@@ -24,6 +24,7 @@ A default texture will be applied if the widget is a Texture and doesn't have a 
 
 local _, ns = ...
 local oUF = ns.oUF
+local GetTexCoordsForRoleSmallCircle = GetTexCoordsForRoleSmallCircle or (function() return 1, 1, 1, 1 end) -- isWW
 
 local function Update(self, event)
 	local element = self.GroupRoleIndicator
