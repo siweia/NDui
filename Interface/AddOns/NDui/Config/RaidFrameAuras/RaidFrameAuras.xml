@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="ClassSpells.lua"/>
 
-	<Script file="TBC\Party-TBC.lua"/>
+	<!--Script file="TBC\Party-TBC.lua"/>
 	<Script file="TBC\BlackTemple.lua"/>
 	<Script file="TBC\GruulsLair.lua"/>
 	<Script file="TBC\HyjalSummit.lua"/>
@@ -21,7 +21,7 @@
 	<Script file="WLK\RubySanctum.lua"/>
 	<Script file="WLK\ToC.lua"/>
 	<Script file="WLK\ULD.lua"/>
-	<Script file="WLK\VoA.lua"/>
+	<Script file="WLK\VoA.lua"/-->
 
 	<Script file="Cata\Party-Cata.lua"/>
 	<Script file="Cata\BaradinHold.lua"/>
