@@ -195,7 +195,8 @@ function TT:InspectUnit(unit, forced)
 end
 
 function TT:InspectUnitItemLevel(unit)
-	if C.db["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
+	if not C.db["Tooltip"]["SpecLevelByShift"] then return end
+	if not IsShiftKeyDown() then return end
 
 	if not unit or not CanInspect(unit) then return end
 	currentUNIT, currentGUID = unit, UnitGUID(unit)
