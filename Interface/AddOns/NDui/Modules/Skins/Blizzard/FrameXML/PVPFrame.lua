@@ -12,7 +12,7 @@ tinsert(C.defaultThemes, function()
 	PVPHonorFrameBGTex:SetAlpha(0)
 	B.CreateBDFrame(PVPHonorFrameInfoScrollFrame, .25)
 
-	for i = 1, 3 do
+	for i = 1, 5 do
 		local tab = _G["PVPFrameTab"..i]
 		if tab then
 			B.ReskinTab(tab)
