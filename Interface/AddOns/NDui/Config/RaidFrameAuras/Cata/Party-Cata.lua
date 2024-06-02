@@ -30,3 +30,18 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 24099) -- 毒液箭雨
 
 INSTANCE = 66 -- 黑石岩窟
 module:RegisterDebuff(TIER, INSTANCE, 0, 24099) -- 毒液箭雨
+
+INSTANCE = 76 -- 祖尔格拉布
+module:RegisterDebuff(TIER, INSTANCE, 0, 24099) -- 毒液箭雨
+
+INSTANCE = 77 -- 祖阿曼
+module:RegisterDebuff(TIER, INSTANCE, 0, 24099) -- 毒液箭雨
+
+INSTANCE = 184 -- 时光之末
+module:RegisterDebuff(TIER, INSTANCE, 0, 24099) -- 毒液箭雨
+
+INSTANCE = 185 -- 永恒之井
+module:RegisterDebuff(TIER, INSTANCE, 0, 24099) -- 毒液箭雨
+
+INSTANCE = 186 -- 暮光审判
+module:RegisterDebuff(TIER, INSTANCE, 0, 24099) -- 毒液箭雨
