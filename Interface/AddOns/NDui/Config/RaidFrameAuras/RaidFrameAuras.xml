@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="ClassSpells.lua"/>
-	<Script file="RaidDebuffs.lua"/>
 
 	<Script file="TBC\Party-TBC.lua"/>
 	<Script file="TBC\BlackTemple.lua"/>
@@ -23,4 +22,12 @@
 	<Script file="WLK\ToC.lua"/>
 	<Script file="WLK\ULD.lua"/>
 	<Script file="WLK\VoA.lua"/>
+
+	<Script file="Cata\Party-Cata.lua"/>
+	<Script file="Cata\BaradinHold.lua"/>
+	<Script file="Cata\BastionTwilight.lua"/>
+	<Script file="Cata\BlackwingDescent.lua"/>
+	<Script file="Cata\ThroneFourWinds.lua"/>
+	<Script file="Cata\Firelands.lua"/>
+	<Script file="Cata\DragonSoul.lua"/>
 </Ui>
