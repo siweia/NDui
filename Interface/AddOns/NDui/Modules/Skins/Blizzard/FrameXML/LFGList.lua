@@ -71,10 +71,13 @@ tinsert(C.defaultThemes, function()
 	searchPanel.SearchBox:SetHeight(22)
 	B.ReskinFilterButton(searchPanel.FilterButton)
 
-	B.ReskinFilterReset(searchPanel.FilterButton.ResetToDefaults)
-	B.ReskinEditBox(MinRatingFrame.MinRating)
-	MinRatingFrame.MinRating:SetHeight(18)
-
+	if DB.isWW then
+		B.ReskinFilterReset(searchPanel.FilterButton.ResetButton)
+	else
+		B.ReskinFilterReset(searchPanel.FilterButton.ResetToDefaults)
+		B.ReskinEditBox(MinRatingFrame.MinRating)
+		MinRatingFrame.MinRating:SetHeight(18)
+	end
 
 	searchPanel.RefreshButton:SetSize(24, 24)
 	searchPanel.RefreshButton.Icon:SetPoint("CENTER")

@@ -329,8 +329,10 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	local lootJournal = EncounterJournal.LootJournal
 	B.StripTextures(lootJournal)
-	reskinFilterToggle(lootJournal.RuneforgePowerFilterDropDownButton)
-	reskinFilterToggle(lootJournal.ClassDropDownButton)
+	if not DB.isWW then
+		reskinFilterToggle(lootJournal.RuneforgePowerFilterDropDownButton)
+		reskinFilterToggle(lootJournal.ClassDropDownButton)
+	end
 
 	local iconColor = DB.QualityColors[Enum.ItemQuality.Legendary or 5] -- legendary color
 	B.ReskinTrimScroll(lootJournal.ScrollBar)
@@ -386,7 +388,9 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		hooksecurefunc(itemSetsFrame.ScrollBox, "Update", function(self)
 			self:ForEachFrame(reskinBar)
 		end)
-		reskinFilterToggle(itemSetsFrame.ClassButton)
+		if not DB.isWW then
+			reskinFilterToggle(itemSetsFrame.ClassButton)
+		end
 	end
 
 	-- Monthly activities

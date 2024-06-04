@@ -11,7 +11,9 @@ function B:ReskinIconSelector()
 	B.ReskinIcon(self.BorderBox.SelectedIconArea.SelectedIconButton.Icon)
 	B.Reskin(self.BorderBox.OkayButton)
 	B.Reskin(self.BorderBox.CancelButton)
-	B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
+	if not DB.isWW then
+		B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
+	end
 	B.ReskinTrimScroll(self.IconSelector.ScrollBar)
 
 	hooksecurefunc(self.IconSelector.ScrollBox, "Update", function(self)

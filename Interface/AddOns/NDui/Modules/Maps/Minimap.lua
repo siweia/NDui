@@ -599,6 +599,8 @@ function module:Minimap_OnMouseWheel(zoom)
 end
 
 function module:BuildMinimapDropDown()
+	if DB.isWW then return end
+
 	local dropdown = CreateFrame("Frame", "NDuiMiniMapTrackingDropDown", _G.UIParent, "UIDropDownMenuTemplate")
 	dropdown:SetID(1)
 	dropdown:SetClampedToScreen(true)
@@ -606,7 +608,8 @@ function module:BuildMinimapDropDown()
 	dropdown.noResize = true
 	_G.UIDropDownMenu_Initialize(dropdown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
 
-	hooksecurefunc(_G.MinimapCluster.TrackingFrame.Button, "Update", function()
+	local trackFrame = DB.isWW and _G.MinimapCluster.Tracking or _G.MinimapCluster.TrackingFrame
+	hooksecurefunc(trackFrame.Button, "Update", function()
 		if _G.UIDROPDOWNMENU_OPEN_MENU == dropdown then
 			UIDropDownMenu_RefreshAll(dropdown)
 		end
@@ -622,7 +625,11 @@ function module:Minimap_OnMouseUp(btn)
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleCalendar()
 	elseif btn == "RightButton" then
-		ToggleDropDownMenu(1, nil, module.MinimapTracking, self, -100, 100)
+		if DB.isWW then
+			MinimapCluster.Tracking.Button:OpenMenu()
+		else
+			ToggleDropDownMenu(1, nil, module.MinimapTracking, self, -100, 100)
+		end
 	else
 		Minimap:OnClick()
 	end
@@ -688,7 +695,6 @@ function module:SetupMinimap()
 
 	-- Hide Blizz
 	MinimapCluster:EnableMouse(false)
-	MinimapCluster.TrackingFrame:Hide()
 	MinimapCluster.BorderTop:Hide()
 	MinimapCluster.ZoneTextButton:Hide()
 	Minimap:SetArchBlobRingScalar(0)
@@ -696,6 +702,13 @@ function module:SetupMinimap()
 	B.HideObject(Minimap.ZoomIn)
 	B.HideObject(Minimap.ZoomOut)
 	B.HideObject(MinimapCompassTexture)
+
+	if DB.isWW then
+		_G.MinimapCluster.Tracking:SetAlpha(0)
+		_G.MinimapCluster.Tracking:SetScale(0.0001)
+	else
+		_G.MinimapCluster.TrackingFrame:Hide()
+	end
 
 	-- Add Elements
 	self:CreatePulse()

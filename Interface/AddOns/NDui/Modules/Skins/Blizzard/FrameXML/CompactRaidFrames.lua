@@ -41,7 +41,9 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(button, 0)
 		B.Reskin(button)
 	end
-	CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
+	if not DB.isWW then
+		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
+	end
 
 	B.StripTextures(CompactRaidFrameManager, 0)
 	if not DB.isWW then

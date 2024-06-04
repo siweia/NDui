@@ -239,8 +239,10 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- voice pickers
-	ReskinVoicePicker(TextToSpeechFrameTtsVoicePicker)
-	ReskinVoicePicker(TextToSpeechFrameTtsVoiceAlternatePicker)
+	if not DB.isWW then
+		ReskinVoicePicker(TextToSpeechFrameTtsVoicePicker)
+		ReskinVoicePicker(TextToSpeechFrameTtsVoiceAlternatePicker)
+	end
 
 	B.StripTextures(ChatConfigTextToSpeechChannelSettingsLeft)
 end)

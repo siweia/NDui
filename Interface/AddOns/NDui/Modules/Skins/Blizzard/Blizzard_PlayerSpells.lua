@@ -56,7 +56,7 @@ C.themes["Blizzard_PlayerSpells"] = function()
 
 	B.ReskinPortraitFrame(frame)
 	B.Reskin(frame.TalentsFrame.ApplyButton)
-	B.ReskinDropDown(frame.TalentsFrame.LoadoutDropDown.DropDownControl.DropDownMenu)
+	--B.ReskinDropDown(frame.TalentsFrame.LoadoutDropDown.DropDownControl.DropDownMenu)
 	B.Reskin(frame.TalentsFrame.InspectCopyButton)
 	B.ReskinMinMax(frame.MaximizeMinimizeButton)
 
