@@ -10,7 +10,10 @@ local function ReskinQuestHeader(header, isCalling)
 
 	local collapseButton = isCalling and header or header.CollapseButton
 	if collapseButton then
-		collapseButton:GetPushedTexture():SetAlpha(0)
+		local pushed = collapseButton:GetPushedTexture()
+		if pushed then
+			pushed:SetAlpha(0)
+		end
 		collapseButton:GetHighlightTexture():SetAlpha(0)
 		B.ReskinCollapse(collapseButton, true)
 		collapseButton.bg:SetFrameLevel(6)
@@ -137,9 +140,9 @@ tinsert(C.defaultThemes, function()
 
 		for button in QuestScrollFrame.titleFramePool:EnumerateActive() do
 			if not button.styled then
-				if button.CheckBox then
-					button.CheckBox:DisableDrawLayer("BACKGROUND")
-					B.CreateBDFrame(button.CheckBox, 0, true)
+				if button.Checkbox then
+					button.Checkbox:DisableDrawLayer("BACKGROUND")
+					B.CreateBDFrame(button.Checkbox, 0, true)
 				end
 				if button.Check then -- isWW removed?
 					button.Check:SetAtlas("checkmark-minimal")

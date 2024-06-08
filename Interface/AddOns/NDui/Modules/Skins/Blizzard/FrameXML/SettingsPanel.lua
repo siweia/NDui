@@ -90,6 +90,12 @@ tinsert(C.defaultThemes, function()
 		ReskinDropDownArrow(option.IncrementButton, "right")
 	end
 
+	local function ReskinDropdown(option)
+		B.Reskin(option.Dropdown)
+		B.Reskin(option.DecrementButton)
+		B.Reskin(option.IncrementButton)
+	end
+
 	local function UpdateKeybindButtons(self)
 		if not self.bindingsPool then return end
 		for panel in self.bindingsPool:EnumerateActive() do
@@ -110,7 +116,12 @@ tinsert(C.defaultThemes, function()
 	end
 
 	local function forceSaturation(self)
-		self.CheckBox:DesaturateHierarchy(1)
+		if self.Checkbox then
+			self.Checkbox:DesaturateHierarchy(1)
+		end
+		if self.CheckBox then -- isWW, renamed
+			self.CheckBox:DesaturateHierarchy(1)
+		end
 	end
 
 	local function ReskinControlsGroup(controls)
@@ -119,12 +130,17 @@ tinsert(C.defaultThemes, function()
 			if element.SliderWithSteppers then
 				B.ReskinStepperSlider(element.SliderWithSteppers)
 			end
-			if element.DropDown then
+			if element.DropDown then -- isWW, renamed
 				ReskinOptionDropDown(element.DropDown)
 			end
-			if element.CheckBox then
+			if element.CheckBox then -- isWW, renamed
 				B.ReskinCheck(element.CheckBox)
 				element.CheckBox.bg:SetInside(nil, 6, 6)
+				hooksecurefunc(element, "DesaturateHierarchy", forceSaturation)
+			end
+			if element.Checkbox then
+				B.ReskinCheck(element.Checkbox)
+				element.Checkbox.bg:SetInside(nil, 6, 6)
 				hooksecurefunc(element, "DesaturateHierarchy", forceSaturation)
 			end
 		end
@@ -145,16 +161,24 @@ tinsert(C.defaultThemes, function()
 					child.CheckBox.bg:SetInside(nil, 6, 6)
 					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
 				end
-				if child.DropDown then
+				if child.Checkbox then
+					B.ReskinCheck(child.Checkbox)
+					child.Checkbox.bg:SetInside(nil, 6, 6)
+					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
+				end
+				if child.DropDown then -- isWW, renamed
 					ReskinOptionDropDown(child.DropDown)
 				end
 				if child.ColorBlindFilterDropDown then
 					ReskinOptionDropDown(child.ColorBlindFilterDropDown)
 				end
+				if child.Control then -- isWW, new add
+					ReskinDropdown(child.Control)
+				end
 				for j = 1, 13 do
 					local control = child["Control"..j]
 					if control then
-						if control.DropDown then
+						if control.DropDown then -- isWW, renamed
 							ReskinOptionDropDown(control.DropDown)
 						end
 					end

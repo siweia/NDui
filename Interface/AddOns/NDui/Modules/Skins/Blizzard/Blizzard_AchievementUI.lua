@@ -36,7 +36,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	end
 
 	if DB.isWW then
-		B.ReskinFilterButton(AchievementFrameFilterDropDown)
+		B.ReskinFilterButton(AchievementFrameFilterDropdown)
 	else
 		B.ReskinDropDown(AchievementFrameFilterDropDown)
 		AchievementFrameFilterDropDown:ClearAllPoints()

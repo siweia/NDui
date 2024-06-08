@@ -1561,7 +1561,7 @@ do
 		local cover = self.cover or self.Cover
 		if cover then cover:SetTexture("") end
 
-		local checkButton = self.checkButton or self.CheckButton or self.CheckBox
+		local checkButton = self.checkButton or self.CheckButton or self.CheckBox or self.Checkbox
 		if checkButton then
 			checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
 			checkButton:SetPoint("BOTTOMLEFT", -2, -2)

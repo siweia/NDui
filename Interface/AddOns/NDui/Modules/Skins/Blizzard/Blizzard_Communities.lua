@@ -39,7 +39,7 @@ end
 
 local function reskinRequestCheckbox(self)
 	for button in self.SpecsPool:EnumerateActive() do
-		if button.CheckBox then
+		if button.CheckBox then -- isWW, might renamed to Checkbox
 			B.ReskinCheck(button.CheckBox)
 			button.CheckBox:SetSize(26, 26)
 		end
@@ -267,7 +267,11 @@ C.themes["Blizzard_Communities"] = function()
 		bg:SetPoint("BOTTOMRIGHT", -4, 3)
 		B.StripTextures(dialog.Description)
 		B.CreateBDFrame(dialog.Description, .25)
-		B.ReskinCheck(dialog.TypeCheckBox)
+		if DB.isWW then
+			B.ReskinCheck(dialog.TypeCheckbox)
+		else
+			B.ReskinCheck(dialog.TypeCheckBox)
+		end
 		B.Reskin(dialog.Accept)
 		B.Reskin(dialog.Delete)
 		B.Reskin(dialog.Cancel)

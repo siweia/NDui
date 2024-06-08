@@ -341,9 +341,9 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(detailFrame)
 		B.SetBD(detailFrame)
 		B.ReskinClose(detailFrame.CloseButton)
-		B.ReskinCheck(detailFrame.AtWarCheckBox)
-		B.ReskinCheck(detailFrame.MakeInactiveCheckBox)
-		B.ReskinCheck(detailFrame.WatchFactionCheckBox)
+		B.ReskinCheck(detailFrame.AtWarCheckbox)
+		B.ReskinCheck(detailFrame.MakeInactiveCheckbox)
+		B.ReskinCheck(detailFrame.WatchFactionCheckbox)
 		B.Reskin(detailFrame.ViewRenownButton)
 	else
 		B.StripTextures(ReputationDetailFrame)
@@ -367,8 +367,13 @@ tinsert(C.defaultThemes, function()
 	else
 		B.ReskinClose((select(4, TokenFramePopup:GetChildren())))
 	end
-	B.ReskinCheck(TokenFramePopup.InactiveCheckBox)
-	B.ReskinCheck(TokenFramePopup.BackpackCheckBox)
+	if DB.isWW then
+		B.ReskinCheck(TokenFramePopup.InactiveCheckbox)
+		B.ReskinCheck(TokenFramePopup.BackpackCheckbox)
+	else
+		B.ReskinCheck(TokenFramePopup.InactiveCheckBox)
+		B.ReskinCheck(TokenFramePopup.BackpackCheckBox)
+	end
 	B.ReskinTrimScroll(TokenFrame.ScrollBar)
 
 	hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)

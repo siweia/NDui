@@ -97,8 +97,10 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	FriendsFrameStatusDropDown:ClearAllPoints()
-	FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
+	if FriendsFrameStatusDropDown then -- isWW, removed?
+		FriendsFrameStatusDropDown:ClearAllPoints()
+		FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
+	end
 
 	-- FriendsFrameBattlenetFrame
 
