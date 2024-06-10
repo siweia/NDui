@@ -16,32 +16,42 @@ tinsert(C.defaultThemes, function()
 		CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(.86, 1, 0, 1)
 	end)
 
-	local buttons = {
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleTank,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleHealer,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleDamager,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup1,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup2,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup3,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup4,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup5,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup6,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup7,
-		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup8,
-		CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll,
-		CompactRaidFrameManagerDisplayFrameLeaderOptionsCountdown,
-		CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck,
-		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
-		CompactRaidFrameManagerDisplayFrameLockedModeToggle,
-		CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
-		CompactRaidFrameManagerDisplayFrameConvertToRaid,
-		CompactRaidFrameManagerDisplayFrameEditMode,
-	}
-	for _, button in pairs(buttons) do
-		B.StripTextures(button, 0)
-		B.Reskin(button)
-	end
-	if not DB.isWW then
+	if DB.isWW then
+		B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameModeControlDropdown)
+		B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameRestrictPingsDropdown)
+		if CompactRaidFrameManagerDisplayFrameBottomButtonsLeavePartyButton then
+			B.Reskin(CompactRaidFrameManagerDisplayFrameBottomButtonsLeavePartyButton)
+		end
+		if CompactRaidFrameManagerDisplayFrameBottomButtonsLeaveInstanceGroupButton then
+			B.Reskin(CompactRaidFrameManagerDisplayFrameBottomButtonsLeaveInstanceGroupButton)
+		end
+	else
+		local buttons = {
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleTank,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleHealer,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleDamager,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup1,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup2,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup3,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup4,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup5,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup6,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup7,
+			CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup8,
+			CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll,
+			CompactRaidFrameManagerDisplayFrameLeaderOptionsCountdown,
+			CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck,
+			CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
+			CompactRaidFrameManagerDisplayFrameLockedModeToggle,
+			CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
+			CompactRaidFrameManagerDisplayFrameConvertToRaid,
+			CompactRaidFrameManagerDisplayFrameEditMode,
+		}
+		for _, button in pairs(buttons) do
+			B.StripTextures(button, 0)
+			B.Reskin(button)
+		end
+
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture("Interface\\RaidFrame\\Raid-WorldPing")
 	end
 
