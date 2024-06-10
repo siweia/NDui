@@ -1935,26 +1935,30 @@ local function OpenGUI()
 end
 
 function G:OnLogin()
-	local gui = CreateFrame("Button", "GameMenuFrameNDui", GameMenuFrame, "GameMenuButtonTemplate, BackdropTemplate")
-	gui:SetText(L["NDui Console"])
-	gui:SetPoint("TOP", GameMenuButtonAddons, "BOTTOM", 0, -21)
-
-	if DB.isWW then
-		GameMenuFrameNDui:SetSize(200, 36)
-		GameMenuFrameNDui:SetPoint("TOP", GameMenuFrame, 0, -15)
-	else
-		GameMenuFrame:HookScript("OnShow", function(self)
-			GameMenuButtonLogout:SetPoint("TOP", gui, "BOTTOM", 0, -21)
-			self:SetHeight(self:GetHeight() + gui:GetHeight() + 22)
-		end)
-	end
-
-	gui:SetScript("OnClick", function()
+	local function toggleGUI()
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		OpenGUI()
 		HideUIPanel(GameMenuFrame)
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+	end
+
+	if DB.isWW then
+		hooksecurefunc(GameMenuFrame, "Reset", function(self)
+			self:AddButton(L["NDui Console"], toggleGUI)
+		end)
+		return
+	end
+
+	local gui = CreateFrame("Button", "GameMenuFrameNDui", GameMenuFrame, "GameMenuButtonTemplate, BackdropTemplate")
+	gui:SetText(L["NDui Console"])
+	gui:SetPoint("TOP", GameMenuButtonAddons, "BOTTOM", 0, -21)
+
+	GameMenuFrame:HookScript("OnShow", function(self)
+		GameMenuButtonLogout:SetPoint("TOP", gui, "BOTTOM", 0, -21)
+		self:SetHeight(self:GetHeight() + gui:GetHeight() + 22)
 	end)
+
+	gui:SetScript("OnClick", toggleGUI)
 
 	if C.db["Skins"]["BlizzardSkins"] then
 		if DB.isWW then
