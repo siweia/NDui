@@ -8,15 +8,14 @@ local function ReskinQuestHeader(header, isCalling)
 	if header.Divider then header.Divider:Hide() end
 	if header.TopFiligree then header.TopFiligree:Hide() end
 
-	local collapseButton = isCalling and header or header.CollapseButton
-	if collapseButton then
-		local pushed = collapseButton:GetPushedTexture()
-		if pushed then
-			pushed:SetAlpha(0)
+	if not DB.isWW then
+		local collapseButton = isCalling and header or header.CollapseButton
+		if collapseButton then
+			collapseButton:GetPushedTexture():SetAlpha(0)
+			collapseButton:GetHighlightTexture():SetAlpha(0)
+			B.ReskinCollapse(collapseButton, true)
+			collapseButton.bg:SetFrameLevel(6)
 		end
-		collapseButton:GetHighlightTexture():SetAlpha(0)
-		B.ReskinCollapse(collapseButton, true)
-		collapseButton.bg:SetFrameLevel(6)
 	end
 
 	header.styled = true

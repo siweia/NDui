@@ -11,7 +11,9 @@ function B:ReskinIconSelector()
 	B.ReskinIcon(self.BorderBox.SelectedIconArea.SelectedIconButton.Icon)
 	B.Reskin(self.BorderBox.OkayButton)
 	B.Reskin(self.BorderBox.CancelButton)
-	if not DB.isWW then
+	if DB.isWW then
+		B.ReskinDropDown(self.BorderBox.IconTypeDropdown)
+	else
 		B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
 	end
 	B.ReskinTrimScroll(self.IconSelector.ScrollBar)
@@ -335,7 +337,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinTrimScroll(ReputationFrame.ScrollBar)
 
 	if DB.isWW then
-		B.ReskinDropDown(ReputationFrame.filterDropDown)
+		B.ReskinDropDown(ReputationFrame.filterDropdown)
 
 		local detailFrame = ReputationFrame.ReputationDetailFrame
 		B.StripTextures(detailFrame)

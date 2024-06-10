@@ -37,6 +37,8 @@ C.themes["Blizzard_AchievementUI"] = function()
 
 	if DB.isWW then
 		B.ReskinFilterButton(AchievementFrameFilterDropdown)
+		AchievementFrameFilterDropdown:ClearAllPoints()
+		AchievementFrameFilterDropdown:SetPoint("TOPLEFT", 25, -5)
 	else
 		B.ReskinDropDown(AchievementFrameFilterDropDown)
 		AchievementFrameFilterDropDown:ClearAllPoints()

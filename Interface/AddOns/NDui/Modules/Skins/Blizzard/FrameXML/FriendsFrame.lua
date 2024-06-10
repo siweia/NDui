@@ -97,11 +97,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	if FriendsFrameStatusDropDown then -- isWW, removed?
-		FriendsFrameStatusDropDown:ClearAllPoints()
-		FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
-	end
-
 	-- FriendsFrameBattlenetFrame
 
 	FriendsFrameBattlenetFrame:GetRegions():Hide()
@@ -145,9 +140,17 @@ tinsert(C.defaultThemes, function()
 	B.ReskinTrimScroll(IgnoreListFrame.ScrollBar)
 	B.ReskinTrimScroll(WhoFrame.ScrollBar)
 	B.ReskinTrimScroll(FriendsFriendsFrame.ScrollBar)
-	B.ReskinDropDown(FriendsFrameStatusDropDown)
-	B.ReskinDropDown(WhoFrameDropDown)
-	B.ReskinDropDown(FriendsFriendsFrameDropDown)
+	if DB.isWW then
+		B.ReskinDropDown(FriendsFrameStatusDropdown)
+		B.ReskinDropDown(WhoFrameDropdown)
+		B.ReskinDropDown(FriendsFriendsFrameDropdown)
+	else
+		B.ReskinDropDown(FriendsFrameStatusDropDown)
+		FriendsFrameStatusDropDown:ClearAllPoints()
+		FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
+		B.ReskinDropDown(WhoFrameDropDown)
+		B.ReskinDropDown(FriendsFriendsFrameDropDown)
+	end
 	B.Reskin(FriendsListFrameContinueButton)
 	B.ReskinInput(AddFriendNameEditBox)
 	B.StripTextures(AddFriendFrame)

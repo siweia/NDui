@@ -398,10 +398,11 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(icons)
 	B.ReskinInput(HeirloomsJournalSearchBox)
-	B.ReskinDropDown(HeirloomsJournalClassDropDown)
 	if DB.isWW then
+		B.ReskinDropDown(HeirloomsJournal.ClassDropdown)
 		B.ReskinFilterButton(HeirloomsJournal.FilterDropdown)
 	else
+		B.ReskinDropDown(HeirloomsJournalClassDropDown)
 		B.ReskinFilterButton(HeirloomsJournal.FilterButton)
 	end
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, "left")
@@ -496,10 +497,11 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(ItemsCollectionFrame)
 	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
-	B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
 	B.ReskinInput(WardrobeCollectionFrameSearchBox)
 	if DB.isWW then
-		B.ReskinDropDown(WardrobeCollectionFrame.ClassDropDown)
+		B.ReskinDropDown(WardrobeCollectionFrame.ClassDropdown)
+	else
+		B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
 	end
 
 	hooksecurefunc(WardrobeCollectionFrame, "SetTab", function(self, tabID)
@@ -567,7 +569,9 @@ C.themes["Blizzard_Collections"] = function()
 	local DetailsFrame = SetsCollectionFrame.DetailsFrame
 	DetailsFrame.ModelFadeTexture:Hide()
 	DetailsFrame.IconRowBackground:Hide()
-	if not DB.isWW then
+	if DB.isWW then
+		B.ReskinDropDown(DetailsFrame.VariantSetsDropdown)
+	else
 		B.ReskinFilterButton(DetailsFrame.VariantSetsButton, "Down")
 	end
 

@@ -1061,9 +1061,24 @@ do
 
 	-- Handle dropdown
 	function B:ReskinDropDown()
-		if DB.isWW then return end
-
 		B.StripTextures(self)
+
+		if DB.isWW then
+			if self.Arrow then self.Arrow:SetAlpha(0) end
+
+			local bg = B.CreateBDFrame(self, 0, true)
+			bg:SetPoint("TOPLEFT", 0, -2)
+			bg:SetPoint("BOTTOMRIGHT", 0, 2)
+			local tex = self:CreateTexture(nil, "ARTWORK")
+			tex:SetPoint("RIGHT", bg, -3, 0)
+			tex:SetSize(18, 18)
+			B.SetupArrow(tex, "down")
+			self.__texture = tex
+
+			self:HookScript("OnEnter", B.Texture_OnEnter)
+			self:HookScript("OnLeave", B.Texture_OnLeave)
+			return
+		end
 
 		local frameName = self.GetName and self:GetName()
 		local down = self.Button or frameName and (_G[frameName.."Button"] or _G[frameName.."_Button"])
@@ -1173,6 +1188,7 @@ do
 	function B:ReskinArrow(direction)
 		self:SetSize(16, 16)
 		B.Reskin(self, true)
+		if self.Texture then self.Texture:SetAlpha(0) end
 
 		self:SetDisabledTexture(DB.bdTex)
 		local dis = self:GetDisabledTexture()
@@ -1213,6 +1229,14 @@ do
 		end
 		if self.ResetButton then
 			B.ReskinFilterReset(self.ResetButton)
+		end
+		if DB.isWW then
+			self.__bg:SetOutside()
+			local tex = self:CreateTexture(nil, "ARTWORK")
+			B.SetupArrow(tex, "right")
+			tex:SetSize(16, 16)
+			tex:SetPoint("RIGHT", -2, 0)
+			self.__texture = tex
 		end
 	end
 

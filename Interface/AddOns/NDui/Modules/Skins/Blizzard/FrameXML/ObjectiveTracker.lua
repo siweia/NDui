@@ -201,6 +201,14 @@ tinsert(C.defaultThemes, function()
 		local mainMinimize = ObjectiveTrackerFrame.Header.MinimizeButton
 		reskinMinimizeButton(mainMinimize, ObjectiveTrackerFrame.Header)
 		mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
+
+		-- Handle blocks
+		hooksecurefunc(ScenarioObjectiveTracker.StageBlock, "UpdateStageBlock", function(block)
+			block.NormalBG:SetTexture("")
+			if not block.bg then
+				block.bg = B.SetBD(block.GlowTexture, nil, 4, -2, -4, 2)
+			end
+		end)
 	else
 		headers = {
 			ObjectiveTrackerBlocksFrame.QuestHeader,
