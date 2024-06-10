@@ -422,7 +422,11 @@ C.themes["Blizzard_Communities"] = function()
 		B.ReskinCheck(dialog.MaxLevelOnly.Button)
 		B.ReskinCheck(dialog.MinIlvlOnly.Button)
 		B.ReskinInput(dialog.MinIlvlOnly.EditBox)
-		if not DB.isWW then
+		if DB.isWW then
+			B.ReskinDropDown(dialog.ClubFocusDropdown)
+			B.ReskinDropDown(dialog.LookingForDropdown)
+			B.ReskinDropDown(dialog.LanguageDropdown)
+		else
 			B.ReskinDropDown(ClubFinderFocusDropdown)
 			B.ReskinDropDown(ClubFinderLookingForDropdown)
 			B.ReskinDropDown(ClubFinderLanguageDropdown)

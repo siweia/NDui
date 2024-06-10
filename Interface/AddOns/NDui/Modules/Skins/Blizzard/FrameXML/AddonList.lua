@@ -13,6 +13,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(AddonListOkayButton)
 	B.ReskinCheck(AddonListForceLoad)
 	if DB.isWW then
+		B.ReskinDropDown(AddonList.Dropdown)
 	else
 		B.ReskinDropDown(AddonCharacterDropDown)
 		AddonCharacterDropDown:SetWidth(170)
