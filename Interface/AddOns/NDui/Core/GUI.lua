@@ -152,7 +152,6 @@ G.DefaultSettings = {
 		ClickThrough = false,
 		IconScale = 1,
 		DeprecatedAuras = false,
-		QuakeRing = false,
 		MinCD = 3,
 	},
 	UFs = {
@@ -203,7 +202,6 @@ G.DefaultSettings = {
 		CPHeight = 5,
 		CPxOffset = 12,
 		CPyOffset = -2,
-		QuakeTimer = true,
 		LagString = true,
 		RuneTimer = true,
 		RaidBuffIndicator = true,
@@ -1199,8 +1197,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "LagString", L["Castbar LagString"].."*", true, nil, toggleCastBarLatency},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"].."*", nil, setupSwingBars, toggleSwingBars},
-		{1, "UFs", "QuakeTimer", L["UFs QuakeTimer"], true, nil, nil, L["QuakeTimerTip"]},
-		{1, "UFs", "PetCB", L["PetCastbar"]},
+		{1, "UFs", "PetCB", L["PetCastbar"], true},
 		{},--blank
 		{1, "UFs", "CombatText", HeaderTag..L["UFs CombatText"]},
 		{1, "UFs", "ScrollingCT", L["ScrollingCT"].."*", true},
@@ -1327,8 +1324,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
-		{1, "AuraWatch", "QuakeRing", L["QuakeRing"].."*"},
-		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], true, nil, nil, L["ClickThroughTip"]},
+		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], nil, {.8, 2, .1}},
 		{3, "AuraWatch", "MinCD", NewTag..L["AuraWatch MinCD"].."*", true, {1, 60, 1}, nil, L["MinCDTip"]},
 		{},--blank
