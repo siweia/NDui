@@ -75,7 +75,11 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- Instance select
 	EncounterJournalInstanceSelectBG:SetAlpha(0)
-	B.ReskinDropDown(EncounterJournal.instanceSelect.tierDropDown)
+	if DB.isWW then
+		B.ReskinDropDown(EncounterJournal.instanceSelect.ExpansionDropdown)
+	else
+		B.ReskinDropDown(EncounterJournal.instanceSelect.tierDropDown)
+	end
 	B.ReskinTrimScroll(EncounterJournal.instanceSelect.ScrollBar)
 
 	hooksecurefunc(EncounterJournal.instanceSelect.ScrollBox, "Update", function(self)
@@ -231,13 +235,19 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
 
-	local buttons = {
-		EncounterJournalEncounterFrameInfoDifficulty,
-		EncounterJournalEncounterFrameInfoFilterToggle,
-		EncounterJournalEncounterFrameInfoSlotFilterToggle,
-	}
-	for _, button in pairs(buttons) do
-		reskinFilterToggle(button)
+	if DB.isWW then
+		B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.filter)
+		B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.slotFilter)
+		B.ReskinDropDown(EncounterJournalEncounterFrameInfoDifficulty)
+	else
+		local buttons = {
+			EncounterJournalEncounterFrameInfoDifficulty,
+			EncounterJournalEncounterFrameInfoFilterToggle,
+			EncounterJournalEncounterFrameInfoSlotFilterToggle,
+		}
+		for _, button in pairs(buttons) do
+			B.ReskinDropDown(EncounterJournalEncounterFrameInfoDifficulty)
+		end
 	end
 
 	-- Suggest frame
@@ -361,7 +371,11 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	-- ItemSetsFrame
 	if EncounterJournal.LootJournalItems then
 		B.StripTextures(EncounterJournal.LootJournalItems)
-		B.ReskinDropDown(EncounterJournal.LootJournalViewDropDown)
+		if DB.isWW then
+			B.ReskinDropDown(EncounterJournal.LootJournalViewDropdown)
+		else
+			B.ReskinDropDown(EncounterJournal.LootJournalViewDropDown)
+		end
 
 		local function reskinBar(bar)
 			if not bar.styled then
@@ -388,7 +402,9 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		hooksecurefunc(itemSetsFrame.ScrollBox, "Update", function(self)
 			self:ForEachFrame(reskinBar)
 		end)
-		if not DB.isWW then
+		if DB.isWW then
+			B.ReskinDropDown(itemSetsFrame.ClassDropdown)
+		else
 			reskinFilterToggle(itemSetsFrame.ClassButton)
 		end
 	end

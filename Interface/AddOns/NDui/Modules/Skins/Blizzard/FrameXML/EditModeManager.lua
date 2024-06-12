@@ -16,7 +16,11 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(frame.CloseButton)
 	B.Reskin(frame.RevertAllChangesButton)
 	B.Reskin(frame.SaveChangesButton)
-	B.ReskinDropDown(frame.LayoutDropdown.DropDownMenu)
+	if DB.isWW then
+		B.ReskinDropDown(frame.LayoutDropdown)
+	else
+		B.ReskinDropDown(frame.LayoutDropdown.DropDownMenu)
+	end
 	reskinOptionCheck(frame.ShowGridCheckButton.Button)
 	reskinOptionCheck(frame.EnableSnapCheckButton.Button)
 	reskinOptionCheck(frame.EnableAdvancedOptionsCheckButton.Button)
@@ -87,7 +91,11 @@ tinsert(C.defaultThemes, function()
 
 		for dropdown in self.pools:EnumerateActiveByTemplate("EditModeSettingDropdownTemplate") do
 			if not dropdown.styled then
-				B.ReskinDropDown(dropdown.Dropdown.DropDownMenu)
+				if DB.isWW then
+					B.ReskinDropDown(dropdown.Dropdown)
+				else
+					B.ReskinDropDown(dropdown.Dropdown.DropDownMenu)
+				end
 				dropdown.styled = true
 			end
 		end

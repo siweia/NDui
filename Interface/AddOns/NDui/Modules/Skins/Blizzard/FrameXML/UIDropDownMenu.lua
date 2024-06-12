@@ -14,6 +14,8 @@ end
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
+	if DB.isWW then return end
+
 	local dropdowns = {"DropDownList", "L_DropDownList", "Lib_DropDownList"}
 	hooksecurefunc("UIDropDownMenu_CreateFrames", function()
 		for _, name in next, dropdowns do

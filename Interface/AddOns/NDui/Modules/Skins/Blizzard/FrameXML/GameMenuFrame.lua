@@ -9,6 +9,13 @@ tinsert(C.defaultThemes, function()
 	GameMenuFrame.Header:SetPoint("TOP", GameMenuFrame, 0, 7)
 	B.SetBD(GameMenuFrame)
 	GameMenuFrame.Border:Hide()
+	if DB.isWW then
+		GameMenuFrame.Header.Text:SetFontObject(Game16Font)
+		local line = GameMenuFrame.Header:CreateTexture(nil, "ARTWORK")
+		line:SetSize(190, C.mult)
+		line:SetPoint("BOTTOM", 0, 5)
+		line:SetColorTexture(1, 1, 1, .25)
+	end
 
 	local buttons = {
 		"GameMenuButtonHelp",

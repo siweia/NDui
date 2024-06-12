@@ -56,7 +56,7 @@ C.themes["Blizzard_PlayerSpells"] = function()
 
 	B.ReskinPortraitFrame(frame)
 	B.Reskin(frame.TalentsFrame.ApplyButton)
-	--B.ReskinDropDown(frame.TalentsFrame.LoadoutDropDown.DropDownControl.DropDownMenu)
+	B.ReskinDropDown(frame.TalentsFrame.LoadSystem.Dropdown)
 	B.Reskin(frame.TalentsFrame.InspectCopyButton)
 	B.ReskinMinMax(frame.MaximizeMinimizeButton)
 
@@ -127,6 +127,12 @@ C.themes["Blizzard_PlayerSpells"] = function()
 
 	local spellBook = PlayerSpellsFrame.SpellBookFrame
 	if spellBook then
+		spellBook.BookBGLeft:SetAlpha(.5)
+		spellBook.BookBGRight:SetAlpha(.5)
+		spellBook.BookBGHalved:SetAlpha(.5)
+		spellBook.Bookmark:SetAlpha(.5)
+		spellBook.BookCornerFlipbook:Hide()
+
 		for i = 1, 3 do
 			local tab = select(i, spellBook.CategoryTabSystem:GetChildren())
 			B.ReskinTab(tab)
@@ -134,8 +140,10 @@ C.themes["Blizzard_PlayerSpells"] = function()
 		B.ReskinArrow(spellBook.PagedSpellsFrame.PagingControls.PrevPageButton, "left")
 		B.ReskinArrow(spellBook.PagedSpellsFrame.PagingControls.NextPageButton, "right")
 		spellBook.PagedSpellsFrame.PagingControls.PageText:SetTextColor(1, 1, 1)
-		B.ReskinEditBox(spellBook.SearchBox)
 		B.ReskinCheck(spellBook.HidePassivesCheckButton.Button)
+		B.ReskinEditBox(spellBook.SearchBox)
+		spellBook.SearchBox.__bg:SetPoint("TOPLEFT", -5, -3)
+		spellBook.SearchBox.__bg:SetPoint("BOTTOMRIGHT", 2, 3)
 
 		hooksecurefunc(spellBook.PagedSpellsFrame, "DisplayViewsForCurrentPage", function(self)
 			for _, frame in self:EnumerateFrames() do

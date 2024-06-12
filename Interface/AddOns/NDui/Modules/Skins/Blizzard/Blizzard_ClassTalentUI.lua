@@ -12,7 +12,7 @@ local function reskinTalentFrameDialog(dialog)
 	dialog.NameControl.EditBox.__bg:SetPoint("TOPLEFT", -5, -10)
 	dialog.NameControl.EditBox.__bg:SetPoint("BOTTOMRIGHT", 5, 10)
 end
-
+-- isWW: removed?
 C.themes["Blizzard_ClassTalentUI"] = function()
 	local frame = ClassTalentFrame
 

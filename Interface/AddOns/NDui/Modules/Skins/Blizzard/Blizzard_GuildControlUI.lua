@@ -91,8 +91,14 @@ C.themes["Blizzard_GuildControlUI"] = function()
 	B.Reskin(GuildControlUIRankOrderFrameNewButton)
 	B.ReskinClose(GuildControlUICloseButton)
 	B.ReskinTrimScroll(GuildControlUIRankBankFrameInsetScrollFrame.ScrollBar)
-	B.ReskinDropDown(GuildControlUINavigationDropDown)
-	B.ReskinDropDown(GuildControlUIRankSettingsFrameRankDropDown)
-	B.ReskinDropDown(GuildControlUIRankBankFrameRankDropDown)
+	if DB.isWW then
+		B.ReskinDropDown(GuildControlUINavigationDropdown)
+		B.ReskinDropDown(GuildControlUIRankSettingsFrameRankDropdown)
+		B.ReskinDropDown(GuildControlUIRankBankFrameRankDropdown)
+	else
+		B.ReskinDropDown(GuildControlUINavigationDropDown)
+		B.ReskinDropDown(GuildControlUIRankSettingsFrameRankDropDown)
+		B.ReskinDropDown(GuildControlUIRankBankFrameRankDropDown)
+	end
 	B.ReskinInput(GuildControlUIRankSettingsFrameGoldBox, 20)
 end

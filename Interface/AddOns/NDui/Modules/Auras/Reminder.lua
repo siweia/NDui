@@ -6,7 +6,7 @@ local pairs, tinsert, next = pairs, table.insert, next
 local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
 local GetSpecialization, GetItemCooldown = GetSpecialization, GetItemCooldown
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
-local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
+local IsInInstance, IsPlayerSpell, GetSpellTexture = IsInInstance, IsPlayerSpell, GetSpellTexture
 local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
 local GetNumGroupMembers = GetNumGroupMembers
 
@@ -53,10 +53,10 @@ function A:Reminder_Update(cfg)
 				return
 			end
 		else
-			for i = 1, 32 do
-				local name, _, _, _, _, _, _, _, _, spellID = UnitBuff("player", i)
-				if not name then break end
-				if name and cfg.spells[spellID] then
+			for i = 1, 40 do
+				local auraData = C_UnitAuras.GetBuffDataByIndex("player", i, "HELPFUL")
+				if not auraData then break end
+				if auraData.spellId and cfg.spells[auraData.spellId] then
 					frame:Hide()
 					return
 				end
@@ -139,6 +139,7 @@ function A:InitReminder()
 		B:RegisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)
 		B:RegisterEvent("ZONE_CHANGED_NEW_AREA", A.Reminder_OnEvent)
 		B:RegisterEvent("PLAYER_ENTERING_WORLD", A.Reminder_OnEvent)
+		B:RegisterEvent("WEAPON_ENCHANT_CHANGED", A.Reminder_OnEvent)
 	else
 		if parentFrame then
 			parentFrame:Hide()
@@ -149,6 +150,7 @@ function A:InitReminder()
 			B:UnregisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)
 			B:UnregisterEvent("ZONE_CHANGED_NEW_AREA", A.Reminder_OnEvent)
 			B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.Reminder_OnEvent)
+			B:UnregisterEvent("WEAPON_ENCHANT_CHANGED", A.Reminder_OnEvent)
 		end
 	end
 end

@@ -35,7 +35,11 @@ C.themes["Blizzard_PerksProgram"] = function()
 
 	local productsFrame = frame.ProductsFrame
 	if productsFrame then
-		ReskinCustomizeButton(productsFrame.PerksProgramFilter.FilterDropDownButton)
+		if DB.isWW then
+			B.Reskin(productsFrame.PerksProgramFilter)
+		else
+			ReskinCustomizeButton(productsFrame.PerksProgramFilter.FilterDropDownButton)
+		end
 		B.ReskinIcon(productsFrame.PerksProgramCurrencyFrame.Icon)
 		B.StripTextures(productsFrame.PerksProgramProductDetailsContainerFrame)
 		B.SetBD(productsFrame.PerksProgramProductDetailsContainerFrame)

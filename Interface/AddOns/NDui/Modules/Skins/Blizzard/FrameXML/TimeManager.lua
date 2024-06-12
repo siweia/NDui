@@ -10,7 +10,11 @@ tinsert(C.defaultThemes, function()
 	TimeManagerStopwatchCheck:SetCheckedTexture(DB.pushedTex)
 	B.CreateBDFrame(TimeManagerStopwatchCheck)
 
-	if not DB.isWW then
+	if DB.isWW then
+		B.ReskinDropDown(TimeManagerAlarmTimeFrame.HourDropdown)
+		B.ReskinDropDown(TimeManagerAlarmTimeFrame.MinuteDropdown)
+		B.ReskinDropDown(TimeManagerAlarmTimeFrame.AMPMDropdown)
+	else
 		TimeManagerAlarmHourDropDown:SetWidth(80)
 		TimeManagerAlarmMinuteDropDown:SetWidth(80)
 		TimeManagerAlarmAMPMDropDown:SetWidth(90)

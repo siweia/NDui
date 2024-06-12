@@ -28,6 +28,7 @@ local function reskinQuestIcon(button)
 end
 
 local function reskinQuestIcons(_, block)
+	reskinQuestIcon(block.ItemButton) -- isWW
 	reskinQuestIcon(block.itemButton)
 	reskinQuestIcon(block.groupFinderButton)
 
@@ -201,6 +202,14 @@ tinsert(C.defaultThemes, function()
 		local mainMinimize = ObjectiveTrackerFrame.Header.MinimizeButton
 		reskinMinimizeButton(mainMinimize, ObjectiveTrackerFrame.Header)
 		mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
+
+		-- Handle blocks
+		hooksecurefunc(ScenarioObjectiveTracker.StageBlock, "UpdateStageBlock", function(block)
+			block.NormalBG:SetTexture("")
+			if not block.bg then
+				block.bg = B.SetBD(block.GlowTexture, nil, 4, -2, -4, 2)
+			end
+		end)
 	else
 		headers = {
 			ObjectiveTrackerBlocksFrame.QuestHeader,
@@ -244,6 +253,21 @@ tinsert(C.defaultThemes, function()
 		BONUS_OBJECTIVE_TRACKER_MODULE = BonusObjectiveTracker
 		WORLD_QUEST_TRACKER_MODULE = WorldQuestObjectiveTracker
 		]]
+		local trackers = {
+			ScenarioObjectiveTracker,
+			UIWidgetObjectiveTracker,
+			CampaignQuestObjectiveTracker,	
+			QuestObjectiveTracker,
+			AdventureObjectiveTracker,
+			AchievementObjectiveTracker,
+			MonthlyActivitiesObjectiveTracker,
+			ProfessionsRecipeTracker,
+			BonusObjectiveTracker,
+			WorldQuestObjectiveTracker,
+		}
+		for _, tracker in pairs(trackers) do
+			hooksecurefunc(tracker, "AddBlock", reskinQuestIcons)
+		end
 		return
 	end
 

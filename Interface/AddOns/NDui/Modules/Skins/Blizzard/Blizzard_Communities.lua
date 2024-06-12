@@ -39,7 +39,7 @@ end
 
 local function reskinRequestCheckbox(self)
 	for button in self.SpecsPool:EnumerateActive() do
-		if button.CheckBox then
+		if button.CheckBox then -- isWW, might renamed to Checkbox
 			B.ReskinCheck(button.CheckBox)
 			button.CheckBox:SetSize(26, 26)
 		end
@@ -110,11 +110,16 @@ C.themes["Blizzard_Communities"] = function()
 	B.ReskinPortraitFrame(CommunitiesFrame)
 	CommunitiesFrame.NineSlice:Hide()
 	CommunitiesFrame.PortraitOverlay:SetAlpha(0)
-	B.ReskinDropDown(CommunitiesFrame.StreamDropDownMenu)
+	if DB.isWW then
+		B.ReskinDropDown(CommunitiesFrame.StreamDropdown)
+		B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropdown)
+	else
+		B.ReskinDropDown(CommunitiesFrame.StreamDropDownMenu)
+		B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropDownMenu)
+	end
 	B.ReskinMinMax(CommunitiesFrame.MaximizeMinimizeFrame)
 	B.StripTextures(CommunitiesFrame.AddToChatButton)
 	B.ReskinArrow(CommunitiesFrame.AddToChatButton, "down")
-	B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropDownMenu)
 
 	local calendarButton = CommunitiesFrame.CommunitiesCalendarButton
 	calendarButton:SetSize(24, 24)
@@ -231,7 +236,11 @@ C.themes["Blizzard_Communities"] = function()
 		local dialog = CommunitiesFrame.NotificationSettingsDialog
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
-		B.ReskinDropDown(dialog.CommunitiesListDropDownMenu)
+		if DB.isWW then
+			B.ReskinDropDown(dialog.CommunitiesListDropdown)
+		else
+			B.ReskinDropDown(dialog.CommunitiesListDropDownMenu)
+		end
 		if dialog.Selector then
 			B.StripTextures(dialog.Selector)
 			B.Reskin(dialog.Selector.OkayButton)
@@ -267,7 +276,11 @@ C.themes["Blizzard_Communities"] = function()
 		bg:SetPoint("BOTTOMRIGHT", -4, 3)
 		B.StripTextures(dialog.Description)
 		B.CreateBDFrame(dialog.Description, .25)
-		B.ReskinCheck(dialog.TypeCheckBox)
+		if DB.isWW then
+			B.ReskinCheck(dialog.TypeCheckbox)
+		else
+			B.ReskinCheck(dialog.TypeCheckBox)
+		end
 		B.Reskin(dialog.Accept)
 		B.Reskin(dialog.Delete)
 		B.Reskin(dialog.Cancel)
@@ -282,8 +295,13 @@ C.themes["Blizzard_Communities"] = function()
 		B.Reskin(dialog.Copy)
 		B.Reskin(dialog.Close)
 		B.ReskinArrow(dialog.MaximizeButton, "down")
-		B.ReskinDropDown(dialog.ExpiresDropDownMenu)
-		B.ReskinDropDown(dialog.UsesDropDownMenu)
+		if DB.isWW then
+			B.ReskinDropDown(dialog.ExpiresDropdown)
+			B.ReskinDropDown(dialog.UsesDropdown)
+		else
+			B.ReskinDropDown(dialog.ExpiresDropDownMenu)
+			B.ReskinDropDown(dialog.UsesDropDownMenu)
+		end
 		B.Reskin(dialog.GenerateLinkButton)
 
 		dialog.InviteManager.ArtOverlay:Hide()
@@ -324,7 +342,11 @@ C.themes["Blizzard_Communities"] = function()
 	-- Roster
 	CommunitiesFrame.MemberList.InsetFrame:Hide()
 	B.StripTextures(CommunitiesFrame.MemberList.ColumnDisplay)
-	B.ReskinDropDown(CommunitiesFrame.GuildMemberListDropDownMenu)
+	if DB.isWW then
+		B.ReskinDropDown(CommunitiesFrame.GuildMemberListDropdown)
+	else
+		B.ReskinDropDown(CommunitiesFrame.GuildMemberListDropDownMenu)
+	end
 	CommunitiesFrame.MemberList.ScrollBar:GetChildren():Hide()
 	B.ReskinTrimScroll(CommunitiesFrame.MemberList.ScrollBar)
 
@@ -361,7 +383,11 @@ C.themes["Blizzard_Communities"] = function()
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.CommunitiesSettingsButton)
-	B.ReskinDropDown(CommunitiesFrame.CommunityMemberListDropDownMenu)
+	if DB.isWW then
+		B.ReskinDropDown(CommunitiesFrame.CommunityMemberListDropdown)
+	else
+		B.ReskinDropDown(CommunitiesFrame.CommunityMemberListDropDownMenu)
+	end
 
 	local detailFrame = CommunitiesFrame.GuildMemberDetailFrame
 	B.StripTextures(detailFrame)
@@ -396,9 +422,15 @@ C.themes["Blizzard_Communities"] = function()
 		B.ReskinCheck(dialog.MaxLevelOnly.Button)
 		B.ReskinCheck(dialog.MinIlvlOnly.Button)
 		B.ReskinInput(dialog.MinIlvlOnly.EditBox)
-		B.ReskinDropDown(ClubFinderFocusDropdown)
-		B.ReskinDropDown(ClubFinderLookingForDropdown)
-		B.ReskinDropDown(ClubFinderLanguageDropdown)
+		if DB.isWW then
+			B.ReskinDropDown(dialog.ClubFocusDropdown)
+			B.ReskinDropDown(dialog.LookingForDropdown)
+			B.ReskinDropDown(dialog.LanguageDropdown)
+		else
+			B.ReskinDropDown(ClubFinderFocusDropdown)
+			B.ReskinDropDown(ClubFinderLookingForDropdown)
+			B.ReskinDropDown(ClubFinderLanguageDropdown)
+		end
 	end
 
 	do

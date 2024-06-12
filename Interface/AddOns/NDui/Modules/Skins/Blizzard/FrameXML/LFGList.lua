@@ -199,8 +199,13 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(entryCreation.Name)
 	B.ReskinInput(entryCreation.ItemLevel.EditBox)
 	B.ReskinInput(entryCreation.VoiceChat.EditBox)
-	B.ReskinDropDown(entryCreation.GroupDropDown)
-	B.ReskinDropDown(entryCreation.ActivityDropDown)
+	if DB.isWW then
+		B.ReskinDropDown(entryCreation.GroupDropdown)
+		B.ReskinDropDown(entryCreation.ActivityDropdown)
+	else
+		B.ReskinDropDown(entryCreation.GroupDropDown)
+		B.ReskinDropDown(entryCreation.ActivityDropDown)
+	end
 	B.ReskinDropDown(entryCreation.PlayStyleDropdown)
 	B.ReskinCheck(entryCreation.MythicPlusRating.CheckButton)
 	B.ReskinInput(entryCreation.MythicPlusRating.EditBox)

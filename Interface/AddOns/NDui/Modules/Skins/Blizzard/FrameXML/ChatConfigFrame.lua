@@ -40,7 +40,10 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("ChatConfig_UpdateCheckboxes", function(frame)
 		if not FCF_GetCurrentChatFrame() then return end
 
-		local nameString = frame:GetName().."CheckBox"
+		local nameString = frame:GetName().."Checkbox"
+		if not DB.isWW then
+			nameString = frame:GetName().."CheckBox"
+		end
 		for index in ipairs(frame.checkBoxTable) do
 			local checkBoxName = nameString..index
 			local checkbox = _G[checkBoxName]
@@ -58,7 +61,10 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable)
 		if frame.styled then return end
 
-		local nameString = frame:GetName().."CheckBox"
+		local nameString = frame:GetName().."Checkbox"
+		if not DB.isWW then
+			nameString = frame:GetName().."CheckBox"
+		end
 		for index, value in ipairs(checkBoxTable) do
 			local checkBoxName = nameString..index
 			B.ReskinCheck(_G[checkBoxName])
@@ -224,7 +230,10 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("TextToSpeechFrame_UpdateMessageCheckboxes", function(frame)
 		local checkBoxTable = frame.checkBoxTable
 		if checkBoxTable then
-			local checkBoxNameString = frame:GetName().."CheckBox"
+			local checkBoxNameString = frame:GetName().."Checkbox"
+			if not DB.isWW then
+				checkBoxNameString = frame:GetName().."CheckBox"
+			end
 			local checkBoxName, checkBox
 			for index in ipairs(checkBoxTable) do
 				checkBoxName = checkBoxNameString..index

@@ -1197,9 +1197,9 @@ function G:SetupUnitFrame(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local sliderRange = {
-		["Player"] = {150, 400},
-		["Focus"] = {150, 400},
-		["Pet"] = {100, 300},
+		["Player"] = {100, 400},
+		["Focus"] = {100, 400},
+		["Pet"] = {100, 400},
 		["Boss"] = {100, 400},
 	}
 
@@ -1496,14 +1496,6 @@ function G:SetupCastbar(parent)
 			castbar.Icon:SetSize(height, height)
 			castbar.mover:Show()
 			castbar.mover:SetSize(width+height+5, height+5)
-
-			local quakeTimer = _G.oUF_Player.QuakeTimer
-			if quakeTimer then
-				quakeTimer:SetSize(width, height)
-				quakeTimer.Icon:SetSize(height, height)
-				quakeTimer.mover:Show()
-				quakeTimer.mover:SetSize(width+height+5, height+5)
-			end
 		end
 	end
 	createOptionGroup(scroll.child, L["Player Castbar"], -170, "Player", updatePlayerCastbar)
@@ -1536,10 +1528,6 @@ function G:SetupCastbar(parent)
 		local playerCB = _G.oUF_Player and _G.oUF_Player.Castbar
 		if playerCB then
 			playerCB.mover:Hide()
-			local quakeTimer = _G.oUF_Player.QuakeTimer
-			if quakeTimer then
-				quakeTimer.mover:Hide()
-			end
 		end
 		local targetCB = _G.oUF_Target and _G.oUF_Target.Castbar
 		if targetCB then
