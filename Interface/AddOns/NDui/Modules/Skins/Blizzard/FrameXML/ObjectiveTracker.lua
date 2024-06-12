@@ -28,6 +28,7 @@ local function reskinQuestIcon(button)
 end
 
 local function reskinQuestIcons(_, block)
+	reskinQuestIcon(block.ItemButton) -- isWW
 	reskinQuestIcon(block.itemButton)
 	reskinQuestIcon(block.groupFinderButton)
 
@@ -252,6 +253,21 @@ tinsert(C.defaultThemes, function()
 		BONUS_OBJECTIVE_TRACKER_MODULE = BonusObjectiveTracker
 		WORLD_QUEST_TRACKER_MODULE = WorldQuestObjectiveTracker
 		]]
+		local trackers = {
+			ScenarioObjectiveTracker,
+			UIWidgetObjectiveTracker,
+			CampaignQuestObjectiveTracker,	
+			QuestObjectiveTracker,
+			AdventureObjectiveTracker,
+			AchievementObjectiveTracker,
+			MonthlyActivitiesObjectiveTracker,
+			ProfessionsRecipeTracker,
+			BonusObjectiveTracker,
+			WorldQuestObjectiveTracker,
+		}
+		for _, tracker in pairs(trackers) do
+			hooksecurefunc(tracker, "AddBlock", reskinQuestIcons)
+		end
 		return
 	end
 
