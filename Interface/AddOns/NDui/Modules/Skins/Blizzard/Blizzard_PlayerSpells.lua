@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local function handleSpellButton(self)
 	local slot, slotType = SpellBook_GetSpellBookSlot(self)
-	local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
+	local isPassive = C_Spell.IsSpellPassive(slot, SpellBookFrame.bookType)
 	local name = self:GetName()
 	local highlightTexture = _G[name.."Highlight"]
 	if isPassive then

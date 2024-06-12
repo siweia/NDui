@@ -381,7 +381,7 @@ function ExtraQuestButton:SetItem(itemLink)
 	if self.itemID then
 		local HotKey = self.HotKey
 		local key = GetBindingKey("EXTRAACTIONBUTTON1")
-		local hasRange = C_Item.ItemHasRange(itemLink)
+		local hasRange = C_Item.ItemHasRange(self.itemID)
 		if key then
 			HotKey:SetText(GetBindingText(key, 1))
 			HotKey:Show()
