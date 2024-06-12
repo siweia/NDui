@@ -1939,7 +1939,7 @@ function G:OnLogin()
 	end
 
 	if DB.isWW then
-		hooksecurefunc(GameMenuFrame, "Reset", function(self)
+		hooksecurefunc(GameMenuFrame, "InitButtons", function(self)
 			self:AddButton(L["NDui Console"], toggleGUI)
 		end)
 		return
