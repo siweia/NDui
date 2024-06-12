@@ -33,6 +33,15 @@ if DB.isWW then
 		--start, duration, enabled, modRate
 		return cd.startTime, cd.duration, cd.isEnabled, cd.modRate
 	end
+
+	GetSpellCharges = function(spellID)
+		local charge = C_Spell.GetSpellCharges(spellID)
+		if not charge then return end
+		--currentCharges, maxCharges, cooldownStart, cooldownDuration, chargeModRate
+		return charge.currentCharges, charge.maxCharges, charge.cooldownStartTime, charge.cooldownDuration, charge.chargeModRate
+	end
+
+	GetSpellTexture = C_Spell.GetSpellTexture or GetSpellTexture
 end
 
 -- Colors
