@@ -248,6 +248,28 @@ tinsert(C.defaultThemes, function()
 			end
 		end)
 
+		hooksecurefunc(ScenarioObjectiveTracker.StageBlock, "UpdateWidgetRegistration", function(self)
+			local widgetContainer = self.WidgetContainer
+			if widgetContainer.widgetFrames then
+				for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
+					if widgetFrame.Frame then widgetFrame.Frame:SetAlpha(0) end
+
+					local bar = widgetFrame.TimerBar
+					if bar and not bar.bg then
+						bar.bg = B.CreateBDFrame(bar, .25)
+					end
+
+					if widgetFrame.CurrencyContainer then
+						for currencyFrame in widgetFrame.currencyPool:EnumerateActive() do
+							if not currencyFrame.bg then
+								currencyFrame.bg = B.ReskinIcon(currencyFrame.Icon)
+							end
+						end
+					end
+				end
+			end
+		end)
+
 		hooksecurefunc(ScenarioObjectiveTracker.ChallengeModeBlock, "SetUpAffixes", function(self)
 			for frame in self.affixPool:EnumerateActive() do
 				frame.Border:SetTexture(nil)

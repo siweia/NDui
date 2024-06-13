@@ -125,6 +125,13 @@ C.themes["Blizzard_PlayerSpells"] = function()
 		end
 	end
 
+	local dialog = HeroTalentsSelectionDialog
+	if dialog then
+		B.StripTextures(dialog)
+		B.SetBD(dialog)
+		B.ReskinClose(dialog.CloseButton)
+	end
+
 	local spellBook = PlayerSpellsFrame.SpellBookFrame
 	if spellBook then
 		spellBook.BookBGLeft:SetAlpha(.5)
