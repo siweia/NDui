@@ -1,6 +1,5 @@
 # NDui
 
-## [7.20.2](https://github.com/siweia/NDui/tree/7.20.2) (2024-6-13)
+## [7.20.3](https://github.com/siweia/NDui/tree/7.20.3) (2024-6-15)
 
-- Update skins for 11.0.
-- Remove some deprecated code.
+- More updates for 11.0.
