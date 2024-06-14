@@ -130,6 +130,15 @@ C.themes["Blizzard_PlayerSpells"] = function()
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
 		B.ReskinClose(dialog.CloseButton)
+
+		hooksecurefunc(dialog, "ShowDialog", function(self)
+			for specFrame in self.SpecContentFramePool:EnumerateActive() do
+				if not specFrame.styled then
+					B.Reskin(specFrame.ActivateButton)
+					specFrame.styled = true
+				end
+			end
+		end)
 	end
 
 	local spellBook = PlayerSpellsFrame.SpellBookFrame
