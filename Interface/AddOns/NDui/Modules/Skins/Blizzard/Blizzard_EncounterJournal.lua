@@ -246,7 +246,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 			EncounterJournalEncounterFrameInfoSlotFilterToggle,
 		}
 		for _, button in pairs(buttons) do
-			B.ReskinDropDown(EncounterJournalEncounterFrameInfoDifficulty)
+			reskinFilterToggle(button)
 		end
 	end
 
