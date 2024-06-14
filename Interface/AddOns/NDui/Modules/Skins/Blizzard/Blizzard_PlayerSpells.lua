@@ -135,6 +135,7 @@ C.themes["Blizzard_PlayerSpells"] = function()
 			for specFrame in self.SpecContentFramePool:EnumerateActive() do
 				if not specFrame.styled then
 					B.Reskin(specFrame.ActivateButton)
+					B.Reskin(specFrame.ApplyChangesButton)
 					specFrame.styled = true
 				end
 			end
