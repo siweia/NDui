@@ -19,12 +19,6 @@ function AddonTooltip_Update(owner)
 	_AddonTooltip_Update(owner)
 end
 
--- Fix empty string in party guide promote
-if not PROMOTE_GUIDE then
-	if DB.isDeveloper then print(DB.NDuiString..": Blizzard promote string fixed.") end
-	PROMOTE_GUIDE = PARTY_PROMOTE_GUIDE
-end
-
 -- Fix Drag Collections taint
 do
 	local done
