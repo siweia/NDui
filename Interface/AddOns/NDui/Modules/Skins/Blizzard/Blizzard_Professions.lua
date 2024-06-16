@@ -218,6 +218,7 @@ C.themes["Blizzard_Professions"] = function()
 	B.ReskinMinMax(frame.MaximizeMinimize)
 	if DB.isWW then
 		B.ReskinEditBox(craftingPage.MinimizedSearchBox)
+		B.ReskinIcon(craftingPage.ConcentrationDisplay.Icon)
 	end
 
 	local guildFrame = craftingPage.GuildFrame
@@ -341,6 +342,9 @@ C.themes["Blizzard_Professions"] = function()
 	B.ReskinTab(browseFrame.PublicOrdersButton)
 	B.ReskinTab(browseFrame.GuildOrdersButton)
 	B.ReskinTab(browseFrame.PersonalOrdersButton)
+	if DB.isWW then
+		B.ReskinTab(browseFrame.NpcOrdersButton)
+	end
 	B.StripTextures(browseFrame.OrdersRemainingDisplay)
 	B.CreateBDFrame(browseFrame.OrdersRemainingDisplay, .25)
 

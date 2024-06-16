@@ -169,7 +169,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	ConquestFrame.RatedBG:HookScript("OnEnter", ConquestFrameButton_OnEnter)
 	B.Reskin(ConquestFrame.JoinButton)
 
-	local names = {"RatedSoloShuffle", "Arena2v2", "Arena3v3", "RatedBG"}
+	local names = {"RatedSoloShuffle", "RatedBGBlitz", "Arena2v2", "Arena3v3", "RatedBG"}
 	for _, name in pairs(names) do
 		local bu = ConquestFrame[name]
 		if bu then
@@ -210,9 +210,12 @@ C.themes["Blizzard_PVPUI"] = function()
 		end
 
 		if rewardTexture then
-			rewardFrame.Icon:SetTexture(rewardTexture)
-			local color = DB.QualityColors[rewardQuaility]
-			rewardFrame.Icon.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+			local icon = rewardFrame.Icon
+			icon:SetTexture(rewardTexture)
+			if icon.bg then
+				local color = DB.QualityColors[rewardQuaility]
+				icon.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+			end
 		end
 	end)
 end

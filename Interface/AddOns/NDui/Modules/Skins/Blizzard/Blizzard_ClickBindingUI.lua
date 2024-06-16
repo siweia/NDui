@@ -76,8 +76,10 @@ C.themes["Blizzard_ClickBindingUI"] = function()
 	frame.ScrollBoxBackground:Hide()
 	hooksecurefunc(frame.ScrollBox, "Update", reskinScrollChild)
 
-	reskinPortraitIcon(frame.SpellbookPortrait, 136830)
-	reskinPortraitIcon(frame.MacrosPortrait, 136377)
+	if not DB.isWW then
+		reskinPortraitIcon(frame.SpellbookPortrait, 136830)
+		reskinPortraitIcon(frame.MacrosPortrait, 136377)
+	end
 
 	frame.TutorialFrame.NineSlice:Hide()
 	B.SetBD(frame.TutorialFrame)
