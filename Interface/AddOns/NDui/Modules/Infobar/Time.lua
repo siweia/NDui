@@ -451,7 +451,7 @@ info.onMouseUp = function(_, btn)
 	if btn == "RightButton" then
 		ToggleTimeManager()
 	elseif btn == "MiddleButton" then
-		if not WeeklyRewardsFrame then LoadAddOn("Blizzard_WeeklyRewards") end
+		if not WeeklyRewardsFrame then C_AddOns.LoadAddOn("Blizzard_WeeklyRewards") end
 		if InCombatLockdown() then
 			B:TogglePanel(WeeklyRewardsFrame)
 		else

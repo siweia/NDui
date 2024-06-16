@@ -205,6 +205,14 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	if DB.isWW then
+		hooksecurefunc(QuestInfoQuestType, "SetTextColor", function(text, r, g, b)
+			if not (r == 1 and g == 1 and b == 1) then
+				text:SetTextColor(1, 1, 1)
+			end
+		end)
+	end
+
 	-- Change text colors
 	hooksecurefunc(QuestInfoRequiredMoneyText, "SetTextColor", ReplaceTextColor)
 	hooksecurefunc(QuestInfoSpellObjectiveLearnLabel, "SetTextColor", ReplaceTextColor)

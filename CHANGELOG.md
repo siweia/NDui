@@ -1,7 +1,6 @@
 # NDui
 
-## [7.20.1](https://github.com/siweia/NDui/tree/7.20.1) (2024-6-9)
+## [7.20.4](https://github.com/siweia/NDui/tree/7.20.4) (2024-6-15)
 
-- Update option range.
-- Update aura.
-- Fix error in 11.0.
+- More updates for 11.0.
+- Fix copypasta.

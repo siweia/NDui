@@ -42,6 +42,9 @@ if DB.isWW then
 	end
 
 	GetSpellTexture = C_Spell.GetSpellTexture or GetSpellTexture
+	GetSpellCount = C_Spell.GetSpellCastCount or GetSpellCount
+	IsUsableSpell = C_Spell.IsSpellUsable or IsUsableSpell
+	IsCurrentSpell = C_Spell.IsCurrentSpell or IsCurrentSpell
 end
 
 -- Colors

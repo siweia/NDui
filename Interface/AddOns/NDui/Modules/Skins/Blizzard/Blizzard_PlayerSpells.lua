@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local function handleSpellButton(self)
 	local slot, slotType = SpellBook_GetSpellBookSlot(self)
-	local isPassive = IsPassiveSpell(slot, SpellBookFrame.bookType)
+	local isPassive = C_Spell.IsSpellPassive(slot, SpellBookFrame.bookType)
 	local name = self:GetName()
 	local highlightTexture = _G[name.."Highlight"]
 	if isPassive then
@@ -123,6 +123,23 @@ C.themes["Blizzard_PlayerSpells"] = function()
 			B.ReskinCheck(check.CheckButton)
 			check.CheckButton.bg:SetInside(nil, 6, 6)
 		end
+	end
+
+	local dialog = HeroTalentsSelectionDialog
+	if dialog then
+		B.StripTextures(dialog)
+		B.SetBD(dialog)
+		B.ReskinClose(dialog.CloseButton)
+
+		hooksecurefunc(dialog, "ShowDialog", function(self)
+			for specFrame in self.SpecContentFramePool:EnumerateActive() do
+				if not specFrame.styled then
+					B.Reskin(specFrame.ActivateButton)
+					B.Reskin(specFrame.ApplyChangesButton)
+					specFrame.styled = true
+				end
+			end
+		end)
 	end
 
 	local spellBook = PlayerSpellsFrame.SpellBookFrame

@@ -144,6 +144,7 @@ tinsert(C.defaultThemes, function()
 		B.ReskinDropDown(FriendsFrameStatusDropdown)
 		B.ReskinDropDown(WhoFrameDropdown)
 		B.ReskinDropDown(FriendsFriendsFrameDropdown)
+		FriendsFrameStatusDropdown:SetWidth(55)
 	else
 		B.ReskinDropDown(FriendsFrameStatusDropDown)
 		FriendsFrameStatusDropDown:ClearAllPoints()

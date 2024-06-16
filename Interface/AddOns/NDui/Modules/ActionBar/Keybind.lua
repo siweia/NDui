@@ -5,7 +5,8 @@ local Bar = B:GetModule("Actionbar")
 local _G = _G
 local pairs, tonumber, print, strfind, strupper = pairs, tonumber, print, strfind, strupper
 local InCombatLockdown = InCombatLockdown
-local GetSpellBookItemName, GetMacroInfo = GetSpellBookItemName, GetMacroInfo
+local GetSpellBookItemName = C_SpellBook and C_SpellBook.GetSpellBookItemName or GetSpellBookItemName
+local GetMacroInfo = GetMacroInfo
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown
 local GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings = GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings
 local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
@@ -95,11 +96,13 @@ function Bar:Bind_Create()
 
 	for i = 1, 12 do
 		local button = _G["SpellButton"..i]
-		button:HookScript("OnEnter", hookSpellButton)
+		if button then
+			button:HookScript("OnEnter", hookSpellButton)
+		end
 	end
 
 	if not C_AddOns.IsAddOnLoaded("Blizzard_MacroUI") then
-		hooksecurefunc("LoadAddOn", Bar.Bind_RegisterMacro)
+		hooksecurefunc(C_AddOns, "LoadAddOn", Bar.Bind_RegisterMacro)
 	else
 		Bar.Bind_RegisterMacro("Blizzard_MacroUI")
 	end
@@ -118,7 +121,7 @@ function Bar:Bind_Update(button, spellmacro)
 	frame:Show()
 
 	if spellmacro == "SPELL" then
-		frame.id = SpellBook_GetSpellBookSlot(button)
+		frame.id = SpellBook_GetSpellBookSlot(button) -- isWW, needs review
 		frame.name = GetSpellBookItemName(frame.id, SpellBookFrame.bookType)
 		frame.bindings = {GetBindingKey(spellmacro.." "..frame.name)}
 	elseif spellmacro == "MACRO" then

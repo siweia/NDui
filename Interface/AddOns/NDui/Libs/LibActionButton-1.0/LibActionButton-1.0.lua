@@ -38,6 +38,8 @@ if not lib then return end
 -- isWW, depreacated
 local GetSpellLossOfControlCooldown = C_Spell and C_Spell.GetSpellLossOfControlCooldown or GetSpellLossOfControlCooldown
 local IsAttackSpell = C_Spell and C_Spell.IsAutoAttackSpell or IsAttackSpell
+local IsPressHoldReleaseSpell = C_Spell and C_Spell.IsPressHoldReleaseSpell or IsPressHoldReleaseSpell
+local IsAutoRepeatSpell = C_Spell and C_Spell.IsAutoRepeatSpell or IsAutoRepeatSpell
 
 -- Lua functions
 local type, error, tostring, tonumber, assert, select = type, error, tostring, tonumber, assert, select

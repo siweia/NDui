@@ -300,10 +300,11 @@ tinsert(C.defaultThemes, function()
 						updateCollapse(child.HighlightRight)
 						B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
 					end
-					if child.ReputationBar then
-						B.StripTextures(child.ReputationBar)
-						child.ReputationBar:SetStatusBarTexture(DB.bdTex)
-						B.CreateBDFrame(child.ReputationBar, .25)
+					local repbar = child.Content and child.Content.ReputationBar
+					if repbar then
+						B.StripTextures(repbar)
+						repbar:SetStatusBarTexture(DB.bdTex)
+						B.CreateBDFrame(repbar, .25)
 					end
 					if child.ToggleCollapseButton then
 						B.ReskinCollapse(child.ToggleCollapseButton, true)
@@ -372,52 +373,83 @@ tinsert(C.defaultThemes, function()
 	if DB.isWW then
 		B.ReskinCheck(TokenFramePopup.InactiveCheckbox)
 		B.ReskinCheck(TokenFramePopup.BackpackCheckbox)
+		B.ReskinArrow(TokenFrame.CurrencyTransferLogToggleButton, "right")
+		B.ReskinPortraitFrame(CurrencyTransferLog)
 	else
 		B.ReskinCheck(TokenFramePopup.InactiveCheckBox)
 		B.ReskinCheck(TokenFramePopup.BackpackCheckBox)
 	end
 	B.ReskinTrimScroll(TokenFrame.ScrollBar)
 
-	hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)
-		for i = 1, self.ScrollTarget:GetNumChildren() do
-			local child = select(i, self.ScrollTarget:GetChildren())
-			if child.Highlight and not child.styled then
-				if not child.styled then
-					child.CategoryLeft:SetAlpha(0)
-					child.CategoryRight:SetAlpha(0)
-					child.CategoryMiddle:SetAlpha(0)
-
-					child.Highlight:SetInside()
-					child.Highlight.SetPoint = B.Dummy
-					child.Highlight:SetColorTexture(1, 1, 1, .25)
-					child.Highlight.SetTexture = B.Dummy
-
-					child.bg = B.ReskinIcon(child.Icon)
-
-					if child.ExpandIcon then
-						child.expBg = B.CreateBDFrame(child.ExpandIcon, 0, true)
-						child.expBg:SetInside(child.ExpandIcon, 3, 3)
+	if DB.isWW then
+		hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)
+			for i = 1, self.ScrollTarget:GetNumChildren() do
+				local child = select(i, self.ScrollTarget:GetChildren())
+				if child and not child.styled then
+					if child.Right then
+						B.StripTextures(child)
+						hooksecurefunc(child.Right, "SetAtlas", updateCollapse)
+						hooksecurefunc(child.HighlightRight, "SetAtlas", updateCollapse)
+						updateCollapse(child.Right)
+						updateCollapse(child.HighlightRight)
+						B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
 					end
-
-					if child.Check then
-						child.Check:SetAtlas("checkmark-minimal")
+					local icon = child.Content and child.Content.CurrencyIcon
+					if icon then
+						B.ReskinIcon(icon)
 					end
-
+					if child.ToggleCollapseButton then
+						B.ReskinCollapse(child.ToggleCollapseButton, true)
+						updateToggleCollapse(child.ToggleCollapseButton)
+						hooksecurefunc(child.ToggleCollapseButton, "RefreshIcon", updateToggleCollapse)
+					end
+	
 					child.styled = true
 				end
-
-				child.styled = true
 			end
-
-			if child.isHeader then
-				child.bg:Hide()
-				child.expBg:Show()
-			else
-				child.bg:Show()
-				child.expBg:Hide()
+		end)
+	else
+		hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)
+			for i = 1, self.ScrollTarget:GetNumChildren() do
+				local child = select(i, self.ScrollTarget:GetChildren())
+				if child.Highlight and not child.styled then
+					if not child.styled then
+						child.CategoryLeft:SetAlpha(0)
+						child.CategoryRight:SetAlpha(0)
+						child.CategoryMiddle:SetAlpha(0)
+	
+						child.Highlight:SetInside()
+						child.Highlight.SetPoint = B.Dummy
+						child.Highlight:SetColorTexture(1, 1, 1, .25)
+						child.Highlight.SetTexture = B.Dummy
+	
+						child.bg = B.ReskinIcon(child.Icon)
+	
+						if child.ExpandIcon then
+							child.expBg = B.CreateBDFrame(child.ExpandIcon, 0, true)
+							child.expBg:SetInside(child.ExpandIcon, 3, 3)
+						end
+	
+						if child.Check then
+							child.Check:SetAtlas("checkmark-minimal")
+						end
+	
+						child.styled = true
+					end
+	
+					child.styled = true
+				end
+	
+				if child.isHeader then
+					child.bg:Hide()
+					child.expBg:Show()
+				else
+					child.bg:Show()
+					child.expBg:Hide()
+				end
 			end
-		end
-	end)
+		end)
+	end
 
 	B.StripTextures(TokenFramePopup)
 	B.SetBD(TokenFramePopup)

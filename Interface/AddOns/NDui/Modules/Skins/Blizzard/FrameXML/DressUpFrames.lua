@@ -66,7 +66,10 @@ tinsert(C.defaultThemes, function()
 		end)
 	end
 
-	if not DB.isWW then
+	if DB.isWW then
+		B.ReskinDropDown(DressUpFrameOutfitDropdown)
+		B.Reskin(DressUpFrameOutfitDropdown.SaveButton)
+	else
 		B.Reskin(DressUpFrameOutfitDropDown.SaveButton)
 		B.StripTextures(DressUpFrameOutfitDropDown)
 		B.ReskinDropDown(DressUpFrameOutfitDropDown)

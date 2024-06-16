@@ -285,7 +285,7 @@ function S:ReskinRematchElements()
 	B.CreateBDFrame(target, .25)
 	S.RematchButton(target.BigLoadSaveButton)
 
-	if not heheheheeh then return end
+	if true then return end
 	local targetPanel = loadoutPanel.TargetPanel
 	if targetPanel then -- compatible
 		B.StripTextures(targetPanel.Top)
