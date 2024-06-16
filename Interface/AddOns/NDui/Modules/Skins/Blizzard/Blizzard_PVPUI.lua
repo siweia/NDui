@@ -18,6 +18,9 @@ local function ReskinPvPFrame(frame)
 	reward.Ring:Hide()
 	reward.CircleMask:Hide()
 	B.ReskinIcon(reward.Icon)
+	if reward.CheckMark then
+		reward.CheckMark:SetAtlas("checkmark-minimal")
+	end
 end
 
 local function ConquestFrameButton_OnEnter(self)
