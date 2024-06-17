@@ -320,7 +320,7 @@ local list = {
 		{AuraID = 48792, UnitID = "target"},	-- 冰封之韧
 		{AuraID = 48707, UnitID = "target"},	-- 反魔法护罩
 		{AuraID = 61336, UnitID = "target"},	-- 生存本能
-		{AuraID = 197690, UnitID = "target"},	-- 防御姿态
+		{AuraID = 197690, UnitID = "target"},	-- 防御姿态 -- isWW: removed?
 		{AuraID = 147833, UnitID = "target"},	-- 援护
 		{AuraID = 186265, UnitID = "target"},	-- 灵龟守护
 		{AuraID = 113862, UnitID = "target"},	-- 强化隐形术
