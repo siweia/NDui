@@ -43,20 +43,42 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 	ReskinCustomizeButton(frame.RandomizeAppearanceButton)
 
 	hooksecurefunc(frame, "UpdateOptionButtons", function(self)
-		for button in self.selectionPopoutPool:EnumerateActive() do
-			if not button.styled then
-				ReskinCustomizeArrow(button.DecrementButton, "left")
-				ReskinCustomizeArrow(button.IncrementButton, "right")
+		if self.selectionPopoutPool then -- isWW: removed
+			for button in self.selectionPopoutPool:EnumerateActive() do
+				if not button.styled then
+					ReskinCustomizeArrow(button.DecrementButton, "left")
+					ReskinCustomizeArrow(button.IncrementButton, "right")
 
-				local popoutButton = button.Button
-				popoutButton.HighlightTexture:SetAlpha(0)
-				popoutButton.NormalTexture:SetAlpha(0)
-				ReskinCustomizeButton(popoutButton)
-				B.StripTextures(popoutButton.Popout)
-				local bg = B.SetBD(popoutButton.Popout, 1)
-				bg:SetFrameLevel(popoutButton.Popout:GetFrameLevel())
+					local popoutButton = button.Button
+					popoutButton.HighlightTexture:SetAlpha(0)
+					popoutButton.NormalTexture:SetAlpha(0)
+					ReskinCustomizeButton(popoutButton)
+					B.StripTextures(popoutButton.Popout)
+					local bg = B.SetBD(popoutButton.Popout, 1)
+					bg:SetFrameLevel(popoutButton.Popout:GetFrameLevel())
 
-				button.styled = true
+					button.styled = true
+				end
+			end
+		end
+
+		if self.dropdownPool then
+			for option in self.dropdownPool:EnumerateActive() do
+				if not option.styled then
+					B.Reskin(option.Dropdown)
+					B.Reskin(option.DecrementButton)
+					B.Reskin(option.IncrementButton)
+					option.styled = true
+				end
+			end
+		end
+
+		if self.sliderPool then
+			for slider in self.sliderPool:EnumerateActive() do
+				if not slider.styled then
+					B.ReskinSlider(slider)
+					slider.styled = true
+				end
 			end
 		end
 
@@ -69,6 +91,8 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 		end
 	end)
 
-	ReskinCustomizeTooltip(CharCustomizeTooltip)
+	if not DB.isWW then
+		ReskinCustomizeTooltip(CharCustomizeTooltip)
+	end
 	ReskinCustomizeTooltip(CharCustomizeNoHeaderTooltip)
 end
