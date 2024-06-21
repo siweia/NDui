@@ -28,6 +28,7 @@
 	<Script file="LootHistory.lua"/>
 	<Script file="LossOfControlFrame.lua"/>
 	<Script file="MailFrame.lua"/>
+	<Script file="Menu.lua"/>
 	<Script file="MerchantFrame.lua"/>
 	<Script file="ModelPreviewFrame.lua"/>
 	<Script file="MovieFrame.lua"/>
