@@ -9,6 +9,7 @@ local guiTab, guiPage, f = {}, {}
 
 -- Default Settings
 G.DefaultSettings = {
+	Reset = false,
 	BFA = false,
 	Mover = {},
 	InternalCD = {},
@@ -98,7 +99,7 @@ G.DefaultSettings = {
 		BarStancePerRow = 10,
 		VehButtonSize = 34,
 		MBSize = 22,
-		MBPerRow = 12,
+		MBPerRow = 13,
 		MBSpacing = 5,
 	},
 	Bags = {
@@ -665,6 +666,11 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		C.db = NDuiPDB[NDuiADB["ProfileIndex"][DB.MyFullName] - 1]
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
+
+	if not C.db["Reset"] then
+		C.db["Actionbar"]["MBPerRow"] = 13
+		C.db["Reset"] = true
+	end
 
 	B:SetupUIScale(true)
 	if NDuiADB["CustomTex"] ~= "" then

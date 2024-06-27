@@ -7,6 +7,8 @@ local _G = getfenv(0)
 local tinsert, pairs, type = table.insert, pairs, type
 local buttonList, menubar = {}
 
+local maxButtons = 13
+
 function Bar:MicroButton_SetupTexture(icon, texture)
 	local r, g, b = DB.r, DB.g, DB.b
 	if not C.db["Skins"]["ClassLine"] then r, g, b = 0, 0, 0 end
@@ -118,8 +120,8 @@ function Bar:MicroMenu_Setup()
 		end
 	end
 
-	local column = min(12, perRow)
-	local rows = ceil(12/perRow)
+	local column = min(maxButtons, perRow)
+	local rows = ceil(maxButtons/perRow)
 	local width = column*size + (column-1)*margin
 	local height = size*rows + (rows-1)*margin
 	menubar:SetSize(width, height)
@@ -130,7 +132,7 @@ function Bar:MicroMenu()
 	if not C.db["Actionbar"]["MicroMenu"] then return end
 
 	menubar = CreateFrame("Frame", nil, UIParent)
-	menubar:SetSize(323, 22)
+	menubar:SetSize(27*maxButtons, 22)
 	menubar.mover = B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 	Bar:MicroMenu_Lines(menubar)
 
@@ -142,10 +144,9 @@ function Bar:MicroMenu()
 		{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
 		{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
 		{"guild", "GuildMicroButton", MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLEGUILDTAB")},
-		--{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
 		{"encounter", "EJMicroButton", MicroButtonTooltipText(ENCOUNTER_JOURNAL, "TOGGLEENCOUNTERJOURNAL")},
-		--{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
-		{"LFG", function(_, btn) if btn == "LeftButton" then PVEFrame_ToggleFrame() else TogglePVPFrame() end end, DB.LeftButton..MicroButtonTooltipText(LFG_BUTTON, "TOGGLEGROUPFINDER").."|n"..DB.RightButton..MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
+		{"pvp", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
+		{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLEGROUPFINDER")},
 		{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
 		{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
