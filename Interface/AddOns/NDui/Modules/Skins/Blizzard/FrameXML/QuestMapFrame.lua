@@ -140,7 +140,7 @@ tinsert(C.defaultThemes, function()
 		for button in QuestScrollFrame.titleFramePool:EnumerateActive() do
 			if not button.styled then
 				if button.Checkbox then
-					button.Checkbox:DisableDrawLayer("BACKGROUND")
+					B.StripTextures(button.Checkbox, 2)
 					B.CreateBDFrame(button.Checkbox, 0, true)
 				end
 				if button.Check then -- isWW removed?
@@ -170,6 +170,16 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(CompleteQuestFrame)
 		B.StripTextures(CompleteQuestFrame.CompleteButton)
 		B.Reskin(CompleteQuestFrame.CompleteButton)
+	end
+
+	-- Map legend
+	local mapLegend = QuestMapFrame.MapLegend
+	if mapLegend then
+		B.StripTextures(mapLegend.BorderFrame)
+		B.Reskin(mapLegend.BackButton)
+		B.ReskinTrimScroll(mapLegend.ScrollFrame.ScrollBar)
+		B.StripTextures(mapLegend.ScrollFrame)
+		B.CreateBDFrame(mapLegend.ScrollFrame, .25)
 	end
 
 	-- [[ Quest log popup detail frame ]]
