@@ -6,6 +6,7 @@ local TIER = 8 -- BfA
 local INSTANCE -- 5人本
 
 INSTANCE = 1023 -- 围攻伯拉勒斯
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 257169) -- 恐惧咆哮
 module:RegisterDebuff(TIER, INSTANCE, 0, 257168) -- 诅咒挥砍
 module:RegisterDebuff(TIER, INSTANCE, 0, 272588) -- 腐烂伤口

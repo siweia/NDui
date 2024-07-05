@@ -111,27 +111,47 @@ function G:SetupRaidDebuffs(parent)
 		end)
 	end
 
-	local maxLevel = UnitLevel("player") > 60
+	local maxLevel = UnitLevel("player") > 70
 	local dungeons = {}
 
-	for dungeonID = 1196, 1204 do
-		if dungeonID ~= 1200 then
-			AddNewDungeon(dungeons, dungeonID)
+	if maxLevel then
+		for dungeonID = 1267, 1274 do
+			if dungeonID ~= 1273 then
+				AddNewDungeon(dungeons, dungeonID)
+			end
 		end
+		AddNewDungeon(dungeons, 1210) -- 暗焰裂口
+		AddNewDungeon(dungeons, 71) -- 格瑞姆巴托
+		AddNewDungeon(dungeons, 1023) -- 围攻伯拉勒斯
+		AddNewDungeon(dungeons, 1182) -- 通灵战潮
+		AddNewDungeon(dungeons, 1184) -- 塞兹仙林的迷雾
+	else
+		for dungeonID = 1196, 1204 do
+			if dungeonID ~= 1200 then
+				AddNewDungeon(dungeons, dungeonID)
+			end
+		end
+		AddNewDungeon(dungeons, 1209)  -- 永恒黎明
+		AddNewDungeon(dungeons, 65)  -- 潮汐王座
+		AddNewDungeon(dungeons, 556)  -- 永茂林地
+		AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
+		AddNewDungeon(dungeons, 762)  -- 黑心林地
+		AddNewDungeon(dungeons, 968)  -- 阿塔达萨
+		AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
 	end
-	AddNewDungeon(dungeons, 1209)  -- 永恒黎明
-	AddNewDungeon(dungeons, 65)  -- 潮汐王座
-	AddNewDungeon(dungeons, 556)  -- 永茂林地
-	AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
-	AddNewDungeon(dungeons, 762)  -- 黑心林地
-	AddNewDungeon(dungeons, 968)  -- 阿塔达萨
-	AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
 
-	local raids = {
-		[1] = EJ_GetInstanceInfo(1200),
-		[2] = EJ_GetInstanceInfo(1208),
-		[3] = EJ_GetInstanceInfo(1207),
-	}
+	local raids
+	if maxLevel then
+		raids = {
+			[1] = EJ_GetInstanceInfo(1273), -- 尼鲁巴尔王宫
+		}
+	else
+		raids = {
+			[1] = EJ_GetInstanceInfo(1200),
+			[2] = EJ_GetInstanceInfo(1208),
+			[3] = EJ_GetInstanceInfo(1207),
+		}
+	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
