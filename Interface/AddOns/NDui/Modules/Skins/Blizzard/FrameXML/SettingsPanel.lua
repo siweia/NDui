@@ -133,6 +133,9 @@ tinsert(C.defaultThemes, function()
 			if element.DropDown then -- isWW, renamed
 				ReskinOptionDropDown(element.DropDown)
 			end
+			if element.Control then -- isWW, new add
+				ReskinDropdown(element.Control)
+			end
 			if element.CheckBox then -- isWW, renamed
 				B.ReskinCheck(element.CheckBox)
 				element.CheckBox.bg:SetInside(nil, 6, 6)
