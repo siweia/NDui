@@ -203,6 +203,9 @@ local function reskinRankBar(rankBar)
 	rankBar.Background:Hide()
 	rankBar.Rank.Text:SetFontObject(Game12Font)
 	B.CreateBDFrame(rankBar.Fill, 1)
+	if DB.isWW then
+		B.ReskinArrow(rankBar.ExpansionDropdownButton, "down")
+	end
 end
 
 C.themes["Blizzard_Professions"] = function()
@@ -269,9 +272,6 @@ C.themes["Blizzard_Professions"] = function()
 
 	local rankBar = craftingPage.RankBar
 	reskinRankBar(rankBar)
-	if DB.isWW then
-		B.ReskinArrow(rankBar.ExpansionDropdownButton, "down")
-	end
 
 	B.ReskinArrow(craftingPage.LinkButton, "right")
 	craftingPage.LinkButton:SetSize(20, 20)
@@ -399,6 +399,25 @@ C.themes["Blizzard_Professions"] = function()
 
 	B.StripTextures(orderDetails.FulfillmentForm.NoteEditBox)
 	B.CreateBDFrame(orderDetails.FulfillmentForm.NoteEditBox, .25)
+
+	if DB.isWW then
+		B.ReskinIcon(orderView.ConcentrationDisplay.Icon)
+
+		local rewardsFrame = orderInfo.NPCRewardsFrame
+		if rewardsFrame then
+			rewardsFrame.Background:Hide()
+			B.CreateBDFrame(rewardsFrame.Background, .25)
+	
+			local function handleRewardButton(button)
+				if not button then return end
+				B.StripTextures(button)
+				button.bg = B.ReskinIcon(button.Icon)
+				B.ReskinIconBorder(button.IconBorder, true)
+			end
+			handleRewardButton(rewardsFrame.RewardItem1)
+			handleRewardButton(rewardsFrame.RewardItem2)
+		end
+	end
 
 	-- InspectRecipeFrame
 	local inspectFrame = InspectRecipeFrame
