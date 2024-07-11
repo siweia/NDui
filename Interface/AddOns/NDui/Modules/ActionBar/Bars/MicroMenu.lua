@@ -39,6 +39,7 @@ function Bar:MicroButton_Create(parent, data)
 
 	if type(method) == "string" then
 		local button = _G[method]
+		if not button then print(method) return end
 		button:SetHitRectInsets(0, 0, 0, 0)
 		button:SetParent(bu)
 		button.__owner = bu
@@ -140,7 +141,7 @@ function Bar:MicroMenu()
 		{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
 		{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
 		{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
-		{"guild", "SocialsMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
+		{"guild", "GuildMicroButton", MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLESOCIAL")},
 		{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
 		{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
 		{"collections", "HelpMicroButton", MicroButtonTooltipText(HELP_BUTTON, "TOGGLEHELP")},
