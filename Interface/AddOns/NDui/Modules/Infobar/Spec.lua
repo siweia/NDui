@@ -19,7 +19,7 @@ info.eventList = {
 info.onEvent = function(self)
 	local text = ""
 	for i = 1, 5 do
-		local name, _, pointsSpent = GetTalentTabInfo(i)
+		local _, name, _, _, pointsSpent = GetTalentTabInfo(i)
 		if not name then break end
 		text = text.."-"..pointsSpent
 	end
@@ -43,7 +43,7 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(" ")
 
 	for i = 1, 5 do
-		local name, _, pointsSpent = GetTalentTabInfo(i)
+		local _, name, _, _, pointsSpent = GetTalentTabInfo(i)
 		if not name then break end
 		GameTooltip:AddDoubleLine(name, pointsSpent, 1,1,1, 1,.8,0)
 	end
