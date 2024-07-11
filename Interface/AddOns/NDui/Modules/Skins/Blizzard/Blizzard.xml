@@ -14,6 +14,7 @@
 	<Script file="Blizzard_FlightMap.lua"/>
 	<Script file="Blizzard_GMChatUI.lua"/>
 	<Script file="Blizzard_GuildBankUI.lua"/>
+	<Script file="Blizzard_GuildControlUI.lua"/>
 	<Script file="Blizzard_InspectUI.lua"/>
 	<Script file="Blizzard_ItemSocketingUI.lua"/>
 	<Script file="Blizzard_MacroUI.lua"/>
