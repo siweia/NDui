@@ -314,9 +314,7 @@ function module:SetupWorldMap()
 	B.CreateMF(WorldMapFrame, nil, true)
 	self.UpdateMapScale(WorldMapFrame)
 	WorldMapFrame:HookScript("OnShow", self.UpdateMapAnchor)
-	if DB.isNewPatch then
-		hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
-	end
+	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
 
 	-- Default elements
 	WorldMapFrame.BlackoutFrame:SetAlpha(0)
