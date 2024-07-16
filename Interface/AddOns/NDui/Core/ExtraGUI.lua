@@ -111,27 +111,47 @@ function G:SetupRaidDebuffs(parent)
 		end)
 	end
 
-	local maxLevel = UnitLevel("player") > 60
+	local maxLevel = UnitLevel("player") > 70
 	local dungeons = {}
 
-	for dungeonID = 1196, 1204 do
-		if dungeonID ~= 1200 then
-			AddNewDungeon(dungeons, dungeonID)
+	if maxLevel then
+		for dungeonID = 1267, 1274 do
+			if dungeonID ~= 1273 then
+				AddNewDungeon(dungeons, dungeonID)
+			end
 		end
+		AddNewDungeon(dungeons, 1210) -- 暗焰裂口
+		AddNewDungeon(dungeons, 71) -- 格瑞姆巴托
+		AddNewDungeon(dungeons, 1023) -- 围攻伯拉勒斯
+		AddNewDungeon(dungeons, 1182) -- 通灵战潮
+		AddNewDungeon(dungeons, 1184) -- 塞兹仙林的迷雾
+	else
+		for dungeonID = 1196, 1204 do
+			if dungeonID ~= 1200 then
+				AddNewDungeon(dungeons, dungeonID)
+			end
+		end
+		AddNewDungeon(dungeons, 1209)  -- 永恒黎明
+		AddNewDungeon(dungeons, 65)  -- 潮汐王座
+		AddNewDungeon(dungeons, 556)  -- 永茂林地
+		AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
+		AddNewDungeon(dungeons, 762)  -- 黑心林地
+		AddNewDungeon(dungeons, 968)  -- 阿塔达萨
+		AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
 	end
-	AddNewDungeon(dungeons, 1209)  -- 永恒黎明
-	AddNewDungeon(dungeons, 65)  -- 潮汐王座
-	AddNewDungeon(dungeons, 556)  -- 永茂林地
-	AddNewDungeon(dungeons, 740)  -- 黑鸦堡垒
-	AddNewDungeon(dungeons, 762)  -- 黑心林地
-	AddNewDungeon(dungeons, 968)  -- 阿塔达萨
-	AddNewDungeon(dungeons, 1021)  -- 维克雷斯庄园
 
-	local raids = {
-		[1] = EJ_GetInstanceInfo(1200),
-		[2] = EJ_GetInstanceInfo(1208),
-		[3] = EJ_GetInstanceInfo(1207),
-	}
+	local raids
+	if maxLevel then
+		raids = {
+			[1] = EJ_GetInstanceInfo(1273), -- 尼鲁巴尔王宫
+		}
+	else
+		raids = {
+			[1] = EJ_GetInstanceInfo(1200),
+			[2] = EJ_GetInstanceInfo(1208),
+			[3] = EJ_GetInstanceInfo(1207),
+		}
+	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
@@ -1971,7 +1991,7 @@ function G:SetupActionbarStyle(parent)
 
 	local styleString = {
 		[1] = "NAB:34:12:12:12:34:12:12:12:32:12:0:12:32:12:12:1:32:12:12:1:34:12:12:12:34:12:12:12:34:12:12:12:26:12:10:30:12:10:0B24:0B60:-271B26:271B26:-1BR336:-35BR336:0B522:0T-482:0T-442:0B98:-202B100",
-		[2] = "NAB:34:12:12:12:34:12:12:12:34:12:12:12:32:12:12:1:32:12:12:1:34:12:12:12:34:12:12:12:34:12:12:12:26:12:10:30:12:10:0B24:0B60:0B96:271B26:-1BR336:-35BR336:0B522:0T-482:0T-442:0B134:-202B100",
+		[2] = "NAB:34:12:12:12:34:12:12:12:34:12:12:12:32:12:12:1:32:12:12:1:34:12:12:12:34:12:12:12:34:12:12:12:26:12:10:30:12:10:0B24:0B60:0B96:271B26:-1BR336:-35BR336:0B522:0T-482:0T-442:0B134:-202B136",
 		[3] = "NAB:34:12:12:12:34:12:12:12:34:12:12:6:32:12:12:1:32:12:12:1:34:12:12:12:34:12:12:12:34:12:12:12:26:12:10:30:12:10:-108B24:-108B60:216B24:163B26:-1BR336:-35BR336:0B522:0T-482:0T-442:0B98:-310B100",
 		[4] = "NAB:34:12:12:12:34:12:12:12:32:12:12:6:32:12:12:6:32:12:12:1:34:12:12:12:34:12:12:12:34:12:12:12:26:12:10:30:12:10:0B24:0B60:536BL26:271B26:-536BR26:-1TR-336:0B522:0T-482:0T-442:0B98:-202B100",
 	}

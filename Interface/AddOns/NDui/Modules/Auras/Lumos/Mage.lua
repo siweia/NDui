@@ -31,7 +31,7 @@ function A:ChantLumos(self)
 			if IsPlayerSpell(116011) then
 				UpdateTotemAura(button, 609815, 116011)
 			elseif IsPlayerSpell(1463) then
-				UpdateBuff(button, 1463, 1463)
+				UpdateBuff(button, 1463, 116267)
 			else
 				UpdateCooldown(button, 55342, true)
 			end
@@ -48,7 +48,7 @@ function A:ChantLumos(self)
 			if IsPlayerSpell(116011) then
 				UpdateTotemAura(button, 609815, 116011)
 			elseif IsPlayerSpell(1463) then
-				UpdateBuff(button, 1463, 1463)
+				UpdateBuff(button, 1463, 116267)
 			else
 				UpdateCooldown(button, 55342, true)
 			end
@@ -75,7 +75,7 @@ function A:ChantLumos(self)
 			if IsPlayerSpell(116011) then
 				UpdateTotemAura(button, 609815, 116011)
 			elseif IsPlayerSpell(1463) then
-				UpdateBuff(button, 1463, 1463)
+				UpdateBuff(button, 1463, 116267)
 			else
 				UpdateCooldown(button, 55342, true)
 			end

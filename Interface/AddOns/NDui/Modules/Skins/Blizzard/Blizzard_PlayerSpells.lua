@@ -128,7 +128,7 @@ C.themes["Blizzard_PlayerSpells"] = function()
 	local dialog = HeroTalentsSelectionDialog
 	if dialog then
 		B.StripTextures(dialog)
-		B.SetBD(dialog)
+		B.SetBD(dialog, 1)
 		B.ReskinClose(dialog.CloseButton)
 
 		hooksecurefunc(dialog, "ShowDialog", function(self)

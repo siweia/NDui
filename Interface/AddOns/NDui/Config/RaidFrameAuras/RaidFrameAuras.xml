@@ -28,4 +28,7 @@
 	<Script file="Dragonflight\VaultoftheIncarnates.lua"/>
 	<Script file="Dragonflight\Aberrus.lua"/>
 	<Script file="Dragonflight\Amirdrassil.lua"/>
+
+	<Script file="TWW\Party-TWW.lua"/>
+	<Script file="TWW\NerubarPalace.lua"/>
 </Ui>
