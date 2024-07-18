@@ -93,9 +93,13 @@ tinsert(C.defaultThemes, function()
 	-- Quest NPC model
 
 	B.StripTextures(QuestModelScene)
-	B.StripTextures(QuestNPCModelTextFrame)
 	local bg = B.SetBD(QuestModelScene)
-	bg:SetOutside(nil, nil, nil, QuestNPCModelTextFrame)
+
+	local modelText = QuestNPCModelTextFrame or QuestModelScene.ModelTextFrame
+	if modelText then -- isWW
+		B.StripTextures(modelText)
+		bg:SetOutside(nil, nil, nil, modelText)
+	end
 
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, _, x, y)
 		x = x + 6
