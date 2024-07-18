@@ -155,7 +155,16 @@ tinsert(C.defaultThemes, function()
 		end
 
 		for header in QuestScrollFrame.campaignHeaderMinimalFramePool:EnumerateActive() do
-			ReskinQuestHeader(header)
+			if DB.isWW then
+				if header.CollapseButton and not header.styled then
+					B.StripTextures(header)
+					B.CreateBDFrame(header.Background, .25)
+					header.Highlight:SetColorTexture(1, 1, 1, .25)
+					header.styled = true
+				end
+			else
+				ReskinQuestHeader(header)
+			end
 		end
 
 		for header in QuestScrollFrame.covenantCallingsHeaderFramePool:EnumerateActive() do
