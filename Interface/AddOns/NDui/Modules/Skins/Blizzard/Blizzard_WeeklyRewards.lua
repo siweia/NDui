@@ -33,9 +33,11 @@ end
 local function ReskinActivityFrame(frame, isObject)
 	if frame.Border then
 		if isObject then
-			frame.Border:SetAlpha(0)
-			frame.SelectedTexture:SetAlpha(0)
-			frame.LockIcon:SetVertexColor(r, g, b)
+			if not DB.isWW then
+				frame.Border:SetAlpha(0)
+				frame.SelectedTexture:SetAlpha(0)
+				frame.LockIcon:SetVertexColor(r, g, b)
+			end
 			hooksecurefunc(frame, "SetSelectionState", updateSelection)
 			hooksecurefunc(frame.ItemFrame, "SetDisplayedItem", reskinRewardIcon)
 
@@ -50,7 +52,7 @@ local function ReskinActivityFrame(frame, isObject)
 		end
 	end
 
-	if frame.Background then
+	if not DB.isWW and frame.Background then
 		frame.bg = B.CreateBDFrame(frame.Background, 1)
 	end
 end
@@ -72,19 +74,24 @@ end
 C.themes["Blizzard_WeeklyRewards"] = function()
 	local WeeklyRewardsFrame = WeeklyRewardsFrame
 
-	B.StripTextures(WeeklyRewardsFrame)
-	B.SetBD(WeeklyRewardsFrame)
+	local bg = B.SetBD(WeeklyRewardsFrame)
 	B.ReskinClose(WeeklyRewardsFrame.CloseButton)
 	B.StripTextures(WeeklyRewardsFrame.SelectRewardButton)
 	B.Reskin(WeeklyRewardsFrame.SelectRewardButton)
-	WeeklyRewardsFrame.NineSlice:SetAlpha(0)
-	WeeklyRewardsFrame.BackgroundTile:SetAlpha(0)
 
-	local headerFrame = WeeklyRewardsFrame.HeaderFrame
-	B.StripTextures(headerFrame)
-	--B.CreateBDFrame(headerFrame, .25)
-	headerFrame:SetPoint("TOP", 1, -42)
-	headerFrame.Text:SetFontObject(SystemFont_Huge1)
+	if DB.isWW then
+		WeeklyRewardsFrame.BorderShadow:SetInside(bg)
+		WeeklyRewardsFrame.BorderContainer:SetAlpha(0)
+	else
+		B.StripTextures(WeeklyRewardsFrame)
+		WeeklyRewardsFrame.NineSlice:SetAlpha(0)
+		WeeklyRewardsFrame.BackgroundTile:SetAlpha(0)
+
+		local headerFrame = WeeklyRewardsFrame.HeaderFrame
+		B.StripTextures(headerFrame)
+		headerFrame:SetPoint("TOP", 1, -42)
+		headerFrame.Text:SetFontObject(SystemFont_Huge1)
+	end
 
 	ReskinActivityFrame(WeeklyRewardsFrame.RaidFrame)
 	ReskinActivityFrame(WeeklyRewardsFrame.MythicFrame)
