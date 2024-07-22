@@ -43,6 +43,10 @@ local function reskinRequestCheckbox(self)
 			B.ReskinCheck(button.CheckBox)
 			button.CheckBox:SetSize(26, 26)
 		end
+		if button.Checkbox then
+			B.ReskinCheck(button.Checkbox)
+			button.Checkbox:SetSize(26, 26)
+		end
 	end
 end
 

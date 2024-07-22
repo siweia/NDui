@@ -132,8 +132,13 @@ function module:ReskinRegions()
 
 	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
 	queueIcon:SetPoint("CENTER", QueueStatusButton)
-	queueIcon:SetSize(50, 50)
-	queueIcon:SetTexture(DB.eyeTex)
+	if DB.isWW then
+		queueIcon:SetSize(30, 30)
+		queueIcon:SetAtlas("Raid")
+	else
+		queueIcon:SetSize(50, 50)
+		queueIcon:SetTexture(DB.eyeTex)
+	end
 	local anim = queueIcon:CreateAnimationGroup()
 	anim:SetLooping("REPEAT")
 	anim.rota = anim:CreateAnimation("Rotation")
