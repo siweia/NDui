@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/5CkTA4u.png" width="512" height="256" />
 
 
-![](https://img.shields.io/github/stars/siweia/NDui?style=social) [![](https://img.shields.io/github/last-commit/siweia/NDui?color=c59a6c&label=Retail)](https://github.com/siweia/NDui) [![](https://img.shields.io/github/last-commit/siweia/NDui/TBC?label=TBC)](https://github.com/siweia/NDui/tree/TBC) [![](https://img.shields.io/github/last-commit/siweia/NDui/Era?color=ffffff&label=Classic)](https://github.com/siweia/NDui/tree/Era)
+![](https://img.shields.io/github/stars/siweia/NDui?style=social) [![](https://img.shields.io/github/last-commit/siweia/NDui?color=c59a6c&label=Retail)](https://github.com/siweia/NDui) [![](https://img.shields.io/github/last-commit/siweia/NDui/Classic?label=Classic)](https://github.com/siweia/NDui/tree/Classic) [![](https://img.shields.io/github/last-commit/siweia/NDui/Era?color=ffffff&label=Era)](https://github.com/siweia/NDui/tree/Era)
 
 
 </div>
