@@ -369,13 +369,23 @@ tinsert(C.defaultThemes, function()
 	if TokenFramePopup.CloseButton then -- blizz typo by parentKey "CloseButton" into "$parent.CloseButton"
 		B.ReskinClose(TokenFramePopup.CloseButton)
 	else
-		B.ReskinClose((select(4, TokenFramePopup:GetChildren())))
+		B.ReskinClose((select(5, TokenFramePopup:GetChildren())))
 	end
 	if DB.isWW then
+		B.Reskin(TokenFramePopup.CurrencyTransferToggleButton)
 		B.ReskinCheck(TokenFramePopup.InactiveCheckbox)
 		B.ReskinCheck(TokenFramePopup.BackpackCheckbox)
 		B.ReskinArrow(TokenFrame.CurrencyTransferLogToggleButton, "right")
 		B.ReskinPortraitFrame(CurrencyTransferLog)
+
+		B.ReskinPortraitFrame(CurrencyTransferMenu)
+		CurrencyTransferMenu.SourceSelector.SourceLabel:SetWidth(56)
+		B.ReskinDropDown(CurrencyTransferMenu.SourceSelector.Dropdown)
+		B.ReskinInput(CurrencyTransferMenu.AmountSelector.InputBox)
+		B.ReskinIcon(CurrencyTransferMenu.SourceBalancePreview.BalanceInfo.CurrencyIcon)
+		B.ReskinIcon(CurrencyTransferMenu.PlayerBalancePreview.BalanceInfo.CurrencyIcon)
+		B.Reskin(CurrencyTransferMenu.ConfirmButton)
+		B.Reskin(CurrencyTransferMenu.CancelButton)
 	else
 		B.ReskinCheck(TokenFramePopup.InactiveCheckBox)
 		B.ReskinCheck(TokenFramePopup.BackpackCheckBox)
