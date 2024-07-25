@@ -96,7 +96,7 @@ function Implementation:OnHide()
 	if(self.notInited) then return end
 
 	if(self.OnClose) then self:OnClose() end
-	if(self:AtBank()) then CloseBankFrame() end
+	if(self:AtBank()) then C_Bank.CloseBankFrame() end
 end
 
 --[[!
