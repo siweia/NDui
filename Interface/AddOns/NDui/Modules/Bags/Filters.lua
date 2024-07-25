@@ -182,6 +182,13 @@ local function isPrimordialStone(item)
 	return item.id and primordialStones[item.id]
 end
 
+local accountBankIDs = {
+	[Enum.BagIndex.AccountBankTab_1 or 13] = true,
+	[Enum.BagIndex.AccountBankTab_2 or 14] = true,
+	[Enum.BagIndex.AccountBankTab_3 or 15] = true,
+	[Enum.BagIndex.AccountBankTab_4 or 16] = true,
+	[Enum.BagIndex.AccountBankTab_5 or 17] = true
+}
 function module:GetFilters()
 	local filters = {}
 
@@ -209,6 +216,7 @@ function module:GetFilters()
 	filters.bagRelic = function(item) return isItemInBag(item) and isKorthiaRelic(item) end
 	filters.onlyBagReagent = function(item) return isItemInBagReagent(item) and not isEmptySlot(item) end
 	filters.bagStone = function(item) return isItemInBag(item) and isPrimordialStone(item) end
+	filters.accountbank = function(item) return accountBankIDs[item.bagId] and not isEmptySlot(item) end
 
 	for i = 1, 5 do
 		filters["bagCustom"..i] = function(item) return (isItemInBag(item) or isItemInBagReagent(item)) and isItemCustom(item, i) end
