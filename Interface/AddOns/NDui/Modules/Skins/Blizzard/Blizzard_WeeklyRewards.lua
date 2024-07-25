@@ -33,7 +33,7 @@ end
 local function ReskinActivityFrame(frame, isObject)
 	if frame.Border then
 		if isObject then
-			if not DB.isWW then
+			if not DB.isNewPatch then
 				frame.Border:SetAlpha(0)
 				frame.SelectedTexture:SetAlpha(0)
 				frame.LockIcon:SetVertexColor(r, g, b)
@@ -52,7 +52,7 @@ local function ReskinActivityFrame(frame, isObject)
 		end
 	end
 
-	if not DB.isWW and frame.Background then
+	if not DB.isNewPatch and frame.Background then
 		frame.bg = B.CreateBDFrame(frame.Background, 1)
 	end
 end
@@ -79,7 +79,7 @@ C.themes["Blizzard_WeeklyRewards"] = function()
 	B.StripTextures(WeeklyRewardsFrame.SelectRewardButton)
 	B.Reskin(WeeklyRewardsFrame.SelectRewardButton)
 
-	if DB.isWW then
+	if DB.isNewPatch then
 		WeeklyRewardsFrame.BorderShadow:SetInside(bg)
 		WeeklyRewardsFrame.BorderContainer:SetAlpha(0)
 	else
