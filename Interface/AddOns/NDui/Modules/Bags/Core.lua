@@ -276,12 +276,14 @@ function module:CreateReagentButton(f)
 end
 
 function module:CreateAccountBankButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Battlenet-ClientIcon-App")
+	local bu = B.CreateButton(self, 22, 22, true, 235423)
+	bu.Icon:SetTexCoord(.6, .9, .1, .4)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -C.mult)
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
-		if not IsReagentBankUnlocked() then
-			StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, { bankType = Enum.BankType.Account })
+		if AccountBankPanel:ShouldShowLockPrompt() then
+			UIErrorsFrame:AddMessage(DB.InfoColor..ACCOUNT_BANK_LOCKED_PROMPT)
+		--	StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, { bankType = Enum.BankType.Account })
 		else
 			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 			AccountBankPanel:Show()
