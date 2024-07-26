@@ -300,6 +300,65 @@ function module:CreateAccountBankButton(f)
 	return bu
 end
 
+local function AddBankTabSettingsToTooltip(tooltip, depositFlags)
+	if not tooltip or not depositFlags then return end
+
+	if FlagsUtil.IsSet(depositFlags, Enum.BagSlotFlags.ExpansionCurrent) then
+		GameTooltip_AddNormalLine(tooltip, BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_CURRENT))
+	elseif FlagsUtil.IsSet(depositFlags, Enum.BagSlotFlags.ExpansionLegacy) then
+		GameTooltip_AddNormalLine(tooltip, BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_LEGACY))
+	end
+	
+	local filterList = ContainerFrameUtil_ConvertFilterFlagsToList(depositFlags)
+	if filterList then
+		GameTooltip_AddNormalLine(tooltip, BANK_TAB_DEPOSIT_ASSIGNMENTS:format(filterList), true)
+	end
+end
+
+local function clickTab()
+	if not C_Bank.HasMaxBankTabs(Enum.BankType.Account) then
+		StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, { bankType = Enum.BankType.Account })
+	end
+end
+
+local function tab_OnEnter(self)
+	local data = AccountBankPanel.purchasedBankTabData[self.tabIndex]
+	if not data then return end
+
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip_SetTitle(GameTooltip, data.name, NORMAL_FONT_COLOR)
+	AddBankTabSettingsToTooltip(GameTooltip, data.depositFlags)
+	GameTooltip_AddInstructionLine(GameTooltip, BANK_TAB_TOOLTIP_CLICK_INSTRUCTION)
+	GameTooltip:Show()
+end
+
+function module:CreateAccountBankTabs()
+	local buttonSize = 37
+	local frame = CreateFrame("Frame", nil, self)
+	frame:SetSize((buttonSize+5)*5+5, buttonSize + 10)
+	frame:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
+	B.SetBD(frame)
+	-- todo: update bank tabs
+	local bankTabs = {}
+
+	for i = 1, 5 do
+		local bu = B.CreateButton(frame, 37, 37, true, QUESTION_MARK_ICON)
+		bu:SetPoint("BOTTOMLEFT", 5+(i-1)*(buttonSize+5), 5)
+		bu.tabIndex = i
+		bankTabs[i] = bu
+
+		bu:SetScript("OnClick", clickTab)
+		bu:SetScript("OnEnter", tab_OnEnter)
+		bu:SetScript("OnLeave", B.HideTooltip)
+	end
+
+	hooksecurefunc(AccountBankPanel, "RefreshBankTabs", function(self)
+		for index, data in pairs(self.purchasedBankTabData) do
+			bankTabs[index].Icon:SetTexture(data.icon)
+		end
+	end)
+end
+
 function module:CreateBankButton(f)
 	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Banker")
 	bu:SetScript("OnClick", function()
@@ -1273,11 +1332,10 @@ function module:OnLogin()
 			buttons[4] = module.CreateBankButton(self, f)
 			buttons[5] = module.CreateAccountBankButton(self, f)
 		elseif name == "AccountBank" then
-			module.CreateBagBar(self, settings, 5)
+			module.CreateAccountBankTabs(self)
 			buttons[3] = module.CreateDepositButton(self, name)
-			buttons[4] = module.CreateBagToggle(self)
-			buttons[5] = module.CreateBankButton(self, f)
-			buttons[6] = module.CreateReagentButton(self, f)
+			buttons[4] = module.CreateBankButton(self, f)
+			buttons[5] = module.CreateReagentButton(self, f)
 		end
 
 		for i = 1, #buttons do
