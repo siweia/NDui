@@ -183,3 +183,16 @@ tagPool["money"] = function()
 	return str
 end
 tagEvents["money"] = { "PLAYER_MONEY" }
+
+tagPool["accountmoney"] = function()
+	local money = C_Bank.FetchDepositedMoney(Enum.BankType.Account) or 0
+	local str = ""
+	local gold, silver, copper = floor(money/1e4), floor(money/100) % 100, money % 100
+
+	if gold > 0 then str = str..BreakUpLargeNumbers(gold)..createAtlasCoin("gold").." " end
+	if silver > 0 then str = str..silver..createAtlasCoin("silver").." " end
+	if copper > 0 then str = str..copper..createAtlasCoin("copper").." " end
+
+	return str
+end
+tagEvents["accountmoney"] = { "PLAYER_MONEY", "ACCOUNT_MONEY" }

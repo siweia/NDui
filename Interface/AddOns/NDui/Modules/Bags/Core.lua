@@ -17,6 +17,7 @@ local SortAccountBankBags = C_Container.SortAccountBankBags
 local PickupContainerItem = C_Container.PickupContainerItem
 local SplitContainerItem = C_Container.SplitContainerItem
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
+local ACCOUNT_BANK_TYPE = Enum.BankType.Account or 2
 
 local sortCache = {}
 function module:ReverseSort()
@@ -316,6 +317,40 @@ function module:CreateAccountBankButton(f)
 	return bu
 end
 
+function module:CreateAccountMoney()
+	local frame = CreateFrame("Button", nil, self)
+	frame:SetSize(50, 22)
+
+	local tag = self:SpawnPlugin("TagDisplay", "[accountmoney]", self)
+	tag:SetFont(unpack(DB.Font))
+	tag:SetPoint("RIGHT", frame, -2, 0)
+	frame.tag = tag
+
+	frame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+	frame:SetScript("OnClick", function(_, btn)
+		if btn == "RightButton" then
+			StaticPopup_Hide("BANK_MONEY_DEPOSIT")
+			if StaticPopup_Visible("BANK_MONEY_WITHDRAW") then
+				StaticPopup_Hide("BANK_MONEY_WITHDRAW")
+			else
+				StaticPopup_Show("BANK_MONEY_WITHDRAW", nil, nil, {bankType = ACCOUNT_BANK_TYPE})
+			end
+		else
+			StaticPopup_Hide("BANK_MONEY_WITHDRAW")
+			if StaticPopup_Visible("BANK_MONEY_DEPOSIT") then
+				StaticPopup_Hide("BANK_MONEY_DEPOSIT")
+			else
+				StaticPopup_Show("BANK_MONEY_DEPOSIT", nil, nil, {bankType = ACCOUNT_BANK_TYPE})
+			end
+		end
+	end)
+	frame.title = DB.LeftButton..BANK_DEPOSIT_MONEY_BUTTON_LABEL.."|n"..DB.RightButton..BANK_WITHDRAW_MONEY_BUTTON_LABEL
+	B.AddTooltip(frame, "ANCHOR_TOP")
+
+
+	return frame
+end
+
 function module:CreateBankButton(f)
 	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Banker")
 	bu:SetScript("OnClick", function()
@@ -384,7 +419,7 @@ function module:CreateAccountBankDeposit()
 			SetCVar("bankAutoDepositReagents", isOn and 0 or 1)
 			updateAccountBankDeposit(bu)
 		else
-			C_Bank.AutoDepositItemsIntoBank(Enum.BankType.Account)
+			C_Bank.AutoDepositItemsIntoBank(ACCOUNT_BANK_TYPE)
 		end
 	end)
 	bu.title = ACCOUNT_BANK_DEPOSIT_BUTTON_LABEL
@@ -1318,6 +1353,7 @@ function module:OnLogin()
 			buttons[4] = module.CreateAccountBankDeposit(self)
 			buttons[5] = module.CreateBankButton(self, f)
 			buttons[6] = module.CreateReagentButton(self, f)
+			buttons[7] = module.CreateAccountMoney(self)
 		end
 
 		for i = 1, #buttons do
