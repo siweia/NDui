@@ -203,9 +203,7 @@ local function reskinRankBar(rankBar)
 	rankBar.Background:Hide()
 	rankBar.Rank.Text:SetFontObject(Game12Font)
 	B.CreateBDFrame(rankBar.Fill, 1)
-	if DB.isWW then
-		B.ReskinArrow(rankBar.ExpansionDropdownButton, "down")
-	end
+	B.ReskinArrow(rankBar.ExpansionDropdownButton, "down")
 end
 
 C.themes["Blizzard_Professions"] = function()
@@ -219,10 +217,8 @@ C.themes["Blizzard_Professions"] = function()
 	B.Reskin(craftingPage.ViewGuildCraftersButton)
 	reskinArrowInput(craftingPage.CreateMultipleInputBox)
 	B.ReskinMinMax(frame.MaximizeMinimize)
-	if DB.isWW then
-		B.ReskinEditBox(craftingPage.MinimizedSearchBox)
-		B.ReskinIcon(craftingPage.ConcentrationDisplay.Icon)
-	end
+	B.ReskinEditBox(craftingPage.MinimizedSearchBox)
+	B.ReskinIcon(craftingPage.ConcentrationDisplay.Icon)
 
 	local guildFrame = craftingPage.GuildFrame
 	B.StripTextures(guildFrame)
@@ -257,11 +253,7 @@ C.themes["Blizzard_Professions"] = function()
 	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in case blizz rename
 	B.CreateBDFrame(recipeList, .25):SetInside()
 	B.ReskinEditBox(recipeList.SearchBox)
-	if DB.isWW then
-		B.ReskinFilterButton(recipeList.FilterDropdown)
-	else
-		B.ReskinFilterButton(recipeList.FilterButton)
-	end
+	B.ReskinFilterButton(recipeList.FilterDropdown)
 
 	local form = craftingPage.SchematicForm
 	B.StripTextures(form)
@@ -333,18 +325,12 @@ C.themes["Blizzard_Professions"] = function()
 	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in case blizz rename
 	B.CreateBDFrame(recipeList, .25):SetInside()
 	B.ReskinEditBox(recipeList.SearchBox)
-	if DB.isWW then
-		B.ReskinFilterButton(recipeList.FilterDropdown)
-	else
-		B.ReskinFilterButton(recipeList.FilterButton)
-	end
+	B.ReskinFilterButton(recipeList.FilterDropdown)
 
 	B.ReskinTab(browseFrame.PublicOrdersButton)
 	B.ReskinTab(browseFrame.GuildOrdersButton)
 	B.ReskinTab(browseFrame.PersonalOrdersButton)
-	if DB.isWW then
-		B.ReskinTab(browseFrame.NpcOrdersButton)
-	end
+	B.ReskinTab(browseFrame.NpcOrdersButton)
 	B.StripTextures(browseFrame.OrdersRemainingDisplay)
 	B.CreateBDFrame(browseFrame.OrdersRemainingDisplay, .25)
 
@@ -399,24 +385,21 @@ C.themes["Blizzard_Professions"] = function()
 
 	B.StripTextures(orderDetails.FulfillmentForm.NoteEditBox)
 	B.CreateBDFrame(orderDetails.FulfillmentForm.NoteEditBox, .25)
+	B.ReskinIcon(orderView.ConcentrationDisplay.Icon)
 
-	if DB.isWW then
-		B.ReskinIcon(orderView.ConcentrationDisplay.Icon)
+	local rewardsFrame = orderInfo.NPCRewardsFrame
+	if rewardsFrame then
+		rewardsFrame.Background:Hide()
+		B.CreateBDFrame(rewardsFrame.Background, .25)
 
-		local rewardsFrame = orderInfo.NPCRewardsFrame
-		if rewardsFrame then
-			rewardsFrame.Background:Hide()
-			B.CreateBDFrame(rewardsFrame.Background, .25)
-	
-			local function handleRewardButton(button)
-				if not button then return end
-				B.StripTextures(button)
-				button.bg = B.ReskinIcon(button.Icon)
-				B.ReskinIconBorder(button.IconBorder, true)
-			end
-			handleRewardButton(rewardsFrame.RewardItem1)
-			handleRewardButton(rewardsFrame.RewardItem2)
+		local function handleRewardButton(button)
+			if not button then return end
+			B.StripTextures(button)
+			button.bg = B.ReskinIcon(button.Icon)
+			B.ReskinIconBorder(button.IconBorder, true)
 		end
+		handleRewardButton(rewardsFrame.RewardItem1)
+		handleRewardButton(rewardsFrame.RewardItem2)
 	end
 
 	-- InspectRecipeFrame

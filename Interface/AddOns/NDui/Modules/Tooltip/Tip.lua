@@ -706,13 +706,6 @@ TT:RegisterTooltips("Blizzard_EncounterJournal", function()
 	EncounterJournalTooltip.Item2.IconBorder:SetAlpha(0)
 end)
 
-if not DB.isWW then
-	TT:RegisterTooltips("Blizzard_Calendar", function()
-		CalendarContextMenu:HookScript("OnShow", TT.ReskinTooltip)
-		CalendarInviteStatusContextMenu:HookScript("OnShow", TT.ReskinTooltip)
-	end)
-end
-
 TT:RegisterTooltips("Blizzard_PerksProgram", function()
 	if PerksProgramTooltip then
 		TT.ReskinTooltip(PerksProgramTooltip)

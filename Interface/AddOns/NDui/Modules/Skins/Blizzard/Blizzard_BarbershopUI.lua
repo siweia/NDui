@@ -91,8 +91,5 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 		end
 	end)
 
-	if not DB.isWW then
-		ReskinCustomizeTooltip(CharCustomizeTooltip)
-	end
 	ReskinCustomizeTooltip(CharCustomizeNoHeaderTooltip)
 end

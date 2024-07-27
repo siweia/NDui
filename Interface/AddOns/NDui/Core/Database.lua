@@ -13,7 +13,7 @@ DB.isNewPatch = select(4, GetBuildInfo()) >= 110002 -- 11.0.2
 DB.isWW = select(4, GetBuildInfo()) >= 110000 -- 11.0.0
 
 -- Deprecated
-if DB.isWW then
+if DB.isWW then -- FIXME
 	local function EasyMenu_Initialize( frame, level, menuList )
 		for index = 1, #menuList do
 			local value = menuList[index]

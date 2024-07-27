@@ -43,24 +43,6 @@ local function reskinScrollChild(self)
 	end
 end
 
-local function updateButtonSelection(button, isSelected)
-	if isSelected then
-		button.bg:SetBackdropBorderColor(1, .8, 0)
-	else
-		button.bg:SetBackdropBorderColor(0, 0, 0)
-	end
-end
-
-local function reskinPortraitIcon(button, texture)
-	B.StripTextures(button)
-	button.Portrait:SetTexture(texture)
-	button.bg = B.ReskinIcon(button.Portrait)
-	button.bg:SetBackdropColor(0, 0, 0)
-	button.Highlight:SetColorTexture(1, 1, 1, .25)
-	button.Highlight:SetInside(button.bg)
-	hooksecurefunc(button, "SetSelectedState", updateButtonSelection)
-end
-
 C.themes["Blizzard_ClickBindingUI"] = function()
 	local frame = _G.ClickBindingFrame
 
@@ -75,11 +57,6 @@ C.themes["Blizzard_ClickBindingUI"] = function()
 
 	frame.ScrollBoxBackground:Hide()
 	hooksecurefunc(frame.ScrollBox, "Update", reskinScrollChild)
-
-	if not DB.isWW then
-		reskinPortraitIcon(frame.SpellbookPortrait, 136830)
-		reskinPortraitIcon(frame.MacrosPortrait, 136377)
-	end
 
 	frame.TutorialFrame.NineSlice:Hide()
 	B.SetBD(frame.TutorialFrame)

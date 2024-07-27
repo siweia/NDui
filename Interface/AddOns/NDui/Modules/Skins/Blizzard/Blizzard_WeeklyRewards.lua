@@ -96,9 +96,7 @@ C.themes["Blizzard_WeeklyRewards"] = function()
 	ReskinActivityFrame(WeeklyRewardsFrame.RaidFrame)
 	ReskinActivityFrame(WeeklyRewardsFrame.MythicFrame)
 	ReskinActivityFrame(WeeklyRewardsFrame.PVPFrame)
-	if DB.isWW then
-		ReskinActivityFrame(WeeklyRewardsFrame.WorldFrame)
-	end
+	ReskinActivityFrame(WeeklyRewardsFrame.WorldFrame)
 
 	for _, frame in pairs(WeeklyRewardsFrame.Activities) do
 		ReskinActivityFrame(frame, true)

@@ -1,8 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-if not DB.isWW then return end
-
 local function replaceHighlight(button)
 	button.highlightTexture:SetColorTexture(1, 1, 1, .25)
 end

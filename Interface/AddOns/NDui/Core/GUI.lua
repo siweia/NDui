@@ -1944,34 +1944,7 @@ function G:OnLogin()
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 	end
 
-	if DB.isWW then
-		hooksecurefunc(GameMenuFrame, "InitButtons", function(self)
-			self:AddButton(L["NDui Console"], toggleGUI)
-		end)
-		return
-	end
-
-	local gui = CreateFrame("Button", "GameMenuFrameNDui", GameMenuFrame, "GameMenuButtonTemplate, BackdropTemplate")
-	gui:SetText(L["NDui Console"])
-	gui:SetPoint("TOP", GameMenuButtonAddons, "BOTTOM", 0, -21)
-
-	GameMenuFrame:HookScript("OnShow", function(self)
-		GameMenuButtonLogout:SetPoint("TOP", gui, "BOTTOM", 0, -21)
-		self:SetHeight(self:GetHeight() + gui:GetHeight() + 22)
+	hooksecurefunc(GameMenuFrame, "InitButtons", function(self)
+		self:AddButton(L["NDui Console"], toggleGUI)
 	end)
-
-	gui:SetScript("OnClick", toggleGUI)
-
-	if C.db["Skins"]["BlizzardSkins"] then
-		if DB.isWW then
-			gui:DisableDrawLayer("BACKGROUND")
-			gui.bg = B.CreateBDFrame(gui, 0, true)
-			local hl = gui:GetHighlightTexture()
-			hl:SetColorTexture(cr, cg, cb, .25)
-			hl:SetInside(gui.bg)
-			gui.bg:SetInside(nil, 3, 3)
-		else
-			B.Reskin(gui)
-		end
-	end
 end

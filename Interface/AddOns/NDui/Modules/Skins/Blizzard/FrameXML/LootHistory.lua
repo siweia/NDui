@@ -13,11 +13,7 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(frame)
 	B.ReskinClose(frame.ClosePanelButton)
 	B.ReskinTrimScroll(frame.ScrollBar)
-	if DB.isWW then
-		B.ReskinDropDown(frame.EncounterDropdown)
-	else
-		B.ReskinDropDown(frame.EncounterDropDown)
-	end
+	B.ReskinDropDown(frame.EncounterDropdown)
 
 	local bar = frame.Timer
 	if bar then

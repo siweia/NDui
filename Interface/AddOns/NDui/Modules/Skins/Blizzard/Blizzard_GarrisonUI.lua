@@ -786,11 +786,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- Pick
 	local Pick = GarrisonRecruiterFrame.Pick
 	B.Reskin(Pick.ChooseRecruits)
-	if DB.isWW then
-		B.ReskinDropDown(Pick.ThreatDropdown)
-	else
-		B.ReskinDropDown(Pick.ThreatDropDown)
-	end
+	B.ReskinDropDown(Pick.ThreatDropdown)
 	B.ReskinRadio(Pick.Radio1)
 	B.ReskinRadio(Pick.Radio2)
 

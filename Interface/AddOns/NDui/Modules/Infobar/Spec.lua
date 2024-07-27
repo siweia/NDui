@@ -221,11 +221,7 @@ info.onMouseUp = function(self, btn)
 
 	if btn == "LeftButton" then
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-		if DB.isWW then
-			PlayerSpellsUtil.ToggleClassTalentOrSpecFrame()
-		else
-			ToggleTalentFrame(2)
-		end
+		PlayerSpellsUtil.ToggleClassTalentOrSpecFrame()
 	else
 		BuildSpecMenu()
 		EasyMenu(newMenu, B.EasyMenu, self, -80, 100, "MENU", 1)

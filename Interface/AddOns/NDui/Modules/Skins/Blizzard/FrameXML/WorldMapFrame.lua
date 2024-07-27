@@ -17,9 +17,7 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(overlayFrames[2], 3)
 	B.StripTextures(overlayFrames[3], 3)
 	overlayFrames[3].ActiveTexture:SetTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Toggle")
-	if DB.isWW then
-		B.ReskinFilterReset(overlayFrames[2].ResetButton)
-	end
+	B.ReskinFilterReset(overlayFrames[2].ResetButton)
 
 	local sideToggle = WorldMapFrame.SidePanelToggle
 	sideToggle:SetFrameLevel(3)

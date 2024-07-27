@@ -16,11 +16,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinClose(frame.CloseButton)
 	B.Reskin(frame.RevertAllChangesButton)
 	B.Reskin(frame.SaveChangesButton)
-	if DB.isWW then
-		B.ReskinDropDown(frame.LayoutDropdown)
-	else
-		B.ReskinDropDown(frame.LayoutDropdown.DropDownMenu)
-	end
+	B.ReskinDropDown(frame.LayoutDropdown)
 	reskinOptionCheck(frame.ShowGridCheckButton.Button)
 	reskinOptionCheck(frame.EnableSnapCheckButton.Button)
 	reskinOptionCheck(frame.EnableAdvancedOptionsCheckButton.Button)
@@ -33,11 +29,9 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(dialog)
 	B.SetBD(dialog)
 	B.ReskinClose(dialog.CloseButton)
-	if DB.isWW then
-		frame.AccountSettings.SettingsContainer.BorderArt:Hide()
-		B.CreateBDFrame(frame.AccountSettings.SettingsContainer, .25)
-		B.ReskinTrimScroll(frame.AccountSettings.SettingsContainer.ScrollBar)
-	end
+	frame.AccountSettings.SettingsContainer.BorderArt:Hide()
+	B.CreateBDFrame(frame.AccountSettings.SettingsContainer, .25)
+	B.ReskinTrimScroll(frame.AccountSettings.SettingsContainer.ScrollBar)
 
 	local function reskinOptionChecks(settings)
 		for i = 1, settings:GetNumChildren() do
@@ -91,11 +85,7 @@ tinsert(C.defaultThemes, function()
 
 		for dropdown in self.pools:EnumerateActiveByTemplate("EditModeSettingDropdownTemplate") do
 			if not dropdown.styled then
-				if DB.isWW then
-					B.ReskinDropDown(dropdown.Dropdown)
-				else
-					B.ReskinDropDown(dropdown.Dropdown.DropDownMenu)
-				end
+				B.ReskinDropDown(dropdown.Dropdown)
 				dropdown.styled = true
 			end
 		end

@@ -517,7 +517,7 @@ function M:RaidTool_CreateMenu(parent)
 end
 
 function M:RaidTool_EasyMarker()
-	if DB.isWW then return end
+	if DB.isWW then return end -- FIXME: with the new menu template
 
 	local menuList = {}
 

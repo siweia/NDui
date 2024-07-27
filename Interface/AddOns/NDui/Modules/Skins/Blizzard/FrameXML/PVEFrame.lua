@@ -55,11 +55,7 @@ tinsert(C.defaultThemes, function()
 	if ScenarioQueueFrame then
 		B.StripTextures(ScenarioFinderFrame)
 		ScenarioQueueFrameBackground:SetAlpha(0)
-		if DB.isWW then
-			B.ReskinDropDown(ScenarioQueueFrameTypeDropdown)
-		else
-			B.ReskinDropDown(ScenarioQueueFrameTypeDropDown)
-		end
+		B.ReskinDropDown(ScenarioQueueFrameTypeDropdown)
 		B.Reskin(ScenarioQueueFrameFindGroupButton)
 		B.ReskinTrimScroll(ScenarioQueueFrameRandomScrollFrame.ScrollBar)
 		if ScenarioQueueFrameRandomScrollFrameScrollBar then

@@ -122,16 +122,7 @@ C.themes["Blizzard_Calendar"] = function()
 		B.ClassIconTexCoord(bu:GetNormalTexture(), class)
 	end
 
-	if DB.isWW then
-		B.ReskinFilterButton(CalendarFrame.FilterButton)
-	else
-		B.StripTextures(CalendarFilterFrame)
-		local bg = B.CreateBDFrame(CalendarFilterFrame, 0, true)
-		bg:SetPoint("TOPLEFT", 35, -1)
-		bg:SetPoint("BOTTOMRIGHT", -18, 1)
-		B.ReskinArrow(CalendarFilterButton, "down")
-	end
-
+	B.ReskinFilterButton(CalendarFrame.FilterButton)
 	CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)
 	CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)
 	CalendarViewRaidFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -6, -24)
@@ -184,26 +175,14 @@ C.themes["Blizzard_Calendar"] = function()
 	B.ReskinClose(CalendarViewRaidCloseButton)
 	B.ReskinClose(CalendarMassInviteCloseButton)
 
-	if DB.isWW then
-		B.ReskinDropDown(CalendarCreateEventFrame.CommunityDropdown)
-		B.ReskinDropDown(CalendarCreateEventFrame.EventTypeDropdown)
-		B.ReskinDropDown(CalendarCreateEventFrame.HourDropdown)
-		B.ReskinDropDown(CalendarCreateEventFrame.MinuteDropdown)
-		B.ReskinDropDown(CalendarCreateEventFrame.AMPMDropdown)
-		B.ReskinDropDown(CalendarMassInviteFrame.CommunityDropdown)
-		B.ReskinDropDown(CalendarMassInviteFrame.RankDropdown)
-	else
-		B.ReskinDropDown(CalendarCreateEventCommunityDropDown)
-		B.ReskinDropDown(CalendarCreateEventTypeDropDown)
-		B.ReskinDropDown(CalendarCreateEventHourDropDown)
-		B.ReskinDropDown(CalendarCreateEventMinuteDropDown)
-		B.ReskinDropDown(CalendarCreateEventAMPMDropDown)
-		B.ReskinDropDown(CalendarMassInviteCommunityDropDown)
-		B.ReskinDropDown(CalendarMassInviteRankMenu)
-		CalendarCreateEventHourDropDown:SetWidth(80)
-		CalendarCreateEventMinuteDropDown:SetWidth(80)
-		CalendarCreateEventAMPMDropDown:SetWidth(90)
-	end
+	B.ReskinDropDown(CalendarCreateEventFrame.CommunityDropdown)
+	B.ReskinDropDown(CalendarCreateEventFrame.EventTypeDropdown)
+	B.ReskinDropDown(CalendarCreateEventFrame.HourDropdown)
+	B.ReskinDropDown(CalendarCreateEventFrame.MinuteDropdown)
+	B.ReskinDropDown(CalendarCreateEventFrame.AMPMDropdown)
+	B.ReskinDropDown(CalendarMassInviteFrame.CommunityDropdown)
+	B.ReskinDropDown(CalendarMassInviteFrame.RankDropdown)
+
 	B.ReskinInput(CalendarCreateEventTitleEdit)
 	B.ReskinInput(CalendarCreateEventInviteEdit)
 	B.ReskinInput(CalendarMassInviteMinLevelEdit)
@@ -213,9 +192,4 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarPrevMonthButton:SetSize(19, 19)
 	CalendarNextMonthButton:SetSize(19, 19)
 	B.ReskinCheck(CalendarCreateEventLockEventCheck)
-
-	if not DB.isWW then
-		B.ReskinDropDown(CalendarCreateEventDifficultyOptionDropDown)
-		CalendarCreateEventDifficultyOptionDropDown:SetWidth(150)
-	end
 end

@@ -49,12 +49,7 @@ function M:UpdateProfessions()
 			for i = 1, numSpells do
 				local slotID = i + spelloffset
 				if not IsPassiveSpell(slotID, BOOKTYPE_PROFESSION) then
-					local spellID
-					if DB.isWW then
-						spellID = GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION).spellID
-					else
-						spellID = select(2, GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION))
-					end
+					local spellID = GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION).spellID
 					if i == 1 then
 						M:TradeTabs_Create(spellID)
 					else

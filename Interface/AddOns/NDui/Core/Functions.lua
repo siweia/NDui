@@ -1062,34 +1062,19 @@ do
 	-- Handle dropdown
 	function B:ReskinDropDown()
 		B.StripTextures(self)
-
-		if DB.isWW then
-			if self.Arrow then self.Arrow:SetAlpha(0) end
-
-			local bg = B.CreateBDFrame(self, 0, true)
-			bg:SetPoint("TOPLEFT", 0, -2)
-			bg:SetPoint("BOTTOMRIGHT", 0, 2)
-			local tex = self:CreateTexture(nil, "ARTWORK")
-			tex:SetPoint("RIGHT", bg, -3, 0)
-			tex:SetSize(18, 18)
-			B.SetupArrow(tex, "down")
-			self.__texture = tex
-
-			self:HookScript("OnEnter", B.Texture_OnEnter)
-			self:HookScript("OnLeave", B.Texture_OnLeave)
-			return
-		end
-
-		local frameName = self.GetName and self:GetName()
-		local down = self.Button or frameName and (_G[frameName.."Button"] or _G[frameName.."_Button"])
+		if self.Arrow then self.Arrow:SetAlpha(0) end
 
 		local bg = B.CreateBDFrame(self, 0, true)
-		bg:SetPoint("TOPLEFT", 16, -4)
-		bg:SetPoint("BOTTOMRIGHT", -18, 8)
+		bg:SetPoint("TOPLEFT", 0, -2)
+		bg:SetPoint("BOTTOMRIGHT", 0, 2)
+		local tex = self:CreateTexture(nil, "ARTWORK")
+		tex:SetPoint("RIGHT", bg, -3, 0)
+		tex:SetSize(18, 18)
+		B.SetupArrow(tex, "down")
+		self.__texture = tex
 
-		down:ClearAllPoints()
-		down:SetPoint("RIGHT", bg, -2, 0)
-		B.ReskinArrow(down, "down")
+		self:HookScript("OnEnter", B.Texture_OnEnter)
+		self:HookScript("OnLeave", B.Texture_OnLeave)
 	end
 
 	-- Handle close button
@@ -1230,14 +1215,12 @@ do
 		if self.ResetButton then
 			B.ReskinFilterReset(self.ResetButton)
 		end
-		if DB.isWW then
-			self.__bg:SetOutside()
-			local tex = self:CreateTexture(nil, "ARTWORK")
-			B.SetupArrow(tex, "right")
-			tex:SetSize(16, 16)
-			tex:SetPoint("RIGHT", -2, 0)
-			self.__texture = tex
-		end
+		self.__bg:SetOutside()
+		local tex = self:CreateTexture(nil, "ARTWORK")
+		B.SetupArrow(tex, "right")
+		tex:SetSize(16, 16)
+		tex:SetPoint("RIGHT", -2, 0)
+		self.__texture = tex
 	end
 
 	function B:ReskinNavBar()
