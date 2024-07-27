@@ -249,7 +249,7 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 			return "<"..guildName..">"
 		end
 	elseif not isPlayer and C.db["Nameplate"]["NameOnlyTitle"] then
-		local data = not DB.isWW and C_TooltipInfo.GetUnit(unit)
+		local data = not DB.isWW and C_TooltipInfo.GetUnit(unit) -- FIXME: ColorMixin error
 		if not data then return "" end
 
 		local lineData = data.lines[GetCVarBool("colorblindmode") and 3 or 2]

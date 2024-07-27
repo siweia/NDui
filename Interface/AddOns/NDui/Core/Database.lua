@@ -13,55 +13,23 @@ DB.isNewPatch = select(4, GetBuildInfo()) >= 110002 -- 11.0.2
 DB.isWW = select(4, GetBuildInfo()) >= 110000 -- 11.0.0
 
 -- Deprecated
-if DB.isWW then
-	UnitAura = function(unitToken, index, filter)
-		local auraData = C_UnitAuras.GetAuraDataByIndex(unitToken, index, filter)
-		if not auraData then return nil end
-		return AuraUtil.UnpackAuraData(auraData)
-	end
-
-	GetSpellInfo = function(spellID)
-		local spellInfo = C_Spell.GetSpellInfo(spellID)
-		if not spellInfo then return end
-		--name, rank, icon, castTime, minRange, maxRange, spellID, originalIcon
-		return spellInfo.name, nil, spellInfo.iconID, spellInfo.castTime, spellInfo.minRange, spellInfo.maxRange, spellInfo.spellID, spellInfo.originalIconID
-	end
-
-	GetSpellCooldown = function(spellID)
-		local cd = C_Spell.GetSpellCooldown(spellID)
-		if not cd then return end
-		--start, duration, enabled, modRate
-		return cd.startTime, cd.duration, cd.isEnabled, cd.modRate
-	end
-
-	GetSpellCharges = function(spellID)
-		local charge = C_Spell.GetSpellCharges(spellID)
-		if not charge then return end
-		--currentCharges, maxCharges, cooldownStart, cooldownDuration, chargeModRate
-		return charge.currentCharges, charge.maxCharges, charge.cooldownStartTime, charge.cooldownDuration, charge.chargeModRate
-	end
-
-	GetSpellTexture = C_Spell.GetSpellTexture or GetSpellTexture
-	GetSpellCount = C_Spell.GetSpellCastCount or GetSpellCount
-	IsUsableSpell = C_Spell.IsSpellUsable or IsUsableSpell
-	IsCurrentSpell = C_Spell.IsCurrentSpell or IsCurrentSpell
-
+if DB.isWW then -- FIXME
 	local function EasyMenu_Initialize( frame, level, menuList )
 		for index = 1, #menuList do
 			local value = menuList[index]
 			if (value.text) then
-				value.index = index;
-				UIDropDownMenu_AddButton( value, level );
+				value.index = index
+				UIDropDownMenu_AddButton( value, level )
 			end
 		end
 	end
 	
 	function EasyMenu(menuList, menuFrame, anchor, x, y, displayMode, autoHideDelay )
 		if ( displayMode == "MENU" ) then
-			menuFrame.displayMode = displayMode;
+			menuFrame.displayMode = displayMode
 		end
-		UIDropDownMenu_Initialize(menuFrame, EasyMenu_Initialize, displayMode, nil, menuList);
-		ToggleDropDownMenu(1, nil, menuFrame, anchor, x, y, menuList, nil, autoHideDelay);
+		UIDropDownMenu_Initialize(menuFrame, EasyMenu_Initialize, displayMode, nil, menuList)
+		ToggleDropDownMenu(1, nil, menuFrame, anchor, x, y, menuList, nil, autoHideDelay)
 	end
 end
 

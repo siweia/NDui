@@ -1,4 +1,4 @@
-local _, ns = ...
+	local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local r, g, b = DB.r, DB.g, DB.b
@@ -28,7 +28,7 @@ local function reskinQuestIcon(button)
 end
 
 local function reskinQuestIcons(_, block)
-	reskinQuestIcon(block.ItemButton) -- isWW
+	reskinQuestIcon(block.ItemButton)
 	reskinQuestIcon(block.itemButton)
 	reskinQuestIcon(block.groupFinderButton)
 
@@ -63,38 +63,6 @@ local function reskinBarTemplate(bar)
 	B:SmoothBar(bar)
 end
 
-local function reskinProgressbar(_, _, line)
-	local progressBar = line.ProgressBar
-	local bar = progressBar.Bar
-
-	if not bar.bg then
-		bar:ClearAllPoints()
-		bar:SetPoint("LEFT")
-		reskinBarTemplate(bar)
-	end
-end
-
-local function reskinProgressbarWithIcon(_, _, line)
-	local progressBar = line.ProgressBar
-	local bar = progressBar.Bar
-	local icon = bar.Icon
-
-	if not bar.bg then
-		bar:SetPoint("LEFT", 22, 0)
-		reskinBarTemplate(bar)
-
-		icon:SetMask("")
-		icon.bg = B.ReskinIcon(icon, true)
-		icon:ClearAllPoints()
-		icon:SetPoint("TOPLEFT", bar, "TOPRIGHT", 5, 0)
-		icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 25, 0)
-	end
-
-	if icon.bg then
-		icon.bg:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
-	end
-end
-
 local function reskinBar(self, key)
 	local progressBar = self.usedProgressBars[key]
 	local bar = progressBar and progressBar.Bar
@@ -119,15 +87,6 @@ local function reskinBar(self, key)
 	end
 end
 
-local function reskinTimerBar(_, _, line)
-	local timerBar = line.TimerBar
-	local bar = timerBar.Bar
-
-	if not bar.bg then
-		reskinBarTemplate(bar)
-	end
-end
-
 local function reskinTimer(self, key)
 	local timerBar = self.usedTimerBars[key]
 	local bar = timerBar and timerBar.Bar
@@ -138,7 +97,7 @@ local function reskinTimer(self, key)
 end
 
 local function updateMinimizeButton(button, collapsed)
-	button = button.MinimizeButton or button -- isWW
+	button = button.MinimizeButton
 	button.__texture:DoCollapse(collapsed)
 end
 
@@ -149,18 +108,6 @@ local function reskinMinimizeButton(button, header)
 	button.__texture:DoCollapse(false)
 	if button.SetCollapsed then
 		hooksecurefunc(button, "SetCollapsed", updateMinimizeButton)
-	end
-	if DB.isWW then
-		hooksecurefunc(header, "SetCollapsed", updateMinimizeButton)
-	end
-end
-
-local function GetMawBuffsAnchor(frame)
-	local center = frame:GetCenter()
-	if center and center < GetScreenWidth()/2 then
-		return "LEFT"
-	else
-		return "RIGHT"
 	end
 end
 
@@ -212,245 +159,113 @@ tinsert(C.defaultThemes, function()
 	if C_AddOns.IsAddOnLoaded("!KalielsTracker") then return end
 
 	-- Reskin Headers
-	if DB.isWW then
-		local mainHeader = ObjectiveTrackerFrame.Header
-		reskinHeader(mainHeader)
+	local mainHeader = ObjectiveTrackerFrame.Header
+	reskinHeader(mainHeader)
 
-		-- Minimize Button
-		local mainMinimize =mainHeader.MinimizeButton
-		reskinMinimizeButton(mainMinimize, mainHeader)
-		mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
+	-- Minimize Button
+	local mainMinimize =mainHeader.MinimizeButton
+	reskinMinimizeButton(mainMinimize, mainHeader)
+	mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
 
-		local trackers = {
-			ScenarioObjectiveTracker,
-			UIWidgetObjectiveTracker,
-			CampaignQuestObjectiveTracker,	
-			QuestObjectiveTracker,
-			AdventureObjectiveTracker,
-			AchievementObjectiveTracker,
-			MonthlyActivitiesObjectiveTracker,
-			ProfessionsRecipeTracker,
-			BonusObjectiveTracker,
-			WorldQuestObjectiveTracker,
-		}
-		for _, tracker in pairs(trackers) do
-			reskinHeader(tracker.Header)
-			hooksecurefunc(tracker, "AddBlock", reskinQuestIcons)
-			hooksecurefunc(tracker, "GetProgressBar", reskinBar)
-			hooksecurefunc(tracker, "GetTimerBar", reskinTimer)
+	local trackers = {
+		ScenarioObjectiveTracker,
+		UIWidgetObjectiveTracker,
+		CampaignQuestObjectiveTracker,	
+		QuestObjectiveTracker,
+		AdventureObjectiveTracker,
+		AchievementObjectiveTracker,
+		MonthlyActivitiesObjectiveTracker,
+		ProfessionsRecipeTracker,
+		BonusObjectiveTracker,
+		WorldQuestObjectiveTracker,
+	}
+	for _, tracker in pairs(trackers) do
+		reskinHeader(tracker.Header)
+		hooksecurefunc(tracker, "AddBlock", reskinQuestIcons)
+		hooksecurefunc(tracker, "GetProgressBar", reskinBar)
+		hooksecurefunc(tracker, "GetTimerBar", reskinTimer)
+	end
+
+	-- Handle blocks, untest
+	hooksecurefunc(ScenarioObjectiveTracker.StageBlock, "UpdateStageBlock", function(block)
+		block.NormalBG:SetTexture("")
+		if not block.bg then
+			block.bg = B.SetBD(block.GlowTexture, nil, 4, -2, -4, 2)
 		end
+	end)
 
-		-- Handle blocks, untest
-		hooksecurefunc(ScenarioObjectiveTracker.StageBlock, "UpdateStageBlock", function(block)
-			block.NormalBG:SetTexture("")
-			if not block.bg then
-				block.bg = B.SetBD(block.GlowTexture, nil, 4, -2, -4, 2)
-			end
-		end)
+	hooksecurefunc(ScenarioObjectiveTracker.StageBlock, "UpdateWidgetRegistration", function(self)
+		local widgetContainer = self.WidgetContainer
+		if widgetContainer.widgetFrames then
+			for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
+				if widgetFrame.Frame then widgetFrame.Frame:SetAlpha(0) end
 
-		hooksecurefunc(ScenarioObjectiveTracker.StageBlock, "UpdateWidgetRegistration", function(self)
-			local widgetContainer = self.WidgetContainer
-			if widgetContainer.widgetFrames then
-				for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
-					if widgetFrame.Frame then widgetFrame.Frame:SetAlpha(0) end
+				local bar = widgetFrame.TimerBar
+				if bar and not bar.bg then
+					bar.bg = B.CreateBDFrame(bar, .25)
+				end
 
-					local bar = widgetFrame.TimerBar
-					if bar and not bar.bg then
-						bar.bg = B.CreateBDFrame(bar, .25)
-					end
-
-					if widgetFrame.CurrencyContainer then
-						for currencyFrame in widgetFrame.currencyPool:EnumerateActive() do
-							if not currencyFrame.bg then
-								currencyFrame.bg = B.ReskinIcon(currencyFrame.Icon)
-							end
+				if widgetFrame.CurrencyContainer then
+					for currencyFrame in widgetFrame.currencyPool:EnumerateActive() do
+						if not currencyFrame.bg then
+							currencyFrame.bg = B.ReskinIcon(currencyFrame.Icon)
 						end
 					end
 				end
 			end
-		end)
-
-		hooksecurefunc(ScenarioObjectiveTracker.ChallengeModeBlock, "SetUpAffixes", function(self)
-			for frame in self.affixPool:EnumerateActive() do
-				frame.Border:SetTexture(nil)
-				frame.Portrait:SetTexture(nil)
-				if not frame.bg then
-					frame.bg = B.ReskinIcon(frame.Portrait)
-				end
-	
-				if frame.info then
-					frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
-				elseif frame.affixID then
-					local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
-					frame.Portrait:SetTexture(filedataid)
-				end
-			end
-		end)
-
-		hooksecurefunc(ScenarioObjectiveTracker.ChallengeModeBlock, "Activate", function(block)
-			if not block.bg then
-				block.TimerBG:Hide()
-				block.TimerBGBack:Hide()
-				block.timerbg = B.CreateBDFrame(block.TimerBGBack, .3)
-				block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 6, -2)
-				block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
-	
-				block.StatusBar:SetStatusBarTexture(DB.normTex)
-				block.StatusBar:SetStatusBarColor(r, g, b)
-				block.StatusBar:SetHeight(10)
-	
-				select(3, block:GetRegions()):Hide()
-				block.bg = B.SetBD(block, nil, 4, -2, -4, 0)
-			end
-		end)
-
-		hooksecurefunc(ScenarioObjectiveTracker, "UpdateSpellCooldowns", function(self)
-			for spellFrame in self.spellFramePool:EnumerateActive() do
-				local spellButton = spellFrame.SpellButton
-				if spellButton and not spellButton.styled then
-					local bg = B.ReskinIcon(spellButton.Icon)
-					spellButton:SetNormalTexture(0)
-					spellButton:SetPushedTexture(0)
-					local hl = spellButton:GetHighlightTexture()
-					hl:SetColorTexture(1, 1, 1, .25)
-					hl:SetInside(bg)
-		
-					spellButton.styled = true
-				end
-			end
-		end)
-
-		-- Maw buffs container
-		ReskinMawBuffsContainer(ScenarioObjectiveTracker.MawBuffsBlock.Container)
-	else
-		local headers = {
-			ObjectiveTrackerBlocksFrame.QuestHeader,
-			ObjectiveTrackerBlocksFrame.AchievementHeader,
-			ObjectiveTrackerBlocksFrame.ScenarioHeader,
-			ObjectiveTrackerBlocksFrame.CampaignQuestHeader,
-			ObjectiveTrackerBlocksFrame.ProfessionHeader,
-			BONUS_OBJECTIVE_TRACKER_MODULE.Header,
-			WORLD_QUEST_TRACKER_MODULE.Header,
-			MONTHLY_ACTIVITIES_TRACKER_MODULE.Header,
-			ADVENTURE_TRACKER_MODULE.Header,
-			ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader,
-		}
-		for _, header in pairs(headers) do
-			reskinHeader(header)
 		end
+	end)
 
-		-- Minimize Button
-		local mainMinimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton
-		reskinMinimizeButton(mainMinimize)
-		mainMinimize.bg:SetBackdropBorderColor(1, .8, 0, .5)
-	
-		for _, header in pairs(headers) do
-			local minimize = header.MinimizeButton
-			if minimize then
-				reskinMinimizeButton(minimize)
+	hooksecurefunc(ScenarioObjectiveTracker.ChallengeModeBlock, "SetUpAffixes", function(self)
+		for frame in self.affixPool:EnumerateActive() do
+			frame.Border:SetTexture(nil)
+			frame.Portrait:SetTexture(nil)
+			if not frame.bg then
+				frame.bg = B.ReskinIcon(frame.Portrait)
+			end
+
+			if frame.info then
+				frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
+			elseif frame.affixID then
+				local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
+				frame.Portrait:SetTexture(filedataid)
 			end
 		end
+	end)
 
-		-- QuestIcons
-		hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcons)
-		hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
-		hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
-		hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
+	hooksecurefunc(ScenarioObjectiveTracker.ChallengeModeBlock, "Activate", function(block)
+		if not block.bg then
+			block.TimerBG:Hide()
+			block.TimerBGBack:Hide()
+			block.timerbg = B.CreateBDFrame(block.TimerBGBack, .3)
+			block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 6, -2)
+			block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
 
-		-- Reskin Progressbars
-		BonusObjectiveTrackerProgressBar_PlayFlareAnim = B.Dummy
+			block.StatusBar:SetStatusBarTexture(DB.normTex)
+			block.StatusBar:SetStatusBarColor(r, g, b)
+			block.StatusBar:SetHeight(10)
 
-		hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
-		hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
+			select(3, block:GetRegions()):Hide()
+			block.bg = B.SetBD(block, nil, 4, -2, -4, 0)
+		end
+	end)
 
-		hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
-		hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
-		hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbarWithIcon)
-
-		hooksecurefunc(QUEST_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
-		hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
-		hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, "AddTimerBar", reskinTimerBar)
-
-		-- Reskin Blocks
-		hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
-			block.NormalBG:SetTexture("")
-			if not block.bg then
-				block.bg = B.SetBD(block.GlowTexture, nil, 4, -2, -4, 2)
-			end
-		end)
-
-		hooksecurefunc(SCENARIO_CONTENT_TRACKER_MODULE, "Update", function()
-			local widgetContainer = ScenarioStageBlock.WidgetContainer
-			if widgetContainer.widgetFrames then
-				for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
-					if widgetFrame.Frame then widgetFrame.Frame:SetAlpha(0) end
-
-					local bar = widgetFrame.TimerBar
-					if bar and not bar.bg then
-						bar.bg = B.CreateBDFrame(bar, .25)
-					end
-
-					if widgetFrame.CurrencyContainer then
-						for currencyFrame in widgetFrame.currencyPool:EnumerateActive() do
-							if not currencyFrame.bg then
-								currencyFrame.bg = B.ReskinIcon(currencyFrame.Icon)
-							end
-						end
-					end
-				end
-			end
-		end)
-
-		hooksecurefunc("ScenarioSpellButton_UpdateCooldown", function(spellButton)
-			if not spellButton.styled then
+	hooksecurefunc(ScenarioObjectiveTracker, "UpdateSpellCooldowns", function(self)
+		for spellFrame in self.spellFramePool:EnumerateActive() do
+			local spellButton = spellFrame.SpellButton
+			if spellButton and not spellButton.styled then
 				local bg = B.ReskinIcon(spellButton.Icon)
 				spellButton:SetNormalTexture(0)
 				spellButton:SetPushedTexture(0)
 				local hl = spellButton:GetHighlightTexture()
 				hl:SetColorTexture(1, 1, 1, .25)
 				hl:SetInside(bg)
-
+	
 				spellButton.styled = true
 			end
-		end)
+		end
+	end)
 
-		hooksecurefunc("Scenario_ChallengeMode_ShowBlock", function()
-			local block = ScenarioChallengeModeBlock
-			if not block.bg then
-				block.TimerBG:Hide()
-				block.TimerBGBack:Hide()
-				block.timerbg = B.CreateBDFrame(block.TimerBGBack, .3)
-				block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 6, -2)
-				block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
-
-				block.StatusBar:SetStatusBarTexture(DB.normTex)
-				block.StatusBar:SetStatusBarColor(r, g, b)
-				block.StatusBar:SetHeight(10)
-
-				select(3, block:GetRegions()):Hide()
-				block.bg = B.SetBD(block, nil, 4, -2, -4, 0)
-			end
-		end)
-
-		hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", B.AffixesSetup)
-
-		--[=[ Rewards on bonus tracker, todo
-
-		hooksecurefunc("BonusObjectiveTracker_AnimateReward", function(block)
-			local rewardsFrame = block.module.rewardsFrame
-			local rewards = rewardsFrame.Rewards
-			for i = #rewards, 1, -1 do
-				local reward = rewards[i]
-				if reward.styled then break end
-				B.ReskinIcon(reward.ItemIcon)
-				reward.ItemBorder:SetTexture("")
-
-				reward.styled = true
-			end
-		end)
-		]=]
-
-		-- Maw buffs container
-		ReskinMawBuffsContainer(ScenarioBlocksFrame.MawBuffsBlock.Container)
-	end
+	-- Maw buffs container
+	ReskinMawBuffsContainer(ScenarioObjectiveTracker.MawBuffsBlock.Container)
 end)

@@ -96,7 +96,7 @@ tinsert(C.defaultThemes, function()
 	local bg = B.SetBD(QuestModelScene)
 
 	local modelText = QuestNPCModelTextFrame or QuestModelScene.ModelTextFrame
-	if modelText then -- isWW
+	if modelText then -- isNewPatch
 		B.StripTextures(modelText)
 		bg:SetOutside(nil, nil, nil, modelText)
 	end

@@ -12,7 +12,7 @@ local select, tremove, tinsert, wipe = _G.select, _G.table.remove, _G.table.inse
 local m_cos, m_sin, m_pi, m_random = _G.math.cos, _G.math.sin, _G.math.pi, _G.math.random
 
 local UnitGUID = _G.UnitGUID
-local GetSpellTexture = _G.GetSpellTexture
+local GetSpellTexture = _G.C_Spell.GetSpellTexture
 local BreakUpLargeNumbers = _G.BreakUpLargeNumbers
 local ENTERING_COMBAT = _G.ENTERING_COMBAT
 local LEAVING_COMBAT = _G.LEAVING_COMBAT

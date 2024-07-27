@@ -4,7 +4,7 @@ local M = B:GetModule("Misc")
 local TT = B:GetModule("Tooltip")
 
 local pairs, select, next, type, unpack = pairs, select, next, type, unpack
-local UnitGUID, GetItemInfo, GetSpellInfo = UnitGUID, C_Item.GetItemInfo, GetSpellInfo
+local UnitGUID, GetItemInfo = UnitGUID, C_Item.GetItemInfo
 local GetContainerItemLink = C_Container.GetContainerItemLink
 local GetInventoryItemLink = GetInventoryItemLink
 local EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation = EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation
@@ -134,7 +134,7 @@ function M:ItemLevel_UpdateTraits(button, id, link)
 			local selected = C_AzeriteEmpoweredItem_IsPowerSelected(empoweredItemLocation, powerID)
 			if selected then
 				local spellID = TT:Azerite_PowerToSpell(powerID)
-				local name, _, icon = GetSpellInfo(spellID)
+				local name, icon = C_Spell.GetSpellName(spellID), C_Spell.GetSpellTexture(spellID)
 				local texture = button["textureIcon"..i]
 				if name and texture then
 					texture:SetTexture(icon)

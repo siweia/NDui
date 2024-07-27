@@ -14,19 +14,12 @@ C.themes["Blizzard_ItemUpgradeUI"] = function()
 	local ItemUpgradeFrame = ItemUpgradeFrame
 	B.ReskinPortraitFrame(ItemUpgradeFrame)
 
-	if DB.isWW then
-		hooksecurefunc(ItemUpgradeFrame, "UpdateUpgradeItemInfo", function(self)
-			if self.upgradeInfo then
-				self.UpgradeItemButton:SetPushedTexture(0)
-			end
-		end)
-	else
-		hooksecurefunc(ItemUpgradeFrame, "Update", function(self)
-			if self.upgradeInfo then
-				self.UpgradeItemButton:SetPushedTexture(0)
-			end
-		end)
-	end
+	hooksecurefunc(ItemUpgradeFrame, "UpdateUpgradeItemInfo", function(self)
+		if self.upgradeInfo then
+			self.UpgradeItemButton:SetPushedTexture(0)
+		end
+	end)
+
 	local bg = B.CreateBDFrame(ItemUpgradeFrame, .25)
 	bg:SetPoint("TOPLEFT", 20, -25)
 	bg:SetPoint("BOTTOMRIGHT", -20, 375)

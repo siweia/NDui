@@ -136,15 +136,8 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.ReskinInput(MountJournalSearchBox)
 	B.ReskinInput(PetJournalSearchBox)
-	if DB.isWW then
-		B.ReskinFilterButton(PetJournal.FilterDropdown)
-		B.ReskinFilterButton(MountJournal.FilterDropdown)
-	else
-		B.ReskinFilterButton(PetJournalFilterButton)
-		B.ReskinFilterButton(MountJournalFilterButton)
-		MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
-		PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
-	end
+	B.ReskinFilterButton(PetJournal.FilterDropdown)
+	B.ReskinFilterButton(MountJournal.FilterDropdown)
 
 	local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
 	B.ReskinCheck(togglePlayer)
@@ -183,21 +176,19 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end)
 
-	if DB.isWW then
-		local function reskinDynamicButton(button, index)
-			if button.Border then button.Border:Hide() end
-			button:SetPushedTexture(0)
-			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			B.ReskinIcon(select(index, button:GetRegions()), nil)
-			button:SetNormalTexture(0)
-		end
-		reskinDynamicButton(MountJournal.ToggleDynamicFlightFlyoutButton, 1)
-
-		local flyout = MountJournal.DynamicFlightFlyout
-		flyout.Background:Hide()
-		reskinDynamicButton(flyout.OpenDynamicFlightSkillTreeButton, 4)
-		reskinDynamicButton(flyout.DynamicFlightModeButton, 4)
+	local function reskinDynamicButton(button, index)
+		if button.Border then button.Border:Hide() end
+		button:SetPushedTexture(0)
+		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		B.ReskinIcon(select(index, button:GetRegions()), nil)
+		button:SetNormalTexture(0)
 	end
+	reskinDynamicButton(MountJournal.ToggleDynamicFlightFlyoutButton, 1)
+
+	local flyout = MountJournal.DynamicFlightFlyout
+	flyout.Background:Hide()
+	reskinDynamicButton(flyout.OpenDynamicFlightSkillTreeButton, 4)
+	reskinDynamicButton(flyout.DynamicFlightModeButton, 4)
 
 	-- Pet card
 
@@ -332,11 +323,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(iconsFrame)
 	B.ReskinInput(ToyBox.searchBox)
-	if DB.isWW then
-		B.ReskinFilterButton(ToyBox.FilterDropdown)
-	else
-		B.ReskinFilterButton(ToyBoxFilterButton)
-	end
+	B.ReskinFilterButton(ToyBox.FilterDropdown)
 	B.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(ToyBox.PagingFrame.NextPageButton, "right")
 
@@ -398,13 +385,8 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(icons)
 	B.ReskinInput(HeirloomsJournalSearchBox)
-	if DB.isWW then
-		B.ReskinDropDown(HeirloomsJournal.ClassDropdown)
-		B.ReskinFilterButton(HeirloomsJournal.FilterDropdown)
-	else
-		B.ReskinDropDown(HeirloomsJournalClassDropDown)
-		B.ReskinFilterButton(HeirloomsJournal.FilterButton)
-	end
+	B.ReskinDropDown(HeirloomsJournal.ClassDropdown)
+	B.ReskinFilterButton(HeirloomsJournal.FilterDropdown)
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, "right")
 
@@ -498,11 +480,7 @@ C.themes["Blizzard_Collections"] = function()
 	B.StripTextures(ItemsCollectionFrame)
 	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
 	B.ReskinInput(WardrobeCollectionFrameSearchBox)
-	if DB.isWW then
-		B.ReskinDropDown(WardrobeCollectionFrame.ClassDropdown)
-	else
-		B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
-	end
+	B.ReskinDropDown(WardrobeCollectionFrame.ClassDropdown)
 
 	hooksecurefunc(WardrobeCollectionFrame, "SetTab", function(self, tabID)
 		for index = 1, 2 do
@@ -569,11 +547,7 @@ C.themes["Blizzard_Collections"] = function()
 	local DetailsFrame = SetsCollectionFrame.DetailsFrame
 	DetailsFrame.ModelFadeTexture:Hide()
 	DetailsFrame.IconRowBackground:Hide()
-	if DB.isWW then
-		B.ReskinDropDown(DetailsFrame.VariantSetsDropdown)
-	else
-		B.ReskinFilterButton(DetailsFrame.VariantSetsButton, "Down")
-	end
+	B.ReskinDropDown(DetailsFrame.VariantSetsDropdown)
 
 	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(_, itemFrame)
 		local ic = itemFrame.Icon
@@ -605,10 +579,12 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinPortraitFrame(WardrobeFrame)
 	B.Reskin(WardrobeTransmogFrame.ApplyButton)
 
-	local specButton = DB.isWW and WardrobeTransmogFrame.SpecDropdown or WardrobeTransmogFrame.SpecButton
-	B.StripTextures(specButton)
-	B.ReskinArrow(specButton, "down")
-	specButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
+	local specButton = WardrobeTransmogFrame.SpecDropdown
+	if specButton then
+		B.StripTextures(specButton)
+		B.ReskinArrow(specButton, "down")
+		specButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
+	end
 	B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
 	B.ReskinModelControl(WardrobeTransmogFrame.ModelScene)
 
@@ -629,14 +605,7 @@ C.themes["Blizzard_Collections"] = function()
 	end
 
 	-- Outfit Frame
-	if DB.isWW then
-		B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
-	else
-		B.Reskin(WardrobeOutfitDropDown.SaveButton)
-		B.ReskinDropDown(WardrobeOutfitDropDown)
-		WardrobeOutfitDropDown:SetHeight(32)
-		WardrobeOutfitDropDown.SaveButton:SetPoint("LEFT", WardrobeOutfitDropDown, "RIGHT", -13, 2)
-	end
+	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
 
 	-- HPetBattleAny
 	local reskinHPet

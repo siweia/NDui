@@ -70,14 +70,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(searchPanel.SearchBox)
 	searchPanel.SearchBox:SetHeight(22)
 	B.ReskinFilterButton(searchPanel.FilterButton)
-
-	if DB.isWW then
-		B.ReskinFilterReset(searchPanel.FilterButton.ResetButton)
-	else
-		B.ReskinFilterReset(searchPanel.FilterButton.ResetToDefaults)
-		B.ReskinEditBox(MinRatingFrame.MinRating)
-		MinRatingFrame.MinRating:SetHeight(18)
-	end
+	B.ReskinFilterReset(searchPanel.FilterButton.ResetButton)
 
 	searchPanel.RefreshButton:SetSize(24, 24)
 	searchPanel.RefreshButton.Icon:SetPoint("CENTER")
@@ -199,13 +192,8 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(entryCreation.Name)
 	B.ReskinInput(entryCreation.ItemLevel.EditBox)
 	B.ReskinInput(entryCreation.VoiceChat.EditBox)
-	if DB.isWW then
-		B.ReskinDropDown(entryCreation.GroupDropdown)
-		B.ReskinDropDown(entryCreation.ActivityDropdown)
-	else
-		B.ReskinDropDown(entryCreation.GroupDropDown)
-		B.ReskinDropDown(entryCreation.ActivityDropDown)
-	end
+	B.ReskinDropDown(entryCreation.GroupDropdown)
+	B.ReskinDropDown(entryCreation.ActivityDropdown)
 	B.ReskinDropDown(entryCreation.PlayStyleDropdown)
 	B.ReskinCheck(entryCreation.MythicPlusRating.CheckButton)
 	B.ReskinInput(entryCreation.MythicPlusRating.EditBox)

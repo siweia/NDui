@@ -5,7 +5,7 @@ local G = B:GetModule("GUI")
 local _G = _G
 local unpack, pairs, ipairs, tinsert = unpack, pairs, ipairs, tinsert
 local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonumber
-local GetSpellInfo, GetSpellTexture = GetSpellInfo, GetSpellTexture
+local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
 local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
 local IsControlKeyDown = IsControlKeyDown
 
@@ -181,7 +181,7 @@ function G:SetupRaidDebuffs(parent)
 		local dungeonName, raidName, spellID, priority = options[1].Text:GetText(), options[2].Text:GetText(), tonumber(options[3]:GetText()), tonumber(options[4]:GetText())
 		local instName = dungeonName or raidName or (iType.Text:GetText() == OTHER and 0)
 		if not instName or not spellID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-		if spellID and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if spellID and not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if isAuraExisted(instName, spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		priority = analyzePrio(priority)
@@ -277,7 +277,7 @@ function G:SetupRaidDebuffs(parent)
 	end
 
 	local function applyData(index, instName, spellID, priority)
-		local name, _, texture = GetSpellInfo(spellID)
+		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 		if not bars[index] then
 			bars[index] = createBar(index, texture)
 		end
@@ -449,7 +449,7 @@ function G:SetupClickCast(parent)
 		local value, key, modKey = options[1]:GetText(), options[2].Text:GetText(), options[3].Text:GetText()
 		local numValue = tonumber(value)
 		if not value or not key then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-		if numValue and not GetSpellInfo(value) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if numValue and not GetSpellName(value) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if (not numValue) and (not textIndex[value]) and not strmatch(value, "/") then UIErrorsFrame:AddMessage(DB.InfoColor..L["Invalid Input"]) return end
 		if not modKey or modKey == NONE then modKey = "" end
 		local fullkey = (modKey == "" and key or modKey.."-"..key)
@@ -490,10 +490,10 @@ function G:SetupPartyWatcher(parent)
 	panel:SetScript("OnHide", updatePartyWatcherSpells)
 
 	local barTable = {}
-	local ARCANE_TORRENT = GetSpellInfo(25046)
+	local ARCANE_TORRENT = GetSpellName(25046)
 
 	local function createBar(parent, spellID, duration)
-		local spellName = GetSpellInfo(spellID)
+		local spellName = GetSpellName(spellID)
 		if spellName == ARCANE_TORRENT then return end
 		local texture = GetSpellTexture(spellID)
 
@@ -554,7 +554,7 @@ function G:SetupPartyWatcher(parent)
 	local function addClick(scroll, options)
 		local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
 		if not spellID or not duration then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-		if not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		local modDuration = NDuiADB["PartySpells"][spellID]
 		if modDuration and modDuration ~= 0 or C.PartySpells[spellID] and not modDuration then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
@@ -589,7 +589,7 @@ function G:SetupPartyWatcher(parent)
 		menuList[index] = {text = color..localClassName, notCheckable = true, hasArrow = true, menuList = {}}
 
 		for spellID, duration in pairs(value) do
-			local spellName, _, texture = GetSpellInfo(spellID)
+			local spellName, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 			if spellName then
 				tinsert(menuList[index].menuList, {
 					text = spellName,
@@ -638,7 +638,7 @@ function G:SetupNameplateFilter(parent)
 	}
 
 	local function createBar(parent, index, spellID)
-		local name, _, texture = GetSpellInfo(spellID)
+		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
@@ -682,7 +682,7 @@ function G:SetupNameplateFilter(parent)
 
 	local function addClick(parent, index)
 		local spellID = tonumber(parent.box:GetText())
-		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if not spellID or not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if isAuraExisted(index, spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		local key = index == 1 and "NameplateWhite" or "NameplateBlack"
@@ -767,7 +767,7 @@ function G:SetupSpellsIndicator(parent)
 	local anchors = {"TL", "T", "TR", "L", "R", "BL", "B", "BR"}
 
 	local function createBar(parent, spellID, anchor, r, g, b, showAll)
-		local name, _, texture = GetSpellInfo(spellID)
+		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
@@ -799,7 +799,7 @@ function G:SetupSpellsIndicator(parent)
 
 	local function addClick(parent)
 		local spellID = tonumber(parent.box:GetText())
-		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if not spellID or not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		local anchor, r, g, b, showAll
 		anchor, r, g, b = parent.dd.Text:GetText(), parent.swatch.tex:GetColor()
 		showAll = parent.showAll:GetChecked() or nil
@@ -895,7 +895,7 @@ function G:SetupBuffsIndicator(parent)
 	local barList = {}
 
 	local function createBar(parent, spellID, isNew)
-		local name, _, texture = GetSpellInfo(spellID)
+		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
@@ -930,7 +930,7 @@ function G:SetupBuffsIndicator(parent)
 
 	local function addClick(parent)
 		local spellID = tonumber(parent.box:GetText())
-		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if not spellID or not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if isAuraExisted(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		NDuiADB["RaidBuffsWhite"][spellID] = true
@@ -1006,7 +1006,7 @@ function G:SetupDebuffsIndicator(parent)
 	local barList = {}
 
 	local function createBar(parent, spellID, isNew)
-		local name, _, texture = GetSpellInfo(spellID)
+		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
 		B.CreateBD(bar, .25)
@@ -1041,7 +1041,7 @@ function G:SetupDebuffsIndicator(parent)
 
 	local function addClick(parent)
 		local spellID = tonumber(parent.box:GetText())
-		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if not spellID or not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if isAuraExisted(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 		NDuiADB["RaidDebuffsBlack"][spellID] = true
@@ -1657,8 +1657,7 @@ function G:PlateCastbarGlow(parent)
 	local barTable = {}
 
 	local function createBar(parent, spellID)
-		local spellName = GetSpellInfo(spellID)
-		local texture = GetSpellTexture(spellID)
+		local spellName, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
@@ -1694,7 +1693,7 @@ function G:PlateCastbarGlow(parent)
 	local function addClick(button)
 		local parent = button.__owner
 		local spellID = tonumber(parent.box:GetText())
-		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if not spellID or not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		local modValue = NDuiADB["MajorSpells"][spellID]
 		if modValue or modValue == nil and C.MajorSpells[spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 		NDuiADB["MajorSpells"][spellID] = true
@@ -2160,8 +2159,7 @@ function G:NameplateColorDots(parent)
 	local barTable = {}
 
 	local function createBar(parent, spellID, isNew)
-		local spellName = GetSpellInfo(spellID)
-		local texture = GetSpellTexture(spellID)
+		local spellName, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(220, 30)
@@ -2199,7 +2197,7 @@ function G:NameplateColorDots(parent)
 	local function addClick(button)
 		local parent = button.__owner
 		local spellID = tonumber(parent.box:GetText())
-		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+		if not spellID or not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 		if C.db["Nameplate"]["DotSpells"][spellID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 		C.db["Nameplate"]["DotSpells"][spellID] = true
 		createBar(parent.child, spellID, true)

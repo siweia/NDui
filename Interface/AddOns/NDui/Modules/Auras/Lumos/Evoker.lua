@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "EVOKER" then return end
+local GetSpellTexture = C_Spell.GetSpellTexture
 
 local function GetUnitAura(unit, spell, filter)
 	return A:GetUnitAura(unit, spell, filter)
@@ -22,7 +23,7 @@ end
 
 local function UpdateSpellStatus(button, spellID)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
-	if IsUsableSpell(spellID) then
+	if C_Spell.IsSpellUsable(spellID) then
 		button.Icon:SetDesaturated(false)
 	else
 		button.Icon:SetDesaturated(true)

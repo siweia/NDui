@@ -4,7 +4,7 @@ local M = B:GetModule("Misc")
 
 local pairs, strfind = pairs, strfind
 local UnitGUID = UnitGUID
-local GetActionInfo, GetSpellInfo, GetOverrideBarSkin = GetActionInfo, GetSpellInfo, GetOverrideBarSkin
+local GetActionInfo, GetOverrideBarSkin = GetActionInfo, GetOverrideBarSkin
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local C_GossipInfo_SelectOption, C_GossipInfo_GetNumOptions = C_GossipInfo.SelectOption, C_GossipInfo.GetNumOptions
 
@@ -56,7 +56,7 @@ function M:QuestTool_SetGlow(msg)
 		for i = 1, 3 do
 			local button = _G["ActionButton"..i]
 			local _, spellID = GetActionInfo(button.action)
-			local name = spellID and GetSpellInfo(spellID)
+			local name = spellID and C_Spell.GetSpellName(spellID)
 			if fixedStrings[name] and isActionMatch(msg, fixedStrings[name]) or isActionMatch(msg, name) then
 				B.ShowOverlayGlow(button)
 			else

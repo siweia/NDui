@@ -109,11 +109,6 @@ tinsert(C.defaultThemes, function()
 	VoiceChatChannelActivatedNotification:SetBackdrop(nil)
 	B.SetBD(VoiceChatChannelActivatedNotification)
 
-	if not DB.isWW then
-		B.ReskinSlider(UnitPopupVoiceMicrophoneVolume.Slider)
-		B.ReskinSlider(UnitPopupVoiceSpeakerVolume.Slider)
-	end
-
 	-- VoiceActivityManager
 	hooksecurefunc(VoiceActivityManager, "LinkFrameNotificationAndGuid", function(_, _, notification, guid)
 		local class = select(2, GetPlayerInfoByGUID(guid))

@@ -60,6 +60,7 @@
 		All optional
 	-->
 	<Script file='mixins-add\plugins\bagBar.lua' />
+	<Script file='mixins-add\plugins\bagTabs.lua' />
 	<Script file='mixins-add\plugins\searchBar.lua' />
 	<Script file='mixins-add\plugins\tagDisplay.lua' />
 

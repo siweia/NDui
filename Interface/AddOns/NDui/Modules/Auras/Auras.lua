@@ -5,8 +5,9 @@ local A = B:RegisterModule("Auras")
 
 local _G = getfenv(0)
 local format, floor, strmatch, select, unpack, tonumber = format, floor, strmatch, select, unpack, tonumber
-local UnitAura, GetTime = UnitAura, GetTime
+local GetTime = GetTime
 local GetInventoryItemQuality, GetInventoryItemTexture, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetWeaponEnchantInfo
+local C_UnitAuras_GetAuraDataByIndex = C_UnitAuras.GetAuraDataByIndex
 
 function A:OnLogin()
 	A:HideBlizBuff()
@@ -112,16 +113,17 @@ function A:UpdateTimer(elapsed)
 end
 
 function A:GetSpellStat(arg16, arg17, arg18)
+	if not arg16 then return end
 	return (arg16 > 0 and L["Versa"]) or (arg17 > 0 and L["Mastery"]) or (arg18 > 0 and L["Haste"]) or L["Crit"]
 end
 
 function A:UpdateAuras(button, index)
 	local unit, filter = button.header:GetAttribute("unit"), button.filter
-	local name, texture, count, debuffType, duration, expirationTime, _, _, _, spellID, _, _, _, _, _, arg16, arg17, arg18 = UnitAura(unit, index, filter)
-	if not name then return end
+	local auraData = C_UnitAuras_GetAuraDataByIndex(unit, index, filter)
+	if not auraData then return end
 
-	if duration > 0 and expirationTime then
-		local timeLeft = expirationTime - GetTime()
+	if auraData.duration > 0 and auraData.expirationTime then
+		local timeLeft = auraData.expirationTime - GetTime()
 		if not button.timeLeft then
 			button.nextUpdate = -1
 			button.timeLeft = timeLeft
@@ -136,6 +138,7 @@ function A:UpdateAuras(button, index)
 		button.timer:SetText("")
 	end
 
+	local count = auraData.applications
 	if count and count > 1 then
 		button.count:SetText(count)
 	else
@@ -143,19 +146,19 @@ function A:UpdateAuras(button, index)
 	end
 
 	if filter == "HARMFUL" then
-		local color = oUF.colors.debuff[debuffType or "none"]
+		local color = oUF.colors.debuff[auraData.dispelName or "none"]
 		button:SetBackdropBorderColor(color[1], color[2], color[3])
 	else
 		button:SetBackdropBorderColor(0, 0, 0)
 	end
 
 	-- Show spell stat for 'Soleahs Secret Technique'
-	if spellID == 368512 then
-		button.count:SetText(A:GetSpellStat(arg16, arg17, arg18))
+	if auraData.spellId == 368512 then
+		button.count:SetText(A:GetSpellStat(unpack(auraData.points)))
 	end
 
-	button.spellID = spellID
-	button.icon:SetTexture(texture)
+	button.spellID = auraData.spellId
+	button.icon:SetTexture(auraData.icon)
 	button.expiration = nil
 end
 

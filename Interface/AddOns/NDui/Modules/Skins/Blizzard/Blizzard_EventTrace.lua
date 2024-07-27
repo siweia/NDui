@@ -42,11 +42,7 @@ C.themes["Blizzard_EventTrace"] = function()
 	B.ReskinPortraitFrame(EventTrace)
 
 	local subtitleBar = EventTrace.SubtitleBar
-	if DB.isWW then
-		B.ReskinFilterButton(subtitleBar.OptionsDropdown)
-	else
-		B.ReskinFilterButton(subtitleBar.OptionsDropDown)
-	end
+	B.ReskinFilterButton(subtitleBar.OptionsDropdown)
 
 	local logBar = EventTrace.Log.Bar
 	local filterBar = EventTrace.Filter.Bar

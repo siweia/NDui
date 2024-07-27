@@ -36,11 +36,6 @@ local function reskinSectionHeader()
 	end
 end
 
-local function reskinFilterToggle(button)
-	B.StripTextures(button)
-	B.Reskin(button)
-end
-
 C.themes["Blizzard_EncounterJournal"] = function()
 	-- Tabs
 	for i = 1, 5 do
@@ -75,11 +70,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- Instance select
 	EncounterJournalInstanceSelectBG:SetAlpha(0)
-	if DB.isWW then
-		B.ReskinDropDown(EncounterJournal.instanceSelect.ExpansionDropdown)
-	else
-		B.ReskinDropDown(EncounterJournal.instanceSelect.tierDropDown)
-	end
+	B.ReskinDropDown(EncounterJournal.instanceSelect.ExpansionDropdown)
 	B.ReskinTrimScroll(EncounterJournal.instanceSelect.ScrollBar)
 
 	hooksecurefunc(EncounterJournal.instanceSelect.ScrollBox, "Update", function(self)
@@ -234,21 +225,10 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
+	B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.filter)
+	B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.slotFilter)
+	B.ReskinDropDown(EncounterJournalEncounterFrameInfoDifficulty)
 
-	if DB.isWW then
-		B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.filter)
-		B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.slotFilter)
-		B.ReskinDropDown(EncounterJournalEncounterFrameInfoDifficulty)
-	else
-		local buttons = {
-			EncounterJournalEncounterFrameInfoDifficulty,
-			EncounterJournalEncounterFrameInfoFilterToggle,
-			EncounterJournalEncounterFrameInfoSlotFilterToggle,
-		}
-		for _, button in pairs(buttons) do
-			reskinFilterToggle(button)
-		end
-	end
 
 	-- Suggest frame
 	local suggestFrame = EncounterJournal.suggestFrame
@@ -339,10 +319,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	local lootJournal = EncounterJournal.LootJournal
 	B.StripTextures(lootJournal)
-	if not DB.isWW then
-		reskinFilterToggle(lootJournal.RuneforgePowerFilterDropDownButton)
-		reskinFilterToggle(lootJournal.ClassDropDownButton)
-	end
 
 	local iconColor = DB.QualityColors[Enum.ItemQuality.Legendary or 5] -- legendary color
 	B.ReskinTrimScroll(lootJournal.ScrollBar)
@@ -371,11 +347,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	-- ItemSetsFrame
 	if EncounterJournal.LootJournalItems then
 		B.StripTextures(EncounterJournal.LootJournalItems)
-		if DB.isWW then
-			B.ReskinDropDown(EncounterJournal.LootJournalViewDropdown)
-		else
-			B.ReskinDropDown(EncounterJournal.LootJournalViewDropDown)
-		end
+		B.ReskinDropDown(EncounterJournal.LootJournalViewDropdown)
 
 		local function reskinBar(bar)
 			if not bar.styled then
@@ -402,11 +374,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		hooksecurefunc(itemSetsFrame.ScrollBox, "Update", function(self)
 			self:ForEachFrame(reskinBar)
 		end)
-		if DB.isWW then
-			B.ReskinDropDown(itemSetsFrame.ClassDropdown)
-		else
-			reskinFilterToggle(itemSetsFrame.ClassButton)
-		end
+		B.ReskinDropDown(itemSetsFrame.ClassDropdown)
 	end
 
 	-- Monthly activities

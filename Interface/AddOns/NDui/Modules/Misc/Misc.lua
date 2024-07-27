@@ -149,7 +149,7 @@ function M:ExtendInstance()
 	local bu = CreateFrame("Button", nil, RaidInfoFrame)
 	bu:SetPoint("TOPRIGHT", -35, -5)
 	bu:SetSize(25, 25)
-	B.PixelIcon(bu, GetSpellTexture(80353), true)
+	B.PixelIcon(bu, C_Spell.GetSpellTexture(80353), true)
 	bu.title = L["Extend Instance"]
 	local tipStr = format(L["Extend Instance Tip"], DB.LeftButton, DB.RightButton)
 	B.AddTooltip(bu, "ANCHOR_RIGHT", tipStr, "system")

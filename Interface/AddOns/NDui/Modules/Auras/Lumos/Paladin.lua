@@ -3,8 +3,9 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "PALADIN" then return end
+local GetSpellTexture = C_Spell.GetSpellTexture
 
-local IsUsableSpell, IsPlayerSpell = IsUsableSpell, IsPlayerSpell
+local IsPlayerSpell = IsPlayerSpell
 local GetCurrentGlyphNameForSpell = GetCurrentGlyphNameForSpell
 
 local function UpdateCooldown(button, spellID, texture)
@@ -21,7 +22,7 @@ end
 
 local function UpdateSpellStatus(button, spellID)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
-	if IsUsableSpell(spellID) then
+	if C_Spell.IsSpellUsable(spellID) then
 		button.Icon:SetDesaturated(false)
 	else
 		button.Icon:SetDesaturated(true)

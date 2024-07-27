@@ -101,14 +101,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	searchBar.FavoritesSearchButton:SetSize(22, 22)
 	B.ReskinEditBox(searchBar.SearchBox)
 	B.Reskin(searchBar.SearchButton)
-
-	if DB.isWW then
-		B.ReskinFilterButton(searchBar.FilterDropdown)
-	else
-		local filterButton = searchBar.FilterButton
-		B.ReskinFilterButton(filterButton)
-		B.ReskinFilterReset(filterButton.ClearFiltersButton)
-	end
+	B.ReskinFilterButton(searchBar.FilterDropdown)
 
 	B.StripTextures(frame.BrowseOrders.CategoryList)
 	B.ReskinTrimScroll(frame.BrowseOrders.CategoryList.ScrollBar)
@@ -135,13 +128,9 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 
 	-- Form
 	B.Reskin(frame.Form.BackButton)
-	if DB.isWW then
-		B.ReskinCheck(frame.Form.AllocateBestQualityCheckbox)
-		B.ReskinCheck(frame.Form.TrackRecipeCheckbox.Checkbox)
-	else
-		B.ReskinCheck(frame.Form.AllocateBestQualityCheckBox)
-		B.ReskinCheck(frame.Form.TrackRecipeCheckBox.Checkbox)
-	end
+	B.ReskinCheck(frame.Form.AllocateBestQualityCheckbox)
+	B.ReskinCheck(frame.Form.TrackRecipeCheckbox.Checkbox)
+
 	frame.Form.RecipeHeader:Hide()
 	B.CreateBDFrame(frame.Form.RecipeHeader, .25)
 	B.StripTextures(frame.Form.LeftPanelBackground)
@@ -159,13 +148,8 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	B.ReskinEditBox(frame.Form.OrderRecipientTarget)
 	frame.Form.OrderRecipientTarget.__bg:SetPoint("TOPLEFT", -8, -2)
 	frame.Form.OrderRecipientTarget.__bg:SetPoint("BOTTOMRIGHT", 0, 2)
-	if DB.isWW then
-		B.ReskinDropDown(frame.Form.OrderRecipientDropdown)
-		B.ReskinDropDown(frame.Form.MinimumQuality.Dropdown)
-	else
-		B.ReskinDropDown(frame.Form.OrderRecipientDropDown)
-		B.ReskinDropDown(frame.Form.MinimumQuality.DropDown)
-	end
+	B.ReskinDropDown(frame.Form.OrderRecipientDropdown)
+	B.ReskinDropDown(frame.Form.MinimumQuality.Dropdown)
 
 	local paymentContainer = frame.Form.PaymentContainer
 	B.StripTextures(paymentContainer.NoteEditBox)
@@ -175,11 +159,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 
 	reskinMoneyInput(paymentContainer.TipMoneyInputFrame.GoldBox)
 	reskinMoneyInput(paymentContainer.TipMoneyInputFrame.SilverBox)
-	if DB.isWW then
-		B.ReskinDropDown(paymentContainer.DurationDropdown)
-	else
-		B.ReskinDropDown(paymentContainer.DurationDropDown)
-	end
+	B.ReskinDropDown(paymentContainer.DurationDropdown)
 	B.Reskin(paymentContainer.ListOrderButton)
 	B.Reskin(paymentContainer.CancelOrderButton)
 
@@ -239,11 +219,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 		reskinContainer(qualityDialog["Container"..i])
 	end
 
-	if DB.isWW then
-		B.Reskin(frame.Form.OrderRecipientDisplay.SocialDropdown)
-	else
-		B.Reskin(frame.Form.OrderRecipientDisplay.SocialDropdownButton)
-	end
+	B.Reskin(frame.Form.OrderRecipientDisplay.SocialDropdown)
 
 	-- Orders
 	B.Reskin(frame.MyOrdersPage.RefreshButton)

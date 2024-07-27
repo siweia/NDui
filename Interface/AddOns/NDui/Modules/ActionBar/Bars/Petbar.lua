@@ -131,11 +131,7 @@ function Bar.PetBarOnEvent(event)
 	if event == "PET_BAR_UPDATE_COOLDOWN" then
 		PetActionBar:UpdateCooldowns()
 	else
-		if DB.isWW then
-			Bar.UpdatePetBarInWW(PetActionBar)
-		else
-			Bar.UpdatePetBar(PetActionBar)
-		end
+		Bar.UpdatePetBarInWW(PetActionBar)
 	end
 end
 

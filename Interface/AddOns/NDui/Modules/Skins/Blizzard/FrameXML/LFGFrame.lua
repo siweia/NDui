@@ -66,11 +66,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(LFDRoleCheckPopupDeclineButton)
 	B.ReskinTrimScroll(LFDQueueFrameSpecific.ScrollBar)
 	B.ReskinTrimScroll(LFDQueueFrameRandomScrollFrame.ScrollBar)
-	if DB.isWW then
-		B.ReskinDropDown(LFDQueueFrameTypeDropdown)
-	else
-		B.ReskinDropDown(LFDQueueFrameTypeDropDown)
-	end
+	B.ReskinDropDown(LFDQueueFrameTypeDropdown)
 	B.Reskin(LFDQueueFrameFindGroupButton)
 	B.Reskin(LFDQueueFramePartyBackfillBackfillButton)
 	B.Reskin(LFDQueueFramePartyBackfillNoBackfillButton)
@@ -171,11 +167,7 @@ tinsert(C.defaultThemes, function()
 	RaidFinderQueueFrameScrollFrame:SetWidth(RaidFinderQueueFrameScrollFrame:GetWidth()+1)
 
 	B.ReskinTrimScroll(RaidFinderQueueFrameScrollFrame.ScrollBar)
-	if DB.isWW then
-		B.ReskinDropDown(RaidFinderQueueFrameSelectionDropdown)
-	else
-		B.ReskinDropDown(RaidFinderQueueFrameSelectionDropDown)
-	end
+	B.ReskinDropDown(RaidFinderQueueFrameSelectionDropdown)
 	B.Reskin(RaidFinderFrameFindRaidButton)
 	B.Reskin(RaidFinderQueueFrameIneligibleFrameLeaveQueueButton)
 	B.Reskin(RaidFinderQueueFramePartyBackfillBackfillButton)

@@ -479,7 +479,7 @@ function G:ExportGUIData()
 		elseif KEY == "PartySpells" then
 			text = text..";ACCOUNT:"..KEY
 			for spellID, duration in pairs(VALUE) do
-				local name = GetSpellInfo(spellID)
+				local name = C_Spell.GetSpellName(spellID)
 				if name then
 					text = text..":"..spellID..":"..duration
 				end

@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "DRUID" then return end
+local GetSpellTexture = C_Spell.GetSpellTexture
+local GetSpellCastCount = C_Spell.GetSpellCastCount
 
 local function UpdateCooldown(button, spellID, texture)
 	return A:UpdateCooldown(button, spellID, texture)
@@ -18,7 +20,7 @@ end
 
 local function UpdateSpellStatus(button, spellID)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
-	if IsUsableSpell(spellID) then
+	if C_Spell.IsSpellUsable(spellID) then
 		button.Icon:SetDesaturated(false)
 	else
 		button.Icon:SetDesaturated(true)
@@ -31,14 +33,14 @@ function A:ChantLumos(self)
 		local currentPower = UnitPower("player", 8)
 		do
 			local button = self.lumos[1]
-			local count = GetSpellCount(190984)
+			local count = GetSpellCastCount(190984)
 			UpdateBuff(button, 190984, 48517)
 			button.Count:SetText(count > 0 and count or "")
 		end
 
 		do
 			local button = self.lumos[2]
-			local count = GetSpellCount(194153)
+			local count = GetSpellCastCount(194153)
 			UpdateBuff(button, 194153, 48518)
 			button.Count:SetText(count > 0 and count or "")
 		end

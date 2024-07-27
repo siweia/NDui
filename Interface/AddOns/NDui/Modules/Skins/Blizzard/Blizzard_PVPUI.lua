@@ -110,11 +110,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	HonorFrame.Inset:Hide()
 	ReskinPvPFrame(HonorFrame)
 	B.Reskin(HonorFrame.QueueButton)
-	if DB.isWW then
-		B.ReskinDropDown(HonorFrameTypeDropdown)
-	else
-		B.ReskinDropDown(HonorFrameTypeDropDown)
-	end
+	B.ReskinDropDown(HonorFrameTypeDropdown)
 	B.ReskinTrimScroll(HonorFrame.SpecificScrollBar)
 
 	hooksecurefunc(HonorFrame.SpecificScrollBox, "Update", function(self)

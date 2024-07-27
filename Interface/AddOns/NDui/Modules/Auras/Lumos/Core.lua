@@ -2,19 +2,29 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
+local GetSpellTexture = C_Spell.GetSpellTexture
+
 function A:GetUnitAura(unit, spell, filter)
 	for index = 1, 32 do
-		local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
-		if not name then break end
-		if name and spellID == spell then
-			return name, count, duration, expire, caster, spellID, value
+		local auraData = C_UnitAuras.GetAuraDataByIndex(unit, index, filter)
+		if not auraData then break end
+		if auraData.spellId == spell then
+			return auraData.name, auraData.applications, auraData.duration, auraData.expirationTime, auraData.sourceUnit, auraData.spellId, auraData.points[1]
 		end
 	end
 end
 
 function A:UpdateCooldown(button, spellID, texture)
-	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
-	local start, duration = GetSpellCooldown(spellID)
+	local chargeInfo = C_Spell.GetSpellCharges(spellID)
+	local charges = chargeInfo and chargeInfo.currentCharges
+	local maxCharges = chargeInfo and chargeInfo.maxCharges
+	local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
+	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
+
+	local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
+	local start = cooldownInfo and cooldownInfo.startTime
+	local duration = cooldownInfo and cooldownInfo.duration
+
 	if charges and maxCharges > 1 then
 		button.Count:SetText(charges)
 	else

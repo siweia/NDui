@@ -17,6 +17,7 @@ local SortAccountBankBags = C_Container.SortAccountBankBags
 local PickupContainerItem = C_Container.PickupContainerItem
 local SplitContainerItem = C_Container.SplitContainerItem
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
+local ACCOUNT_BANK_TYPE = Enum.BankType.Account or 2
 
 local sortCache = {}
 function module:ReverseSort()
@@ -211,7 +212,7 @@ function module:CreateBagBar(settings, columns)
 	bagBar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagBar)
 	bagBar.highlightFunction = highlightFunction
-	bagBar.isGlobal = true
+	bagBar.isGlobal = isGlobal
 	bagBar:Hide()
 	bagBar.columns = columns
 	bagBar.UpdateAnchor = updateBagBar
@@ -220,20 +221,37 @@ function module:CreateBagBar(settings, columns)
 	self.BagBar = bagBar
 end
 
+function module:CreateBagTab(settings, columns)
+	local bagTab = self:SpawnPlugin("BagTab", settings.Bags)
+	bagTab:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
+	B.SetBD(bagTab)
+	bagTab.highlightFunction = highlightFunction
+	bagTab:Hide()
+	bagTab.columns = columns
+	bagTab.UpdateAnchor = updateBagBar
+	bagTab:UpdateAnchor()
+
+	self.BagBar = bagTab
+end
+
 local function CloseOrRestoreBags(self, btn)
 	if btn == "RightButton" then
 		local bag = self.__owner.main
 		local bank = self.__owner.bank
 		local reagent = self.__owner.reagent
+		local account = self.__owner.accountbank
 		C.db["TempAnchor"][bag:GetName()] = nil
 		C.db["TempAnchor"][bank:GetName()] = nil
 		C.db["TempAnchor"][reagent:GetName()] = nil
+		C.db["TempAnchor"][account:GetName()] = nil
 		bag:ClearAllPoints()
 		bag:SetPoint(unpack(bag.__anchor))
 		bank:ClearAllPoints()
 		bank:SetPoint(unpack(bank.__anchor))
 		reagent:ClearAllPoints()
-		reagent:SetPoint(unpack(reagent.__anchor))
+		reagent:SetPoint(unpack(bank.__anchor))
+		account:ClearAllPoints()
+		account:SetPoint(unpack(bank.__anchor))
 		PlaySound(SOUNDKIT.IG_MINIMAP_OPEN)
 	else
 		CloseAllBags()
@@ -283,7 +301,6 @@ function module:CreateAccountBankButton(f)
 	bu:SetScript("OnClick", function(_, btn)
 		if AccountBankPanel:ShouldShowLockPrompt() then
 			UIErrorsFrame:AddMessage(DB.InfoColor..ACCOUNT_BANK_LOCKED_PROMPT)
-		--	StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, { bankType = Enum.BankType.Account })
 		else
 			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 			AccountBankPanel:Show()
@@ -300,63 +317,38 @@ function module:CreateAccountBankButton(f)
 	return bu
 end
 
-local function AddBankTabSettingsToTooltip(tooltip, depositFlags)
-	if not tooltip or not depositFlags then return end
+function module:CreateAccountMoney()
+	local frame = CreateFrame("Button", nil, self)
+	frame:SetSize(50, 22)
 
-	if FlagsUtil.IsSet(depositFlags, Enum.BagSlotFlags.ExpansionCurrent) then
-		GameTooltip_AddNormalLine(tooltip, BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_CURRENT))
-	elseif FlagsUtil.IsSet(depositFlags, Enum.BagSlotFlags.ExpansionLegacy) then
-		GameTooltip_AddNormalLine(tooltip, BANK_TAB_EXPANSION_ASSIGNMENT:format(BANK_TAB_EXPANSION_FILTER_LEGACY))
-	end
-	
-	local filterList = ContainerFrameUtil_ConvertFilterFlagsToList(depositFlags)
-	if filterList then
-		GameTooltip_AddNormalLine(tooltip, BANK_TAB_DEPOSIT_ASSIGNMENTS:format(filterList), true)
-	end
-end
+	local tag = self:SpawnPlugin("TagDisplay", "[accountmoney]", self)
+	tag:SetFont(unpack(DB.Font))
+	tag:SetPoint("RIGHT", frame, -2, 0)
+	frame.tag = tag
 
-local function clickTab()
-	if not C_Bank.HasMaxBankTabs(Enum.BankType.Account) then
-		StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, { bankType = Enum.BankType.Account })
-	end
-end
-
-local function tab_OnEnter(self)
-	local data = AccountBankPanel.purchasedBankTabData[self.tabIndex]
-	if not data then return end
-
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-	GameTooltip_SetTitle(GameTooltip, data.name, NORMAL_FONT_COLOR)
-	AddBankTabSettingsToTooltip(GameTooltip, data.depositFlags)
-	GameTooltip_AddInstructionLine(GameTooltip, BANK_TAB_TOOLTIP_CLICK_INSTRUCTION)
-	GameTooltip:Show()
-end
-
-function module:CreateAccountBankTabs()
-	local buttonSize = 37
-	local frame = CreateFrame("Frame", nil, self)
-	frame:SetSize((buttonSize+5)*5+5, buttonSize + 10)
-	frame:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
-	B.SetBD(frame)
-	-- todo: update bank tabs
-	local bankTabs = {}
-
-	for i = 1, 5 do
-		local bu = B.CreateButton(frame, 37, 37, true, QUESTION_MARK_ICON)
-		bu:SetPoint("BOTTOMLEFT", 5+(i-1)*(buttonSize+5), 5)
-		bu.tabIndex = i
-		bankTabs[i] = bu
-
-		bu:SetScript("OnClick", clickTab)
-		bu:SetScript("OnEnter", tab_OnEnter)
-		bu:SetScript("OnLeave", B.HideTooltip)
-	end
-
-	hooksecurefunc(AccountBankPanel, "RefreshBankTabs", function(self)
-		for index, data in pairs(self.purchasedBankTabData) do
-			bankTabs[index].Icon:SetTexture(data.icon)
+	frame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+	frame:SetScript("OnClick", function(_, btn)
+		if btn == "RightButton" then
+			StaticPopup_Hide("BANK_MONEY_DEPOSIT")
+			if StaticPopup_Visible("BANK_MONEY_WITHDRAW") then
+				StaticPopup_Hide("BANK_MONEY_WITHDRAW")
+			else
+				StaticPopup_Show("BANK_MONEY_WITHDRAW", nil, nil, {bankType = ACCOUNT_BANK_TYPE})
+			end
+		else
+			StaticPopup_Hide("BANK_MONEY_WITHDRAW")
+			if StaticPopup_Visible("BANK_MONEY_DEPOSIT") then
+				StaticPopup_Hide("BANK_MONEY_DEPOSIT")
+			else
+				StaticPopup_Show("BANK_MONEY_DEPOSIT", nil, nil, {bankType = ACCOUNT_BANK_TYPE})
+			end
 		end
 	end)
+	frame.title = DB.LeftButton..BANK_DEPOSIT_MONEY_BUTTON_LABEL.."|n"..DB.RightButton..BANK_WITHDRAW_MONEY_BUTTON_LABEL
+	B.AddTooltip(frame, "ANCHOR_TOP")
+
+
+	return frame
 end
 
 function module:CreateBankButton(f)
@@ -389,27 +381,50 @@ function module:AutoDeposit()
 		DepositReagentBank()
 	end
 end
--- todo: bankAutoDepositReagents, cvar
-function module:CreateDepositButton(name)
-	local isAccountBank = name == "AccountBank"
+
+function module:CreateDepositButton()
 	local bu = B.CreateButton(self, 22, 22, true, "Atlas:GreenCross")
 	bu.Icon:SetOutside()
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
-		if isAccountBank then
-			C_Bank.AutoDepositItemsIntoBank(Enum.BankType.Account)
+		if btn == "RightButton" then
+			C.db["Bags"]["AutoDeposit"] = not C.db["Bags"]["AutoDeposit"]
+			updateDepositButtonStatus(bu)
 		else
-			if btn == "RightButton" then
-				C.db["Bags"]["AutoDeposit"] = not C.db["Bags"]["AutoDeposit"]
-				updateDepositButtonStatus(bu)
-			else
-				DepositReagentBank()
-			end
+			DepositReagentBank()
 		end
 	end)
 	bu.title = REAGENTBANK_DEPOSIT
-	B.AddTooltip(bu, "ANCHOR_TOP", not isAccountBank and DB.InfoColor..L["AutoDepositTip"])
+	B.AddTooltip(bu, "ANCHOR_TOP", DB.InfoColor..L["AutoDepositTip"])
 	updateDepositButtonStatus(bu)
+
+	return bu
+end
+
+local function updateAccountBankDeposit(bu)
+	if GetCVarBool("bankAutoDepositReagents") then
+		bu.bg:SetBackdropBorderColor(1, .8, 0)
+	else
+		B.SetBorderColor(bu.bg)
+	end
+end
+
+function module:CreateAccountBankDeposit()
+	local bu = B.CreateButton(self, 22, 22, true, "Atlas:GreenCross")
+	bu.Icon:SetOutside()
+	bu:RegisterForClicks("AnyUp")
+	bu:SetScript("OnClick", function(_, btn)
+		if btn == "RightButton" then
+			local isOn = GetCVarBool("bankAutoDepositReagents")
+			SetCVar("bankAutoDepositReagents", isOn and 0 or 1)
+			updateAccountBankDeposit(bu)
+		else
+			C_Bank.AutoDepositItemsIntoBank(ACCOUNT_BANK_TYPE)
+		end
+	end)
+	bu.title = ACCOUNT_BANK_DEPOSIT_BUTTON_LABEL
+	B.AddTooltip(bu, "ANCHOR_TOP", DB.InfoColor..L["DepositTradeGoodsTip"])
+	updateAccountBankDeposit(bu)
 
 	return bu
 end
@@ -426,12 +441,15 @@ local function ToggleBackpacks(self)
 	end
 end
 
-function module:CreateBagToggle()
+function module:CreateBagToggle(click)
 	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\Button-Backpack-Up")
 	bu.__owner = self
 	bu:SetScript("OnClick", ToggleBackpacks)
 	bu.title = BACKPACK_TOOLTIP
 	B.AddTooltip(bu, "ANCHOR_TOP")
+	if click then
+		ToggleBackpacks(bu)
+	end
 
 	return bu
 end
@@ -962,14 +980,12 @@ function module:OnLogin()
 
 		f.reagent = MyContainer:New("Reagent", {Bags = "bankreagent", BagType = "Bank"})
 		f.reagent:SetFilter(filters.onlyReagent, true)
-		f.reagent.__anchor = {"BOTTOMLEFT", f.bank}
-		f.reagent:SetPoint(unpack(f.reagent.__anchor))
+		f.reagent:SetPoint(unpack(f.bank.__anchor))
 		f.reagent:Hide()
 
 		f.accountbank = MyContainer:New("AccountBank", {Bags = "accountbank", BagType = "Bank"})
 		f.accountbank:SetFilter(filters.accountbank, true)
-		f.accountbank.__anchor = {"BOTTOMLEFT", f.bank}
-		f.accountbank:SetPoint(unpack(f.reagent.__anchor))
+		f.accountbank:SetPoint(unpack(f.bank.__anchor))
 		f.accountbank:Hide()
 
 		for bagType, groups in pairs(module.ContainerGroups) do
@@ -1303,7 +1319,7 @@ function module:OnLogin()
 		elseif name == "BagReagent" then
 			label = L["ReagentBag"]
 		elseif name == "BagStone" then
-			label = GetSpellInfo(404861)
+			label = C_Spell.GetSpellName(404861)
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)
@@ -1328,14 +1344,16 @@ function module:OnLogin()
 			buttons[4] = module.CreateReagentButton(self, f)
 			buttons[5] = module.CreateAccountBankButton(self, f)
 		elseif name == "Reagent" then
-			buttons[3] = module.CreateDepositButton(self, name)
+			buttons[3] = module.CreateDepositButton(self)
 			buttons[4] = module.CreateBankButton(self, f)
 			buttons[5] = module.CreateAccountBankButton(self, f)
 		elseif name == "AccountBank" then
-			module.CreateAccountBankTabs(self)
-			buttons[3] = module.CreateDepositButton(self, name)
-			buttons[4] = module.CreateBankButton(self, f)
-			buttons[5] = module.CreateReagentButton(self, f)
+			module.CreateBagTab(self, settings, 5)
+			buttons[3] = module.CreateBagToggle(self, true)
+			buttons[4] = module.CreateAccountBankDeposit(self)
+			buttons[5] = module.CreateBankButton(self, f)
+			buttons[6] = module.CreateReagentButton(self, f)
+			buttons[7] = module.CreateAccountMoney(self, f)
 		end
 
 		for i = 1, #buttons do

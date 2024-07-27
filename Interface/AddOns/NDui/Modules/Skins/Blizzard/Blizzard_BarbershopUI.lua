@@ -20,18 +20,6 @@ local function ReskinCustomizeTooltip(tooltip)
 	tooltip:SetScale(UIParent:GetScale())
 end
 
-local function ReskinCustomizeArrow(button, direction)
-	B.StripTextures(button, 0)
-
-	local tex = button:CreateTexture(nil, "ARTWORK")
-	tex:SetInside(button, 3, 3)
-	B.SetupArrow(tex, direction)
-	button.__texture = tex
-
-	button:HookScript("OnEnter", B.Texture_OnEnter)
-	button:HookScript("OnLeave", B.Texture_OnLeave)
-end
-
 C.themes["Blizzard_CharacterCustomize"] = function()
 	local frame = CharCustomizeFrame
 
@@ -43,25 +31,6 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 	ReskinCustomizeButton(frame.RandomizeAppearanceButton)
 
 	hooksecurefunc(frame, "UpdateOptionButtons", function(self)
-		if self.selectionPopoutPool then -- isWW: removed
-			for button in self.selectionPopoutPool:EnumerateActive() do
-				if not button.styled then
-					ReskinCustomizeArrow(button.DecrementButton, "left")
-					ReskinCustomizeArrow(button.IncrementButton, "right")
-
-					local popoutButton = button.Button
-					popoutButton.HighlightTexture:SetAlpha(0)
-					popoutButton.NormalTexture:SetAlpha(0)
-					ReskinCustomizeButton(popoutButton)
-					B.StripTextures(popoutButton.Popout)
-					local bg = B.SetBD(popoutButton.Popout, 1)
-					bg:SetFrameLevel(popoutButton.Popout:GetFrameLevel())
-
-					button.styled = true
-				end
-			end
-		end
-
 		if self.dropdownPool then
 			for option in self.dropdownPool:EnumerateActive() do
 				if not option.styled then
@@ -91,8 +60,5 @@ C.themes["Blizzard_CharacterCustomize"] = function()
 		end
 	end)
 
-	if not DB.isWW then
-		ReskinCustomizeTooltip(CharCustomizeTooltip)
-	end
 	ReskinCustomizeTooltip(CharCustomizeNoHeaderTooltip)
 end

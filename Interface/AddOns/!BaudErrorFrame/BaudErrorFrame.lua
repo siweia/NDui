@@ -97,7 +97,7 @@ end
 
 function BaudErrorFrameMinimapButton_OnUpdate(self)
 	self:ClearAllPoints()
-	if IsAddOnLoaded("NDui") then
+	if C_AddOns.IsAddOnLoaded("NDui") then
 		self:SetPoint("BOTTOMRIGHT", UIParent)
 	else
 		self:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 0, 0)
@@ -240,7 +240,7 @@ f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", function()
 	f:UnregisterEvent("PLAYER_ENTERING_WORLD")
 
-	if IsAddOnLoaded("NDui") then
+	if C_AddOns.IsAddOnLoaded("NDui") then
 		local B, _, _, DB = unpack(NDui)
 		if DB.isDeveloper then
 			RegisterTaintEvents(BaudErrorFrame)

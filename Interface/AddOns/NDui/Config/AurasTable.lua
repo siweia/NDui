@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("AurasTable")
 
 local pairs, next, format, wipe, unpack = pairs, next, format, wipe, unpack
-local GetSpellInfo = GetSpellInfo
+local GetSpellName = C_Spell.GetSpellName
 local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 
 -- AuraWatch
@@ -39,7 +39,7 @@ function module:AddNewAuraWatch(class, list)
 		for _, v in pairs(k) do
 			local spellID = v.AuraID or v.SpellID
 			if spellID then
-				local name = GetSpellInfo(spellID)
+				local name = GetSpellName(spellID)
 				if not name and not v.Disabled then
 					wipe(v)
 					if DB.isDeveloper then print(format("|cffFF0000Invalid spellID:|r '%s' %s", class, spellID)) end
@@ -102,7 +102,7 @@ end
 -- Party watcher spells
 function module:CheckPartySpells()
 	for spellID, duration in pairs(C.PartySpells) do
-		local name = GetSpellInfo(spellID)
+		local name = GetSpellName(spellID)
 		if name then
 			local modDuration = NDuiADB["PartySpells"][spellID]
 			if modDuration and modDuration == duration then
@@ -120,7 +120,7 @@ function module:CheckCornerSpells()
 	if not data then return end
 
 	for spellID in pairs(data) do
-		local name = GetSpellInfo(spellID)
+		local name = GetSpellName(spellID)
 		if not name then
 			if DB.isDeveloper then print("Invalid cornerspell ID: "..spellID) end
 		end
@@ -135,7 +135,7 @@ end
 
 function module:CheckMajorSpells()
 	for spellID in pairs(C.MajorSpells) do
-		local name = GetSpellInfo(spellID)
+		local name = GetSpellName(spellID)
 		if name then
 			if NDuiADB["MajorSpells"][spellID] then
 				NDuiADB["MajorSpells"][spellID] = nil
@@ -154,7 +154,7 @@ end
 
 local function CheckNameplateFilter(list, key)
 	for spellID in pairs(list) do
-		local name = GetSpellInfo(spellID)
+		local name = GetSpellName(spellID)
 		if name then
 			if NDuiADB[key][spellID] then
 				NDuiADB[key][spellID] = nil

@@ -5,9 +5,9 @@ local UF = B:GetModule("UnitFrames")
 
 local strmatch, format, wipe = strmatch, format, wipe
 local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
-local UnitAura, GetSpellInfo = UnitAura, GetSpellInfo
+local GetSpellName = C_Spell.GetSpellName
 local InCombatLockdown = InCombatLockdown
-local GetTime, GetSpellCooldown, IsInRaid, IsInGroup = GetTime, GetSpellCooldown, IsInRaid, IsInGroup
+local GetTime, IsInRaid, IsInGroup = GetTime, IsInRaid, IsInGroup
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
 local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
@@ -156,7 +156,7 @@ local function setupClickSets(self)
 				value = fixedSpells[value] or value
 				--self:SetAttribute(format(keyIndex, "type"), "spell")
 				--self:SetAttribute(format(keyIndex, "spell"), value)
-				local spellName = GetSpellInfo(value)
+				local spellName = GetSpellName(value)
 				self:SetAttribute(format(keyIndex, "type"), "macro")
 				self:SetAttribute(format(keyIndex, "macrotext"), "/cast [@mouseover]"..spellName)
 			elseif value == "target" then
@@ -211,7 +211,7 @@ function UF:UpdatePartyWatcherSpells()
 	wipe(UF.PartyWatcherSpells)
 
 	for spellID, duration in pairs(C.PartySpells) do
-		local name = GetSpellInfo(spellID)
+		local name = GetSpellName(spellID)
 		if name then
 			local modDuration = NDuiADB["PartySpells"][spellID]
 			if not modDuration or modDuration > 0 then
@@ -269,7 +269,11 @@ function UF:SendCDMessage()
 		local value = watchingList[UF.myGUID]
 		if value then
 			for spellID in pairs(value) do
-				local start, duration, enabled = GetSpellCooldown(spellID)
+				local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
+				local start = cooldownInfo and cooldownInfo.startTime
+				local duration = cooldownInfo and cooldownInfo.duration
+				local enabled = cooldownInfo and cooldownInfo.isEnabled
+
 				if enabled ~= 0 and start ~= 0 then
 					local remaining = start + duration - thisTime
 					if remaining < 0 then remaining = 0 end

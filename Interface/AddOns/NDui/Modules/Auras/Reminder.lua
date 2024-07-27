@@ -6,7 +6,7 @@ local pairs, tinsert, next = pairs, table.insert, next
 local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
 local GetSpecialization, GetItemCooldown = GetSpecialization, GetItemCooldown
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
-local IsInInstance, IsPlayerSpell, GetSpellTexture = IsInInstance, IsPlayerSpell, GetSpellTexture
+local IsInInstance, IsPlayerSpell = IsInInstance, IsPlayerSpell
 local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
 local GetNumGroupMembers = GetNumGroupMembers
 
@@ -74,7 +74,7 @@ function A:Reminder_Create(cfg)
 	local texture = cfg.texture
 	if not texture then
 		for spellID in pairs(cfg.spells) do
-			texture = GetSpellTexture(spellID)
+			texture = C_Spell.GetSpellTexture(spellID)
 			break
 		end
 	end

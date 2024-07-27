@@ -3,10 +3,10 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
-local GetSpellCooldown, GetSpellInfo, GetItemCooldown = GetSpellCooldown, GetSpellInfo, GetItemCooldown
+local GetItemCooldown = GetItemCooldown
 local IsPassiveSpell = C_Spell and C_Spell.IsSpellPassive or IsPassiveSpell
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
-local IsCurrentSpell, IsPlayerSpell, UseItemByName = IsCurrentSpell, IsPlayerSpell, UseItemByName
+local IsPlayerSpell, UseItemByName = IsPlayerSpell, UseItemByName
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
 local PlayerHasToy, C_ToyBox_IsToyUsable, C_ToyBox_GetToyInfo = PlayerHasToy, C_ToyBox.IsToyUsable, C_ToyBox.GetToyInfo
 local C_TradeSkillUI_GetRecipeInfo, C_TradeSkillUI_GetTradeSkillLine = C_TradeSkillUI.GetRecipeInfo, C_TradeSkillUI.GetTradeSkillLine
@@ -49,12 +49,7 @@ function M:UpdateProfessions()
 			for i = 1, numSpells do
 				local slotID = i + spelloffset
 				if not IsPassiveSpell(slotID, BOOKTYPE_PROFESSION) then
-					local spellID
-					if DB.isWW then
-						spellID = GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION).spellID
-					else
-						spellID = select(2, GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION))
-					end
+					local spellID = GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION).spellID
 					if i == 1 then
 						M:TradeTabs_Create(spellID)
 					else
@@ -78,7 +73,7 @@ function M:TradeTabs_Update()
 		local spellID = tab.spellID
 		local itemID = tab.itemID
 
-		if IsCurrentSpell(spellID) then
+		if C_Spell.IsCurrentSpell(spellID) then
 			tab:SetChecked(true)
 			tab.cover:Show()
 		else
@@ -90,7 +85,9 @@ function M:TradeTabs_Update()
 		if itemID then
 			start, duration = GetItemCooldown(itemID)
 		else
-			start, duration = GetSpellCooldown(spellID)
+			local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
+			start = cooldownInfo and cooldownInfo.startTime
+			duration = cooldownInfo and cooldownInfo.duration
 		end
 		if start and duration and duration > 1.5 then
 			tab.CD:SetCooldown(start, duration)
@@ -117,7 +114,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	elseif itemID then
 		name, _, _, _, _, _, _, _, _, texture = C_Item.GetItemInfo(itemID)
 	else
-		name, _, texture = GetSpellInfo(spellID)
+		name, texture = C_Spell.GetSpellName(spellID), C_Spell.GetSpellTexture(spellID)
 	end
 	if not name then return end -- precaution
 

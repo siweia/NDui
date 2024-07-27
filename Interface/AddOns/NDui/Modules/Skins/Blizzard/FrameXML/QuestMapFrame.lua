@@ -8,16 +8,6 @@ local function ReskinQuestHeader(header, isCalling)
 	if header.Divider then header.Divider:Hide() end
 	if header.TopFiligree then header.TopFiligree:Hide() end
 
-	if not DB.isWW then
-		local collapseButton = isCalling and header or header.CollapseButton
-		if collapseButton then
-			collapseButton:GetPushedTexture():SetAlpha(0)
-			collapseButton:GetHighlightTexture():SetAlpha(0)
-			B.ReskinCollapse(collapseButton, true)
-			collapseButton.bg:SetFrameLevel(6)
-		end
-	end
-
 	header.styled = true
 end
 
@@ -60,15 +50,9 @@ tinsert(C.defaultThemes, function()
 	QuestScrollFrame.Contents.Separator:SetAlpha(0)
 	ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
 
-	if DB.isWW then
-		QuestScrollFrame.Background:SetAlpha(0)
-		B.StripTextures(QuestScrollFrame.BorderFrame)
-		B.StripTextures(QuestMapFrame.DetailsFrame.BackFrame)
-	else
-		QuestMapFrame.Background:SetAlpha(0)
-		QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
-		QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
-	end
+	QuestScrollFrame.Background:SetAlpha(0)
+	B.StripTextures(QuestScrollFrame.BorderFrame)
+	B.StripTextures(QuestMapFrame.DetailsFrame.BackFrame)
 
 	local campaignOverview = QuestMapFrame.CampaignOverview
 	campaignOverview.BG:SetAlpha(0)
@@ -77,9 +61,7 @@ tinsert(C.defaultThemes, function()
 	QuestScrollFrame.Edge:Hide()
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 	B.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
-	if DB.isWW then
-		B.ReskinEditBox(QuestScrollFrame.SearchBox)
-	end
+	B.ReskinEditBox(QuestScrollFrame.SearchBox)
 
 	-- Quest details
 
@@ -96,13 +78,8 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(DetailsFrame.TrackButton)
 	B.ReskinTrimScroll(QuestMapDetailsScrollFrame.ScrollBar)
 
-	if DB.isWW then
-		B.Reskin(DetailsFrame.BackFrame.BackButton)
-		B.StripTextures(DetailsFrame.RewardsFrameContainer.RewardsFrame)
-	else
-		B.StripTextures(DetailsFrame.RewardsFrame)
-		B.Reskin(DetailsFrame.BackButton)
-	end
+	B.Reskin(DetailsFrame.BackFrame.BackButton)
+	B.StripTextures(DetailsFrame.RewardsFrameContainer.RewardsFrame)
 
 	DetailsFrame.AbandonButton:ClearAllPoints()
 	DetailsFrame.AbandonButton:SetPoint("BOTTOMLEFT", DetailsFrame, -1, 0)
@@ -122,15 +99,9 @@ tinsert(C.defaultThemes, function()
 		for button in QuestScrollFrame.headerFramePool:EnumerateActive() do
 			if button.ButtonText then
 				if not button.styled then
-					if DB.isWW then
-						B.StripTextures(button)
-						B.CreateBDFrame(button, .25)
-						button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-					else
-						B.ReskinCollapse(button, true)
-						button:GetPushedTexture():SetAlpha(0)
-						button:GetHighlightTexture():SetAlpha(0)
-					end
+					B.StripTextures(button)
+					B.CreateBDFrame(button, .25)
+					button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 					button.styled = true
 				end
@@ -143,9 +114,6 @@ tinsert(C.defaultThemes, function()
 					B.StripTextures(button.Checkbox, 2)
 					B.CreateBDFrame(button.Checkbox, 0, true)
 				end
-				if button.Check then -- isWW removed?
-					button.Check:SetAtlas("checkmark-minimal")
-				end
 				button.styled = true
 			end
 		end
@@ -155,15 +123,11 @@ tinsert(C.defaultThemes, function()
 		end
 
 		for header in QuestScrollFrame.campaignHeaderMinimalFramePool:EnumerateActive() do
-			if DB.isWW then
-				if header.CollapseButton and not header.styled then
-					B.StripTextures(header)
-					B.CreateBDFrame(header.Background, .25)
-					header.Highlight:SetColorTexture(1, 1, 1, .25)
-					header.styled = true
-				end
-			else
-				ReskinQuestHeader(header)
+			if header.CollapseButton and not header.styled then
+				B.StripTextures(header)
+				B.CreateBDFrame(header.Background, .25)
+				header.Highlight:SetColorTexture(1, 1, 1, .25)
+				header.styled = true
 			end
 		end
 
@@ -173,13 +137,6 @@ tinsert(C.defaultThemes, function()
 
 		ReskinAWQHeader()
 	end)
-
-	-- Complete quest frame
-	if not DB.isWW then
-		B.StripTextures(CompleteQuestFrame)
-		B.StripTextures(CompleteQuestFrame.CompleteButton)
-		B.Reskin(CompleteQuestFrame.CompleteButton)
-	end
 
 	-- Map legend
 	local mapLegend = QuestMapFrame.MapLegend

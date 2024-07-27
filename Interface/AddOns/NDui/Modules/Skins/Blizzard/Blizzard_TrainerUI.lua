@@ -53,9 +53,5 @@ C.themes["Blizzard_TrainerUI"] = function()
 	end)
 
 	B.Reskin(ClassTrainerTrainButton)
-	if DB.isWW then
-		B.ReskinFilterButton(ClassTrainerFrame.FilterDropdown)
-	else
-		B.ReskinDropDown(ClassTrainerFrameFilterDropDown)
-	end
+	B.ReskinFilterButton(ClassTrainerFrame.FilterDropdown)
 end

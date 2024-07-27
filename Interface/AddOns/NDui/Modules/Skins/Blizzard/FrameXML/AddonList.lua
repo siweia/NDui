@@ -12,12 +12,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(AddonListCancelButton)
 	B.Reskin(AddonListOkayButton)
 	B.ReskinCheck(AddonListForceLoad)
-	if DB.isWW then
-		B.ReskinDropDown(AddonList.Dropdown)
-	else
-		B.ReskinDropDown(AddonCharacterDropDown)
-		AddonCharacterDropDown:SetWidth(170)
-	end
+	B.ReskinDropDown(AddonList.Dropdown)
 	B.ReskinTrimScroll(AddonList.ScrollBar)
 
 	AddonListForceLoad:SetSize(26, 26)

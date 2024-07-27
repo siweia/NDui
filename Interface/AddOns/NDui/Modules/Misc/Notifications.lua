@@ -8,8 +8,8 @@ local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
-local GetSpellLink = C_Spell and C_Spell.GetSpellLink or GetSpellLink
-local GetSpellInfo, GetSpellCooldown = GetSpellInfo, GetSpellCooldown
+local GetSpellLink = C_Spell.GetSpellLink
+local GetSpellName = C_Spell.GetSpellName
 local GetActionInfo, GetMacroSpell, GetMacroItem = GetActionInfo, GetMacroSpell, GetMacroItem
 local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local C_Timer_After = C_Timer.After
@@ -408,7 +408,7 @@ local spellList = {
 
 function M:ItemAlert_Update(unit, castID, spellID)
 	if groupUnits[unit] and spellList[spellID] and (spellList[spellID] ~= castID) then
-		SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellInfo(spellID)), M:GetMsgChannel())
+		SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellName(spellID)), M:GetMsgChannel())
 		spellList[spellID] = castID
 	end
 end
@@ -626,7 +626,12 @@ end
 local lastCDSend = 0
 function M:SendCurrentSpell(thisTime, spellID)
 	local spellLink = GetSpellLink(spellID)
-	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
+	local chargeInfo = C_Spell.GetSpellCharges(spellID)
+	local charges = chargeInfo and chargeInfo.currentCharges
+	local maxCharges = chargeInfo and chargeInfo.maxCharges
+	local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
+	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
+
 	if charges and maxCharges then
 		if charges ~= maxCharges then
 			local remain = chargeStart + chargeDuration - thisTime
@@ -635,7 +640,10 @@ function M:SendCurrentSpell(thisTime, spellID)
 			SendChatMessage(format(L["ChargesCompleted"], spellLink, charges, maxCharges), M:GetMsgChannel())
 		end
 	else
-		local start, duration = GetSpellCooldown(spellID)
+		local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
+		local start = cooldownInfo and cooldownInfo.startTime
+		local duration = cooldownInfo and cooldownInfo.duration
+
 		if start and duration > 0 then
 			local remain = start + duration - thisTime
 			SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())

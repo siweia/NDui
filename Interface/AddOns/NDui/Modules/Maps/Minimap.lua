@@ -132,13 +132,9 @@ function module:ReskinRegions()
 
 	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
 	queueIcon:SetPoint("CENTER", QueueStatusButton)
-	if DB.isWW then
-		queueIcon:SetSize(30, 30)
-		queueIcon:SetAtlas("Raid")
-	else
-		queueIcon:SetSize(50, 50)
-		queueIcon:SetTexture(DB.eyeTex)
-	end
+	queueIcon:SetSize(30, 30)
+	queueIcon:SetAtlas("Raid")
+
 	local anim = queueIcon:CreateAnimationGroup()
 	anim:SetLooping("REPEAT")
 	anim.rota = anim:CreateAnimation("Rotation")
@@ -175,7 +171,7 @@ function module:ReskinRegions()
 			hooksecurefunc(frame.Background, "SetAtlas", replaceFlag)
 		end
 		reskinDifficulty(instDifficulty.Instance)
-		reskinDifficulty(instDifficulty.Default) -- isWW
+		reskinDifficulty(instDifficulty.Default)
 		reskinDifficulty(instDifficulty.Guild)
 		reskinDifficulty(instDifficulty.ChallengeMode)
 	end
@@ -605,44 +601,18 @@ function module:Minimap_OnMouseWheel(zoom)
 	end
 end
 
-function module:BuildMinimapDropDown()
-	if DB.isWW then return end
-
-	local dropdown = CreateFrame("Frame", "NDuiMiniMapTrackingDropDown", _G.UIParent, "UIDropDownMenuTemplate")
-	dropdown:SetID(1)
-	dropdown:SetClampedToScreen(true)
-	dropdown:Hide()
-	dropdown.noResize = true
-	_G.UIDropDownMenu_Initialize(dropdown, _G.MiniMapTrackingDropDown_Initialize, "MENU")
-
-	local trackFrame = DB.isWW and _G.MinimapCluster.Tracking or _G.MinimapCluster.TrackingFrame
-	hooksecurefunc(trackFrame.Button, "Update", function()
-		if _G.UIDROPDOWNMENU_OPEN_MENU == dropdown then
-			UIDropDownMenu_RefreshAll(dropdown)
-		end
-	end)
-
-	B:LockCVar("minimapTrackingShowAll", "1")
-
-	module.MinimapTracking = dropdown
-end
-
 function module:Minimap_OnMouseUp(btn)
 	if btn == "MiddleButton" then
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleCalendar()
 	elseif btn == "RightButton" then
-		if DB.isWW then
-			local button = MinimapCluster.Tracking.Button
-			if button then
-				button:OpenMenu()
-				if button.menu then
-					button.menu:ClearAllPoints()
-					button.menu:SetPoint("CENTER", self, -100, 100)
-				end
+		local button = MinimapCluster.Tracking.Button
+		if button then
+			button:OpenMenu()
+			if button.menu then
+				button.menu:ClearAllPoints()
+				button.menu:SetPoint("CENTER", self, -100, 100)
 			end
-		else
-			ToggleDropDownMenu(1, nil, module.MinimapTracking, self, -100, 100)
 		end
 	else
 		Minimap:OnClick()
@@ -700,7 +670,6 @@ function module:SetupMinimap()
 	self:UpdateMinimapScale()
 	self:ShowMinimapClock()
 	self:ShowCalendar()
-	self:BuildMinimapDropDown()
 
 	-- Minimap clicks
 	Minimap:EnableMouseWheel(true)
@@ -717,12 +686,9 @@ function module:SetupMinimap()
 	B.HideObject(Minimap.ZoomOut)
 	B.HideObject(MinimapCompassTexture)
 
-	if DB.isWW then
-		_G.MinimapCluster.Tracking:SetAlpha(0)
-		_G.MinimapCluster.Tracking:SetScale(0.0001)
-	else
-		_G.MinimapCluster.TrackingFrame:Hide()
-	end
+	_G.MinimapCluster.Tracking:SetAlpha(0)
+	_G.MinimapCluster.Tracking:SetScale(0.0001)
+
 
 	-- Add Elements
 	self:CreatePulse()

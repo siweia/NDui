@@ -918,3 +918,4 @@ L["AddPower"] = "Additional Power" -- need translation
 L["AddPowerTip"] = "|nShow additional powerbar for classes like Shadow Priest and Fural Druid." -- need translation
 L["AuraWatch MinCD"] = "Min Cooldown" -- need translation
 L["MinCDTip"] = "|nThe Spell cooldown only visible when its cooldown greater then the second value." -- need translation
+    L["DepositTradeGoodsTip"] = "|nLeft click to deposit warband items, right click to swith deposit mode.|nIf the button border shown, the reagents from your bags would deposit into your warband bank as well." -- need translation

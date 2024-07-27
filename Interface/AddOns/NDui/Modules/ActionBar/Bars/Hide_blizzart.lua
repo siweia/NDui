@@ -31,11 +31,7 @@ end
 
 local function updateTokenVisibility()
 	TokenFrame_LoadUI()
-	if DB.isWW then
-		TokenFrame:Update()
-	else
-		TokenFrame_Update()
-	end
+	TokenFrame:Update()
 end
 
 local function buttonEventsRegisterFrame(self, added)

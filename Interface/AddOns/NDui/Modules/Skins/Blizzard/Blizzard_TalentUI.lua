@@ -88,8 +88,7 @@ C.themes["Blizzard_TalentUI"] = function()
 		if bonuses then
 			for i = 1, #bonuses, bonusesIncrement do
 				local frame = scrollChild["abilityButton"..index]
-				local _, icon = GetSpellTexture(bonuses[i])
-				frame.icon:SetTexture(icon)
+				frame.icon:SetTexture(C_Spell.GetSpellTexture(bonuses[i]))
 				frame.subText:SetTextColor(.75, .75, .75)
 
 				if not frame.styled then

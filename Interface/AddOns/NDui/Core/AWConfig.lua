@@ -5,6 +5,8 @@ local G = B:GetModule("GUI")
 local r, g, b = DB.r, DB.g, DB.b
 local pairs, floor = pairs, math.floor
 local f
+local GetSpellName = C_Spell.GetSpellName
+local GetSpellTexture = C_Spell.GetSpellTexture
 
 -- Elements
 local function labelOnEnter(self)
@@ -217,7 +219,7 @@ local function CreatePanel()
 
 	local function AddAura(parent, index, data)
 		local typeID, spellID, unitID, caster, stack, amount, timeless, combat, text, flash = unpack(data)
-		local name, _, texture = GetSpellInfo(spellID)
+		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 		if typeID == "SlotID" then
 			texture = GetInventoryItemTexture("player", spellID)
 			name = slotIndex[spellID]
@@ -273,7 +275,7 @@ local function CreatePanel()
 
 	local function AddInternal(parent, index, data)
 		local intID, duration, trigger, unit, itemID = unpack(data)
-		local name, _, texture = GetSpellInfo(intID)
+		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
 		if itemID then
 			name = C_Item.GetItemInfo(itemID)
 		end
@@ -453,7 +455,7 @@ local function CreatePanel()
 
 				if not typeID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Choose a Type"]) return end
 				if (typeID == "AuraID" and (not spellID or not unitID)) or (typeID == "SpellID" and not spellID) or (typeID == "SlotID" and not slotID) or (typeID == "TotemID" and not totemID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-				if (typeID == "AuraID" or typeID == "SpellID") and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+				if (typeID == "AuraID" or typeID == "SpellID") and not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 
 				local realID = spellID or slotID or totemID
 				if C.db["AuraWatchList"][i][realID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
@@ -464,7 +466,7 @@ local function CreatePanel()
 			elseif i == 10 then
 				local intID, duration, trigger, unit, itemID = tonumber(Option[13]:GetText()), tonumber(Option[14]:GetText()), Option[15].Text:GetText(), Option[16].Text:GetText(), tonumber(Option[17]:GetText())
 				if not intID or not duration or not trigger or not unit then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-				if intID and not GetSpellInfo(intID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+				if intID and not GetSpellName(intID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 				if C.db["InternalCD"][intID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 				C.db["InternalCD"][intID] = {intID, duration, trigger, unit, itemID}
