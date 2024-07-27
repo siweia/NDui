@@ -4,26 +4,34 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
-	if not CompactRaidFrameManagerToggleButton then return end
+	local toggleButton = CompactRaidFrameManagerToggleButton
+	if not toggleButton then return end
 
-	CompactRaidFrameManagerToggleButton:SetNormalTexture("Interface\\Buttons\\UI-ColorPicker-Buttons")
-	CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(.15, .39, 0, 1)
-	CompactRaidFrameManagerToggleButton:SetSize(15, 15)
-	hooksecurefunc("CompactRaidFrameManager_Collapse", function()
-		CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(.15, .39, 0, 1)
-	end)
-	hooksecurefunc("CompactRaidFrameManager_Expand", function()
-		CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(.86, 1, 0, 1)
-	end)
+	toggleButton:SetSize(16, 16)
+
+	local nt = toggleButton:GetNormalTexture()
+
+	local function updateArrow()
+		if CompactRaidFrameManager.collapsed then
+			B.SetupArrow(nt, "right")
+		else
+			B.SetupArrow(nt, "left")
+		end
+		nt:SetTexCoord(0, 1, 0, 1)
+	end
+
+	updateArrow()
+	hooksecurefunc("CompactRaidFrameManager_Collapse", updateArrow)
+	hooksecurefunc("CompactRaidFrameManager_Expand", updateArrow)
 
 	if DB.isWW then
 		B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameModeControlDropdown)
 		B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameRestrictPingsDropdown)
-		if CompactRaidFrameManagerDisplayFrameBottomButtonsLeavePartyButton then
-			B.Reskin(CompactRaidFrameManagerDisplayFrameBottomButtonsLeavePartyButton)
-		end
-		if CompactRaidFrameManagerDisplayFrameBottomButtonsLeaveInstanceGroupButton then
-			B.Reskin(CompactRaidFrameManagerDisplayFrameBottomButtonsLeaveInstanceGroupButton)
+
+		for _, button in pairs({CompactRaidFrameManager.displayFrame.BottomButtons:GetChildren()}) do
+			if button:IsObjectType("Button") then
+				B.Reskin(button)
+			end
 		end
 	else
 		local buttons = {
