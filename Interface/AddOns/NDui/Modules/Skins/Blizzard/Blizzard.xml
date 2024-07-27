@@ -13,7 +13,6 @@
 	<Script file="Blizzard_Calendar.lua"/>
 	<Script file="Blizzard_ChallengesUI.lua"/>
 	<Script file="Blizzard_ChromieTimeUI.lua"/>
-	<Script file="Blizzard_ClassTalentUI.lua"/>
 	<Script file="Blizzard_ClickBindingUI.lua"/>
 	<Script file="Blizzard_Collections.lua"/>
 	<Script file="Blizzard_Communities.lua"/>

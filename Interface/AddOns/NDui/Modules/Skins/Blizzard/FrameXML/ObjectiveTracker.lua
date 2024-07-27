@@ -1,4 +1,4 @@
-local _, ns = ...
+	local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local r, g, b = DB.r, DB.g, DB.b
@@ -28,7 +28,7 @@ local function reskinQuestIcon(button)
 end
 
 local function reskinQuestIcons(_, block)
-	reskinQuestIcon(block.ItemButton) -- isWW
+	reskinQuestIcon(block.ItemButton)
 	reskinQuestIcon(block.itemButton)
 	reskinQuestIcon(block.groupFinderButton)
 
@@ -97,7 +97,7 @@ local function reskinTimer(self, key)
 end
 
 local function updateMinimizeButton(button, collapsed)
-	button = button.MinimizeButton or button -- isWW
+	button = button.MinimizeButton
 	button.__texture:DoCollapse(collapsed)
 end
 

@@ -33,7 +33,7 @@ function B:ReskinProfessionsFlyout(parent)
 
 	for i = 1, parent:GetNumChildren() do
 		local child = select(i, parent:GetChildren())
-		local checkbox = child.HideUnownedCheckBox or child.HideUnownedCheckbox -- isWW
+		local checkbox = child.HideUnownedCheckbox
 		if checkbox then
 			flyoutFrame = child
 
@@ -101,13 +101,13 @@ local function reskinProfessionForm(form)
 		hl:SetInside(button.bg)
 	end
 
-	local trackBox = form.TrackRecipeCheckBox or form.TrackRecipeCheckbox --isWW
+	local trackBox = form.TrackRecipeCheckbox
 	if trackBox then
 		B.ReskinCheck(trackBox)
 		trackBox:SetSize(24, 24)
 	end
 
-	local checkBox = form.AllocateBestQualityCheckBox or form.AllocateBestQualityCheckbox --isWW
+	local checkBox = form.AllocateBestQualityCheckbox
 	if checkBox then
 		B.ReskinCheck(checkBox)
 		checkBox:SetSize(24, 24)

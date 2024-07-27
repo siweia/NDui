@@ -121,7 +121,7 @@ function Bar:Bind_Update(button, spellmacro)
 	frame:Show()
 
 	if spellmacro == "SPELL" then
-		frame.id = SpellBook_GetSpellBookSlot(button) -- isWW, needs review
+		frame.id = SpellBook_GetSpellBookSlot(button)
 		frame.name = GetSpellBookItemName(frame.id, SpellBookFrame.bookType)
 		frame.bindings = {GetBindingKey(spellmacro.." "..frame.name)}
 	elseif spellmacro == "MACRO" then

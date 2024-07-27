@@ -119,9 +119,6 @@ tinsert(C.defaultThemes, function()
 		if self.Checkbox then
 			self.Checkbox:DesaturateHierarchy(1)
 		end
-		if self.CheckBox then -- isWW, renamed
-			self.CheckBox:DesaturateHierarchy(1)
-		end
 	end
 
 	local function ReskinControlsGroup(controls)
@@ -130,16 +127,8 @@ tinsert(C.defaultThemes, function()
 			if element.SliderWithSteppers then
 				B.ReskinStepperSlider(element.SliderWithSteppers)
 			end
-			if element.DropDown then -- isWW, renamed
-				ReskinOptionDropDown(element.DropDown)
-			end
-			if element.Control then -- isWW, new add
+			if element.Control then
 				ReskinDropdown(element.Control)
-			end
-			if element.CheckBox then -- isWW, renamed
-				B.ReskinCheck(element.CheckBox)
-				element.CheckBox.bg:SetInside(nil, 6, 6)
-				hooksecurefunc(element, "DesaturateHierarchy", forceSaturation)
 			end
 			if element.Checkbox then
 				B.ReskinCheck(element.Checkbox)
@@ -169,22 +158,11 @@ tinsert(C.defaultThemes, function()
 					child.Checkbox.bg:SetInside(nil, 6, 6)
 					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
 				end
-				if child.DropDown then -- isWW, renamed
-					ReskinOptionDropDown(child.DropDown)
-				end
 				if child.ColorBlindFilterDropDown then
 					ReskinOptionDropDown(child.ColorBlindFilterDropDown)
 				end
-				if child.Control then -- isWW, new add
+				if child.Control then
 					ReskinDropdown(child.Control)
-				end
-				for j = 1, 13 do
-					local control = child["Control"..j]
-					if control then
-						if control.DropDown then -- isWW, renamed
-							ReskinOptionDropDown(control.DropDown)
-						end
-					end
 				end
 				if child.Button then
 					if child.Button:GetWidth() < 250 then

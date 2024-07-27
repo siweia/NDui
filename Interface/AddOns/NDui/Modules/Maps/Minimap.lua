@@ -171,7 +171,7 @@ function module:ReskinRegions()
 			hooksecurefunc(frame.Background, "SetAtlas", replaceFlag)
 		end
 		reskinDifficulty(instDifficulty.Instance)
-		reskinDifficulty(instDifficulty.Default) -- isWW
+		reskinDifficulty(instDifficulty.Default)
 		reskinDifficulty(instDifficulty.Guild)
 		reskinDifficulty(instDifficulty.ChallengeMode)
 	end

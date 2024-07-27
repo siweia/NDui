@@ -39,10 +39,6 @@ end
 
 local function reskinRequestCheckbox(self)
 	for button in self.SpecsPool:EnumerateActive() do
-		if button.CheckBox then -- isWW, might renamed to Checkbox
-			B.ReskinCheck(button.CheckBox)
-			button.CheckBox:SetSize(26, 26)
-		end
 		if button.Checkbox then
 			B.ReskinCheck(button.Checkbox)
 			button.Checkbox:SetSize(26, 26)

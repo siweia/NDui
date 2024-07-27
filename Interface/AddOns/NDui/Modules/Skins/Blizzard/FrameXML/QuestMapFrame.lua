@@ -114,9 +114,6 @@ tinsert(C.defaultThemes, function()
 					B.StripTextures(button.Checkbox, 2)
 					B.CreateBDFrame(button.Checkbox, 0, true)
 				end
-				if button.Check then -- isWW removed?
-					button.Check:SetAtlas("checkmark-minimal")
-				end
 				button.styled = true
 			end
 		end

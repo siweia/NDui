@@ -30,7 +30,7 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, #overlayFrames do
 		local frame = overlayFrames[i]
-		local dropdown = frame.BountyDropdownButton or frame.BountyDropdown -- isWW
+		local dropdown = frame.BountyDropdown
 		if dropdown then
 			B.ReskinArrow(dropdown, "right")
 			break
