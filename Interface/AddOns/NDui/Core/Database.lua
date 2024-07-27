@@ -27,13 +27,6 @@ if DB.isWW then
 		return cd.startTime, cd.duration, cd.isEnabled, cd.modRate
 	end
 
-	GetSpellCharges = function(spellID)
-		local charge = C_Spell.GetSpellCharges(spellID)
-		if not charge then return end
-		--currentCharges, maxCharges, cooldownStart, cooldownDuration, chargeModRate
-		return charge.currentCharges, charge.maxCharges, charge.cooldownStartTime, charge.cooldownDuration, charge.chargeModRate
-	end
-
 	local function EasyMenu_Initialize( frame, level, menuList )
 		for index = 1, #menuList do
 			local value = menuList[index]

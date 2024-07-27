@@ -627,7 +627,12 @@ end
 local lastCDSend = 0
 function M:SendCurrentSpell(thisTime, spellID)
 	local spellLink = GetSpellLink(spellID)
-	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
+	local chargeInfo = C_Spell.GetSpellCharges(spellID)
+	local charges = chargeInfo and chargeInfo.currentCharges
+	local maxCharges = chargeInfo and chargeInfo.maxCharges
+	local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
+	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
+
 	if charges and maxCharges then
 		if charges ~= maxCharges then
 			local remain = chargeStart + chargeDuration - thisTime

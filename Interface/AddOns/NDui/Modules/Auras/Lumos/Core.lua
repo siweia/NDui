@@ -15,7 +15,12 @@ function A:GetUnitAura(unit, spell, filter)
 end
 
 function A:UpdateCooldown(button, spellID, texture)
-	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
+	local chargeInfo = C_Spell.GetSpellCharges(spellID)
+	local charges = chargeInfo and chargeInfo.currentCharges
+	local maxCharges = chargeInfo and chargeInfo.maxCharges
+	local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
+	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
+
 	local start, duration = GetSpellCooldown(spellID)
 	if charges and maxCharges > 1 then
 		button.Count:SetText(charges)

@@ -8,7 +8,7 @@ local IsInGroup, IsInRaid, IsInInstance = IsInGroup, IsInRaid, IsInInstance
 local UnitIsGroupLeader, UnitIsGroupAssistant = UnitIsGroupLeader, UnitIsGroupAssistant
 local IsPartyLFG, IsLFGComplete, HasLFGRestrictions = IsPartyLFG, IsLFGComplete, HasLFGRestrictions
 local GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex, SetRaidTarget = GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex, SetRaidTarget
-local GetSpellCharges, UnitAura = GetSpellCharges, UnitAura
+local UnitAura = UnitAura
 local GetTime, SendChatMessage = GetTime, SendChatMessage
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown, InCombatLockdown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown, InCombatLockdown
 local UnitExists, UninviteUnit = UnitExists, UninviteUnit
@@ -154,7 +154,11 @@ end
 function M:RaidTool_UpdateRes(elapsed)
 	self.elapsed = (self.elapsed or 0) + elapsed
 	if self.elapsed > .1 then
-		local charges, _, started, duration = GetSpellCharges(20484)
+		local chargeInfo = C_Spell.GetSpellCharges(20484)
+		local charges = chargeInfo and chargeInfo.currentCharges
+		local started = chargeInfo and chargeInfo.cooldownStartTime
+		local duration = chargeInfo and chargeInfo.cooldownDuration
+
 		if charges then
 			local timer = duration - (GetTime() - started)
 			if timer < 0 then
