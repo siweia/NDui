@@ -4,7 +4,7 @@ local M = B:GetModule("Misc")
 
 local pairs, strfind = pairs, strfind
 local UnitGUID = UnitGUID
-local GetActionInfo, GetSpellInfo, GetOverrideBarSkin = GetActionInfo, GetSpellInfo, GetOverrideBarSkin
+local GetActionInfo, GetSpellInfo, GetOverrideBarSkin = GetActionInfo, B.GetSpellInfo, GetOverrideBarSkin
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local C_GossipInfo_SelectOption, C_GossipInfo_GetNumOptions = C_GossipInfo.SelectOption, C_GossipInfo.GetNumOptions
 

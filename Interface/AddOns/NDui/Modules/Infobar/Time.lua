@@ -30,6 +30,7 @@ local C_TaskQuest_GetThreatQuests = C_TaskQuest.GetThreatQuests
 local C_TaskQuest_GetQuestInfoByQuestID = C_TaskQuest.GetQuestInfoByQuestID
 local C_AreaPoiInfo_GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
 -- Localized
+local GetSpellInfo = B.GetSpellInfo
 local COMMUNITY_FEAST = GetSpellInfo(388961)
 
 local function updateTimerFormat(color, hour, minute)

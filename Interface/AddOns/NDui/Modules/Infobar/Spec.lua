@@ -200,7 +200,7 @@ local function BuildSpecMenu()
 	end
 
 	tinsert(newMenu, seperatorMenu)
-	tinsert(newMenu, {text = GetSpellInfo(384255), isTitle = true, notCheckable = true})
+	tinsert(newMenu, {text = B.GetSpellInfo(384255), isTitle = true, notCheckable = true})
 	tinsert(newMenu, {text = BLUE_FONT_COLOR:WrapTextInColorCode(TALENT_FRAME_DROP_DOWN_STARTER_BUILD), func = selectCurrentConfig,
 		arg1 = STARTER_BUILD,	checked = function() return C_ClassTalents.GetStarterBuildActive() end,
 	})

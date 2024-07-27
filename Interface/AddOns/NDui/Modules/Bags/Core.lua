@@ -212,7 +212,7 @@ function module:CreateBagBar(settings, columns)
 	bagBar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagBar)
 	bagBar.highlightFunction = highlightFunction
-	bagBar.isGlobal = true
+	bagBar.isGlobal = isGlobal
 	bagBar:Hide()
 	bagBar.columns = columns
 	bagBar.UpdateAnchor = updateBagBar
@@ -1319,7 +1319,7 @@ function module:OnLogin()
 		elseif name == "BagReagent" then
 			label = L["ReagentBag"]
 		elseif name == "BagStone" then
-			label = GetSpellInfo(404861)
+			label = B.GetSpellInfo(404861)
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)
@@ -1353,7 +1353,7 @@ function module:OnLogin()
 			buttons[4] = module.CreateAccountBankDeposit(self)
 			buttons[5] = module.CreateBankButton(self, f)
 			buttons[6] = module.CreateReagentButton(self, f)
-			buttons[7] = module.CreateAccountMoney(self)
+			buttons[7] = module.CreateAccountMoney(self, f)
 		end
 
 		for i = 1, #buttons do

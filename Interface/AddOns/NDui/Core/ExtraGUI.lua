@@ -5,7 +5,7 @@ local G = B:GetModule("GUI")
 local _G = _G
 local unpack, pairs, ipairs, tinsert = unpack, pairs, ipairs, tinsert
 local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonumber
-local GetSpellInfo, GetSpellTexture = GetSpellInfo, GetSpellTexture
+local GetSpellInfo, GetSpellTexture = B.GetSpellInfo, GetSpellTexture
 local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
 local IsControlKeyDown = IsControlKeyDown
 

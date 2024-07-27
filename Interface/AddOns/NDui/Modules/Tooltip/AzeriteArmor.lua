@@ -4,7 +4,7 @@ local TT = B:GetModule("Tooltip")
 
 local _G = getfenv(0)
 local format, tinsert, ipairs, select = string.format, table.insert, ipairs, select
-local GetSpellInfo = GetSpellInfo
+local GetSpellInfo = B.GetSpellInfo
 local C_AzeriteEmpoweredItem_GetPowerInfo = C_AzeriteEmpoweredItem.GetPowerInfo
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_AzeriteEmpoweredItem_GetAllTierInfoByItemID = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID

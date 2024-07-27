@@ -5,6 +5,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
+local GetSpellInfo = B.GetSpellInfo
 
 local classList = {
 	["DEATHKNIGHT"] = {

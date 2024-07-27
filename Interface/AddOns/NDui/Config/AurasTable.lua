@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("AurasTable")
 
 local pairs, next, format, wipe, unpack = pairs, next, format, wipe, unpack
-local GetSpellInfo = GetSpellInfo
+local GetSpellInfo = B.GetSpellInfo
 local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 
 -- AuraWatch

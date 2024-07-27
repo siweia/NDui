@@ -10,7 +10,7 @@ function UF:UpdateRaidDebuffsBlack()
 	wipe(UF.RaidDebuffsBlack)
 
 	for spellID in pairs(C.RaidDebuffsBlack) do
-		local name = GetSpellInfo(spellID)
+		local name = B.GetSpellInfo(spellID)
 		if name then
 			if NDuiADB["RaidDebuffsBlack"][spellID] == nil then
 				UF.RaidDebuffsBlack[spellID] = true

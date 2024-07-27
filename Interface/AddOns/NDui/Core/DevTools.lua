@@ -18,6 +18,7 @@ local gsub, pairs, tonumber, tostring = gsub, pairs, tonumber, tostring
 local floor, ceil = math.floor, math.ceil
 local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local GetSpellDescription = C_Spell.GetSpellDescription or GetSpellDescription
+local GetSpellInfo = B.GetSpellInfo
 
 DB.Devs = {
 	["寧德-加尔"] = true,
