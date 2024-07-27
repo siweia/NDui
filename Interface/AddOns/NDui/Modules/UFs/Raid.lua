@@ -5,7 +5,8 @@ local UF = B:GetModule("UnitFrames")
 
 local strmatch, format, wipe = strmatch, format, wipe
 local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
-local UnitAura, GetSpellInfo = UnitAura, B.GetSpellInfo
+local UnitAura = UnitAura
+local GetSpellName = C_Spell.GetSpellName
 local InCombatLockdown = InCombatLockdown
 local GetTime, GetSpellCooldown, IsInRaid, IsInGroup = GetTime, GetSpellCooldown, IsInRaid, IsInGroup
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
@@ -156,7 +157,7 @@ local function setupClickSets(self)
 				value = fixedSpells[value] or value
 				--self:SetAttribute(format(keyIndex, "type"), "spell")
 				--self:SetAttribute(format(keyIndex, "spell"), value)
-				local spellName = GetSpellInfo(value)
+				local spellName = GetSpellName(value)
 				self:SetAttribute(format(keyIndex, "type"), "macro")
 				self:SetAttribute(format(keyIndex, "macrotext"), "/cast [@mouseover]"..spellName)
 			elseif value == "target" then
@@ -211,7 +212,7 @@ function UF:UpdatePartyWatcherSpells()
 	wipe(UF.PartyWatcherSpells)
 
 	for spellID, duration in pairs(C.PartySpells) do
-		local name = GetSpellInfo(spellID)
+		local name = GetSpellName(spellID)
 		if name then
 			local modDuration = NDuiADB["PartySpells"][spellID]
 			if not modDuration or modDuration > 0 then

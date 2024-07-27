@@ -8,8 +8,9 @@ local updater = CreateFrame("Frame")
 local AuraList, FrameList, UnitIDTable, IntTable, IntCD, myTable, cooldownTable = {}, {}, {}, {}, {}, {}, {}
 local pairs, select, tinsert, tremove, wipe, strfind = pairs, select, table.insert, table.remove, table.wipe, strfind
 local InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
-local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell = GetTime, B.GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell
+local GetTime, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell = GetTime, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell
 local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, C_Item.GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
+local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
 
 -- DataConvert
 local function DataAnalyze(v)
@@ -379,7 +380,7 @@ function A:AuraWatch_UpdateCD()
 			local value = group.List[spellID]
 			if value then
 				if value.SpellID then
-					local name, _, icon = GetSpellInfo(value.SpellID)
+					local name, icon = GetSpellName(value.SpellID), GetSpellTexture(value.SpellID)
 					local start, duration = GetSpellCooldown(value.SpellID)
 					local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(value.SpellID)
 					if group.Mode == "ICON" then name = nil end
@@ -568,7 +569,7 @@ function A:AuraWatch_SetupInt(intID, itemID, duration, unitID, guid, sourceName)
 		frame.type = 2
 		frame.spellID = itemID
 	else
-		name, _, icon = GetSpellInfo(intID)
+		name, icon = GetSpellName(intID), GetSpellTexture(intID)
 		frame.type = 1
 		frame.spellID = intID
 	end

@@ -1319,7 +1319,7 @@ function module:OnLogin()
 		elseif name == "BagReagent" then
 			label = L["ReagentBag"]
 		elseif name == "BagStone" then
-			label = B.GetSpellInfo(404861)
+			label = C_Spell.GetSpellName(404861)
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)

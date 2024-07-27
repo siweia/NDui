@@ -21,7 +21,7 @@ local C_NamePlate_SetNamePlateEnemySize = C_NamePlate.SetNamePlateEnemySize
 local C_NamePlate_SetNamePlateFriendlySize = C_NamePlate.SetNamePlateFriendlySize
 local C_NamePlate_SetNamePlateEnemyClickThrough = C_NamePlate.SetNamePlateEnemyClickThrough
 local C_NamePlate_SetNamePlateFriendlyClickThrough = C_NamePlate.SetNamePlateFriendlyClickThrough
-local GetSpellInfo = B.GetSpellInfo
+local GetSpellName = C_Spell.GetSpellName
 
 -- Init
 function UF:UpdatePlateCVars()
@@ -1332,7 +1332,7 @@ function UF:RefreshMajorSpells()
 	wipe(UF.MajorSpells)
 
 	for spellID in pairs(C.MajorSpells) do
-		local name = GetSpellInfo(spellID)
+		local name = GetSpellName(spellID)
 		if name then
 			local modValue = NDuiADB["MajorSpells"][spellID]
 			if modValue == nil then
@@ -1355,7 +1355,7 @@ local function RefreshNameplateFilter(list, key)
 	wipe(UF[key])
 
 	for spellID in pairs(list) do
-		local name = GetSpellInfo(spellID)
+		local name = GetSpellName(spellID)
 		if name then
 			if NDuiADB[key][spellID] == nil then
 				UF[key][spellID] = true

@@ -20,13 +20,6 @@ if DB.isWW then
 		return AuraUtil.UnpackAuraData(auraData)
 	end
 
-	B.GetSpellInfo = function(_, spellID)
-		local spellInfo = C_Spell.GetSpellInfo(spellID)
-		if not spellInfo then return end
-		--name, rank, icon, castTime, minRange, maxRange, spellID, originalIcon
-		return spellInfo.name, nil, spellInfo.iconID, spellInfo.castTime, spellInfo.minRange, spellInfo.maxRange, spellInfo.spellID, spellInfo.originalIconID
-	end
-
 	GetSpellCooldown = function(spellID)
 		local cd = C_Spell.GetSpellCooldown(spellID)
 		if not cd then return end

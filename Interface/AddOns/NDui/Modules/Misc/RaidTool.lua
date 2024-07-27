@@ -8,7 +8,7 @@ local IsInGroup, IsInRaid, IsInInstance = IsInGroup, IsInRaid, IsInInstance
 local UnitIsGroupLeader, UnitIsGroupAssistant = UnitIsGroupLeader, UnitIsGroupAssistant
 local IsPartyLFG, IsLFGComplete, HasLFGRestrictions = IsPartyLFG, IsLFGComplete, HasLFGRestrictions
 local GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex, SetRaidTarget = GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex, SetRaidTarget
-local GetSpellCharges, GetSpellInfo, UnitAura = GetSpellCharges, B.GetSpellInfo, UnitAura
+local GetSpellCharges, UnitAura = GetSpellCharges, UnitAura
 local GetTime, SendChatMessage = GetTime, SendChatMessage
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown, InCombatLockdown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown, InCombatLockdown
 local UnitExists, UninviteUnit = UnitExists, UninviteUnit
@@ -339,7 +339,7 @@ function M:RaidTool_BuffChecker(parent)
 					local HasBuff
 					local buffTable = DB.BuffList[j]
 					for k = 1, #buffTable do
-						local buffName = GetSpellInfo(buffTable[k])
+						local buffName = C_Spell.GetSpellName(buffTable[k])
 						for index = 1, 32 do
 							local currentBuff = UnitAura(name, index)
 							if currentBuff and currentBuff == buffName then

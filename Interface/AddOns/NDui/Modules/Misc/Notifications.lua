@@ -8,8 +8,9 @@ local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
-local GetSpellLink = C_Spell and C_Spell.GetSpellLink or GetSpellLink
-local GetSpellInfo, GetSpellCooldown = B.GetSpellInfo, GetSpellCooldown
+local GetSpellLink = C_Spell.GetSpellLink
+local GetSpellCooldown = GetSpellCooldown
+local GetSpellName = C_Spell.GetSpellName
 local GetActionInfo, GetMacroSpell, GetMacroItem = GetActionInfo, GetMacroSpell, GetMacroItem
 local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local C_Timer_After = C_Timer.After
@@ -408,7 +409,7 @@ local spellList = {
 
 function M:ItemAlert_Update(unit, castID, spellID)
 	if groupUnits[unit] and spellList[spellID] and (spellList[spellID] ~= castID) then
-		SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellInfo(spellID)), M:GetMsgChannel())
+		SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellName(spellID)), M:GetMsgChannel())
 		spellList[spellID] = castID
 	end
 end

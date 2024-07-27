@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
-local GetSpellCooldown, GetSpellInfo, GetItemCooldown = GetSpellCooldown, B.GetSpellInfo, GetItemCooldown
+local GetSpellCooldown, GetItemCooldown = GetSpellCooldown, GetItemCooldown
 local IsPassiveSpell = C_Spell and C_Spell.IsSpellPassive or IsPassiveSpell
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
 local IsCurrentSpell, IsPlayerSpell, UseItemByName = IsCurrentSpell, IsPlayerSpell, UseItemByName
@@ -117,7 +117,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	elseif itemID then
 		name, _, _, _, _, _, _, _, _, texture = C_Item.GetItemInfo(itemID)
 	else
-		name, _, texture = GetSpellInfo(spellID)
+		name, texture = C_Spell.GetSpellName(spellID), C_Spell.GetSpellTexture(spellID)
 	end
 	if not name then return end -- precaution
 
