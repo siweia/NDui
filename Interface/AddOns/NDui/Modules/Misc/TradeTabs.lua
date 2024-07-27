@@ -6,7 +6,7 @@ local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
 local GetSpellCooldown, GetItemCooldown = GetSpellCooldown, GetItemCooldown
 local IsPassiveSpell = C_Spell and C_Spell.IsSpellPassive or IsPassiveSpell
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
-local IsCurrentSpell, IsPlayerSpell, UseItemByName = IsCurrentSpell, IsPlayerSpell, UseItemByName
+local IsPlayerSpell, UseItemByName = IsPlayerSpell, UseItemByName
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
 local PlayerHasToy, C_ToyBox_IsToyUsable, C_ToyBox_GetToyInfo = PlayerHasToy, C_ToyBox.IsToyUsable, C_ToyBox.GetToyInfo
 local C_TradeSkillUI_GetRecipeInfo, C_TradeSkillUI_GetTradeSkillLine = C_TradeSkillUI.GetRecipeInfo, C_TradeSkillUI.GetTradeSkillLine
@@ -78,7 +78,7 @@ function M:TradeTabs_Update()
 		local spellID = tab.spellID
 		local itemID = tab.itemID
 
-		if IsCurrentSpell(spellID) then
+		if C_Spell.IsCurrentSpell(spellID) then
 			tab:SetChecked(true)
 			tab.cover:Show()
 		else

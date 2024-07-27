@@ -23,7 +23,7 @@ end
 
 local function UpdateSpellStatus(button, spellID)
 	button.Icon:SetTexture(GetSpellTexture(spellID))
-	if IsUsableSpell(spellID) then
+	if C_Spell.IsSpellUsable(spellID) then
 		button.Icon:SetDesaturated(false)
 	else
 		button.Icon:SetDesaturated(true)
