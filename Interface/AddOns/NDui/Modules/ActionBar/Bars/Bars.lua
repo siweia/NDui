@@ -56,7 +56,7 @@ function Bar:UpdateActionSize(name)
 				button:SetPoint("TOPLEFT", frame, padding, -padding)
 			elseif i == 7 then
 				button:SetPoint("TOPLEFT", frame.child, padding, -padding)
-			elseif mod(i-1, 3) ==  0 then
+			elseif mod(i-1, 3) == 0 then
 				button:SetPoint("TOP", frame.buttons[i-3], "BOTTOM", 0, -margin)
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
@@ -71,7 +71,7 @@ function Bar:UpdateActionSize(name)
 			button:ClearAllPoints()
 			if i == 1 then
 				button:SetPoint("TOPLEFT", frame, padding, -padding)
-			elseif mod(i-1, perRow) ==  0 then
+			elseif mod(i-1, perRow) == 0 then
 				button:SetPoint("TOP", frame.buttons[i-perRow], "BOTTOM", 0, -margin)
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)

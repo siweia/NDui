@@ -98,8 +98,8 @@ function module:ChannelRename()
 
 	--party
 	CHAT_PARTY_GET = "|Hchannel:PARTY|h[P]|h %s "
-	CHAT_PARTY_LEADER_GET =  "|Hchannel:PARTY|h[PL]|h %s "
-	CHAT_PARTY_GUIDE_GET =  "|Hchannel:PARTY|h[PG]|h %s "
+	CHAT_PARTY_LEADER_GET = "|Hchannel:PARTY|h[PL]|h %s "
+	CHAT_PARTY_GUIDE_GET = "|Hchannel:PARTY|h[PG]|h %s "
 
 	--instance
 	CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE|h[I]|h %s "

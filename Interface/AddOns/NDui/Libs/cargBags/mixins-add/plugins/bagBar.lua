@@ -213,7 +213,7 @@ cargBags:RegisterPlugin("BagBar", function(self, bags)
 		bags = cargBags:ParseBags(bags)
 	end
 
-	local bar = CreateFrame("Frame",  nil, self)
+	local bar = CreateFrame("Frame", nil, self)
 	bar.container = self
 
 	bar.layouts = cargBags.classes.Container.layouts

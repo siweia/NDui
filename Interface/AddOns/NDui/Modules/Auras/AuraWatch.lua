@@ -737,7 +737,7 @@ function A:AuraWatch_Centralize(force)
 			local width = frame1.__width
 			local interval = frame1.__interval
 			frame1:ClearAllPoints()
-			frame1:SetPoint("CENTER", frame1.MoveHandle, "CENTER",  - (width+interval)/2 * (numIndex-2), 0)
+			frame1:SetPoint("CENTER", frame1.MoveHandle, "CENTER", - (width+interval)/2 * (numIndex-2), 0)
 		end
 	end
 end

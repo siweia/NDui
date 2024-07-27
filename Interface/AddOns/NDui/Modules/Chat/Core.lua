@@ -375,7 +375,7 @@ local function FixLanguageFilterSideEffects()
 	if sideEffectFixed then return end
 	sideEffectFixed = true
 
-	B.CreateFS(HelpFrame, 18, L["LanguageFilterTip"], "system",  "TOP", 0, 30)
+	B.CreateFS(HelpFrame, 18, L["LanguageFilterTip"], "system", "TOP", 0, 30)
 
 	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
 	function C_BattleNet.GetFriendGameAccountInfo(...)
