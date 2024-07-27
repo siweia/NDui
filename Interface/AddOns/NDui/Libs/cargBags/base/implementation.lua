@@ -96,7 +96,7 @@ function Implementation:OnHide()
 	if(self.notInited) then return end
 
 	if(self.OnClose) then self:OnClose() end
-	if(self:AtBank()) then CloseBankFrame() end
+	if(self:AtBank()) then C_Bank.CloseBankFrame() end
 end
 
 --[[!
@@ -412,7 +412,7 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 	elseif(bagID) then
 		self:UpdateBag(bagID)
 	else
-		for bagID = -3, 12 do
+		for bagID = -3, 17 do
 			self:UpdateBag(bagID)
 		end
 	end

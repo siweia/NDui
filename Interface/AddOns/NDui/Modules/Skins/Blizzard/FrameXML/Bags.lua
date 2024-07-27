@@ -42,6 +42,7 @@ end
 local function ReskinBagSlot(bu)
 	bu:SetNormalTexture(0)
 	bu:SetPushedTexture(0)
+	if bu.Background then bu.Background:SetAlpha(0) end
 	bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	bu.searchOverlay:SetOutside()
 
@@ -74,7 +75,8 @@ local function updateContainer(frame)
 
 	for i = 1, frame.size do
 		local itemButton = _G[name.."Item"..i]
-		if _G[name.."Item"..i.."IconQuestTexture"]:IsShown() then
+		local questTexture = _G[name.."Item"..i.."IconQuestTexture"]
+		if itemButton and questTexture:IsShown() then
 			itemButton.IconBorder:SetVertexColor(1, 1, 0)
 		end
 	end
@@ -91,6 +93,28 @@ end
 local function emptySlotBG(button)
 	if button.ItemSlotBackground then
 		button.ItemSlotBackground:Hide()
+	end
+end
+
+local function handleBagSlots(self)
+	for button in self.itemButtonPool:EnumerateActive() do
+		if not button.bg then
+			ReskinBagSlot(button)
+		end
+	end
+end
+
+local function handleBankTab(tab)
+	if not tab.styled then
+		tab.Border:SetAlpha(0)
+		tab:SetNormalTexture(0)
+		tab:SetPushedTexture(0)
+		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		tab.SelectedTexture:SetTexture(DB.pushedTex)
+		B.CreateBDFrame(tab)
+		tab.Icon:SetTexCoord(unpack(DB.TexCoord))
+
+		tab.styled = true
 	end
 end
 
@@ -114,12 +138,7 @@ tinsert(C.defaultThemes, function()
 		if frame.Bg then frame.Bg:Hide() end
 		createBagIcon(frame, i)
 		hooksecurefunc(frame, "Update", updateContainer)
-
-		for k = 1, MAX_CONTAINER_ITEMS do
-			local button = _G[frameName.."Item"..k]
-			ReskinBagSlot(button)
-			hooksecurefunc(button, "ChangeOwnership", emptySlotBG)
-		end
+		hooksecurefunc(frame, "UpdateItemSlots", handleBagSlots)
 	end
 
 	B.StripTextures(BackpackTokenFrame)
@@ -145,12 +164,13 @@ tinsert(C.defaultThemes, function()
 	B.ReskinPortraitFrame(ContainerFrameCombinedBags)
 	createBagIcon(ContainerFrameCombinedBags, 1)
 	ContainerFrameCombinedBags.PortraitButton.Highlight:SetTexture("")
+	hooksecurefunc(ContainerFrameCombinedBags, "UpdateItemSlots", handleBagSlots)
 
 	-- [[ Bank ]]
 
 	BankSlotsFrame:DisableDrawLayer("BORDER")
-	BankFrameMoneyFrameInset:Hide()
 	BankFrameMoneyFrameBorder:Hide()
+	BankSlotsFrame.NineSlice:SetAlpha(0)
 
 	-- "item slots" and "bag slots" text
 	select(9, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
@@ -160,6 +180,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(BankFramePurchaseButton)
 	B.ReskinTab(BankFrameTab1)
 	B.ReskinTab(BankFrameTab2)
+	B.ReskinTab(BankFrameTab3)
 	B.ReskinInput(BankItemSearchBox)
 
 	for i = 1, 28 do
@@ -183,6 +204,7 @@ tinsert(C.defaultThemes, function()
 	ReagentBankFrame:DisableDrawLayer("BACKGROUND")
 	ReagentBankFrame:DisableDrawLayer("BORDER")
 	ReagentBankFrame:DisableDrawLayer("ARTWORK")
+	ReagentBankFrame.NineSlice:SetAlpha(0)
 
 	B.Reskin(ReagentBankFrame.DespositButton)
 	B.Reskin(ReagentBankFrameUnlockInfoPurchaseButton)
@@ -202,4 +224,39 @@ tinsert(C.defaultThemes, function()
 			reagentButtonsStyled = true
 		end
 	end)
+
+	-- [[ Account bank ]]
+	AccountBankPanel.NineSlice:SetAlpha(0)
+	AccountBankPanel.EdgeShadows:Hide()
+	B.Reskin(AccountBankPanel.ItemDepositFrame.DepositButton)
+	B.ReskinCheck(AccountBankPanel.ItemDepositFrame.IncludeReagentsCheckbox)
+	handleMoneyFrame(AccountBankPanel)
+	B.Reskin(AccountBankPanel.MoneyFrame.WithdrawButton)
+	B.Reskin(AccountBankPanel.MoneyFrame.DepositButton)
+
+	hooksecurefunc(AccountBankPanel, "GenerateItemSlotsForSelectedTab", handleBagSlots)
+
+	hooksecurefunc(AccountBankPanel, "RefreshBankTabs", function(self)
+		for tab in self.bankTabPool:EnumerateActive() do
+			handleBankTab(tab)
+		end
+	end)
+	handleBankTab(AccountBankPanel.PurchaseTab)
+
+	B.Reskin(AccountBankPanel.PurchasePrompt.TabCostFrame.PurchaseButton)
+
+	local menu = AccountBankPanel.TabSettingsMenu
+	if menu then
+		B.StripTextures(menu)
+		B.ReskinIconSelector(menu)
+		menu.DepositSettingsMenu:DisableDrawLayer("OVERLAY")
+
+		for _, child in pairs({menu.DepositSettingsMenu:GetChildren()}) do
+			if child:IsObjectType("CheckButton") then
+				B.ReskinCheck(child)
+			elseif child.Arrow then
+				B.ReskinDropDown(child)
+			end
+		end
+	end
 end)

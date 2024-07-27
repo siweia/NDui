@@ -25,6 +25,13 @@ local ReagentButtonInventorySlot = _G.ReagentButtonInventorySlot
 local ButtonInventorySlot = _G.ButtonInventorySlot
 local BANK_CONTAINER = BANK_CONTAINER or -1
 local REAGENTBANK_CONTAINER = REAGENTBANK_CONTAINER or -3
+local ACCOUNTBANK_CONTAINERS = {
+	[Enum.BagIndex.AccountBankTab_1 or 13] = true,
+	[Enum.BagIndex.AccountBankTab_2 or 14] = true,
+	[Enum.BagIndex.AccountBankTab_3 or 15] = true,
+	[Enum.BagIndex.AccountBankTab_4 or 16] = true,
+	[Enum.BagIndex.AccountBankTab_5 or 17] = true,
+}
 local SplitContainerItem = C_Container.SplitContainerItem
 
 --[[!
@@ -47,6 +54,7 @@ function ItemButton:GetTemplate(bagID)
 		(bagID == REAGENTBANK_CONTAINER and ReagentBankFrame)
 		or (bagID == BANK_CONTAINER and BankFrame)
 		or (bagID and _G["ContainerFrame"..(bagID + 1)])
+		or (ACCOUNTBANK_CONTAINERS[bagID] and AccountBankPanel)
 		or ""
 end
 

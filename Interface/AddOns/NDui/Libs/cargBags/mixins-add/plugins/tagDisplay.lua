@@ -113,6 +113,12 @@ local function GetNumFreeSlots(name)
 		return GetContainerNumFreeSlots(-3)
 	elseif name == "BagReagent" then
 		return GetContainerNumFreeSlots(5)
+	elseif name == "AccountBank" then
+		local numFreeSlots = 0
+		for bagID = 13, 17 do
+			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+		end
+		return numFreeSlots
 	end
 end
 

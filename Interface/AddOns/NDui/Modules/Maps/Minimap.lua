@@ -633,7 +633,14 @@ function module:Minimap_OnMouseUp(btn)
 		ToggleCalendar()
 	elseif btn == "RightButton" then
 		if DB.isWW then
-			MinimapCluster.Tracking.Button:OpenMenu()
+			local button = MinimapCluster.Tracking.Button
+			if button then
+				button:OpenMenu()
+				if button.menu then
+					button.menu:ClearAllPoints()
+					button.menu:SetPoint("CENTER", self, -100, 100)
+				end
+			end
 		else
 			ToggleDropDownMenu(1, nil, module.MinimapTracking, self, -100, 100)
 		end

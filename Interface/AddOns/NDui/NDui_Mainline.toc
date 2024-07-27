@@ -4,7 +4,7 @@
 ## Author: Siweia
 ## Notes: More than a UI.
 ## Version: 7.21.1
-## X-Support: DF
+## X-Support: TWW
 ## X-Website: https://github.com/siweia/NDui
 ## X-Curse-Project-ID: 324377
 ## X-WoWI-ID: 24846
