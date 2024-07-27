@@ -21,7 +21,10 @@ function A:UpdateCooldown(button, spellID, texture)
 	local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
 	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
 
-	local start, duration = GetSpellCooldown(spellID)
+	local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
+	local start = cooldownInfo and cooldownInfo.startTime
+	local duration = cooldownInfo and cooldownInfo.duration
+
 	if charges and maxCharges > 1 then
 		button.Count:SetText(charges)
 	else

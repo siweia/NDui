@@ -8,7 +8,7 @@ local updater = CreateFrame("Frame")
 local AuraList, FrameList, UnitIDTable, IntTable, IntCD, myTable, cooldownTable = {}, {}, {}, {}, {}, {}, {}
 local pairs, select, tinsert, tremove, wipe, strfind = pairs, select, table.insert, table.remove, table.wipe, strfind
 local InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
-local GetTime, GetSpellCooldown, GetTotemInfo, IsPlayerSpell = GetTime, GetSpellCooldown, GetTotemInfo, IsPlayerSpell
+local GetTime, GetTotemInfo, IsPlayerSpell = GetTime, GetTotemInfo, IsPlayerSpell
 local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, C_Item.GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
 
@@ -381,12 +381,17 @@ function A:AuraWatch_UpdateCD()
 			if value then
 				if value.SpellID then
 					local name, icon = GetSpellName(value.SpellID), GetSpellTexture(value.SpellID)
-					local start, duration = GetSpellCooldown(value.SpellID)
+
+					local cooldownInfo = C_Spell.GetSpellCooldown(value.SpellID)
+					local start = cooldownInfo and cooldownInfo.startTime
+					local duration = cooldownInfo and cooldownInfo.duration
+
 					local chargeInfo = C_Spell.GetSpellCharges(spellID)
 					local charges = chargeInfo and chargeInfo.currentCharges
 					local maxCharges = chargeInfo and chargeInfo.maxCharges
 					local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
 					local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
+
 					if group.Mode == "ICON" then name = nil end
 					if charges and maxCharges and maxCharges > 1 and charges < maxCharges then
 						A:AuraWatch_SetupCD(KEY, name, icon, chargeStart, chargeDuration, true, 1, value.SpellID, charges)

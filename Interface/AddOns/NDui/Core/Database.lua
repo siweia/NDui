@@ -20,13 +20,6 @@ if DB.isWW then
 		return AuraUtil.UnpackAuraData(auraData)
 	end
 
-	GetSpellCooldown = function(spellID)
-		local cd = C_Spell.GetSpellCooldown(spellID)
-		if not cd then return end
-		--start, duration, enabled, modRate
-		return cd.startTime, cd.duration, cd.isEnabled, cd.modRate
-	end
-
 	local function EasyMenu_Initialize( frame, level, menuList )
 		for index = 1, #menuList do
 			local value = menuList[index]

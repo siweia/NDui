@@ -9,7 +9,6 @@ local IsPartyLFG, IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsPartyLFG, IsI
 local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
 local GetSpellLink = C_Spell.GetSpellLink
-local GetSpellCooldown = GetSpellCooldown
 local GetSpellName = C_Spell.GetSpellName
 local GetActionInfo, GetMacroSpell, GetMacroItem = GetActionInfo, GetMacroSpell, GetMacroItem
 local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
@@ -641,7 +640,10 @@ function M:SendCurrentSpell(thisTime, spellID)
 			SendChatMessage(format(L["ChargesCompleted"], spellLink, charges, maxCharges), M:GetMsgChannel())
 		end
 	else
-		local start, duration = GetSpellCooldown(spellID)
+		local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
+		local start = cooldownInfo and cooldownInfo.startTime
+		local duration = cooldownInfo and cooldownInfo.duration
+
 		if start and duration > 0 then
 			local remain = start + duration - thisTime
 			SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())

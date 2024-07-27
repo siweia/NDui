@@ -14,7 +14,7 @@ local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFa
 local IsInRaid, IsInGroup, UnitName, UnitHealth, UnitHealthMax = IsInRaid, IsInGroup, UnitName, UnitHealth, UnitHealthMax
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
-local GetSpellCooldown, GetTime = GetSpellCooldown, GetTime
+local GetTime = GetTime
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local INTERRUPTED, THREAT_TOOLTIP = INTERRUPTED, THREAT_TOOLTIP
 local C_NamePlate_SetNamePlateEnemySize = C_NamePlate.SetNamePlateEnemySize
@@ -1286,7 +1286,10 @@ function UF:ResizeTargetPower()
 end
 
 function UF:UpdateGCDTicker()
-	local start, duration = GetSpellCooldown(61304)
+	local cooldownInfo = C_Spell.GetSpellCooldown(61304)
+	local start = cooldownInfo and cooldownInfo.startTime
+	local duration = cooldownInfo and cooldownInfo.duration
+
 	if start > 0 and duration > 0 then
 		if self.duration ~= duration then
 			self:SetMinMaxValues(0, duration)
