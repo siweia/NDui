@@ -119,8 +119,25 @@ local function handleBankTab(tab)
 end
 
 tinsert(C.defaultThemes, function()
-	if C.db["Bags"]["Enable"] then return end
 	if not C.db["Skins"]["BlizzardSkins"] then return end
+
+	local menu = AccountBankPanel and AccountBankPanel.TabSettingsMenu
+	if menu then
+		B.StripTextures(menu)
+		B.ReskinIconSelector(menu)
+		menu.DepositSettingsMenu:DisableDrawLayer("OVERLAY")
+
+		for _, child in pairs({menu.DepositSettingsMenu:GetChildren()}) do
+			if child:IsObjectType("CheckButton") then
+				B.ReskinCheck(child)
+				child:SetSize(24, 24)
+			elseif child.Arrow then
+				B.ReskinDropDown(child)
+			end
+		end
+	end
+
+	if C.db["Bags"]["Enable"] then return end
 	if not C.db["Skins"]["DefaultBags"] then return end
 
 	for i = 1, 13 do
@@ -244,19 +261,4 @@ tinsert(C.defaultThemes, function()
 	handleBankTab(AccountBankPanel.PurchaseTab)
 
 	B.Reskin(AccountBankPanel.PurchasePrompt.TabCostFrame.PurchaseButton)
-
-	local menu = AccountBankPanel.TabSettingsMenu
-	if menu then
-		B.StripTextures(menu)
-		B.ReskinIconSelector(menu)
-		menu.DepositSettingsMenu:DisableDrawLayer("OVERLAY")
-
-		for _, child in pairs({menu.DepositSettingsMenu:GetChildren()}) do
-			if child:IsObjectType("CheckButton") then
-				B.ReskinCheck(child)
-			elseif child.Arrow then
-				B.ReskinDropDown(child)
-			end
-		end
-	end
 end)
