@@ -225,15 +225,19 @@ local function CloseOrRestoreBags(self, btn)
 		local bag = self.__owner.main
 		local bank = self.__owner.bank
 		local reagent = self.__owner.reagent
+		local account = self.__owner.accountbank
 		C.db["TempAnchor"][bag:GetName()] = nil
 		C.db["TempAnchor"][bank:GetName()] = nil
 		C.db["TempAnchor"][reagent:GetName()] = nil
+		C.db["TempAnchor"][account:GetName()] = nil
 		bag:ClearAllPoints()
 		bag:SetPoint(unpack(bag.__anchor))
 		bank:ClearAllPoints()
 		bank:SetPoint(unpack(bank.__anchor))
 		reagent:ClearAllPoints()
-		reagent:SetPoint(unpack(reagent.__anchor))
+		reagent:SetPoint(unpack(bank.__anchor))
+		account:ClearAllPoints()
+		account:SetPoint(unpack(bank.__anchor))
 		PlaySound(SOUNDKIT.IG_MINIMAP_OPEN)
 	else
 		CloseAllBags()
@@ -315,9 +319,38 @@ local function AddBankTabSettingsToTooltip(tooltip, depositFlags)
 	end
 end
 
-local function clickTab()
-	if not C_Bank.HasMaxBankTabs(Enum.BankType.Account) then
+local function clickTab(bu, btn)
+	local data = AccountBankPanel.purchasedBankTabData[bu.tabIndex]
+	if not data then
 		StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, { bankType = Enum.BankType.Account })
+	else
+		if btn == "LeftButton" then
+		end
+		if btn ~= "RightButton" then return end
+		local menu = AccountBankPanel.TabSettingsMenu
+		if menu then
+			if menu:IsShown() then menu:Hide() end
+			menu:SetParent(UIParent)
+			menu:ClearAllPoints()
+			menu:SetPoint("CENTER", 0, 100)
+			menu:EnableMouse(true)
+			menu:TriggerEvent(BankPanelTabSettingsMenuMixin.Event.OpenTabSettingsRequested, bu.bagId)
+	
+			if not menu.styled then
+				B.StripTextures(menu)
+				B.ReskinIconSelector(menu)
+				menu.DepositSettingsMenu:DisableDrawLayer("OVERLAY")
+		
+				for _, child in pairs({menu.DepositSettingsMenu:GetChildren()}) do
+					if child:IsObjectType("CheckButton") then
+						B.ReskinCheck(child)
+					elseif child.Arrow then
+						B.ReskinDropDown(child)
+					end
+				end
+				menu.styled = true
+			end
+		end
 	end
 end
 
@@ -345,8 +378,10 @@ function module:CreateAccountBankTabs()
 		local bu = B.CreateButton(frame, 37, 37, true, QUESTION_MARK_ICON)
 		bu:SetPoint("BOTTOMLEFT", 5+(i-1)*(buttonSize+5), 5)
 		bu.tabIndex = i
+		bu.bagId = i+12
 		bankTabs[i] = bu
 
+		bu:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 		bu:SetScript("OnClick", clickTab)
 		bu:SetScript("OnEnter", tab_OnEnter)
 		bu:SetScript("OnLeave", B.HideTooltip)
@@ -962,14 +997,12 @@ function module:OnLogin()
 
 		f.reagent = MyContainer:New("Reagent", {Bags = "bankreagent", BagType = "Bank"})
 		f.reagent:SetFilter(filters.onlyReagent, true)
-		f.reagent.__anchor = {"BOTTOMLEFT", f.bank}
-		f.reagent:SetPoint(unpack(f.reagent.__anchor))
+		f.reagent:SetPoint(unpack(f.bank.__anchor))
 		f.reagent:Hide()
 
 		f.accountbank = MyContainer:New("AccountBank", {Bags = "accountbank", BagType = "Bank"})
 		f.accountbank:SetFilter(filters.accountbank, true)
-		f.accountbank.__anchor = {"BOTTOMLEFT", f.bank}
-		f.accountbank:SetPoint(unpack(f.reagent.__anchor))
+		f.accountbank:SetPoint(unpack(f.bank.__anchor))
 		f.accountbank:Hide()
 
 		for bagType, groups in pairs(module.ContainerGroups) do
