@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "DRUID" then return end
+local GetSpellTexture = C_Spell.GetSpellTexture
 
 local function UpdateCooldown(button, spellID, texture)
 	return A:UpdateCooldown(button, spellID, texture)

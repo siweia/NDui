@@ -34,7 +34,6 @@ if DB.isWW then
 		return charge.currentCharges, charge.maxCharges, charge.cooldownStartTime, charge.cooldownDuration, charge.chargeModRate
 	end
 
-	GetSpellTexture = C_Spell.GetSpellTexture or GetSpellTexture
 	GetSpellCount = C_Spell.GetSpellCastCount or GetSpellCount
 	IsUsableSpell = C_Spell.IsSpellUsable or IsUsableSpell
 	IsCurrentSpell = C_Spell.IsCurrentSpell or IsCurrentSpell

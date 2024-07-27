@@ -35,7 +35,8 @@ local _, ns = ...
 local oUF = ns.oUF
 
 local wipe = wipe
-local GetTime, GetSpellTexture, UnitGUID = GetTime, GetSpellTexture, UnitGUID
+local GetSpellTexture = C_Spell.GetSpellTexture
+local GetTime, UnitGUID = GetTime, UnitGUID
 
 local function Update(self, event, unit, _, spellID)
 	if unit ~= self.unit then return end

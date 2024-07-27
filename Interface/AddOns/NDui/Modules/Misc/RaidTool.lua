@@ -186,7 +186,7 @@ function M:RaidTool_CombatRes(parent)
 	local res = CreateFrame("Frame", nil, frame)
 	res:SetSize(22, 22)
 	res:SetPoint("LEFT", 5, 0)
-	B.PixelIcon(res, GetSpellTexture(20484))
+	B.PixelIcon(res, C_Spell.GetSpellTexture(20484), nil)
 	res.__owner = parent
 
 	res.Count = B.CreateFS(res, 16, "0")

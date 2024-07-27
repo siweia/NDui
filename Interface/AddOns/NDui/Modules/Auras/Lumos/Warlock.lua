@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "WARLOCK" then return end
+local GetSpellTexture = C_Spell.GetSpellTexture
 
 function A:PostCreateLumos(self)
 	local frame = CreateFrame("Frame")

@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "EVOKER" then return end
+local GetSpellTexture = C_Spell.GetSpellTexture
 
 local function GetUnitAura(unit, spell, filter)
 	return A:GetUnitAura(unit, spell, filter)

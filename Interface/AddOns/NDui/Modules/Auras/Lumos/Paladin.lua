@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "PALADIN" then return end
+local GetSpellTexture = C_Spell.GetSpellTexture
 
 local IsUsableSpell, IsPlayerSpell = IsUsableSpell, IsPlayerSpell
 local GetCurrentGlyphNameForSpell = GetCurrentGlyphNameForSpell

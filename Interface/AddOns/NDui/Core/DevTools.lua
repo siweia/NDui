@@ -64,7 +64,7 @@ SlashCmdList["NDUI_DUMPSPELL"] = function(arg)
 	if not name then return end
 	local des = GetSpellDescription(arg)
 	print("|cff70C0F5------------------------")
-	print(" \124T"..GetSpellTexture(arg)..":16:16:::64:64:5:59:5:59\124t", DB.InfoColor..arg)
+	print(" \124T"..C_Spell.GetSpellTexture(arg)..":16:16:::64:64:5:59:5:59\124t", DB.InfoColor..arg)
 	print(NAME, DB.InfoColor..(name or "nil"))
 	print(DESCRIPTION, DB.InfoColor..(des or "nil"))
 	print("|cff70C0F5------------------------")

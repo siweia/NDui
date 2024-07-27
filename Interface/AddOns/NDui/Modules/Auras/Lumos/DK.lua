@@ -4,6 +4,7 @@ local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "DEATHKNIGHT" then return end
 local floor = math.floor
+local GetSpellTexture = C_Spell.GetSpellTexture
 
 function A:PostCreateLumos(self)
 	local shield = B.CreateFS(self.Health, 18, "", "system")

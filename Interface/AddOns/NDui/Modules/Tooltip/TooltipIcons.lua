@@ -3,7 +3,6 @@ local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
 local gsub, unpack, select = gsub, unpack, select
-local GetSpellTexture = GetSpellTexture
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local newString = "0:0:64:64:5:59:5:59"
 
@@ -47,7 +46,7 @@ local GetTooltipTextureByType = {
 		return C_Item.GetItemIconByID(id)
 	end,
 	[Enum.TooltipDataType.Spell] = function(id)
-		return GetSpellTexture(id)
+		return C_Spell.GetSpellTexture(id)
 	end,
 	[Enum.TooltipDataType.Mount] = function(id)
 		return select(3, C_MountJournal_GetMountInfoByID(id))
