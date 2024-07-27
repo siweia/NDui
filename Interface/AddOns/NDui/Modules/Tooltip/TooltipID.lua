@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
 local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
-local UnitAura, GetUnitName = UnitAura, GetUnitName
+local GetUnitName = GetUnitName
 local IsPlayerSpell = IsPlayerSpell
 local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeFixedReagentItemLink
 local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
@@ -86,8 +86,10 @@ function TT:SetupTooltipID()
 	-- Spells
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
 		if self:IsForbidden() then return end
-
-		local _, _, _, _, _, _, caster, _, _, id = UnitAura(...)
+		local auraData = C_UnitAuras.GetAuraDataByIndex(...)
+		if not auraData then return end
+		local caster = auraData.sourceUnit
+		local id = auraData.spellId
 		if id then
 			TT.AddLineForID(self, id, types.spell)
 		end

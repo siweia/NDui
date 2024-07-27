@@ -6,10 +6,10 @@ local GetSpellTexture = C_Spell.GetSpellTexture
 
 function A:GetUnitAura(unit, spell, filter)
 	for index = 1, 32 do
-		local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
-		if not name then break end
-		if name and spellID == spell then
-			return name, count, duration, expire, caster, spellID, value
+		local auraData = C_UnitAuras.GetAuraDataByIndex(unit, index, filter)
+		if not auraData then break end
+		if auraData.spellId == spell then
+			return auraData.name, auraData.applications, auraData.duration, auraData.expirationTime, auraData.sourceUnit, auraData.spellId, auraData.points[1]
 		end
 	end
 end

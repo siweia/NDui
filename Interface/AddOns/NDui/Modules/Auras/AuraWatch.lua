@@ -7,7 +7,7 @@ local hasCentralize
 local updater = CreateFrame("Frame")
 local AuraList, FrameList, UnitIDTable, IntTable, IntCD, myTable, cooldownTable = {}, {}, {}, {}, {}, {}, {}
 local pairs, select, tinsert, tremove, wipe, strfind = pairs, select, table.insert, table.remove, table.wipe, strfind
-local InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
+local InCombatLockdown, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
 local GetTime, GetTotemInfo, IsPlayerSpell = GetTime, GetTotemInfo, IsPlayerSpell
 local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, C_Item.GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
@@ -508,9 +508,9 @@ function A:UpdateAuraWatchByFilter(unit, filter, inCombat)
 	local index = 1
 
 	while true do
-		local name, icon, count, _, duration, expires, caster, _, _, spellID, _, _, _, _, _, number1, number2 = UnitAura(unit, index, filter)
-		if not name then break end
-		A:AuraWatch_UpdateAura(unit, index, filter, name, icon, count, duration, expires, caster, spellID, (number1 == 0 and tonumber(number2) or tonumber(number1)), inCombat)
+		local auraData = C_UnitAuras.GetAuraDataByIndex(unit, index, filter)
+		if not auraData then break end
+		A:AuraWatch_UpdateAura(unit, index, filter, auraData.name, auraData.icon, auraData.applications, auraData.duration, auraData.expirationTime, auraData.sourceUnit, auraData.spellId, (auraData.points[1] == 0 and tonumber(auraData.points[2]) or tonumber(auraData.points[1])), inCombat)
 
 		index = index + 1
 	end

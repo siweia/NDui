@@ -5,7 +5,6 @@ local UF = B:GetModule("UnitFrames")
 
 local strmatch, format, wipe = strmatch, format, wipe
 local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
-local UnitAura = UnitAura
 local GetSpellName = C_Spell.GetSpellName
 local InCombatLockdown = InCombatLockdown
 local GetTime, IsInRaid, IsInGroup = GetTime, IsInRaid, IsInGroup
