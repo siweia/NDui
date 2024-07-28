@@ -1,10 +1,13 @@
+--[[
+	Create tabs for blizzard AccountBankPanel.
+	By siweia.
+]]
 local addon, ns = ...
 local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
 local AccountBankPanel = AccountBankPanel
-local ContainerIDToInventoryID = C_Container.ContainerIDToInventoryID
 local BANK_TAB1 = Enum.BagIndex.AccountBankTab_1 or 13
 local ACCOUNT_BANK_TYPE = Enum.BankType.Account or 2
 
@@ -16,7 +19,6 @@ local BagTab = cargBags:NewClass("BagTab", nil, "Button")
 
 -- Default attributes
 BagTab.bgTex = QUESTION_MARK_ICON
-BagTab.itemFadeAlpha = 0.1
 
 local function AddBankTabSettingsToTooltip(tooltip, depositFlags)
 	if not tooltip or not depositFlags then return end

@@ -51,21 +51,4 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc(menuManagerProxy, "OpenMenu", setupMenu)
 	hooksecurefunc(menuManagerProxy, "OpenContextMenu", setupMenu)
-
-	-- tab menu on AccountBankPanel
-	local menu = AccountBankPanel and AccountBankPanel.TabSettingsMenu
-	if menu then
-		B.StripTextures(menu)
-		B.ReskinIconSelector(menu)
-		menu.DepositSettingsMenu:DisableDrawLayer("OVERLAY")
-
-		for _, child in pairs({menu.DepositSettingsMenu:GetChildren()}) do
-			if child:IsObjectType("CheckButton") then
-				B.ReskinCheck(child)
-				child:SetSize(24, 24)
-			elseif child.Arrow then
-				B.ReskinDropDown(child)
-			end
-		end
-	end
 end)
