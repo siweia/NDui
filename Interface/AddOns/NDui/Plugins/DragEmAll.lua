@@ -34,7 +34,6 @@ local frames = {
 	["RaidParentFrame"] = false,
 	["ReputationFrame"] = true,
 	["SendMailFrame"] = true,
-	["SpellBookFrame"] = false,
 	["SplashFrame"] = false,
 	["StackSplitFrame"] = false,
 	["TabardFrame"] = false,
