@@ -517,12 +517,11 @@ function M:RaidTool_CreateMenu(parent)
 end
 
 function M:RaidTool_EasyMarker()
-	if DB.isWW then return end -- FIXME: with the new menu template
-
+	-- TODO: replace with the newest dropdown template
 	local menuList = {}
 
-	local function GetMenuTitle(color, text)
-		return (color and B.HexRGB(color) or "")..text
+	local function GetMenuTitle(text, ...)
+		return (... and B.HexRGB(...) or "")..text
 	end
 
 	local function SetRaidTargetByIndex(_, arg1)
@@ -541,14 +540,14 @@ function M:RaidTool_EasyMarker()
 		UnitPopupRaidTargetNoneButtonMixin
 	}
 	for index, mixin in pairs(mixins) do
-		local texCoords = mixin:GetTextureCoords()
+		local t1, t2, t3, t4 = mixin:GetTextureCoords()
 		menuList[index] = {
-			text = GetMenuTitle(mixin:GetColor(), mixin:GetText()),
+			text = GetMenuTitle(mixin:GetText(), mixin:GetColor()),
 			icon = mixin:GetIcon(),
-			tCoordLeft = texCoords.tCoordLeft,
-			tCoordRight = texCoords.tCoordRight,
-			tCoordTop = texCoords.tCoordTop,
-			tCoordBottom = texCoords.tCoordBottom,
+			tCoordLeft = t1,
+			tCoordRight = t2,
+			tCoordTop = t3,
+			tCoordBottom = t4,
 			arg1 = 9 - index,
 			func = SetRaidTargetByIndex,
 		}
