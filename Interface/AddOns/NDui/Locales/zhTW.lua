@@ -920,3 +920,4 @@ L["MinCDTip"] = "|n法術的冷卻時間必須大於設定數值，才會進行�
 L["DepositTradeGoodsTip"] = "|n左鍵點擊存放所有戰團綁定物品，右鍵點擊切換存放模式。|n當按鈕邊框高亮時，將存放可交易的材料。"
 L["HideInCombat"] = "戰鬥中隱藏滑鼠提示"
 L["HideInCombatTip"] = "|n選擇戰鬥中隱藏滑鼠提示的方式。|n當切換為修飾鍵時，只有按住它才可以在戰鬥中顯示。"
+L["HideDPSRole"] = "隐藏DPS职责"

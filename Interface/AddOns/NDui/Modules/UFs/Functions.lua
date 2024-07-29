@@ -531,6 +531,10 @@ end
 
 local function postUpdateRole(element, role)
 	if element:IsShown() then
+		if role == "DAMAGER" and C.db["UFs"]["HideDPSRole"] then
+			element:Hide()
+			return
+		end
 		B.ReskinSmallRole(element, role)
 	end
 end

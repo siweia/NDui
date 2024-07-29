@@ -920,3 +920,4 @@ L["MinCDTip"] = "|n法术的冷却时间必须大于设定值，才会进行监�
 L["DepositTradeGoodsTip"] = "|n左键点击存放所有战团绑定物品，右键点击切换存放模式。|n当按钮边框高亮时，将存放可交易的材料。"
 L["HideInCombat"] = "战斗中隐藏鼠标提示"
 L["HideInCombatTip"] = "|n选择战斗中隐藏鼠标提示的方式。|n当切换为修饰键时，只有按住该键才可以在战斗中显示。"
+L["HideDPSRole"] = "隐藏DPS职责图标"

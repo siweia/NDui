@@ -920,3 +920,4 @@ L["MinCDTip"] = "|nThe Spell cooldown only visible when its cooldown greater the
 L["DepositTradeGoodsTip"] = "|nLeft click to deposit warband items, right click to swith deposit mode.|nIf the button border shown, the reagents from your bags would deposit into your warband bank as well." -- need translation
 L["HideInCombat"] = "Hide in combat" -- need translation
 L["HideInCombatTip"] = "|nSelect the way to hide GameTooltip in combat.|nGameTooltip only visible when you hold the modified key you selected." -- need translation
+L["HideDPSRole"] = "Hide DPS roleicon" -- need translation
