@@ -633,6 +633,7 @@ function M:MenuButton_Whisper()
 end
 
 function M:QuickMenuButton()
+	-- FIXME: adjust for new patch
 	if not C.db["Misc"]["MenuButton"] then return end
 
 	local menuList = {
@@ -679,6 +680,43 @@ function M:QuickMenuButton()
 			end
 			M.MenuButtonName = name.."-"..server
 			frame:Show()
+		end
+	end)
+
+	local modMenus = {}
+
+	local function guildInvite(data)
+		GuildInvite(data.name)
+	end
+	local function copyName(data)
+		local editBox = ChatEdit_ChooseBoxForSend()
+		local hasText = (editBox:GetText() ~= "")
+		ChatEdit_ActivateChat(editBox)
+		editBox:Insert(data.name)
+		if not hasText then editBox:HighlightText() end
+	end
+	local function sendWhisper(data)
+		ChatFrame_SendTell(data.name)
+	end
+	hooksecurefunc(UnitPopupManager, "OpenMenu", function(self, which)
+		if not modMenus["MENU_UNIT_"..which] then
+			Menu.ModifyMenu("MENU_UNIT_"..which, function(owner, rootDescription, data)
+				rootDescription:CreateDivider();
+				rootDescription:CreateTitle("NDui");
+				rootDescription:CreateButton(ADD_FRIEND, function() print("Text here!") end)
+				rootDescription:CreateButton((gsub(CHAT_GUILD_INVITE_SEND, HEADER_COLON, "")), function() GuildInvite(data.name) end)
+				rootDescription:CreateButton(COPY_NAME, function()
+					local editBox = ChatEdit_ChooseBoxForSend()
+					local hasText = (editBox:GetText() ~= "")
+					ChatEdit_ActivateChat(editBox)
+					editBox:Insert(data.name)
+					if not hasText then editBox:HighlightText() end
+				end)
+				rootDescription:CreateButton(WHISPER, function()
+					ChatFrame_SendTell(data.name)
+				end)
+			end)
+			modMenus["MENU_UNIT_"..which] = true
 		end
 	end)
 end
