@@ -469,7 +469,7 @@ G.DefaultSettings = {
 		FontScale = 1,
 	},
 	Tooltip = {
-		CombatHide = false,
+		HideInCombat = 1,
 		CursorMode = 1,
 		ItemQuality = false,
 		TipAnchor = 4,
@@ -1373,8 +1373,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[12] = {
 		{3, "Tooltip", "Scale", L["Tooltip Scale"].."*", nil, {.5, 1.5, .1}},
 		{4, "Tooltip", "TipAnchor", L["TipAnchor"].."*", true, {L["TOPLEFT"], L["TOPRIGHT"], L["BOTTOMLEFT"], L["BOTTOMRIGHT"]}, nil, L["TipAnchorTip"]},
-		{1, "Tooltip", "CombatHide", L["Hide Tooltip"].."*"},
-		{1, "Tooltip", "ItemQuality", L["ShowItemQuality"].."*"},
+		{4, "Tooltip", "HideInCombat", L["HideInCombat"].."*", nil, {DISABLE, "ALT", "SHIFT", "CTRL", ALWAYS}, nil, L["HideInCombatTip"]},
 		{4, "Tooltip", "CursorMode", L["Follow Cursor"].."*", true, {DISABLE, L["LEFT"], L["TOP"], L["RIGHT"]}},
 		{1, "Tooltip", "HideTitle", L["Hide Title"].."*"},
 		{1, "Tooltip", "HideRank", L["Hide Rank"].."*", true},
@@ -1382,8 +1381,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "HideJunkGuild", L["HideJunkGuild"].."*", true},
 		{1, "Tooltip", "HideRealm", L["Hide Realm"].."*"},
 		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*", true},
-		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"]},
+		{1, "Tooltip", "ItemQuality", L["ShowItemQuality"].."*"},
 		{1, "Tooltip", "SpecLevelByShift", NewTag..L["Show SpecLevelByShift"].."*", true},
+		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"]},
 	},
 	[13] = {
 		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemQuality"]},

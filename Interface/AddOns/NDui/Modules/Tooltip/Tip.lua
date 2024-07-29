@@ -103,9 +103,29 @@ function TT:OnTooltipCleared()
 	GameTooltip_ClearWidgetSet(self)
 end
 
+local function ShouldHideInCombat()
+	local index = C.db["Tooltip"]["HideInCombat"]
+	if index == 1 then
+		return true
+	elseif index == 2 then
+		return IsAltKeyDown()
+	elseif index == 3 then
+		return IsShiftKeyDown()
+	elseif index == 4 then
+		return IsControlKeyDown()
+	elseif index == 5 then
+		return false
+	end
+end
+
 function TT:OnTooltipSetUnit()
 	if self:IsForbidden() then return end
-	if C.db["Tooltip"]["CombatHide"] and InCombatLockdown() then self:Hide() return end
+
+	if (not ShouldHideInCombat()) and InCombatLockdown() then
+		self:Hide()
+		return
+	end
+
 	TT.HideLines(self)
 
 	local unit = TT.GetUnit(self)
