@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/5CkTA4u.png" width="512" height="256" />
 
 
-![](https://img.shields.io/github/stars/siweia/NDui?style=social) [![](https://img.shields.io/github/last-commit/siweia/NDui?color=c59a6c&label=Retail)](https://github.com/siweia/NDui) [![](https://img.shields.io/github/last-commit/siweia/NDui/Classic?label=Classic)](https://github.com/siweia/NDui/tree/Classic) [![](https://img.shields.io/github/last-commit/siweia/NDui/Era?color=ffffff&label=Era)](https://github.com/siweia/NDui/tree/Era)
+![](https://img.shields.io/github/stars/siweia/NDui?style=social) [![](https://img.shields.io/github/last-commit/siweia/NDui?color=c59a6c&label=Retail)](https://github.com/siweia/NDui) [![](https://img.shields.io/github/last-commit/siweia/NDui/TBC?label=TBC)](https://github.com/siweia/NDui/tree/TBC) [![](https://img.shields.io/github/last-commit/siweia/NDui/Era?color=ffffff&label=Classic)](https://github.com/siweia/NDui/tree/Era)
 
 
 </div>
@@ -10,11 +10,10 @@
 # ScreenShot
 ![](https://cdn-wow.mmoui.com/preview/pvw70637.jpg)
 
-# NDui Intro
-- This is not just a UI that changes your ingame appearence.
-- It contains build-in auras watcher and toolbar for all specs and talents.
-- Locales include 简体中文, 繁體中文, English, Russian and French.
-- Published Pages: [NGA](https://bbs.nga.cn/read.php?tid=5483616) - [WowInterface](https://www.wowinterface.com/downloads/info24846-NDui.html) - [CurseForge](https://www.curseforge.com/wow/addons/ndui) - [WAGO](https://addons.wago.io/addons/ndui)
+# NDui Classic
+- A classic version of [NDui](https://github.com/siweia/NDui) for World of Warcraft classic.
+- Locales include 简体中文, 繁體中文, koKR and enUS.
+- Published Pages: [NGA](https://bbs.nga.cn/read.php?tid=18321155) - [WowInterface](https://www.wowinterface.com/downloads/info25188-NDuiClassic.html) - [CurseForge](https://www.curseforge.com/wow/addons/ndui-classic) - [WAGO](https://addons.wago.io/addons/ndui)
 
 # Main Features
 - Reskin default UI skins.
@@ -27,22 +26,20 @@
 - Chat spam filter, whisper invite.
 - One-container system with filters by cargBags.
 - Classbar with spells for all classes, disabled as default (Console - Auras - Enable Personal Resource).
-- Raid Toolbar with ready check, count down, combat resurrect timer.
+- Raid Toolbar with ready check, count down.
 - Optional event alerts.
-  - Rare alert.
   - Interrupt/dispell alert.
   - Broken spell alert.
   - Quests progress notification.
-  - Dungeons difficulty alert when solo.
   - Placed item alerts.
-- Infobars with auto sell junk, auto repair, invasion timers and quest completion check.
+- Infobars with auto sell junk, auto repair.
 
 # Default AddOns
 - !BaudErrorFrame: Error collecter
-- NDui: Core for NDui.
+- NDui: Core for NDui Classic.
 
 # Skins Support
-- BigWigs, DBM, Details, PremadeGroupsFilter, Rematch, Skada, TMW, WeakAuras...
+- BigWigs, DBM, Details, Recount, Skada, TMW, WeakAuras...
 
 # Download & Setup
 1. Download and unzip the file.

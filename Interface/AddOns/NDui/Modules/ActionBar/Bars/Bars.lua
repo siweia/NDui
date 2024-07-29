@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:RegisterModule("Actionbar")
-local LAB = LibStub("LibActionButton-1.0-NDui")
+local LAB = LibStub("LibActionButton-1.0")
 
 local _G = _G
 local tinsert, next = tinsert, next
@@ -56,7 +56,7 @@ function Bar:UpdateActionSize(name)
 				button:SetPoint("TOPLEFT", frame, padding, -padding)
 			elseif i == 7 then
 				button:SetPoint("TOPLEFT", frame.child, padding, -padding)
-			elseif mod(i-1, 3) == 0 then
+			elseif mod(i-1, 3) ==  0 then
 				button:SetPoint("TOP", frame.buttons[i-3], "BOTTOM", 0, -margin)
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
@@ -71,7 +71,7 @@ function Bar:UpdateActionSize(name)
 			button:ClearAllPoints()
 			if i == 1 then
 				button:SetPoint("TOPLEFT", frame, padding, -padding)
-			elseif mod(i-1, perRow) == 0 then
+			elseif mod(i-1, perRow) ==  0 then
 				button:SetPoint("TOP", frame.buttons[i-perRow], "BOTTOM", 0, -margin)
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
@@ -127,8 +127,8 @@ function Bar:UpdateButtonConfig(i)
 	count.font.flags = DB.Font[3]
 	count.position.anchor = "BOTTOMRIGHT"
 	count.position.relAnchor = false
-	count.position.offsetX = -2
-	count.position.offsetY = 2
+	count.position.offsetX = 2
+	count.position.offsetY = 0
 	count.justifyH = "RIGHT"
 
 	local macro = self.buttonConfig.text.macro
@@ -152,7 +152,7 @@ function Bar:UpdateButtonConfig(i)
 		button.keyBoundTarget = self.buttonConfig.keyBoundTarget
 
 		button:SetAttribute("buttonlock", lockBars)
-		button:SetAttribute("unlockedpreventdrag", not lockBars) -- make sure button can drag without being click
+		--button:SetAttribute("unlockedpreventdrag", not lockBars) -- make sure button can drag without being click
 		button:SetAttribute("checkmouseovercast", true)
 		button:SetAttribute("checkfocuscast", true)
 		button:SetAttribute("checkselfcast", true)
@@ -236,6 +236,10 @@ function Bar:CreateBars()
 		[8] = {page = 15, bindName = "MULTIACTIONBAR7BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 80}},
 	}
 
+	if C.db["Actionbar"]["DemonPage"] and DB.MyClass == "WARLOCK" then
+		fullPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]16;[overridebar]18;[shapeshift]17;[vehicleui]16;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;[form:1]7;1"
+	end
+
 	local mIndex = 1
 	for index = 1, 8 do
 		local data = BAR_DATA[index]
@@ -300,7 +304,7 @@ function Bar:CreateBars()
 			Bar:StyleActionButton(button)
 		end
 	end
-
+--[[
 	local function delayUpdate()
 		Bar:UpdateBarConfig()
 		B:UnregisterEvent("PLAYER_REGEN_ENABLED", delayUpdate)
@@ -313,6 +317,9 @@ function Bar:CreateBars()
 			end
 			Bar:UpdateBarConfig()
 		end
+	end)]]
+	InterfaceOptionsActionBarsPanelLockActionBars:HookScript("OnClick", function()
+		Bar:UpdateBarConfig()
 	end)
 end
 
@@ -324,7 +331,6 @@ function Bar:OnLogin()
 
 	Bar.movers = {}
 	Bar:CreateBars()
-	Bar:CreateExtrabar()
 	Bar:CreateLeaveVehicle()
 	Bar:CreatePetbar()
 	Bar:CreateStancebar()
@@ -334,16 +340,9 @@ function Bar:OnLogin()
 	Bar:UpdateAllSize()
 	Bar:HideBlizz()
 
-	if C_PetBattles.IsInBattle() then
-		Bar:ClearBindings()
-	else
-		Bar:ReassignBindings()
-	end
+	Bar:ReassignBindings()
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.ReassignBindings)
-	B:RegisterEvent("PET_BATTLE_CLOSE", Bar.ReassignBindings)
-	B:RegisterEvent("PET_BATTLE_OPENING_DONE", Bar.ClearBindings)
 
-	if AdiButtonAuras then
-		AdiButtonAuras:RegisterLAB("LibActionButton-1.0-NDui")
-	end
+	Bar:HunterAspectBar()
+	Bar:TotemBar()
 end

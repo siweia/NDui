@@ -3,14 +3,14 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
-local SpellIsPriorityAura, SpellGetVisibilityInfo = SpellIsPriorityAura, SpellGetVisibilityInfo
+local SpellGetVisibilityInfo = SpellGetVisibilityInfo
 
 UF.RaidDebuffsBlack = {}
 function UF:UpdateRaidDebuffsBlack()
 	wipe(UF.RaidDebuffsBlack)
 
 	for spellID in pairs(C.RaidDebuffsBlack) do
-		local name = C_Spell.GetSpellName(spellID)
+		local name = GetSpellInfo(spellID)
 		if name then
 			if NDuiADB["RaidDebuffsBlack"][spellID] == nil then
 				UF.RaidDebuffsBlack[spellID] = true
@@ -110,7 +110,7 @@ function UF.DebuffsIndicator_Filter(raidAuras, aura)
 	local spellID = aura.spellID
 	if UF.RaidDebuffsBlack[spellID] then
 		return false
-	elseif aura.isBossAura or SpellIsPriorityAura(spellID) then
+	elseif aura.isBossAura then
 		return true
 	else
 		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, raidAuras.isInCombat and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")

@@ -2,7 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Settings")
 local pairs, wipe = pairs, table.wipe
-local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")
@@ -18,27 +17,16 @@ local function ForceDefaultSettings()
 	SetCVar("lootUnderMouse", 1)
 	SetCVar("screenshotQuality", 10)
 	SetCVar("showTutorials", 0)
+	SetCVar("ActionButtonUseKeyDown", 1)
 	SetCVar("lockActionBars", 1)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("overrideArchive", 0)
-	SetCVar("floatingCombatTextFloatMode", 1)
-	SetCVar("floatingCombatTextCombatDamage", 1)
-	SetCVar("floatingCombatTextCombatHealing", 1)
-	SetCVar("floatingCombatTextCombatDamageDirectionalScale", 0)
-	SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 10)
-	--SetActionBarToggles(1, 1, 1, 1)
+	SetActionBarToggles(1, 1, 1, 1)
 	if not InCombatLockdown() then
 		SetCVar("nameplateMotion", 1)
 		SetCVar("nameplateShowAll", 1)
 		SetCVar("nameplateShowEnemies", 1)
 		SetCVar("alwaysShowActionBars", 1)
-	end
-	if DB.isDeveloper then
-		SetCVar("ffxGlow", 0)
-		SetCVar("WorldTextScale", 1.2)
-		SetCVar("SpellQueueWindow", 100)
-		--SetCVar("AutoPushSpellToActionBar", 0)
-		--SetCVar("missingTransmogSourceInItemTooltips", 1)
 	end
 end
 
@@ -96,7 +84,6 @@ local function ForceDBMOptions()
 	DBM_AllSavedOptions["Default"]["SpecialWarningX"] = 0
 	DBM_AllSavedOptions["Default"]["SpecialWarningY"] = -260
 	DBM_AllSavedOptions["Default"]["SpecialWarningFontStyle"] = DB.Font[3]
-	DBM_AllSavedOptions["Default"]["HideQuestTooltips"] = false
 	DBM_AllSavedOptions["Default"]["HideObjectivesFrame"] = false
 	DBM_AllSavedOptions["Default"]["WarningFontSize"] = 18
 	DBM_AllSavedOptions["Default"]["SpecialWarningFontSize2"] = 24
@@ -168,8 +155,8 @@ end
 -- BigWigs
 local function ForceBigwigs()
 	if not IsAddOnLoaded("BigWigs") then return end
-	if BigWigs3DB then wipe(BigWigs3DB) end
-	BigWigs3DB = {
+	if BigWigsClassicDB then wipe(BigWigsClassicDB) end
+	BigWigsClassicDB = {
 		["namespaces"] = {
 			["BigWigs_Plugins_Bars"] = {
 				["profiles"] = {
@@ -321,6 +308,7 @@ local function YesTutor()
 			C.db["Tutorial"]["Complete"] = true
 			tutor:Hide()
 			StaticPopup_Show("RELOAD_NDUI")
+			currentPage = 0
 		end
 		TurnNextPage()
 	end)
@@ -352,13 +340,13 @@ local function HelloWorld()
 
 	local c1, c2 = "|cffFFFF00", "|cff00FF00"
 	local lines = {
-		c1.." /ww "..c2..L["Cmd ww intro"].."|r",
-		" /bb "..c2..L["Cmd bb intro"].."|r",
-		" /mm /mmm "..c2..L["Cmd mm intro"].."|r",
-		" /rl "..c2..L["Cmd rl intro"].."|r",
+		c1.." /ww "..c2..L["Cmd ww intro"],
+		c1.." /bb "..c2..L["Cmd bb intro"],
+		c1.." /mm /mmm "..c2..L["Cmd mm intro"],
+		c1.." /rl "..c2..L["Cmd rl intro"],
 	}
 	if GetLocale() == "zhCN" then
-		tinsert(lines, " /ncl "..c2..L["Cmd ncl intro"].."|r")
+		tinsert(lines, c1.." /ncl "..c2..L["Cmd ncl intro"])
 	end
 	local text = L["Help Intro"].."|n|n"
 	for _, line in pairs(lines) do
@@ -385,6 +373,10 @@ SlashCmdList["NDUI"] = HelloWorld
 SLASH_NDUI1 = "/ndui"
 
 function module:OnLogin()
+	-- Hide options
+	B.HideOption(Advanced_UseUIScale)
+	B.HideOption(Advanced_UIScaleSlider)
+
 	-- Tutorial and settings
 	ForceAddonSkins()
 	if not C.db["Tutorial"]["Complete"] then HelloWorld() end

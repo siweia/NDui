@@ -3,7 +3,7 @@ name: Package and release
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - 'Classic-[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
 
@@ -27,4 +27,4 @@ jobs:
       - name: Package and release
         uses: BigWigsMods/packager@master
         with:
-          args: -w 0
+          args: -w 0 -g wrath

@@ -17,8 +17,22 @@ C.themes["Blizzard_RaidUI"] = function()
 
 	for i = 1, MAX_RAID_MEMBERS do
 		local bu = _G["RaidGroupButton"..i]
-		select(4, bu:GetRegions()):SetAlpha(0)
-		select(5, bu:GetRegions()):SetColorTexture(r, g, b, .2)
+		B.StripTextures(bu)
 		B.CreateBDFrame(bu)
+	end
+
+	B.Reskin(RaidFrameReadyCheckButton)
+
+	for class, value in pairs(RAID_CLASS_BUTTONS) do
+		local bu = _G["RaidClassButton"..value.button]
+		local icon = _G["RaidClassButton"..value.button.."IconTexture"]
+		bu:GetRegions():Hide()
+		B.CreateBDFrame(bu)
+		if value.button > 10 then
+			icon:SetTexCoord(unpack(DB.TexCoord))
+		else
+			B.ClassIconTexCoord(icon, class)
+		end
+		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	end
 end

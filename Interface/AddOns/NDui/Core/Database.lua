@@ -3,35 +3,14 @@ local B, C, L, DB = unpack(ns)
 
 local bit_band, bit_bor = bit.band, bit.bor
 local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
-local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
 
-DB.Version = C_AddOns.GetAddOnMetadata("NDui", "Version")
-DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")
+DB.Version = GetAddOnMetadata("NDui", "Version")
+DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
-DB.isNewPatch = select(4, GetBuildInfo()) >= 110002 -- 11.0.2
-DB.isWW = select(4, GetBuildInfo()) >= 110000 -- 11.0.0
-
--- Deprecated
-if DB.isWW then -- FIXME
-	local function EasyMenu_Initialize( frame, level, menuList )
-		for index = 1, #menuList do
-			local value = menuList[index]
-			if (value.text) then
-				value.index = index
-				UIDropDownMenu_AddButton( value, level )
-			end
-		end
-	end
-	
-	function EasyMenu(menuList, menuFrame, anchor, x, y, displayMode, autoHideDelay )
-		if ( displayMode == "MENU" ) then
-			menuFrame.displayMode = displayMode
-		end
-		UIDropDownMenu_Initialize(menuFrame, EasyMenu_Initialize, displayMode, nil, menuList)
-		ToggleDropDownMenu(1, nil, menuFrame, anchor, x, y, menuList, nil, autoHideDelay)
-	end
-end
+DB.isClassic = select(4, GetBuildInfo()) < 90000
+DB.isNewPatch = select(4, GetBuildInfo()) >= 30403 -- 3.4.3 WLK
+DB.isCata = select(4, GetBuildInfo()) >= 40400 -- 4.4.0 Cata
 
 -- Colors
 DB.MyName = UnitName("player")
@@ -41,9 +20,6 @@ DB.MyClass = select(2, UnitClass("player"))
 DB.MyFaction = UnitFactionGroup("player")
 DB.ClassList = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
-	DB.ClassList[v] = k
-end
-for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
 	DB.ClassList[v] = k
 end
 DB.ClassColors = {}
@@ -65,9 +41,8 @@ for index, value in pairs(qualityColors) do
 	DB.QualityColors[index] = {r = value.r, g = value.g, b = value.b}
 end
 DB.QualityColors[-1] = {r = 0, g = 0, b = 0}
-DB.QualityColors[Enum.ItemQuality.Poor] = {r = COMMON_GRAY_COLOR.r, g = COMMON_GRAY_COLOR.g, b = COMMON_GRAY_COLOR.b}
-DB.QualityColors[Enum.ItemQuality.Common] = {r = 0, g = 0, b = 0}
-DB.QualityColors[99] = {r = 1, g = 0, b = 0}
+DB.QualityColors[LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
+DB.QualityColors[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
 
 -- Fonts
 DB.Font = {STANDARD_TEXT_FONT, 12, "OUTLINE"}
@@ -85,17 +60,19 @@ DB.bgTex = Media.."bgTex"
 DB.pushedTex = Media.."pushed"
 DB.arrowTex = Media.."TargetArrow"
 DB.starTex = Media.."Hutu\\star"
-DB.flagTex = Media.."Hutu\\flag"
 DB.MicroTex = Media.."Hutu\\Menu\\"
+DB.rolesTex = Media.."Hutu\\RoleIcons"
+DB.tankTex = Media.."Hutu\\Tank"
+DB.healTex = Media.."Hutu\\Healer"
+DB.dpsTex = Media.."Hutu\\DPS"
 DB.chatLogo = Media.."Hutu\\logoSmall"
-DB.logoTex = Media.."Hutu\\logo"
+DB.logoTex = Media.."Hutu\\logoClassic"
+DB.sortTex = Media.."SortIcon"
 DB.closeTex = Media.."Hutu\\close"
 DB.ArrowUp = Media.."Hutu\\arrow"
 DB.afdianTex = Media.."Hutu\\Afdian"
 DB.patreonTex = Media.."Hutu\\Patreon"
 DB.sponsorTex = Media.."Hutu\\Sponsor"
-DB.curseforgeTex = Media.."Hutu\\CURSEFORGE.PNG"
-DB.boxTex = Media.."Hutu\\Box.PNG"
 DB.mailTex = "Interface\\Minimap\\Tracking\\Mailbox"
 DB.gearTex = "Interface\\WorldMap\\Gear_64"
 DB.eyeTex = "Interface\\Minimap\\Raid_Icon"		-- blue: \\Dungeon_Icon
@@ -109,11 +86,12 @@ DB.newItemFlash = "Interface\\Cooldown\\star4"
 DB.sparkTex = "Interface\\CastingBar\\UI-CastingBar-Spark"
 DB.TexCoord = {.08, .92, .08, .92}
 DB.LeftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t "
-DB.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t "
+DB.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t "
 DB.ScrollButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t "
 DB.AFKTex = "|T"..FRIENDS_TEXTURE_AFK..":14:14:0:0:16:16:1:15:1:15|t"
 DB.DNDTex = "|T"..FRIENDS_TEXTURE_DND..":14:14:0:0:16:16:1:15:1:15|t"
-
+-- Deprecated
+DB.textures = {normal = 0, flash = 0, pushed = DB.pushedTex, checked = 0}
 -- Flags
 function DB:IsMyPet(flags)
 	return bit_band(flags, COMBATLOG_OBJECT_AFFILIATION_MINE) > 0
@@ -121,7 +99,7 @@ end
 DB.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
 DB.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
 
--- RoleUpdater
+--[[ RoleUpdater
 local function CheckRole()
 	local tree = GetSpecialization()
 	if not tree then return end
@@ -139,20 +117,32 @@ local function CheckRole()
 	end
 end
 B:RegisterEvent("PLAYER_LOGIN", CheckRole)
-B:RegisterEvent("PLAYER_TALENT_UPDATE", CheckRole)
+B:RegisterEvent("CHARACTER_POINTS_CHANGED", CheckRole)]]
 
 -- Raidbuff Checklist
 DB.BuffList = {
 	[1] = {		-- 合剂
-		370652,	-- 静电赋能瓶剂
-		370653,	-- 冰寒庇护瓶剂
-		371172,	-- 温存全能瓶剂
-		371204,	-- 止风瓶剂
-		371339,	-- 元素混沌瓶剂
-		371354,	-- 风暴之眼瓶剂
-		371386,	-- 疏离注能瓶剂
-		373257,	-- 冰川之怒瓶剂
-		374000,	-- 腐化之怒冰冻瓶剂
+		17627,	-- 精炼智慧
+		28518,	-- 强固合剂
+		28519,	-- 强效回复合剂
+		28520,	-- 无情突袭合剂
+		28521,	-- 盲目光芒合剂
+		28540,	-- 纯粹死亡合剂
+		42735,	-- 多彩奇迹
+		-- 战斗药剂
+		33726,	-- 掌控药剂
+		11406,	-- 屠魔药剂
+		38954,	-- 魔能力量药剂
+		33721,	-- 魔能药剂
+		17539,	-- 强效奥法药剂
+		28491,	-- 治疗能量
+		-- 守护药剂
+		28502,	-- 特效护甲
+		39625,	-- 特效坚韧药剂
+		39626,	-- 土灵药剂
+		28514,	-- 增效
+		28509,	-- 强效法力回复
+		39627,	-- 德莱尼智慧药剂
 	},
 	[2] = {     -- 进食充分
 		104273, -- 250敏捷，BUFF名一致
@@ -176,143 +166,163 @@ DB.BuffList = {
 
 -- Reminder Buffs Checklist
 DB.ReminderBuffs = {
-	ITEMS = {
-		{	itemID = 190384, -- 9.0永久属性符文
-			spells = {
-				[393438] = true, -- 巨龙强化符文 itemID 201325
-				[367405] = true, -- 永久符文buff
-			},
-			instance = true,
-			disable = true, -- 禁用直到出了新符文
-		},
-		{	itemID = 194307, -- 巢穴守护者的诺言
-			spells = {
-				[394457] = true,
-			},
-			equip = true,
-			instance = true,
-			inGroup = true,
-		},
-		--[=[
-		{	itemID = 178742, -- 瓶装毒素饰品
-			spells = {
-				[345545] = true,
-			},
-			equip = true,
-			instance = true,
-			combat = true,
-		},
-		{	itemID = 190958, -- 究极秘术
-			spells = {
-				[368512] = true,
-			},
-			equip = true,
-			instance = true,
-			inGroup = true,
-		},
-		]=]
-	},
 	MAGE = {
-		{	spells = {	-- 奥术魔宠
-				[210126] = true,
+		{	spells = {	-- 奥术智慧
+				[1459] = true,
+				[8096] = true,  -- 智力卷轴
+				[23028] = true, -- 奥术光辉
+				[61024] = true, -- 达拉然智慧
+				[61316] = true, -- 达拉然光辉
+				--[46302] = true, -- 基鲁的胜利之歌
 			},
-			depend = 205022,
-			spec = 1,
+			texture = GetSpellTexture(1459),
+			depend = 1459,
 			combat = true,
 			instance = true,
 			pvp = true,
 		},
-		{	spells = {	-- 奥术智慧
-				[1459] = true,
+		{	spells = {
+				[168] = true,	-- 霜甲术
+				[7302] = true,	-- 冰甲术
+				[6117] = true,	-- 法师护甲
+				[30482] = true,	-- 熔岩护甲
 			},
-			depend = 1459,
+			depend = 168,
+			combat = true,
 			instance = true,
+			pvp = true,
 		},
 	},
 	PRIEST = {
 		{	spells = {	-- 真言术耐
-				[21562] = true,
+				[1243] = true,
+				[8099] = true,  -- 耐力卷轴
+				[21562] = true, -- 坚韧祷言
+				--[46302] = true, -- 基鲁的胜利之歌
 			},
-			depend = 21562,
-			instance = true,
-		},
-	},
-	WARRIOR = {
-		{	spells = {	-- 战斗怒吼
-				[6673] = true,
-			},
-			depend = 6673,
-			instance = true,
-		},
-	},
-	SHAMAN = {
-		{	spells = {
-				[192106] = true,	-- 闪电之盾
-				[974] = true,		-- 大地之盾
-				[52127] = true,		-- 水之护盾
-			},
-			depend = 192106,
+			depend = 1243,
 			combat = true,
 			instance = true,
 			pvp = true,
 		},
-		{	spells = {
-				[33757] = true,		-- 风怒武器
+		{	spells = {	-- 心灵之火
+				[48168] = true,
 			},
-			depend = 33757,
+			depend = 48168,
 			combat = true,
 			instance = true,
 			pvp = true,
-			weaponIndex = 1,
-			spec = 2,
-		},
-		{	spells = {
-				[318038] = true,	-- 火舌武器
-			},
-			depend = 318038,
-			combat = true,
-			instance = true,
-			pvp = true,
-			weaponIndex = 2,
-			spec = 2,
-		},
-	},
-	ROGUE = {
-		{	spells = {	-- 伤害类毒药
-				[2823] = true,		-- 致命药膏
-				[8679] = true,		-- 致伤药膏
-				[315584] = true,	-- 速效药膏
-				[381664] = true,	-- 增效药膏
-			},
-			texture = 132273,
-			depend = 315584,
-			combat = true,
-			instance = true,
-			pvp = true,
-		},
-		{	spells = {	-- 效果类毒药
-				[3408] = true,		-- 减速药膏
-				[5761] = true,		-- 迟钝药膏
-				[381637] = true,	-- 萎缩药膏
-			},
-			depend = 3408,
-			pvp = true,
-		},
-	},
-	EVOKER = {
-		{	spells = {	-- 青铜龙的祝福
-				[381748] = true,
-			},
-			depend = 364342,
-			instance = true,
 		},
 	},
 	DRUID = {
 		{	spells = {	-- 野性印记
 				[1126] = true,
+				[21849] = true, -- 野性赐福
 			},
 			depend = 1126,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+		{	spells = {	--- 荆棘术
+				[467] = true,
+			},
+			depend = 467,
+			pvp = true,
+		},
+	},
+	WARRIOR = {
+		{	spells = {
+				[6673] = true,	-- 战斗怒吼
+				[19740] = true,	-- 力量祝福
+			},
+			depends = {6673, 5242, 6192, 11549, 11550, 11551, 25289, 2048, 47436},
+			gemini = {
+				[GetSpellInfo(469)] = true, -- 命令怒吼
+			},
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+		{	spells = {	-- 命令怒吼
+				[469] = true,
+			},
+			depend = 469,
+			gemini = {
+				[GetSpellInfo(6673)] = true, -- 战斗怒吼
+			},
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+	},
+	HUNTER = {
+		{	spells = {	-- 雄鹰守护
+				[13165] = true,
+				[61846] = true, -- 龙鹰
+			},
+			depend = 13165,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+		{	spells = {	--- 强击光环
+				[19506] = true,
+			},
+			depend = 19506,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+	},
+	WARLOCK = {
+		{	spells = {
+				[28176] = true,	-- 邪甲术
+				[706] = true,	-- 魔甲术
+				[687] = true,	-- 恶魔皮肤
+			},
+			depend = 28176,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+	},
+	DEATHKNIGHT = {
+		{	spells = {
+				[57330] = true,	-- 寒冬号角
+				[25527] = true, -- 大地之力图腾
+			},
+			depend = 57330,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+	},
+	PALADIN = {
+		{	spells = {	-- 正义之怒
+				[25780] = true,
+			},
+			depend = 20925,
 			instance = true,
 		},
 	},
 }
+
+-- Deprecated
+LE_ITEM_CLASS_CONSUMABLE = LE_ITEM_CLASS_CONSUMABLE or Enum.ItemClass.Consumable
+LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_CONTAINER or Enum.ItemClass.Container
+LE_ITEM_CLASS_WEAPON = LE_ITEM_CLASS_WEAPON or Enum.ItemClass.Weapon
+LE_ITEM_CLASS_GEM = LE_ITEM_CLASS_GEM or Enum.ItemClass.Gem
+LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_ARMOR or Enum.ItemClass.Armor
+LE_ITEM_CLASS_REAGENT = LE_ITEM_CLASS_REAGENT or Enum.ItemClass.Reagent
+LE_ITEM_CLASS_PROJECTILE = LE_ITEM_CLASS_PROJECTILE or Enum.ItemClass.Projectile
+LE_ITEM_CLASS_TRADEGOODS = LE_ITEM_CLASS_TRADEGOODS or Enum.ItemClass.Tradegoods
+LE_ITEM_CLASS_ITEM_ENHANCEMENT = LE_ITEM_CLASS_ITEM_ENHANCEMENT or Enum.ItemClass.ItemEnhancement
+LE_ITEM_CLASS_RECIPE = LE_ITEM_CLASS_RECIPE or Enum.ItemClass.Recipe
+LE_ITEM_CLASS_QUIVER = LE_ITEM_CLASS_QUIVER or Enum.ItemClass.Quiver
+LE_ITEM_CLASS_QUESTITEM = LE_ITEM_CLASS_QUESTITEM or Enum.ItemClass.Questitem
+LE_ITEM_CLASS_KEY = LE_ITEM_CLASS_KEY or Enum.ItemClass.Key
+LE_ITEM_CLASS_MISCELLANEOUS = LE_ITEM_CLASS_MISCELLANEOUS or Enum.ItemClass.Miscellaneous
+LE_ITEM_CLASS_GLYPH = LE_ITEM_CLASS_GLYPH or Enum.ItemClass.Glyph
+LE_ITEM_CLASS_BATTLEPET = LE_ITEM_CLASS_BATTLEPET or Enum.ItemClass.Battlepet
+LE_ITEM_CLASS_WOW_TOKEN = LE_ITEM_CLASS_WOW_TOKEN or Enum.ItemClass.WoWToken

@@ -10,12 +10,15 @@ local GetTime = GetTime
 local GetInventoryItemID = GetInventoryItemID
 local UnitAttackSpeed = UnitAttackSpeed
 local UnitRangedDamage = UnitRangedDamage
+local UnitCastingInfo = UnitCastingInfo
 
 local meleeing, rangeing, lasthit
 local MainhandID = GetInventoryItemID("player", 16)
 local OffhandID = GetInventoryItemID("player", 17)
 local RangedID = GetInventoryItemID("player", 18)
 local playerGUID = UnitGUID("player")
+local AUTO_CAST_TIME = 0
+local delayTime = 0
 
 local function SwingStopped(element)
 	local bar = element.__owner
@@ -52,7 +55,7 @@ do
 	local checkelapsed = 0
 	local slamelapsed = 0
 	local slamtime = 0
-	local slam = C_Spell.GetSpellName(1464)
+	local slam = GetSpellInfo(1464)
 	function OnDurationUpdate(self, elapsed)
 		local now = GetTime()
 
@@ -86,6 +89,9 @@ do
 				slamelapsed = 0
 			end
 
+			local currentValue = now - self.min
+			local swingTime = self.max - self.min - AUTO_CAST_TIME
+
 			if now > self.max then
 				if meleeing then
 					if lasthit then
@@ -95,13 +101,18 @@ do
 						slamtime = 0
 					end
 				else
+					delayTime = 0
 					self:Hide()
 					self:SetScript("OnUpdate", nil)
 					meleeing = false
 					rangeing = false
 				end
 			else
-				UpdateBarValue(self, now - self.min)
+				UpdateBarValue(self, currentValue)
+			end
+
+			if self.__owner.bg then
+				self.__owner.bg:SetShown(rangeing)
 			end
 		end
 	end
@@ -201,7 +212,7 @@ local function RangedChange(self, _, unit)
 	local speed = UnitRangedDamage("player")
 
 	if RangedID ~= NewRangedID then
-		swing.speed = UnitRangedDamage(unit)
+		swing.speed = speed
 		swing.min = now
 		swing.max = swing.min + swing.speed
 		swing:Show()
@@ -230,12 +241,15 @@ local function Ranged(self, _, unit, _, spellID)
 	rangeing = true
 	bar:Show()
 
-	swing.speed = UnitRangedDamage(unit)
+	swing.speed = UnitRangedDamage(unit) * .82
 	swing.min = GetTime()
 	swing.max = swing.min + swing.speed
 	swing:Show()
 	UpdateBarMinMaxValues(swing)
 	swing:SetScript("OnUpdate", OnDurationUpdate)
+	if bar.bg then
+		bar.bg:SetWidth(AUTO_CAST_TIME / (swing.max - swing.min) * bar:GetWidth())
+	end
 
 	swingMH:Hide()
 	swingMH:SetScript("OnUpdate", nil)

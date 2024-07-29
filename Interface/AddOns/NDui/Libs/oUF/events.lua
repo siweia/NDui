@@ -49,7 +49,10 @@ function Private.UpdateUnits(frame, unit, realUnit)
 				-- we don't want to re-register unitless/shared events in case
 				-- someone added them by hand to the unitEvents table
 				if(not registered or unit1 and (unit1 ~= unit or unit2 ~= realUnit)) then
-					registerUnitEvent(frame, event, unit, realUnit)
+					-- BUG: passing explicit nil units to RegisterUnitEvent
+					-- makes it silently fall back to RegisterEvent, using ''
+					-- instead of explicit nils doesn't cause this behaviour
+					registerUnitEvent(frame, event, unit, realUnit or '')
 				end
 
 				if(resetRealUnit) then

@@ -113,8 +113,8 @@ function FilterSet:Check(item)
 	end
 
 	-- check filters of chained sets
-	for tbl in pairs(self.chained) do
-		if(not tbl:Check(item)) then
+	for table in pairs(self.chained) do
+		if(not table:Check(item)) then
 			return nil
 		end
 	end
@@ -160,7 +160,8 @@ function Container:FilterForFunction(func, filters)
 	filters = filters or self.filters
 
 	for _, button in pairs(self.buttons) do
-		local result = filters:Check(button:GetInfo())
+		local result = filters:Check(button:GetItemInfo())
 		func(button, result)
 	end
 end
+

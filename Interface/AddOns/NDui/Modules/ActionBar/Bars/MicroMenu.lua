@@ -39,47 +39,28 @@ function Bar:MicroButton_Create(parent, data)
 
 	if type(method) == "string" then
 		local button = _G[method]
-		if not button then return end
 		button:SetHitRectInsets(0, 0, 0, 0)
 		button:SetParent(bu)
 		button.__owner = bu
 		hooksecurefunc(button, "SetParent", ResetButtonParent)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
-		--button:UnregisterAllEvents() -- statusbar on quest tracker needs this for anchoring
+		button:UnregisterAllEvents()
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
-		button:SetHighlightTexture(0) -- 10.1.5
-		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
+		if tooltip then
+			button.title = "|cffffffff"..tooltip
+			B.AddTooltip(button, "ANCHOR_RIGHT", button.newbieText, "system")
+		end
 
 		local hl = button:GetHighlightTexture()
 		Bar:MicroButton_SetupTexture(hl, texture)
-		hooksecurefunc(button, "SetHighlightAtlas", function()
-			button:SetHighlightTexture(DB.MicroTex..texture)
-			hl:SetBlendMode("ADD")
-		end)
 		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 
-		local flash = button.FlashBorder
-		if flash then
-			Bar:MicroButton_SetupTexture(flash, texture)
-			if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
-		end
-		if button.FlashContent then button.FlashContent:SetAlpha(0) end
-		if button.Portrait then button.Portrait:Hide() end
-		if button.Background then button.Background:SetAlpha(0) end
-		if button.PushedBackground then button.PushedBackground:SetAlpha(0) end
-		if texture == "player" then
-			button.Shadow:Hide()
-			button.PushedShadow:SetAlpha(0)
-		end
-		if texture == "guild" then
-			button:DisableDrawLayer("ARTWORK")
-			button:DisableDrawLayer("OVERLAY")
-			button.HighlightEmblem:SetAlpha(0)
-			button.NotificationOverlay:SetPoint("TOPLEFT", 3, 0)
-		end
+		local flash = button.Flash
+		Bar:MicroButton_SetupTexture(flash, texture)
+		if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
 	else
 		bu:SetScript("OnMouseUp", method)
 		B.AddTooltip(bu, "ANCHOR_RIGHT", tooltip)
@@ -154,20 +135,39 @@ function Bar:MicroMenu()
 	Bar:MicroMenu_Lines(menubar)
 
 	-- Generate Buttons
-	local buttonInfo = {
-		{"player", "CharacterMicroButton"},
-		{"spellbook", "ProfessionMicroButton"},
-		{"talents", "PlayerSpellsMicroButton"},
-		{"achievements", "AchievementMicroButton"},
-		{"quests", "QuestLogMicroButton"},
-		{"guild", "GuildMicroButton"},
-		{"LFG", "LFDMicroButton"},
-		{"encounter", "EJMicroButton"},
-		{"collections", "CollectionsMicroButton"},
-		{"store", "StoreMicroButton"},
-		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
-		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
-	}
+	local buttonInfo
+	if DB.isCata then
+		buttonInfo = {
+			{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
+			{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
+			{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
+			{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
+			{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
+			{"guild", "GuildMicroButton", MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLEGUILDTAB")},
+			--{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
+			{"encounter", "EJMicroButton", MicroButtonTooltipText(ENCOUNTER_JOURNAL, "TOGGLEENCOUNTERJOURNAL")},
+			{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
+			{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
+			{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
+			{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
+			{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
+		}
+	else
+		buttonInfo = {
+			{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
+			{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
+			{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
+			{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
+			{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
+			{"guild", "SocialsMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
+			{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
+			{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
+			{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
+			{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
+			{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
+			{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
+		}
+	end
 
 	for _, info in pairs(buttonInfo) do
 		Bar:MicroButton_Create(menubar, info)
@@ -177,26 +177,9 @@ function Bar:MicroMenu()
 	Bar:MicroMenu_Setup()
 
 	-- Default elements
-	if MainMenuMicroButton.MainMenuBarPerformanceBar then
-		B.HideObject(MainMenuMicroButton.MainMenuBarPerformanceBar)
-	end
+	B.HideObject(PVPMicroButtonTexture)
+	B.HideObject(MicroButtonPortrait)
 	B.HideObject(HelpOpenWebTicketButton)
+	B.HideObject(MainMenuBarPerformanceBar)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
-
-	BagsBar:Hide()
-	BagsBar:UnregisterAllEvents()
-	MicroButtonAndBagsBar:Hide()
-	MicroButtonAndBagsBar:UnregisterAllEvents()
-
-	if C.db["Map"]["DisableMinimap"] then
-		QueueStatusButton:SetParent(Minimap)
-		QueueStatusButton:ClearAllPoints()
-		QueueStatusButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 30, -10)
-		QueueStatusButton:SetFrameLevel(5)
-		QueueStatusButton:SetScale(.9)
-	end
-
-	if MicroMenu and MicroMenu.UpdateHelpTicketButtonAnchor then
-		MicroMenu.UpdateHelpTicketButtonAnchor = B.Dummy
-	end
 end

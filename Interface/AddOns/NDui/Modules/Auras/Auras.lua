@@ -5,9 +5,8 @@ local A = B:RegisterModule("Auras")
 
 local _G = getfenv(0)
 local format, floor, strmatch, select, unpack, tonumber = format, floor, strmatch, select, unpack, tonumber
-local GetTime = GetTime
+local UnitAura, GetTime = UnitAura, GetTime
 local GetInventoryItemQuality, GetInventoryItemTexture, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetWeaponEnchantInfo
-local C_UnitAuras_GetAuraDataByIndex = C_UnitAuras.GetAuraDataByIndex
 
 function A:OnLogin()
 	A:HideBlizBuff()
@@ -19,13 +18,11 @@ end
 function A:HideBlizBuff()
 	if not C.db["Auras"]["BuffFrame"] and not C.db["Auras"]["HideBlizBuff"] then return end
 
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", function(_, isLogin, isReload)
-		if isLogin or isReload then
-			B.HideObject(_G.BuffFrame)
-			B.HideObject(_G.DebuffFrame)
-			BuffFrame.numHideableBuffs = 0 -- fix error when on editmode
-		end
-	end)
+	B.HideObject(_G.BuffFrame)
+	B.HideObject(_G.TemporaryEnchantFrame)
+	SetCVar("consolidateBuffs", 0)
+	B.HideObject(_G.ConsolidatedBuffs)
+	B.HideOption(_G.InterfaceOptionsDisplayPanelConsolidateBuffs)
 end
 
 function A:BuildBuffFrame()
@@ -59,8 +56,6 @@ function A:BuildBuffFrame()
 	A.DebuffFrame.mover = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", A.BuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 	A.DebuffFrame:ClearAllPoints()
 	A.DebuffFrame:SetPoint("TOPRIGHT", A.DebuffFrame.mover)
-
-	A:CreatePrivateAuras()
 end
 
 local day, hour, minute = 86400, 3600, 60
@@ -112,18 +107,13 @@ function A:UpdateTimer(elapsed)
 	if onTooltip then A:Button_SetTooltip(self) end
 end
 
-function A:GetSpellStat(arg16, arg17, arg18)
-	if not arg16 then return end
-	return (arg16 > 0 and L["Versa"]) or (arg17 > 0 and L["Mastery"]) or (arg18 > 0 and L["Haste"]) or L["Crit"]
-end
-
 function A:UpdateAuras(button, index)
 	local unit, filter = button.header:GetAttribute("unit"), button.filter
-	local auraData = C_UnitAuras_GetAuraDataByIndex(unit, index, filter)
-	if not auraData then return end
+	local name, texture, count, debuffType, duration, expirationTime, _, _, _, spellID = UnitAura(unit, index, filter)
+	if not name then return end
 
-	if auraData.duration > 0 and auraData.expirationTime then
-		local timeLeft = auraData.expirationTime - GetTime()
+	if duration > 0 and expirationTime then
+		local timeLeft = expirationTime - GetTime()
 		if not button.timeLeft then
 			button.nextUpdate = -1
 			button.timeLeft = timeLeft
@@ -138,7 +128,6 @@ function A:UpdateAuras(button, index)
 		button.timer:SetText("")
 	end
 
-	local count = auraData.applications
 	if count and count > 1 then
 		button.count:SetText(count)
 	else
@@ -146,29 +135,29 @@ function A:UpdateAuras(button, index)
 	end
 
 	if filter == "HARMFUL" then
-		local color = oUF.colors.debuff[auraData.dispelName or "none"]
+		local color = oUF.colors.debuff[debuffType or "none"]
 		button:SetBackdropBorderColor(color[1], color[2], color[3])
 	else
 		button:SetBackdropBorderColor(0, 0, 0)
 	end
 
-	-- Show spell stat for 'Soleahs Secret Technique'
-	if auraData.spellId == 368512 then
-		button.count:SetText(A:GetSpellStat(unpack(auraData.points)))
-	end
-
-	button.spellID = auraData.spellId
-	button.icon:SetTexture(auraData.icon)
+	button.spellID = spellID
+	button.icon:SetTexture(texture)
 	button.expiration = nil
 end
 
 function A:UpdateTempEnchant(button, index)
-	local expirationTime = select(button.enchantOffset, GetWeaponEnchantInfo())
+	local expirationTime, count = select(button.enchantOffset, GetWeaponEnchantInfo())
 	if expirationTime then
 		local quality = GetInventoryItemQuality("player", index)
 		local color = DB.QualityColors[quality or 1]
 		button:SetBackdropBorderColor(color.r, color.g, color.b)
 		button.icon:SetTexture(GetInventoryItemTexture("player", index))
+		if count and count > 0 then
+			button.count:SetText(count)
+		else
+			button.count:SetText("")
+		end
 
 		button.expiration = expirationTime
 		button.oldTime = GetTime()
@@ -179,6 +168,7 @@ function A:UpdateTempEnchant(button, index)
 		button.expiration = nil
 		button.timeLeft = nil
 		button.timer:SetText("")
+		button.count:SetText("")
 	end
 end
 
@@ -256,7 +246,6 @@ function A:CreateAuraHeader(filter)
 	RegisterAttributeDriver(header, "unit", "[vehicleui] vehicle; player")
 
 	header.visibility = CreateFrame("Frame", nil, UIParent, "SecureHandlerStateTemplate")
-	header.visibility:RegisterEvent("WEAPON_ENCHANT_CHANGED")
 	SecureHandlerSetFrameRef(header.visibility, "AuraHeader", header)
 	RegisterStateDriver(header.visibility, "customVisibility", "[petbattle] 0;1")
 	header.visibility:SetAttribute("_onstate-customVisibility", [[
@@ -332,79 +321,9 @@ function A:CreateAuraIcon(button)
 	B.CreateBD(button, .25)
 	B.CreateSD(button)
 
-	button:RegisterForClicks("RightButtonDown")
+	button:RegisterForClicks("RightButtonUp")
 	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
-	button:HookScript("OnMouseDown", A.RemoveSpellFromIgnoreList)
+	--button:HookScript("OnMouseDown", A.RemoveSpellFromIgnoreList)
 	button:SetScript("OnEnter", A.Button_OnEnter)
 	button:SetScript("OnLeave", B.HideTooltip)
-end
-
-local auraAnchor = {
-	unitToken = "player",
-	auraIndex = 1,
-	parent = UIParent,
-	showCountdownFrame = true,
-	showCountdownNumbers = true,
-
-	iconInfo = {
-		iconWidth = 30,
-		iconHeight = 30,
-		iconAnchor = {
-			point = "CENTER",
-			relativeTo = UIParent,
-			relativePoint = "CENTER",
-			offsetX = 0,
-			offsetY = 0,
-		},
-	},
-
-	durationAnchor = {
-        point = "TOP",
-        relativeTo = UIParent,
-        relativePoint = "BOTTOM",
-        offsetX = 0,
-        offsetY = 0,
-    },
-}
-
-function A:CreatePrivateAuras()
-	local maxButtons = 4 -- only 4 in blzz code, needs review
-	local buttonSize = C.db["Auras"]["PrivateSize"]
-	local reverse = C.db["Auras"]["ReversePrivate"]
-
-	A.PrivateFrame = CreateFrame("Frame", "NDuiPrivateAuras", UIParent)
-	A.PrivateFrame:SetSize((buttonSize + C.margin)*maxButtons - C.margin, buttonSize + 2*C.margin)
-	A.PrivateFrame.mover = B.Mover(A.PrivateFrame, "PrivateAuras", "PrivateAuras", {"TOPRIGHT", A.DebuffFrame.mover, "BOTTOMRIGHT", 0, -12})
-	A.PrivateFrame:ClearAllPoints()
-	A.PrivateFrame:SetPoint("TOPRIGHT", A.PrivateFrame.mover)
-
-	A.PrivateAuras = {}
-	local prevButton
-
-	local rel1 = reverse and "TOPLEFT" or "TOPRIGHT"
-	local rel2 = reverse and "LEFT" or "RIGHT"
-	local rel3 = reverse and "RIGHT" or "LEFT"
-	local margin = reverse and C.margin or -C.margin
-
-	for i = 1, maxButtons do
-		local button = CreateFrame("Frame", "$parentAnchor"..i, A.PrivateFrame)
-		button:SetSize(buttonSize, buttonSize)
-		if not prevButton then
-			button:SetPoint(rel1, A.PrivateFrame)
-		else
-			button:SetPoint(rel2, prevButton, rel3, margin, 0)
-		end
-		prevButton = button
-
-		auraAnchor.auraIndex = i
-		auraAnchor.parent = button
-		auraAnchor.durationAnchor.relativeTo = button
-		auraAnchor.iconInfo.iconWidth = buttonSize
-		auraAnchor.iconInfo.iconHeight = buttonSize
-		auraAnchor.iconInfo.iconAnchor.relativeTo = button
-
-		C_UnitAuras.RemovePrivateAuraAnchor(i)
-		C_UnitAuras.AddPrivateAuraAnchor(auraAnchor)
-		A.PrivateAuras[i] = button
-	end
 end

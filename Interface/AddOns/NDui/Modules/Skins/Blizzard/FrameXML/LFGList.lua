@@ -16,8 +16,6 @@ local function HandleRoleAnchor(self, role)
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local r, g, b = DB.r, DB.g, DB.b
 
 	local LFGListFrame = LFGListFrame
@@ -68,9 +66,8 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(searchPanel.BackToGroupButton)
 	B.Reskin(searchPanel.SignUpButton)
 	B.ReskinInput(searchPanel.SearchBox)
-	searchPanel.SearchBox:SetHeight(22)
 	B.ReskinFilterButton(searchPanel.FilterButton)
-	B.ReskinFilterReset(searchPanel.FilterButton.ResetButton)
+
 
 	searchPanel.RefreshButton:SetSize(24, 24)
 	searchPanel.RefreshButton.Icon:SetPoint("CENTER")
@@ -192,8 +189,8 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(entryCreation.Name)
 	B.ReskinInput(entryCreation.ItemLevel.EditBox)
 	B.ReskinInput(entryCreation.VoiceChat.EditBox)
-	B.ReskinDropDown(entryCreation.GroupDropdown)
-	B.ReskinDropDown(entryCreation.ActivityDropdown)
+	B.ReskinDropDown(entryCreation.GroupDropDown)
+	B.ReskinDropDown(entryCreation.ActivityDropDown)
 	B.ReskinDropDown(entryCreation.PlayStyleDropdown)
 	B.ReskinCheck(entryCreation.MythicPlusRating.CheckButton)
 	B.ReskinInput(entryCreation.MythicPlusRating.EditBox)

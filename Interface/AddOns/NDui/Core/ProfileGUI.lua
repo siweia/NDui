@@ -370,8 +370,7 @@ local bloodlustFilter = {
 	[57723] = true,
 	[57724] = true,
 	[80354] = true,
-	[264689] = true,
-	[390435] = true, -- evoker
+	[264689] = true
 }
 
 local accountStrValues = {
@@ -405,16 +404,15 @@ function G:ExportGUIData()
 						for k, v in pairs(value) do
 							text = text..":"..k..":"..v
 						end
+					elseif key == "ExplosiveCache" then
+						text = text..";"..KEY..":"..key..":EMPTYTABLE"
 					elseif KEY == "AuraWatchList" then
 						if key == "Switcher" then
 							for k, v in pairs(value) do
 								text = text..";"..KEY..":"..key..":"..k..":"..tostring(v)
 							end
 						elseif key == "IgnoreSpells" then
-							text = text..";"..KEY..":"..key
-							for spellID in pairs(value) do
-								text = text..":"..tostring(spellID)
-							end
+							-- do nothing
 						else
 							for spellID, k in pairs(value) do
 								text = text..";"..KEY..":"..key..":"..spellID
@@ -474,14 +472,6 @@ function G:ExportGUIData()
 							text = text..":"..spellID..":"..anchor..":"..color[1]..":"..color[2]..":"..color[3]..":"..tostring(filter or false)
 						end
 					end
-				end
-			end
-		elseif KEY == "PartySpells" then
-			text = text..";ACCOUNT:"..KEY
-			for spellID, duration in pairs(VALUE) do
-				local name = C_Spell.GetSpellName(spellID)
-				if name then
-					text = text..":"..spellID..":"..duration
 				end
 			end
 		elseif KEY == "ContactList" then
@@ -544,7 +534,7 @@ local function IsOldProfileVersion(version)
 	major = tonumber(major)
 	minor = tonumber(minor)
 	patch = tonumber(patch)
-	return major < 7 and (minor < 23 or (minor == 23 and patch < 2))
+	return major < 3 and minor < 11
 end
 
 function G:ImportGUIData()
@@ -583,10 +573,7 @@ function G:ImportGUIData()
 				local index, state = select(3, strsplit(":", option))
 				C.db[key][value][tonumber(index)] = toBoolean(state)
 			elseif value == "IgnoreSpells" then
-				local spells = {select(3, strsplit(":", option))}
-				for _, spellID in next, spells do
-					C.db[key][value][tonumber(spellID)] = true
-				end
+				-- do nothing
 			else
 				local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
 				value = tonumber(value)
@@ -657,16 +644,6 @@ function G:ImportGUIData()
 						end
 					end
 				end
-			elseif value == "PartySpells" then
-				local options = {strsplit(":", option)}
-				local index = 3
-				local spellID = options[index]
-				while spellID do
-					local duration = options[index+1]
-					NDuiADB[value][tonumber(spellID)] = tonumber(duration) or 0
-					index = index + 2
-					spellID = options[index]
-				end
 			elseif value == "ContactList" then
 				local names = {select(3, strsplit(":", option))}
 				for i = 1, #names, 4 do
@@ -694,7 +671,7 @@ function G:ImportGUIData()
 				end
 			end
 		elseif tonumber(arg1) then
-			if value == "DBMCount" then
+			if value == "DBMCount" or value == "StatOrder" then
 				C.db[key][value] = arg1
 			elseif C.db[key] then
 				C.db[key][value] = tonumber(arg1)

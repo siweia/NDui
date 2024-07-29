@@ -5,9 +5,9 @@ local UF = B:GetModule("UnitFrames")
 
 local invalidPrio = -1
 
-local class, instName = DB.MyClass
+local class, instID = DB.MyClass
 local function checkInstance()
-	instName = IsInInstance() and GetInstanceInfo()
+	instID = select(8, GetInstanceInfo())
 end
 
 local DispellColor = {
@@ -26,20 +26,15 @@ local DispellPriority = {
 }
 
 local DispellFilter
+local cleanse = IsSpellKnown(51886)
 do
 	local dispellClasses = {
 		["DRUID"] = {
-			["Magic"] = false,
 			["Curse"] = true,
 			["Poison"] = true,
 		},
-		["MONK"] = {
-			["Magic"] = true,
-			["Poison"] = true,
-			["Disease"] = true,
-		},
 		["PALADIN"] = {
-			["Magic"] = false,
+			["Magic"] = true,
 			["Poison"] = true,
 			["Disease"] = true,
 		},
@@ -48,15 +43,15 @@ do
 			["Disease"] = true,
 		},
 		["SHAMAN"] = {
-			["Magic"] = false,
-			["Curse"] = true,
+			["Poison"] = cleanse,
+			["Disease"] = cleanse,
+			["Curse"] = cleanse,
 		},
 		["MAGE"] = {
 			["Curse"] = true,
 		},
-		["EVOKER"] = {
-			["Magic"] = false,
-			["Poison"] = true,
+		["WARLOCK"] = {
+			["Magic"] = true,
 		},
 	}
 
@@ -65,15 +60,29 @@ end
 
 local function checkSpecs()
 	if class == "DRUID" then
-		DispellFilter.Magic = GetSpecialization() == 4
+		if GetSpecialization() == 4 then
+			DispellFilter.Magic = true
+		else
+			DispellFilter.Magic = false
+		end
 	elseif class == "MONK" then
-		DispellFilter.Magic = GetSpecialization() == 2
+		if GetSpecialization() == 2 then
+			DispellFilter.Magic = true
+		else
+			DispellFilter.Magic = false
+		end
 	elseif class == "PALADIN" then
-		DispellFilter.Magic = GetSpecialization() == 1
+		if GetSpecialization() == 1 then
+			DispellFilter.Magic = true
+		else
+			DispellFilter.Magic = false
+		end
 	elseif class == "SHAMAN" then
-		DispellFilter.Magic = GetSpecialization() == 3
-	elseif class == "EVOKER" then
-		DispellFilter.Magic = GetSpecialization() == 2
+		if GetSpecialization() == 3 then
+			DispellFilter.Magic = true
+		else
+			DispellFilter.Magic = false
+		end
 	end
 end
 
@@ -81,19 +90,19 @@ UF.DebuffList = {}
 
 function UF:UpdateRaidDebuffs()
 	wipe(UF.DebuffList)
-	for instName, value in pairs(C.RaidDebuffs) do
+	for instID, value in pairs(C.RaidDebuffs) do
 		for spell, priority in pairs(value) do
-			if not (NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell]) then
-				if not UF.DebuffList[instName] then UF.DebuffList[instName] = {} end
-				UF.DebuffList[instName][spell] = priority
+			if not (NDuiADB["RaidDebuffs"][instID] and NDuiADB["RaidDebuffs"][instID][spell]) then
+				if not UF.DebuffList[instID] then UF.DebuffList[instID] = {} end
+				UF.DebuffList[instID][spell] = priority
 			end
 		end
 	end
-	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
+	for instID, value in pairs(NDuiADB["RaidDebuffs"]) do
 		for spell, priority in pairs(value) do
 			if priority > 0 then
-				if not UF.DebuffList[instName] then UF.DebuffList[instName] = {} end
-				UF.DebuffList[instName][spell] = priority
+				if not UF.DebuffList[instID] then UF.DebuffList[instID] = {} end
+				UF.DebuffList[instID][spell] = priority
 			end
 		end
 	end
@@ -102,8 +111,8 @@ end
 function UF:UpdateRaidInfo()
 	checkInstance()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkInstance)
-	checkSpecs()
-	B:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
+	--checkSpecs()
+	--B:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
 	UF:UpdateRaidDebuffs()
 end
 
@@ -185,7 +194,7 @@ function UF:AurasIndicator_UpdatePriority(numDebuffs, unit)
 
 		if auras.instAura then
 			local instPrio
-			local debuffList = instName and auras.Debuffs[instName] or auras.Debuffs[0]
+			local debuffList = instID and auras.Debuffs[instID] or auras.Debuffs[0]
 			if debuffList then
 				instPrio = debuffList[aura.spellID]
 			end

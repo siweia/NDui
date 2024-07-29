@@ -7,21 +7,18 @@ local info = module:RegisterInfobar("Gold", C.Infobar.GoldPos)
 
 local format, pairs, wipe, unpack = string.format, pairs, table.wipe, unpack
 local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
-local GetMoney, GetNumWatchedTokens, Ambiguate = GetMoney, GetNumWatchedTokens, Ambiguate
+local GetMoney = GetMoney
+local GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local UseContainerItem = C_Container and C_Container.UseContainerItem or UseContainerItem
+local GetContainerItemInfo = GetContainerItemInfo
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
+local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
 local CalculateTotalNumberOfFreeBagSlots = CalculateTotalNumberOfFreeBagSlots
-local C_TransmogCollection_GetItemInfo = C_TransmogCollection.GetItemInfo
-local C_Container_UseContainerItem = C_Container.UseContainerItem
-local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
-local C_Container_GetContainerItemInfo = C_Container.GetContainerItemInfo
-
 local slotString = L["Bags"]..": %s%d"
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
-myRealm = gsub(myRealm, "%s", "") -- fix for multi words realm name
 
 local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then
@@ -166,7 +163,10 @@ info.onMouseUp = function(self, btn)
 	end
 end
 
-local title
+local replacedTextures = {
+	[136998] = "Interface\\PVPFrame\\PVP-Currency-Alliance",
+	[137000] = "Interface\\PVPFrame\\PVP-Currency-Horde",
+}
 
 info.onEnter = function(self)
 	local _, anchor, offset = module:GetTooltipAnchor(info)
@@ -200,35 +200,17 @@ info.onEnter = function(self)
 		end
 	end
 	GameTooltip:AddLine(" ")
-	local accountmoney = C_Bank.FetchDepositedMoney(Enum.BankType.Account)
-	if accountmoney > 0 then
-		GameTooltip:AddDoubleLine(ACCOUNT_BANK_PANEL_TITLE..":", module:GetMoneyString(accountmoney), .6,.8,1, 1,1,1)
-	end
-	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold + accountmoney), .6,.8,1, 1,1,1)
+	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
 
-	title = false
-	local chargeInfo = C_CurrencyInfo_GetCurrencyInfo(2912) -- Tier charges
-	if chargeInfo then
-		if not title then
+	for i = 1, GetNumWatchedTokens() do
+		local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
+		if name and i == 1 then
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
-			title = true
 		end
-		local iconTexture = " |T"..chargeInfo.iconFileID..":13:15:0:0:50:50:4:46:4:46|t"
-		GameTooltip:AddDoubleLine(chargeInfo.name, chargeInfo.quantity.."/"..chargeInfo.maxQuantity..iconTexture, 1,1,1, 1,1,1)
-	end
-
-	for i = 1, 10 do -- seems unlimit, but use 10 for now, needs review
-		local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
-		if not currencyInfo then break end
-		local name, count, icon, currencyID = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID, currencyInfo.currencyTypesID
 		if name and count then
-			if not title then
-				GameTooltip:AddLine(" ")
-				GameTooltip:AddLine(CURRENCY..":", .6,.8,1)
-				title = true
-			end
 			local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
+			icon = replacedTextures[icon] or icon -- replace classic honor icons
 			local iconTexture = " |T"..icon..":13:15:0:0:50:50:4:46:4:46|t"
 			if total > 0 then
 				GameTooltip:AddDoubleLine(name, count.."/"..total..iconTexture, 1,1,1, 1,1,1)
@@ -237,7 +219,6 @@ info.onEnter = function(self)
 			end
 		end
 	end
-	
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.RightButton..L["Switch Mode"].." ", 1,1,1, .6,.8,1)
 	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["AutoSell Junk"]..": "..(NDuiADB["AutoSell"] and "|cff55ff55"..VIDEO_OPTIONS_ENABLED or "|cffff5555"..VIDEO_OPTIONS_DISABLED).." ", 1,1,1, .6,.8,1)
@@ -248,23 +229,28 @@ end
 info.onLeave = B.HideTooltip
 
 -- Auto selljunk
-local stop, cache = true, {}
+local sellCount, stop, cache = 0, true, {}
 local errorText = _G.ERR_VENDOR_DOESNT_BUY
-local BAG = B:GetModule("Bags")
+
+local function stopSelling(tell)
+	stop = true
+	if sellCount > 0 and tell then
+		print(format("|cff99CCFF%s|r%s", L["Selljunk Calculate"], module:GetMoneyString(sellCount, true)))
+	end
+	sellCount = 0
+end
 
 local function startSelling()
 	if stop then return end
-	for bag = 0, 5 do
-		for slot = 1, C_Container_GetContainerNumSlots(bag) do
+	for bag = 0, 4 do
+		for slot = 1, C_Container.GetContainerNumSlots(bag) do
 			if stop then return end
-			local info = C_Container_GetContainerItemInfo(bag, slot)
+			local info = C_Container.GetContainerItemInfo(bag, slot)
 			if info then
-				if not cache["b"..bag.."s"..slot] and info.hyperlink and not info.hasNoValue
-				and (info.quality == 0 or NDuiADB["CustomJunkList"][info.itemID])
-				and (not BAG:IsPetTrashCurrency(info.itemID))
-				and (not C_TransmogCollection_GetItemInfo(info.hyperlink) or not B.IsUnknownTransmog(bag, slot)) then
+				local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
+				if link and not noValue and (quality == 0 or NDuiADB["CustomJunkList"][itemID]) and not cache["b"..bag.."s"..slot] then
 					cache["b"..bag.."s"..slot] = true
-					C_Container_UseContainerItem(bag, slot)
+					C_Container.UseContainerItem(bag, slot)
 					C_Timer_After(.15, startSelling)
 					return
 				end
@@ -283,8 +269,10 @@ local function updateSelling(event, ...)
 		wipe(cache)
 		startSelling()
 		B:RegisterEvent("UI_ERROR_MESSAGE", updateSelling)
-	elseif event == "UI_ERROR_MESSAGE" and arg == errorText or event == "MERCHANT_CLOSED" then
-		stop = true
+	elseif event == "UI_ERROR_MESSAGE" and arg == errorText then
+		stopSelling(false)
+	elseif event == "MERCHANT_CLOSED" then
+		stopSelling(true)
 	end
 end
 B:RegisterEvent("MERCHANT_SHOW", updateSelling)

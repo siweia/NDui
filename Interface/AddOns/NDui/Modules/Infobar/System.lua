@@ -9,11 +9,10 @@ local info = module:RegisterInfobar("Fps", C.Infobar.SystemPos)
 local ipairs, tinsert, wipe, sort = ipairs, tinsert, wipe, sort
 local format, floor, min, max = format, floor, min, max
 local GetFramerate, GetTime = GetFramerate, GetTime
-local GetCVarBool, SetCVar = GetCVarBool, SetCVar
+local GetNumAddOns, GetAddOnInfo, GetCVarBool, SetCVar = GetNumAddOns, GetAddOnInfo, GetCVarBool, SetCVar
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage
 local UpdateAddOnMemoryUsage, GetAddOnMemoryUsage = UpdateAddOnMemoryUsage, GetAddOnMemoryUsage
-local IsShiftKeyDown = IsShiftKeyDown
-local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
+local IsShiftKeyDown, IsAddOnLoaded = IsShiftKeyDown, IsAddOnLoaded
 local ResetCPUUsage, collectgarbage, gcinfo = ResetCPUUsage, collectgarbage, gcinfo
 
 local showMoreString = "%d %s (%s)"
@@ -51,12 +50,12 @@ end
 
 local infoTable = {}
 local function BuildAddonList()
-	local numAddons = C_AddOns.GetNumAddOns()
+	local numAddons = GetNumAddOns()
 	if numAddons == #infoTable then return end
 
 	wipe(infoTable)
 	for i = 1, numAddons do
-		local _, title, _, loadable = C_AddOns.GetAddOnInfo(i)
+		local _, title, _, loadable = GetAddOnInfo(i)
 		if loadable then
 			tinsert(infoTable, {i, title, 0, 0})
 		end

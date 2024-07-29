@@ -4,7 +4,6 @@ local S = B:GetModule("Skins")
 local TT = B:GetModule("Tooltip")
 
 local strfind, strmatch, gsub = string.find, string.match, string.gsub
-local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local buttonsize = 24
 

@@ -2,14 +2,18 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
+	ColorPickerFrameHeader:SetAlpha(0)
+	ColorPickerFrameHeader:ClearAllPoints()
+	ColorPickerFrameHeader:SetPoint("TOP", ColorPickerFrame, 0, 10)
 
-	B.StripTextures(ColorPickerFrame.Header)
-	ColorPickerFrame.Header:ClearAllPoints()
-	ColorPickerFrame.Header:SetPoint("TOP", ColorPickerFrame, 0, 10)
-	ColorPickerFrame.Border:Hide()
-
+	ColorPickerFrame:SetBackdrop(nil)
 	B.SetBD(ColorPickerFrame)
-	B.Reskin(ColorPickerFrame.Footer.OkayButton)
-	B.Reskin(ColorPickerFrame.Footer.CancelButton)
+	B.Reskin(ColorPickerOkayButton)
+	B.Reskin(ColorPickerCancelButton)
+	B.ReskinSlider(OpacitySliderFrame, true)
+
+	ColorPickerCancelButton:ClearAllPoints()
+	ColorPickerCancelButton:SetPoint("BOTTOMLEFT", ColorPickerFrame, "BOTTOM", 1, 6)
+	ColorPickerOkayButton:ClearAllPoints()
+	ColorPickerOkayButton:SetPoint("BOTTOMRIGHT", ColorPickerFrame, "BOTTOM", -1, 6)
 end)

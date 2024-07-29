@@ -44,9 +44,7 @@ function module:UpdateChannelNames(text, ...)
 	-- Timestamp
 	if NDuiADB["TimestampFormat"] > 1 then
 		local locTime, realmTime = GetCurrentTime()
-		local defaultTimestamp = GetCVar("showTimestamps")
-		if defaultTimestamp == "none" then defaultTimestamp = nil end
-		local oldTimeStamp = defaultTimestamp and gsub(BetterDate(defaultTimestamp, locTime), "%[([^]]*)%]", "%%[%1%%]")
+		local oldTimeStamp = CHAT_TIMESTAMP_FORMAT and gsub(BetterDate(CHAT_TIMESTAMP_FORMAT, locTime), "%[([^]]*)%]", "%%[%1%%]")
 		if oldTimeStamp then
 			text = gsub(text, oldTimeStamp, "")
 		end
@@ -98,8 +96,8 @@ function module:ChannelRename()
 
 	--party
 	CHAT_PARTY_GET = "|Hchannel:PARTY|h[P]|h %s "
-	CHAT_PARTY_LEADER_GET = "|Hchannel:PARTY|h[PL]|h %s "
-	CHAT_PARTY_GUIDE_GET = "|Hchannel:PARTY|h[PG]|h %s "
+	CHAT_PARTY_LEADER_GET =  "|Hchannel:PARTY|h[PL]|h %s "
+	CHAT_PARTY_GUIDE_GET =  "|Hchannel:PARTY|h[PG]|h %s "
 
 	--instance
 	CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE|h[I]|h %s "

@@ -19,7 +19,7 @@
 	class-generation, helper-functions and the Blizzard-replacement.
 ]]
 local parent, ns = ...
-local global = C_AddOns.GetAddOnMetadata(parent, 'X-cargBags')
+local global = GetAddOnMetadata(parent, 'X-cargBags')
 
 --- @class table
 --  @name cargBags
@@ -92,6 +92,7 @@ function cargBags:ReplaceBlizzard(name)
 	OpenBag = toggleBag		-- fixed the loot won alert frame
 
 	BankFrame:UnregisterAllEvents()
+	BankFrame:SetParent(NDui[1].HiddenFrame)
 end
 
 --- Flags the implementation to handle Blizzards Bag-Toggle-Functions

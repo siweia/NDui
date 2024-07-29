@@ -37,10 +37,9 @@ local function replaceTextColor(text, r)
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	QuestFont:SetTextColor(1, 1, 1)
 
+	B.StripTextures(GossipFrame.GreetingPanel)
 	B.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
 	B.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
 
@@ -48,18 +47,18 @@ tinsert(C.defaultThemes, function()
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local button = select(i, self.ScrollTarget:GetChildren())
 			if not button.styled then
-				local buttonText = button.GreetingText or button.GetFontString and button:GetFontString()
-				if buttonText then
-					buttonText:SetTextColor(1, 1, 1)
-					hooksecurefunc(buttonText, "SetTextColor", replaceTextColor)
-				end
-				if button.SetText then
-					local buttonText = select(3, button:GetRegions()) -- no parentKey atm
-					if buttonText and buttonText:IsObjectType("FontString") then
-						replaceGossipText(button, button:GetText())
-						hooksecurefunc(button, "SetText", replaceGossipText)
-						hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+				if DB.isCata then
+					local buttonText = button.GreetingText or button.GetFontString and button:GetFontString()
+					if buttonText then
+						buttonText:SetTextColor(1, 1, 1)
+						hooksecurefunc(buttonText, "SetTextColor", replaceTextColor)
 					end
+				end
+				local buttonText = select(3, button:GetRegions()) -- no parentKey atm
+				if buttonText and buttonText:IsObjectType("FontString") then
+					replaceGossipText(button, button:GetText())
+					hooksecurefunc(button, "SetText", replaceGossipText)
+					hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
 				end
 
 				button.styled = true
@@ -67,28 +66,31 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
+	B.StripTextures(NPCFriendshipStatusBar)
+	NPCFriendshipStatusBar:SetStatusBarTexture(DB.normTex)
+	B.CreateBDFrame(NPCFriendshipStatusBar, .25)
+
 	for i = 1, 4 do
-		local notch = GossipFrame.FriendshipStatusBar["Notch"..i]
+		local notch = _G["NPCFriendshipStatusBarNotch"..i]
 		if notch then
 			notch:SetColorTexture(0, 0, 0)
 			notch:SetSize(C.mult, 16)
 		end
 	end
-	GossipFrame.FriendshipStatusBar.BarBorder:Hide()
 
-	GossipFrameInset:Hide()
-	if GossipFrame.Background then GossipFrame.Background:Hide() end
-	B.ReskinPortraitFrame(GossipFrame)
+	B.ReskinPortraitFrame(GossipFrame, 15, -15, -30, 65)
 
 	-- Text on QuestFrame
-	QuestFrameGreetingPanel:HookScript("OnShow", function(self)
-		for button in self.titleButtonPool:EnumerateActive() do
-			if not button.styled then
-				replaceGossipText(button, button:GetText())
-				hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+	local MAX_NUM_QUESTS = MAX_NUM_QUESTS or 25
 
-				button.styled = true
-			end
+	for i = 1, MAX_NUM_QUESTS do
+		local button = _G["QuestTitleButton"..i]
+		if button and not button.styled then
+			replaceGossipText(button, button:GetText())
+			hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+
+			button.styled = true
 		end
-	end)
+	end
 end)

@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local cr, cg, cb = DB.r, DB.g, DB.b
 
 	B.ReskinPortraitFrame(AddonList)
@@ -12,27 +10,33 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(AddonListCancelButton)
 	B.Reskin(AddonListOkayButton)
 	B.ReskinCheck(AddonListForceLoad)
-	B.ReskinDropDown(AddonList.Dropdown)
-	B.ReskinTrimScroll(AddonList.ScrollBar)
+	B.ReskinDropDown(AddonCharacterDropDown)
+	B.ReskinScroll(AddonListScrollFrameScrollBar)
 
 	AddonListForceLoad:SetSize(26, 26)
+	AddonCharacterDropDown:SetWidth(170)
 
-	local function forceSaturation(self, _, force)
-		if force then return end
-		self:SetVertexColor(cr, cg, cb)
-		self:SetDesaturated(true, true)
+	for i = 1, MAX_ADDONS_DISPLAYED do
+		local checkbox = _G["AddonListEntry"..i.."Enabled"]
+		B.ReskinCheck(checkbox, true)
+		B.Reskin(_G["AddonListEntry"..i.."Load"])
 	end
 
-	hooksecurefunc("AddonList_InitButton", function(entry)
-		if not entry.styled then
-			B.ReskinCheck(entry.Enabled, true)
-			B.Reskin(entry.LoadAddonButton)
-			hooksecurefunc(entry.Enabled:GetCheckedTexture(), "SetDesaturated", forceSaturation)
-
-			B.ReplaceIconString(entry.Title)
-			hooksecurefunc(entry.Title, "SetText", B.ReplaceIconString)
-
-			entry.styled = true
+	hooksecurefunc("AddonList_Update", function()
+		for i = 1, MAX_ADDONS_DISPLAYED do
+			local entry = _G["AddonListEntry"..i]
+			if entry and entry:IsShown() then
+				local checkbox = _G["AddonListEntry"..i.."Enabled"]
+				if checkbox.forceSaturation then
+					local tex = checkbox:GetCheckedTexture()
+					if checkbox.state == 2 then
+						tex:SetDesaturated(true)
+						tex:SetVertexColor(cr, cg, cb)
+					elseif checkbox.state == 1 then
+						tex:SetVertexColor(1, .8, 0, .8)
+					end
+				end
+			end
 		end
 	end)
 end)

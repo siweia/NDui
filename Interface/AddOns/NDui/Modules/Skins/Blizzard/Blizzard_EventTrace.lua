@@ -12,7 +12,7 @@ local function reskinScrollChild(self)
 		local child = select(i, self.ScrollTarget:GetChildren())
 		local hideButton = child and child.HideButton
 		if hideButton and not hideButton.styled then
-			B.ReskinClose(hideButton, nil, nil, nil, true)
+			B.ReskinClose(hideButton)
 			hideButton:ClearAllPoints()
 			hideButton:SetPoint("LEFT", 3, 0)
 
@@ -42,7 +42,7 @@ C.themes["Blizzard_EventTrace"] = function()
 	B.ReskinPortraitFrame(EventTrace)
 
 	local subtitleBar = EventTrace.SubtitleBar
-	B.ReskinFilterButton(subtitleBar.OptionsDropdown)
+	B.ReskinFilterButton(subtitleBar.OptionsDropDown)
 
 	local logBar = EventTrace.Log.Bar
 	local filterBar = EventTrace.Filter.Bar

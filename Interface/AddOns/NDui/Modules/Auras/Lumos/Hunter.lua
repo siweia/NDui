@@ -3,7 +3,20 @@ local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
 if DB.MyClass ~= "HUNTER" then return end
-local GetSpellTexture = C_Spell.GetSpellTexture
+
+function A:PostCreateLumos(self)
+	local iconSize = self.bu[1]:GetWidth()
+	local boom = CreateFrame("Frame", nil, self.Health)
+	boom:SetSize(iconSize, iconSize)
+	boom:SetPoint("BOTTOM", self.Health, "TOP", 0, 5)
+	B.AuraIcon(boom)
+
+	self.boom = boom
+end
+
+function A:PostUpdateVisibility(self)
+	if self.boom then self.boom:Hide() end
+end
 
 local function GetUnitAura(unit, spell, filter)
 	return A:GetUnitAura(unit, spell, filter)
@@ -21,98 +34,124 @@ local function UpdateDebuff(button, spellID, auraID, cooldown, glow)
 	return A:UpdateAura(button, "target", auraID, "HARMFUL", spellID, cooldown, glow)
 end
 
-local function UpdateSpellStatus(button, spellID)
-	button.Icon:SetTexture(GetSpellTexture(spellID))
-	if C_Spell.IsSpellUsable(spellID) then
-		button.Icon:SetDesaturated(false)
-	else
-		button.Icon:SetDesaturated(true)
-	end
-end
-
--- 凶暴野兽层数监控
-local eventList = {
-	["SPELL_AURA_APPLIED"] = true,
-	["SPELL_AURA_REFRESH"] = true,
+local boomGroups = {
+	[270339] = 186270,
+	[270332] = 259489,
+	[271049] = 259491,
 }
-local myGUID = UnitGUID("player")
-local currentStack, resetTime = 0, 0
-
-local function CheckDireStacks(_, ...)
-	local timestamp, eventType, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, spellID = ...
-	if sourceGUID ~= myGUID then return end
-
-	if eventType == "SPELL_AURA_APPLIED" or eventType == "SPELL_AURA_REFRESH" then
-		if spellID == 281036 and GetTime() > resetTime then
-			currentStack = currentStack + 1
-			if currentStack == 6 then
-				currentStack = 1
-			end
-		elseif spellID == 378747 then
-			resetTime = GetTime()
-			currentStack = 5
-		end
-	elseif eventType == "SPELL_AURA_REMOVED" and spellID == 378747 then
-		if currentStack == 5 then
-			currentStack = 0
-		end
-	end
-end
-B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", CheckDireStacks)
 
 function A:ChantLumos(self)
-	local spec = GetSpecialization()
-	if spec == 1 then
-		UpdateCooldown(self.lumos[1], 34026, true)
-		UpdateCooldown(self.lumos[2], 217200, true)
-		UpdateBuff(self.lumos[3], 106785, 272790, false, true, "END")
-		UpdateBuff(self.lumos[4], 19574, 19574, true, false, true)
+	if GetSpecialization() == 1 then
+		UpdateCooldown(self.bu[1], 34026, true)
+		UpdateCooldown(self.bu[2], 217200, true)
+		UpdateBuff(self.bu[3], 106785, 272790, false, true, "END")
+		UpdateBuff(self.bu[4], 19574, 19574, true, false, true)
+		UpdateBuff(self.bu[5], 193530, 193530, true, false, true)
+
+	elseif GetSpecialization() == 2 then
+		UpdateCooldown(self.bu[1], 19434, true)
 
 		do
-			local button = self.lumos[5]
-			if IsPlayerSpell(378745) then
-				UpdateBuff(button, 281036, 281036)
-				button.Count:SetText(currentStack)
+			local button = self.bu[2]
+			if IsPlayerSpell(271788) then
+				UpdateDebuff(button, 271788, 271788)
+			elseif IsPlayerSpell(131894) then
+				UpdateDebuff(button, 131894, 131894, true)
 			else
-				UpdateBuff(button, 268877, 268877)
+				if IsPlayerSpell(260367) then
+					UpdateBuff(button, 260242, 260242)
+				else
+					UpdateCooldown(button, 257044, true)
+				end
 			end
 		end
 
-	elseif spec == 2 then
-		UpdateCooldown(self.lumos[1], 19434, true)
-		UpdateCooldown(self.lumos[2], 257044, true)
-		UpdateBuff(self.lumos[3], 257622, 257622)
+		do
+			local button = self.bu[3]
+			if IsPlayerSpell(193533) then
+				local name, count, duration, expire, caster, spellID = GetUnitAura("target", 277959, "HARMFUL")
+				if not name then name, count, duration, expire, caster, spellID = GetUnitAura("player", 193534, "HELPFUL") end
+				if name and caster == "player" then
+					button.Count:SetText(count)
+					button.CD:SetCooldown(expire-duration, duration)
+					button.CD:Show()
+					button.Icon:SetDesaturated(false)
+					button.Icon:SetTexture(GetSpellTexture(spellID))
+				else
+					button.Count:SetText("")
+					button.CD:Hide()
+					button.Icon:SetDesaturated(true)
+					button.Icon:SetTexture(GetSpellTexture(193534))
+				end
+			elseif IsPlayerSpell(257284) then
+				UpdateDebuff(button, 257284, 257284)
+			else
+				UpdateCooldown(button, 257044, true)
+			end
+		end
 
 		do
-			local button = self.lumos[4]
+			local button = self.bu[4]
 			if IsPlayerSpell(260402) then
 				UpdateBuff(button, 260402, 260402, true, false, true)
-			elseif IsPlayerSpell(321460) then
-				UpdateCooldown(button, 53351)
-				UpdateSpellStatus(button, 53351)
+			elseif IsPlayerSpell(120360) then
+				UpdateCooldown(button, 120360, true)
 			else
-				UpdateBuff(button, 260242, 260242)
+				UpdateBuff(button, 260395, 260395)
 			end
 		end
 
-		UpdateBuff(self.lumos[5], 288613, 288613, true, false, true)
+		UpdateBuff(self.bu[5], 288613, 288613, true, false, true)
 
-	elseif spec == 3 then
-		UpdateDebuff(self.lumos[1], 259491, 259491, false, "END")
+	elseif GetSpecialization() == 3 then
+		UpdateDebuff(self.bu[1], 259491, 259491, false, "END")
 
 		do
-			local button = self.lumos[2]
-			UpdateCooldown(button, 259489, true)
-			local name = GetUnitAura("target", 270332, "HARMFUL") -- 目标红炸弹高亮
-			if name then
-				B.ShowOverlayGlow(button)
+			local button = self.bu[2]
+			if IsPlayerSpell(260248) then
+				UpdateBuff(button, 260248, 260249)
+			elseif IsPlayerSpell(162488) then
+				UpdateDebuff(button, 162488, 162487, true)
 			else
-				B.HideOverlayGlow(button)
+				UpdateDebuff(button, 131894, 131894, true)
 			end
 		end
 
 		do
-			local button = self.lumos[3]
+			local button = self.bu[3]
+			local boom = self.boom
+			if IsPlayerSpell(271014) then
+				boom:Show()
+
+				local name, _, duration, expire, caster, spellID = GetUnitAura("target", 270339, "HARMFUL")
+				if not name then name, _, duration, expire, caster, spellID = GetUnitAura("target", 270332, "HARMFUL") end
+				if not name then name, _, duration, expire, caster, spellID = GetUnitAura("target", 271049, "HARMFUL") end
+				if name and caster == "player" then
+					boom.Icon:SetTexture(GetSpellTexture(boomGroups[spellID]))
+					boom.CD:SetCooldown(expire-duration, duration)
+					boom.CD:Show()
+					boom.Icon:SetDesaturated(false)
+				else
+					local texture = GetSpellTexture(259495)
+					if texture == GetSpellTexture(270323) then
+						boom.Icon:SetTexture(GetSpellTexture(259489))
+					elseif texture == GetSpellTexture(271045) then
+						boom.Icon:SetTexture(GetSpellTexture(259491))
+					else
+						boom.Icon:SetTexture(GetSpellTexture(186270))	-- 270335
+					end
+					boom.Icon:SetDesaturated(true)
+				end
+
+				UpdateCooldown(button, 259495, true)
+			else
+				boom:Hide()
+				UpdateDebuff(button, 259495, 269747, true)
+			end
+		end
+
+		do
+			local button = self.bu[4]
 			if IsPlayerSpell(260285) then
 				UpdateBuff(button, 260285, 260286)
 			elseif IsPlayerSpell(269751) then
@@ -122,21 +161,6 @@ function A:ChantLumos(self)
 			end
 		end
 
-		do
-			local button = self.lumos[4]
-			if IsPlayerSpell(271014) then
-				UpdateCooldown(button, 259495, true)
-				local name = GetUnitAura("player", 363805, "HELPFUL") -- 有疯狂投弹兵时高亮
-				if name then
-					B.ShowOverlayGlow(button)
-				else
-					B.HideOverlayGlow(button)
-				end
-			else
-				UpdateDebuff(button, 259495, 269747, true)
-			end
-		end
-
-		UpdateBuff(self.lumos[5], 266779, 266779, true, false, true)
+		UpdateBuff(self.bu[5], 266779, 266779, true, false, true)
 	end
 end

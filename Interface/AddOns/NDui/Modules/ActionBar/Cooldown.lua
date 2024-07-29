@@ -12,7 +12,7 @@ local ICON_SIZE = 36
 local hideNumbers, active, hooked = {}, {}, {}
 
 local day, hour, minute = 86400, 3600, 60
-function module.FormattedTimer(s, modRate)
+function module.FormattedTimer(s)
 	if s >= day then
 		return format("%d"..DB.MyColor.."d", s/day + .5), s%day
 	elseif s > hour then
@@ -26,9 +26,9 @@ function module.FormattedTimer(s, modRate)
 	else
 		local colorStr = (s < 3 and "|cffff0000") or (s < 10 and "|cffffff00") or "|cffcccc33"
 		if s < C.db["Actionbar"]["TenthTH"] then
-			return format(colorStr.."%.1f|r", s), (s - format("%.1f", s)) / modRate
+			return format(colorStr.."%.1f|r", s), s - format("%.1f", s)
 		else
-			return format(colorStr.."%d|r", s + .5), (s - floor(s)) / modRate
+			return format(colorStr.."%d|r", s + .5), s - floor(s)
 		end
 	end
 end
@@ -64,10 +64,9 @@ function module:TimerOnUpdate(elapsed)
 	if self.nextUpdate > 0 then
 		self.nextUpdate = self.nextUpdate - elapsed
 	else
-		local passTime = GetTime() - self.start
-		local remain = passTime >= 0 and ((self.duration - passTime) / self.modRate) or self.duration
+		local remain = self.duration - (GetTime() - self.start)
 		if remain > 0 then
-			local getTime, nextUpdate = module.FormattedTimer(remain, self.modRate)
+			local getTime, nextUpdate = module.FormattedTimer(remain)
 			self.text:SetText(getTime)
 			self.nextUpdate = nextUpdate
 		else
@@ -91,7 +90,7 @@ function module:OnCreate()
 	scaler.timer = timer
 
 	local text = timer:CreateFontString(nil, "BACKGROUND")
-	text:SetPoint("CENTER", 1, 0)
+	text:SetPoint("CENTER", 2, 0)
 	text:SetJustifyH("CENTER")
 	timer.text = text
 
@@ -102,7 +101,7 @@ function module:OnCreate()
 	return timer
 end
 
-function module:StartTimer(start, duration, modRate)
+function module:StartTimer(start, duration)
 	if self:IsForbidden() then return end
 	if self.noCooldownCount or hideNumbers[self] then return end
 
@@ -113,15 +112,13 @@ function module:StartTimer(start, duration, modRate)
 	end
 
 	local parent = self:GetParent()
-	start = tonumber(start) or 0
-	duration = tonumber(duration) or 0
-	modRate = tonumber(modRate) or 1
+    start = tonumber(start) or 0
+    duration = tonumber(duration) or 0
 
 	if start > 0 and duration > MIN_DURATION then
 		local timer = self.timer or module.OnCreate(self)
 		timer.start = start
 		timer.duration = duration
-		timer.modRate = modRate
 		timer.enabled = true
 		timer.nextUpdate = 0
 
@@ -172,10 +169,10 @@ end
 
 function module:CooldownUpdate()
 	local button = self:GetParent()
-	local start, duration, modRate = GetActionCooldown(button.action)
+	local start, duration = GetActionCooldown(button.action)
 
 	if shouldUpdateTimer(self, start) then
-		module.StartTimer(self, start, duration, modRate)
+		module.StartTimer(self, start, duration)
 	end
 end
 
@@ -210,8 +207,9 @@ function module:OnLogin()
 			module.RegisterActionButton(frame)
 		end
 	end
-	hooksecurefunc(ActionBarButtonEventsFrameMixin, "RegisterFrame", module.RegisterActionButton)
+	hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", module.RegisterActionButton)
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)
+	B.HideOption(InterfaceOptionsActionBarsPanelCountdownCooldowns)
 end

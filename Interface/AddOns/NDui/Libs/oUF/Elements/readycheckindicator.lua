@@ -42,10 +42,6 @@ local Private = oUF.Private
 
 local unitExists = Private.unitExists
 
-local READY_CHECK_READY_TEXTURE = "UI-LFG-ReadyMark"
-local READY_CHECK_NOT_READY_TEXTURE = "UI-LFG-DeclineMark"
-local READY_CHECK_WAITING_TEXTURE = "UI-LFG-PendingMark"
-
 local function OnFinished(self)
 	local element = self:GetParent()
 	element:Hide()
@@ -76,11 +72,11 @@ local function Update(self, event)
 	local status = GetReadyCheckStatus(unit)
 	if(unitExists(unit) and status) then
 		if(status == 'ready') then
-			element:SetAtlas(element.readyTexture)
+			element:SetTexture(element.readyTexture)
 		elseif(status == 'notready') then
-			element:SetAtlas(element.notReadyTexture)
+			element:SetTexture(element.notReadyTexture)
 		else
-			element:SetAtlas(element.waitingTexture)
+			element:SetTexture(element.waitingTexture)
 		end
 
 		element.status = status
@@ -126,7 +122,7 @@ end
 
 local function Enable(self, unit)
 	local element = self.ReadyCheckIndicator
-	unit = unit and unit:match('(%a+)%d*$')
+	unit = unit and unit:match('(%a+)%d*')
 	if(element and (unit == 'party' or unit == 'raid')) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate

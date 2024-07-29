@@ -2,29 +2,19 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
-local GetSpellTexture = C_Spell.GetSpellTexture
-
 function A:GetUnitAura(unit, spell, filter)
 	for index = 1, 32 do
-		local auraData = C_UnitAuras.GetAuraDataByIndex(unit, index, filter)
-		if not auraData then break end
-		if auraData.spellId == spell then
-			return auraData.name, auraData.applications, auraData.duration, auraData.expirationTime, auraData.sourceUnit, auraData.spellId, auraData.points[1]
+		local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value = UnitAura(unit, index, filter)
+		if not name then break end
+		if name and spellID == spell then
+			return name, count, duration, expire, caster, spellID, value
 		end
 	end
 end
 
 function A:UpdateCooldown(button, spellID, texture)
-	local chargeInfo = C_Spell.GetSpellCharges(spellID)
-	local charges = chargeInfo and chargeInfo.currentCharges
-	local maxCharges = chargeInfo and chargeInfo.maxCharges
-	local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
-	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
-
-	local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
-	local start = cooldownInfo and cooldownInfo.startTime
-	local duration = cooldownInfo and cooldownInfo.duration
-
+	local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
+	local start, duration = GetSpellCooldown(spellID)
 	if charges and maxCharges > 1 then
 		button.Count:SetText(charges)
 	else
@@ -131,26 +121,19 @@ function A:UpdateTotemAura(button, texture, spellID, glow)
 end
 
 local function UpdateVisibility(self)
-	if InCombatLockdown() or self.lumos.onFire then return end
-
+	if InCombatLockdown() then return end
 	for i = 1, 5 do
-		local bu = self.lumos[i]
-		bu.Count:SetTextColor(1, 1, 1)
-		bu.Count:SetText("")
-		bu.CD:Hide()
-		bu:SetScript("OnUpdate", nil)
-		bu.Icon:SetDesaturated(true)
-		B.HideOverlayGlow(bu.glowFrame)
+		self.bu[i].Count:SetTextColor(1, 1, 1)
+		self.bu[i].Count:SetText("")
+		self.bu[i].CD:Hide()
+		self.bu[i]:SetScript("OnUpdate", nil)
+		B.HideOverlayGlow(self.bu[i].glowFrame)
 	end
 	if A.PostUpdateVisibility then A:PostUpdateVisibility(self) end
 end
 
-local lumosUnits = {
-	["player"] = true,
-	["target"] = true,
-}
 local function UpdateIcons(self, event, unit)
-	if event == "UNIT_AURA" and not lumosUnits[unit] then return end
+	if event == "UNIT_AURA" and unit ~= "player" and unit ~= "target" then return end
 	A:ChantLumos(self)
 	UpdateVisibility(self)
 end
@@ -170,20 +153,11 @@ local function TurnOff(self)
 	UpdateVisibility(self)
 end
 
-local function OnTalentUpdate(self, event)
-	UpdateIcons(self, event)
-	if self.lumos.onFire then
-		if A.PostUpdateVisibility then A:PostUpdateVisibility(self) end
-	end
-end
-
 function A:CreateLumos(self)
 	if not A.ChantLumos then return end
 
-	self.lumos = {}
-	self.lumos.onFire = C.db["Nameplate"]["PPOnFire"]
-
-	local iconSize = (C.db["Nameplate"]["PPWidth"]+2*C.mult - C.margin*4)/5
+	self.bu = {}
+	local iconSize = (C.db["Nameplate"]["PPWidth"] - C.margin*4)/5
 	for i = 1, 5 do
 		local bu = CreateFrame("Frame", nil, self.Health)
 		bu:SetSize(iconSize, iconSize)
@@ -192,25 +166,21 @@ function A:CreateLumos(self)
 
 		local fontParent = CreateFrame("Frame", nil, bu)
 		fontParent:SetAllPoints()
-		fontParent:SetFrameLevel(bu:GetFrameLevel() + 6)
+		fontParent:SetFrameLevel(bu:GetFrameLevel() + 5)
 		bu.Count = B.CreateFS(fontParent, 16, "", false, "BOTTOM", 0, -10)
 		if i == 1 then
-			bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", -C.mult, -C.margin)
+			bu:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -5)
 		else
-			bu:SetPoint("LEFT", self.lumos[i-1], "RIGHT", C.margin, 0)
+			bu:SetPoint("LEFT", self.bu[i-1], "RIGHT", C.margin, 0)
 		end
 
-		self.lumos[i] = bu
+		self.bu[i] = bu
 	end
 
 	if A.PostCreateLumos then A:PostCreateLumos(self) end
 
 	UpdateIcons(self)
-	if self.lumos.onFire then
-		TurnOn(self)
-	else
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff, true)
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", TurnOn, true)
-	end
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", OnTalentUpdate, true)
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", TurnOff, true)
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", TurnOn, true)
+	self:RegisterEvent("PLAYER_TALENT_UPDATE", UpdateIcons, true)
 end

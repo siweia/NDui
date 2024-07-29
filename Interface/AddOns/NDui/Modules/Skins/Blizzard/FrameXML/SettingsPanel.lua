@@ -3,9 +3,8 @@ local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local frame = SettingsPanel
+	if not frame then return end
 
 	B.StripTextures(frame)
 	B.SetBD(frame)
@@ -90,12 +89,6 @@ tinsert(C.defaultThemes, function()
 		ReskinDropDownArrow(option.IncrementButton, "right")
 	end
 
-	local function ReskinDropdown(option)
-		B.Reskin(option.Dropdown)
-		B.Reskin(option.DecrementButton)
-		B.Reskin(option.IncrementButton)
-	end
-
 	local function UpdateKeybindButtons(self)
 		if not self.bindingsPool then return end
 		for panel in self.bindingsPool:EnumerateActive() do
@@ -116,9 +109,7 @@ tinsert(C.defaultThemes, function()
 	end
 
 	local function forceSaturation(self)
-		if self.Checkbox then
-			self.Checkbox:DesaturateHierarchy(1)
-		end
+		self.CheckBox:DesaturateHierarchy(1)
 	end
 
 	local function ReskinControlsGroup(controls)
@@ -127,12 +118,12 @@ tinsert(C.defaultThemes, function()
 			if element.SliderWithSteppers then
 				B.ReskinStepperSlider(element.SliderWithSteppers)
 			end
-			if element.Control then
-				ReskinDropdown(element.Control)
+			if element.DropDown then
+				ReskinOptionDropDown(element.DropDown)
 			end
-			if element.Checkbox then
-				B.ReskinCheck(element.Checkbox)
-				element.Checkbox.bg:SetInside(nil, 6, 6)
+			if element.CheckBox then
+				B.ReskinCheck(element.CheckBox)
+				element.CheckBox.bg:SetInside(nil, 6, 6)
 				hooksecurefunc(element, "DesaturateHierarchy", forceSaturation)
 			end
 		end
@@ -153,16 +144,19 @@ tinsert(C.defaultThemes, function()
 					child.CheckBox.bg:SetInside(nil, 6, 6)
 					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
 				end
-				if child.Checkbox then
-					B.ReskinCheck(child.Checkbox)
-					child.Checkbox.bg:SetInside(nil, 6, 6)
-					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
+				if child.DropDown then
+					ReskinOptionDropDown(child.DropDown)
 				end
 				if child.ColorBlindFilterDropDown then
 					ReskinOptionDropDown(child.ColorBlindFilterDropDown)
 				end
-				if child.Control then
-					ReskinDropdown(child.Control)
+				for j = 1, 13 do
+					local control = child["Control"..j]
+					if control then
+						if control.DropDown then
+							ReskinOptionDropDown(control.DropDown)
+						end
+					end
 				end
 				if child.Button then
 					if child.Button:GetWidth() < 250 then
@@ -201,6 +195,12 @@ tinsert(C.defaultThemes, function()
 				if child.Button1 and child.Button2 then
 					B.Reskin(child.Button1)
 					B.Reskin(child.Button2)
+				end
+				if child.NewButton then
+					B.Reskin(child.NewButton)
+				end
+				if child.DeleteButton then
+					B.Reskin(child.DeleteButton)
 				end
 				if child.Controls then
 					for i = 1, #child.Controls do

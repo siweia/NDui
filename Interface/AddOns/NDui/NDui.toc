@@ -1,8 +1,8 @@
-## Interface: 110000, 110002
-## Title: |cff0080ffNDui|r
-## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Simpy, Tuller, zork.
+## Interface: 30403
+## Title: |cff0080ffNDui|r |cff00ff00Classic|r
+## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
 ## Notes: Empty toc for Curseforge
-## Version: 7.21.1
-## X-Support: TWW
-## X-Website: https://github.com/siweia/NDui
+## Version: 3.12.3
+## X-Support: BC Classic
+## X-Website: https://github.com/siweia/NDui/tree/TBC

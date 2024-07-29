@@ -5,15 +5,11 @@ if DB.Client ~= "zhCN" then return end
 local strsplit, pairs = string.split, pairs
 
 local hx = {
-	"部分选项调整；",
-	"更新部分技能监控；",
-	"11.0的相关界面美化更新；",
-	"11.0的相关支持更新；",
-	"团队减益添加新版本的副本选项；",
-	"移除震荡词缀的相关功能；",
-	"动作条的预设方案调整；",
-	"法师的个人资源条监控更新；",
-	"oUF核心更新。",
+	"正确隐藏自带的boss框体；",
+	"更新DBM法术图标的屏蔽选项；",
+	"部分反馈的问题调整；",
+	"添加选项以调整微型菜单的尺寸和排序；",
+	"控制台及本地文本更新。",
 }
 
 local f
@@ -37,7 +33,7 @@ local function changelog()
 
 	local offset = 0
 	for n, t in pairs(hx) do
-		B.CreateFS(f, 14, n..". "..t, false, "TOPLEFT", 15, -(50 + offset))
+		B.CreateFS(f, 14, n..": "..t, false, "TOPLEFT", 15, -(50 + offset))
 		offset = offset + 24
 	end
 	f:SetSize(480, 60 + offset)

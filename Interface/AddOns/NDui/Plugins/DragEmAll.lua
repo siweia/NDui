@@ -13,36 +13,51 @@ local frames = {
 
 	-- Blizz Frames
 	["AddonList"] = false,
+	["ArenaFrame"] = false,
+	["AudioOptionsFrame"] = false,
+	["BattlefieldFrame"] = true,
 	["ChannelFrame"] = false,
 	["ChatConfigFrame"] = false,
 	["DressUpFrame"] = false,
 	["FriendsFrame"] = false,
+	["GameMenuFrame"] = false,
 	["GossipFrame"] = false,
-	["GuildInviteFrame"] = false,
 	["GuildRegistrarFrame"] = false,
 	["HelpFrame"] = false,
+	["InterfaceOptionsFrame"] = false,
 	["ItemTextFrame"] = false,
 	["LootFrame"] = false,
 	["MailFrame"] = false,
 	["MerchantFrame"] = false,
 	["ModelPreviewFrame"] = false,
 	["OpenMailFrame"] = false,
-	["PaperDollFrame"] = true,
 	["PetitionFrame"] = false,
+	["PetStableFrame"] = false,
 	["PVEFrame"] = false,
+	["PVPFrame"] = (not DB.isCata),
 	["QuestFrame"] = false,
+	["QuestLogDetailFrame"] = false,
 	["RaidParentFrame"] = false,
-	["ReputationFrame"] = true,
 	["SendMailFrame"] = true,
-	["SplashFrame"] = false,
+	["SpellBookFrame"] = false,
 	["StackSplitFrame"] = false,
 	["TabardFrame"] = false,
 	["TaxiFrame"] = false,
-	["TokenFrame"] = true,
 	["TradeFrame"] = false,
 	["TutorialFrame"] = false,
-	["SettingsPanel"] = false,
+	["VideoOptionsFrame"] = false,
 }
+
+local function CharacterFrameMoveCheck()
+	if IsAddOnLoaded("RXPGuides") then return end
+
+	frames["PaperDollFrame"] = "CharacterFrame"
+	frames["PetPaperDollFrameCompanionFrame"] = "CharacterFrame"
+	frames["PetPaperDollFramePetFrame"] = "CharacterFrame"
+	frames["ReputationFrame"] = true
+	frames["SkillFrame"] = true
+	frames["TokenFrame"] = true
+end
 
 -- Frame Existing Check
 local function IsFrameExists()
@@ -60,47 +75,39 @@ local lodFrames = {
 	Blizzard_AlliedRacesUI		= { ["AlliedRacesFrame"] = false },
 	Blizzard_ArchaeologyUI		= { ["ArchaeologyFrame"] = false },
 	Blizzard_ArtifactUI			= { ["ArtifactFrame"] = false, ["ArtifactRelicForgeFrame"] = false },
-	Blizzard_AuctionHouseUI		= { ["AuctionHouseFrame"] = false },
+	Blizzard_AuctionUI			= { ["AuctionFrame"] = false },
 	Blizzard_AzeriteEssenceUI	= { ["AzeriteEssenceUI"] = false },
 	Blizzard_AzeriteRespecUI	= { ["AzeriteRespecFrame"] = false },
 	Blizzard_AzeriteUI			= { ["AzeriteEmpoweredItemUI"] = false },
-	Blizzard_BindingUI			= { ["KeyBindingFrame"] = false, ["QuickKeybindFrame"] = false },
+	Blizzard_BarbershopUI		= { ["BarberShopFrame"] = false },
+	Blizzard_BindingUI			= { ["KeyBindingFrame"] = false },
 	Blizzard_BlackMarketUI		= { ["BlackMarketFrame"] = false },
-	Blizzard_Calendar			= { ["CalendarFrame"] = false, ["CalendarCreateEventFrame"] = true, ["CalendarEventPickerFrame"] = false },
+	Blizzard_Calendar			= { ["CalendarFrame"] = false, ["CalendarCreateEventFrame"] = true },
 	Blizzard_ChallengesUI		= { ["ChallengesKeystoneFrame"] = false },
-	Blizzard_ClassTalentUI		= { ["ClassTalentFrame"] = false },
-	Blizzard_ClickBindingUI		= { ["ClickBindingFrame"] = false },
 	Blizzard_Collections		= { ["WardrobeFrame"] = false, ["WardrobeOutfitEditFrame"] = false },
-	Blizzard_CovenantRenown		= { ["CovenantRenownFrame"] = false, },
-	Blizzard_CovenantSanctum	= { ["CovenantSanctumFrame"] = false, },
-	--Blizzard_Communities		= { ["CommunitiesFrame"] = false, ["CommunitiesSettingsDialog"] = false, ["CommunitiesGuildLogFrame"] = false, ["CommunitiesTicketManagerDialog"] = false, ["CommunitiesAvatarPickerDialog"] = false, ["CommunitiesFrame.NotificationSettingsDialog"] = false, ["ClubFinderCommunityAndGuildFinderFrame.RequestToJoinFrame"] = false},
+	Blizzard_Communities		= { ["CommunitiesFrame"] = false, ["CommunitiesSettingsDialog"] = false, ["CommunitiesGuildLogFrame"] = false, ["CommunitiesTicketManagerDialog"] = false, ["CommunitiesAvatarPickerDialog"] = false, ["CommunitiesFrame.NotificationSettingsDialog"] = false},
 	Blizzard_FlightMap			= { ["FlightMapFrame"] = false },
-	Blizzard_GenericTraitUI		= { ["GenericTraitFrame"] = false },
 	Blizzard_GMSurveyUI			= { ["GMSurveyFrame"] = false },
 	Blizzard_GuildBankUI		= { ["GuildBankFrame"] = false, ["GuildBankEmblemFrame"] = true },
 	Blizzard_GuildControlUI		= { ["GuildControlUI"] = false },
-	Blizzard_GuildRecruitmentUI	= { ["CommunitiesGuildRecruitmentFrame"] = false },
+	Blizzard_GuildRecruitmentUI = { ["CommunitiesGuildRecruitmentFrame"] = false },
 	Blizzard_GuildUI			= { ["GuildFrame"] = false, ["GuildRosterFrame"] = true, ["GuildFrame.TitleMouseover"] = true },
 	Blizzard_InspectUI			= { ["InspectFrame"] = false, ["InspectPVPFrame"] = true, ["InspectTalentFrame"] = true },
-	Blizzard_IslandsPartyPoseUI	= { ["IslandsPartyPoseFrame"] = false },
+	Blizzard_IslandsPartyPoseUI = { ["IslandsPartyPoseFrame"] = false },
 	Blizzard_IslandsQueueUI		= { ["IslandsQueueFrame"] = false },
 	Blizzard_ItemSocketingUI	= { ["ItemSocketingFrame"] = false },
 	Blizzard_ItemUpgradeUI		= { ["ItemUpgradeFrame"] = false },
+	Blizzard_LookingForGroupUI	= { ["LFGParentFrame"] = false },
 	Blizzard_LookingForGuildUI	= { ["LookingForGuildFrame"] = false },
 	Blizzard_MacroUI			= { ["MacroFrame"] = false },
 	Blizzard_ObliterumUI		= { ["ObliterumForgeFrame"] = false },
 	Blizzard_OrderHallUI		= { ["OrderHallTalentFrame"] = false, },
-	Blizzard_ScrappingMachineUI	= { ["ScrappingMachineFrame"] = false },
-	Blizzard_Professions		= { ["InspectRecipeFrame"] = false, ["ProfessionsFrame"] = false },
-	Blizzard_ProfessionsBook	= { ["ProfessionsBookFrame"] = false },
-	Blizzard_ProfessionsCustomerOrders	= { ["ProfessionsCustomerOrdersFrame"] = false },
-	Blizzard_TalentUI			= { ["PlayerTalentFrame"] = false, ["PVPTalentPrestigeLevelDialog"] = false, },
+	Blizzard_ScrappingMachineUI = { ["ScrappingMachineFrame"] = false },
+	Blizzard_TalentUI			= { ["PlayerTalentFrame"] = false },
 	Blizzard_TimeManager		= { ["TimeManagerFrame"] = false },
-	Blizzard_TokenUI			= { ["TokenFrame"] = true },
 	Blizzard_TradeSkillUI		= { ["TradeSkillFrame"] = false },
 	Blizzard_TrainerUI			= { ["ClassTrainerFrame"] = false },
 	Blizzard_VoidStorageUI		= { ["VoidStorageFrame"] = false, ["VoidStorageBorderFrameMouseBlockFrame"] = "VoidStorageFrame" },
-	Blizzard_WeeklyRewards		= { ["WeeklyRewardsFrame"] = false },
 }
 
 local parentFrame, hooked = {}, {}
@@ -181,8 +188,9 @@ local function HookFrames(list)
 end
 
 local function InitSetup()
-	HookFrames(frames)
+	CharacterFrameMoveCheck()
 	IsFrameExists()
+	HookFrames(frames)
 end
 
 local function AddonLoaded(_, name)
