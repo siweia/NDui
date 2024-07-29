@@ -103,6 +103,7 @@ function S:DBMSkin()
 
 	if not IsAddOnLoaded("DBM-Core") then return end
 	if not C.db["Skins"]["DBM"] then return end
+	if not DBM.Options then return end
 
 	hooksecurefunc(DBT, "CreateBar", function(self)
 		for bar in self:GetBarIterator() do

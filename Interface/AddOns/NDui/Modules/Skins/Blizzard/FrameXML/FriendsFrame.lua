@@ -26,6 +26,7 @@ tinsert(C.defaultThemes, function()
 
 		local travelPass = bu.travelPassButton
 		travelPass:SetSize(22, 22)
+		travelPass:SetNormalTexture(0)
 		travelPass:SetPushedTexture(0)
 		travelPass:SetDisabledTexture(0)
 		travelPass:SetPoint("TOPRIGHT", -3, -6)
