@@ -268,4 +268,13 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(LFGListInviteDialog.AcceptButton)
 	B.Reskin(LFGListInviteDialog.DeclineButton)
 	B.Reskin(LFGListInviteDialog.AcknowledgeButton)
+
+	local LFGListCreateRoleDialog = LFGListCreateRoleDialog
+	B.StripTextures(LFGListCreateRoleDialog)
+	B.SetBD(LFGListCreateRoleDialog)
+	B.ReskinRole(LFGListCreateRoleDialog.DamagerButton)
+	B.ReskinRole(LFGListCreateRoleDialog.TankButton)
+	B.ReskinRole(LFGListCreateRoleDialog.HealerButton)
+	B.Reskin(LFGListCreateRoleDialog.SignUpButton)
+	B.Reskin(LFGListCreateRoleDialog.CancelButton)
 end)
