@@ -1553,24 +1553,6 @@ do
 	end
 
 	-- Role Icons
-	function B:GetRoleTexCoord()
-		if self == "TANK" then
-			return .34/9.03, 2.85/9.03, 3.16/9.03, 5.67/9.03
-		elseif self == "DPS" or self == "DAMAGER" then
-			return 3.27/9.03, 5.78/9.03, 3.16/9.03, 5.67/9.03
-		elseif self == "HEALER" then
-			return 3.27/9.03, 5.78/9.03, .27/9.03, 2.78/9.03
-		elseif self == "LEADER" then
-			return .34/9.03, 2.85/9.03, .27/9.03, 2.78/9.03
-		elseif self == "READY" then
-			return 6.17/9.03, 8.68/9.03, .27/9.03, 2.78/9.03
-		elseif self == "PENDING" then
-			return 6.17/9.03, 8.68/9.03, 3.16/9.03, 5.67/9.03
-		elseif self == "REFUSE" then
-			return 3.27/9.03, 5.78/9.03, 6.04/9.03, 8.55/9.03
-		end
-	end
-
 	function B:GetRoleTex()
 		if self == "TANK" then
 			return DB.tankTex
