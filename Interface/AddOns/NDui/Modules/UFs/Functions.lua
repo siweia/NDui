@@ -599,17 +599,15 @@ function UF:CreateIcons(self)
 	phase:SetSize(24, 24)
 	self.PhaseIndicator = phase
 
-	if C.db["UFs"]["ShowRole"] then
-		local ri = self:CreateTexture(nil, "OVERLAY")
-		if mystyle == "raid" then
-			ri:SetPoint("TOPRIGHT", self, 5, 5)
-		else
-			ri:SetPoint("TOPRIGHT", self, 0, 8)
-		end
-		ri:SetSize(15, 15)
-		ri.PostUpdate = postUpdateRole
-		self.GroupRoleIndicator = ri
+	local ri = self:CreateTexture(nil, "OVERLAY")
+	if mystyle == "raid" then
+		ri:SetPoint("TOPRIGHT", self, 5, 5)
+	else
+		ri:SetPoint("TOPRIGHT", self, 0, 8)
 	end
+	ri:SetSize(15, 15)
+	ri.PostUpdate = postUpdateRole
+	self.GroupRoleIndicator = ri
 
 	local li = self:CreateTexture(nil, "OVERLAY")
 	li:SetPoint("TOPLEFT", self, -1, 8)
