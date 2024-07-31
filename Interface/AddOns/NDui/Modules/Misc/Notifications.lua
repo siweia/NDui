@@ -141,7 +141,7 @@ function M:VersionCheck_Compare(new, old)
 	local old1, old2 = strsplit(".", old)
 	old1, old2 = tonumber(old1), tonumber(old2)
 	if old1 > 4 then old1, old2 = 0, 0 end
-	if old1 == 4 and old2 >= 4 then old1, old2 = 0, 0 end
+	--if old1 == 4 and old2 >= 4 then old1, old2 = 0, 0 end
 
 	if new1 > old1 or (new1 == old1 and new2 > old2) then
 		return "IsNew"
