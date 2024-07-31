@@ -853,3 +853,4 @@ L["AuraWatch MinCD"] = "Min Cooldown"
 L["MinCDTip"] = "|nThe Spell cooldown only visible when its cooldown greater then the second value."
 L["HideInCombat"] = "Hide in combat"
 L["HideInCombatTip"] = "|nSelect the way to hide GameTooltip in combat.|nGameTooltip only visible when you hold the modified key you selected."
+L["HideDPSRole"] = "Hide DPS roleicon" -- need translation
