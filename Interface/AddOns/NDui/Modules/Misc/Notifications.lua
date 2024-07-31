@@ -213,7 +213,7 @@ function M:VersionCheck()
 	self:VersionCheck_UpdateGroup()
 	B:RegisterEvent("GROUP_ROSTER_UPDATE", self.VersionCheck_UpdateGroup)
 
-	GTFO()
+	--GTFO()
 end
 
 --[[
