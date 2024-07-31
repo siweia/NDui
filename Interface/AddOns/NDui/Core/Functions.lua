@@ -1553,24 +1553,6 @@ do
 	end
 
 	-- Role Icons
-	function B:GetRoleTexCoord()
-		if self == "TANK" then
-			return .34/9.03, 2.85/9.03, 3.16/9.03, 5.67/9.03
-		elseif self == "DPS" or self == "DAMAGER" then
-			return 3.27/9.03, 5.78/9.03, 3.16/9.03, 5.67/9.03
-		elseif self == "HEALER" then
-			return 3.27/9.03, 5.78/9.03, .27/9.03, 2.78/9.03
-		elseif self == "LEADER" then
-			return .34/9.03, 2.85/9.03, .27/9.03, 2.78/9.03
-		elseif self == "READY" then
-			return 6.17/9.03, 8.68/9.03, .27/9.03, 2.78/9.03
-		elseif self == "PENDING" then
-			return 6.17/9.03, 8.68/9.03, 3.16/9.03, 5.67/9.03
-		elseif self == "REFUSE" then
-			return 3.27/9.03, 5.78/9.03, 6.04/9.03, 8.55/9.03
-		end
-	end
-
 	function B:GetRoleTex()
 		if self == "TANK" then
 			return DB.tankTex
@@ -1586,18 +1568,11 @@ do
 		self:SetTexCoord(0, 1, 0, 1)
 	end
 
-	function B:ReskinRole(role)
+	function B:ReskinRole()
 		if self.background then self.background:SetTexture("") end
 
 		local cover = self.cover or self.Cover
 		if cover then cover:SetTexture("") end
-
-		local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
-		if texture then
-			texture:SetTexture(DB.rolesTex)
-			texture:SetTexCoord(B.GetRoleTexCoord(role))
-		end
-		self.bg = B.CreateBDFrame(self)
 
 		local checkButton = self.checkButton or self.CheckButton or self.CheckBox
 		if checkButton then
