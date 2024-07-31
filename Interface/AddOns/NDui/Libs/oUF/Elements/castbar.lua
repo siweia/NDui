@@ -201,7 +201,7 @@ local function UpdatePips(element, numStages)
 end
 
 --[[ Override: Castbar:ShouldShow(unit)
-Handles check for which unit the castbar should show for.  
+Handles check for which unit the castbar should show for. 
 Defaults to the object unit.
 
 * self - the Castbar widget
