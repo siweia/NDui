@@ -240,7 +240,7 @@ G.DefaultSettings = {
 		HideTip = false,
 		LibHealComm = false,
 		AutoBuffs = false,
-		HideDPSRole = false,
+		ShowRoleMode = 1,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -1175,15 +1175,15 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidTextScale, L["100PercentTip"]},
-		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
-		{1, "UFs", "SmartRaid", HeaderTag..L["SmartRaid"].."*", nil, nil, updateAllHeaders, L["SmartRaidTip"]},
+		{4, "UFs", "ShowRoleMode", NewTag..L["ShowRoleMode"], nil, {ALL, DISABLE, L["HideDPSRole"]}},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
+		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
+		{1, "UFs", "SmartRaid", HeaderTag..L["SmartRaid"].."*", true, nil, updateAllHeaders, L["SmartRaidTip"]},
 		{1, "UFs", "TeamIndex", L["RaidFrame TeamIndex"].."*", nil, nil, updateTeamIndex},
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", true, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
-		{1, "UFs", "HideDPSRole", NewTag..L["HideDPSRole"], true},
-		{1, "UFs", "LibHealComm", HeaderTag..L["HealPrediction"]},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
+		{1, "UFs", "LibHealComm", HeaderTag..L["HealPrediction"]},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},
