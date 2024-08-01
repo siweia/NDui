@@ -86,7 +86,7 @@ function Bar:HideBlizz()
 	-- Fix maw block anchor
 	MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
 	-- Update token panel
-	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
+	--B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility) -- needs review, taint the money transfer
 	-- Hide blizzard expbar
 	StatusTrackingBarManager:UnregisterAllEvents()
 	StatusTrackingBarManager:Hide()

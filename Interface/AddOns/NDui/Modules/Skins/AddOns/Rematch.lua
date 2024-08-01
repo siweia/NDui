@@ -59,7 +59,7 @@ end
 
 function S:ReskinScrollEnd(direction)
 	B.ReskinArrow(self, direction)
-	self.Texture:SetAlpha(0)
+	if self.Texture then self.Texture:SetAlpha(0) end
 	self:SetSize(16, 12)
 	self.__texture:SetVertexColor(1, .8, 0)
 	self:HookScript("OnLeave", scrollEndOnLeave)
@@ -741,7 +741,7 @@ function S:ReskinRematch()
 
 		B.StripTextures(self)
 		B.SetBD(self)
-		if self.CloseButton then -- todo: handle all widget icons on title bar
+		if self.CloseButton then
 			B.ReskinClose(self.CloseButton)
 		end
 		for _, tab in ipairs(self.PanelTabs.Tabs) do

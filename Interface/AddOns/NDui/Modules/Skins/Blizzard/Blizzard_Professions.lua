@@ -140,7 +140,6 @@ local function reskinProfessionForm(form)
 		if slot then
 			reskinSlotButton(slot.Button)
 		end
-		-- todo: salvage flyout, item flyout, recraft flyout
 	end)
 end
 

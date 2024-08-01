@@ -160,7 +160,7 @@ tinsert(C.defaultThemes, function()
 
 	-- Reskin Headers
 	local mainHeader = ObjectiveTrackerFrame.Header
-	reskinHeader(mainHeader)
+	B.StripTextures(mainHeader) -- main header looks simple this way
 
 	-- Minimize Button
 	local mainMinimize =mainHeader.MinimizeButton

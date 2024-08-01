@@ -27,7 +27,7 @@ The following options are listed by priority. The first check that returns true 
 .colorPower  - Use `self.colors.power[token]` to color the bar based on the player's additional power type
                (boolean)
 .colorClass  - Use `self.colors.class[class]` to color the bar based on unit class. `class` is defined by the
-               second return of [UnitClass](http://wowprogramming.com/docs/api/UnitClass.html) (boolean)
+               second return of [UnitClass](https://warcraft.wiki.gg/wiki/API_UnitClass) (boolean)
 .colorSmooth - Use `self.colors.smooth` to color the bar with a smooth gradient based on the player's current
                additional power percentage (boolean)
 
@@ -59,8 +59,9 @@ local oUF = ns.oUF
 
 local _, playerClass = UnitClass('player')
 
--- sourced from FrameXML/AlternatePowerBar.lua
+-- sourced from Blizzard_UnitFrame/AlternatePowerBar.lua
 local ALT_POWER_BAR_PAIR_DISPLAY_INFO = _G.ALT_POWER_BAR_PAIR_DISPLAY_INFO
+
 local ADDITIONAL_POWER_BAR_NAME = 'MANA'
 local ADDITIONAL_POWER_BAR_INDEX = 0
 

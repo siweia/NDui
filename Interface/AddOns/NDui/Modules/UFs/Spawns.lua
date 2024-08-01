@@ -759,8 +759,6 @@ function UF:OnLogin()
 			UF:UpdateRaidTeamIndex()
 		end
 
-		UF:UpdateRaidHealthMethod()
-
 		if C.db["UFs"]["SpecRaidPos"] then
 			local function UpdateSpecPos(event, ...)
 				local unit, _, spellID = ...

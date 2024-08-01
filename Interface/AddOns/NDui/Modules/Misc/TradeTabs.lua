@@ -13,7 +13,7 @@ local C_TradeSkillUI_GetRecipeInfo, C_TradeSkillUI_GetTradeSkillLine = C_TradeSk
 local C_TradeSkillUI_GetOnlyShowSkillUpRecipes, C_TradeSkillUI_SetOnlyShowSkillUpRecipes = C_TradeSkillUI.GetOnlyShowSkillUpRecipes, C_TradeSkillUI.SetOnlyShowSkillUpRecipes
 local C_TradeSkillUI_GetOnlyShowMakeableRecipes, C_TradeSkillUI_SetOnlyShowMakeableRecipes = C_TradeSkillUI.GetOnlyShowMakeableRecipes, C_TradeSkillUI.SetOnlyShowMakeableRecipes
 
-local BOOKTYPE_PROFESSION = BOOKTYPE_PROFESSION or 0-- isWW
+local BOOKTYPE_PROFESSION = BOOKTYPE_PROFESSION or 0
 local RUNEFORGING_ID = 53428
 local PICK_LOCK = 1804
 local CHEF_HAT = 134020
@@ -48,7 +48,7 @@ function M:UpdateProfessions()
 		if numSpells > 0 then
 			for i = 1, numSpells do
 				local slotID = i + spelloffset
-				if not IsPassiveSpell(slotID, BOOKTYPE_PROFESSION) then
+				if not IsPassiveSpell(slotID) then
 					local spellID = GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION).spellID
 					if i == 1 then
 						M:TradeTabs_Create(spellID)
@@ -73,7 +73,7 @@ function M:TradeTabs_Update()
 		local spellID = tab.spellID
 		local itemID = tab.itemID
 
-		if C_Spell.IsCurrentSpell(spellID) then
+		if spellID and C_Spell.IsCurrentSpell(spellID) then
 			tab:SetChecked(true)
 			tab.cover:Show()
 		else

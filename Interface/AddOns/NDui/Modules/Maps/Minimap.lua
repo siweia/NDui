@@ -165,12 +165,11 @@ function module:ReskinRegions()
 			self:SetTexture(DB.flagTex)
 		end
 		local function reskinDifficulty(frame)
-			if not frame then return end -- isWW, renamed?
+			if not frame then return end
 			frame.Border:Hide()
 			replaceFlag(frame.Background)
 			hooksecurefunc(frame.Background, "SetAtlas", replaceFlag)
 		end
-		reskinDifficulty(instDifficulty.Instance)
 		reskinDifficulty(instDifficulty.Default)
 		reskinDifficulty(instDifficulty.Guild)
 		reskinDifficulty(instDifficulty.ChallengeMode)
