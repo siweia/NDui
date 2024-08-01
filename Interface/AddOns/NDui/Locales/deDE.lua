@@ -917,3 +917,4 @@ L["DepositTradeGoodsTip"] = "|nLeft click to deposit warband items, right click 
 L["HideInCombat"] = "Hide in combat" -- need translation
 L["HideInCombatTip"] = "|nSelect the way to hide GameTooltip in combat.|nGameTooltip only visible when you hold the modified key you selected." -- need translation
 L["HideDPSRole"] = "Hide DPS roleicon" -- need translation
+L["ShowRoleMode"] = "Show roleicons" -- need translation
