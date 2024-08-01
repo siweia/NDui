@@ -73,7 +73,7 @@ function M:TradeTabs_Update()
 		local spellID = tab.spellID
 		local itemID = tab.itemID
 
-		if C_Spell.IsCurrentSpell(spellID) then
+		if spellID and C_Spell.IsCurrentSpell(spellID) then
 			tab:SetChecked(true)
 			tab.cover:Show()
 		else
