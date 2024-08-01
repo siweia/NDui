@@ -191,7 +191,7 @@ tagPool["accountmoney"] = function()
 
 	if gold > 0 then str = str..BreakUpLargeNumbers(gold)..createAtlasCoin("gold").." " end
 	if silver > 0 then str = str..silver..createAtlasCoin("silver").." " end
-	if copper > 0 then str = str..copper..createAtlasCoin("copper").." " end
+	if copper >= 0 then str = str..copper..createAtlasCoin("copper").." " end
 
 	return str
 end
