@@ -227,8 +227,6 @@ G.DefaultSettings = {
 		PartyAltPower = true,
 		PartyWatcherSync = true,
 		RaidTextScale = 1,
-		FrequentHealth = false,
-		HealthFrequency = .2,
 		ShowRaidBuff = false,
 		RaidBuffSize = 12,
 		BuffClickThru = true,
@@ -979,10 +977,6 @@ local function updateRaidTextScale()
 	B:GetModule("UnitFrames"):UpdateRaidTextScale()
 end
 
-local function updateRaidHealthMethod()
-	B:GetModule("UnitFrames"):UpdateRaidHealthMethod()
-end
-
 local function toggleCastBarLatency()
 	B:GetModule("UnitFrames"):ToggleCastBarLatency()
 end
@@ -1245,10 +1239,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "TeamIndex", L["RaidFrame TeamIndex"].."*", nil, nil, updateTeamIndex},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
 		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
-		{1, "UFs", "FrequentHealth", HeaderTag..L["FrequentHealth"].."*", true, nil, updateRaidHealthMethod, L["FrequentHealthTip"]},
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", nil, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{1, "UFs", "HideDPSRole", NewTag..L["HideDPSRole"]},
-		{3, "UFs", "HealthFrequency", L["HealthFrequency"].."*", true, {.1, .5, .05}, updateRaidHealthMethod, L["HealthFrequencyTip"]},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},
