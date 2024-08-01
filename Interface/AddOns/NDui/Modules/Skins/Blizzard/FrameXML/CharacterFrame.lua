@@ -331,13 +331,27 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(TokenFramePopup.CurrencyTransferToggleButton)
 	B.ReskinCheck(TokenFramePopup.InactiveCheckbox)
 	B.ReskinCheck(TokenFramePopup.BackpackCheckbox)
+
 	B.ReskinArrow(TokenFrame.CurrencyTransferLogToggleButton, "right")
 	B.ReskinPortraitFrame(CurrencyTransferLog)
+	B.ReskinTrimScroll(CurrencyTransferLog.ScrollBar)
+
+	local function handleCurrencyIcon(button)
+		local icon = button.CurrencyIcon
+		if icon then
+			B.ReskinIcon(icon)
+		end
+	end
+	hooksecurefunc(CurrencyTransferLog.ScrollBox, "Update", function(self)
+		self:ForEachFrame(handleCurrencyIcon)
+	end)
 
 	B.ReskinPortraitFrame(CurrencyTransferMenu)
+	B.CreateBDFrame(CurrencyTransferMenu.SourceSelector, .25)
 	CurrencyTransferMenu.SourceSelector.SourceLabel:SetWidth(56)
 	B.ReskinDropDown(CurrencyTransferMenu.SourceSelector.Dropdown)
 	B.ReskinInput(CurrencyTransferMenu.AmountSelector.InputBox)
+	B.CreateBDFrame(CurrencyTransferMenu.AmountSelector, .25)
 	B.ReskinIcon(CurrencyTransferMenu.SourceBalancePreview.BalanceInfo.CurrencyIcon)
 	B.ReskinIcon(CurrencyTransferMenu.PlayerBalancePreview.BalanceInfo.CurrencyIcon)
 	B.Reskin(CurrencyTransferMenu.ConfirmButton)
