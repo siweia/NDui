@@ -381,8 +381,6 @@ local function Disable(self)
 	if(element) then
 		element:Hide()
 
-		element:SetScript('OnUpdate', nil)
-
 		self:UnregisterEvent('UNIT_HEALTH', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 		self:UnregisterEvent('UNIT_CONNECTION', ColorPath)
