@@ -518,7 +518,7 @@ end
 
 local function postUpdateRole(element, role)
 	if element:IsShown() then
-		if role == "DAMAGER" and C.db["UFs"]["HideDPSRole"] then
+		if role == "DAMAGER" and C.db["UFs"]["ShowRoleMode"] == 3 then
 			element:Hide()
 			return
 		end
@@ -605,15 +605,17 @@ function UF:CreateIcons(self)
 	phase:SetSize(24, 24)
 	self.PhaseIndicator = phase
 
-	local ri = self:CreateTexture(nil, "OVERLAY")
-	if mystyle == "raid" then
-		ri:SetPoint("TOPRIGHT", self, 5, 5)
-	else
-		ri:SetPoint("TOPRIGHT", self, 0, 8)
+	if C.db["UFs"]["ShowRoleMode"] ~= 2 then
+		local ri = self:CreateTexture(nil, "OVERLAY")
+		if mystyle == "raid" then
+			ri:SetPoint("TOPRIGHT", self, 5, 5)
+		else
+			ri:SetPoint("TOPRIGHT", self, 0, 8)
+		end
+		ri:SetSize(15, 15)
+		ri.PostUpdate = postUpdateRole
+		self.GroupRoleIndicator = ri
 	end
-	ri:SetSize(15, 15)
-	ri.PostUpdate = postUpdateRole
-	self.GroupRoleIndicator = ri
 
 	local li = self:CreateTexture(nil, "OVERLAY")
 	li:SetPoint("TOPLEFT", self, -1, 8)
