@@ -220,6 +220,7 @@ tinsert(C.defaultThemes, function()
 		QuestInfoDescriptionHeader,
 		QuestInfoObjectivesHeader,
 		QuestInfoRewardsFrame.Header,
+		QuestInfoAccountCompletedNotice,
 	}
 	for _, font in pairs(yellowish) do
 		SetTextColor_Yellow(font)
