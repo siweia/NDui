@@ -40,6 +40,7 @@ function UF:UpdatePlateCVars()
 	SetCVar("nameplateOverlapV", C.db["Nameplate"]["VerticalSpacing"])
 	SetCVar("nameplateShowOnlyNames", C.db["Nameplate"]["CVarOnlyNames"] and 1 or 0)
 	SetCVar("nameplateShowFriendlyNPCs", C.db["Nameplate"]["CVarShowNPCs"] and 1 or 0)
+	SetCVar("nameplateMaxDistance", C.db["Nameplate"]["PlateRange"])
 end
 
 function UF:UpdateClickableSize()
