@@ -605,6 +605,7 @@ C.themes["Blizzard_Collections"] = function()
 	end
 
 	-- Outfit Frame
+	B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
 	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
 
 	-- HPetBattleAny
