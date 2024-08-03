@@ -536,9 +536,9 @@ function UF:UpdateDungeonProgress(unit)
 			local total = cache[name]
 			if not total then
 				for criteriaIndex = 1, numCriteria do
-					local _, _, _, _, totalQuantity, _, _, _, _, _, _, _, isWeightedProgress = C_Scenario.GetCriteriaInfo(criteriaIndex)
-					if isWeightedProgress then
-						cache[name] = totalQuantity
+					local criteriaInfo = C_ScenarioInfo.GetCriteriaInfo(criteriaIndex)
+					if criteriaInfo and criteriaInfo.isWeightedProgress then
+						cache[name] = criteriaInfo.totalQuantity
 						total = cache[name]
 						break
 					end
