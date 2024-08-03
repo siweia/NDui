@@ -119,6 +119,8 @@ local BagSmartFilter = {
 		text = strlower(text)
 		if text == "boe" then
 			return item.bindOn == "equip"
+		elseif text == "aoe" then
+			return item.bindOn == "accountequip"
 		else
 			return IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) or IsItemMatched(item.name, text)
 		end
