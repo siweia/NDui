@@ -280,7 +280,7 @@ function module:CreateReagentButton(f)
 			StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
 		else
 			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-			ReagentBankFrame:Show()
+			BankFrame_ShowPanel("ReagentBankFrame") -- trigger context matching
 			BankFrame.selectedTab = 2
 			BankFrame.activeTabIndex = 2
 			f.reagent:Show()
@@ -305,7 +305,7 @@ function module:CreateAccountBankButton(f)
 			UIErrorsFrame:AddMessage(DB.InfoColor..ACCOUNT_BANK_LOCKED_PROMPT)
 		else
 			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-			AccountBankPanel:Show()
+			BankFrame_ShowPanel("AccountBankPanel") -- trigger context matching
 			BankFrame.selectedTab = 3
 			BankFrame.activeTabIndex = 3
 			f.reagent:Hide()
@@ -357,7 +357,7 @@ function module:CreateBankButton(f)
 	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Banker")
 	bu:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-		ReagentBankFrame:Hide()
+		BankFrame_ShowPanel("BankSlotsFrame") -- trigger context matching
 		BankFrame.selectedTab = 1
 		BankFrame.activeTabIndex = 1
 		f.reagent:Hide()
@@ -1016,12 +1016,9 @@ function module:OnLogin()
 	function Backpack:OnBankClosed()
 		BankFrame.selectedTab = 1
 		BankFrame.activeTabIndex = 1
-		BankFrame:Hide()
 		self:GetContainer("Bank"):Hide()
 		self:GetContainer("Reagent"):Hide()
 		self:GetContainer("AccountBank"):Hide()
-		ReagentBankFrame:Hide()
-		AccountBankPanel:Hide()
 	end
 
 	local MyButton = Backpack:GetItemButtonClass()
