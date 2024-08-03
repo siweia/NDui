@@ -301,17 +301,6 @@ function S:QuestTracker()
 	QuestFrameReset(QuestWatchFrame)
 	hooksecurefunc(QuestWatchFrame, "SetPoint", QuestFrameReset)
 
-	local timerMover = CreateFrame("Frame", "NDuiQuestTimerMover", UIParent)
-	timerMover:SetSize(150, 30)
-	B.Mover(timerMover, QUEST_TIMERS, "QuestTimer", {"TOPRIGHT", frame, "TOPLEFT", -10, 0})
-
-	hooksecurefunc(QuestTimerFrame, "SetPoint", function(self, _, parent)
-		if parent ~= timerMover then
-			self:ClearAllPoints()
-			self:SetPoint("TOP", timerMover)
-		end
-	end)
-
 	if not C.db["Skins"]["QuestTracker"] then return end
 
 	S:EnhancedQuestTracker()

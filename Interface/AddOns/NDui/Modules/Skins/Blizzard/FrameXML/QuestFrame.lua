@@ -193,9 +193,4 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end)
-
-	-- QuestTimerFrame
-
-	B.StripTextures(QuestTimerFrame)
-	B.SetBD(QuestTimerFrame)
 end)
