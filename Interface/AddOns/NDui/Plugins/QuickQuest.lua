@@ -203,6 +203,9 @@ local ignoreInstances = {
 	[1571] = true, -- 枯法者
 	[1626] = true, -- 群星庭院
 }
+
+local QUEST_STRING = "cFF0000FF.-"..TRANSMOG_SOURCE_2
+
 QuickQuest:Register("GOSSIP_SHOW", function()
 	local npcID = GetNPCID()
 	if C.IgnoreQuestNPC[npcID] then return end
@@ -252,7 +255,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 	local questGossipID
 	for i = 1, numOptions do
 		local option = gossipInfoTable[i]
-		if option.name and (strfind(option.name, "cFF0000FF") or option.flags == QuestLabelPrepend) then
+		if option.name and (strfind(option.name, QUEST_STRING) or option.flags == QuestLabelPrepend) then
 			numQuestGossips = numQuestGossips + 1
 			questGossipID = option.gossipOptionID
 		end
