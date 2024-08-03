@@ -156,6 +156,7 @@ function Bar:MicroMenu()
 	Bar:MicroMenu_Setup()
 
 	-- Default elements
+	B.HideObject(WorldMapMicroButton)
 	B.HideObject(MicroButtonPortrait)
 	B.HideObject(MainMenuBarDownload)
 	B.HideObject(HelpOpenWebTicketButton)
