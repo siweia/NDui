@@ -572,6 +572,7 @@ L["FilterQuest"] = "Фильтр квестовых предметов"
 L["FilterAnima"] = "Фильтр анима вещей"
 L["FilterRelic"] = "Фильтр реликвий Кортии"
 L["FilterStone"] = "Фильтр изначальные камни"
+L["FilterAOE"] = "Filter Warband BOE" -- need translation
 L["KorthiaRelic"] = "Реликвии Кортии"
 L["Max Rank"] = "Макс.ранг"
 L["SmoothAmount"] = "Частота плавности"

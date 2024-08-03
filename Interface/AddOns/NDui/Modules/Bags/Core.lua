@@ -944,17 +944,18 @@ function module:OnLogin()
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 6, "BagReagent", filters.onlyBagReagent)
-		AddNewContainer("Bag", 17, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 18, "Junk", filters.bagsJunk)
 		AddNewContainer("Bag", 9, "EquipSet", filters.bagEquipSet)
+		AddNewContainer("Bag", 10, "BagAOE", filters.bagAOE)
 		AddNewContainer("Bag", 7, "AzeriteItem", filters.bagAzeriteItem)
 		AddNewContainer("Bag", 8, "Equipment", filters.bagEquipment)
-		AddNewContainer("Bag", 10, "BagCollection", filters.bagCollection)
-		AddNewContainer("Bag", 15, "Consumable", filters.bagConsumable)
-		AddNewContainer("Bag", 11, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 16, "BagQuest", filters.bagQuest)
-		AddNewContainer("Bag", 12, "BagAnima", filters.bagAnima)
-		AddNewContainer("Bag", 13, "BagRelic", filters.bagRelic)
-		AddNewContainer("Bag", 14, "BagStone", filters.bagStone)
+		AddNewContainer("Bag", 11, "BagCollection", filters.bagCollection)
+		AddNewContainer("Bag", 16, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 12, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 17, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 13, "BagAnima", filters.bagAnima)
+		AddNewContainer("Bag", 14, "BagRelic", filters.bagRelic)
+		AddNewContainer("Bag", 15, "BagStone", filters.bagStone)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
@@ -965,14 +966,15 @@ function module:OnLogin()
 			AddNewContainer("Bank", i, "BankCustom"..i, filters["bankCustom"..i])
 		end
 		AddNewContainer("Bank", 8, "BankEquipSet", filters.bankEquipSet)
+		AddNewContainer("Bank", 9, "BankAOE", filters.bankAOE)
 		AddNewContainer("Bank", 6, "BankAzeriteItem", filters.bankAzeriteItem)
-		AddNewContainer("Bank", 9, "BankLegendary", filters.bankLegendary)
+		AddNewContainer("Bank", 10, "BankLegendary", filters.bankLegendary)
 		AddNewContainer("Bank", 7, "BankEquipment", filters.bankEquipment)
-		AddNewContainer("Bank", 10, "BankCollection", filters.bankCollection)
-		AddNewContainer("Bank", 13, "BankConsumable", filters.bankConsumable)
-		AddNewContainer("Bank", 11, "BankGoods", filters.bankGoods)
-		AddNewContainer("Bank", 14, "BankQuest", filters.bankQuest)
-		AddNewContainer("Bank", 12, "BankAnima", filters.bankAnima)
+		AddNewContainer("Bank", 11, "BankCollection", filters.bankCollection)
+		AddNewContainer("Bank", 14, "BankConsumable", filters.bankConsumable)
+		AddNewContainer("Bank", 12, "BankGoods", filters.bankGoods)
+		AddNewContainer("Bank", 15, "BankQuest", filters.bankQuest)
+		AddNewContainer("Bank", 13, "BankAnima", filters.bankAnima)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
@@ -1322,6 +1324,8 @@ function module:OnLogin()
 			label = L["ReagentBag"]
 		elseif name == "BagStone" then
 			label = C_Spell.GetSpellName(404861)
+		elseif strmatch(name, "AOE") then
+			label = ITEM_ACCOUNTBOUND_UNTIL_EQUIP
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)

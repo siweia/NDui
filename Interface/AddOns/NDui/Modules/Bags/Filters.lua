@@ -182,6 +182,12 @@ local function isPrimordialStone(item)
 	return item.id and primordialStones[item.id]
 end
 
+local function isWarboundUntilEquipped(item)
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterAOE"] then return end
+	return item.bindOn and item.bindOn == "accountequip"
+end
+
 local accountBankIDs = {
 	[Enum.BagIndex.AccountBankTab_1 or 13] = true,
 	[Enum.BagIndex.AccountBankTab_2 or 14] = true,
@@ -217,6 +223,8 @@ function module:GetFilters()
 	filters.onlyBagReagent = function(item) return isItemInBagReagent(item) and not isEmptySlot(item) end
 	filters.bagStone = function(item) return isItemInBag(item) and isPrimordialStone(item) end
 	filters.accountbank = function(item) return accountBankIDs[item.bagId] and not isEmptySlot(item) end
+	filters.bagAOE = function(item) return isItemInBag(item) and isWarboundUntilEquipped(item) end
+	filters.bankAOE = function(item) return isItemInBank(item) and isWarboundUntilEquipped(item) end
 
 	for i = 1, 5 do
 		filters["bagCustom"..i] = function(item) return (isItemInBag(item) or isItemInBagReagent(item)) and isItemCustom(item, i) end

@@ -572,6 +572,7 @@ L["FilterQuest"] = "Filtrer les objets de quête"
 L["FilterAnima"] = "Filtrer les objets d'anima"
 L["FilterRelic"] = "Filtrer les reliques Korthiennes"
 L["FilterStone"] = "Filtrer les pierres primordiales"
+L["FilterAOE"] = "Filter Warband BOE" -- need translation
 L["KorthiaRelic"] = "Reliques Korthiennes"
 L["Max Rank"] = "Rang max"
 L["SmoothAmount"] = "Fluidité de la fréquence"
