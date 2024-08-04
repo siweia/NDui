@@ -91,6 +91,7 @@ local isIgnoredZone = {
 }
 local isIgnoredIDs = { -- todo: add option for this
 	[5485] = true, -- 海象人工具盒
+	[6149] = true, -- 奥妮克希亚龙蛋
 }
 
 local function isUsefulAtlas(info)
@@ -121,7 +122,8 @@ function M:RareAlert_Update(id)
 				local x, y = position:GetXY()
 				nameString = format(M.RareString, mapID, x*10000, y*10000, info.name, x*100, y*100, "")
 			end
-			print(currrentTime.." -> "..tex..DB.InfoColor..(nameString or info.name or ""))
+			local debugString = DB.isDeveloper and info.vignetteID or ""
+			print(currrentTime.." -> "..tex..DB.InfoColor..(nameString or info.name or "")..debugString)
 		end
 
 		if not C.db["Misc"]["RareAlertInWild"] or M.RareInstType == "none" then
