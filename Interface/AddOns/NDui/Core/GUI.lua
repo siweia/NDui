@@ -301,6 +301,7 @@ G.DefaultSettings = {
 		WhisperSound = true,
 		BottomBox = false,
 		SysFont = false,
+		EditFont = 14,
 	},
 	Map = {
 		DisableMap = false,
@@ -1213,8 +1214,11 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Chat", "ChatWidth", L["LockChatWidth"].."*", nil, {200, 600, 1}, updateChatSize},
 		{3, "Chat", "ChatHeight", L["LockChatHeight"].."*", true, {100, 500, 1}, updateChatSize},
 		{},--blank
+		{4, "ACCOUNT", "TimestampFormat", L["TimestampFormat"].."*", nil, {DISABLE, "03:27 PM", "03:27:32 PM", "15:27", "15:27:32"}},
+		{4, "Chat", "ChatBGType", L["ChatBGType"].."*", true, {DISABLE, L["Default Dark"], L["Gradient"]}, toggleChatBackground},
 		{1, "Chat", "Oldname", L["Default Channel"]},
-		{1, "Chat", "Sticky", L["Chat Sticky"].."*", true, nil, updateChatSticky},
+		{1, "Chat", "Sticky", L["Chat Sticky"].."*", nil, nil, updateChatSticky},
+		{3, "Chat", "EditFont", L["EditFont"].."*", true, {10, 30, 1}, toggleEditBoxAnchor},
 		{1, "Chat", "Chatbar", L["ShowChatbar"]},
 		{1, "Chat", "WhisperColor", L["Differ WhisperColor"].."*", true},
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
@@ -1222,8 +1226,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "WhisperSound", L["WhisperSound"].."*", nil, nil, nil, L["WhisperSoundTip"]},
 		{1, "Chat", "BottomBox", L["BottomBox"].."*", true, nil, toggleEditBoxAnchor},
 		{1, "Chat", "SysFont", L["SysFont"], nil, nil, nil, L["SysFontTip"]},
-		{4, "ACCOUNT", "TimestampFormat", L["TimestampFormat"].."*", nil, {DISABLE, "03:27 PM", "03:27:32 PM", "15:27", "15:27:32"}},
-		{4, "Chat", "ChatBGType", L["ChatBGType"].."*", true, {DISABLE, L["Default Dark"], L["Gradient"]}, toggleChatBackground},
 		{},--blank
 		{1, "Chat", "EnableFilter", HeaderTag..L["Enable Chatfilter"]},
 		{1, "Chat", "BlockAddonAlert", L["Block Addon Alert"], true},

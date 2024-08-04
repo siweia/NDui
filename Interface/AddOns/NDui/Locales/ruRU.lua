@@ -822,3 +822,4 @@ L["AuraWatch MinCD"] = "Min Cooldown" -- need translation
 L["MinCDTip"] = "|nThe Spell cooldown only visible when its cooldown greater then the second value." -- need translation
 L["HideInCombat"] = "Hide in combat" -- need translation
 L["HideInCombatTip"] = "|nSelect the way to hide GameTooltip in combat.|nGameTooltip only visible when you hold the modified key you selected." -- need translation
+L["EditFont"] = "Editbox fontsize" -- need translation

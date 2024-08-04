@@ -82,15 +82,16 @@ local function UpdateEditBoxAnchor(eb)
 	end
 end
 
-function module:ToggleEditBoxAnchor()
-	for _, eb in pairs(chatEditboxes) do
-		UpdateEditBoxAnchor(eb)
-	end
+local function UpdateEditboxFont(editbox)
+	editbox:SetFont(DB.Font[1], C.db["Chat"]["EditFont"], "")
+	editbox.header:SetFont(DB.Font[1], C.db["Chat"]["EditFont"], "")
 end
 
-local function UpdateEditboxFont(editbox)
-	editbox:SetFont(DB.Font[1], 14, "")
-	editbox.header:SetFont(DB.Font[1], 14, "")
+function module:ToggleEditBoxAnchor()
+	for _, eb in pairs(chatEditboxes) do
+		UpdateEditboxFont(eb)
+		UpdateEditBoxAnchor(eb)
+	end
 end
 
 function module:SkinChat()
