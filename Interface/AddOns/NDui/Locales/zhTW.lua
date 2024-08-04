@@ -920,3 +920,4 @@ L["HideInCombatTip"] = "|n選擇戰鬥中隱藏滑鼠提示的方式。|n當切�
 L["HideDPSRole"] = "隱藏DPS職責"
 L["ShowRoleMode"] = "職責圖標顯示方式"
 L["PlateRange"] = "名條最大顯示距離"
+L["MoreFontSize"] = "更多字體大小"

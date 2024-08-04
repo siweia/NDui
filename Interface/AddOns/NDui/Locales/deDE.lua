@@ -920,3 +920,4 @@ L["HideInCombatTip"] = "|nSelect the way to hide GameTooltip in combat.|nGameToo
 L["HideDPSRole"] = "Hide DPS roleicon" -- need translation
 L["ShowRoleMode"] = "Show roleicons" -- need translation
 L["PlateRange"] = "Nameplate max range" -- need translation
+L["MoreFontSize"] = "More font size" -- need translation
