@@ -921,3 +921,4 @@ L["HideDPSRole"] = "Hide DPS roleicon" -- need translation
 L["ShowRoleMode"] = "Show roleicons" -- need translation
 L["PlateRange"] = "Nameplate max range" -- need translation
 L["MoreFontSize"] = "More font size" -- need translation
+L["EditFont"] = "Editbox fontsize" -- need translation
