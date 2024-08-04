@@ -436,7 +436,7 @@ function module:OnLogin()
 
 	-- Font size
 	for i = 1, 15 do
-		CHAT_FONT_HEIGHTS[i] = i + 9
+		CHAT_FONT_HEIGHTS[i] = i + 9 -- FIXME: taint in combat, SetPropagateKeyboardInput
 	end
 
 	-- Default
