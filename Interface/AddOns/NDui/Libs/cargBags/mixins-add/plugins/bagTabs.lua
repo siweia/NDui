@@ -11,6 +11,8 @@ local AccountBankPanel = AccountBankPanel
 local BANK_TAB1 = Enum.BagIndex.AccountBankTab_1 or 13
 local ACCOUNT_BANK_TYPE = Enum.BankType.Account or 2
 
+cargBags.selectedTabID = 1 -- default tabID
+
 function Implementation:GetBagTabClass()
 	return self:GetClass("BagTab", true, "BagTab")
 end
@@ -102,12 +104,6 @@ function BagTab:OnLeave()
 	GameTooltip:Hide()
 end
 
-local function selectTab(self, index)
-	for i = 1, #self.bar.buttons do
-		self.hidden = i ~= index
-	end
-end
-
 function BagTab:UpdateButton()
 	local container = self.bar.container
 	if(container and container.SetFilter) then
@@ -135,14 +131,17 @@ function BagTab:UpdateButton()
 end
 
 function BagTab:OnClick(btn)
-	local data = AccountBankPanel.purchasedBankTabData[self:GetID()]
+	local currentTabID = self:GetID()
+	cargBags.selectedTabID = currentTabID
+
+	local data = AccountBankPanel.purchasedBankTabData[currentTabID]
 	if not data then
 		StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, {bankType = ACCOUNT_BANK_TYPE})
 	else
 		if btn == "LeftButton" then
 			local buttons = self.bar.buttons
 			for i = 1, #buttons do
-				buttons[i].hidden = i ~= self:GetID()
+				buttons[i].hidden = i ~= currentTabID
 				buttons[i]:UpdateButton()
 			end
 		else -- right button

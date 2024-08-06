@@ -13,7 +13,6 @@ local GetContainerNumSlots = C_Container.GetContainerNumSlots
 local SortBags = C_Container.SortBags
 local SortBankBags = C_Container.SortBankBags
 local SortReagentBankBags = C_Container.SortReagentBankBags
-local SortAccountBankBags = C_Container.SortAccountBankBags
 local PickupContainerItem = C_Container.PickupContainerItem
 local SplitContainerItem = C_Container.SplitContainerItem
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
@@ -469,7 +468,7 @@ function module:CreateSortButton(name)
 		elseif name == "Reagent" then
 			SortReagentBankBags()
 		elseif name == "AccountBank" then
-			SortAccountBankBags()
+			StaticPopup_Show("BANK_CONFIRM_CLEANUP", nil, nil, { bankType = ACCOUNT_BANK_TYPE })
 		else
 			if C.db["Bags"]["BagSortMode"] == 1 then
 				SortBags()
@@ -529,11 +528,10 @@ function module:GetEmptySlot(name)
 			return 5, slotID
 		end
 	elseif name == "AccountBank" then
-		for bagID = 13, 17 do
-			local slotID = module:GetContainerEmptySlot(bagID)
-			if slotID then
-				return bagID, slotID
-			end
+		local bagID = cargBags.selectedTabID + 12
+		local slotID = module:GetContainerEmptySlot(bagID)
+		if slotID then
+			return bagID, slotID
 		end
 	end
 end
