@@ -1392,7 +1392,7 @@ function UF:CreateClassPower(self)
 			end
 			local chargeStar = bar.chargeParent:CreateTexture()
 			chargeStar:SetTexture(DB.starTex)
-			chargeStar:SetSize(14, 14)
+			chargeStar:SetSize(12, 12)
 			chargeStar:SetPoint("CENTER", bars[i])
 			chargeStar:Hide()
 			bars[i].chargeStar = chargeStar
