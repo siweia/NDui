@@ -4,7 +4,6 @@ local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
 local GetItemCooldown = GetItemCooldown
-local IsPassiveSpell = C_Spell and C_Spell.IsSpellPassive or IsPassiveSpell
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
 local IsPlayerSpell, UseItemByName = IsPlayerSpell, UseItemByName
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
@@ -48,7 +47,7 @@ function M:UpdateProfessions()
 		if numSpells > 0 then
 			for i = 1, numSpells do
 				local slotID = i + spelloffset
-				if not IsPassiveSpell(slotID) then
+				if not C_SpellBook.IsSpellBookItemPassive(slotID, BOOKTYPE_PROFESSION) then
 					local spellID = GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION).spellID
 					if i == 1 then
 						M:TradeTabs_Create(spellID)
