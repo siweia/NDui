@@ -127,8 +127,8 @@ local function UpdateColor(self, event, unit)
 		color = self.colors.tapped
 	elseif(element.colorThreat and not UnitPlayerControlled(unit) and UnitThreatSituation('player', unit)) then
 		color =  self.colors.threat[UnitThreatSituation('player', unit)]
-	elseif(element.colorClass and UnitIsPlayer(unit))
-		or (element.colorClassNPC and not UnitIsPlayer(unit))
+	elseif(element.colorClass and (UnitIsPlayer(unit) or UnitInPartyIsAI(unit)))
+		or (element.colorClassNPC and not (UnitIsPlayer(unit) or UnitInPartyIsAI(unit)))
 		or (element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
 		color = self.colors.class[class]
