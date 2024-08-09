@@ -103,7 +103,7 @@ oUF.Tags.Methods["color"] = function(unit)
 
 	if UnitIsTapDenied(unit) then
 		return B.HexRGB(oUF.colors.tapped)
-	elseif UnitIsPlayer(unit) then
+	elseif UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
 		return B.HexRGB(oUF.colors.class[class])
 	elseif reaction then
 		return B.HexRGB(oUF.colors.reaction[reaction])

@@ -131,7 +131,7 @@ function UF.HealthPostUpdate(element, unit, cur, max)
 	end
 	if useGradientClass then
 		local color
-		if UnitIsPlayer(unit) then
+		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
 			local _, class = UnitClass(unit)
 			color = self.colors.class[class]
 		elseif UnitReaction(unit, "player") then
