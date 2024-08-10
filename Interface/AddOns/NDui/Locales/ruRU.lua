@@ -922,3 +922,5 @@ L["ShowRoleMode"] = "Show roleicons" -- need translation
 L["PlateRange"] = "Nameplate max range" -- need translation
 L["MoreFontSize"] = "More font size" -- need translation
 L["EditFont"] = "Editbox fontsize" -- need translation
+L["IgnoredRares"] = "Rare blacklist" -- need translation
+L["IgnoredRaresTip"] = "|nEnter the rare id that you don't need to be notified, use space in between for multiple ids." -- need translation
