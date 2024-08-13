@@ -26,11 +26,12 @@ local function QuestInfo_GetQuestID()
 end
 
 local defaultColor = GetMaterialTextColors("Default")
+local completedColor = QUEST_OBJECTIVE_COMPLETED_FONT_COLOR:GetRGB()
 
 local function ReplaceTextColor(object, r)
 	if r == 0 or r == defaultColor[1] then
 		object:SetTextColor(1, 1, 1)
-	elseif r == .2 then
+	elseif r == completedColor then
 		object:SetTextColor(.7, .7, .7)
 	end
 end
