@@ -85,8 +85,6 @@ function Bar:StanceBarOnEvent()
 end
 
 function Bar:CreateStancebar()
-	if not C.db["Actionbar"]["ShowStance"] then return end
-
 	local buttonList = {}
 	local frame = CreateFrame("Frame", "NDui_ActionBarStance", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["StanceBar"], "StanceBar", {"BOTTOMLEFT", _G.NDui_ActionBar2, "TOPLEFT", 0, margin})
@@ -113,5 +111,5 @@ function Bar:CreateStancebar()
 	B:RegisterEvent("UPDATE_SHAPESHIFT_COOLDOWN", Bar.StanceBarOnEvent)
 
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
+	RegisterStateDriver(frame, "visibility", not C.db["Actionbar"]["ShowStance"] and "hide" or frame.frameVisibility)
 end

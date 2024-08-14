@@ -34,6 +34,7 @@ local bindTypeToString = {
 	[ITEM_ACCOUNTBOUND] = "account",
 	[ITEM_BIND_TO_ACCOUNT] = "account",
 	[ITEM_BNETACCOUNTBOUND] = "account",
+	[ITEM_ACCOUNTBOUND_UNTIL_EQUIP] = "accountequip",
 }
 
 cargBags.itemKeys["bindOn"] = function(i)

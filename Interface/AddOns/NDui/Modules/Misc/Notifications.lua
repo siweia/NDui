@@ -89,14 +89,24 @@ local isIgnoredZone = {
 	[1943] = true,	-- 联盟激流堡
 	[2111] = true,	-- 黑海岸前线
 }
-local isIgnoredIDs = { -- todo: add option for this
+local defaultList = {
 	[5485] = true, -- 海象人工具盒
+	[6149] = true, -- 奥妮克希亚龙蛋
 }
+local isIgnoredIDs = {}
 
 local function isUsefulAtlas(info)
 	local atlas = info.atlasName
 	if atlas then
 		return strfind(atlas, "[Vv]ignette") or (atlas == "nazjatar-nagaevent")
+	end
+end
+
+function M:RareAlert_UpdateIgnored()
+	B.SplitList(isIgnoredIDs, NDuiADB["IgnoredRares"], true)
+
+	for id in pairs(defaultList) do
+		isIgnoredIDs[id] = true
 	end
 end
 
@@ -119,7 +129,7 @@ function M:RareAlert_Update(id)
 			local position = mapID and C_VignetteInfo_GetVignettePosition(info.vignetteGUID, mapID)
 			if position then
 				local x, y = position:GetXY()
-				nameString = format(M.RareString, mapID, x*10000, y*10000, info.name, x*100, y*100, "")
+				nameString = format(M.RareString, mapID, x*10000, y*10000, info.name, x*100, y*100, "ID:"..info.vignetteID)
 			end
 			print(currrentTime.." -> "..tex..DB.InfoColor..(nameString or info.name or ""))
 		end
@@ -145,9 +155,10 @@ function M:RareAlert_CheckInstance()
 end
 
 function M:RareAlert()
-	M.RareString = "|Hworldmap:%d+:%d+:%d+|h[%s (%.1f, %.1f)%s]|h|r"
+	M.RareString = "|Hworldmap:%d+:%d+:%d+|h[%s (%.1f, %.1f) %s]|h|r"
 
 	if C.db["Misc"]["RareAlerter"] then
+		M:RareAlert_UpdateIgnored()
 		M:RareAlert_CheckInstance()
 		B:RegisterEvent("UPDATE_INSTANCE_INFO", M.RareAlert_CheckInstance)
 	else

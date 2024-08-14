@@ -90,15 +90,16 @@ local function UpdateEditBoxAnchor(eb)
 	end
 end
 
-function module:ToggleEditBoxAnchor()
-	for _, eb in pairs(chatEditboxes) do
-		UpdateEditBoxAnchor(eb)
-	end
+local function UpdateEditboxFont(editbox)
+	editbox:SetFont(DB.Font[1], C.db["Chat"]["EditFont"], "")
+	editbox.header:SetFont(DB.Font[1], C.db["Chat"]["EditFont"], "")
 end
 
-local function UpdateEditboxFont(editbox)
-	editbox:SetFont(DB.Font[1], 14, "")
-	editbox.header:SetFont(DB.Font[1], 14, "")
+function module:ToggleEditBoxAnchor()
+	for _, eb in pairs(chatEditboxes) do
+		UpdateEditboxFont(eb)
+		UpdateEditBoxAnchor(eb)
+	end
 end
 
 function module:SkinChat()
@@ -434,11 +435,6 @@ function module:OnLogin()
 	hooksecurefunc("FloatingChatFrame_OnEvent", module.UpdateTabEventColors)
 	hooksecurefunc("ChatFrame_MessageEventHandler", module.PlayWhisperSound)
 
-	-- Font size
-	for i = 1, 15 do
-		CHAT_FONT_HEIGHTS[i] = i + 9
-	end
-
 	-- Default
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
 	SetCVar("chatStyle", "classic")
@@ -462,5 +458,25 @@ function module:OnLogin()
 		B:RegisterEvent("UI_SCALE_CHANGED", module.UpdateChatSize)
 		hooksecurefunc(ChatFrame1, "SetPoint", updateChatAnchor)
 		FCF_SavePositionAndDimensions(ChatFrame1)
+	end
+
+	-- Extra elements in chat tab menu
+	do
+		-- Font size
+		local function IsSelected(height)
+			local _, fontHeight = FCF_GetCurrentChatFrame():GetFont()
+			return height == floor(fontHeight + .5)
+		end
+
+		local function SetSelected(height)
+			FCF_SetChatWindowFontSize(nil, FCF_GetChatFrameByID(CURRENT_CHAT_FRAME_ID), height)
+		end
+
+		Menu.ModifyMenu("MENU_FCF_TAB", function(self, rootDescription, data)
+			local fontSizeSubmenu = rootDescription:CreateButton(DB.InfoColor..L["MoreFontSize"])
+			for i = 10, 30 do
+				fontSizeSubmenu:CreateRadio((format(FONT_SIZE_TEMPLATE, i)), IsSelected, SetSelected, i)
+			end
+		end)
 	end
 end

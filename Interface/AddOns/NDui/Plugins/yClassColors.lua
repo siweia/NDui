@@ -142,7 +142,16 @@ hooksecurefunc(FriendsListFrame.ScrollBox, "Update", function(self)
 end)
 
 -- Whoframe
-local columnTable = {}
+local columnTable = {
+	["zone"] = "",
+	["guild"] = "",
+	["race"] = "",
+}
+
+local currentType = "zone"
+hooksecurefunc(C_FriendList, "SortWho", function(sortType)
+	currentType = sortType
+end)
 
 hooksecurefunc(WhoFrame.ScrollBox, "Update", function(self)
 	local playerZone = GetRealZoneText()
@@ -163,14 +172,13 @@ hooksecurefunc(WhoFrame.ScrollBox, "Update", function(self)
 			if guild == playerGuild then guild = "|cff00ff00"..guild end
 			if race == playerRace then race = "|cff00ff00"..race end
 
-			wipe(columnTable)
-			tinsert(columnTable, zone)
-			tinsert(columnTable, guild)
-			tinsert(columnTable, race)
+			columnTable.zone = zone or ""
+			columnTable.guild = guild or ""
+			columnTable.race = race or ""
 
 			nameText:SetTextColor(classColor(class, true))
 			levelText:SetText(diffColor(level)..level)
-			variableText:SetText(columnTable[UIDropDownMenu_GetSelectedID(WhoFrameDropDown)])
+			variableText:SetText(columnTable[currentType])
 		end
 	end
 end)

@@ -62,8 +62,13 @@ function M:ExpBar_Update()
 		local factionID = factionData.factionID
 		if factionID and C_Reputation_IsMajorFaction(factionID) then
 			local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
-			value = majorFactionData.renownReputationEarned or 0
-			barMin, barMax = 0, majorFactionData.renownLevelThreshold
+			local isMaxRenown = C_MajorFactions.HasMaximumRenown(factionID)
+			if isMaxRenown then
+				barMin, barMax, value = 0, 1, 1
+			else
+				value = majorFactionData.renownReputationEarned or 0
+				barMin, barMax = 0, majorFactionData.renownLevelThreshold
+			end
 		else
 			local repInfo = C_GossipInfo_GetFriendshipReputation(factionID)
 			local friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold
@@ -146,12 +151,18 @@ function M:ExpBar_UpdateTooltip()
 		if factionID and C_Reputation_IsMajorFaction(factionID) then
 			local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
 			name = majorFactionData.name
-			value = majorFactionData.renownReputationEarned or 0
-			barMin, barMax = 0, majorFactionData.renownLevelThreshold
 			standingtext = RENOWN_LEVEL_LABEL..majorFactionData.renownLevel
+
+			local isMaxRenown = C_MajorFactions.HasMaximumRenown(factionID)
+			if isMaxRenown then
+				barMin, barMax, value = 0, 1, 1
+			else
+				value = majorFactionData.renownReputationEarned or 0
+				barMin, barMax = 0, majorFactionData.renownLevelThreshold
+			end
 		else
 			local repInfo = C_GossipInfo_GetFriendshipReputation(factionID)
-			local friendID, friendRep, friendThreshold, nextFriendThreshold, friendTextLevel = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold, repInfo.text
+			local friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold
 			local repRankInfo = C_GossipInfo_GetFriendshipReputationRanks(factionID)
 			local currentRank, maxRank = repRankInfo.currentLevel, repRankInfo.maxLevel
 			if friendID and friendID ~= 0 then
@@ -164,7 +175,7 @@ function M:ExpBar_UpdateTooltip()
 					barMax = barMin + 1e3
 					value = barMax - 1
 				end
-				standingtext = friendTextLevel
+				standingtext = repInfo.reaction
 			else
 				if standing == MAX_REPUTATION_REACTION then
 					barMax = barMin + 1e3

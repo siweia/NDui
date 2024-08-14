@@ -137,6 +137,7 @@ function A:ChantLumos(self)
 			end
 		end
 
-		UpdateBuff(self.lumos[5], 266779, 266779, true, false, true)
+		local spellID = IsPlayerSpell(360952) and 360952 or 266779
+		UpdateBuff(self.lumos[5], spellID, spellID, true, false, true)
 	end
 end

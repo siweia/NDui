@@ -20,6 +20,19 @@ function S:PGFSkin()
 
 	local names = {"Difficulty", "MPRating", "Members", "Tanks", "Heals", "DPS", "Partyfit", "BLFit", "BRFit", "Defeated", "MatchingId", "PvPRating"}
 
+	local function handleDropdown(drop)
+		B.StripTextures(drop)
+
+		local bg = B.CreateBDFrame(drop, 0, true)
+		bg:SetPoint("TOPLEFT", 16, -4)
+		bg:SetPoint("BOTTOMRIGHT", -18, 8)
+
+		local down = drop.Button
+		down:ClearAllPoints()
+		down:SetPoint("RIGHT", bg, -2, 0)
+		B.ReskinArrow(down, "down")
+	end
+
 	local function handleGroup(panel)
 		for _, name in pairs(names) do
 			local frame = panel.Group[name]
@@ -36,7 +49,7 @@ function S:PGFSkin()
 					B.ReskinInput(frame.Max)
 				end
 				if frame.DropDown then
-					B.ReskinDropDown(frame.DropDown)
+					handleDropdown(frame.DropDown)
 				end
 			end
 		end

@@ -268,11 +268,11 @@ info.onShiftDown = function()
 end
 
 local communityFeastTime = {
+	["CN"] = 1679747400, -- 20:30
 	["TW"] = 1679747400, -- 20:30
 	["KR"] = 1679747400, -- 20:30
 	["EU"] = 1679749200, -- 21:00
 	["US"] = 1679751000, -- 21:30
-	["CN"] = 1679751000, -- 21:30
 }
 
 info.onEnter = function(self)

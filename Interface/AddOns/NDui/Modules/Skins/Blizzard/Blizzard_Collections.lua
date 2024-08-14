@@ -481,6 +481,7 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
 	B.ReskinInput(WardrobeCollectionFrameSearchBox)
 	B.ReskinDropDown(WardrobeCollectionFrame.ClassDropdown)
+	B.ReskinDropDown(ItemsCollectionFrame.WeaponDropdown)
 
 	hooksecurefunc(WardrobeCollectionFrame, "SetTab", function(self, tabID)
 		for index = 1, 2 do
@@ -605,6 +606,7 @@ C.themes["Blizzard_Collections"] = function()
 	end
 
 	-- Outfit Frame
+	B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
 	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
 
 	-- HPetBattleAny

@@ -119,6 +119,8 @@ local list = {
 		{AuraID = 388045, UnitID = "player", Flash = true},	-- 警戒
 		{AuraID = 378770, UnitID = "player", Flash = true},	-- 夺命打击
 		{AuraID = 378747, UnitID = "player", Flash = true},	-- 凶暴兽群
+		{AuraID = 459759, UnitID = "player", Flash = true, Stack = 4},	-- 黑鸦
+		{AuraID = 459689, UnitID = "player", Flash = true, Stack = 5},	-- 毒蛇钉刺
 
 		{AuraID = 394366, UnitID = "player"},	-- 密迹寻踪，射击2T
 		{AuraID = 394384, UnitID = "player", Flash = true},	-- 集中瞄准，射击4T

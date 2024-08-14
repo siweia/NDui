@@ -69,25 +69,19 @@ end
 local function ReskinWA()
 	if not C.db["Skins"]["WeakAuras"] then return end
 
-	if WeakAuras.regionPrototype then
+	if not WeakAuras or not WeakAuras.Private then
+		return
+	end
+
+	if WeakAuras.Private.regionPrototype then
 		local function OnPrototypeCreate(region)
 			Skin_WeakAuras(region, region.regionType)
 		end
 		local function OnPrototypeModifyFinish(_, region)
 			Skin_WeakAuras(region, region.regionType)
 		end
-		hooksecurefunc(WeakAuras.regionPrototype, "create", OnPrototypeCreate)
-		hooksecurefunc(WeakAuras.regionPrototype, "modifyFinish", OnPrototypeModifyFinish)
-	elseif WeakAuras.SetTextureOrAtlas then
-		hooksecurefunc(WeakAuras, "SetTextureOrAtlas", function(icon)
-			local parent = icon:GetParent()
-			if parent then
-				local region = parent.regionType and parent or parent:GetParent()
-				if region.regionType then
-					Skin_WeakAuras(region, region.regionType)
-				end
-			end
-		end)
+		hooksecurefunc(WeakAuras.Private.regionPrototype, "create", OnPrototypeCreate)
+		hooksecurefunc(WeakAuras.Private.regionPrototype, "modifyFinish", OnPrototypeModifyFinish)
 	end
 end
 

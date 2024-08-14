@@ -13,7 +13,6 @@ local GetContainerNumSlots = C_Container.GetContainerNumSlots
 local SortBags = C_Container.SortBags
 local SortBankBags = C_Container.SortBankBags
 local SortReagentBankBags = C_Container.SortReagentBankBags
-local SortAccountBankBags = C_Container.SortAccountBankBags
 local PickupContainerItem = C_Container.PickupContainerItem
 local SplitContainerItem = C_Container.SplitContainerItem
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
@@ -119,6 +118,8 @@ local BagSmartFilter = {
 		text = strlower(text)
 		if text == "boe" then
 			return item.bindOn == "equip"
+		elseif text == "aoe" then
+			return item.bindOn == "accountequip"
 		else
 			return IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) or IsItemMatched(item.name, text)
 		end
@@ -278,7 +279,7 @@ function module:CreateReagentButton(f)
 			StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
 		else
 			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-			ReagentBankFrame:Show()
+			BankFrame_ShowPanel("ReagentBankFrame") -- trigger context matching
 			BankFrame.selectedTab = 2
 			BankFrame.activeTabIndex = 2
 			f.reagent:Show()
@@ -303,7 +304,7 @@ function module:CreateAccountBankButton(f)
 			UIErrorsFrame:AddMessage(DB.InfoColor..ACCOUNT_BANK_LOCKED_PROMPT)
 		else
 			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-			AccountBankPanel:Show()
+			BankFrame_ShowPanel("AccountBankPanel") -- trigger context matching
 			BankFrame.selectedTab = 3
 			BankFrame.activeTabIndex = 3
 			f.reagent:Hide()
@@ -355,7 +356,7 @@ function module:CreateBankButton(f)
 	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Banker")
 	bu:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-		ReagentBankFrame:Hide()
+		BankFrame_ShowPanel("BankSlotsFrame") -- trigger context matching
 		BankFrame.selectedTab = 1
 		BankFrame.activeTabIndex = 1
 		f.reagent:Hide()
@@ -467,7 +468,7 @@ function module:CreateSortButton(name)
 		elseif name == "Reagent" then
 			SortReagentBankBags()
 		elseif name == "AccountBank" then
-			SortAccountBankBags()
+			StaticPopup_Show("BANK_CONFIRM_CLEANUP", nil, nil, { bankType = ACCOUNT_BANK_TYPE })
 		else
 			if C.db["Bags"]["BagSortMode"] == 1 then
 				SortBags()
@@ -527,11 +528,10 @@ function module:GetEmptySlot(name)
 			return 5, slotID
 		end
 	elseif name == "AccountBank" then
-		for bagID = 13, 17 do
-			local slotID = module:GetContainerEmptySlot(bagID)
-			if slotID then
-				return bagID, slotID
-			end
+		local bagID = cargBags.selectedTabID + 12
+		local slotID = module:GetContainerEmptySlot(bagID)
+		if slotID then
+			return bagID, slotID
 		end
 	end
 end
@@ -942,17 +942,18 @@ function module:OnLogin()
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 6, "BagReagent", filters.onlyBagReagent)
-		AddNewContainer("Bag", 17, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 18, "Junk", filters.bagsJunk)
 		AddNewContainer("Bag", 9, "EquipSet", filters.bagEquipSet)
+		AddNewContainer("Bag", 10, "BagAOE", filters.bagAOE)
 		AddNewContainer("Bag", 7, "AzeriteItem", filters.bagAzeriteItem)
 		AddNewContainer("Bag", 8, "Equipment", filters.bagEquipment)
-		AddNewContainer("Bag", 10, "BagCollection", filters.bagCollection)
-		AddNewContainer("Bag", 15, "Consumable", filters.bagConsumable)
-		AddNewContainer("Bag", 11, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 16, "BagQuest", filters.bagQuest)
-		AddNewContainer("Bag", 12, "BagAnima", filters.bagAnima)
-		AddNewContainer("Bag", 13, "BagRelic", filters.bagRelic)
-		AddNewContainer("Bag", 14, "BagStone", filters.bagStone)
+		AddNewContainer("Bag", 11, "BagCollection", filters.bagCollection)
+		AddNewContainer("Bag", 16, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 12, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 17, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 13, "BagAnima", filters.bagAnima)
+		AddNewContainer("Bag", 14, "BagRelic", filters.bagRelic)
+		AddNewContainer("Bag", 15, "BagStone", filters.bagStone)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
@@ -963,14 +964,15 @@ function module:OnLogin()
 			AddNewContainer("Bank", i, "BankCustom"..i, filters["bankCustom"..i])
 		end
 		AddNewContainer("Bank", 8, "BankEquipSet", filters.bankEquipSet)
+		AddNewContainer("Bank", 9, "BankAOE", filters.bankAOE)
 		AddNewContainer("Bank", 6, "BankAzeriteItem", filters.bankAzeriteItem)
-		AddNewContainer("Bank", 9, "BankLegendary", filters.bankLegendary)
+		AddNewContainer("Bank", 10, "BankLegendary", filters.bankLegendary)
 		AddNewContainer("Bank", 7, "BankEquipment", filters.bankEquipment)
-		AddNewContainer("Bank", 10, "BankCollection", filters.bankCollection)
-		AddNewContainer("Bank", 13, "BankConsumable", filters.bankConsumable)
-		AddNewContainer("Bank", 11, "BankGoods", filters.bankGoods)
-		AddNewContainer("Bank", 14, "BankQuest", filters.bankQuest)
-		AddNewContainer("Bank", 12, "BankAnima", filters.bankAnima)
+		AddNewContainer("Bank", 11, "BankCollection", filters.bankCollection)
+		AddNewContainer("Bank", 14, "BankConsumable", filters.bankConsumable)
+		AddNewContainer("Bank", 12, "BankGoods", filters.bankGoods)
+		AddNewContainer("Bank", 15, "BankQuest", filters.bankQuest)
+		AddNewContainer("Bank", 13, "BankAnima", filters.bankAnima)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
@@ -1012,12 +1014,9 @@ function module:OnLogin()
 	function Backpack:OnBankClosed()
 		BankFrame.selectedTab = 1
 		BankFrame.activeTabIndex = 1
-		BankFrame:Hide()
 		self:GetContainer("Bank"):Hide()
 		self:GetContainer("Reagent"):Hide()
 		self:GetContainer("AccountBank"):Hide()
-		ReagentBankFrame:Hide()
-		AccountBankPanel:Hide()
 	end
 
 	local MyButton = Backpack:GetItemButtonClass()
@@ -1320,6 +1319,8 @@ function module:OnLogin()
 			label = L["ReagentBag"]
 		elseif name == "BagStone" then
 			label = C_Spell.GetSpellName(404861)
+		elseif strmatch(name, "AOE") then
+			label = ITEM_ACCOUNTBOUND_UNTIL_EQUIP
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)

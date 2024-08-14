@@ -276,6 +276,12 @@ DB.ReminderBuffs = {
 			weaponIndex = 2,
 			spec = 2,
 		},
+		{	spells = {	-- 天怒
+				[462854] = true,
+			},
+			depend = 462854,
+			instance = true,
+		},
 	},
 	ROGUE = {
 		{	spells = {	-- 伤害类毒药

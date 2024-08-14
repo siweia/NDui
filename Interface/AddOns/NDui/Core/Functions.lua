@@ -1079,7 +1079,10 @@ do
 
 	-- Handle close button
 	function B:Texture_OnEnter()
-		if self:IsEnabled() then
+		if DB.isDeveloper and not self.IsEnabled then
+			print(self:GetDebugName())
+		end
+		if self.IsEnabled and self:IsEnabled() then
 			if self.bg then
 				self.bg:SetBackdropColor(cr, cg, cb, .25)
 			else
