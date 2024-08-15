@@ -417,15 +417,20 @@ tinsert(C.defaultThemes, function()
 	-- Event toast
 	hooksecurefunc(EventToastManagerFrame, "DisplayToast", function(self)
 		local toast = self.currentDisplayingToast
-		local border = toast and toast.IconBorder
-		if border then
-			local icon = toast.Icon
-			if not toast.bg then
-				toast.bg = B.ReskinIcon(icon)
+		if not toast then return end
+
+		local icon = toast.Icon
+		local border = toast.IconBorder
+		if icon and not toast.bg then
+			toast.bg = B.ReskinIcon(icon)
+			if border then
 				border:SetTexture("")
 				B.ReskinIconBorder(border, true)
 			end
-			toast.bg:SetShown(icon:IsShown())
+		end
+
+		if toast.bg then
+			toast.bg:SetShown(icon and icon:IsShown())
 		end
 	end)
 end)
