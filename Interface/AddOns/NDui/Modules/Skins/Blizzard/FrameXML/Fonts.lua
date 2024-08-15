@@ -145,6 +145,13 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(PriceFontGray)
 	ReskinFont(PriceFontGreen)
 	ReskinFont(PriceFontRed)
+	-- new font family in 11.0.2
+	for i = 12, 22 do
+		local font = _G["ObjectiveTrackerFont"..i]
+		if font then
+			ReskinFont(font)
+		end
+	end
 
 	-- Refont RaidFrame Health
 	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
