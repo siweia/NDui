@@ -1135,7 +1135,7 @@ local function AddNewTag(parent, anchor)
 end
 
 G.TabList = {
-	IsNew..L["Actionbar"],
+	L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
 	IsNew..L["RaidFrame"],
@@ -1145,7 +1145,7 @@ G.TabList = {
 	IsNew..L["Raid Tools"],
 	IsNew..L["ChatFrame"],
 	L["Maps"],
-	L["Skins"],
+	IsNew..L["Skins"],
 	IsNew..L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
@@ -1156,7 +1156,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
 		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
 		{},--blank
-		{1, "Actionbar", "MicroMenu", IsNew..L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
+		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
 		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},
@@ -1170,7 +1170,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"].."*", true, nil, updateHotkeys},
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
-		{4, "ACCOUNT", "GlowMode", IsNew..L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
+		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
