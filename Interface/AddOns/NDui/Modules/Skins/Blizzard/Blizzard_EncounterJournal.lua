@@ -218,9 +218,6 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- Various controls
 	B.ReskinPortraitFrame(EncounterJournal)
-	if not DB.isNewPatch then
-		B.Reskin(EncounterJournalEncounterFrameInfoResetButton)
-	end
 	B.ReskinInput(EncounterJournalSearchBox)
 	B.ReskinTrimScroll(EncounterJournal.encounter.instance.LoreScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.BossesScrollBar)

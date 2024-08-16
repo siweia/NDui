@@ -134,10 +134,9 @@ tagPool["item"] = function(self, item)
 end
 
 tagPool["currency"] = function(self, id)
-	local _, count, icon = GetBackpackCurrencyInfo(id)
-
-	if(count) then
-		return count .. createIcon(icon, self.iconValues)
+	local currencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo(id)
+	if currencyInfo then
+		return currencyInfo.quantity..createIcon(currencyInfo.iconFileID, self.iconValues)
 	end
 end
 tagEvents["currency"] = { "CURRENCY_DISPLAY_UPDATE" }

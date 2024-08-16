@@ -33,11 +33,6 @@ end
 local function ReskinActivityFrame(frame, isObject)
 	if frame.Border then
 		if isObject then
-			if not DB.isNewPatch then
-				frame.Border:SetAlpha(0)
-				frame.SelectedTexture:SetAlpha(0)
-				frame.LockIcon:SetVertexColor(r, g, b)
-			end
 			hooksecurefunc(frame, "SetSelectionState", updateSelection)
 			hooksecurefunc(frame.ItemFrame, "SetDisplayedItem", reskinRewardIcon)
 
@@ -50,10 +45,6 @@ local function ReskinActivityFrame(frame, isObject)
 			frame.Border:SetSize(25, 137)
 			frame.Border:SetPoint("LEFT", frame, "RIGHT", 3, 0)
 		end
-	end
-
-	if not DB.isNewPatch and frame.Background then
-		frame.bg = B.CreateBDFrame(frame.Background, 1)
 	end
 end
 
@@ -79,19 +70,8 @@ C.themes["Blizzard_WeeklyRewards"] = function()
 	B.StripTextures(WeeklyRewardsFrame.SelectRewardButton)
 	B.Reskin(WeeklyRewardsFrame.SelectRewardButton)
 
-	if DB.isNewPatch then
-		WeeklyRewardsFrame.BorderShadow:SetInside(bg)
-		WeeklyRewardsFrame.BorderContainer:SetAlpha(0)
-	else
-		B.StripTextures(WeeklyRewardsFrame)
-		WeeklyRewardsFrame.NineSlice:SetAlpha(0)
-		WeeklyRewardsFrame.BackgroundTile:SetAlpha(0)
-
-		local headerFrame = WeeklyRewardsFrame.HeaderFrame
-		B.StripTextures(headerFrame)
-		headerFrame:SetPoint("TOP", 1, -42)
-		headerFrame.Text:SetFontObject(SystemFont_Huge1)
-	end
+	WeeklyRewardsFrame.BorderShadow:SetInside(bg)
+	WeeklyRewardsFrame.BorderContainer:SetAlpha(0)
 
 	ReskinActivityFrame(WeeklyRewardsFrame.RaidFrame)
 	ReskinActivityFrame(WeeklyRewardsFrame.MythicFrame)
@@ -123,4 +103,10 @@ C.themes["Blizzard_WeeklyRewards"] = function()
 	local rewardText = WeeklyRewardsFrame.ConcessionFrame.RewardsFrame.Text
 	replaceIconString(rewardText)
 	hooksecurefunc(rewardText, "SetText", replaceIconString)
+
+	local dialog = WeeklyRewardExpirationWarningDialog
+	if dialog then
+		B.StripTextures(dialog)
+		B.SetBD(dialog)
+	end
 end

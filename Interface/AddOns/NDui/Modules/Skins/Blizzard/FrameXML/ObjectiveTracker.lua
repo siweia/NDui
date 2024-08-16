@@ -1,4 +1,4 @@
-	local _, ns = ...
+local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local r, g, b = DB.r, DB.g, DB.b
@@ -9,14 +9,12 @@ local function reskinQuestIcon(button)
 	if not button.SetNormalTexture then return end
 
 	if not button.styled then
-		button:SetSize(24, 24)
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		local icon = button.icon or button.Icon
 		if icon then
 			button.bg = B.ReskinIcon(icon, true)
-			icon:SetInside()
 		end
 
 		button.styled = true
@@ -29,16 +27,6 @@ end
 
 local function reskinQuestIcons(_, block)
 	reskinQuestIcon(block.ItemButton)
-	reskinQuestIcon(block.itemButton)
-	reskinQuestIcon(block.groupFinderButton)
-
-	local check = block.currentLine and block.currentLine.Check
-	if check and not check.styled then
-		check:SetAtlas("checkmark-minimal")
-		check:SetDesaturated(true)
-		check:SetVertexColor(0, 1, 0)
-		check.styled = true
-	end
 end
 
 local function reskinHeader(header)

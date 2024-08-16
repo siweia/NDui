@@ -1037,7 +1037,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local ANIMA_TEXTURE = 3528288
 		local ANIMA_SPELLID = {[347555] = 3, [345706] = 5, [336327] = 35, [336456] = 250}
 		local function GetAnimaMultiplier(itemID)
-			local _, spellID = GetItemSpell(itemID)
+			if not itemID then return end
+			local _, spellID = C_Item.GetItemSpell(itemID)
 			return ANIMA_SPELLID[spellID]
 		end
 		local function SetAnimaActualCount(self, text)

@@ -123,9 +123,7 @@ cargBags:RegisterScaffold("Default", function(self)
 	self.glowCoords = { 14/64, 50/64, 14/64, 50/64 } --! @property glowCoords <table> Indexed table of texCoords for the glow texture
 	self.bgTex = nil --! @property bgTex <string> Texture used as a background if no item is in the slot
 
-	self.CreateFrame = ItemButton_CreateFrame
 	self.Scaffold = ItemButton_Scaffold
-
 	self.ButtonUpdate = ItemButton_Update
 	self.ButtonUpdateCooldown = ItemButton_UpdateCooldown
 	self.ButtonUpdateLock = ItemButton_UpdateLock

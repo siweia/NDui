@@ -32,7 +32,7 @@ end
 
 --	Returns the type of the parent bag
 cargBags.itemKeys["bagType"] = function(i)
-	return select(2, GetContainerNumFreeSlots(i.bagId))
+	return select(2, C_Container.GetContainerNumFreeSlots(i.bagId))
 end
 
 -- Returns the item string (12345:0:0:0)
@@ -41,8 +41,7 @@ cargBags.itemKeys["string"] = function(i)
 end
 
 cargBags.itemKeys["stats"] = function(i)
-	if(not i.link or not GetItemStats) then return end
-	local stats = GetItemStats(i.link)
-	i.stats = stats
-	return stats
+	if not i.link then return end
+	i.stats = C_Item.GetItemStats(i.link)
+	return i.stats
 end
