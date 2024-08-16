@@ -208,7 +208,6 @@ G.DefaultSettings = {
 		RaidBuffIndicator = true,
 		PartyFrame = true,
 		PartyDirec = 2,
-		PartyWatcher = true,
 		PWOnRight = false,
 		PartyWidth = 100,
 		PartyHeight = 32,
@@ -226,7 +225,6 @@ G.DefaultSettings = {
 		BuffIndicatorScale = 1,
 		UFTextScale = 1,
 		PartyAltPower = true,
-		PartyWatcherSync = true,
 		RaidTextScale = 1,
 		ShowRaidBuff = false,
 		RaidBuffSize = 12,
@@ -591,7 +589,6 @@ G.AccountSettings = {
 	ProfileIndex = {},
 	ProfileNames = {},
 	Help = {},
-	PartySpells = {},
 	CornerSpells = {},
 	CustomTex = "",
 	MajorSpells = {},
@@ -773,10 +770,6 @@ end
 
 local function setupSpellsIndicator()
 	G:SetupSpellsIndicator(guiPage[4])
-end
-
-local function setupPartyWatcher()
-	G:SetupPartyWatcher(guiPage[4])
 end
 
 local function setupNameplateFilter()
@@ -1219,12 +1212,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[4] = {
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
 		{1, "UFs", "SimpleMode", L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
-		{},--blank
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
-		{1, "UFs", "PartyWatcher", HeaderTag..L["UFs PartyWatcher"], nil, setupPartyWatcher, nil, L["PartyWatcherTip"]},
-		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"].."*", nil, nil, updatePartyElements},
-		{1, "UFs", "PartyWatcherSync", L["PartyWatcherSync"], true, nil, nil, L["PartyWatcherSyncTip"]},
 		{},--blank
 		{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},
 		{1, "UFs", "ShowRaidBuff", L["ShowRaidBuff"].."*", true, setupBuffsIndicator, updateRaidAurasOptions, L["ShowRaidBuffTip"]},

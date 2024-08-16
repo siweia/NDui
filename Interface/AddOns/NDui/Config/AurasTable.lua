@@ -99,21 +99,6 @@ function module:RegisterDebuff(tierID, instID, _, spellID, level)
 	RaidDebuffs[instName][spellID] = level
 end
 
--- Party watcher spells
-function module:CheckPartySpells()
-	for spellID, duration in pairs(C.PartySpells) do
-		local name = GetSpellName(spellID)
-		if name then
-			local modDuration = NDuiADB["PartySpells"][spellID]
-			if modDuration and modDuration == duration then
-				NDuiADB["PartySpells"][spellID] = nil
-			end
-		else
-			if DB.isDeveloper then print("Invalid partyspell ID: "..spellID) end
-		end
-	end
-end
-
 function module:CheckCornerSpells()
 	if not NDuiADB["CornerSpells"][DB.MyClass] then NDuiADB["CornerSpells"][DB.MyClass] = {} end
 	local data = C.CornerBuffs[DB.MyClass]
@@ -210,7 +195,6 @@ function module:OnLogin()
 	C.AuraWatchList = AuraWatchList
 	C.RaidDebuffs = RaidDebuffs
 
-	module:CheckPartySpells()
 	module:CheckCornerSpells()
 	module:CheckMajorSpells()
 	module:CheckNameplateFilters()

@@ -180,7 +180,6 @@ end
 local function CreatePartyStyle(self)
 	self.raidType = "party"
 	CreateRaidStyle(self)
-	UF:InterruptIndicator(self)
 	UF:CreatePartyAltPower(self)
 end
 
@@ -439,9 +438,6 @@ function UF:OnLogin()
 		-- Group Styles
 		local partyMover
 		if C.db["UFs"]["PartyFrame"] then
-			UF:SyncWithZenTracker()
-			UF:UpdatePartyWatcherSpells()
-
 			local party
 			oUF:RegisterStyle("Party", CreatePartyStyle)
 			oUF:SetActiveStyle("Party")
