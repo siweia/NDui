@@ -7,6 +7,31 @@ C.themes["Blizzard_AzeriteUI"] = function()
 	AzeriteEmpoweredItemUI.ClipFrame.BackgroundFrame.Bg:Hide()
 end
 
+local function updateEssenceButton(button)
+	if not button.bg then
+		local bg = B.CreateBDFrame(button, .25)
+		bg:SetPoint("TOPLEFT", 1, 0)
+		bg:SetPoint("BOTTOMRIGHT", 0, 2)
+
+		B.ReskinIcon(button.Icon)
+		button.PendingGlow:SetTexture("")
+		local hl = button:GetHighlightTexture()
+		hl:SetColorTexture(r, g, b, .25)
+		hl:SetInside(bg)
+
+		button.bg = bg
+	end
+	button.Background:SetTexture("")
+
+	if button:IsShown() then
+		if button.PendingGlow:IsShown() then
+			button.bg:SetBackdropBorderColor(1, .8, 0)
+		else
+			button.bg:SetBackdropBorderColor(0, 0, 0)
+		end
+	end
+end
+
 C.themes["Blizzard_AzeriteEssenceUI"] = function()
 	local r, g, b = DB.r, DB.g, DB.b
 
@@ -21,31 +46,8 @@ C.themes["Blizzard_AzeriteEssenceUI"] = function()
 		end
 	end
 
-	hooksecurefunc(AzeriteEssenceUI.EssenceList, "Refresh", function(self)
-		for _, button in ipairs(self.buttons) do
-			if not button.bg then
-				local bg = B.CreateBDFrame(button, .25)
-				bg:SetPoint("TOPLEFT", 1, 0)
-				bg:SetPoint("BOTTOMRIGHT", 0, 2)
-
-				B.ReskinIcon(button.Icon)
-				button.PendingGlow:SetTexture("")
-				local hl = button:GetHighlightTexture()
-				hl:SetColorTexture(r, g, b, .25)
-				hl:SetInside(bg)
-
-				button.bg = bg
-			end
-			button.Background:SetTexture("")
-
-			if button:IsShown() then
-				if button.PendingGlow:IsShown() then
-					button.bg:SetBackdropBorderColor(1, .8, 0)
-				else
-					button.bg:SetBackdropBorderColor(0, 0, 0)
-				end
-			end
-		end
+	hooksecurefunc(AzeriteEssenceUI.EssenceList.ScrollBox, "Update", function(self)
+		self:ForEachFrame(updateEssenceButton)
 	end)
 end
 
