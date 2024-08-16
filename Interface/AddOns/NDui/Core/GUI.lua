@@ -208,7 +208,6 @@ G.DefaultSettings = {
 		RaidBuffIndicator = true,
 		PartyFrame = true,
 		PartyDirec = 2,
-		PWOnRight = false,
 		PartyWidth = 100,
 		PartyHeight = 32,
 		PartyPowerHeight = 2,
