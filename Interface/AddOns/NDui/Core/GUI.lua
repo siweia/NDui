@@ -478,6 +478,7 @@ G.DefaultSettings = {
 		BgTex = true,
 		GreyBD = false,
 		FontScale = 1,
+		QuestTracker = true,
 	},
 	Tooltip = {
 		HideInCombat = 1,
@@ -1421,6 +1422,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[11] = {
 		{1, "Skins", "BlizzardSkins", HeaderTag..L["BlizzardSkins"], nil, nil, nil, L["BlizzardSkinsTips"]},
 		{1, "Skins", "AlertFrames", L["ReskinAlertFrames"], true},
+		{1, "Skins", "QuestTracker", IsNew..L["QuestTracker"]},
 		{1, "Skins", "Loot", L["Loot"], true},
 		{1, "Skins", "PetBattle", L["PetBattle Skin"]},
 		{1, "Skins", "FlatMode", L["FlatMode"], true},
