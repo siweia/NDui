@@ -470,7 +470,6 @@ G.DefaultSettings = {
 		ToggleDirection = 1,
 		BlizzardSkins = true,
 		SkinAlpha = .5,
-		DefaultBags = true,
 		FlatMode = false,
 		AlertFrames = true,
 		FontOutline = true,
@@ -1422,7 +1421,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[11] = {
 		{1, "Skins", "BlizzardSkins", HeaderTag..L["BlizzardSkins"], nil, nil, nil, L["BlizzardSkinsTips"]},
 		{1, "Skins", "AlertFrames", L["ReskinAlertFrames"], true},
-		{1, "Skins", "DefaultBags", L["DefaultBags"], nil, nil, nil, L["DefaultBagsTips"]},
 		{1, "Skins", "Loot", L["Loot"], true},
 		{1, "Skins", "PetBattle", L["PetBattle Skin"]},
 		{1, "Skins", "FlatMode", L["FlatMode"], true},

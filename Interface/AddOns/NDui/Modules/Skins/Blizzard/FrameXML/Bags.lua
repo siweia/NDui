@@ -138,7 +138,6 @@ tinsert(C.defaultThemes, function()
 	end
 
 	if C.db["Bags"]["Enable"] then return end
-	if not C.db["Skins"]["DefaultBags"] then return end
 
 	for i = 1, 13 do
 		local frameName = "ContainerFrame"..i
