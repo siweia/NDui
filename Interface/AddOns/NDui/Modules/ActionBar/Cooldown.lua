@@ -172,7 +172,7 @@ end
 
 function module:CooldownUpdate()
 	local button = self:GetParent()
-	local start, duration, modRate = GetActionCooldown(button.action)
+	local start, duration, _, modRate = GetActionCooldown(button.action)
 
 	if shouldUpdateTimer(self, start) then
 		module.StartTimer(self, start, duration, modRate)
