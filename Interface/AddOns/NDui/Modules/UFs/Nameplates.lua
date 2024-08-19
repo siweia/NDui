@@ -569,7 +569,7 @@ local NPClassifies = {
 }
 
 function UF:AddCreatureIcon(self)
-	local icon = self:CreateTexture(nil, "ARTWORK")
+	local icon = self.Health:CreateTexture(nil, "ARTWORK")
 	icon:SetTexture(DB.starTex)
 	icon:SetPoint("RIGHT", self.nameText, "LEFT", 10, 0)
 	icon:SetSize(18, 18)
