@@ -6,7 +6,7 @@ local TT = B:GetModule("Tooltip")
 local select, max, strfind, format, strsplit = select, math.max, string.find, string.format, string.split
 local GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown = GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown
 local UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi = UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi
-local GetInventoryItemTexture, GetInventoryItemLink, GetItemGem, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetItemGem, GetAverageItemLevel
+local GetInventoryItemTexture, GetInventoryItemLink, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetAverageItemLevel
 local HEIRLOOMS = _G.HEIRLOOMS
 
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
@@ -159,7 +159,7 @@ function TT:GetUnitItemLevel(unit)
 								local relics = {select(4, strsplit(":", itemLink))}
 								for i = 1, 3 do
 									local relicID = relics[i] ~= "" and relics[i]
-									local relicLink = select(2, GetItemGem(itemLink, i))
+									local relicLink = select(2, C_Item.GetItemGem(itemLink, i))
 									if relicID and not relicLink then
 										delay = true
 										break
