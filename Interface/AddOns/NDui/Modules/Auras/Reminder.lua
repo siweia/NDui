@@ -4,7 +4,7 @@ local A = B:GetModule("Auras")
 
 local pairs, tinsert, next = pairs, table.insert, next
 local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
-local GetSpecialization, GetItemCooldown = GetSpecialization, GetItemCooldown
+local GetSpecialization = GetSpecialization
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell = IsInInstance, IsPlayerSpell
 local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
@@ -31,7 +31,7 @@ function A:Reminder_Update(cfg)
 	if itemID then
 		if inGroup and GetNumGroupMembers() < 2 then isGrouped = false end
 		if equip and not IsEquippedItem(itemID) then isEquipped = false end
-		if C_Item.GetItemCount(itemID) == 0 or (not isEquipped) or (not isGrouped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
+		if C_Item.GetItemCount(itemID) == 0 or (not isEquipped) or (not isGrouped) or C_Item.GetItemCooldown(itemID) > 0 then -- check item cooldown
 			frame:Hide()
 			return
 		end
