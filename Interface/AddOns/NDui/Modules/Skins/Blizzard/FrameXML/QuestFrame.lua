@@ -97,6 +97,10 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(QuestModelScene.ModelTextFrame)
 	bg:SetOutside(nil, nil, nil, QuestModelScene.ModelTextFrame)
 
+	if QuestNPCModelTextScrollFrame then
+		B.ReskinTrimScroll(QuestNPCModelTextScrollFrame.ScrollBar)
+	end
+
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, _, x, y)
 		x = x + 6
 		QuestModelScene:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
