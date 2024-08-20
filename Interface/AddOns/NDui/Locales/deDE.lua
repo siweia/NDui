@@ -914,3 +914,4 @@ L["EditFont"] = "Editbox fontsize" -- need translation
 L["IgnoredRares"] = "Rare blacklist" -- need translation
 L["IgnoredRaresTip"] = "|nEnter the rare id that you don't need to be notified, use space in between for multiple ids." -- need translation
 L["QuestTracker"] = "Skin for QuestTracker" -- need translation
+L["PurchaseTabTip"] = "You need to disable addon and use default bankframe to purchase extra tabs." -- need translation
