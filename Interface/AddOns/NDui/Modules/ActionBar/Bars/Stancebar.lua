@@ -36,7 +36,7 @@ function Bar:UpdateStanceBar()
 	local rows = ceil(num/perRow)
 	frame:SetWidth(column*size + (column-1)*margin + 2*padding)
 	frame:SetHeight(size*rows + (rows-1)*margin + 2*padding)
-	frame.mover:SetSize(size, size)
+	frame.mover:SetSize(size+2*padding, size+2*padding)
 end
 
 function Bar:UpdateStance()
