@@ -15,6 +15,7 @@ local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
 TT.TierSets = {
+	-- FIXME: removed these in release
 	-- WARRIOR
 	[217220] = true, [217219] = true, [217218] = true, [217217] = true, [217216] = true,
 	-- PALADIN
@@ -41,6 +42,33 @@ TT.TierSets = {
 	[217230] = true, [217229] = true, [217228] = true, [217227] = true, [217226] = true,
 	-- EVOKER
 	[217180] = true, [217179] = true, [217178] = true, [217177] = true, [217176] = true,
+
+	-- HUNTER
+	[212023] = true, [212021] = true, [212020] = true, [212019] = true, [212018] = true,
+	-- WARRIOR
+	[211987] = true, [211985] = true, [211984] = true, [211983] = true, [211982] = true,
+	-- PALADIN
+	[211996] = true, [211994] = true, [211993] = true, [211992] = true, [211991] = true,
+	-- ROGUE
+	[212041] = true, [212039] = true, [212038] = true, [212037] = true, [212036] = true,
+	-- PRIEST
+	[212084] = true, [212083] = true, [212082] = true, [212086] = true, [212081] = true,
+	-- DK
+	[212005] = true, [212003] = true, [212002] = true, [212001] = true, [212000] = true,
+	-- SHAMAN
+	[212014] = true, [212012] = true, [212011] = true, [212010] = true, [212009] = true,
+	-- MAGE
+	[212095] = true, [212093] = true, [212092] = true, [212091] = true, [212090] = true,
+	-- WARLOCK
+	[212075] = true, [212074] = true, [212073] = true, [212077] = true, [212072] = true,
+	-- MONK
+	[212050] = true, [212048] = true, [212047] = true, [212046] = true, [212045] = true,
+	-- DRUID
+	[212059] = true, [212057] = true, [212056] = true, [212055] = true, [212054] = true,
+	-- DH
+	[212068] = true, [212066] = true, [212065] = true, [212064] = true, [212063] = true,
+	-- EVOKER
+	[212032] = true, [212030] = true, [212029] = true, [212028] = true, [212027] = true,
 }
 
 local formatSets = {
