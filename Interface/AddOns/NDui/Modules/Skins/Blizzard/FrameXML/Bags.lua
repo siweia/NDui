@@ -187,6 +187,7 @@ tinsert(C.defaultThemes, function()
 	BankSlotsFrame:DisableDrawLayer("BORDER")
 	BankFrameMoneyFrameBorder:Hide()
 	BankSlotsFrame.NineSlice:SetAlpha(0)
+	BankSlotsFrame.EdgeShadows:Hide()
 
 	-- "item slots" and "bag slots" text
 	select(9, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
@@ -221,6 +222,7 @@ tinsert(C.defaultThemes, function()
 	ReagentBankFrame:DisableDrawLayer("BORDER")
 	ReagentBankFrame:DisableDrawLayer("ARTWORK")
 	ReagentBankFrame.NineSlice:SetAlpha(0)
+	ReagentBankFrame.EdgeShadows:Hide()
 
 	B.Reskin(ReagentBankFrame.DespositButton)
 	B.Reskin(ReagentBankFrameUnlockInfoPurchaseButton)
