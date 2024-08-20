@@ -70,7 +70,7 @@ function cargBags:GetImplementation(name)
 	return self.classes.Implementation:Get(name)
 end
 
-local function toggleBag(forceopen)	cargBags.blizzard:Toggle(forceopen)	end
+local function toggleBag(forceopen)	cargBags.blizzard:Toggle(true)	end
 local function toggleNoForce() cargBags.blizzard:Toggle() end
 local function closeBag() cargBags.blizzard:Hide() end
 
