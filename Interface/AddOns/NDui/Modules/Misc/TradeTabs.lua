@@ -3,7 +3,6 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
-local GetItemCooldown = GetItemCooldown
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
 local IsPlayerSpell, UseItemByName = IsPlayerSpell, UseItemByName
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
@@ -82,7 +81,7 @@ function M:TradeTabs_Update()
 
 		local start, duration
 		if itemID then
-			start, duration = GetItemCooldown(itemID)
+			start, duration = C_Item.GetItemCooldown(itemID)
 		else
 			local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
 			start = cooldownInfo and cooldownInfo.startTime

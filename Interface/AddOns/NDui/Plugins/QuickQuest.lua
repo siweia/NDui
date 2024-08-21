@@ -8,7 +8,7 @@ local B, C, L, DB = unpack(ns)
 local next, ipairs, select = next, ipairs, select
 local IsAltKeyDown = IsAltKeyDown
 local UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink = UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink
-local GetTrackingInfo, GetInstanceInfo, GetQuestID = GetTrackingInfo, GetInstanceInfo, GetQuestID
+local GetInstanceInfo, GetQuestID = GetInstanceInfo, GetQuestID
 local GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest = GetNumActiveQuests, GetActiveTitle, GetActiveQuestID, SelectActiveQuest
 local IsQuestCompletable, GetNumQuestItems, GetQuestItemLink, QuestIsFromAreaTrigger = IsQuestCompletable, GetNumQuestItems, GetQuestItemLink, QuestIsFromAreaTrigger
 local QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest, AcknowledgeAutoAcceptQuest = QuestGetAutoAccept, AcceptQuest, CloseQuest, CompleteQuest, AcknowledgeAutoAcceptQuest
@@ -26,9 +26,6 @@ local C_GossipInfo_GetAvailableQuests = C_GossipInfo.GetAvailableQuests
 local C_GossipInfo_GetNumActiveQuests = C_GossipInfo.GetNumActiveQuests
 local C_GossipInfo_SelectAvailableQuest = C_GossipInfo.SelectAvailableQuest
 local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
-local GetTrackingInfo = C_Minimap.GetTrackingInfo
-local GetNumTrackingTypes = C_Minimap.GetNumTrackingTypes
-local MINIMAP_TRACKING_TRIVIAL_QUESTS = MINIMAP_TRACKING_TRIVIAL_QUESTS
 local QuestLabelPrepend = Enum.GossipOptionRecFlags.QuestLabelPrepend
 
 local choiceQueue
@@ -73,13 +70,8 @@ local function GetNPCID()
 	return B.GetNPCID(UnitGUID("npc"))
 end
 
-local function IsTrackingHidden()
-	for index = 1, GetNumTrackingTypes() do
-		local name, _, active = GetTrackingInfo(index)
-		if name == MINIMAP_TRACKING_TRIVIAL_QUESTS then
-			return active
-		end
-	end
+local function IsAccountCompleted(questID)
+	return C_Minimap.IsFilteredOut(Enum.MinimapTrackingFilter.AccountCompletedQuests) and C_QuestLog.IsQuestFlaggedCompletedOnAccount(questID)
 end
 
 local ignoreQuestNPC = {
@@ -135,8 +127,8 @@ QuickQuest:Register("QUEST_GREETING", function()
 	local available = GetNumAvailableQuests()
 	if available > 0 then
 		for index = 1, available do
-			local isTrivial = GetAvailableQuestInfo(index)
-			if not isTrivial or IsTrackingHidden() then
+			local isTrivial, _, _, _, questID = GetAvailableQuestInfo(index)
+			if not IsAccountCompleted(questID) and (not isTrivial or C_Minimap.IsTrackingHiddenQuests()) then
 				SelectAvailableQuest(index)
 			end
 		end
@@ -225,7 +217,8 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 	if available > 0 then
 		for index, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
 			local trivial = questInfo.isTrivial
-			if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
+			local questID = questInfo.questID
+			if not IsAccountCompleted(questID) and (not trivial or C_Minimap.IsTrackingHiddenQuests() or (trivial and npcID == 64337)) then
 				C_GossipInfo_SelectAvailableQuest(questInfo.questID)
 			end
 		end
@@ -283,7 +276,7 @@ QuickQuest:Register("QUEST_DETAIL", function()
 		AcceptQuest()
 	elseif QuestGetAutoAccept() then
 		AcknowledgeAutoAcceptQuest()
-	elseif not C_QuestLog_IsQuestTrivial(GetQuestID()) or IsTrackingHidden() then
+	elseif not C_QuestLog_IsQuestTrivial(GetQuestID()) or C_Minimap.IsTrackingHiddenQuests() then
 		if not C.IgnoreQuestNPC[GetNPCID()] then
 			AcceptQuest()
 		end

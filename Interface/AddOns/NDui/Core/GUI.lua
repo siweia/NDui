@@ -208,8 +208,6 @@ G.DefaultSettings = {
 		RaidBuffIndicator = true,
 		PartyFrame = true,
 		PartyDirec = 2,
-		PartyWatcher = true,
-		PWOnRight = false,
 		PartyWidth = 100,
 		PartyHeight = 32,
 		PartyPowerHeight = 2,
@@ -226,7 +224,6 @@ G.DefaultSettings = {
 		BuffIndicatorScale = 1,
 		UFTextScale = 1,
 		PartyAltPower = true,
-		PartyWatcherSync = true,
 		RaidTextScale = 1,
 		ShowRaidBuff = false,
 		RaidBuffSize = 12,
@@ -470,7 +467,6 @@ G.DefaultSettings = {
 		ToggleDirection = 1,
 		BlizzardSkins = true,
 		SkinAlpha = .5,
-		DefaultBags = true,
 		FlatMode = false,
 		AlertFrames = true,
 		FontOutline = true,
@@ -479,6 +475,7 @@ G.DefaultSettings = {
 		BgTex = true,
 		GreyBD = false,
 		FontScale = 1,
+		QuestTracker = true,
 	},
 	Tooltip = {
 		HideInCombat = 1,
@@ -591,7 +588,6 @@ G.AccountSettings = {
 	ProfileIndex = {},
 	ProfileNames = {},
 	Help = {},
-	PartySpells = {},
 	CornerSpells = {},
 	CustomTex = "",
 	MajorSpells = {},
@@ -773,10 +769,6 @@ end
 
 local function setupSpellsIndicator()
 	G:SetupSpellsIndicator(guiPage[4])
-end
-
-local function setupPartyWatcher()
-	G:SetupPartyWatcher(guiPage[4])
 end
 
 local function setupNameplateFilter()
@@ -1135,7 +1127,7 @@ local function AddNewTag(parent, anchor)
 end
 
 G.TabList = {
-	IsNew..L["Actionbar"],
+	L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
 	IsNew..L["RaidFrame"],
@@ -1145,7 +1137,7 @@ G.TabList = {
 	IsNew..L["Raid Tools"],
 	IsNew..L["ChatFrame"],
 	L["Maps"],
-	L["Skins"],
+	IsNew..L["Skins"],
 	IsNew..L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
@@ -1156,7 +1148,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[1] = {
 		{1, "Actionbar", "Enable", HeaderTag..L["Enable Actionbar"], nil, setupActionBar},
 		{},--blank
-		{1, "Actionbar", "MicroMenu", IsNew..L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
+		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
 		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},
@@ -1170,7 +1162,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"].."*", true, nil, updateHotkeys},
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
-		{4, "ACCOUNT", "GlowMode", IsNew..L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
+		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
@@ -1219,12 +1211,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[4] = {
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
 		{1, "UFs", "SimpleMode", L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
-		{},--blank
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
-		{1, "UFs", "PartyWatcher", HeaderTag..L["UFs PartyWatcher"], nil, setupPartyWatcher, nil, L["PartyWatcherTip"]},
-		{1, "UFs", "PWOnRight", L["PartyWatcherOnRight"].."*", nil, nil, updatePartyElements},
-		{1, "UFs", "PartyWatcherSync", L["PartyWatcherSync"], true, nil, nil, L["PartyWatcherSyncTip"]},
 		{},--blank
 		{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},
 		{1, "UFs", "ShowRaidBuff", L["ShowRaidBuff"].."*", true, setupBuffsIndicator, updateRaidAurasOptions, L["ShowRaidBuffTip"]},
@@ -1422,7 +1410,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[11] = {
 		{1, "Skins", "BlizzardSkins", HeaderTag..L["BlizzardSkins"], nil, nil, nil, L["BlizzardSkinsTips"]},
 		{1, "Skins", "AlertFrames", L["ReskinAlertFrames"], true},
-		{1, "Skins", "DefaultBags", L["DefaultBags"], nil, nil, nil, L["DefaultBagsTips"]},
+		{1, "Skins", "QuestTracker", IsNew..L["QuestTracker"]},
 		{1, "Skins", "Loot", L["Loot"], true},
 		{1, "Skins", "PetBattle", L["PetBattle Skin"]},
 		{1, "Skins", "FlatMode", L["FlatMode"], true},

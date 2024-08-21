@@ -476,14 +476,6 @@ function G:ExportGUIData()
 					end
 				end
 			end
-		elseif KEY == "PartySpells" then
-			text = text..";ACCOUNT:"..KEY
-			for spellID, duration in pairs(VALUE) do
-				local name = C_Spell.GetSpellName(spellID)
-				if name then
-					text = text..":"..spellID..":"..duration
-				end
-			end
 		elseif KEY == "ContactList" then
 			text = text..";ACCOUNT:"..KEY
 			for name, color in pairs(VALUE) do
@@ -656,16 +648,6 @@ function G:ImportGUIData()
 							NDuiADB[value][class][spellID] = {anchor, {r, g, b}, filter}
 						end
 					end
-				end
-			elseif value == "PartySpells" then
-				local options = {strsplit(":", option)}
-				local index = 3
-				local spellID = options[index]
-				while spellID do
-					local duration = options[index+1]
-					NDuiADB[value][tonumber(spellID)] = tonumber(duration) or 0
-					index = index + 2
-					spellID = options[index]
 				end
 			elseif value == "ContactList" then
 				local names = {select(3, strsplit(":", option))}

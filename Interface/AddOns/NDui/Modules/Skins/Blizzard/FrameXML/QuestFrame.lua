@@ -11,7 +11,8 @@ local function UpdateProgressItemQuality(self)
 	if objectType == "item" then
 		quality = select(4, GetQuestItemInfo(buttonType, index))
 	elseif objectType == "currency" then
-		quality = select(4, GetQuestCurrencyInfo(buttonType, index))
+		local info = C_QuestOffer.GetQuestRequiredCurrencyInfo(index)
+		quality = info and info.quality
 	end
 
 	local color = DB.QualityColors[quality or 1]
@@ -96,6 +97,10 @@ tinsert(C.defaultThemes, function()
 	local bg = B.SetBD(QuestModelScene)
 	B.StripTextures(QuestModelScene.ModelTextFrame)
 	bg:SetOutside(nil, nil, nil, QuestModelScene.ModelTextFrame)
+
+	if QuestNPCModelTextScrollFrame then
+		B.ReskinTrimScroll(QuestNPCModelTextScrollFrame.ScrollBar)
+	end
 
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, _, x, y)
 		x = x + 6

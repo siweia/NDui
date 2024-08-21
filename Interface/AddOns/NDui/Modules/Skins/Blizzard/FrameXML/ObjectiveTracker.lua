@@ -144,6 +144,7 @@ local function ReskinMawBuffsContainer(container)
 end
 
 tinsert(C.defaultThemes, function()
+	if not C.db["Skins"]["QuestTracker"] then return end
 	if C_AddOns.IsAddOnLoaded("!KalielsTracker") then return end
 
 	-- Reskin Headers
