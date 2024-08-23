@@ -218,6 +218,7 @@ function module:RecycleBin()
 		["HandyNotes.-Pin"] = true,
 		["Guidelime"] = true,
 		["QuestieFrame"] = true,
+		["TTMinimapButton"] = true,
 	}
 	B.SplitList(ignoredButtons, NDuiADB["IgnoredButtons"])
 
@@ -288,6 +289,10 @@ function module:RecycleBin()
 					child:SetScript("OnMouseUp", nil)
 				elseif name == "BagSync_MinimapButton" then
 					child:HookScript("OnMouseUp", clickFunc)
+				elseif name == "WIM3MinimapButton" then
+					child.SetParent = B.Dummy
+					child:SetFrameStrata("DIALOG")
+					child.SetFrameStrata = B.Dummy
 				end
 
 				child.styled = true
