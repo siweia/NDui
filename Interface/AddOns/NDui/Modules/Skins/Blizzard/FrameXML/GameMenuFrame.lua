@@ -11,7 +11,7 @@ tinsert(C.defaultThemes, function()
 	GameMenuFrame.Border:Hide()
 	GameMenuFrame.Header.Text:SetFontObject(Game16Font)
 	local line = GameMenuFrame.Header:CreateTexture(nil, "ARTWORK")
-	line:SetSize(190, C.mult)
+	line:SetSize(156, C.mult)
 	line:SetPoint("BOTTOM", 0, 5)
 	line:SetColorTexture(1, 1, 1, .25)
 
@@ -46,7 +46,7 @@ tinsert(C.defaultThemes, function()
 				local hl = button:GetHighlightTexture()
 				hl:SetColorTexture(cr, cg, cb, .25)
 				hl:SetInside(button.bg)
-				button.bg:SetInside(nil, 3, 3)
+				button.bg:SetInside()
 
 				button.styled = true
 			end
