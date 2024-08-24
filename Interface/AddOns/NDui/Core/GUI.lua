@@ -1838,7 +1838,7 @@ end
 
 function G:OnLogin()
 	local gui = CreateFrame("Button", "GameMenuFrameNDui", GameMenuFrame, "GameMenuButtonTemplate, BackdropTemplate")
-	gui:SetText(L["NDui Console"])
+	gui:SetText("|T"..DB.chatLogo..":12:24|t |cff0080ffNDui|r")
 	gui:SetPoint("TOP", GameMenuButtonAddons, "BOTTOM", 0, -21)
 	GameMenuFrame:HookScript("OnShow", function(self)
 		GameMenuButtonLogout:SetPoint("TOP", gui, "BOTTOM", 0, -21)
