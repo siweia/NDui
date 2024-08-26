@@ -184,14 +184,9 @@ tinsert(C.defaultThemes, function()
 
 	-- [[ Bank ]]
 
-	BankSlotsFrame:DisableDrawLayer("BORDER")
 	BankFrameMoneyFrameBorder:Hide()
-	BankSlotsFrame.NineSlice:SetAlpha(0)
+	B.StripTextures(BankSlotsFrame)
 	BankSlotsFrame.EdgeShadows:Hide()
-
-	-- "item slots" and "bag slots" text
-	select(9, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
-	select(10, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
 
 	B.ReskinPortraitFrame(BankFrame)
 	B.Reskin(BankFramePurchaseButton)
