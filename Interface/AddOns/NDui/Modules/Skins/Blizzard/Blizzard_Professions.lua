@@ -375,6 +375,7 @@ C.themes["Blizzard_Professions"] = function()
 	B.Reskin(orderInfo.ReleaseOrderButton)
 	B.StripTextures(orderInfo.NoteBox)
 	B.CreateBDFrame(orderInfo.NoteBox, .25)
+	B.Reskin(orderInfo.SocialDropdown)
 
 	local orderDetails = orderView.OrderDetails
 	B.StripTextures(orderDetails)
