@@ -365,10 +365,10 @@ do
 	local function setupMisc(event, addon)
 		if addon == "Blizzard_ArchaeologyUI" then
 			AddCalculateIcon()
-			-- Repoint Bar
-			ArcheologyDigsiteProgressBar.ignoreFramePositionManager = true
-			ArcheologyDigsiteProgressBar:SetPoint("BOTTOM", 0, 150)
-			B.CreateMF(ArcheologyDigsiteProgressBar)
+			-- Repoint Bar, todo: add mover for this, UIParentBottomManagedFrameContainer
+		--	ArcheologyDigsiteProgressBar.ignoreFramePositionManager = true
+		--	ArcheologyDigsiteProgressBar:SetPoint("BOTTOM", 0, 150)
+		--	B.CreateMF(ArcheologyDigsiteProgressBar)
 
 			B:UnregisterEvent(event, setupMisc)
 		end

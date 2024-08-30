@@ -26,8 +26,8 @@ local function ReskinWidgetStatusBar(bar)
 		if bar.SparkGlow then bar.SparkGlow:SetAlpha(0) end
 		if bar.BorderGlow then bar.BorderGlow:SetAlpha(0) end
 		if bar.Label then
-			bar.Label:SetPoint("CENTER", 0, -5)
-			bar.Label:SetFontObject(Game12Font)
+			--bar.Label:SetPoint("CENTER", 0, -5)
+			--bar.Label:SetFontObject(Game12Font)
 			ResetLabelColor(bar.Label)
 			hooksecurefunc(bar.Label, "SetTextColor", ResetLabelColor)
 		end
@@ -150,6 +150,9 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
 		if self:IsForbidden() then return end
 		ReskinWidgetStatusBar(self.Bar)
+		if self.Label then
+			self.Label:SetTextColor(1, .8, 0)
+		end
 	end)
 
 	B.Reskin(_G.UIWidgetCenterDisplayFrame.CloseButton)
