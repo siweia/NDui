@@ -334,57 +334,57 @@ info.onEnter = function(self)
 		end
 	end
 
-	-- Elemental threats
-	title = false
-	for mapID, stormGroup in next, stormPoiIDs do
-		for _, areaPoiIDs in next, stormGroup do
-			for _, areaPoiID in next, areaPoiIDs do
-				local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(mapID, areaPoiID)
-				local elementType = poiInfo and poiInfo.atlasName and strmatch(poiInfo.atlasName, "ElementalStorm%-Lesser%-(.+)")
-				if elementType then
-					addTitle(poiInfo.name)
-					local mapInfo = C_Map_GetMapInfo(mapID)
-					local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
-					timeLeft = timeLeft/60
-					if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-					GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
-					break
+	if IsShiftKeyDown() then
+		-- Elemental threats
+		title = false
+		for mapID, stormGroup in next, stormPoiIDs do
+			for _, areaPoiIDs in next, stormGroup do
+				for _, areaPoiID in next, areaPoiIDs do
+					local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(mapID, areaPoiID)
+					local elementType = poiInfo and poiInfo.atlasName and strmatch(poiInfo.atlasName, "ElementalStorm%-Lesser%-(.+)")
+					if elementType then
+						addTitle(poiInfo.name)
+						local mapInfo = C_Map_GetMapInfo(mapID)
+						local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
+						timeLeft = timeLeft/60
+						if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+						GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
+						break
+					end
 				end
 			end
 		end
-	end
-
-	-- Grand hunts
-	title = false
-	for areaPoiID, mapID in pairs(huntAreaToMapID) do
-		local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(1978, areaPoiID) -- Dragon isles
-		if poiInfo then
-			addTitle(poiInfo.name)
-			local mapInfo = C_Map_GetMapInfo(mapID)
-			local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
-			timeLeft = timeLeft/60
-			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-			GameTooltip:AddDoubleLine(mapInfo.name, GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
-			break
+	
+		-- Grand hunts
+		title = false
+		for areaPoiID, mapID in pairs(huntAreaToMapID) do
+			local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(1978, areaPoiID) -- Dragon isles
+			if poiInfo then
+				addTitle(poiInfo.name)
+				local mapInfo = C_Map_GetMapInfo(mapID)
+				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
+				timeLeft = timeLeft/60
+				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+				GameTooltip:AddDoubleLine(mapInfo.name, GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
+				break
+			end
 		end
-	end
+	
+		-- Community feast
+		title = false
+		local feastTime = communityFeastTime[region]
+		if feastTime then
+			local currentTime = time()
+			local duration = 5400 -- 1.5hrs
+			local elapsed = mod(currentTime - feastTime, duration)
+			local nextTime = duration - elapsed + currentTime
+	
+			addTitle(COMMUNITY_FEAST)
+			if currentTime - (nextTime-duration) < 900 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
+			GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
+			GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime), date("%m/%d %H:%M", nextTime+duration), 1,1,1, 1,1,1)
+		end
 
-	-- Community feast
-	title = false
-	local feastTime = communityFeastTime[region]
-	if feastTime then
-		local currentTime = time()
-		local duration = 5400 -- 1.5hrs
-		local elapsed = mod(currentTime - feastTime, duration)
-		local nextTime = duration - elapsed + currentTime
-
-		addTitle(COMMUNITY_FEAST)
-		if currentTime - (nextTime-duration) < 900 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
-		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
-		GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime), date("%m/%d %H:%M", nextTime+duration), 1,1,1, 1,1,1)
-	end
-
-	if IsShiftKeyDown() then
 		-- Nzoth relavants
 		for _, v in ipairs(horrificVisions) do
 			if IsQuestFlaggedCompleted(v.id) then
