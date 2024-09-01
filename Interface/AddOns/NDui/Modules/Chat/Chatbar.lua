@@ -65,7 +65,11 @@ function module:Chatbar()
 		end},
 		{.65, .65, 1, PARTY, function() ChatFrame_OpenChat("/p ", chatFrame) end},
 		{1, .5, 0, INSTANCE.."/"..RAID, function()
-			ChatFrame_OpenChat("/raid ", chatFrame)
+			if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+				ChatFrame_OpenChat("/i ", chatFrame)
+			else
+				ChatFrame_OpenChat("/raid ", chatFrame)
+			end
 		end},
 		{.25, 1, .25, GUILD.."/"..OFFICER, function(_, btn)
 			if btn == "RightButton" and C_GuildInfo_IsGuildOfficer() then

@@ -27,6 +27,8 @@ local function sendQuestMsg(msg)
 
 	if debugMode and DB.isDeveloper then
 		print(msg)
+	elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+		SendChatMessage(msg, "INSTANCE_CHAT")
 	elseif IsInRaid() then
 		SendChatMessage(msg, "RAID")
 	elseif IsInGroup() and not IsInRaid() then
