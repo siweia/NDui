@@ -11,8 +11,6 @@ local AccountBankPanel = AccountBankPanel
 local BANK_TAB1 = Enum.BagIndex.AccountBankTab_1 or 13
 local ACCOUNT_BANK_TYPE = Enum.BankType.Account or 2
 
-cargBags.selectedTabID = 1 -- default tabID
-
 function Implementation:GetBagTabClass()
 	return self:GetClass("BagTab", true, "BagTab")
 end
@@ -115,6 +113,7 @@ function BagTab:UpdateButton()
 			local bagID = self.bagId
 			self.filter = function(i) return i.bagId ~= bagID end
 		end
+		self.hidden = not self.hidden
 
 		if(self.bar.isGlobal) then
 			for _, container in pairs(container.implementation.contByID) do
@@ -136,18 +135,13 @@ end
 
 function BagTab:OnClick(btn)
 	local currentTabID = self:GetID()
-	cargBags.selectedTabID = currentTabID
 
 	local data = AccountBankPanel.purchasedBankTabData[currentTabID]
 	if not data then
 		--StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, {bankType = ACCOUNT_BANK_TYPE})
 	else
 		if btn == "LeftButton" then
-			local buttons = self.bar.buttons
-			for i = 1, #buttons do
-				buttons[i].hidden = i ~= currentTabID
-				buttons[i]:UpdateButton()
-			end
+			self.bar.buttons[currentTabID]:UpdateButton()
 		else -- right button
 			local menu = AccountBankPanel.TabSettingsMenu
 			if menu then
@@ -185,7 +179,7 @@ cargBags:RegisterPlugin("BagTab", function(self, bags)
 	for i = 1, #bags do
 		local button = buttonClass:Create(bags[i])
 		button:SetParent(bar)
-		button.hidden = i ~= 1
+		button.hidden = true
 		button.bar = bar
 		table.insert(bar.buttons, button)
 	end
@@ -197,7 +191,6 @@ cargBags:RegisterPlugin("BagTab", function(self, bags)
 	end)
 
 	updater(bar)
-	self.implementation:RegisterEvent("BANK_TABS_CHANGED", bar, updater)
 
 	return bar
 end)

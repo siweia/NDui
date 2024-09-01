@@ -528,10 +528,11 @@ function module:GetEmptySlot(name)
 			return 5, slotID
 		end
 	elseif name == "AccountBank" then
-		local bagID = cargBags.selectedTabID + 12
-		local slotID = module:GetContainerEmptySlot(bagID)
-		if slotID then
-			return bagID, slotID
+		for bagID = 13, 17 do
+			local slotID = module:GetContainerEmptySlot(bagID)
+			if slotID then
+				return bagID, slotID
+			end
 		end
 	end
 end
