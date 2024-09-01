@@ -39,6 +39,9 @@ tinsert(C.defaultThemes, function()
 		if not FCF_GetCurrentChatFrame() then return end
 
 		local nameString = frame:GetName().."CheckBox"
+		if DB.isNewPatch then
+			nameString = frame:GetName().."Checkbox"
+		end
 		for index in ipairs(frame.checkBoxTable) do
 			local checkBoxName = nameString..index
 			local checkbox = _G[checkBoxName]
@@ -61,6 +64,9 @@ tinsert(C.defaultThemes, function()
 		if frame.styled then return end
 
 		local nameString = frame:GetName().."CheckBox"
+		if DB.isNewPatch then
+			nameString = frame:GetName().."Checkbox"
+		end
 		for index, value in ipairs(checkBoxTable) do
 			local checkBoxName = nameString..index
 			B.ReskinCheck(_G[checkBoxName])
@@ -223,6 +229,9 @@ tinsert(C.defaultThemes, function()
 		local checkBoxTable = frame.checkBoxTable
 		if checkBoxTable then
 			local checkBoxNameString = frame:GetName().."CheckBox"
+			if DB.isNewPatch then
+				checkBoxNameString = frame:GetName().."Checkbox"
+			end
 			local checkBoxName, checkBox
 			for index in ipairs(checkBoxTable) do
 				checkBoxName = checkBoxNameString..index
@@ -236,8 +245,10 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- voice pickers
-	ReskinVoicePicker(TextToSpeechFrameTtsVoicePicker)
-	ReskinVoicePicker(TextToSpeechFrameTtsVoiceAlternatePicker)
+	if not DB.isNewPatch then
+		ReskinVoicePicker(TextToSpeechFrameTtsVoicePicker)
+		ReskinVoicePicker(TextToSpeechFrameTtsVoiceAlternatePicker)
+	end
 
 	B.StripTextures(ChatConfigTextToSpeechChannelSettingsLeft)
 end)

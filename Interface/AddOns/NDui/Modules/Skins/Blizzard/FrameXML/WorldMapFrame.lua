@@ -14,9 +14,15 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	B.ReskinDropDown(WorldMapZoneMinimapDropDown)
-	B.ReskinDropDown(WorldMapContinentDropDown)
-	B.ReskinDropDown(WorldMapZoneDropDown)
+	if DB.isNewPatch then
+		B.ReskinDropDown(WorldMapZoneMinimapDropdown)
+		B.ReskinDropDown(WorldMapContinentDropdown)
+		B.ReskinDropDown(WorldMapZoneDropdown)
+	else
+		B.ReskinDropDown(WorldMapZoneMinimapDropDown)
+		B.ReskinDropDown(WorldMapContinentDropDown)
+		B.ReskinDropDown(WorldMapZoneDropDown)
+	end
 	B.Reskin(WorldMapZoomOutButton)
 
 	if MiniBorderLeft then MiniBorderLeft:Hide() end

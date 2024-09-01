@@ -108,6 +108,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
+	if DB.isNewPatch then return end
 	-- [[ Dropdown ]]
 
 	LootHistoryDropDown.initialize = function(self)

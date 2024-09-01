@@ -109,7 +109,11 @@ tinsert(C.defaultThemes, function()
 	end
 
 	local function forceSaturation(self)
-		self.CheckBox:DesaturateHierarchy(1)
+		if DB.isNewPatch then
+			self.Checkbox:DesaturateHierarchy(1)
+		else
+			self.CheckBox:DesaturateHierarchy(1)
+		end
 	end
 
 	local function ReskinControlsGroup(controls)
@@ -121,9 +125,14 @@ tinsert(C.defaultThemes, function()
 			if element.DropDown then
 				ReskinOptionDropDown(element.DropDown)
 			end
-			if element.CheckBox then
+			if element.CheckBox then -- isNewPatch, removed
 				B.ReskinCheck(element.CheckBox)
 				element.CheckBox.bg:SetInside(nil, 6, 6)
+				hooksecurefunc(element, "DesaturateHierarchy", forceSaturation)
+			end
+			if element.Checkbox then
+				B.ReskinCheck(element.Checkbox)
+				element.Checkbox.bg:SetInside(nil, 6, 6)
 				hooksecurefunc(element, "DesaturateHierarchy", forceSaturation)
 			end
 		end

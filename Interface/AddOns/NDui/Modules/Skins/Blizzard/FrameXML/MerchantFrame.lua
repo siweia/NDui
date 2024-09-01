@@ -51,7 +51,6 @@ end
 
 tinsert(C.defaultThemes, function()
 	B.ReskinPortraitFrame(MerchantFrame)
---	B.ReskinDropDown(MerchantFrameLootFilter)
 	B.StripTextures(MerchantPrevPageButton)
 	B.ReskinArrow(MerchantPrevPageButton, "left")
 	B.StripTextures(MerchantNextPageButton)
@@ -59,8 +58,6 @@ tinsert(C.defaultThemes, function()
 	MerchantMoneyInset:Hide()
 	MerchantMoneyBg:Hide()
 	MerchantNameText:SetDrawLayer("ARTWORK")
-	--MerchantExtraCurrencyBg:SetAlpha(0)
-	--MerchantExtraCurrencyInset:SetAlpha(0)
 	BuybackBG:SetAlpha(0)
 
 	MerchantFrameTab1:ClearAllPoints()

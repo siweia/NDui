@@ -151,12 +151,17 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(ReputationDetailFrame)
 	B.SetBD(ReputationDetailFrame)
 	B.ReskinClose(ReputationDetailCloseButton)
-	B.ReskinCheck(ReputationDetailInactiveCheckBox)
-	B.ReskinCheck(ReputationDetailMainScreenCheckBox)
+	if DB.isNewPatch then
+		B.ReskinCheck(ReputationDetailInactiveCheckbox)
+		B.ReskinCheck(ReputationDetailMainScreenCheckbox)
+	else
+		B.ReskinCheck(ReputationDetailInactiveCheckBox)
+		B.ReskinCheck(ReputationDetailMainScreenCheckBox)
+	end
 	B.ReskinScroll(ReputationListScrollFrameScrollBar)
 	select(3, ReputationDetailFrame:GetRegions()):Hide()
 
-	local atWarCheck = ReputationDetailAtWarCheckBox
+	local atWarCheck = ReputationDetailAtWarCheckBox or ReputationDetailAtWarCheckbox
 	B.ReskinCheck(atWarCheck)
 	local atWarCheckTex = atWarCheck:GetCheckedTexture()
 	atWarCheckTex:ClearAllPoints()

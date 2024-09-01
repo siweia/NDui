@@ -59,8 +59,10 @@ tinsert(C.defaultThemes, function()
 	VoiceChatChannelActivatedNotification:SetBackdrop(nil)
 	B.SetBD(VoiceChatChannelActivatedNotification)
 
-	B.ReskinSlider(UnitPopupVoiceMicrophoneVolume.Slider)
-	B.ReskinSlider(UnitPopupVoiceSpeakerVolume.Slider)
+	if not DB.isNewPatch then
+		B.ReskinSlider(UnitPopupVoiceMicrophoneVolume.Slider)
+		B.ReskinSlider(UnitPopupVoiceSpeakerVolume.Slider)
+	end
 
 	-- VoiceActivityManager
 	hooksecurefunc(VoiceActivityManager, "LinkFrameNotificationAndGuid", function(_, _, notification, guid)

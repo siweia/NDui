@@ -49,15 +49,17 @@ function module:CreatePulse()
 	end)
 end
 
+local MiniMapTracking = DB.isNewPatch and MiniMapTracking or MiniMapTrackingFrame
+
 local function ResetTrackingFrameAnchor()
-	MiniMapTrackingFrame:ClearAllPoints()
-	MiniMapTrackingFrame:SetPoint("BOTTOMRIGHT", Minimap, -5, 5)
+	MiniMapTracking:ClearAllPoints()
+	MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, -5, 5)
 end
 
 function module:ReskinRegions()
 	-- Tracking icon
-	MiniMapTrackingFrame:SetScale(.7)
-	MiniMapTrackingFrame:SetFrameLevel(999)
+	MiniMapTracking:SetScale(.7)
+	MiniMapTracking:SetFrameLevel(999)
 	MiniMapTrackingBorder:Hide()
 	local bg = B.ReskinIcon(MiniMapTrackingIcon)
 	bg:SetBackdropBorderColor(cr, cg, cb)

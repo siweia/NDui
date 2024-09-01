@@ -82,6 +82,8 @@ function Bar:HideBlizz()
 
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
-	InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
-	InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+	if not DB.isNewPatch then
+		InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
+		InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+	end
 end

@@ -336,13 +336,6 @@ do
 	end
 end
 
--- Temporary taint fix
-do
-	InterfaceOptionsFrameCancel:SetScript("OnClick", function()
-		InterfaceOptionsFrameOkay:Click()
-	end)
-end
-
 -- Select target when click on raid units
 do
 	local function fixRaidGroupButton()
