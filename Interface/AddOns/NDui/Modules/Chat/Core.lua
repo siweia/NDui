@@ -5,7 +5,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 
 local _G = _G
 local pairs, ipairs, strsub, strlower = pairs, ipairs, string.sub, string.lower
-local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
+local IsInGroup, IsInRaid, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsInGuild, IsShiftKeyDown, IsControlKeyDown
 local ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime
 local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant
 local CanCooperateWithGameAccount, BNInviteFriend, PlaySound = CanCooperateWithGameAccount, BNInviteFriend, PlaySound
@@ -181,7 +181,7 @@ local cycles = {
 	{ chatType = "SAY", IsActive = function() return true end },
 	{ chatType = "PARTY", IsActive = function() return IsInGroup() end },
 	{ chatType = "RAID", IsActive = function() return IsInRaid() end },
-	{ chatType = "INSTANCE_CHAT", IsActive = function() return IsPartyLFG() end },
+	{ chatType = "INSTANCE_CHAT", IsActive = function() return IsPartyLFG() or C_PartyInfo.IsPartyWalkIn() end },
 	{ chatType = "GUILD", IsActive = function() return IsInGuild() end },
 	{ chatType = "OFFICER", IsActive = function() return C_GuildInfo_IsGuildOfficer() end },
 	{ chatType = "CHANNEL", IsActive = function(_, editbox)

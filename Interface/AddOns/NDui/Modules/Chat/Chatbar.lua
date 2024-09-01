@@ -74,7 +74,7 @@ function module:Chatbar()
 		end},
 		{.65, .65, 1, PARTY, function() ChatFrame_OpenChat("/p ", chatFrame) end},
 		{1, .5, 0, INSTANCE.."/"..RAID, function()
-			if IsPartyLFG() then
+			if IsPartyLFG() or C_PartyInfo.IsPartyWalkIn() then
 				ChatFrame_OpenChat("/i ", chatFrame)
 			else
 				ChatFrame_OpenChat("/raid ", chatFrame)

@@ -190,7 +190,7 @@ function M:KeystoneInfo_WeeklyRuns()
 end
 
 function M:KeystoneInfo_Create()
-	local texture = select(10, C_Item.GetItemInfo(158923)) or 525134
+	local texture = C_Item.GetItemIconByID(158923) or 525134
 	local iconColor = DB.QualityColors[Enum.ItemQuality.Epic or 4]
 	local button = CreateFrame("Frame", nil, ChallengesFrame.WeeklyInfo, "BackdropTemplate")
 	button:SetPoint("BOTTOMLEFT", 2, 67)

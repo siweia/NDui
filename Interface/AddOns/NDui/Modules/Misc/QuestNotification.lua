@@ -4,7 +4,7 @@ local M = B:GetModule("Misc")
 
 local strmatch, strfind, gsub, format, floor = strmatch, strfind, gsub, format, floor
 local wipe, mod, tonumber, pairs, print = wipe, mod, tonumber, pairs, print
-local IsPartyLFG, IsInRaid, IsInGroup, PlaySound, SendChatMessage = IsPartyLFG, IsInRaid, IsInGroup, PlaySound, SendChatMessage
+local SendChatMessage = SendChatMessage
 local GetQuestLink = GetQuestLink
 local C_QuestLog_GetInfo = C_QuestLog.GetInfo
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
@@ -45,7 +45,7 @@ local function sendQuestMsg(msg)
 
 	if debugMode and DB.isDeveloper then
 		print(msg)
-	elseif IsPartyLFG() then
+	elseif (IsPartyLFG() or C_PartyInfo.IsPartyWalkIn()) then
 		SendChatMessage(msg, "INSTANCE_CHAT")
 	elseif IsInRaid() then
 		SendChatMessage(msg, "RAID")
