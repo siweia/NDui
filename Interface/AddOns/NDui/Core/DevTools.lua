@@ -130,7 +130,7 @@ do
 
 	SlashCmdList["NDUI_VER_CHECK"] = function(msg)
 		local channel
-		if IsPartyLFG() then
+		if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 			channel = "INSTANCE_CHAT"
 		elseif IsInRaid() then
 			channel = "RAID"
