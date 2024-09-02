@@ -224,7 +224,7 @@ end
 
 function module:CreateBagTab(settings, columns)
 	local bagTab = self:SpawnPlugin("BagTab", settings.Bags)
-	bagTab:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
+	bagTab:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagTab)
 	bagTab.highlightFunction = highlightFunction
 	bagTab:Hide()
