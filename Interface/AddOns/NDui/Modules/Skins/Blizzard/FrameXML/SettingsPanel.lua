@@ -89,6 +89,12 @@ tinsert(C.defaultThemes, function()
 		ReskinDropDownArrow(option.IncrementButton, "right")
 	end
 
+	local function ReskinDropdown(option)
+		B.Reskin(option.Dropdown)
+		B.Reskin(option.DecrementButton)
+		B.Reskin(option.IncrementButton)
+	end
+
 	local function UpdateKeybindButtons(self)
 		if not self.bindingsPool then return end
 		for panel in self.bindingsPool:EnumerateActive() do
@@ -122,8 +128,11 @@ tinsert(C.defaultThemes, function()
 			if element.SliderWithSteppers then
 				B.ReskinStepperSlider(element.SliderWithSteppers)
 			end
-			if element.DropDown then
+			if element.DropDown then -- isNewPatch, removed
 				ReskinOptionDropDown(element.DropDown)
+			end
+			if element.Control then
+				ReskinDropdown(element.Control)
 			end
 			if element.CheckBox then -- isNewPatch, removed
 				B.ReskinCheck(element.CheckBox)
@@ -159,7 +168,10 @@ tinsert(C.defaultThemes, function()
 				if child.ColorBlindFilterDropDown then
 					ReskinOptionDropDown(child.ColorBlindFilterDropDown)
 				end
-				for j = 1, 13 do
+				if child.Control then
+					ReskinDropdown(child.Control)
+				end
+				for j = 1, 13 do -- isNewPatch, removed
 					local control = child["Control"..j]
 					if control then
 						if control.DropDown then
