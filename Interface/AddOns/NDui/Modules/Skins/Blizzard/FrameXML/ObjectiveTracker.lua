@@ -27,6 +27,7 @@ end
 
 local function reskinQuestIcons(_, block)
 	reskinQuestIcon(block.ItemButton)
+	reskinQuestIcon(block.rightEdgeFrame)
 end
 
 local function reskinHeader(header)
