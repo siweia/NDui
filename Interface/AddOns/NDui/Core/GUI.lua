@@ -99,6 +99,7 @@ G.DefaultSettings = {
 		FontSize = 12,
 		BagsWidth = 12,
 		BankWidth = 14,
+		AccountWidth = 20,
 		BagsiLvl = true,
 		BagSortMode = 1,
 		ItemFilter = true,
@@ -1182,6 +1183,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Bags", "FontSize", L["Bags FontSize"].."*", true, {10, 50, 1}, updateBagSize},
 		{3, "Bags", "BagsWidth", L["Bags Width"].."*", false, {10, 40, 1}, updateBagSize},
 		{3, "Bags", "BankWidth", L["Bank Width"].."*", true, {10, 40, 1}, updateBagSize},
+		{3, "Bags", "AccountWidth", L["AccountBank Width"].."*", nil, {10, 40, 1}, updateBagSize},
 	},
 	[3] = {
 		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
