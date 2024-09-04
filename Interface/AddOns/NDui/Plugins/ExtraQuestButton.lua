@@ -500,6 +500,18 @@ local function GetClosestQuestItem()
 		end
 	end
 
+	local tasksTable = GetTasksTable() -- bonus tracker, needs review
+	for i = 1, #tasksTable do
+		local questID = tasksTable[i]
+		if questID and not C_QuestLog_IsWorldQuest(questID) and not QuestUtils_IsQuestWatched(questID) and GetTaskInfo(questID) then
+			local distance, itemLink = GetQuestDistanceWithItem(questID)
+			if distance and distance <= closestDistance then
+				closestDistance = distance
+				closestQuestItemLink = itemLink
+			end
+		end
+	end
+
 	return closestQuestItemLink
 end
 
