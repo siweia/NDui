@@ -9,7 +9,7 @@ local AuraList, FrameList, UnitIDTable, IntTable, IntCD, myTable, cooldownTable 
 local pairs, select, tinsert, tremove, wipe, strfind = pairs, select, table.insert, table.remove, table.wipe, strfind
 local InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
 local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell = GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell
-local GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemCooldown, GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
+local GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 
 -- DataConvert
 local function DataAnalyze(v)
@@ -394,7 +394,7 @@ function A:AuraWatch_UpdateCD()
 						A:AuraWatch_SetupCD(KEY, name, icon, start, duration, true, 1, value.SpellID)
 					end
 				elseif value.ItemID then
-					local start, duration = GetItemCooldown(value.ItemID)
+					local start, duration = C_Container.GetItemCooldown(value.ItemID)
 					if start and duration > C.db["AuraWatch"]["MinCD"] then
 						local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(value.ItemID)
 						if group.Mode == "ICON" then name = nil end

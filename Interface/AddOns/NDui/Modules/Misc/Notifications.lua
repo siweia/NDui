@@ -333,7 +333,7 @@ function M:SendCurrentSpell(thisTime, spellID)
 end
 
 function M:SendCurrentItem(thisTime, itemID, itemLink)
-	local start, duration = GetItemCooldown(itemID)
+	local start, duration = C_Container.GetItemCooldown(itemID)
 	if start and duration > 0 then
 		local remain = start + duration - thisTime
 		SendChatMessage(format(L["CooldownRemaining"], itemLink, GetRemainTime(remain)), msgChannel())
