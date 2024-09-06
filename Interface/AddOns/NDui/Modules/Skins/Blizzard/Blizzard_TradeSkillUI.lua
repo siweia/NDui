@@ -37,8 +37,13 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 		end
 	end)
 
-	B.ReskinDropDown(TradeSkillSubClassDropDown)
-	B.ReskinDropDown(TradeSkillInvSlotDropDown)
+	if DB.isNewPatch then
+		B.ReskinDropDown(TradeSkillSubClassDropdown)
+		B.ReskinDropDown(TradeSkillInvSlotDropdown)
+	else
+		B.ReskinDropDown(TradeSkillSubClassDropDown)
+		B.ReskinDropDown(TradeSkillInvSlotDropDown)
+	end
 
 	B.StripTextures(TradeSkillDetailScrollChildFrame)
 	B.StripTextures(TradeSkillSkillIcon)

@@ -317,10 +317,10 @@ function Bar:CreateBars()
 			end
 			Bar:UpdateBarConfig()
 		end
-	end)]]
+	end)
 	InterfaceOptionsActionBarsPanelLockActionBars:HookScript("OnClick", function()
 		Bar:UpdateBarConfig()
-	end)
+	end)]]
 end
 
 function Bar:OnLogin()

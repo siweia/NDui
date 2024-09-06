@@ -526,37 +526,72 @@ end
 function M:RaidTool_EasyMarker()
 	local menuList = {}
 
-	local function GetMenuTitle(color, text)
-		return (color and B.HexRGB(color) or "")..text
-	end
-
-	local function SetRaidTargetByIndex(_, arg1)
-		SetRaidTarget("target", arg1)
-	end
-
-	local mixins = {
-		UnitPopupRaidTarget8ButtonMixin,
-		UnitPopupRaidTarget7ButtonMixin,
-		UnitPopupRaidTarget6ButtonMixin,
-		UnitPopupRaidTarget5ButtonMixin,
-		UnitPopupRaidTarget4ButtonMixin,
-		UnitPopupRaidTarget3ButtonMixin,
-		UnitPopupRaidTarget2ButtonMixin,
-		UnitPopupRaidTarget1ButtonMixin,
-		UnitPopupRaidTargetNoneButtonMixin
-	}
-	for index, mixin in pairs(mixins) do
-		local texCoords = mixin:GetTextureCoords()
-		menuList[index] = {
-			text = GetMenuTitle(mixin:GetColor(), mixin:GetText()),
-			icon = mixin:GetIcon(),
-			tCoordLeft = texCoords.tCoordLeft,
-			tCoordRight = texCoords.tCoordRight,
-			tCoordTop = texCoords.tCoordTop,
-			tCoordBottom = texCoords.tCoordBottom,
-			arg1 = 9 - index,
-			func = SetRaidTargetByIndex,
+	if DB.isNewPatch then
+		local function GetMenuTitle(text, ...)
+			return (... and B.HexRGB(...) or "")..text
+		end
+	
+		local function SetRaidTargetByIndex(_, arg1)
+			SetRaidTarget("target", arg1)
+		end
+	
+		local mixins = {
+			UnitPopupRaidTarget8ButtonMixin,
+			UnitPopupRaidTarget7ButtonMixin,
+			UnitPopupRaidTarget6ButtonMixin,
+			UnitPopupRaidTarget5ButtonMixin,
+			UnitPopupRaidTarget4ButtonMixin,
+			UnitPopupRaidTarget3ButtonMixin,
+			UnitPopupRaidTarget2ButtonMixin,
+			UnitPopupRaidTarget1ButtonMixin,
+			UnitPopupRaidTargetNoneButtonMixin
 		}
+		for index, mixin in pairs(mixins) do
+			local t1, t2, t3, t4 = mixin:GetTextureCoords()
+			menuList[index] = {
+				text = GetMenuTitle(mixin:GetText(), mixin:GetColor()),
+				icon = mixin:GetIcon(),
+				tCoordLeft = t1,
+				tCoordRight = t2,
+				tCoordTop = t3,
+				tCoordBottom = t4,
+				arg1 = 9 - index,
+				func = SetRaidTargetByIndex,
+			}
+		end
+	else
+		local function GetMenuTitle(color, text)
+			return (color and B.HexRGB(color) or "")..text
+		end
+	
+		local function SetRaidTargetByIndex(_, arg1)
+			SetRaidTarget("target", arg1)
+		end
+	
+		local mixins = {
+			UnitPopupRaidTarget8ButtonMixin,
+			UnitPopupRaidTarget7ButtonMixin,
+			UnitPopupRaidTarget6ButtonMixin,
+			UnitPopupRaidTarget5ButtonMixin,
+			UnitPopupRaidTarget4ButtonMixin,
+			UnitPopupRaidTarget3ButtonMixin,
+			UnitPopupRaidTarget2ButtonMixin,
+			UnitPopupRaidTarget1ButtonMixin,
+			UnitPopupRaidTargetNoneButtonMixin
+		}
+		for index, mixin in pairs(mixins) do
+			local texCoords = mixin:GetTextureCoords()
+			menuList[index] = {
+				text = GetMenuTitle(mixin:GetColor(), mixin:GetText()),
+				icon = mixin:GetIcon(),
+				tCoordLeft = texCoords.tCoordLeft,
+				tCoordRight = texCoords.tCoordRight,
+				tCoordTop = texCoords.tCoordTop,
+				tCoordBottom = texCoords.tCoordBottom,
+				arg1 = 9 - index,
+				func = SetRaidTargetByIndex,
+			}
+		end
 	end
 
 	local function GetModifiedState()

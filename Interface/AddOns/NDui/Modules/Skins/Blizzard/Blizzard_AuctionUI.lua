@@ -159,7 +159,6 @@ C.themes["Blizzard_AuctionUI"] = function()
 	B.ReskinScroll(AuctionsScrollFrameScrollBar)
 	B.ReskinScroll(BrowseFilterScrollFrameScrollBar)
 	B.ReskinScroll(BidScrollFrameScrollBar)
-	B.ReskinDropDown(PriceDropDown)
 	B.ReskinInput(BrowseName)
 	B.ReskinArrow(BrowsePrevPageButton, "left")
 	B.ReskinArrow(BrowseNextPageButton, "right")
@@ -169,28 +168,34 @@ C.themes["Blizzard_AuctionUI"] = function()
 	B.ReskinRadio(AuctionsMediumAuctionButton)
 	B.ReskinRadio(AuctionsLongAuctionButton)
 
-	BrowseDropDownLeft:SetAlpha(0)
-	BrowseDropDownMiddle:SetAlpha(0)
-	BrowseDropDownRight:SetAlpha(0)
+	if DB.isNewPatch then
+		B.ReskinDropDown(BrowseDropdown)
+	else
+		B.ReskinDropDown(PriceDropDown)
 
-	local a1, p, a2, x, y = BrowseDropDownButton:GetPoint()
-	BrowseDropDownButton:SetPoint(a1, p, a2, x, y-4)
-	BrowseDropDownButton:SetSize(16, 16)
-	B.Reskin(BrowseDropDownButton, true)
-
-	local tex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
-	B.SetupArrow(tex, "down")
-	tex:SetSize(14, 14)
-	tex:SetPoint("CENTER")
-	tex:SetVertexColor(1, 1, 1)
-	BrowseDropDownButton.__texture = tex
-
-	local bg = B.CreateBDFrame(BrowseDropDown, 0, true)
-	bg:SetPoint("TOPLEFT", 16, -5)
-	bg:SetPoint("BOTTOMRIGHT", 109, 11)
-
-	BrowseDropDownButton:HookScript("OnEnter", B.Texture_OnEnter)
-	BrowseDropDownButton:HookScript("OnLeave", B.Texture_OnLeave)
+		BrowseDropDownLeft:SetAlpha(0)
+		BrowseDropDownMiddle:SetAlpha(0)
+		BrowseDropDownRight:SetAlpha(0)
+	
+		local a1, p, a2, x, y = BrowseDropDownButton:GetPoint()
+		BrowseDropDownButton:SetPoint(a1, p, a2, x, y-4)
+		BrowseDropDownButton:SetSize(16, 16)
+		B.Reskin(BrowseDropDownButton, true)
+	
+		local tex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
+		B.SetupArrow(tex, "down")
+		tex:SetSize(14, 14)
+		tex:SetPoint("CENTER")
+		tex:SetVertexColor(1, 1, 1)
+		BrowseDropDownButton.__texture = tex
+	
+		local bg = B.CreateBDFrame(BrowseDropDown, 0, true)
+		bg:SetPoint("TOPLEFT", 16, -5)
+		bg:SetPoint("BOTTOMRIGHT", 109, 11)
+	
+		BrowseDropDownButton:HookScript("OnEnter", B.Texture_OnEnter)
+		BrowseDropDownButton:HookScript("OnLeave", B.Texture_OnLeave)
+	end
 
 	local inputs = {"BrowseMinLevel", "BrowseMaxLevel", "AuctionsStackSizeEntry", "AuctionsNumStacksEntry"}
 	for i = 1, #inputs do

@@ -9,8 +9,29 @@ DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isClassic = select(4, GetBuildInfo()) < 90000
-DB.isNewPatch = select(4, GetBuildInfo()) >= 30403 -- 3.4.3 WLK
+DB.isNewPatch = select(4, GetBuildInfo()) >= 40401 -- 4.4.1 Cata
 DB.isCata = select(4, GetBuildInfo()) >= 40400 -- 4.4.0 Cata
+
+-- Deprecated
+if DB.isNewPatch then -- FIXME
+	local function EasyMenu_Initialize( frame, level, menuList )
+		for index = 1, #menuList do
+			local value = menuList[index]
+			if (value.text) then
+				value.index = index
+				UIDropDownMenu_AddButton( value, level )
+			end
+		end
+	end
+	
+	function EasyMenu(menuList, menuFrame, anchor, x, y, displayMode, autoHideDelay )
+		if ( displayMode == "MENU" ) then
+			menuFrame.displayMode = displayMode
+		end
+		UIDropDownMenu_Initialize(menuFrame, EasyMenu_Initialize, displayMode, nil, menuList)
+		ToggleDropDownMenu(1, nil, menuFrame, anchor, x, y, menuList, nil, autoHideDelay)
+	end
+end
 
 -- Colors
 DB.MyName = UnitName("player")

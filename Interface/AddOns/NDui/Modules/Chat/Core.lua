@@ -412,7 +412,9 @@ function module:OnLogin()
 	SetCVar("chatStyle", "classic")
 	SetCVar("chatMouseScroll", 1) -- enable mousescroll
 	--SetCVar("chatClassColorOverride", 0) -- invalid since build 3.4.0.46158
-	B.HideOption(InterfaceOptionsSocialPanelChatStyle)
+	if not DB.isNewPatch then
+		B.HideOption(InterfaceOptionsSocialPanelChatStyle)
+	end
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Chat class color

@@ -1,6 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+if DB.isNewPatch then return end
+
 tinsert(C.defaultThemes, function()
 	local styled = false
 

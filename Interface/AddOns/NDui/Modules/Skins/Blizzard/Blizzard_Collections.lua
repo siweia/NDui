@@ -126,17 +126,22 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinInput(PetJournalSearchBox)
 	B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateLeftButton, "left")
 	B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, "right")
-	B.ReskinFilterButton(PetJournalFilterButton)
-	B.ReskinFilterButton(MountJournalFilterButton)
+	if DB.isNewPatch then
+		B.ReskinFilterButton(PetJournal.FilterDropdown)
+		B.ReskinFilterButton(MountJournal.FilterDropdown)
+	else
+		B.ReskinFilterButton(PetJournalFilterButton)
+		B.ReskinFilterButton(MountJournalFilterButton)
+
+		MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
+		PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
+	end
 
 	local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
 	if togglePlayer then
 		B.ReskinCheck(togglePlayer)
 		togglePlayer:SetSize(28, 28)
 	end
-
-	MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
-	PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
 
 	-- Pet card
 
@@ -157,9 +162,13 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(iconsFrame)
 	B.ReskinInput(ToyBox.searchBox)
-	B.ReskinFilterButton(ToyBoxFilterButton)
 	B.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(ToyBox.PagingFrame.NextPageButton, "right")
+	if DB.isNewPatch then
+		B.ReskinFilterButton(ToyBox.FilterDropdown)
+	else
+		B.ReskinFilterButton(ToyBoxFilterButton)
+	end
 
 	-- Progress bar
 
@@ -219,8 +228,13 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(icons)
 	B.ReskinInput(HeirloomsJournalSearchBox)
-	B.ReskinDropDown(HeirloomsJournalClassDropDown)
-	B.ReskinFilterButton(HeirloomsJournal.FilterButton)
+	if DB.isNewPatch then
+		B.ReskinDropDown(HeirloomsJournal.ClassDropdown)
+		B.ReskinFilterButton(HeirloomsJournal.FilterDropdown)
+	else
+		B.ReskinDropDown(HeirloomsJournalClassDropDown)
+		B.ReskinFilterButton(HeirloomsJournal.FilterButton)
+	end
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, "right")
 
@@ -309,7 +323,11 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(ItemsCollectionFrame)
 	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
-	B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
+	if DB.isNewPatch then
+		B.ReskinDropDown(ItemsCollectionFrame.WeaponDropdown)
+	else
+		B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
+	end
 	B.ReskinInput(WardrobeCollectionFrameSearchBox)
 
 	B.ReskinTab(WardrobeCollectionFrameTab1)
@@ -347,5 +365,11 @@ C.themes["Blizzard_Collections"] = function()
 			hl:SetVertexColor(1, 1, 1, .25)
 			hl:SetAllPoints(slot.Icon)
 		end
+	end
+
+	if DB.isNewPatch then
+		-- Outfit Frame
+		B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
+		B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
 	end
 end

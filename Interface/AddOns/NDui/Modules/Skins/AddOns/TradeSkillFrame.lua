@@ -40,8 +40,13 @@ function S:EnhancedTradeSkill()
 	TradeSkillCancelButton:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -42, 54)
 	TradeSkillCreateButton:ClearAllPoints()
 	TradeSkillCreateButton:SetPoint("RIGHT", TradeSkillCancelButton, "LEFT", -1, 0)
-	TradeSkillInvSlotDropDown:ClearAllPoints()
-	TradeSkillInvSlotDropDown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
+	if DB.isNewPatch then
+		TradeSkillInvSlotDropdown:ClearAllPoints()
+		TradeSkillInvSlotDropdown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
+	else
+		TradeSkillInvSlotDropDown:ClearAllPoints()
+		TradeSkillInvSlotDropDown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
+	end
 	TradeSkillFrameAvailableFilterCheckButton:SetPoint("TOPLEFT", 230, -70)
 
 	if C.db["Skins"]["BlizzardSkins"] then

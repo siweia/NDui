@@ -1,6 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+if DB.isNewPatch then return end
+
 local function reskinPanelSection(frame)
 	B.StripTextures(frame)
 	B.CreateBDFrame(frame, .25)

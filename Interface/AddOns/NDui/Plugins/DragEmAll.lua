@@ -13,7 +13,7 @@ local frames = {
 
 	-- Blizz Frames
 	["AddonList"] = false,
-	["AudioOptionsFrame"] = false,
+	["AudioOptionsFrame"] = false, -- isNewPatch, removed
 	["ChannelFrame"] = false,
 	["ChatConfigFrame"] = false,
 	["DressUpFrame"] = false,
@@ -22,7 +22,7 @@ local frames = {
 	["GossipFrame"] = false,
 	["GuildRegistrarFrame"] = false,
 	["HelpFrame"] = false,
-	["InterfaceOptionsFrame"] = false,
+	["InterfaceOptionsFrame"] = false, -- isNewPatch, removed
 	["ItemTextFrame"] = false,
 	["LootFrame"] = false,
 	["MailFrame"] = false,
@@ -43,7 +43,7 @@ local frames = {
 	["TaxiFrame"] = false,
 	["TradeFrame"] = false,
 	["TutorialFrame"] = false,
-	["VideoOptionsFrame"] = false,
+	["VideoOptionsFrame"] = false, -- isNewPatch, removed
 }
 
 local function CharacterFrameMoveCheck()

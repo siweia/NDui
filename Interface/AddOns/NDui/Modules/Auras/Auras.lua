@@ -22,7 +22,9 @@ function A:HideBlizBuff()
 	B.HideObject(_G.TemporaryEnchantFrame)
 	SetCVar("consolidateBuffs", 0)
 	B.HideObject(_G.ConsolidatedBuffs)
-	B.HideOption(_G.InterfaceOptionsDisplayPanelConsolidateBuffs)
+	if not DB.isNewPatch then
+		B.HideOption(_G.InterfaceOptionsDisplayPanelConsolidateBuffs)
+	end
 end
 
 function A:BuildBuffFrame()

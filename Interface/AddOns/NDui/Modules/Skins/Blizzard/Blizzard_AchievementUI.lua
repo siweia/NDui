@@ -52,10 +52,17 @@ C.themes["Blizzard_AchievementUI"] = function()
 	end)
 
 	AchievementFrameHeaderPoints:SetPoint("TOP", AchievementFrame, "TOP", 0, -6)
-	AchievementFrameFilterDropDown:ClearAllPoints()
-	AchievementFrameFilterDropDown:SetPoint("TOPRIGHT", -120, 0)
-	AchievementFrameFilterDropDownText:ClearAllPoints()
-	AchievementFrameFilterDropDownText:SetPoint("CENTER", -10, 1)
+	if DB.isNewPatch then
+		B.ReskinFilterButton(AchievementFrameFilterDropdown)
+		AchievementFrameFilterDropdown:ClearAllPoints()
+		AchievementFrameFilterDropdown:SetPoint("TOPLEFT", 25, -5)
+	else
+		AchievementFrameFilterDropDown:ClearAllPoints()
+		AchievementFrameFilterDropDown:SetPoint("TOPRIGHT", -120, 0)
+		AchievementFrameFilterDropDownText:ClearAllPoints()
+		AchievementFrameFilterDropDownText:SetPoint("CENTER", -10, 1)
+		B.ReskinDropDown(AchievementFrameFilterDropDown)
+	end
 
 	B.StripTextures(AchievementFrameSummaryCategoriesStatusBar)
 	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(DB.bdTex)
@@ -247,7 +254,6 @@ C.themes["Blizzard_AchievementUI"] = function()
 	B.ReskinScroll(AchievementFrameStatsContainerScrollBar)
 	B.ReskinScroll(AchievementFrameCategoriesContainerScrollBar)
 	B.ReskinScroll(AchievementFrameComparisonContainerScrollBar)
-	B.ReskinDropDown(AchievementFrameFilterDropDown)
 
 	for i = 1, 20 do
 		local bu = _G["AchievementFrameComparisonStatsContainerButton"..i]

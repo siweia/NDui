@@ -53,14 +53,16 @@ function Bar:HideBlizz()
 	end
 
 	-- Hide blizz options
-	B.HideOption(InterfaceOptionsActionBarsPanelBottomLeft)
-	B.HideOption(InterfaceOptionsActionBarsPanelBottomRight)
-	B.HideOption(InterfaceOptionsActionBarsPanelRight)
-	B.HideOption(InterfaceOptionsActionBarsPanelRightTwo)
-	B.HideOption(InterfaceOptionsActionBarsPanelAlwaysShowActionBars)
 	SetCVar("multiBarRightVerticalLayout", 0)
-	InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
-	InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+	if not DB.isNewPatch then
+		B.HideOption(InterfaceOptionsActionBarsPanelBottomLeft)
+		B.HideOption(InterfaceOptionsActionBarsPanelBottomRight)
+		B.HideOption(InterfaceOptionsActionBarsPanelRight)
+		B.HideOption(InterfaceOptionsActionBarsPanelRightTwo)
+		B.HideOption(InterfaceOptionsActionBarsPanelAlwaysShowActionBars)
+		InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
+		InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+	end
 	-- Update token panel
 	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 end
