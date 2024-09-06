@@ -143,6 +143,10 @@ local function isTradeGoods(item)
 	return item.classID == Enum.ItemClass.Tradegoods
 end
 
+local function hasReagentBagEquipped()
+	return ContainerFrame_GetContainerNumSlots(5) > 0
+end
+
 local function isQuestItem(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterQuest"] then return end
@@ -222,7 +226,7 @@ function module:GetFilters()
 	filters.bankAOE = function(item) return isItemInBank(item) and isWarboundUntilEquipped(item) end
 
 	filters.onlyReagent = function(item) return item.bagId == -3 and not isEmptySlot(item) end -- reagent bank
-	filters.onlyBagReagent = function(item) return (isItemInBagReagent(item) and not isEmptySlot(item)) or (isItemInBag(item) and isTradeGoods(item)) end -- reagent bagslot
+	filters.onlyBagReagent = function(item) return (isItemInBagReagent(item) and not isEmptySlot(item)) or (hasReagentBagEquipped() and isItemInBag(item) and isTradeGoods(item)) end -- reagent bagslot
 
 	filters.accountbank = function(item) return isItemInAccountBank(item) and not isEmptySlot(item) end
 	filters.accountEquipment = function(item) return isItemInAccountBank(item) and isItemEquipment(item) end
