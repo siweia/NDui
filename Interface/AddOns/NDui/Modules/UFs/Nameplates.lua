@@ -72,6 +72,7 @@ function UF:SetupCVars()
 	SetCVar("nameplateGlobalScale", 1)
 	SetCVar("NamePlateHorizontalScale", 1)
 	SetCVar("NamePlateVerticalScale", 1)
+	SetCVar("NamePlateClassificationScale", 1)
 
 	SetCVar("nameplateShowSelf", 0)
 	SetCVar("nameplateResourceOnTarget", 0)
