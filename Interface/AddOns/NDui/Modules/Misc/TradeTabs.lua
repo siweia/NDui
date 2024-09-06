@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
-local GetSpellCooldown, GetSpellInfo, GetItemCooldown = GetSpellCooldown, GetSpellInfo, GetItemCooldown
+local GetSpellCooldown, GetSpellInfo = GetSpellCooldown, GetSpellInfo
 local IsPassiveSpell = C_Spell and C_Spell.IsSpellPassive or IsPassiveSpell
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
 local IsCurrentSpell, IsPlayerSpell, UseItemByName = IsCurrentSpell, IsPlayerSpell, UseItemByName
@@ -19,6 +19,8 @@ local PICK_LOCK = 1804
 local CHEF_HAT = 134020
 local THERMAL_ANVIL = 87216
 local tabList = {}
+
+local GetItemCooldown = C_Container.GetItemCooldown or GetItemCooldown -- isNewPatch
 
 local onlyPrimary = {
 	[171] = true, -- Alchemy

@@ -46,6 +46,8 @@ local WoWBCC = (WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
 local WoWWrath = (WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC)
 local WoWCata = (WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC)
 
+local GetItemCooldown = C_Container.GetItemCooldown or GetItemCooldown -- isNewPatch
+
 -- Enable custom flyouts for WoW Retail
 local UseCustomFlyout = WoWRetail
 
@@ -2166,7 +2168,7 @@ else
 			-- based on ActionButton_UpdateFlyout in ActionButton.lua
 			local actionType = GetActionInfo(self._state_action)
 			if actionType == "flyout" then
-				local isMouseOverButton =  GetMouseFocus() == self;
+				local isMouseOverButton = self:IsMouseOver()
 
 				local isButtonDown
 				if (isButtonDownOverride ~= nil) then

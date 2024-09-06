@@ -15,6 +15,8 @@ local AuraUtil_FindAuraByName = AuraUtil.FindAuraByName
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
 
+local GetItemCooldown = C_Container.GetItemCooldown or GetItemCooldown -- isNewPatch
+
 --[[
 	闭上你的嘴！
 	打断、偷取及驱散法术时的警报
