@@ -165,7 +165,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinScroll(ReputationListScrollFrameScrollBar)
 	select(3, ReputationDetailFrame:GetRegions()):Hide()
 
-	local atWarCheck = ReputationDetailAtWarCheckBox or ReputationDetailAtWarCheckbox
+	local atWarCheck = ReputationDetailAtWarCheckBox or ReputationDetailAtWarCheckbox -- isNewPatch
 	B.ReskinCheck(atWarCheck)
 	local atWarCheckTex = atWarCheck:GetCheckedTexture()
 	atWarCheckTex:ClearAllPoints()

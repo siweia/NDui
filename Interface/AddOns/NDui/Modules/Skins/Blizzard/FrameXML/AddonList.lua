@@ -13,7 +13,9 @@ tinsert(C.defaultThemes, function()
 	B.ReskinScroll(AddonListScrollFrameScrollBar)
 
 	AddonListForceLoad:SetSize(26, 26)
-	if not DB.isNewPatch then
+	if DB.isNewPatch then
+		B.ReskinDropDown(AddonList.Dropdown)
+	else
 		B.ReskinDropDown(AddonCharacterDropDown)
 		AddonCharacterDropDown:SetWidth(170)
 	end

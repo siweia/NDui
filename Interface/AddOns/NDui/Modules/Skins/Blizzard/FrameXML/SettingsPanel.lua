@@ -157,9 +157,14 @@ tinsert(C.defaultThemes, function()
 					bg:SetPoint("TOPLEFT", 15, -30)
 					bg:SetPoint("BOTTOMRIGHT", -30, -5)
 				end
-				if child.CheckBox then
+				if child.CheckBox then -- isNewPatch
 					B.ReskinCheck(child.CheckBox)
 					child.CheckBox.bg:SetInside(nil, 6, 6)
+					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
+				end
+				if child.Checkbox then
+					B.ReskinCheck(child.Checkbox)
+					child.Checkbox.bg:SetInside(nil, 6, 6)
 					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
 				end
 				if child.DropDown then
