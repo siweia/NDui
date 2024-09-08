@@ -414,7 +414,8 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	-- Event toast
+	--[=[ Event toast, seems unnecessary
+
 	hooksecurefunc(EventToastManagerFrame, "DisplayToast", function(self)
 		local toast = self.currentDisplayingToast
 		if not toast then return end
@@ -433,4 +434,5 @@ tinsert(C.defaultThemes, function()
 			toast.bg:SetShown(icon and icon:IsShown() and icon:GetTexture() ~= nil)
 		end
 	end)
+	]=]
 end)

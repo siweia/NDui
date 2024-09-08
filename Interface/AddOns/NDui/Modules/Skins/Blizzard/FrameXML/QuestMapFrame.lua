@@ -29,9 +29,9 @@ local function ReskinAWQHeader()
 	if C_AddOns.IsAddOnLoaded("AngrierWorldQuests") then
 		local button = _G["AngrierWorldQuestsHeader"]
 		if button and not button.styled then
-			B.ReskinCollapse(button, true)
-			button:GetPushedTexture():SetAlpha(0)
-			button:GetHighlightTexture():SetAlpha(0)
+			B.StripTextures(button)
+			B.CreateBDFrame(button, .25)
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 			button.styled = true
 		end

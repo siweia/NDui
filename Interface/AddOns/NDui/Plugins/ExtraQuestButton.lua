@@ -63,6 +63,7 @@ local inaccurateQuestAreas = {
 	[59809] = true,
 	[60004] = 118, -- 前夕任务：英勇之举
 	[63971] = 1543, -- 法夜突袭，蜗牛践踏
+	[79960] = 2255,
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -110,6 +111,20 @@ local questItems = {
 	[60188] = 178464, -- Night Fae Covenant
 	[60649] = 180170, -- Ardenweald
 	[60609] = 180008, -- Ardenweald
+	[61708] = 174043, -- Maldraxxus, untested
+	[63892] = 185963, -- Korthia
+	[12022] = 169219, -- Brewfest
+	[12191] = 169219, -- Brewfest
+	[66439] = 192545, -- The Waking Shores
+	[77891] = 209017, -- Emerald Dream
+	[77483] = 202247, -- Technoscrying
+	[77484] = 202247, -- Technoscrying
+	[77434] = 202247, -- Technoscrying
+	[78931] = 202247, -- Technoscrying
+	[78820] = 202247, -- Technoscrying
+	[78616] = 202247, -- Technoscrying
+	[78755] = 211483, -- Khaz Algar
+	[79960] = 216664, -- Azj
 }
 
 -- items that need to be shown, but not. (itemID = bool/mapID)
@@ -496,6 +511,18 @@ local function GetClosestQuestItem()
 					closestDistance = distance
 					closestQuestItemLink = itemLink
 				end
+			end
+		end
+	end
+
+	local tasksTable = GetTasksTable() -- bonus tracker, needs review
+	for i = 1, #tasksTable do
+		local questID = tasksTable[i]
+		if questID and not C_QuestLog_IsWorldQuest(questID) and not QuestUtils_IsQuestWatched(questID) and GetTaskInfo(questID) then
+			local distance, itemLink = GetQuestDistanceWithItem(questID)
+			if distance and distance <= closestDistance then
+				closestDistance = distance
+				closestQuestItemLink = itemLink
 			end
 		end
 	end

@@ -1847,7 +1847,7 @@ do
 				frame:SetTexelSnappingBias(0)
 			elseif frame.GetStatusBarTexture then
 				local texture = frame:GetStatusBarTexture()
-				if texture and texture.SetSnapToPixelGrid then
+				if type(texture) == "table" and texture.SetSnapToPixelGrid then
 					texture:SetSnapToPixelGrid(false)
 					texture:SetTexelSnappingBias(0)
 				end

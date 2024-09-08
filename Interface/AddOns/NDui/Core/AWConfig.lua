@@ -275,7 +275,7 @@ local function CreatePanel()
 
 	local function AddInternal(parent, index, data)
 		local intID, duration, trigger, unit, itemID = unpack(data)
-		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
+		local name, texture = GetSpellName(intID), GetSpellTexture(intID)
 		if itemID then
 			name = C_Item.GetItemInfo(itemID)
 		end

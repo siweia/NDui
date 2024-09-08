@@ -4,7 +4,6 @@ local S = B:GetModule("Skins")
 local TT = B:GetModule("Tooltip")
 
 local strfind, strmatch, gsub = string.find, string.match, string.gsub
-local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local buttonsize = 24
 
@@ -102,7 +101,7 @@ function S:DBMSkin()
 		return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
 	end
 
-	if not IsAddOnLoaded("DBM-Core") then return end
+	if not C_AddOns.IsAddOnLoaded("DBM-Core") then return end
 	if not C.db["Skins"]["DBM"] then return end
 
 	hooksecurefunc(DBT, "CreateBar", function(self)
@@ -139,10 +138,6 @@ function S:DBMSkin()
 	if not DBM_AllSavedOptions["Default"] then DBM_AllSavedOptions["Default"] = {} end
 	DBM_AllSavedOptions["Default"]["BlockVersionUpdateNotice"] = true
 	DBM_AllSavedOptions["Default"]["EventSoundVictory"] = "None"
-	if IsAddOnLoaded("DBM-VPYike") then
-		DBM_AllSavedOptions["Default"]["CountdownVoice"] = "VP:Yike"
-		DBM_AllSavedOptions["Default"]["ChosenVoicePack"] = "Yike"
-	end
 	if not DBT_AllPersistentOptions["Default"] then DBT_AllPersistentOptions["Default"] = {} end
 	DBT_AllPersistentOptions["Default"]["DBM"].BarYOffset = 8
 	DBT_AllPersistentOptions["Default"]["DBM"].HugeBarYOffset = 8

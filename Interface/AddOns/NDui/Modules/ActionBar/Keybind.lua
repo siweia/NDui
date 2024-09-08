@@ -122,7 +122,7 @@ function Bar:Bind_Update(button, spellmacro)
 
 	if spellmacro == "SPELL" then
 		frame.id = SpellBook_GetSpellBookSlot(button)
-		frame.name = GetSpellBookItemName(frame.id, SpellBookFrame.bookType)
+		frame.name = GetSpellBookItemName(frame.id, Enum.SpellBookSpellBank.Player)
 		frame.bindings = {GetBindingKey(spellmacro.." "..frame.name)}
 	elseif spellmacro == "MACRO" then
 		frame.id = button.selectionIndex or button:GetID()

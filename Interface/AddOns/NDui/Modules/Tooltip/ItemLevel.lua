@@ -15,34 +15,6 @@ local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
 TT.TierSets = {
-	-- FIXME: removed these in release
-	-- WARRIOR
-	[217220] = true, [217219] = true, [217218] = true, [217217] = true, [217216] = true,
-	-- PALADIN
-	[217200] = true, [217199] = true, [217198] = true, [217197] = true, [217196] = true,
-	-- HUNTER
-	[217185] = true, [217184] = true, [217183] = true, [217182] = true, [217181] = true,
-	-- ROGUE
-	[217210] = true, [217209] = true, [217208] = true, [217207] = true, [217206] = true,
-	-- PRIEST
-	[217204] = true, [217205] = true, [217203] = true, [217202] = true, [217201] = true,
-	-- DEATHKNIGHT
-	[217225] = true, [217224] = true, [217223] = true, [217222] = true, [217221] = true,
-	-- SHAMAN
-	[217240] = true, [217239] = true, [217238] = true, [217237] = true, [217236] = true,
-	-- MAGE
-	[217234] = true, [217233] = true, [217232] = true, [217231] = true, [217235] = true,
-	-- WARLOCK
-	[217214] = true, [217215] = true, [217213] = true, [217212] = true, [217211] = true,
-	-- MONK
-	[217190] = true, [217189] = true, [217188] = true, [217187] = true, [217186] = true,
-	-- DRUID
-	[217195] = true, [217194] = true, [217193] = true, [217192] = true, [217191] = true,
-	-- DEMONHUNTER
-	[217230] = true, [217229] = true, [217228] = true, [217227] = true, [217226] = true,
-	-- EVOKER
-	[217180] = true, [217179] = true, [217178] = true, [217177] = true, [217176] = true,
-
 	-- HUNTER
 	[212023] = true, [212021] = true, [212020] = true, [212019] = true, [212018] = true,
 	-- WARRIOR
