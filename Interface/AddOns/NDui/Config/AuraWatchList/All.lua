@@ -56,6 +56,8 @@ local list = {
 		{AuraID = 371124, UnitID = "player"},	-- 沉静西风药水
 		{AuraID = 371024, UnitID = "player"},	-- 元素强能药水
 		{AuraID = 371028, UnitID = "player"},	-- 究极元素强能药水
+		-- 11.0 饰品
+		{AuraID = 443531, UnitID = "player"},	-- 振奋之光
 		-- 10.0 饰品
 		{AuraID = 381476, UnitID = "player"},	-- 爆发烈焰
 		{AuraID = 383941, UnitID = "player"},	-- 崩坏之力
