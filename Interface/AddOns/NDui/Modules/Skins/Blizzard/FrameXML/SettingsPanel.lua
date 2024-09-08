@@ -60,36 +60,6 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(frame.Container.SettingsList.Header.DefaultsButton)
 	B.ReskinTrimScroll(frame.Container.SettingsList.ScrollBar)
 
-	local function ReskinDropDownArrow(button, direction)
-		button.NormalTexture:SetAlpha(0)
-		button.PushedTexture:SetAlpha(0)
-		button:GetHighlightTexture():SetAlpha(0)
-
-		local dis = button:GetDisabledTexture()
-		B.SetupArrow(dis, direction)
-		dis:SetVertexColor(0, 0, 0, .7)
-		dis:SetDrawLayer("OVERLAY")
-		dis:SetInside(button, 4, 4)
-
-		local tex = button:CreateTexture(nil, "ARTWORK")
-		tex:SetInside(button, 4, 4)
-		B.SetupArrow(tex, direction)
-		button.__texture = tex
-		button:HookScript("OnEnter", B.Texture_OnEnter)
-		button:HookScript("OnLeave", B.Texture_OnLeave)
-	end
-
-	local function ReskinOptionDropDown(option)
-		local button = option.Button
-		B.Reskin(button)
-		button.__bg:SetInside(button, 6, 6)
-		button.NormalTexture:SetAlpha(0)
-		button.HighlightTexture:SetAlpha(0)
-
-		ReskinDropDownArrow(option.DecrementButton, "left")
-		ReskinDropDownArrow(option.IncrementButton, "right")
-	end
-
 	local function ReskinDropdown(option)
 		B.Reskin(option.Dropdown)
 		B.Reskin(option.DecrementButton)
@@ -148,18 +118,10 @@ tinsert(C.defaultThemes, function()
 					bg:SetPoint("TOPLEFT", 15, -30)
 					bg:SetPoint("BOTTOMRIGHT", -30, -5)
 				end
-				if child.CheckBox then
-					B.ReskinCheck(child.CheckBox)
-					child.CheckBox.bg:SetInside(nil, 6, 6)
-					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
-				end
 				if child.Checkbox then
 					B.ReskinCheck(child.Checkbox)
 					child.Checkbox.bg:SetInside(nil, 6, 6)
 					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
-				end
-				if child.ColorBlindFilterDropDown then
-					ReskinOptionDropDown(child.ColorBlindFilterDropDown)
 				end
 				if child.Control then
 					ReskinDropdown(child.Control)
