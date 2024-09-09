@@ -91,13 +91,17 @@ info.onLeave = function(self)
 	GameTooltip:Hide()
 end
 
+
+local zoneString = "|cffffff00|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a %s: %s (%s) %s]|h|r"
+
 info.onMouseUp = function(_, btn)
 	if btn == "LeftButton" then
 		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleFrame(WorldMapFrame)
 	elseif btn == "RightButton" then
+		local mapID = C_Map_GetBestMapForUnit("player")
 		local hasUnit = UnitExists("target") and not UnitIsPlayer("target")
 		local unitName = hasUnit and UnitName("target") or ""
-		ChatFrame_OpenChat(format("%s: %s (%s) %s", L["My Position"], zone, formatCoords(), unitName), SELECTED_DOCK_FRAME)
+		print(format(zoneString, mapID, coordX*10000, coordY*10000, L["My Position"], zone, formatCoords(), unitName))
 	end
 end
