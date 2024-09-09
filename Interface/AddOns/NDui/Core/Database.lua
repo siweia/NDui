@@ -249,6 +249,7 @@ DB.ReminderBuffs = {
 		{	spells = {
 				[192106] = true,	-- 闪电之盾
 				[974] = true,		-- 大地之盾
+				[383648] = true,	-- 大地之盾
 				[52127] = true,		-- 水之护盾
 			},
 			depend = 192106,
