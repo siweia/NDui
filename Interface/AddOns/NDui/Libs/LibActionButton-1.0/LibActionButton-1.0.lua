@@ -1247,6 +1247,7 @@ function InitializeEventHandler()
 	lib.eventFrame:RegisterEvent("SPELL_UPDATE_ICON")
 	if not WoWClassic and not WoWBCC then
 		if not WoWWrath then
+			lib.eventFrame.showGlow = true
 			lib.eventFrame:RegisterEvent("ARCHAEOLOGY_CLOSED")
 			lib.eventFrame:RegisterEvent("UPDATE_SUMMONPETS_ACTION")
 			lib.eventFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
@@ -2031,7 +2032,7 @@ function UpdateHotkeys(self)
 end
 
 function ShowOverlayGlow(self)
-	if LCG then
+	if LCG and lib.eventFrame.showGlow then
 		LCG.ShowOverlayGlow(self)
 	end
 end
@@ -2043,7 +2044,7 @@ function HideOverlayGlow(self)
 end
 
 function UpdateOverlayGlow(self)
-	local spellId = self:GetSpellId()
+	local spellId = lib.eventFrame.showGlow and self:GetSpellId()
 	if spellId and IsSpellOverlayed(spellId) then
 		ShowOverlayGlow(self)
 	else

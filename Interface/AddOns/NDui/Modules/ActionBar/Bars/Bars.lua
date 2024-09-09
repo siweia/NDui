@@ -322,6 +322,21 @@ function Bar:CreateBars()
 	end)
 end
 
+function Bar:UpdateOverlays()
+	local eventFrame = LAB.eventFrame
+	if not eventFrame then return end
+
+	if C.db["Actionbar"]["ShowGlow"] then
+		eventFrame.showGlow = true
+		eventFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
+		eventFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_HIDE")
+	else
+		eventFrame.showGlow = false
+		eventFrame:UnregisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
+		eventFrame:UnregisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_HIDE")
+	end
+end
+
 function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
@@ -330,6 +345,7 @@ function Bar:OnLogin()
 
 	Bar.movers = {}
 	Bar:CreateBars()
+	Bar:UpdateOverlays()
 	Bar:CreateExtrabar()
 	Bar:CreateLeaveVehicle()
 	Bar:CreatePetbar()
