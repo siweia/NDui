@@ -113,12 +113,8 @@ function module.SetItemRefHook(link, _, button)
 					MailFrameTab_OnClick(nil, 2)
 					SendMailNameEditBox:SetText(name)
 					SendMailNameEditBox:HighlightText()
-				else
-					local editBox = ChatEdit_ChooseBoxForSend()
-					local hasText = (editBox:GetText() ~= "")
-					ChatEdit_ActivateChat(editBox)
-					editBox:Insert(name)
-					if not hasText then editBox:HighlightText() end
+				elseif ChatEdit_GetActiveWindow() then
+					ChatEdit_InsertLink(name)
 				end
 			end
 		end
