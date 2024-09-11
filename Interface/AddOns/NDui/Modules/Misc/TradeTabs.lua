@@ -6,7 +6,7 @@ local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
 local IsPlayerSpell, UseItemByName = IsPlayerSpell, UseItemByName
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
-local PlayerHasToy, C_ToyBox_IsToyUsable, C_ToyBox_GetToyInfo = PlayerHasToy, C_ToyBox.IsToyUsable, C_ToyBox.GetToyInfo
+local PlayerHasToy, C_ToyBox_GetToyInfo = PlayerHasToy, C_ToyBox.GetToyInfo
 local C_TradeSkillUI_GetRecipeInfo, C_TradeSkillUI_GetTradeSkillLine = C_TradeSkillUI.GetRecipeInfo, C_TradeSkillUI.GetTradeSkillLine
 local C_TradeSkillUI_GetOnlyShowSkillUpRecipes, C_TradeSkillUI_SetOnlyShowSkillUpRecipes = C_TradeSkillUI.GetOnlyShowSkillUpRecipes, C_TradeSkillUI.SetOnlyShowSkillUpRecipes
 local C_TradeSkillUI_GetOnlyShowMakeableRecipes, C_TradeSkillUI_SetOnlyShowMakeableRecipes = C_TradeSkillUI.GetOnlyShowMakeableRecipes, C_TradeSkillUI.SetOnlyShowMakeableRecipes
@@ -58,7 +58,7 @@ function M:UpdateProfessions()
 		end
 	end
 
-	if isCook and PlayerHasToy(CHEF_HAT) and C_ToyBox_IsToyUsable(CHEF_HAT) then
+	if isCook and PlayerHasToy(CHEF_HAT) then
 		M:TradeTabs_Create(nil, CHEF_HAT)
 	end
 	if C_Item.GetItemCount(THERMAL_ANVIL) > 0 then
@@ -110,7 +110,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	if toyID then
 		_, name, texture = C_ToyBox_GetToyInfo(toyID)
 	elseif itemID then
-		name, _, _, _, _, _, _, _, _, texture = C_Item.GetItemInfo(itemID)
+		name, texture = C_Item.GetItemNameByID(itemID), C_Item.GetItemIconByID(itemID)
 	else
 		name, texture = C_Spell.GetSpellName(spellID), C_Spell.GetSpellTexture(spellID)
 	end
@@ -168,7 +168,7 @@ function M:TradeTabs_FilterIcons()
 	for index, value in pairs(buttonList) do
 		local bu = CreateFrame("Button", nil, ProfessionsFrame.CraftingPage.RecipeList, "BackdropTemplate")
 		bu:SetSize(22, 22)
-		bu:SetPoint("BOTTOMRIGHT", ProfessionsFrame.CraftingPage.RecipeList.FilterButton, "TOPRIGHT", -(index-1)*27, 10)
+		bu:SetPoint("BOTTOMRIGHT", ProfessionsFrame.CraftingPage.RecipeList.FilterDropdown, "TOPRIGHT", -(index-1)*26 + 7, 10)
 		B.PixelIcon(bu, value[1], true)
 		B.AddTooltip(bu, "ANCHOR_TOP", value[2])
 		bu.__value = value
