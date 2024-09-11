@@ -61,16 +61,14 @@ function A:ChantLumos(self)
 
 		do
 			local button = self.lumos[4]
-			if IsPlayerSpell(200806) then
-				UpdateCooldown(button, 200806, true)
-			elseif IsPlayerSpell(193539) then
+			if IsPlayerSpell(193539) then
 				UpdateBuff(button, 193539, 193538)
 			else
-				UpdateDebuff(button, 2818, 2818)
+				UpdateDebuff(button, 5938, 5938)
 			end
 		end
 
-		UpdateDebuff(self.lumos[5], 79140, 79140, true, true)
+		UpdateCooldown(self.lumos[5], 381623, true)
 	elseif spec == 2 then
 		UpdateBuff(self.lumos[1], 315496, 315496)
 		UpdateCooldown(self.lumos[2], 315341, true)

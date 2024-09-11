@@ -42,6 +42,7 @@ local list = {
 		{AuraID = 328305, UnitID = "target", Caster = "player"},	-- 败血刃伤
 		{AuraID = 323654, UnitID = "target", Caster = "player"},	-- Flagellation
 		{AuraID = 324073, UnitID = "target", Caster = "player"},	-- 锯齿骨刺
+		{AuraID = 319504, UnitID = "target", Caster = "player"},	-- 毒刃
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
 		{AuraID = 1966, UnitID = "player"},		-- 佯攻
@@ -79,6 +80,7 @@ local list = {
 		{AuraID = 196980, UnitID = "player"},	-- 暗影大师
 		{AuraID = 315496, UnitID = "player"},	-- 切割
 		{AuraID = 343142, UnitID = "player"},	-- 恐惧之刃
+		{AuraID = 381623, UnitID = "player"},	-- 菊花茶
 	},
 	["Focus Aura"] = {		-- 焦点光环组
 		{AuraID = 6770, UnitID = "focus", Caster = "player"},	-- 闷棍
