@@ -139,30 +139,3 @@ end
 if not GuildControlUIRankSettingsFrameRosterLabel then
 	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
 end
-
-do	-- Fix guild achievement spam
-	local GuildAchievementBlockList = {
-		[6644] = true, -- 熊猫人大使
-		[6664] = true, -- 熊猫人大使
-		[5130] = true, -- 外交手段
-		[7843] = true, -- 外交手段
-		[5129] = true, -- 大使
-		[7844] = true, -- 大使
-		[5812] = true, -- 联合国
-		[5892] = true, -- 联合国
-		[5126] = true, -- 地下城外交家
-		[5145] = true, -- 地下城外交家
-	}
-
-	AlertFrame:UnregisterEvent("ACHIEVEMENT_EARNED")
-
-	local function onEvent(_, event, ...)
-		local achievementID = ...
-		if not GuildAchievementBlockList[achievementID] then
-			AlertFrame:OnEvent(event, ...)
-		end
-	end
-	local FixAlertFrame = CreateFrame("Frame")
-	FixAlertFrame:RegisterEvent("ACHIEVEMENT_EARNED")
-	FixAlertFrame:SetScript("OnEvent", onEvent)
-end
