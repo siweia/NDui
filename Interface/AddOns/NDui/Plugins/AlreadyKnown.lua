@@ -45,7 +45,7 @@ local function IsAlreadyKnown(link, index)
 			end
 		else
 			if knowns[link] then return true end
-			if not knowables[itemClassID] then return end
+			if not knowables[itemClassID] and not C_Item.IsCosmeticItem(link) then return end
 
 			local data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
 			if data then

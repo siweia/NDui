@@ -87,6 +87,15 @@ function module:HyperlinkShowHook(link, _, button)
 					hide = true
 				end
 			end
+		elseif type == "worldmap" then
+			local waypoint = C_Map.GetUserWaypointHyperlink()
+			if waypoint then
+				if ChatEdit_GetActiveWindow() then
+					ChatEdit_InsertLink(waypoint)
+				else
+					ChatFrame_OpenChat(waypoint)
+				end
+			end
 		end
 	elseif type == "url" then
 		local eb = LAST_ACTIVE_CHAT_EDIT_BOX or _G[self:GetName().."EditBox"]
@@ -122,12 +131,8 @@ function module.SetItemRefHook(link, _, button)
 					MailFrameTab_OnClick(nil, 2)
 					SendMailNameEditBox:SetText(name)
 					SendMailNameEditBox:HighlightText()
-				else
-					local editBox = ChatEdit_ChooseBoxForSend()
-					local hasText = (editBox:GetText() ~= "")
-					ChatEdit_ActivateChat(editBox)
-					editBox:Insert(name)
-					if not hasText then editBox:HighlightText() end
+				elseif ChatEdit_GetActiveWindow() then
+					ChatEdit_InsertLink(name)
 				end
 			end
 		end

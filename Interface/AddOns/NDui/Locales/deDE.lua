@@ -916,3 +916,4 @@ L["IgnoredRaresTip"] = "|nEnter the rare id that you don't need to be notified, 
 L["QuestTracker"] = "Skin for QuestTracker" -- need translation
 L["PurchaseTabTip"] = "You need to disable addon and use default bankframe to purchase extra tabs." -- need translation
 L["AccountBank Width"] = "Warband bank Breite"
+L["ShowGlow"] = "Spell activate glow" -- need translation

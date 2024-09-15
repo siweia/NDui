@@ -84,17 +84,7 @@ function A:ChantLumos(self)
 		UpdateCooldown(self.lumos[1], 20271, true)
 		UpdateCooldown(self.lumos[2], 35395, true)
 		UpdateCooldown(self.lumos[3], 184575, true)
-
-		do
-			local button = self.lumos[4]
-			if IsPlayerSpell(223817) then
-				UpdateBuff(button, 223817, 223819, nil, true)
-			elseif IsPlayerSpell(105809) then
-				UpdateBuff(button, 105809, 105809, true)
-			else
-				UpdateBuff(button, 152262, 152262, true)
-			end
-		end
+		UpdateCooldown(self.lumos[4], 255937, true)
 
 		do
 			local button = self.lumos[5]

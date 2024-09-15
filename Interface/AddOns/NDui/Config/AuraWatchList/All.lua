@@ -56,6 +56,8 @@ local list = {
 		{AuraID = 371124, UnitID = "player"},	-- 沉静西风药水
 		{AuraID = 371024, UnitID = "player"},	-- 元素强能药水
 		{AuraID = 371028, UnitID = "player"},	-- 究极元素强能药水
+		-- 11.0 饰品
+		{AuraID = 443531, UnitID = "player"},	-- 振奋之光
 		-- 10.0 饰品
 		{AuraID = 381476, UnitID = "player"},	-- 爆发烈焰
 		{AuraID = 383941, UnitID = "player"},	-- 崩坏之力
@@ -253,6 +255,11 @@ local list = {
 		{AuraID = 427513, UnitID = "player", Flash = true},	-- 剧毒释放，永茂林地
 
 		{AuraID = 426249, UnitID = "player", Flash = true},	-- 炽焰融合，拉罗达尔
+		-- 11.0
+		-- S1
+		{AuraID = 433740, UnitID = "player"},	-- 感染，艾拉卡拉
+		-- Raids
+		{AuraID = 464748, UnitID = "player", Flash = true},	-- 束缚之网，流丝
 	},
 	["Warning"] = { -- 目标重要光环组
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
@@ -302,6 +309,14 @@ local list = {
 		{AuraID = 421013, UnitID = "target", Flash = true},	-- 培植毁灭，瘤根
 		{AuraID = 424140, UnitID = "target", Value = true},	-- 超级新星，丁达尔
 		{AuraID = 421922, UnitID = "target", Value = true},	-- 腐蚀，菲莱克
+		-- 11.0
+		-- S1
+		{AuraID = 445409, UnitID = "target", Value = true},	-- 加固壳壁，斯卡莫拉克
+		-- Raids
+		{AuraID = 440177, UnitID = "target", Flash = true},	-- 准备饕餮，噬灭者乌格拉克斯
+		{AuraID = 450980, UnitID = "target", Value = true},	-- 存在瓦解，阿努巴拉什
+		{AuraID = 451277, UnitID = "target", Value = true},	-- 尖刺风暴，阿努巴拉什
+		{AuraID = 448488, UnitID = "target", Value = true},	-- 崇拜者的保护，尾王
 		-- PVP
 		{AuraID = 498, UnitID = "target"},		-- 圣佑术
 		{AuraID = 642, UnitID = "target"},		-- 圣盾术

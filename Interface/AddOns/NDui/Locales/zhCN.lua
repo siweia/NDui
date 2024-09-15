@@ -916,3 +916,4 @@ L["IgnoredRaresTip"] = "|n输入你不想接受的稀有提醒的ID，每个ID�
 L["QuestTracker"] = "美化任务追踪框体"
 L["PurchaseTabTip"] = "你需要关闭插件通过系统的背包去解锁额外栏位。"
 L["AccountBank Width"] = "战团银行每行格数"
+L["ShowGlow"] = "技能触发高亮"

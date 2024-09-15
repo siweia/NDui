@@ -6,7 +6,7 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
 local MAJOR_VERSION = "LibCustomGlow-1.0-NDui"
-local MINOR_VERSION = 19
+local MINOR_VERSION = 20
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
@@ -356,8 +356,7 @@ table.insert(lib.glowList, "Pixel Glow")
 lib.startList["Pixel Glow"] = lib.PixelGlow_Start
 lib.stopList["Pixel Glow"] = lib.PixelGlow_Stop
 
-
---Autocast Glow Funcitons--
+--Autocast Glow Functions--
 local function acUpdate(self,elapsed)
 	local width,height = self:GetSize()
 	if width ~= self.info.width or height ~= self.info.height then
@@ -433,6 +432,7 @@ function lib.AutoCastGlow_Start(r,color,N,frequency,scale,xOffset,yOffset,key,fr
 	f.info.N = N
 	f.info.period = period
 	f:SetScript("OnUpdate",acUpdate)
+	acUpdate(f, 0)
 end
 
 function lib.AutoCastGlow_Stop(r,key)

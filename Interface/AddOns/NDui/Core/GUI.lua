@@ -32,6 +32,7 @@ G.DefaultSettings = {
 		MicroMenu = true,
 		ShowStance = true,
 		EquipColor = false,
+		ShowGlow = true,
 
 		Bar1 = true,
 		Bar1Flyout = 1,
@@ -841,6 +842,10 @@ local function updateHotkeys()
 	B:GetModule("Actionbar"):UpdateBarConfig()
 end
 
+local function updateOverlays()
+	B:GetModule("Actionbar"):UpdateOverlays()
+end
+
 local function updateEquipColor()
 	local Bar = B:GetModule("Actionbar")
 	for _, button in pairs(Bar.buttons) do
@@ -1164,6 +1169,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
 		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
+		{1, "Actionbar", "ShowGlow", L["ShowGlow"].."*", nil, nil, updateOverlays},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},

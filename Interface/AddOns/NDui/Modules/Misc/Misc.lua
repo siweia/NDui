@@ -233,7 +233,8 @@ function M:MoveTicketStatusFrame()
 end
 
 -- Achievement screenshot
-function M:ScreenShotOnEvent()
+function M:ScreenShotOnEvent(_, alreadyEarnedOnAccount)
+	if alreadyEarnedOnAccount then return end
 	M.ScreenShotFrame.delay = 1
 	M.ScreenShotFrame:Show()
 end

@@ -223,6 +223,7 @@ local blackList = {
 	[354051] = true,	-- 轻盈步
 	[355689] = true,	-- 山崩
 	[386770] = true,	-- 极寒
+	[378760] = true,	-- 冰霜撕咬
 }
 
 function M:IsAllyPet(sourceFlags)
