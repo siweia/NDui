@@ -594,10 +594,12 @@ local function UpdateAuras(self, event, unit, updateInfo)
 			local slots = {C_UnitAuras.GetAuraSlots(unit, buffFilter)}
 			for i = 2, #slots do
 				local data = processData(buffs, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]))
-				buffs.all[data.auraInstanceID] = data
-
-				if((buffs.FilterAura or FilterAura) (buffs, unit, data)) then
-					buffs.active[data.auraInstanceID] = true
+				if data then -- needs review
+					buffs.all[data.auraInstanceID] = data
+	
+					if((buffs.FilterAura or FilterAura) (buffs, unit, data)) then
+						buffs.active[data.auraInstanceID] = true
+					end
 				end
 			end
 		else
