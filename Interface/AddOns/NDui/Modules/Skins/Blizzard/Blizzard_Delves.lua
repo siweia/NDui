@@ -15,7 +15,8 @@ end
 local function reskinOptionSlot(frame, skip)
 	local option = frame.OptionsList
 	B.StripTextures(option)
-	B.SetBD(option, nil, -5, 5, 5, -5)
+	local bg = B.SetBD(option, nil, -5, 5, 5, -5)
+	bg:SetFrameLevel(3)
 	if not skip then
 		hooksecurefunc(option.ScrollBox, "Update", updateButton)
 	end
