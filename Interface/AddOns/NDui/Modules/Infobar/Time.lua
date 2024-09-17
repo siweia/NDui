@@ -101,8 +101,10 @@ local questlist = {
 	{name = "", id = 70893, questName = true},	-- Community feast
 	{name = "", id = 79226, questName = true},	-- The big dig
 	{name = "", id = 78319, questName = true},	-- The superbloom
+	{name = "", id = 76586, questName = true},	-- 散步圣光
 	{name = "", id = 82946, questName = true},	-- 蜡团
 	{name = "", id = 83240, questName = true},	-- 剧场
+	{name = C_Map.GetAreaInfo(15141), id = 83333},	-- 觉醒主机
 }
 
 -- Check Invasion Status
