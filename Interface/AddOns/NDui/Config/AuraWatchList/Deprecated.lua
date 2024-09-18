@@ -224,14 +224,6 @@ C.DeprecatedAuras = {
 		{AuraID = 336258, UnitID = "player", Flash = true},	-- 凋魂之殇，落单狩猎
 		{AuraID = 331399, UnitID = "player"},	-- 凋魂之殇，感染毒雨
 		{AuraID = 333353, UnitID = "player"},	-- 凋魂之殇，暗影伏击
-		{AuraID = 327401, UnitID = "player", Flash = true},	-- 通灵战潮，共受苦难
-		{AuraID = 323471, UnitID = "player", Flash = true},	-- 通灵战潮，切肉飞刀
-		{AuraID = 328181, UnitID = "player"},	-- 通灵战潮，凌冽之寒
-		{AuraID = 327397, UnitID = "player"},	-- 通灵战潮，严酷命运
-		{AuraID = 322681, UnitID = "player"},	-- 通灵战潮，肉钩
-		{AuraID = 335161, UnitID = "player"},	-- 通灵战潮，残存心能
-		{AuraID = 345323, UnitID = "player", Flash = true},	-- 通灵战潮，勇士之赐
-		{AuraID = 320366, UnitID = "player", Flash = true},	-- 通灵战潮，防腐剂
 		{AuraID = 322746, UnitID = "player"},	-- 彼界，堕落之血
 		{AuraID = 323692, UnitID = "player"},	-- 彼界，奥术易伤
 		{AuraID = 331379, UnitID = "player"},	-- 彼界，润滑剂
@@ -243,7 +235,6 @@ C.DeprecatedAuras = {
 		{AuraID = 334496, UnitID = "player", Stack = 7, Flash = true},	-- 彼界，催眠光粉
 		{AuraID = 328453, UnitID = "player"},	-- 晋升高塔，压迫
 		{AuraID = 335805, UnitID = "player", Flash = true},	-- 晋升高塔，执政官的壁垒
-		{AuraID = 325027, UnitID = "player", Flash = true},	-- 仙林，荆棘爆发
 		{AuraID = 356011, UnitID = "player"},	-- 集市，光线切分者
 		{AuraID = 353421, UnitID = "player"},	-- 集市，精力
 		{AuraID = 347949, UnitID = "player", Flash = true},	-- 集市，审讯
@@ -904,9 +895,6 @@ C.DeprecatedAuras = {
 	-- 9.0 词缀
 		{AuraID = 373724, UnitID = "target", Value = true},	-- S4，鲜血屏障
 		-- 5人本
-		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
-		{AuraID = 343470, UnitID = "target", Value = true},	-- 通灵战潮，碎骨之盾
-		{AuraID = 328351, UnitID = "target", Flash = true},	-- 通灵战潮，染血长枪
 		{AuraID = 322773, UnitID = "target", Value = true},	-- 彼界，鲜血屏障
 		{AuraID = 333227, UnitID = "target", Flash = true},	-- 彼界，不死之怒
 		{AuraID = 228626, UnitID = "target"},	-- 彼界，怨灵之瓮
@@ -925,11 +913,6 @@ C.DeprecatedAuras = {
 		{AuraID = 323878, UnitID = "target", Flash = true},	-- 晋升，枯竭
 		{AuraID = 317936, UnitID = "target"},	-- 晋升，弃誓信条
 		{AuraID = 327812, UnitID = "target"},	-- 晋升，振奋英气
-		{AuraID = 323149, UnitID = "target"},	-- 仙林，黑暗之拥
-		{AuraID = 340191, UnitID = "target", Value = true},	-- 仙林，再生辐光
-		{AuraID = 323059, UnitID = "target", Flash = true},	-- 仙林，宗主之怒
-		{AuraID = 336499, UnitID = "target"},	-- 仙林，猜谜游戏
-		{AuraID = 322569, UnitID = "target"},	-- 仙林，兹洛斯之手
 		{AuraID = 326771, UnitID = "target"},	-- 赎罪大厅，岩石监视者
 		{AuraID = 326450, UnitID = "target"},	-- 赎罪大厅，忠心的野兽
 		{AuraID = 322433, UnitID = "target"},	-- 赤红深渊，石肤术

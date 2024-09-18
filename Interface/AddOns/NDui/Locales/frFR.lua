@@ -545,7 +545,6 @@ L["BlizzardSkinsTips"] = "|nSi cette option est désactivée, les apparences pri
 L["ReskinAlertFrames"] = "Changer le cadre d'alerte"
 L["BlockStranger"] = "Bloquer les murmures des étrangers"
 L["BlockStrangerTip"] = "|nSi coché, n'accepter que les chuchotements des membres du groupe ou du raid, amis et membres de la guilde."
-L["LesserVision"] = "Petite vision de N'Zoth"
 L["UFs PartyAltPower"] = "Afficher la puissance alt. du groupe"
 L["BlockInvite"] = "Bloquer l'invitation des étrangers"
 L["BlockInviteTip"] = "|nSi coché, n'accepter que les invitations des amis et des membres de la guilde."

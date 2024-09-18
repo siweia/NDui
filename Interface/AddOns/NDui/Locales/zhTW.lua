@@ -545,7 +545,6 @@ L["BlizzardSkinsTips"] = "|n禁用此選項時，主要介面將恢復暴雪原�
 L["ReskinAlertFrames"] = "美化通知視窗"
 L["BlockStranger"] = "屏蔽陌生人密語"
 L["BlockStrangerTip"] = "|n啟用後，只接受來自隊友、好友以及公會成員的密語。"
-L["LesserVision"] = "恩若司的小幻象"
 L["UFs PartyAltPower"] = "顯示小隊特殊能量"
 L["BlockInvite"] = "屏蔽陌生人組隊邀請"
 L["BlockInviteTip"] = "|n啟用後，只接受來自好友以及公會成員的組隊邀請。"

@@ -58,6 +58,7 @@ local list = {
 		{AuraID = 371028, UnitID = "player"},	-- 究极元素强能药水
 		-- 11.0 饰品
 		{AuraID = 443531, UnitID = "player"},	-- 振奋之光
+		{AuraID = 435493, UnitID = "player"},	-- 死亡之吻
 		-- 10.0 饰品
 		{AuraID = 381476, UnitID = "player"},	-- 爆发烈焰
 		{AuraID = 383941, UnitID = "player"},	-- 崩坏之力
@@ -241,23 +242,31 @@ local list = {
 		{AuraID = 410908, UnitID = "player", Flash = true},	-- 永恒新星，永恒黎明
 		{AuraID = 401420, UnitID = "player", Flash = true},	-- 黄沙重踏，永恒黎明
 		{AuraID = 404141, UnitID = "player", Flash = true},	-- 时光凋零，永恒黎明
-
-		{AuraID = 407406, UnitID = "player", Flash = true},	-- 腐蚀，萨卡雷斯
-		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
-		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
-		{AuraID = 410642, UnitID = "player", Flash = true},	-- 虚空碎裂，萨卡雷斯
-		{AuraID = 407496, UnitID = "player", Flash = true},	-- 无限压迫，萨卡雷斯
 		-- S3
 		{AuraID = 257407, UnitID = "player"},	-- 追踪，阿塔达萨
 		{AuraID = 250585, UnitID = "player", Flash = true},	-- 剧毒之池，阿塔达萨
 		{AuraID = 258723, UnitID = "player", Flash = true},	-- 怪诞之池，阿塔达萨
 		{AuraID = 268086, UnitID = "player", Text = L["Move"]},	-- 恐怖光环，庄园
 		{AuraID = 427513, UnitID = "player", Flash = true},	-- 剧毒释放，永茂林地
-
+		-- Raids
+		{AuraID = 407406, UnitID = "player", Flash = true},	-- 腐蚀，萨卡雷斯
+		{AuraID = 405340, UnitID = "player", Flash = true},	-- 虚无之拥，萨卡雷斯
+		{AuraID = 407576, UnitID = "player"},	-- 星界耀斑，萨卡雷斯
+		{AuraID = 410642, UnitID = "player", Flash = true},	-- 虚空碎裂，萨卡雷斯
+		{AuraID = 407496, UnitID = "player", Flash = true},	-- 无限压迫，萨卡雷斯
 		{AuraID = 426249, UnitID = "player", Flash = true},	-- 炽焰融合，拉罗达尔
-		-- 11.0
+		-- TWW
 		-- S1
 		{AuraID = 433740, UnitID = "player"},	-- 感染，艾拉卡拉
+		{AuraID = 328181, UnitID = "player"},	-- 通灵战潮，凌冽之寒
+		{AuraID = 327397, UnitID = "player"},	-- 通灵战潮，严酷命运
+		{AuraID = 322681, UnitID = "player"},	-- 通灵战潮，肉钩
+		{AuraID = 335161, UnitID = "player"},	-- 通灵战潮，残存心能
+		{AuraID = 327401, UnitID = "player", Flash = true},	-- 通灵战潮，共受苦难
+		{AuraID = 323471, UnitID = "player", Flash = true},	-- 通灵战潮，切肉飞刀
+		{AuraID = 345323, UnitID = "player", Flash = true},	-- 通灵战潮，勇士之赐
+		{AuraID = 320366, UnitID = "player", Flash = true},	-- 通灵战潮，防腐剂
+		{AuraID = 325027, UnitID = "player", Flash = true},	-- 仙林，荆棘爆发
 		-- Raids
 		{AuraID = 464748, UnitID = "player", Flash = true},	-- 束缚之网，流丝
 	},
@@ -299,17 +308,23 @@ local list = {
 		{AuraID = 388691, UnitID = "target", Value = true},	-- 风暴喷涌，莱萨杰斯
 		{AuraID = 396734, UnitID = "target", Flash = true},	-- 风暴遮罩，莱萨杰斯
 		{AuraID = 388431, UnitID = "target", Flash = true},	-- 毁灭帷幕，莱萨杰斯
-
 		{AuraID = 403284, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
 		{AuraID = 410654, UnitID = "target", Flash = true},	-- 虚空增效，萨卡雷斯
 		{AuraID = 407617, UnitID = "target", Value = true},	-- 时空畸体，里翁苏斯
 		{AuraID = 397383, UnitID = "target", Value = true},	-- 熔火屏障，
 		{AuraID = 407036, UnitID = "target", Value = true},	-- 隐匿虚空，耐萨里奥的回响
-
 		{AuraID = 421013, UnitID = "target", Flash = true},	-- 培植毁灭，瘤根
 		{AuraID = 424140, UnitID = "target", Value = true},	-- 超级新星，丁达尔
 		{AuraID = 421922, UnitID = "target", Value = true},	-- 腐蚀，菲莱克
-		-- 11.0
+		-- TWW
+		{AuraID = 323149, UnitID = "target"},	-- 仙林，黑暗之拥
+		{AuraID = 336499, UnitID = "target"},	-- 仙林，猜谜游戏
+		{AuraID = 322569, UnitID = "target"},	-- 仙林，兹洛斯之手
+		{AuraID = 340191, UnitID = "target", Value = true},	-- 仙林，再生辐光
+		{AuraID = 323059, UnitID = "target", Flash = true},	-- 仙林，宗主之怒
+		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
+		{AuraID = 343470, UnitID = "target", Value = true},	-- 通灵战潮，碎骨之盾
+		{AuraID = 328351, UnitID = "target", Flash = true},	-- 通灵战潮，染血长枪
 		-- S1
 		{AuraID = 445409, UnitID = "target", Value = true},	-- 加固壳壁，斯卡莫拉克
 		-- Raids

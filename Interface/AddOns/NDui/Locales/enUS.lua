@@ -545,7 +545,6 @@ L["BlizzardSkinsTips"] = "|nIf disabled, major skins would be back to Blizzard o
 L["ReskinAlertFrames"] = "Reskin AlertFrames"
 L["BlockStranger"] = "Block stranger whisper"
 L["BlockStrangerTip"] = "|nIf checked, only accept whispers from party or raid members, friends and guild members."
-L["LesserVision"] = "Lesser Vision of N'Zoth"
 L["UFs PartyAltPower"] = "Show Party AltPower"
 L["BlockInvite"] = "Block invite from strangers"
 L["BlockInviteTip"] = "|nIf checked, only accept invites from friends and guild members."

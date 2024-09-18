@@ -115,8 +115,10 @@ function M:ContactList_Refresh()
 
 	for fullname, color in pairs(NDuiADB["ContactList"]) do
 		local name, realm = strsplit("-", fullname)
-		if not contactListByRealm[realm] then contactListByRealm[realm] = {} end
-		contactListByRealm[realm][name] = color
+		if realm then
+			if not contactListByRealm[realm] then contactListByRealm[realm] = {} end
+			contactListByRealm[realm][name] = color
+		end
 	end
 
 	GenerateDataByRealm(DB.MyRealm)
