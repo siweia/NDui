@@ -83,7 +83,7 @@ function M:GetRaidMaxGroup()
 		return 8
 	elseif difficulty == 8 or difficulty == 1 or difficulty == 2 or difficulty == 24 then
 		return 1
-	elseif difficulty == 14 or difficulty == 15 then
+	elseif difficulty == 14 or difficulty == 15 or difficulty == 33 then
 		return 6
 	elseif difficulty == 16 then
 		return 4
