@@ -123,11 +123,11 @@ function M:GuildBest_Update()
 
 	if not resize and hasAngryKeystones then
 		hooksecurefunc(self.WeeklyInfo.Child.WeeklyChest, "SetPoint", function(frame, _, x, y)
-			if x == 100 and y == -30 then
-				frame:SetPoint("LEFT", 105, -5)
+			if x == 100 and y == 0 then
+				frame:SetPoint("LEFT", 110, -5)
 			end
 		end)
-		self.WeeklyInfo.Child.ThisWeekLabel:SetPoint("TOP", -135, -25)
+		self.WeeklyInfo.Child.ThisWeekLabel:SetPoint("TOP", -125, -25)
 
 		local schedule = AngryKeystones.Modules.Schedule
 		frame:SetWidth(246)
