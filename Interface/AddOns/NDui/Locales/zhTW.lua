@@ -918,3 +918,5 @@ L["AccountBank Width"] = "戰團銀行每行格數"
 L["ShowGlow"] = "技能激活高亮"
 L["KeyDown"] = "按下快捷列施法"
 L["ButtonLock"] = "鎖定快捷列"
+L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
+L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR

@@ -918,3 +918,5 @@ L["AccountBank Width"] = "Warband bank Breite"
 L["ShowGlow"] = "Spell activate glow" -- need translation
 L["KeyDown"] = "Cast on keydown" -- need translation
 L["ButtonLock"] = "Lock actionbars" -- need translation
+L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
+L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
