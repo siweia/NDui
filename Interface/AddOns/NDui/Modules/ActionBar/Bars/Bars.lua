@@ -186,7 +186,7 @@ function Bar:UpdateVisibility()
 end
 
 function Bar:UpdateBarConfig()
-	B:LockCVar("ActionButtonUseKeyDown", C.db["Actionbar"]["KeyDown"] and 1 or 0)
+	SetCVar("ActionButtonUseKeyDown", C.db["Actionbar"]["KeyDown"] and 1 or 0)
 
 	for i = 1, 8 do
 		local frame = _G["NDui_ActionBar"..i]
