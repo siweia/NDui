@@ -916,3 +916,5 @@ L["QuestTracker"] = "Skin for QuestTracker" -- need translation
 L["PurchaseTabTip"] = "You need to disable addon and use default bankframe to purchase extra tabs." -- need translation
 L["AccountBank Width"] = "Warband bank Breite"
 L["ShowGlow"] = "Spell activate glow" -- need translation
+L["KeyDown"] = "Cast on keydown" -- need translation
+L["ButtonLock"] = "Lock actionbars" -- need translation
