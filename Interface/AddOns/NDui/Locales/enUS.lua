@@ -856,3 +856,7 @@ L["HideInCombatTip"] = "|nSelect the way to hide GameTooltip in combat.|nGameToo
 L["HideDPSRole"] = "Hide DPS roleicon"
 L["ShowRoleMode"] = "Show roleicons"
 L["EditFont"] = "Editbox fontsize"
+L["KeyDown"] = "Cast on keydown"
+L["ButtonLock"] = "Lock actionbars"
+L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
+L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
