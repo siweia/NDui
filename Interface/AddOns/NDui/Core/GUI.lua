@@ -1065,7 +1065,7 @@ local NewTag = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0|t"
 G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["ShowHealthCurrent"], L["ShowHealthPercent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}
 
 G.TabList = {
-	L["Actionbar"],
+	NewTag..L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
 	NewTag..L["RaidFrame"],
@@ -1095,8 +1095,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Actionbar", "MmssTH", L["MmssThreshold"].."*", nil, {60, 600, 1}, nil, L["MmssThresholdTip"]},
 		{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
 		{},--blank
-		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
-		{1, "Actionbar", "ButtonLock", L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},
+		{1, "Actionbar", "KeyDown", NewTag..L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
+		{1, "Actionbar", "ButtonLock", NewTag..L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},
 		{1, "Actionbar", "Hotkeys", L["Actionbar Hotkey"].."*", nil, nil, updateHotkeys},
 		{1, "Actionbar", "Macro", L["Actionbar Macro"].."*", true, nil, updateHotkeys},
 		{1, "Actionbar", "Grid", L["Actionbar Grid"].."*", nil, nil, updateHotkeys},
