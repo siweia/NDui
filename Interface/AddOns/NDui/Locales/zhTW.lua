@@ -852,3 +852,7 @@ L["HideInCombatTip"] = "|n選擇戰鬥中隱藏滑鼠提示的方式。|n當切�
 L["HideDPSRole"] = "隱藏DPS職責"
 L["ShowRoleMode"] = "職責圖標顯示方式"
 L["EditFont"] = "輸入框字體大小"
+L["KeyDown"] = "按下快捷列施法"
+L["ButtonLock"] = "鎖定快捷列"
+L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
+L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
