@@ -42,10 +42,11 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	local function setupMenu()
-		local menuFrame = menuManagerProxy:GetOpenMenu()
+	local function setupMenu(manager, _, menuDescription)
+		local menuFrame = manager:GetOpenMenu()
 		if menuFrame then
 			skinMenu(menuFrame)
+			menuDescription:AddMenuAcquiredCallback(skinMenu)
 		end
 	end
 
