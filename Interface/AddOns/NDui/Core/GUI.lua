@@ -1184,7 +1184,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"], true},
 		{1, "Bags", "BagsiLvl", L["Bags Itemlevel"].."*", nil, nil, updateBagStatus},
 		{1, "Bags", "PetTrash", L["PetTrash"], true, nil, nil, L["PetTrashTip"]},
-		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 500, 1}, nil, L["iLvlToShowTip"]},
+		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 800, 1}, nil, L["iLvlToShowTip"]},
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder, L["BagSortTip"]},
 		{},--blank
 		{3, "Bags", "BagsPerRow", L["BagsPerRow"].."*", nil, {1, 20, 1}, updateBagAnchor, L["BagsPerRowTip"]},
