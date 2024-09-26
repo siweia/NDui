@@ -1488,4 +1488,20 @@ function module:OnLogin()
 
 	SetCVar("professionToolSlotsExampleShown", 1)
 	SetCVar("professionAccessorySlotsExampleShown", 1)
+
+	-- Delay updates for data jam
+	local updater = CreateFrame("Frame", nil, f.main)
+	updater:Hide()
+	updater:SetScript("OnUpdate", function(self, elapsed)
+		self.delay = self.delay - elapsed
+		if self.delay < 0 then
+			module:UpdateAllBags()
+			self:Hide()
+		end
+	end)
+
+	B:RegisterEvent("GET_ITEM_INFO_RECEIVED", function()
+		updater.delay = 1.5
+		updater:Show()
+	end)
 end
