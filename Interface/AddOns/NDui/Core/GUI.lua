@@ -130,7 +130,6 @@ G.DefaultSettings = {
 		FilterQuest = false,
 		FilterEquipSet = false,
 		FilterAnima = false,
-		FilterRelic = false,
 		FilterStone = false,
 		FilterAOE = true,
 	},
