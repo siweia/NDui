@@ -150,7 +150,7 @@ local completeHiddenItems = {
 local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
 ExtraQuestButton:SetMovable(true)
 ExtraQuestButton:RegisterEvent("PLAYER_LOGIN")
-ExtraQuestButton:RegisterForClicks("AnyDown")
+ExtraQuestButton:RegisterForClicks("AnyUp", "AnyDown")
 ExtraQuestButton:Hide()
 ExtraQuestButton:SetScript("OnEvent", function(self, event, ...)
 	if self[event] then

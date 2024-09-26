@@ -332,7 +332,7 @@ function A:CreateAuraIcon(button)
 	B.CreateBD(button, .25)
 	B.CreateSD(button)
 
-	button:RegisterForClicks("RightButtonDown")
+	button:RegisterForClicks("RightButtonUp", "RightButtonDown")
 	button:SetScript("OnAttributeChanged", A.OnAttributeChanged)
 	button:HookScript("OnMouseDown", A.RemoveSpellFromIgnoreList)
 	button:SetScript("OnEnter", A.Button_OnEnter)
