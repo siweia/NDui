@@ -81,9 +81,9 @@ function M:GetRaidMaxGroup()
 		return 1
 	elseif instType ~= "raid" then
 		return 8
-	elseif difficulty == 8 or difficulty == 1 or difficulty == 2 or difficulty == 24 then
+	elseif difficulty == 8 or difficulty == 1 or difficulty == 2 then
 		return 1
-	elseif difficulty == 14 or difficulty == 15 then
+	elseif difficulty == 14 or difficulty == 15 or (difficulty == 24 and instType == "raid") then
 		return 6
 	elseif difficulty == 16 then
 		return 4
@@ -611,7 +611,7 @@ function M:RaidTool_WorldMarker()
 		button.Icon:SetTexture(iconTexture[i])
 
 		if i ~= 9 then
-			button:RegisterForClicks("AnyDown")
+			button:RegisterForClicks("AnyUp", "AnyDown")
 			button:SetAttribute("type", "macro")
 			button:SetAttribute("macrotext1", format("/wm %d", i))
 			button:SetAttribute("macrotext2", format("/cwm %d", i))

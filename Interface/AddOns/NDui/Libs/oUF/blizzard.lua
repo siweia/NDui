@@ -154,6 +154,12 @@ function oUF:DisableBlizzard(unit)
 			for _, frame in next, CompactArenaFrame.memberUnitFrames do
 				handleFrame(frame, true)
 			end
+
+			-- NDui: handle sub frames
+			for i = 1, 5 do
+				handleFrame(_G['ArenaEnemyMatchFrame'..i], true)
+				handleFrame(_G['ArenaEnemyPrepFrame'..i], true)
+			end
 		end
 	end
 end

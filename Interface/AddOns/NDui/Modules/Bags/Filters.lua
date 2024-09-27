@@ -58,20 +58,16 @@ local function isAzeriteArmor(item)
 	return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link)
 end
 
-local iLvlClassIDs = {
-	[Enum.ItemClass.Gem] = Enum.ItemGemSubclass.Artifactrelic,
-	[Enum.ItemClass.Armor] = 0,
-	[Enum.ItemClass.Weapon] = 0,
-}
-function module:IsItemHasLevel(item)
-	local index = iLvlClassIDs[item.classID]
-	return index and (index == 0 or index == item.subClassID)
-end
-
 local function isItemEquipment(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
-	if not C.db["Bags"]["FilterEquipment"] then return end
-	return item.link and item.quality > Enum.ItemQuality.Common and module:IsItemHasLevel(item)
+	if not C.db["Bags"]["FilterEquipment"]then return end
+	return item.link and item.quality > Enum.ItemQuality.Common and item.ilvl
+end
+
+local function isItemLowerLevel(item)
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterLower"] then return end
+	return item.link and item.quality > Enum.ItemQuality.Common and item.ilvl and item.ilvl < C.db["Bags"]["iLvlToShow"]
 end
 
 local consumableIDs = {
@@ -159,27 +155,6 @@ local function isAnimaItem(item)
 	return item.id and C_Item_IsAnimaItemByID(item.id)
 end
 
-local relicSpellIDs = {
-	[356931] = true,
-	[356933] = true,
-	[356934] = true,
-	[356935] = true,
-	[356936] = true,
-	[356937] = true,
-	[356938] = true,
-	[356939] = true,
-	[356940] = true,
-}
-local function isKorthiaRelicByID(itemID)
-	local _, spellID = C_Item.GetItemSpell(itemID)
-	return spellID and relicSpellIDs[spellID]
-end
-local function isKorthiaRelic(item)
-	if not C.db["Bags"]["ItemFilter"] then return end
-	if not C.db["Bags"]["FilterRelic"] then return end
-	return item.id and isKorthiaRelicByID(item.id)
-end
-
 local primordialStones = {}
 for id = 204000, 204030 do
 	primordialStones[id] = true
@@ -209,9 +184,9 @@ function module:GetFilters()
 	filters.bagGoods = function(item) return isItemInBag(item) and isTradeGoods(item) end
 	filters.bagQuest = function(item) return isItemInBag(item) and isQuestItem(item) end
 	filters.bagAnima = function(item) return isItemInBag(item) and isAnimaItem(item) end
-	filters.bagRelic = function(item) return isItemInBag(item) and isKorthiaRelic(item) end
 	filters.bagStone = function(item) return isItemInBag(item) and isPrimordialStone(item) end
 	filters.bagAOE = function(item) return isItemInBag(item) and isWarboundUntilEquipped(item) end
+	filters.bagLower = function(item) return isItemInBag(item) and isItemLowerLevel(item) end
 
 	filters.onlyBank = function(item) return isItemInBank(item) and not isEmptySlot(item) end
 	filters.bankAzeriteItem = function(item) return isItemInBank(item) and isAzeriteArmor(item) end
@@ -224,6 +199,7 @@ function module:GetFilters()
 	filters.bankQuest = function(item) return isItemInBank(item) and isQuestItem(item) end
 	filters.bankAnima = function(item) return isItemInBank(item) and isAnimaItem(item) end
 	filters.bankAOE = function(item) return isItemInBank(item) and isWarboundUntilEquipped(item) end
+	filters.bankLower = function(item) return isItemInBank(item) and isItemLowerLevel(item) end
 
 	filters.onlyReagent = function(item) return item.bagId == -3 and not isEmptySlot(item) end -- reagent bank
 	filters.onlyBagReagent = function(item) return (isItemInBagReagent(item) and not isEmptySlot(item)) or (hasReagentBagEquipped() and isItemInBag(item) and isTradeGoods(item)) end -- reagent bagslot
