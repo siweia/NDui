@@ -23,21 +23,13 @@ local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
 myRealm = gsub(myRealm, "%s", "") -- fix for multi words realm name
 
-local crossRealms = GetAutoCompleteRealms()
-if not crossRealms or #crossRealms == 0 then
-	crossRealms = {[1]=myRealm}
-end
-
 StaticPopupDialogs["RESETGOLD"] = {
 	text = L["Are you sure to reset the gold count?"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		for _, realm in pairs(crossRealms) do
-			if NDuiADB["totalGold"][realm] then
-				wipe(NDuiADB["totalGold"][realm])
-			end
-		end
+		wipe(NDuiADB["totalGold"])
+		if not NDuiADB["totalGold"][myRealm] then NDuiADB["totalGold"][myRealm] = {} end
 		NDuiADB["totalGold"][myRealm][myName] = {GetMoney(), DB.MyClass}
 	end,
 	whileDead = 1,
@@ -119,18 +111,16 @@ function RebuildCharList()
 	end
 
 	local index = 1
-	for _, realm in pairs(crossRealms) do
-		if NDuiADB["totalGold"][realm] then
-			for name, value in pairs(NDuiADB["totalGold"][realm]) do
-				if not (realm == myRealm and name == myName) then
-					index = index + 1
-					if not menuList[index] then menuList[index] = {} end
-					menuList[index].text = B.HexRGB(B.ClassColor(value[2]))..Ambiguate(name.."-"..realm, "none")
-					menuList[index].notCheckable = true
-					menuList[index].arg1 = realm
-					menuList[index].arg2 = name
-					menuList[index].func = clearCharGold
-				end
+	for realm, data in pairs(NDuiADB["totalGold"]) do
+		for name, value in pairs(data) do
+			if not (realm == myRealm and name == myName) then
+				index = index + 1
+				if not menuList[index] then menuList[index] = {} end
+				menuList[index].text = B.HexRGB(B.ClassColor(value[2]))..Ambiguate(name.."-"..realm, "none")
+				menuList[index].notCheckable = true
+				menuList[index].arg1 = realm
+				menuList[index].arg2 = name
+				menuList[index].func = clearCharGold
 			end
 		end
 	end
@@ -187,23 +177,39 @@ info.onEnter = function(self)
 
 	local totalGold = 0
 	GameTooltip:AddLine(L["RealmCharacter"], .6,.8,1)
-	for _, realm in pairs(crossRealms) do
-		local thisRealmList = NDuiADB["totalGold"][realm]
-		if thisRealmList then
-			for k, v in pairs(thisRealmList) do
-				local name = Ambiguate(k.."-"..realm, "none")
+
+	if NDuiADB["totalGold"][myRealm] then
+		for k, v in pairs(NDuiADB["totalGold"][myRealm]) do
+			local name = Ambiguate(k.."-"..myRealm, "none")
+			local gold, class = unpack(v)
+			local r, g, b = B.ClassColor(class)
+			GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+			totalGold = totalGold + gold
+		end
+	end
+
+	local isShiftKeyDown = IsShiftKeyDown()
+	for realm, data in pairs(NDuiADB["totalGold"]) do
+		if realm ~= myRealm then
+			for k, v in pairs(data) do
 				local gold, class = unpack(v)
-				local r, g, b = B.ClassColor(class)
-				GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+				if isShiftKeyDown then -- show other realms while holding shift
+					local name = Ambiguate(k.."-"..realm, "none")
+					local r, g, b = B.ClassColor(class)
+					GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+				end
 				totalGold = totalGold + gold
 			end
 		end
 	end
-	GameTooltip:AddLine(" ")
-	local accountmoney = C_Bank.FetchDepositedMoney(Enum.BankType.Account)
-	if accountmoney > 0 then
-		GameTooltip:AddDoubleLine(ACCOUNT_BANK_PANEL_TITLE..":", module:GetMoneyString(accountmoney), .6,.8,1, 1,1,1)
+	if not isShiftKeyDown then
+		GameTooltip:AddLine(L["Hold Shift"], .6,.8,1)
 	end
+
+	local accountmoney = C_Bank.FetchDepositedMoney(Enum.BankType.Account)
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddDoubleLine(CHARACTER..":", module:GetMoneyString(totalGold), .6,.8,1, 1,1,1)
+	GameTooltip:AddDoubleLine(ACCOUNT_BANK_PANEL_TITLE..":", module:GetMoneyString(accountmoney), .6,.8,1, 1,1,1)
 	GameTooltip:AddDoubleLine(TOTAL..":", module:GetMoneyString(totalGold + accountmoney), .6,.8,1, 1,1,1)
 
 	title = false

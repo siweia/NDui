@@ -40,6 +40,8 @@ C.themes["Blizzard_PerksProgram"] = function()
 		ReskinCustomizeButton(footerFrame.RefundButton) -- not seen yet, needs review
 		B.ReskinCheck(footerFrame.TogglePlayerPreview)
 		B.ReskinCheck(footerFrame.ToggleHideArmor)
+		B.ReskinCheck(footerFrame.ToggleAttackAnimation)
+		B.ReskinCheck(footerFrame.ToggleMountSpecial)
 		ReskinCustomizeButton(footerFrame.RotateButtonContainer.RotateLeftButton)
 		ReskinCustomizeButton(footerFrame.RotateButtonContainer.RotateRightButton)
 	end

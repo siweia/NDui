@@ -322,6 +322,10 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(detailFrame.ViewRenownButton)
 
 	-- Token frame
+	B.ReskinTrimScroll(TokenFrame.ScrollBar)
+	if DB.isNewPatch then
+		B.ReskinDropDown(TokenFrame.filterDropdown)
+	end
 	if TokenFramePopup.CloseButton then -- blizz typo by parentKey "CloseButton" into "$parent.CloseButton"
 		B.ReskinClose(TokenFramePopup.CloseButton)
 	else
@@ -350,13 +354,20 @@ tinsert(C.defaultThemes, function()
 	B.CreateBDFrame(CurrencyTransferMenu.SourceSelector, .25)
 	CurrencyTransferMenu.SourceSelector.SourceLabel:SetWidth(56)
 	B.ReskinDropDown(CurrencyTransferMenu.SourceSelector.Dropdown)
-	B.ReskinInput(CurrencyTransferMenu.AmountSelector.InputBox)
-	B.CreateBDFrame(CurrencyTransferMenu.AmountSelector, .25)
 	B.ReskinIcon(CurrencyTransferMenu.SourceBalancePreview.BalanceInfo.CurrencyIcon)
 	B.ReskinIcon(CurrencyTransferMenu.PlayerBalancePreview.BalanceInfo.CurrencyIcon)
 	B.Reskin(CurrencyTransferMenu.ConfirmButton)
 	B.Reskin(CurrencyTransferMenu.CancelButton)
-	B.ReskinTrimScroll(TokenFrame.ScrollBar)
+
+	local amountSelector = CurrencyTransferMenu.AmountSelector
+	if amountSelector then
+		B.CreateBDFrame(amountSelector, .25)
+		if DB.isNewPatch then
+			B.Reskin(amountSelector.MaxQuantityButton)
+		end
+		B.ReskinEditBox(amountSelector.InputBox)
+		amountSelector.InputBox.__bg:SetInside(nil, 3, 3)
+	end
 
 	hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
