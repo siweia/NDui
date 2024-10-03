@@ -42,6 +42,18 @@ function B:ReskinModelControl()
 	end
 end
 
+local function NoTaintArrow(self, direction) -- needs review
+	B.StripTextures(self)
+
+	local tex = self:CreateTexture(nil, "ARTWORK")
+	tex:SetAllPoints()
+	B.SetupArrow(tex, direction)
+	self.__texture = tex
+
+	self:HookScript("OnEnter", B.Texture_OnEnter)
+	self:HookScript("OnLeave", B.Texture_OnLeave)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -322,7 +334,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(detailFrame.ViewRenownButton)
 
 	-- Token frame
-	B.ReskinTrimScroll(TokenFrame.ScrollBar)
+	B.ReskinTrimScroll(TokenFrame.ScrollBar, true) -- taint if touching thumb, needs review
 	if DB.isNewPatch then
 		B.ReskinDropDown(TokenFrame.filterDropdown)
 	end
@@ -336,7 +348,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinCheck(TokenFramePopup.InactiveCheckbox)
 	B.ReskinCheck(TokenFramePopup.BackpackCheckbox)
 
-	B.ReskinArrow(TokenFrame.CurrencyTransferLogToggleButton, "right")
+	NoTaintArrow(TokenFrame.CurrencyTransferLogToggleButton, "right") -- taint control, needs review
 	B.ReskinPortraitFrame(CurrencyTransferLog)
 	B.ReskinTrimScroll(CurrencyTransferLog.ScrollBar)
 
