@@ -1409,7 +1409,7 @@ function G:SetupCastbar(parent)
 			castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
-	createOptionGroup(scroll.child, L["Player Castbar"], -170, "Player", updatePlayerCastbar)
+	createOptionGroup(scroll.child, L["Player Castbar"], -150, "Player", updatePlayerCastbar)
 
 	local function updateTargetCastbar()
 		local castbar = _G.oUF_Target and _G.oUF_Target.Castbar
@@ -1421,7 +1421,7 @@ function G:SetupCastbar(parent)
 			castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
-	createOptionGroup(scroll.child, L["Target Castbar"], -390, "Target", updateTargetCastbar)
+	createOptionGroup(scroll.child, L["Target Castbar"], -350, "Target", updateTargetCastbar)
 
 	local function updateFocusCastbar()
 		local castbar = _G.oUF_Focus and _G.oUF_Focus.Castbar
@@ -1433,7 +1433,7 @@ function G:SetupCastbar(parent)
 			castbar.mover:SetSize(width+height+5, height+5)
 		end
 	end
-	createOptionGroup(scroll.child, L["Focus Castbar"], -610, "Focus", updateFocusCastbar)
+	createOptionGroup(scroll.child, L["Focus Castbar"], -550, "Focus", updateFocusCastbar)
 
 	panel:HookScript("OnHide", function()
 		local playerCB = _G.oUF_Player and _G.oUF_Player.Castbar
