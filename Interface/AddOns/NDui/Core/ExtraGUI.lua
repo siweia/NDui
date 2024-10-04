@@ -1633,8 +1633,8 @@ function G:SetupNameplateSize(parent)
 		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize","HealthTextSize", "HealthTextOffset", "PlateCBHeight", "CBTextSize", "PlateCBOffset", "HarmWidth", "HarmHeight", "NameTextOffset"},
 		["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize","FriendHealthSize", "FriendHealthOffset", "FriendPlateCBHeight", "FriendCBTextSize", "FriendPlateCBOffset", "HelpWidth", "HelpHeight", "FriendNameOffset"},
 	}
-	local function createOptionGroup(parent, title, offset, value, func, isEnemy)
-		createOptionTitle(parent, title, offset)
+	local function createOptionGroup(parent, offset, value, func, isEnemy)
+		createOptionTitle(parent, "", offset)
 		createOptionSlider(parent, L["Width"], 50, 500, 190, offset-60, optionValues[value][1], func, "Nameplate")
 		createOptionSlider(parent, L["Height"], 5, 50, 8, offset-130, optionValues[value][2], func, "Nameplate")
 		createOptionSlider(parent, L["InteractWidth"], 50, 500, 190, offset-200, optionValues[value][9], func, "Nameplate")
@@ -1653,8 +1653,32 @@ function G:SetupNameplateSize(parent)
 	end
 
 	local UF = B:GetModule("UnitFrames")
-	createOptionGroup(scroll.child, L["HostileNameplate"], -10, "enemy", UF.RefreshAllPlates, true)
-	createOptionGroup(scroll.child, L["FriendlyNameplate"], -1000, "friend", UF.RefreshAllPlates)
+	local options = {
+		[1] = L["HostileNameplate"],
+		[2] = L["FriendlyNameplate"],
+	}
+
+	local dd = G:CreateDropdown(scroll.child, "", 40, -15, options, nil, 180, 28)
+	dd:SetFrameLevel(20)
+	dd.Text:SetText(options[1])
+	dd:SetBackdropBorderColor(1, .8, 0, .5)
+	dd.panels = {}
+
+	for i = 1, #options do
+		local panel = CreateFrame("Frame", nil, scroll.child)
+		panel:SetSize(260, 1)
+		panel:SetPoint("TOP", 0, -30)
+		panel:Hide()
+		if i == 1 then
+			createOptionGroup(panel, -10, "enemy", UF.RefreshAllPlates, true)
+		else
+			createOptionGroup(panel, -10, "friend", UF.RefreshAllPlates)
+		end
+
+		dd.panels[i] = panel
+		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
+	end
+	toggleOptionsPanel(dd.options[1])
 end
 
 function G:SetupNameOnlySize(parent)
