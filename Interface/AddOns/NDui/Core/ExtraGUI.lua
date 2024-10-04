@@ -66,6 +66,13 @@ local function clearEdit(options)
 	end
 end
 
+local function toggleOptionsPanel(option)
+	local dd = option.__owner
+	for i = 1, #dd.panels do
+		dd.panels[i]:SetShown(i == option.index)
+	end
+end
+
 local function updateRaidDebuffs()
 	B:GetModule("UnitFrames"):UpdateRaidDebuffs()
 end
@@ -1074,10 +1081,10 @@ function G:SetupUnitFrame(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local sliderRange = {
-		["Player"] = {100, 400},
-		["Focus"] = {100, 400},
-		["Pet"] = {100, 400},
-		["Boss"] = {100, 400},
+		["Player"] = {100, 500},
+		["Focus"] = {100, 500},
+		["Pet"] = {100, 500},
+		["Boss"] = {100, 500},
 	}
 
 	local defaultValue = { -- healthWidth, healthHeight, powerHeight, healthTag, powerTag, powerOffset, nameOffset
@@ -1087,8 +1094,8 @@ function G:SetupUnitFrame(parent)
 		["Boss"] = {150, 22, 2, 5, 5, 2, 0},
 	}
 
-	local function createOptionGroup(parent, title, offset, value, func)
-		createOptionTitle(parent, title, offset)
+	local function createOptionGroup(parent, offset, value, func)
+		createOptionTitle(parent, "", offset)
 		createOptionDropdown(parent, L["HealthValueType"], offset-50, G.HealthValues, L["100PercentTip"], "UFs", value.."HPTag", defaultValue[value][4], func)
 		local mult = 0
 		if value ~= "Pet" then
@@ -1116,7 +1123,6 @@ function G:SetupUnitFrame(parent)
 		end
 		UF:UpdateUFAuras()
 	end
-	createOptionGroup(scroll.child, L["Player&Target"], -10, "Player", updatePlayerSize)
 
 	local function updateFocusSize()
 		local frame = _G.oUF_Focus
@@ -1126,7 +1132,6 @@ function G:SetupUnitFrame(parent)
 			UF.UpdateFramePowerTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["FocusUF"], -550, "Focus", updateFocusSize)
 
 	local subFrames = {_G.oUF_Pet, _G.oUF_ToT, _G.oUF_FocusTarget}
 	local function updatePetSize()
@@ -1135,7 +1140,6 @@ function G:SetupUnitFrame(parent)
 			UF.UpdateFrameHealthTag(frame)
 		end
 	end
-	createOptionGroup(scroll.child, L["Pet&*Target"], -1090, "Pet", updatePetSize)
 
 	local function updateBossSize()
 		for _, frame in pairs(ns.oUF.objects) do
@@ -1146,7 +1150,37 @@ function G:SetupUnitFrame(parent)
 			end
 		end
 	end
-	createOptionGroup(scroll.child, L["Boss&Arena"], -1500, "Boss", updateBossSize)
+
+	local options = {
+		[1] = L["Player&Target"],
+		[2] = L["FocusUF"],
+		[3] = L["Pet&*Target"],
+		[4] = L["Boss&Arena"],
+	}
+	local data = {
+		[1] = {"Player", updatePlayerSize},
+		[2] = {"Focus", updateFocusSize},
+		[3] = {"Pet", updatePetSize},
+		[4] = {"Boss", updateBossSize},
+	}
+
+	local dd = G:CreateDropdown(scroll.child, "", 40, -15, options, nil, 180, 28)
+	dd:SetFrameLevel(20)
+	dd.Text:SetText(options[1])
+	dd:SetBackdropBorderColor(1, .8, 0, .5)
+	dd.panels = {}
+
+	for i = 1, #options do
+		local panel = CreateFrame("Frame", nil, scroll.child)
+		panel:SetSize(260, 1)
+		panel:SetPoint("TOP", 0, -30)
+		panel:Hide()
+		createOptionGroup(panel, -10, data[i][1], data[i][2])
+
+		dd.panels[i] = panel
+		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
+	end
+	toggleOptionsPanel(dd.options[1])
 end
 
 function G:SetupRaidFrame(parent)
@@ -1701,16 +1735,10 @@ function G:SetupActionBar(parent)
 	local dd = G:CreateDropdown(scroll.child, "", 40, -15, options, nil, 180, 28)
 	dd:SetFrameLevel(20)
 	dd.Text:SetText(options[1])
+	dd:SetBackdropBorderColor(1, .8, 0, .5)
 	dd.panels = {}
 
-	local function toggleOptionsPanel(option)
-		for i = 1, #dd.panels do
-			dd.panels[i]:SetShown(i == option.index)
-		end
-	end
-
 	for i = 1, #options do
-		local value = options[i]
 		local panel = CreateFrame("Frame", nil, scroll.child)
 		panel:SetSize(260, 1)
 		panel:SetPoint("TOP", 0, -30)
@@ -1723,11 +1751,10 @@ function G:SetupActionBar(parent)
 		else
 			createOptionGroup(panel, -10, "Bar"..i)
 		end
-		dd.panels[i] = panel
 
+		dd.panels[i] = panel
 		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
 	end
-
 	toggleOptionsPanel(dd.options[1])
 end
 
