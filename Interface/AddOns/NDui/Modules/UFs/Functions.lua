@@ -1087,6 +1087,7 @@ function UF:RefreshUFAuras(frame)
 
 	UF:ConfigureAuras(element)
 	UF:UpdateAuraContainer(frame, element, element.numBuffs + element.numDebuffs)
+	UF:UpdateAuraDirection(frame, element)
 	element:ForceUpdate()
 end
 
@@ -1152,6 +1153,31 @@ function UF:ToggleAllAuras()
 	UF:ToggleUFAuras(_G.oUF_ToT, enable)
 end
 
+UF.AuraDirections = {
+	[1] = {name = L["RIGHT_DOWN"], initialAnchor = "TOPLEFT", relAnchor = "BOTTOMLEFT", x = 0, y = -1, growthX = "RIGHT", growthY = "DOWN"},
+	[2] = {name = L["RIGHT_UP"], initialAnchor = "BOTTOMLEFT", relAnchor = "TOPLEFT", x = 0, y = 1, growthX = "RIGHT", growthY = "UP"},
+	[3] = {name = L["LEFT_DOWN"], initialAnchor = "TOPRIGHT", relAnchor = "BOTTOMRIGHT", x = 0, y = -1, growthX = "LEFT", growthY = "DOWN"},
+	[4] = {name = L["LEFT_UP"], initialAnchor = "BOTTOMRIGHT", relAnchor = "TOPRIGHT", x = 0, y = 1, growthX = "LEFT", growthY = "UP"},
+}
+
+function UF:UpdateAuraDirection(self, element)
+	local direc = C.db["UFs"][element.__value.."AuraDirec"]
+	local yOffset = C.db["UFs"][element.__value.."AuraOffset"]
+	local value = UF.AuraDirections[direc]
+	element.initialAnchor = value.initialAnchor
+	element["growth-x"] = value.growthX
+	element["growth-y"] = value.growthY
+	element:ClearAllPoints()
+	element:SetPoint(value.initialAnchor, self, value.relAnchor, value.x, value.y * yOffset)
+end
+
+local auraUFs = {
+	["player"] = "Player",
+	["target"] = "Target",
+	["tot"] = "ToT",
+	["pet"] = "Pet",
+	["focus"] = "Focus",
+}
 function UF:CreateAuras(self)
 	local mystyle = self.mystyle
 	local bu = CreateFrame("Frame", nil, self)
@@ -1161,36 +1187,10 @@ function UF:CreateAuras(self)
 	bu["growth-y"] = "DOWN"
 	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
-	if mystyle == "player" then
-		bu.initialAnchor = "TOPRIGHT"
-		bu["growth-x"] = "LEFT"
-		bu:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -10)
-		bu.__value = "Player"
+	if auraUFs[mystyle] then
+		bu.__value = auraUFs[mystyle]
 		UF:ConfigureAuras(bu)
-		bu.FilterAura = UF.UnitCustomFilter
-	elseif mystyle == "target" then
-		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
-		bu.__value = "Target"
-		UF:ConfigureAuras(bu)
-		bu.FilterAura = UF.UnitCustomFilter
-	elseif mystyle == "tot" then
-		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -5)
-		bu.__value = "ToT"
-		UF:ConfigureAuras(bu)
-		bu.FilterAura = UF.UnitCustomFilter
-	elseif mystyle == "pet" then
-		bu.initialAnchor = "TOPRIGHT"
-		bu["growth-x"] = "LEFT"
-		bu:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
-		bu.__value = "Pet"
-		UF:ConfigureAuras(bu)
-		bu.FilterAura = UF.UnitCustomFilter
-	elseif mystyle == "focus" then
-		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
-		bu.numTotal = 23
-		bu.iconsPerRow = 8
-		bu.__value = "Focus"
-		UF:ConfigureAuras(bu)
+		UF:UpdateAuraDirection(self, bu)
 		bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"

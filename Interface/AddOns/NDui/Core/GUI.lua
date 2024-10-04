@@ -317,6 +317,17 @@ G.DefaultSettings = {
 		BossDebuffType = 3,
 		BossBuffPerRow = 6,
 		BossDebuffPerRow = 6,
+
+		PlayerAuraDirec = 3,
+		PlayerAuraOffset = 10,
+		TargetAuraDirec = 1,
+		TargetAuraOffset = 10,
+		ToTAuraDirec = 1,
+		ToTAuraOffset = 10,
+		PetAuraDirec = 1,
+		PetAuraOffset = 10,
+		FocusAuraDirec = 1,
+		FocusAuraOffset = 10,
 	},
 	Chat = {
 		Sticky = false,
