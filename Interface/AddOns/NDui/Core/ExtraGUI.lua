@@ -1835,9 +1835,9 @@ function G:SetupUFAuras(parent)
 	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"]}
 	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"]}
 
-	local function createOptionGroup(parent, title, offset, value, func, isBoss)
+	local function createOptionGroup(parent, offset, value, func, isBoss)
 		local default = defaultData[value]
-		createOptionTitle(parent, title, offset)
+		createOptionTitle(parent, "", offset)
 		createOptionDropdown(parent, L["BuffType"], offset-50, buffOptions, nil, "UFs", value.."BuffType", default[1], func)
 		createOptionDropdown(parent, L["DebuffType"], offset-110, debuffOptions, nil, "UFs", value.."DebuffType", default[2], func)
 		createOptionSlider(parent, L["MaxBuffs"], 1, 40, default[4], offset-180, value.."NumBuff", func)
@@ -1854,12 +1854,40 @@ function G:SetupUFAuras(parent)
 	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", UF.UpdateUFAuras, L["DesaturateIconTip"])
 	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", UF.UpdateUFAuras, L["DebuffColorTip"])
 
-	createOptionGroup(parent, L["PlayerUF"], offset-140, "Player", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["TargetUF"], offset-550, "Target", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["TotUF"], offset-960, "ToT", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["PetUF"], offset-1370, "Pet", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["FocusUF"], offset-1780, "Focus", UF.UpdateUFAuras)
-	createOptionGroup(parent, L["BossFrame"], offset-2190, "Boss", UF.UpdateUFAuras, true)
+	local options = {
+		[1] = L["PlayerUF"],
+		[2] = L["TargetUF"],
+		[3] = L["TotUF"],
+		[4] = L["PetUF"],
+		[5] = L["FocusUF"],
+		[6] = L["BossFrame"],
+	}
+	local data = {
+		[1] = "Player",
+		[2] = "Target",
+		[3] = "ToT",
+		[4] = "Pet",
+		[5] = "Focus",
+		[6] = "Boss",
+	}
+
+	local dd = G:CreateDropdown(scroll.child, "", 40, -135, options, nil, 180, 28)
+	dd:SetFrameLevel(20)
+	dd.Text:SetText(options[1])
+	dd:SetBackdropBorderColor(1, .8, 0, .5)
+	dd.panels = {}
+
+	for i = 1, #options do
+		local panel = CreateFrame("Frame", nil, scroll.child)
+		panel:SetSize(260, 1)
+		panel:SetPoint("TOP", 0, -30)
+		panel:Hide()
+		createOptionGroup(panel, -130, data[i], UF.UpdateUFAuras, i == 6)
+
+		dd.panels[i] = panel
+		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
+	end
+	toggleOptionsPanel(dd.options[1])
 end
 
 function G:SetupActionbarStyle(parent)
