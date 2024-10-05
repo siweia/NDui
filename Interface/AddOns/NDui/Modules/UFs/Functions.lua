@@ -1608,7 +1608,7 @@ function UF:CreatePrediction(self)
 	local overAbsorbBar = CreateFrame("StatusBar", nil, frame)
 	overAbsorbBar:SetAllPoints()
 	overAbsorbBar:SetStatusBarTexture(DB.normTex)
-	overAbsorbBar:SetStatusBarColor(.66, 1, 1, .7)
+	overAbsorbBar:SetStatusBarColor(.66, 1, 1, .5)
 	overAbsorbBar:SetFrameLevel(frameLevel)
 	overAbsorbBar:Hide()
 
