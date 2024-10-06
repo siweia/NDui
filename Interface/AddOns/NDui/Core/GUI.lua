@@ -1141,8 +1141,8 @@ end
 G.TabList = {
 	IsNew..L["Actionbar"],
 	L["Bags"],
-	L["Unitframes"],
-	L["RaidFrame"],
+	IsNew..L["Unitframes"],
+	IsNew..L["RaidFrame"],
 	IsNew..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
@@ -1150,7 +1150,7 @@ G.TabList = {
 	L["ChatFrame"],
 	L["Maps"],
 	L["Skins"],
-	IsNew..L["Tooltip"],
+	L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
@@ -1208,7 +1208,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "CCName", L["ClassColor Name"].."*", true, nil, updateUFTextScale},
 		{1, "UFs", "PlayerAbsorb", L["PlayerAbsorb"].."*", nil, nil, togglePlayerAbsorb, L["PlayerAbsorbTip"]},
 		{1, "UFs", "AddPower", L["AddPower"].."*", true, nil, toggleAddPower, L["AddPowerTip"]},
-		{1, "UFs", "OverAbsorb", L["OverAbsorb"].."*", nil, nil, nil, L["OverAbsorbTip"]},
+		{1, "UFs", "OverAbsorb", IsNew..L["OverAbsorb"].."*", nil, nil, nil, L["OverAbsorbTip"]},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateUFTextScale},
 		{},--blank
@@ -1251,7 +1251,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
-		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]}, updateRaidTextScale, L["100PercentTip"]},
+		{4, "UFs", "RaidHPMode", IsNew..L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]}, updateRaidTextScale, L["100PercentTip"]},
 		{4, "UFs", "ShowRoleMode", L["ShowRoleMode"], nil, {ALL, DISABLE, L["HideDPSRole"]}},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
 		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
