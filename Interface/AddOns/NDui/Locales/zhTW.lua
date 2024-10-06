@@ -916,3 +916,5 @@ L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
 L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
 L["LowerItem"] = "低等級裝備"
 L["FilterLower"] = "過濾低等級裝備"
+L["OverAbsorb"] = "過量吸收盾指示器"
+L["OverAbsorbTip"] = "|n勾選後，當吸收盾大於當前最大血量時，顯示吸收盾狀態條。|n|n此設定影響所有單位框架。"

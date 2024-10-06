@@ -1558,6 +1558,11 @@ function UF:CreateExpRepBar(self)
 end
 
 function UF:PostUpdatePrediction(_, health, maxHealth, allIncomingHeal, allAbsorb)
+	if not C.db["UFs"]["OverAbsorb"] then
+		self.overAbsorbBar:Hide()
+		return
+	end
+
 	local hasOverAbsorb
 	local overAbsorbAmount = health + allIncomingHeal + allAbsorb - maxHealth
 	if overAbsorbAmount > 0 then

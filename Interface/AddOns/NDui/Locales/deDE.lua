@@ -916,3 +916,5 @@ L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
 L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
 L["LowerItem"] = "Lower item level" -- need translation
 L["FilterLower"] = "Filter lower ilvl" -- need translation
+L["OverAbsorb"] = "Over absorb bar" -- need translation
+L["OverAbsorbTip"] = "|nIf enabled, show over absorb bar if unit absorb value greater than max health.|n|nThis option controls all the unitframes." -- need translation
