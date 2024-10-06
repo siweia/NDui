@@ -1558,12 +1558,11 @@ function UF:CreateExpRepBar(self)
 end
 
 function UF:PostUpdatePrediction(_, health, maxHealth, allIncomingHeal, allAbsorb)
-	self.overAbsorb:Hide()
-
+	local hasOverAbsorb
 	local overAbsorbAmount = health + allIncomingHeal + allAbsorb - maxHealth
 	if overAbsorbAmount > 0 then
 		if overAbsorbAmount > maxHealth then
-			self.overAbsorb:Show()
+			hasOverAbsorb = true
 			overAbsorbAmount = maxHealth
 		end
 		self.overAbsorbBar:SetMinMaxValues(0, maxHealth)
@@ -1572,11 +1571,18 @@ function UF:PostUpdatePrediction(_, health, maxHealth, allIncomingHeal, allAbsor
 	else
 		self.overAbsorbBar:Hide()
 	end
+
+	if hasOverAbsorb then
+		self.overAbsorb:Show()
+	else
+		self.overAbsorb:Hide()
+	end
 end
 
 function UF:CreatePrediction(self)
 	local frame = CreateFrame("Frame", nil, self)
 	frame:SetAllPoints(self.Health)
+	frame:SetClipsChildren(true)
 	local frameLevel = frame:GetFrameLevel()-1
 
 	-- Position and size
@@ -1600,17 +1606,29 @@ function UF:CreatePrediction(self)
 	absorbBar:SetPoint("TOP")
 	absorbBar:SetPoint("BOTTOM")
 	absorbBar:SetPoint("LEFT", otherBar:GetStatusBarTexture(), "RIGHT")
-	absorbBar:SetStatusBarTexture(DB.normTex)
-	absorbBar:SetStatusBarColor(.66, 1, 1, .7)
+	absorbBar:SetStatusBarTexture(DB.bdTex)
+	absorbBar:SetStatusBarColor(.66, 1, 1)
 	absorbBar:SetFrameLevel(frameLevel)
+	absorbBar:SetAlpha(.5)
 	absorbBar:Hide()
+	local tex = absorbBar:CreateTexture(nil, "ARTWORK", nil, 1)
+	tex:SetAllPoints(absorbBar:GetStatusBarTexture())
+	tex:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
+	tex:SetHorizTile(true)
+	tex:SetVertTile(true)
 
 	local overAbsorbBar = CreateFrame("StatusBar", nil, frame)
 	overAbsorbBar:SetAllPoints()
-	overAbsorbBar:SetStatusBarTexture(DB.normTex)
-	overAbsorbBar:SetStatusBarColor(.66, 1, 1, .5)
+	overAbsorbBar:SetStatusBarTexture(DB.bdTex)
+	overAbsorbBar:SetStatusBarColor(.66, 1, 1)
 	overAbsorbBar:SetFrameLevel(frameLevel)
+	overAbsorbBar:SetAlpha(.35)
 	overAbsorbBar:Hide()
+	local tex = overAbsorbBar:CreateTexture(nil, "ARTWORK", nil, 1)
+	tex:SetAllPoints(overAbsorbBar:GetStatusBarTexture())
+	tex:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
+	tex:SetHorizTile(true)
+	tex:SetVertTile(true)
 
 	local healAbsorbBar = CreateFrame("StatusBar", nil, frame)
 	healAbsorbBar:SetPoint("TOP")
@@ -1618,11 +1636,11 @@ function UF:CreatePrediction(self)
 	healAbsorbBar:SetPoint("RIGHT", self.Health:GetStatusBarTexture())
 	healAbsorbBar:SetReverseFill(true)
 	healAbsorbBar:SetStatusBarTexture(DB.normTex)
+	healAbsorbBar:Hide()
 	local tex = healAbsorbBar:GetStatusBarTexture()
 	tex:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
 	tex:SetHorizTile(true)
 	tex:SetVertTile(true)
-	healAbsorbBar:Hide()
 
 	local overAbsorb = self.Health:CreateTexture(nil, "OVERLAY")
 	overAbsorb:SetWidth(15)
