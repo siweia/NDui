@@ -21,6 +21,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 272874) -- 践踏
 module:RegisterDebuff(TIER, INSTANCE, 0, 273470) -- 一枪毙命
 module:RegisterDebuff(TIER, INSTANCE, 0, 272834) -- 粘稠的口水
 module:RegisterDebuff(TIER, INSTANCE, 0, 272713) -- 碾压重击
+module:RegisterDebuff(TIER, INSTANCE, 0, 463182) -- 炽烈弹射
 
 INSTANCE = 1022 -- 地渊孢林
 module:RegisterSeasonSpells(TIER, INSTANCE)

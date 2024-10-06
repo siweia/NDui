@@ -72,6 +72,10 @@ tinsert(C.defaultThemes, function()
 	B.ReskinFilterButton(searchPanel.FilterButton)
 	B.ReskinFilterReset(searchPanel.FilterButton.ResetButton)
 
+	searchPanel:HookScript("OnShow", function(self)
+		self.FilterButton:SetSize(90, 21) -- needs review, fix blizzard weired size
+	end)
+
 	searchPanel.RefreshButton:SetSize(24, 24)
 	searchPanel.RefreshButton.Icon:SetPoint("CENTER")
 	searchPanel.ResultsInset:Hide()

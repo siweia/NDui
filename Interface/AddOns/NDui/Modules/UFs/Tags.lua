@@ -68,6 +68,9 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 	elseif arg1 == "losspercent" then
 		local loss = max - cur
 		return loss ~= 0 and B:Round(loss/max*100, 1)
+	elseif arg1 == "absorb" then
+		local absorb = UnitGetTotalAbsorbs(unit) or 0
+		return (absorb > 0 and DB.InfoColor or "")..B.Numb(cur+absorb)
 	end
 end
 oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED PARTY_MEMBER_ENABLE PARTY_MEMBER_DISABLE"
@@ -95,8 +98,8 @@ end
 oUF.Tags.Events["VariousMP"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
 oUF.Tags.Methods["curAbsorb"] = function(unit)
-	local value = UnitGetTotalAbsorbs(unit)
-	return value > 0 and DB.InfoColor..value.."+|r"
+	local value = UnitGetTotalAbsorbs(unit) or 0
+	return value > 0 and DB.InfoColor..B.Numb(value).."+|r"
 end
 oUF.Tags.Events["curAbsorb"] = "UNIT_ABSORB_AMOUNT_CHANGED UNIT_HEAL_ABSORB_AMOUNT_CHANGED"
 
@@ -181,12 +184,13 @@ local healthModeType = {
 	[3] = "current",
 	[4] = "loss",
 	[5] = "losspercent",
+	[6] = "absorb",
 }
 oUF.Tags.Methods["raidhp"] = function(unit)
 	local healthType = healthModeType[C.db["UFs"]["RaidHPMode"]]
 	return oUF.Tags.Methods["VariousHP"](unit, _, healthType)
 end
-oUF.Tags.Events["raidhp"] = oUF.Tags.Events["VariousHP"]
+oUF.Tags.Events["raidhp"] = oUF.Tags.Events["VariousHP"].." UNIT_ABSORB_AMOUNT_CHANGED UNIT_HEAL_ABSORB_AMOUNT_CHANGED"
 
 -- Nameplate tags
 oUF.Tags.Methods["nppp"] = function(unit)

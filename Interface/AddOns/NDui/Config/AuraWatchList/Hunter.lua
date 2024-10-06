@@ -142,6 +142,7 @@ local list = {
 		{SlotID = 14},		-- 饰品2
 		{SpellID = 186265},	-- 灵龟守护
 		{SpellID = 147362},	-- 反制射击
+		{SpellID = 288613},	-- 百发百中
 	},
 }
 

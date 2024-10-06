@@ -1087,6 +1087,7 @@ function UF:RefreshUFAuras(frame)
 
 	UF:ConfigureAuras(element)
 	UF:UpdateAuraContainer(frame, element, element.numBuffs + element.numDebuffs)
+	UF:UpdateAuraDirection(frame, element)
 	element:ForceUpdate()
 end
 
@@ -1152,6 +1153,31 @@ function UF:ToggleAllAuras()
 	UF:ToggleUFAuras(_G.oUF_ToT, enable)
 end
 
+UF.AuraDirections = {
+	[1] = {name = L["RIGHT_DOWN"], initialAnchor = "TOPLEFT", relAnchor = "BOTTOMLEFT", x = 0, y = -1, growthX = "RIGHT", growthY = "DOWN"},
+	[2] = {name = L["RIGHT_UP"], initialAnchor = "BOTTOMLEFT", relAnchor = "TOPLEFT", x = 0, y = 1, growthX = "RIGHT", growthY = "UP"},
+	[3] = {name = L["LEFT_DOWN"], initialAnchor = "TOPRIGHT", relAnchor = "BOTTOMRIGHT", x = 0, y = -1, growthX = "LEFT", growthY = "DOWN"},
+	[4] = {name = L["LEFT_UP"], initialAnchor = "BOTTOMRIGHT", relAnchor = "TOPRIGHT", x = 0, y = 1, growthX = "LEFT", growthY = "UP"},
+}
+
+function UF:UpdateAuraDirection(self, element)
+	local direc = C.db["UFs"][element.__value.."AuraDirec"]
+	local yOffset = C.db["UFs"][element.__value.."AuraOffset"]
+	local value = UF.AuraDirections[direc]
+	element.initialAnchor = value.initialAnchor
+	element["growth-x"] = value.growthX
+	element["growth-y"] = value.growthY
+	element:ClearAllPoints()
+	element:SetPoint(value.initialAnchor, self, value.relAnchor, value.x, value.y * yOffset)
+end
+
+local auraUFs = {
+	["player"] = "Player",
+	["target"] = "Target",
+	["tot"] = "ToT",
+	["pet"] = "Pet",
+	["focus"] = "Focus",
+}
 function UF:CreateAuras(self)
 	local mystyle = self.mystyle
 	local bu = CreateFrame("Frame", nil, self)
@@ -1161,36 +1187,10 @@ function UF:CreateAuras(self)
 	bu["growth-y"] = "DOWN"
 	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
-	if mystyle == "player" then
-		bu.initialAnchor = "TOPRIGHT"
-		bu["growth-x"] = "LEFT"
-		bu:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -10)
-		bu.__value = "Player"
+	if auraUFs[mystyle] then
+		bu.__value = auraUFs[mystyle]
 		UF:ConfigureAuras(bu)
-		bu.FilterAura = UF.UnitCustomFilter
-	elseif mystyle == "target" then
-		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
-		bu.__value = "Target"
-		UF:ConfigureAuras(bu)
-		bu.FilterAura = UF.UnitCustomFilter
-	elseif mystyle == "tot" then
-		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -5)
-		bu.__value = "ToT"
-		UF:ConfigureAuras(bu)
-		bu.FilterAura = UF.UnitCustomFilter
-	elseif mystyle == "pet" then
-		bu.initialAnchor = "TOPRIGHT"
-		bu["growth-x"] = "LEFT"
-		bu:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
-		bu.__value = "Pet"
-		UF:ConfigureAuras(bu)
-		bu.FilterAura = UF.UnitCustomFilter
-	elseif mystyle == "focus" then
-		bu:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
-		bu.numTotal = 23
-		bu.iconsPerRow = 8
-		bu.__value = "Focus"
-		UF:ConfigureAuras(bu)
+		UF:UpdateAuraDirection(self, bu)
 		bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
@@ -1557,63 +1557,123 @@ function UF:CreateExpRepBar(self)
 	B:GetModule("Misc"):SetupScript(bar)
 end
 
+function UF:PostUpdatePrediction(_, health, maxHealth, allIncomingHeal, allAbsorb)
+	if not C.db["UFs"]["OverAbsorb"] then
+		self.overAbsorbBar:Hide()
+		return
+	end
+
+	local hasOverAbsorb
+	local overAbsorbAmount = health + allIncomingHeal + allAbsorb - maxHealth
+	if overAbsorbAmount > 0 then
+		if overAbsorbAmount > maxHealth then
+			hasOverAbsorb = true
+			overAbsorbAmount = maxHealth
+		end
+		self.overAbsorbBar:SetMinMaxValues(0, maxHealth)
+		self.overAbsorbBar:SetValue(overAbsorbAmount)
+		self.overAbsorbBar:Show()
+	else
+		self.overAbsorbBar:Hide()
+	end
+
+	if hasOverAbsorb then
+		self.overAbsorb:Show()
+	else
+		self.overAbsorb:Hide()
+	end
+end
+
 function UF:CreatePrediction(self)
 	local frame = CreateFrame("Frame", nil, self)
-	frame:SetAllPoints()
+	frame:SetAllPoints(self.Health)
+	frame:SetClipsChildren(true)
+	local frameLevel = frame:GetFrameLevel()-1
 
-	local mhpb = frame:CreateTexture(nil, "BORDER", nil, 5)
-	mhpb:SetWidth(1)
-	mhpb:SetTexture(DB.normTex)
-	mhpb:SetVertexColor(0, 1, .5, .5)
+	-- Position and size
+	local myBar = CreateFrame("StatusBar", nil, frame)
+	myBar:SetPoint("TOP")
+	myBar:SetPoint("BOTTOM")
+	myBar:SetPoint("LEFT", self.Health:GetStatusBarTexture(), "RIGHT")
+	myBar:SetStatusBarTexture(DB.normTex)
+	myBar:SetStatusBarColor(0, 1, .5, .5)
+	myBar:Hide()
 
-	local ohpb = frame:CreateTexture(nil, "BORDER", nil, 5)
-	ohpb:SetWidth(1)
-	ohpb:SetTexture(DB.normTex)
-	ohpb:SetVertexColor(0, 1, 0, .5)
+	local otherBar = CreateFrame("StatusBar", nil, frame)
+	otherBar:SetPoint("TOP")
+	otherBar:SetPoint("BOTTOM")
+	otherBar:SetPoint("LEFT", myBar:GetStatusBarTexture(), "RIGHT")
+	otherBar:SetStatusBarTexture(DB.normTex)
+	otherBar:SetStatusBarColor(0, 1, 0, .5)
+	otherBar:Hide()
 
-	local abb = frame:CreateTexture(nil, "BORDER", nil, 5)
-	abb:SetWidth(1)
-	abb:SetTexture(DB.normTex)
-	abb:SetVertexColor(.66, 1, 1, .7)
+	local absorbBar = CreateFrame("StatusBar", nil, frame)
+	absorbBar:SetPoint("TOP")
+	absorbBar:SetPoint("BOTTOM")
+	absorbBar:SetPoint("LEFT", otherBar:GetStatusBarTexture(), "RIGHT")
+	absorbBar:SetStatusBarTexture(DB.bdTex)
+	absorbBar:SetStatusBarColor(.66, 1, 1)
+	absorbBar:SetFrameLevel(frameLevel)
+	absorbBar:SetAlpha(.5)
+	absorbBar:Hide()
+	local tex = absorbBar:CreateTexture(nil, "ARTWORK", nil, 1)
+	tex:SetAllPoints(absorbBar:GetStatusBarTexture())
+	tex:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
+	tex:SetHorizTile(true)
+	tex:SetVertTile(true)
 
-	local abbo = frame:CreateTexture(nil, "ARTWORK", nil, 1)
-	abbo:SetAllPoints(abb)
-	abbo:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
-	abbo.tileSize = 32
+	local overAbsorbBar = CreateFrame("StatusBar", nil, frame)
+	overAbsorbBar:SetAllPoints()
+	overAbsorbBar:SetStatusBarTexture(DB.bdTex)
+	overAbsorbBar:SetStatusBarColor(.66, 1, 1)
+	overAbsorbBar:SetFrameLevel(frameLevel)
+	overAbsorbBar:SetAlpha(.35)
+	overAbsorbBar:Hide()
+	local tex = overAbsorbBar:CreateTexture(nil, "ARTWORK", nil, 1)
+	tex:SetAllPoints(overAbsorbBar:GetStatusBarTexture())
+	tex:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
+	tex:SetHorizTile(true)
+	tex:SetVertTile(true)
 
-	local oag = frame:CreateTexture(nil, "ARTWORK", nil, 1)
-	oag:SetWidth(15)
-	oag:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
-	oag:SetBlendMode("ADD")
-	oag:SetAlpha(.7)
-	oag:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -7, 2)
-	oag:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -7, -2)
+	local healAbsorbBar = CreateFrame("StatusBar", nil, frame)
+	healAbsorbBar:SetPoint("TOP")
+	healAbsorbBar:SetPoint("BOTTOM")
+	healAbsorbBar:SetPoint("RIGHT", self.Health:GetStatusBarTexture())
+	healAbsorbBar:SetReverseFill(true)
+	healAbsorbBar:SetStatusBarTexture(DB.normTex)
+	healAbsorbBar:Hide()
+	local tex = healAbsorbBar:GetStatusBarTexture()
+	tex:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
+	tex:SetHorizTile(true)
+	tex:SetVertTile(true)
 
-	local hab = CreateFrame("StatusBar", nil, frame)
-	hab:SetPoint("TOPLEFT", self.Health)
-	hab:SetPoint("BOTTOMRIGHT", self.Health:GetStatusBarTexture())
-	hab:SetReverseFill(true)
-	hab:SetStatusBarTexture(DB.normTex)
-	hab:SetStatusBarColor(0, .5, .8, .5)
-	hab:SetFrameLevel(frame:GetFrameLevel())
+	local overAbsorb = self.Health:CreateTexture(nil, "OVERLAY")
+	overAbsorb:SetWidth(15)
+	overAbsorb:SetTexture("Interface\\RaidFrame\\Shield-Overshield")
+	overAbsorb:SetBlendMode("ADD")
+	overAbsorb:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -5, 2)
+	overAbsorb:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -5, -2)
+	overAbsorb:Hide()
 
-	local ohg = frame:CreateTexture(nil, "ARTWORK", nil, 1)
-	ohg:SetWidth(15)
-	ohg:SetTexture("Interface\\RaidFrame\\Absorb-Overabsorb")
-	ohg:SetBlendMode("ADD")
-	ohg:SetAlpha(.5)
-	ohg:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", 5, 2)
-	ohg:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMLEFT", 5, -2)
+	local overHealAbsorb = frame:CreateTexture(nil, "OVERLAY")
+	overHealAbsorb:SetWidth(15)
+	overHealAbsorb:SetTexture("Interface\\RaidFrame\\Absorb-Overabsorb")
+	overHealAbsorb:SetBlendMode("ADD")
+	overHealAbsorb:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", 5, 2)
+	overHealAbsorb:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMLEFT", 5, -2)
+	overHealAbsorb:Hide()
 
-	self.HealPredictionAndAbsorb = {
-		myBar = mhpb,
-		otherBar = ohpb,
-		absorbBar = abb,
-		absorbBarOverlay = abbo,
-		overAbsorbGlow = oag,
-		healAbsorbBar = hab,
-		overHealAbsorbGlow = ohg,
+	-- Register with oUF
+	self.HealthPrediction = {
+		myBar = myBar,
+		otherBar = otherBar,
+		absorbBar = absorbBar,
+		healAbsorbBar = healAbsorbBar,
+		overAbsorbBar = overAbsorbBar,
+		overAbsorb = overAbsorb,
+		overHealAbsorb = overHealAbsorb,
 		maxOverflow = 1,
+		PostUpdate = UF.PostUpdatePrediction,
 	}
 	self.predicFrame = frame
 end

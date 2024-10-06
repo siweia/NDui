@@ -140,7 +140,6 @@ G.DefaultSettings = {
 		VerticalTotems = true,
 		TotemSize = 32,
 		ClassAuras = true,
-		MMT29X4 = false,
 		BuffFrame = true,
 		HideBlizBuff = false,
 		ReverseBuff = false,
@@ -245,6 +244,7 @@ G.DefaultSettings = {
 		PlayerAbsorb = false,
 		AutoBuffs = false,
 		ShowRoleMode = 1,
+		OverAbsorb = false,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -318,6 +318,17 @@ G.DefaultSettings = {
 		BossDebuffType = 3,
 		BossBuffPerRow = 6,
 		BossDebuffPerRow = 6,
+
+		PlayerAuraDirec = 3,
+		PlayerAuraOffset = 10,
+		TargetAuraDirec = 1,
+		TargetAuraOffset = 10,
+		ToTAuraDirec = 1,
+		ToTAuraOffset = 10,
+		PetAuraDirec = 1,
+		PetAuraOffset = 10,
+		FocusAuraDirec = 1,
+		FocusAuraOffset = 10,
 	},
 	Chat = {
 		Sticky = false,
@@ -944,13 +955,6 @@ local function toggleGCDTicker()
 	B:GetModule("UnitFrames"):ToggleGCDTicker()
 end
 
-local function toggleFocusCalculation()
-	local A = B:GetModule("Auras")
-	if A.ToggleFocusCalculation then
-		A:ToggleFocusCalculation()
-	end
-end
-
 local function updateUFTextScale()
 	B:GetModule("UnitFrames"):UpdateTextScale()
 end
@@ -1137,8 +1141,8 @@ end
 G.TabList = {
 	IsNew..L["Actionbar"],
 	L["Bags"],
-	L["Unitframes"],
-	L["RaidFrame"],
+	IsNew..L["Unitframes"],
+	IsNew..L["RaidFrame"],
 	IsNew..L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
@@ -1146,7 +1150,7 @@ G.TabList = {
 	L["ChatFrame"],
 	L["Maps"],
 	L["Skins"],
-	IsNew..L["Tooltip"],
+	L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
@@ -1204,6 +1208,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "CCName", L["ClassColor Name"].."*", true, nil, updateUFTextScale},
 		{1, "UFs", "PlayerAbsorb", L["PlayerAbsorb"].."*", nil, nil, togglePlayerAbsorb, L["PlayerAbsorbTip"]},
 		{1, "UFs", "AddPower", L["AddPower"].."*", true, nil, toggleAddPower, L["AddPowerTip"]},
+		{1, "UFs", "OverAbsorb", IsNew..L["OverAbsorb"].."*", nil, nil, nil, L["OverAbsorbTip"]},
 		{3, "UFs", "UFTextScale", L["UFTextScale"].."*", nil, {.8, 1.5, .05}, updateUFTextScale},
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateUFTextScale},
 		{},--blank
@@ -1246,7 +1251,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
-		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"]}, updateRaidTextScale, L["100PercentTip"]},
+		{4, "UFs", "RaidHPMode", IsNew..L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]}, updateRaidTextScale, L["100PercentTip"]},
 		{4, "UFs", "ShowRoleMode", L["ShowRoleMode"], nil, {ALL, DISABLE, L["HideDPSRole"]}},
 		{3, "UFs", "RaidTextScale", L["UFTextScale"].."*", true, {.8, 1.5, .05}, updateRaidTextScale},
 		{1, "UFs", "ShowSolo", L["ShowSolo"].."*", nil, nil, updateAllHeaders, L["ShowSoloTip"]},
@@ -1320,7 +1325,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{3, "Nameplate", "PPFadeoutAlpha", L["PlayerPlate FadeoutAlpha"].."*", true, {0, .5, .05}, togglePlateVisibility},
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
-		{1, "Auras", "MMT29X4", L["MMT29X4"].."*", true, nil, toggleFocusCalculation, L["MMT29X4Tip"]},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["Width"].."*", false, {100, 500, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {2, 15, 1}, refreshNameplates},

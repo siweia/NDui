@@ -13,3 +13,4 @@ module:RegisterSeasonSpells(TIER, INSTANCE)
 
 INSTANCE = 71 -- 格瑞姆巴托
 module:RegisterSeasonSpells(TIER, INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 451395) -- 腐蚀

@@ -1037,7 +1037,7 @@ do
 	end
 
 	-- WowTrimScrollBar
-	function B:ReskinTrimScroll()
+	function B:ReskinTrimScroll(noTaint)
 		B.StripTextures(self)
 		reskinScrollArrow(self.Back, "up", true)
 		reskinScrollArrow(self.Forward, "down", true)
@@ -1045,6 +1045,7 @@ do
 			self.Track:DisableDrawLayer("ARTWORK")
 		end
 
+		if noTaint then return end
 		local thumb = self:GetThumb()
 		if thumb then
 			thumb:DisableDrawLayer("ARTWORK")

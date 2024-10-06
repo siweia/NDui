@@ -159,6 +159,11 @@ local primordialStones = {}
 for id = 204000, 204030 do
 	primordialStones[id] = true
 end
+for id = 204573, 204579 do
+	primordialStones[id] = true
+end
+primordialStones[203703] = true -- 棱光碎片
+
 local function isPrimordialStone(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterStone"] then return end
