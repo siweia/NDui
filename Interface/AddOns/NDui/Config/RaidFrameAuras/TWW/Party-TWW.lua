@@ -8,6 +8,13 @@ local INSTANCE
 INSTANCE = 1274 -- 千丝之城
 module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 452151) -- 严酷戳刺
+module:RegisterDebuff(TIER, INSTANCE, 0, 451295) -- 虚空奔袭
+module:RegisterDebuff(TIER, INSTANCE, 0, 440107) -- 飞刀投掷
+module:RegisterDebuff(TIER, INSTANCE, 0, 441298) -- 冰冻之血
+module:RegisterDebuff(TIER, INSTANCE, 0, 451239) -- 残暴戳刺
+module:RegisterDebuff(TIER, INSTANCE, 0, 443509) -- 贪婪之虫
+module:RegisterDebuff(TIER, INSTANCE, 0, 446718) -- 晦幽纺纱
+module:RegisterDebuff(TIER, INSTANCE, 0, 439341) -- 捻接
 
 INSTANCE = 1269 -- 矶石宝库
 module:RegisterSeasonSpells(TIER, INSTANCE)
@@ -15,11 +22,18 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 449154) -- 熔岩迫击炮
 module:RegisterDebuff(TIER, INSTANCE, 0, 427361) -- 破裂
 module:RegisterDebuff(TIER, INSTANCE, 0, 423572) -- 不稳定的能量
 module:RegisterDebuff(TIER, INSTANCE, 0, 427329) -- 虚空腐蚀
+module:RegisterDebuff(TIER, INSTANCE, 0, 424805) -- 折光射线
+module:RegisterDebuff(TIER, INSTANCE, 0, 424913, 6) -- 不稳定的爆炸
+module:RegisterDebuff(TIER, INSTANCE, 0, 443494) -- 结晶喷发
 
 INSTANCE = 1270 -- 破晨号
 module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 431365) -- 折磨光束
 module:RegisterDebuff(TIER, INSTANCE, 0, 451119) -- 深渊轰击
+module:RegisterDebuff(TIER, INSTANCE, 0, 451107) -- 迸发虫茧
+module:RegisterDebuff(TIER, INSTANCE, 0, 431350) -- 折磨喷发
+module:RegisterDebuff(TIER, INSTANCE, 0, 434668) -- 火花四射的阿拉希炸弹
+module:RegisterDebuff(TIER, INSTANCE, 0, 434113) -- 喷射丝线
 
 INSTANCE = 1271 -- 艾拉-卡拉，回响之城
 module:RegisterSeasonSpells(TIER, INSTANCE)
