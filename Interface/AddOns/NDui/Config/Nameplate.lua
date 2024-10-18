@@ -101,7 +101,7 @@ C.PowerUnits = {
 
 -- 显示姓名板单位的目标
 C.ShowTargetNPCs = {
-	[165251] = true,	-- 仙林狐狸
+	--[165251] = true,	-- 仙林狐狸
 	[174773] = true,	-- 怨毒怪
 }
 

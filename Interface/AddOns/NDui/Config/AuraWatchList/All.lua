@@ -57,6 +57,7 @@ local list = {
 		{AuraID = 371024, UnitID = "player"},	-- 元素强能药水
 		{AuraID = 371028, UnitID = "player"},	-- 究极元素强能药水
 		-- 11.0 饰品
+		{AuraID = 92099, UnitID = "player"},	-- 灰鳞的优雅
 		{AuraID = 443531, UnitID = "player"},	-- 振奋之光
 		{AuraID = 435493, UnitID = "player"},	-- 死亡之吻
 		{AuraID = 455451, UnitID = "player"},	-- 迅芯烛台
