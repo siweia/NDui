@@ -614,14 +614,16 @@ end
 -- Buttons to enhance popup menu
 function M:CustomMenu_AddFriend(rootDescription, data, name)
 	rootDescription:CreateButton(DB.InfoColor..ADD_CHARACTER_FRIEND, function()
-		C_FriendList.AddFriend(name or (data.name.."-"..data.server))
+		local fullName = data.server and data.name.."-"..data.server or data.name
+		C_FriendList.AddFriend(name or fullName)
 	end)
 end
 
 local guildInviteString = gsub(CHAT_GUILD_INVITE_SEND, HEADER_COLON, "")
 function M:CustomMenu_GuildInvite(rootDescription, data, name)
 	rootDescription:CreateButton(DB.InfoColor..guildInviteString, function()
-		C_GuildInfo.Invite(name or (data.name.."-"..data.server))
+		local fullName = data.server and data.name.."-"..data.server or data.name
+		C_GuildInfo.Invite(name or fullName)
 	end)
 end
 
