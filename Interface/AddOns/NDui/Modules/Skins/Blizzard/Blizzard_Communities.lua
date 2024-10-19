@@ -1,6 +1,36 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function reskinCommunityTab(tab)
+	tab:GetRegions():Hide()
+	B.ReskinIcon(tab.Icon)
+	tab:SetCheckedTexture(DB.pushedTex)
+	local hl = tab:GetHighlightTexture()
+	hl:SetColorTexture(1, 1, 1, .25)
+	hl:SetAllPoints(tab.Icon)
+end
+
+local cardGroup = {"First", "Second", "Third"}
+local function reskinGuildCards(cards)
+	for _, name in pairs(cardGroup) do
+		local guildCard = cards[name.."Card"]
+		B.StripTextures(guildCard)
+		B.CreateBDFrame(guildCard, .25)
+		B.Reskin(guildCard.RequestJoin)
+	end
+	B.ReskinArrow(cards.PreviousPage, "left")
+	B.ReskinArrow(cards.NextPage, "right")
+end
+
+local function reskinRequestCheckbox(self)
+	for button in self.SpecsPool:EnumerateActive() do
+		if button.Checkbox then
+			B.ReskinCheck(button.Checkbox)
+			button.Checkbox:SetSize(26, 26)
+		end
+	end
+end
+
 local function updateNameFrame(self)
 	if not self.expanded then return end
 	if not self.bg then
@@ -87,7 +117,38 @@ C.themes["Blizzard_Communities"] = function()
 	CommunitiesFrameCommunitiesList.InsetFrame:Hide()
 	CommunitiesFrameCommunitiesList.FilligreeOverlay:Hide()
 
-	B.StripTextures(ClubFinderGuildFinderFrame.DisabledFrame)
+	local finderFrame = ClubFinderGuildFinderFrame
+	if finderFrame then
+		B.StripTextures(finderFrame.DisabledFrame)
+		B.StripTextures(finderFrame)
+		if finderFrame.ClubFinderSearchTab then reskinCommunityTab(finderFrame.ClubFinderSearchTab) end
+		if finderFrame.ClubFinderPendingTab then reskinCommunityTab(finderFrame.ClubFinderPendingTab) end
+		if finderFrame.GuildCards then reskinGuildCards(finderFrame.GuildCards) end
+
+		local optionsList = finderFrame.OptionsList
+		if optionsList then
+			B.ReskinDropDown(optionsList.ClubFilterDropdown)
+			B.ReskinDropDown(optionsList.ClubSizeDropdown)
+			B.ReskinInput(optionsList.SearchBox)
+			optionsList.SearchBox:SetSize(118, 22)
+			B.Reskin(optionsList.Search)
+			B.ReskinCheck(optionsList.TankRoleFrame.Checkbox)
+			B.ReskinCheck(optionsList.HealerRoleFrame.Checkbox)
+			B.ReskinCheck(optionsList.DpsRoleFrame.Checkbox)
+		end
+
+		local requestFrame = finderFrame.RequestToJoinFrame
+		if requestFrame then
+			B.StripTextures(requestFrame)
+			B.SetBD(requestFrame)
+			B.StripTextures(requestFrame.MessageFrame)
+			B.StripTextures(requestFrame.MessageFrame.MessageScroll)
+			B.CreateBDFrame(requestFrame.MessageFrame.MessageScroll, .25)
+			B.Reskin(requestFrame.Apply)
+			B.Reskin(requestFrame.Cancel)
+			hooksecurefunc(requestFrame, "Initialize", reskinRequestCheckbox)
+		end
+	end
 	B.ReskinTrimScroll(CommunitiesFrameCommunitiesList.ScrollBar)
 
 	hooksecurefunc(CommunitiesFrameCommunitiesList.ScrollBox, "Update", function(self)
@@ -114,12 +175,7 @@ C.themes["Blizzard_Communities"] = function()
 	for _, name in next, {"ChatTab", "RosterTab", "GuildBenefitsTab", "GuildInfoTab"} do
 		local tab = CommunitiesFrame[name]
 		if tab then
-			tab:GetRegions():Hide()
-			B.ReskinIcon(tab.Icon)
-			tab:SetCheckedTexture(DB.pushedTex)
-			local hl = tab:GetHighlightTexture()
-			hl:SetColorTexture(1, 1, 1, .25)
-			hl:SetAllPoints(tab.Icon)
+			reskinCommunityTab(tab)
 		end
 	end
 

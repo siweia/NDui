@@ -234,9 +234,16 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
+	if DB.isNewPatch then
+		B.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
+		B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.filter)
+		B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.slotFilter)
+		B.ReskinDropDown(EncounterJournalEncounterFrameInfoDifficulty)
+	else
+		reskinFilterToggle(EncounterJournalEncounterFrameInfoDifficulty)
+	end
 
 	local buttons = {
-		EncounterJournalEncounterFrameInfoDifficulty,
 		EncounterJournalEncounterFrameInfoFilterToggle,
 		EncounterJournalEncounterFrameInfoSlotFilterToggle,
 	}
