@@ -203,7 +203,7 @@ end
 
 function UF:AddClickSetsListener()
 	if not C.db["UFs"]["RaidClickSets"] then return end
-
+	SetCVar("autoSelfCast", 0) -- disable auto self casting
 	B:RegisterEvent("PLAYER_REGEN_ENABLED", UF.DelayClickSets)
 end
 
