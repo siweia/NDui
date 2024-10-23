@@ -518,28 +518,29 @@ function UF:AddQuestIcon(self)
 	self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
 end
 
--- Dungeon progress, AngryKeystones required
+-- Dungeon progress, MDT required
 function UF:AddDungeonProgress(self)
 	if not C.db["Nameplate"]["AKSProgress"] then return end
 
-	self.progressText = B.CreateFS(self, 16, "", false, "LEFT", 0, 0)
-	self.progressText:SetPoint("LEFT", self, "RIGHT", 5, 0)
+	self.progressText = B.CreateFS(self, 16, "")
+	self.progressText:SetTextColor(.6, .8, 1)
+	self.progressText:ClearAllPoints()
+	self.progressText:SetPoint("BOTTOMLEFT", self, "TOPRIGHT", 5, 5)
 end
 
 local cache = {}
 function UF:UpdateDungeonProgress(unit)
-	if not self.progressText or not AngryKeystones_Data then return end
+	if not self.progressText or not MDT then return end
 	if unit ~= self.unit then return end
 	self.progressText:SetText("")
 
 	local name, _, _, _, _, _, _, _, _, scenarioType = C_Scenario_GetInfo()
 	if scenarioType == LE_SCENARIO_TYPE_CHALLENGE_MODE then
-		local npcID = self.npcID
-		local info = AngryKeystones_Data.progress[npcID]
-		if info then
-			local numCriteria = select(3, C_Scenario_GetStepInfo())
+		local value = MDT:GetEnemyForces(self.npcID)
+		if value and value > 0 then
 			local total = cache[name]
 			if not total then
+				local numCriteria = select(3, C_Scenario_GetStepInfo())
 				for criteriaIndex = 1, numCriteria do
 					local criteriaInfo = C_ScenarioInfo.GetCriteriaInfo(criteriaIndex)
 					if criteriaInfo and criteriaInfo.isWeightedProgress then
@@ -550,15 +551,7 @@ function UF:UpdateDungeonProgress(unit)
 				end
 			end
 
-			local value, valueCount
-			for amount, count in pairs(info) do
-				if not valueCount or count > valueCount or (count == valueCount and amount < value) then
-					value = amount
-					valueCount = count
-				end
-			end
-
-			if value and total then
+			if total then
 				self.progressText:SetText(format("+%.2f", value/total*100))
 			end
 		end
