@@ -263,11 +263,11 @@ function info:GuildPanel_Refresh()
 
 	wipe(info.guildTable)
 	local count = 0
-	local total, _, online = GetNumGuildMembers()
+	local total, numOnline, allOnline = GetNumGuildMembers()
 	local guildName, guildRank = GetGuildInfo("player")
 
 	gName:SetText("|cff0099ff<"..(guildName or "")..">")
-	gOnline:SetText(format(DB.InfoColor.."%s:".." %d/%d", GUILD_ONLINE_LABEL, online, total))
+	gOnline:SetText(format(DB.InfoColor.."%s:".." %d/%d", GUILD_ONLINE_LABEL, (allOnline or numOnline), total))
 	gRank:SetText(DB.InfoColor..RANK..": "..(guildRank or ""))
 
 	for i = 1, total do
@@ -326,8 +326,8 @@ info.onEvent = function(self, event, arg1)
 		end
 	end
 
-	local online = select(3, GetNumGuildMembers())
-	self.text:SetText(GUILD..": "..DB.MyColor..online)
+	local _, numOnline, allOnline = GetNumGuildMembers()
+	self.text:SetText(GUILD..": "..DB.MyColor..(allOnline or numOnline))
 
 	if infoFrame and infoFrame:IsShown() then
 		info:GuildPanel_Refresh()
