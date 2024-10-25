@@ -335,9 +335,7 @@ tinsert(C.defaultThemes, function()
 
 	-- Token frame
 	B.ReskinTrimScroll(TokenFrame.ScrollBar, true) -- taint if touching thumb, needs review
-	if DB.isNewPatch then
-		B.ReskinDropDown(TokenFrame.filterDropdown)
-	end
+	B.ReskinDropDown(TokenFrame.filterDropdown)
 	if TokenFramePopup.CloseButton then -- blizz typo by parentKey "CloseButton" into "$parent.CloseButton"
 		B.ReskinClose(TokenFramePopup.CloseButton)
 	else
@@ -374,9 +372,7 @@ tinsert(C.defaultThemes, function()
 	local amountSelector = CurrencyTransferMenu.AmountSelector
 	if amountSelector then
 		B.CreateBDFrame(amountSelector, .25)
-		if DB.isNewPatch then
-			B.Reskin(amountSelector.MaxQuantityButton)
-		end
+		B.Reskin(amountSelector.MaxQuantityButton)
 		B.ReskinEditBox(amountSelector.InputBox)
 		amountSelector.InputBox.__bg:SetInside(nil, 3, 3)
 	end

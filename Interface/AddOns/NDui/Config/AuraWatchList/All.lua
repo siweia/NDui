@@ -277,7 +277,7 @@ local list = {
 		{AuraID = 464748, UnitID = "player", Flash = true},	-- 束缚之网，流丝
 	},
 	["Warning"] = { -- 目标重要光环组
-		{AuraID = 268756, UnitID = "target"},	-- 望远镜饰品
+		{AuraID = 268756, UnitID = "target", Caster = "player"},	-- 望远镜饰品
 		{AuraID = 355596, UnitID = "target", Flash = true},	-- 橙弓，哀痛箭
 		-- 大幻象
 		{AuraID = 304975, UnitID = "target", Value = true},	-- 虚空哀嚎，吸收盾
