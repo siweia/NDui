@@ -143,6 +143,13 @@ function module:SkinChat()
 
 	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
 
+	if self == GeneralDockManager.primary then
+		local messageFrame = CommunitiesFrame and CommunitiesFrame.Chat and CommunitiesFrame.Chat.MessageFrame
+		if messageFrame then
+			messageFrame:SetFont(fontFile or font, fontSize, fontOutline)
+		end
+	end
+
 	self.styled = true
 end
 
