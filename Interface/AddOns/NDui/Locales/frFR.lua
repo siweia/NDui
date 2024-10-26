@@ -919,3 +919,5 @@ L["FilterLower"] = "Filter lower ilvl" -- need translation
 L["OverAbsorb"] = "Over absorb bar" -- need translation
 L["OverAbsorbTip"] = "|nIf enabled, show over absorb bar if unit absorb value greater than max health.|n|nThis option controls all the unitframes." -- need translation
 L["ShowHealthAbsorb"] = "Current+absorb" -- need translation
+L["LeaderOnly"] = "Leader alert only" -- need translation
+L["LeaderOnlyTip"] = "|nIf enabled, notifications only send by leader or assistant." -- need translation
