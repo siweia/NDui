@@ -90,6 +90,7 @@ end
 local questlist = {
 	{name = L["Mean One"], id = 6983},
 	{name = L["Blingtron"], id = 34774},
+	{name = L["Timewarped"], id = 83285, texture = 6006158},	-- Vanilla
 	{name = L["Timewarped"], id = 40168, texture = 1129674},	-- TBC
 	{name = L["Timewarped"], id = 40173, texture = 1129686},	-- WotLK
 	{name = L["Timewarped"], id = 40786, texture = 1304688},	-- Cata
