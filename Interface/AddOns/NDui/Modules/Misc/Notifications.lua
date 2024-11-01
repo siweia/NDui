@@ -233,6 +233,8 @@ function M:IsAllyPet(sourceFlags)
 end
 
 function M:InterruptAlert_Update(...)
+	if C.db["Misc"]["LeaderOnly"] and not (UnitIsGroupAssistant("player") or UnitIsGroupLeader("player")) then return end -- only alert for leader, needs review
+
 	local _, eventType, _, sourceGUID, sourceName, sourceFlags, _, _, destName, _, _, spellID, _, _, extraskillID, _, _, auraType = ...
 	if not sourceGUID or sourceName == destName then return end
 
@@ -440,6 +442,8 @@ local spellList = {
 }
 
 function M:ItemAlert_Update(unit, castID, spellID)
+	if C.db["Misc"]["LeaderOnly"] and not (UnitIsGroupAssistant("player") or UnitIsGroupLeader("player")) then return end -- only alert for leader, needs review
+
 	if groupUnits[unit] and spellList[spellID] and (spellList[spellID] ~= castID) then
 		SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellName(spellID)), M:GetMsgChannel())
 		spellList[spellID] = castID
@@ -455,6 +459,8 @@ local bloodLustDebuffs = {
 }
 
 function M:CheckBloodlustStatus(...)
+	if C.db["Misc"]["LeaderOnly"] and not (UnitIsGroupAssistant("player") or UnitIsGroupLeader("player")) then return end -- only alert for leader, needs review
+
 	local _, eventType, _, sourceGUID, _, _, _, _, _, _, _, spellID = ...
 	if eventType == "SPELL_AURA_REMOVED" and bloodLustDebuffs[spellID] and sourceGUID == myGUID then
 		SendChatMessage(format(L["BloodlustStr"], GetSpellLink(spellID), M.factionSpell), M:GetMsgChannel())

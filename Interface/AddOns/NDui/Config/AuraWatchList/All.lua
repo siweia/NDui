@@ -333,6 +333,7 @@ local list = {
 		{AuraID = 321754, UnitID = "target", Value = true},	-- 通灵战潮，冰缚之盾
 		{AuraID = 343470, UnitID = "target", Value = true},	-- 通灵战潮，碎骨之盾
 		{AuraID = 328351, UnitID = "target", Flash = true},	-- 通灵战潮，染血长枪
+		{AuraID = 273721, UnitID = "target", Flash = true},	-- 围攻，1号易伤
 		-- S1
 		{AuraID = 445409, UnitID = "target", Value = true},	-- 加固壳壁，斯卡莫拉克
 		-- Raids

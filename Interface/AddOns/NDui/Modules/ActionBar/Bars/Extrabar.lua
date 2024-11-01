@@ -67,4 +67,21 @@ function Bar:CreateExtrabar()
 			self:SetParent(zoneFrame)
 		end
 	end)
+
+	-- Extra button range, needs review
+	hooksecurefunc("ActionButton_UpdateRangeIndicator", function(self, checksRange, inRange)
+		if not self.action then return end
+		if checksRange and not inRange then
+			self.icon:SetVertexColor(.8, .1, .1)
+		else
+			local isUsable, notEnoughMana = IsUsableAction(self.action)
+			if isUsable then
+				self.icon:SetVertexColor(1, 1, 1)
+			elseif notEnoughMana then
+				self.icon:SetVertexColor(.5, .5, 1)
+			else
+				self.icon:SetVertexColor(.4, .4, .4)
+			end
+		end
+	end)
 end

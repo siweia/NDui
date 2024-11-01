@@ -532,6 +532,7 @@ G.DefaultSettings = {
 		OwnDispell = true,
 		InstAlertOnly = true,
 		BrokenAlert = false,
+		LeaderOnly = true,
 		FasterLoot = true,
 		AutoQuest = false,
 		IgnoreQuestNPC = {},
@@ -1365,10 +1366,11 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "OwnDispell", L["OwnDispell"].."*", true},
 		{1, "Misc", "BrokenAlert", HeaderTag..L["BrokenAlert"].."*", nil, nil, updateInterruptAlert, L["BrokenAlertTip"]},
 		{1, "Misc", "InstAlertOnly", L["InstAlertOnly"].."*", true, nil, updateInterruptAlert, L["InstAlertOnlyTip"]},
-		{},--blank
 		{1, "Misc", "SpellItemAlert", L["SpellItemAlert"].."*", nil, nil, updateSpellItemAlert, L["SpellItemAlertTip"]},
-		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", true, nil, updateSoloInfo},
+		{1, "Misc", "LeaderOnly", IsNew..L["LeaderOnly"].."*", true, nil, nil, L["LeaderOnlyTip"]},
+		{},--blank
 		{1, "Misc", "NzothVision", L["NzothVision"]},
+		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", true, nil, updateSoloInfo},
 		{},--blank
 		{1, "Misc", "RareAlerter", HeaderTag..L["Rare Alert"].."*", nil, nil, updateRareAlert},
 		{1, "Misc", "RarePrint", L["Alert In Chat"].."*"},

@@ -76,10 +76,17 @@ function M:AddAutoAcceptButton()
 	bu:SetPoint("BOTTOMLEFT", ApplicationViewerFrame.InfoBackground, 12, 5)
 	B.CreateFS(bu, 14, _G.LFG_LIST_AUTO_ACCEPT, "system", "LEFT", 24, 0)
 
+	local isCN = GetCVar("portal") == "CN"
 	local lastTime = 0
 	local function clickInviteButton(button)
 		if button.applicantID and button.InviteButton:IsEnabled() then
-			button.InviteButton:Click()
+			if C.db["Chat"]["Freedom"] and isCN then
+				ConsoleExec("portal CN")
+			end
+			C_LFGList.InviteApplicant(button.applicantID)
+			if C.db["Chat"]["Freedom"] and isCN then
+				ConsoleExec("portal TW")
+			end
 		end
 	end
 

@@ -150,6 +150,13 @@ function module:SkinChat()
 
 	self:HookScript("OnMouseWheel", module.QuickMouseScroll)
 
+	if self == GeneralDockManager.primary then
+		local messageFrame = CommunitiesFrame and CommunitiesFrame.Chat and CommunitiesFrame.Chat.MessageFrame
+		if messageFrame then
+			messageFrame:SetFont(fontFile or font, fontSize, fontOutline)
+		end
+	end
+
 	self.styled = true
 end
 
