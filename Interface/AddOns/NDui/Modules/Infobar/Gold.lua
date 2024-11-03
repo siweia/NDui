@@ -18,6 +18,7 @@ local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
 local C_Container_GetContainerItemInfo = C_Container.GetContainerItemInfo
 
 local slotString = L["Bags"]..": %s%d"
+local showGoldGap = 100 * 1e4
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
@@ -180,11 +181,13 @@ info.onEnter = function(self)
 
 	if NDuiADB["totalGold"][myRealm] then
 		for k, v in pairs(NDuiADB["totalGold"][myRealm]) do
-			local name = Ambiguate(k.."-"..myRealm, "none")
 			local gold, class = unpack(v)
-			local r, g, b = B.ClassColor(class)
-			GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
-			totalGold = totalGold + gold
+			local name = Ambiguate(k.."-"..myRealm, "none")
+			if gold > showGoldGap or UnitIsUnit(name, "player") then
+				local r, g, b = B.ClassColor(class)
+				GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+				totalGold = totalGold + gold
+			end
 		end
 	end
 
@@ -193,12 +196,14 @@ info.onEnter = function(self)
 		if realm ~= myRealm then
 			for k, v in pairs(data) do
 				local gold, class = unpack(v)
-				if isShiftKeyDown then -- show other realms while holding shift
-					local name = Ambiguate(k.."-"..realm, "none")
-					local r, g, b = B.ClassColor(class)
-					GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+				if gold > showGoldGap then
+					if isShiftKeyDown then -- show other realms while holding shift
+						local name = Ambiguate(k.."-"..realm, "none")
+						local r, g, b = B.ClassColor(class)
+						GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+					end
+					totalGold = totalGold + gold
 				end
-				totalGold = totalGold + gold
 			end
 		end
 	end
