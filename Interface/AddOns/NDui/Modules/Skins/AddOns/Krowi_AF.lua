@@ -338,6 +338,7 @@ function S:KrowiAF()
 					end
 				end
 			end)
+			B.ReskinTrimScroll(characterList.ScrollBar)
 		end
 	end
 end
