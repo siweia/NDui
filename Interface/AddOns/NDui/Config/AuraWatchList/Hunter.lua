@@ -117,6 +117,7 @@ local list = {
 		{AuraID = 392956, UnitID = "player"},	-- 巨熊之韧
 		{AuraID = 407405, UnitID = "player"},	-- 弦之韵律
 		{AuraID = 359844, UnitID = "player"},	-- 荒野的召唤
+		{AuraID = 360952, UnitID = "player"},	-- 协同进攻
 		{AuraID = 388045, UnitID = "player", Flash = true},	-- 警戒
 		{AuraID = 378770, UnitID = "player", Flash = true},	-- 夺命打击
 		{AuraID = 378747, UnitID = "player", Flash = true},	-- 凶暴兽群
