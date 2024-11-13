@@ -1,8 +1,8 @@
-## Interface: 110002, 110005
+## Interface: 110005, 110007
 ## Title: |cff0080ffNDui|r
 ## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Simpy, Tuller, zork.
 ## Author: Siweia
 ## Notes: Empty toc for Curseforge
-## Version: 8.4.0
+## Version: 8.4.1
 ## X-Support: TWW
 ## X-Website: https://github.com/siweia/NDui
