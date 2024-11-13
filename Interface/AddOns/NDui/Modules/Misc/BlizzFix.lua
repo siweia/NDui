@@ -139,3 +139,27 @@ end
 if not GuildControlUIRankSettingsFrameRosterLabel then
 	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
 end
+
+-- Fix the lag caused by the guild news loop during map transitions
+-- @see https://bbs.nga.cn/read.php?&tid=42399961
+local BLZCommunitiesGuildNewsFrame_OnEvent = CommunitiesGuildNewsFrame_OnEvent
+local newsRequireUpdate, newsTimer
+CommunitiesFrameGuildDetailsFrameNews:SetScript("OnEvent", function(frame, event)
+    if event == "GUILD_NEWS_UPDATE" then
+        if newsTimer then
+            newsRequireUpdate = true
+        else
+            BLZCommunitiesGuildNewsFrame_OnEvent(frame, event)
+
+            -- 1秒后, 如果还需要更新公会新闻, 再次更新
+            newsTimer = C_Timer.NewTimer(1, function()
+                if newsRequireUpdate then
+                    BLZCommunitiesGuildNewsFrame_OnEvent(frame, event)
+                end
+                newsTimer = nil
+            end)
+        end
+    else
+        BLZCommunitiesGuildNewsFrame_OnEvent(frame, event)
+    end
+end)
