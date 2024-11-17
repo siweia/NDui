@@ -205,6 +205,12 @@ function M:ExpBar_UpdateTooltip()
 				GameTooltip:AddLine(name, 0,.6,1)
 				GameTooltip:AddDoubleLine(reaction, current.." / "..currentMax.." ("..floor(current/currentMax*100).."%)", .6,.8,1, 1,1,1)
 			end
+		elseif factionID == 2574 then -- 梦境守望者
+			local currencyInfo = C_CurrencyInfo.GetCurrencyInfo(2649) -- 梦境注能
+			local q = currencyInfo.quantity
+			local m = currencyInfo.maxQuantity
+			local name = C_CurrencyInfo.GetCurrencyInfo(2777).name
+			GameTooltip:AddDoubleLine(name, q.." / "..m.." ("..floor(q/m*100).."%)", .6,.8,1, 1,1,1)
 		end
 	end
 
