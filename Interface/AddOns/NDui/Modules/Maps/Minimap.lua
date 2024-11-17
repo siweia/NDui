@@ -625,7 +625,10 @@ function module:SetupMinimap()
 	}
 
 	for _, v in pairs(frames) do
-		B.HideObject(_G[v])
+		local object = _G[v]
+		if object then
+			B.HideObject(_G[v])
+		end
 	end
 	MinimapCluster:EnableMouse(false)
 

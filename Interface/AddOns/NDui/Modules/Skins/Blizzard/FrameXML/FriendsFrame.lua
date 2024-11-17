@@ -4,12 +4,14 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	for i = 1, 5 do
 		local tab = _G["FriendsFrameTab"..i]
-		tab.bg = B.ReskinTab(tab)
-		local hl = _G["FriendsFrameTab"..i.."HighlightTexture"]
-		hl:SetPoint("TOPLEFT", tab.bg, C.mult, -C.mult)
-		hl:SetPoint("BOTTOMRIGHT", tab.bg, -C.mult, C.mult)
-		if i == 1 then
-			tab:SetPoint("BOTTOMLEFT", -2, -31)
+		if tab then
+			tab.bg = B.ReskinTab(tab)
+			local hl = _G["FriendsFrameTab"..i.."HighlightTexture"]
+			hl:SetPoint("TOPLEFT", tab.bg, C.mult, -C.mult)
+			hl:SetPoint("BOTTOMRIGHT", tab.bg, -C.mult, C.mult)
+			if i == 1 then
+				tab:SetPoint("BOTTOMLEFT", -2, -31)
+			end
 		end
 	end
 	FriendsFrameIcon:Hide()
