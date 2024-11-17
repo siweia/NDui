@@ -1,9 +1,9 @@
-## Interface: 40400
+## Interface: 40401
 ## Title: |cff0080ffNDui|r |cffc79c6eClassic|r
 ## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
 ## Notes: More than a UI.
-## Version: 4.5.1
+## Version: 4.5.2
 ## X-Support: Cata Classic
 ## X-Website: https://github.com/siweia/NDui/tree/TBC
 ## X-Curse-Project-ID: 338794
