@@ -106,11 +106,13 @@ function module:ReskinRegions()
 	end)
 
 	-- LFG Icon
-	if MiniMapLFGFrame then
-		MiniMapLFGFrame:ClearAllPoints()
-		MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap, 5, 15)
-		MiniMapLFGBorder:Hide()
-	end
+	C_Timer.After(1, function()
+		if LFGMinimapFrame then
+			LFGMinimapFrame:ClearAllPoints()
+			LFGMinimapFrame:SetPoint("BOTTOMRIGHT", Minimap, 5, 15)
+			LFGMinimapFrameBorder:Hide()
+		end
+	end)
 end
 
 function module:RecycleBin()
