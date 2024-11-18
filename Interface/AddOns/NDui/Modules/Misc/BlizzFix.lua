@@ -99,20 +99,6 @@ do
 	B:RegisterEvent("ADDON_LOADED", fixGuildNews)
 end
 
--- Fix achievement date missing in zhTW
-if GetLocale() == "zhTW" then
-	local function fixAchievementData(event, addon)
-		if addon ~= "Blizzard_AchievementUI" then return end
-
-		hooksecurefunc("AchievementButton_Localize", function(button)
-			button.DateCompleted:SetPoint("TOP", button.Shield, "BOTTOM", -2, 6)
-		end)
-
-		B:UnregisterEvent(event, fixAchievementData)
-	end
-	B:RegisterEvent("ADDON_LOADED", fixAchievementData)
-end
-
 function M:HandleNDuiTitle()
 	-- Square NDui logo texture
 	local function replaceIconString(self, text)
@@ -135,7 +121,21 @@ function M:HandleNDuiTitle()
 	end)
 end
 
--- Fix missing localization file
-if not GuildControlUIRankSettingsFrameRosterLabel then
-	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
+-- Fix guild news jam
+do
+	local lastTime, timeGap = 0, 1.5
+	local function updateGuildNews(self, event)
+		if event == "PLAYER_ENTERING_WORLD" then
+			QueryGuildNews()
+		else
+			if self:IsVisible() then
+				local nowTime = GetTime()
+				if nowTime - lastTime > timeGap then
+					CommunitiesGuildNews_Update(self)
+					lastTime = nowTime
+				end
+			end
+		end
+	end
+	CommunitiesFrameGuildDetailsFrameNews:SetScript("OnEvent", updateGuildNews)
 end
