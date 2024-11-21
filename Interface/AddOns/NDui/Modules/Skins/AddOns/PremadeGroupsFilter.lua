@@ -18,7 +18,7 @@ function S:PGFSkin()
 	local RolePanel = _G.PremadeGroupsFilterRolePanel
 	local PGFDialog = _G.PremadeGroupsFilterDialog
 
-	local names = {"Difficulty", "MPRating", "Members", "Tanks", "Heals", "DPS", "Partyfit", "BLFit", "BRFit", "Defeated", "MatchingId", "PvPRating", "NotDeclined"}
+	local names = {"Difficulty", "MPRating", "Members", "Tanks", "Heals", "DPS", "Partyfit", "BLFit", "BRFit", "Defeated", "MatchingId", "PvPRating", "NotDeclined", "NeedsBL"}
 
 	local function handleDropdown(drop)
 		B.StripTextures(drop)
