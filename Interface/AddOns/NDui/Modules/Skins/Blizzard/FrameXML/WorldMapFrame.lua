@@ -6,13 +6,15 @@ tinsert(C.defaultThemes, function()
 
 	local mapBg = B.ReskinPortraitFrame(WorldMapFrame, 7, 0, -7, 25)
 	mapBg:SetFrameStrata("BACKGROUND")
-	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", function(map)
+	local function updateMapBg(map)
 		if map.isMaximized then
 			mapBg:SetPoint("TOPLEFT", 7, 0)
 		else
 			mapBg:SetPoint("TOPLEFT", 18, 0)
 		end
-	end)
+	end
+	updateMapBg(WorldMapFrame)
+	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", updateMapBg)
 
 	B.ReskinDropDown(WorldMapZoneMinimapDropdown)
 	B.ReskinDropDown(WorldMapContinentDropdown)

@@ -84,8 +84,16 @@ function module:UpdateMapID()
 end
 
 function module:SetupCoords()
-	playerCoords = B.CreateFS(WorldMapFrame, 14, "", false, "TOPLEFT", 60, -6)
-	cursorCoords = B.CreateFS(WorldMapFrame, 14, "", false, "TOPLEFT", 180, -6)
+	local textParent = CreateFrame("Frame", nil, WorldMapFrame)
+	textParent:SetPoint("BOTTOMLEFT", WorldMapFrame.ScrollContainer)
+	textParent:SetSize(1, 18)
+	textParent:SetFrameLevel(5)
+	B.SetGradient(textParent, "H", 0,0,0, .5, 0, 450, 18):SetPoint("LEFT")
+
+	playerCoords = B.CreateFS(textParent, 13, "", false, "LEFT", 5, 0)
+	playerCoords:SetJustifyH("LEFT")
+	cursorCoords = B.CreateFS(textParent, 13, "", false, "LEFT", 180, 0)
+	cursorCoords:SetJustifyH("LEFT")
 
 	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", module.UpdateMapID)
 	hooksecurefunc(WorldMapFrame, "OnMapChanged", module.UpdateMapID)
@@ -263,11 +271,12 @@ function module:MapData_ResetTexturePool(texture)
 end
 
 function module:RemoveMapFog()
-	local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsBaseCheckButtonTemplate")
+	local bu = CreateFrame("CheckButton", nil, WorldMapFrame, "OptionsBaseCheckButtonTemplate")
 	bu:SetHitRectInsets(-5, -5, -5, -5)
-	bu:SetPoint("TOPRIGHT", -270, 0)
+	bu:SetPoint("TOPLEFT", 25, 0)
 	bu:SetSize(26, 26)
-	B.ReskinCheck(bu)
+	B.ReskinCheck(bu, .25)
+	bu.__bg = true
 	bu:SetChecked(C.db["Map"]["MapReveal"])
 	bu.text = B.CreateFS(bu, 14, L["Map Reveal"], false, "LEFT", 25, 0)
 
@@ -322,6 +331,7 @@ function module:SetupWorldMap()
 	WorldMapFrame:SetFrameStrata("MEDIUM")
 	WorldMapFrame.BorderFrame:SetFrameStrata("MEDIUM")
 	WorldMapFrame.BorderFrame:SetFrameLevel(1)
+	WorldMapTitleButton:SetFrameLevel(1)
 	WorldMapFrame:SetAttribute("UIPanelLayout-area", "center")
 	WorldMapFrame:SetAttribute("UIPanelLayout-enabled", false)
 	WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
