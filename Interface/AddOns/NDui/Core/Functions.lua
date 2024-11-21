@@ -1030,33 +1030,20 @@ do
 
 	-- Handle dropdown
 	function B:ReskinDropDown()
-		if DB.isNewPatch then
-			if self.Arrow then self.Arrow:SetAlpha(0) end
-			if self.Background then self.Background:SetAlpha(0) end
-	
-			local bg = B.CreateBDFrame(self, 0, true)
-			bg:SetPoint("TOPLEFT", 0, -2)
-			bg:SetPoint("BOTTOMRIGHT", 0, 2)
-			local tex = self:CreateTexture(nil, "ARTWORK")
-			tex:SetPoint("RIGHT", bg, -3, 0)
-			tex:SetSize(18, 18)
-			B.SetupArrow(tex, "down")
-			self.__texture = tex
-	
-			self:HookScript("OnEnter", B.Texture_OnEnter)
-			self:HookScript("OnLeave", B.Texture_OnLeave)
-		else
-			local frameName = self.GetName and self:GetName()
-			local down = self.Button or frameName and (_G[frameName.."Button"] or _G[frameName.."_Button"])
-	
-			local bg = B.CreateBDFrame(self, 0, true)
-			bg:SetPoint("TOPLEFT", 16, -4)
-			bg:SetPoint("BOTTOMRIGHT", -18, 8)
-	
-			down:ClearAllPoints()
-			down:SetPoint("RIGHT", bg, -2, 0)
-			B.ReskinArrow(down, "down")
-		end
+		if self.Arrow then self.Arrow:SetAlpha(0) end
+		if self.Background then self.Background:SetAlpha(0) end
+
+		local bg = B.CreateBDFrame(self, 0, true)
+		bg:SetPoint("TOPLEFT", 0, -2)
+		bg:SetPoint("BOTTOMRIGHT", 0, 2)
+		local tex = self:CreateTexture(nil, "ARTWORK")
+		tex:SetPoint("RIGHT", bg, -3, 0)
+		tex:SetSize(18, 18)
+		B.SetupArrow(tex, "down")
+		self.__texture = tex
+
+		self:HookScript("OnEnter", B.Texture_OnEnter)
+		self:HookScript("OnLeave", B.Texture_OnLeave)
 	end
 
 	-- Handle close button
@@ -1185,30 +1172,23 @@ do
 	function B:ReskinFilterButton()
 		B.StripTextures(self)
 		B.Reskin(self)
-		if DB.isNewPatch then
-			if self.Text then
-				self.Text:SetPoint("CENTER")
-			end
-			if self.Icon then
-				B.SetupArrow(self.Icon, "right")
-				self.Icon:SetPoint("RIGHT")
-				self.Icon:SetSize(14, 14)
-			end
-			if self.ResetButton then
-				B.ReskinFilterReset(self.ResetButton)
-			end
-			self.__bg:SetOutside()
-			local tex = self:CreateTexture(nil, "ARTWORK")
-			B.SetupArrow(tex, "right")
-			tex:SetSize(16, 16)
-			tex:SetPoint("RIGHT", -2, 0)
-			self.__texture = tex
-		else
+		if self.Text then
 			self.Text:SetPoint("CENTER")
+		end
+		if self.Icon then
 			B.SetupArrow(self.Icon, "right")
 			self.Icon:SetPoint("RIGHT")
 			self.Icon:SetSize(14, 14)
 		end
+		if self.ResetButton then
+			B.ReskinFilterReset(self.ResetButton)
+		end
+		self.__bg:SetOutside()
+		local tex = self:CreateTexture(nil, "ARTWORK")
+		B.SetupArrow(tex, "right")
+		tex:SetSize(16, 16)
+		tex:SetPoint("RIGHT", -2, 0)
+		self.__texture = tex
 	end
 
 	function B:ReskinNavBar()
@@ -1844,8 +1824,7 @@ do
 	end
 
 	function B:CreateSlider(name, minValue, maxValue, step, x, y, width)
-		local template = DB.isNewPatch and "TextToSpeechSliderTemplate" or "OptionsSliderTemplate"
-		local slider = CreateFrame("Slider", nil, self, template)
+		local slider = CreateFrame("Slider", nil, self, "TextToSpeechSliderTemplate")
 		slider:SetPoint("TOPLEFT", x, y)
 		slider:SetWidth(width or 200)
 		slider:SetMinMaxValues(minValue, maxValue)

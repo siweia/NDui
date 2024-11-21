@@ -13,12 +13,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinScroll(AddonListScrollFrameScrollBar)
 
 	AddonListForceLoad:SetSize(26, 26)
-	if DB.isNewPatch then
-		B.ReskinDropDown(AddonList.Dropdown)
-	else
-		B.ReskinDropDown(AddonCharacterDropDown)
-		AddonCharacterDropDown:SetWidth(170)
-	end
+	B.ReskinDropDown(AddonList.Dropdown)
 
 	for i = 1, MAX_ADDONS_DISPLAYED do
 		local checkbox = _G["AddonListEntry"..i.."Enabled"]

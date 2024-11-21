@@ -8,11 +8,7 @@ C.themes["Blizzard_EngravingUI"] = function()
 		B.StripTextures(EngravingFrameSideInset)
 		B.SetBD(EngravingFrame.Border, nil, 1, -2)
 		B.ReskinEditBox(EngravingFrameSearchBox)
-		if DB.isNewPatch then
-			B.ReskinFilterButton(EngravingFrame.FilterDropdown)
-		else
-			B.ReskinDropDown(EngravingFrameFilterDropDown)
-		end
+		B.ReskinFilterButton(EngravingFrame.FilterDropdown)
 		B.ReskinScroll(EngravingFrameScrollFrameScrollBar)
 
 		for i = 1, 15 do

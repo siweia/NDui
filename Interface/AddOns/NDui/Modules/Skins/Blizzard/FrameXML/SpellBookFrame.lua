@@ -14,12 +14,7 @@ tinsert(C.defaultThemes, function()
 			bu:SetPoint("CENTER", SpellBookFrame, "BOTTOMLEFT", 79, 54)
 		end
 	end
-
-	if DB.isNewPatch then
-		B.ReskinCheck(ShowAllSpellRanksCheckbox)
-	else
-		B.ReskinCheck(ShowAllSpellRanksCheckBox)
-	end
+	B.ReskinCheck(ShowAllSpellRanksCheckbox)
 
 	for i = 1, 8 do
 		local tab = _G["SpellBookSkillLineTab"..i]

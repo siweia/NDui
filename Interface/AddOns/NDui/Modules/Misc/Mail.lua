@@ -348,8 +348,7 @@ function M:CollectCurrentButton()
 end
 
 function M:LastMailSaver()
-	local template = DB.isNewPatch and "OptionsBaseCheckButtonTemplate" or "OptionsCheckButtonTemplate"
-	local mailSaver = CreateFrame("CheckButton", nil, SendMailFrame, template)
+	local mailSaver = CreateFrame("CheckButton", nil, SendMailFrame, "OptionsBaseCheckButtonTemplate")
 	mailSaver:SetHitRectInsets(0, 0, 0, 0)
 	mailSaver:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 0, 0)
 	mailSaver:SetSize(24, 24)

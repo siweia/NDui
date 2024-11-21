@@ -11,11 +11,7 @@ function B:ReskinIconSelector()
 	B.ReskinIcon(self.BorderBox.SelectedIconArea.SelectedIconButton.Icon)
 	B.Reskin(self.BorderBox.OkayButton)
 	B.Reskin(self.BorderBox.CancelButton)
-	if DB.isNewPatch then
-		B.ReskinDropDown(self.BorderBox.IconTypeDropdown)
-	else
-		B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
-	end
+	B.ReskinDropDown(self.BorderBox.IconTypeDropdown)
 	B.ReskinTrimScroll(self.IconSelector.ScrollBar)
 
 	hooksecurefunc(self.IconSelector.ScrollBox, "Update", function(self)
@@ -155,17 +151,12 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(ReputationDetailFrame)
 	B.SetBD(ReputationDetailFrame)
 	B.ReskinClose(ReputationDetailCloseButton)
-	if DB.isNewPatch then
-		B.ReskinCheck(ReputationDetailInactiveCheckbox)
-		B.ReskinCheck(ReputationDetailMainScreenCheckbox)
-	else
-		B.ReskinCheck(ReputationDetailInactiveCheckBox)
-		B.ReskinCheck(ReputationDetailMainScreenCheckBox)
-	end
+	B.ReskinCheck(ReputationDetailInactiveCheckbox)
+	B.ReskinCheck(ReputationDetailMainScreenCheckbox)
 	B.ReskinScroll(ReputationListScrollFrameScrollBar)
 	select(3, ReputationDetailFrame:GetRegions()):Hide()
 
-	local atWarCheck = ReputationDetailAtWarCheckBox or ReputationDetailAtWarCheckbox -- isNewPatch
+	local atWarCheck = ReputationDetailAtWarCheckbox
 	B.ReskinCheck(atWarCheck)
 	local atWarCheckTex = atWarCheck:GetCheckedTexture()
 	atWarCheckTex:ClearAllPoints()

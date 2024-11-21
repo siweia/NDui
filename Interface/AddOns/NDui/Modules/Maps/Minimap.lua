@@ -49,8 +49,6 @@ function module:CreatePulse()
 	end)
 end
 
-local MiniMapTracking = DB.isNewPatch and MiniMapTracking or MiniMapTrackingFrame
-
 local function ResetTrackingFrameAnchor()
 	MiniMapTracking:ClearAllPoints()
 	MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, -5, 5)

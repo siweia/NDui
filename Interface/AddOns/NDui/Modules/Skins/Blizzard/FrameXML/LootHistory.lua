@@ -107,25 +107,4 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end)
-
-	if DB.isNewPatch then return end
-	-- [[ Dropdown ]]
-
-	LootHistoryDropDown.initialize = function(self)
-		local info = UIDropDownMenu_CreateInfo();
-		info.isTitle = 1;
-		info.text = MASTER_LOOTER;
-		info.fontObject = GameFontNormalLeft;
-		info.notCheckable = 1;
-		UIDropDownMenu_AddButton(info);
-
-		info = UIDropDownMenu_CreateInfo();
-		info.notCheckable = 1;
-		local name, class = C_LootHistory.GetPlayerInfo(self.itemIdx, self.playerIdx);
-		local classColor = DB.ClassColors[class];
-		local colorCode = classColor.colorStr
-		info.text = string.format(MASTER_LOOTER_GIVE_TO, colorCode..name.."|r");
-		info.func = LootHistoryDropDown_OnClick;
-		UIDropDownMenu_AddButton(info);
-	end
 end)

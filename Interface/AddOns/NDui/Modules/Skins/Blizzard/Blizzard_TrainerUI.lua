@@ -5,11 +5,7 @@ C.themes["Blizzard_TrainerUI"] = function()
 	B.ReskinPortraitFrame(ClassTrainerFrame, 10, -5, -30, 70)
 	B.Reskin(ClassTrainerTrainButton)
 	B.Reskin(ClassTrainerCancelButton)
-	if DB.isNewPatch then
-		B.ReskinFilterButton(ClassTrainerFrame.FilterDropdown)
-	else
-		B.ReskinDropDown(ClassTrainerFrameFilterDropDown)
-	end
+	B.ReskinFilterButton(ClassTrainerFrame.FilterDropdown)
 	B.ReskinScroll(ClassTrainerListScrollFrameScrollBar)
 	B.ReskinScroll(ClassTrainerDetailScrollFrameScrollBar)
 	B.CreateBDFrame(ClassTrainerDetailScrollFrame, .25)
