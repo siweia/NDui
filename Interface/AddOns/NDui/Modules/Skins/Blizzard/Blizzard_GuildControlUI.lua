@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 local function updateGuildRanks()
 	for i = 1, GuildControlGetNumRanks() do
 		local rank = _G["GuildControlUIRankOrderFrameRank"..i]
-		if not rank.styled then
+		if rank and not rank.styled then
 			rank.upButton.icon:Hide()
 			rank.downButton.icon:Hide()
 			rank.deleteButton.icon:Hide()
