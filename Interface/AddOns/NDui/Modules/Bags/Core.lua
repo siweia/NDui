@@ -280,11 +280,6 @@ function module:CreateReagentButton(f)
 		else
 			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 			BankFrame_ShowPanel("ReagentBankFrame") -- trigger context matching
-			BankFrame.selectedTab = 2
-			BankFrame.activeTabIndex = 2
-			f.reagent:Show()
-			f.bank:Hide()
-			f.accountbank:Hide()
 			if btn == "RightButton" then DepositReagentBank() end
 		end
 	end)
@@ -305,11 +300,6 @@ function module:CreateAccountBankButton(f)
 		else
 			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 			BankFrame_ShowPanel("AccountBankPanel") -- trigger context matching
-			BankFrame.selectedTab = 3
-			BankFrame.activeTabIndex = 3
-			f.reagent:Hide()
-			f.bank:Hide()
-			f.accountbank:Show()
 		end
 	end)
 	bu.title = ACCOUNT_BANK_PANEL_TITLE
@@ -357,11 +347,6 @@ function module:CreateBankButton(f)
 	bu:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 		BankFrame_ShowPanel("BankSlotsFrame") -- trigger context matching
-		BankFrame.selectedTab = 1
-		BankFrame.activeTabIndex = 1
-		f.reagent:Hide()
-		f.accountbank:Hide()
-		f.bank:Show()
 	end)
 	bu.title = BANK
 	B.AddTooltip(bu, "ANCHOR_TOP")
@@ -1489,6 +1474,23 @@ function module:OnLogin()
 	SetCVar("professionToolSlotsExampleShown", 1)
 	SetCVar("professionAccessorySlotsExampleShown", 1)
 
+	-- Bank frame paging
+	local bankNameIndex = {
+		["BankSlotsFrame"] = 1,
+		["ReagentBankFrame"] = 2,
+		["AccountBankPanel"] = 3,
+	}
+	hooksecurefunc("BankFrame_ShowPanel", function(sidePanelName)
+		if sidePanelName == "AccountBankPanel" then
+			local panelIndex = bankNameIndex[sidePanelName]
+			BankFrame.selectedTab = panelIndex
+			BankFrame.activeTabIndex = panelIndex
+			f.bank:SetShown(panelIndex == 1)
+			f.reagent:SetShown(panelIndex == 2)
+			f.accountbank:SetShown(panelIndex == 3)
+		end
+	end)
+
 	-- Delay updates for data jam
 	local updater = CreateFrame("Frame", nil, f.main)
 	updater:Hide()
@@ -1501,7 +1503,7 @@ function module:OnLogin()
 	end)
 
 	B:RegisterEvent("GET_ITEM_INFO_RECEIVED", function()
-		updater.delay = 1.5
+		updater.delay = 1
 		updater:Show()
 	end)
 end
