@@ -16,6 +16,7 @@ local SortReagentBankBags = C_Container.SortReagentBankBags
 local PickupContainerItem = C_Container.PickupContainerItem
 local SplitContainerItem = C_Container.SplitContainerItem
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
+local CHAR_BANK_TYPE = Enum.BankType.Character or 1
 local ACCOUNT_BANK_TYPE = Enum.BankType.Account or 2
 
 local sortCache = {}
@@ -275,6 +276,8 @@ function module:CreateReagentButton(f)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -C.mult)
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
+		if not C_Bank.CanViewBank(CHAR_BANK_TYPE) then return end
+
 		if not IsReagentBankUnlocked() then
 			StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
 		else
@@ -295,6 +298,8 @@ function module:CreateAccountBankButton(f)
 	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -C.mult)
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
+		if not C_Bank.CanViewBank(ACCOUNT_BANK_TYPE) then return end
+
 		if AccountBankPanel:ShouldShowLockPrompt() then
 			UIErrorsFrame:AddMessage(DB.InfoColor..ACCOUNT_BANK_LOCKED_PROMPT)
 		else
@@ -345,6 +350,8 @@ end
 function module:CreateBankButton(f)
 	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Banker")
 	bu:SetScript("OnClick", function()
+		if not C_Bank.CanViewBank(CHAR_BANK_TYPE) then return end
+
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 		BankFrame_ShowPanel("BankSlotsFrame") -- trigger context matching
 	end)
