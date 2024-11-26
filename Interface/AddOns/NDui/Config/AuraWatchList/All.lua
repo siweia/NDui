@@ -62,6 +62,7 @@ local list = {
 		{AuraID = 443531, UnitID = "player"},	-- 振奋之光
 		{AuraID = 435493, UnitID = "player"},	-- 死亡之吻
 		{AuraID = 455451, UnitID = "player"},	-- 迅芯烛台
+		{AuraID = 445560, UnitID = "player"},	-- 紫蛋
 		{AuraID = 449954, UnitID = "player"},	-- 奸邪发射机
 		{AuraID = 449947, UnitID = "player", Text = NPE_JUMP},	-- 奸邪发射机，跳3下
 		-- 10.0 饰品
