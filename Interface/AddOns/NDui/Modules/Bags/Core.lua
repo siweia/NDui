@@ -1488,8 +1488,8 @@ function module:OnLogin()
 		["AccountBankPanel"] = 3,
 	}
 	hooksecurefunc("BankFrame_ShowPanel", function(sidePanelName)
-		if sidePanelName == "AccountBankPanel" then
-			local panelIndex = bankNameIndex[sidePanelName]
+		local panelIndex = bankNameIndex[sidePanelName]
+		if panelIndex then
 			BankFrame.selectedTab = panelIndex
 			BankFrame.activeTabIndex = panelIndex
 			f.bank:SetShown(panelIndex == 1)
