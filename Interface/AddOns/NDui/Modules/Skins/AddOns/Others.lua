@@ -49,7 +49,10 @@ function S:PostalSkin()
 	B.ReskinArrow(Postal_OpenAllMenuButton, "down")
 	B.ReskinArrow(Postal_BlackBookButton, "down")
 	for i = 1, 7 do
-		B.ReskinCheck(_G["PostalInboxCB"..i])
+		local cb = _G["PostalInboxCB"..i]
+		if cb then
+			B.ReskinCheck(cb)
+		end
 	end
 
 	Postal_ModuleMenuButton:ClearAllPoints()
