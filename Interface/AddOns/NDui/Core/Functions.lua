@@ -1077,13 +1077,13 @@ do
 
 	-- Handle close button
 	function B:Texture_OnEnter()
-		if self:IsEnabled() then
-			if self.bg then
-				self.bg:SetBackdropColor(cr, cg, cb, .25)
-			else
-				self.__texture:SetVertexColor(0, .6, 1)
-			end
-		end
+	    if self and type(self) == "table" and self.IsEnabled and self:IsEnabled() then
+	        if self.bg then
+	            self.bg:SetBackdropColor(cr, cg, cb, .25)
+	        else
+	            self.__texture:SetVertexColor(0, .6, 1)
+	        end
+	    end
 	end
 
 	function B:Texture_OnLeave()
