@@ -1077,7 +1077,7 @@ do
 
 	-- Handle close button
 	function B:Texture_OnEnter()
-		if self:IsEnabled() then
+		if self.IsEnabled and self:IsEnabled() then
 			if self.bg then
 				self.bg:SetBackdropColor(cr, cg, cb, .25)
 			else
