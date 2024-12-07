@@ -34,7 +34,7 @@ tinsert(C.defaultThemes, function()
 		-- Check all buttons
 		for i = 1, WorldMapFrame:GetNumChildren() do
 			local child = select(i, WorldMapFrame:GetChildren())
-			if child:IsObjectType("Button") and child.Text and not child.__bg then
+			if child:IsObjectType("Button") and child.Text and not child.__bg and not child.__texture then
 				B.Reskin(child)
 			end
 		end

@@ -1030,25 +1030,41 @@ do
 
 	-- Handle dropdown
 	function B:ReskinDropDown()
-		if self.Arrow then self.Arrow:SetAlpha(0) end
-		if self.Background then self.Background:SetAlpha(0) end
-
-		local bg = B.CreateBDFrame(self, 0, true)
-		bg:SetPoint("TOPLEFT", 0, -2)
-		bg:SetPoint("BOTTOMRIGHT", 0, 2)
-		local tex = self:CreateTexture(nil, "ARTWORK")
-		tex:SetPoint("RIGHT", bg, -3, 0)
-		tex:SetSize(18, 18)
-		B.SetupArrow(tex, "down")
-		self.__texture = tex
-
-		self:HookScript("OnEnter", B.Texture_OnEnter)
-		self:HookScript("OnLeave", B.Texture_OnLeave)
+		B.StripTextures(self)
+		if self.Arrow then
+			self.Arrow:SetAlpha(0)
+			if self.Background then self.Background:SetAlpha(0) end
+	
+			local bg = B.CreateBDFrame(self, 0, true)
+			bg:SetPoint("TOPLEFT", 0, -2)
+			bg:SetPoint("BOTTOMRIGHT", 0, 2)
+			local tex = self:CreateTexture(nil, "ARTWORK")
+			tex:SetPoint("RIGHT", bg, -3, 0)
+			tex:SetSize(18, 18)
+			B.SetupArrow(tex, "down")
+			self.__texture = tex
+	
+			self:HookScript("OnEnter", B.Texture_OnEnter)
+			self:HookScript("OnLeave", B.Texture_OnLeave)
+		else
+			local frameName = self.GetName and self:GetName()
+			local down = self.Button or frameName and (_G[frameName.."Button"] or _G[frameName.."_Button"])
+	
+			local bg = B.CreateBDFrame(self, 0, true)
+			bg:SetPoint("TOPLEFT", 16, -4)
+			bg:SetPoint("BOTTOMRIGHT", -18, 8)
+	
+			if down then
+				down:ClearAllPoints()
+				down:SetPoint("RIGHT", bg, -2, 0)
+				B.ReskinArrow(down, "down")
+			end
+		end
 	end
 
 	-- Handle close button
 	function B:Texture_OnEnter()
-		if self:IsEnabled() then
+		if self.IsEnabled and self:IsEnabled() then
 			if self.bg then
 				self.bg:SetBackdropColor(cr, cg, cb, .25)
 			else

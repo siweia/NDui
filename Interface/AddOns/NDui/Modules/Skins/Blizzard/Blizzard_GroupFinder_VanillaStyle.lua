@@ -1,20 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function oldDropdown(self)
-	B.StripTextures(self)
-	local frameName = self.GetName and self:GetName()
-	local down = self.Button or frameName and (_G[frameName.."Button"] or _G[frameName.."_Button"])
-
-	local bg = B.CreateBDFrame(self, 0, true)
-	bg:SetPoint("TOPLEFT", 16, -4)
-	bg:SetPoint("BOTTOMRIGHT", -18, 8)
-
-	down:ClearAllPoints()
-	down:SetPoint("RIGHT", bg, -2, 0)
-	B.ReskinArrow(down, "down")
-end
-
 local function handleCheckButton(button)
 	local checkbutton = button.CheckButton
 	if checkbutton and not checkbutton.styled then
@@ -65,8 +51,8 @@ C.themes["Blizzard_GroupFinder_VanillaStyle"] = function()
 	hooksecurefunc("LFGListingActivityView_InitActivityGroupButton", handleCheckButton)
 
 	B.StripTextures(LFGBrowseFrame)
-	oldDropdown(LFGBrowseFrameCategoryDropDown)
-	oldDropdown(LFGBrowseFrameActivityDropDown)
+	B.ReskinDropDown(LFGBrowseFrameCategoryDropDown)
+	B.ReskinDropDown(LFGBrowseFrameActivityDropDown)
 	B.Reskin(LFGBrowseFrameRefreshButton)
 	LFGBrowseFrameRefreshButton.__bg:SetInside(nil, 6, 6)
 	B.Reskin(LFGBrowseFrameSendMessageButton)
