@@ -8,7 +8,7 @@ C.themes["Blizzard_ScrappingMachineUI"] = function()
 	local ItemSlots = ScrappingMachineFrame.ItemSlots
 	B.StripTextures(ItemSlots)
 
-	hooksecurefunc(ScrappingMachineFrame, "SetupScrapButtonPool", function(self)
+	hooksecurefunc(ScrappingMachineFrame, "UpdateScrapButtonState", function(self)
 		for button in self.ItemSlots.scrapButtons:EnumerateActive() do
 			if not button.bg then
 				B.StripTextures(button)
