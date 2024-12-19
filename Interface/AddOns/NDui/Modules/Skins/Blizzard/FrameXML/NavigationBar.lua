@@ -48,39 +48,48 @@ tinsert(C.defaultThemes, function()
 
 	hooksecurefunc("NavBar_Initialize", B.ReskinNavBar)
 
+	local function handleNavButton(navButton)
+		if navButton.restyled then return end
+
+		B.Reskin(navButton)
+		navButton.arrowUp:SetAlpha(0)
+		navButton.arrowDown:SetAlpha(0)
+		navButton.selected:SetDrawLayer("BACKGROUND", 1)
+		navButton.selected:SetColorTexture(r, g, b, .25)
+		navButton.selected:SetInside(navButton.__bg)
+
+		navButton:HookScript("OnClick", function()
+			moveNavButtons(navButton:GetParent())
+		end)
+
+		-- arrow button
+		local arrowButton = navButton.MenuArrowButton
+		arrowButton.Art:Hide()
+		arrowButton:SetHighlightTexture(0)
+
+		local tex = arrowButton:CreateTexture(nil, "ARTWORK")
+		B.SetupArrow(tex, "down")
+		tex:SetSize(14, 14)
+		tex:SetPoint("CENTER")
+		arrowButton.__texture = tex
+
+		arrowButton:SetScript("OnEnter", B.Texture_OnEnter)
+		arrowButton:SetScript("OnLeave", B.Texture_OnLeave)
+
+		navButton.restyled = true
+	end
+
 	hooksecurefunc("NavBar_AddButton", function(self)
 		B.ReskinNavBar(self)
-
-		local navButton = self.navList[#self.navList]
-		if not navButton.restyled then
-			B.Reskin(navButton)
-			navButton.arrowUp:SetAlpha(0)
-			navButton.arrowDown:SetAlpha(0)
-			navButton.selected:SetDrawLayer("BACKGROUND", 1)
-			navButton.selected:SetColorTexture(r, g, b, .25)
-			navButton.selected:SetInside(navButton.__bg)
-
-			navButton:HookScript("OnClick", function()
-				moveNavButtons(self)
-			end)
-
-			-- arrow button
-			local arrowButton = navButton.MenuArrowButton
-			arrowButton.Art:Hide()
-			arrowButton:SetHighlightTexture(0)
-
-			local tex = arrowButton:CreateTexture(nil, "ARTWORK")
-			B.SetupArrow(tex, "down")
-			tex:SetSize(14, 14)
-			tex:SetPoint("CENTER")
-			arrowButton.__texture = tex
-
-			arrowButton:SetScript("OnEnter", B.Texture_OnEnter)
-			arrowButton:SetScript("OnLeave", B.Texture_OnLeave)
-
-			navButton.restyled = true
-		end
-
+		handleNavButton(self.navList[#self.navList])
 		moveNavButtons(self)
 	end)
+
+	-- Update navbar on WorldMap
+	B.ReskinNavBar(WorldMapFrame.NavBar)
+	local navList = WorldMapFrame.NavBar.navList
+	for i = 2, #navList do
+		handleNavButton(navList[i])
+	end
+	moveNavButtons(WorldMapFrame.NavBar)
 end)
