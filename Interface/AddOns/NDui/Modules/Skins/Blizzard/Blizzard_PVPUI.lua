@@ -80,6 +80,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	PVPQueueFrame.CategoryButton1.Background:SetAlpha(1)
 	B.StripTextures(PVPQueueFrame.HonorInset)
+	PVPQueueFrame.HonorInset.Background:Hide()
 
 	local popup = PVPQueueFrame.NewSeasonPopup
 	B.Reskin(popup.Leave)
