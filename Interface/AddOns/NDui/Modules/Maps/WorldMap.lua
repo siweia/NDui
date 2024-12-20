@@ -275,10 +275,6 @@ function module:SetupWorldMap()
 	-- Remove from frame manager
 	WorldMapFrame:ClearAllPoints()
 	WorldMapFrame:SetPoint("CENTER") -- init anchor
-	WorldMapFrame:SetAttribute("UIPanelLayout-area", nil)
-	WorldMapFrame:SetAttribute("UIPanelLayout-enabled", false)
-	WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
-	tinsert(UISpecialFrames, "WorldMapFrame")
 
 	-- Hide stuff
 	WorldMapFrame.BlackoutFrame:SetAlpha(0)
