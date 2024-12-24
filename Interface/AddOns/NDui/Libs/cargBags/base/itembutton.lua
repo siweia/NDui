@@ -21,6 +21,7 @@ local _, ns = ...
 local cargBags = ns.cargBags
 
 local _G = _G
+local SplitContainerItem = C_Container and C_Container.SplitContainerItem or SplitContainerItem
 
 --[[!
 	@class ItemButton
