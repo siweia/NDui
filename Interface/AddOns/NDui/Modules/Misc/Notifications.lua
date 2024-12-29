@@ -93,7 +93,6 @@ local isIgnoredZone = {
 	[2111] = true,	-- 黑海岸前线
 }
 local defaultList = {
-	[5485] = true, -- 海象人工具盒
 	[6149] = true, -- 奥妮克希亚龙蛋
 }
 local isIgnoredIDs = {}
