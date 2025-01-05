@@ -921,3 +921,5 @@ L["OverAbsorbTip"] = "|nIf enabled, show over absorb bar if unit absorb value gr
 L["ShowHealthAbsorb"] = "Current+absorb" -- need translation
 L["LeaderOnly"] = "Leader alert only" -- need translation
 L["LeaderOnlyTip"] = "|nIf enabled, notifications only send by leader or assistant." -- need translation
+L["SingingSocket"] = "Siren ring enhanced" -- need translation
+L["SingingSocketTip"] = "|nIf enabled, add a quick singing sockets selection tool onto Siren ring panel." -- need translation

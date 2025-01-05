@@ -568,6 +568,7 @@ G.DefaultSettings = {
 		MenuButton = true,
 		QuickJoin = true,
 		MaxZoom = 2.6,
+		SingingSocket = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -1502,6 +1503,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "QuestTool", L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
 		{1, "Misc", "QuickJoin", HeaderTag..L["EnhancedPremade"], nil, nil, nil, L["EnhancedPremadeTip"]},
 		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 2.6, .1}, updateMaxZoomLevel},
+		{1, "Misc", "SingingSocket", L["SingingSocket"], nil, nil, nil, L["SingingSocketTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},

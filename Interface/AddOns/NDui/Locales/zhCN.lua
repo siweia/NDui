@@ -921,3 +921,5 @@ L["OverAbsorbTip"] = "|n启用后，当吸收盾大于当前最大血量时，�
 L["ShowHealthAbsorb"] = "当期数值+吸收"
 L["LeaderOnly"] = "仅拥有队伍权限时通报"
 L["LeaderOnlyTip"] = "|n启用后，只有当你为小队队长、团长或团队助理时，才进行上述通报！"
+L["SingingSocket"] = "海妖戒指增强"
+L["SingingSocketTip"] = "|n启用后，在海妖戒指的宝石页面添加一个快速选择宝石的小工具。"

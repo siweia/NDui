@@ -921,3 +921,5 @@ L["OverAbsorbTip"] = "|n勾選後，當吸收盾大於當前最大血量時，�
 L["ShowHealthAbsorb"] = "當前數值+吸收"
 L["LeaderOnly"] = "僅擁有隊伍權限時通報"
 L["LeaderOnlyTip"] = "|n勾選後，只有當你為小隊隊長、團長或者團隊助理時，才進行上述通報！"
+L["SingingSocket"] = "海妖戒指增强"
+L["SingingSocketTip"] = "|n勾選後，在海妖戒指的寶石頁面添加一個快速選擇寶石的小工具。"

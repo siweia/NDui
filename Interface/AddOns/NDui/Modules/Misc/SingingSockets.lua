@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local iconSize = 35
+local iconSize = 36
 
 local gemsInfo = {
 	[1] = {228638, 228634, 228642, 228648},
@@ -74,6 +74,8 @@ function M:CreateSingingSockets()
 end
 
 function M:SetupSingingSokcets()
+	if not C.db["Misc"]["SingingSocket"] then return end
+
 	hooksecurefunc("ItemSocketingFrame_LoadUI", function()
 		if not ItemSocketingFrame then return end
 

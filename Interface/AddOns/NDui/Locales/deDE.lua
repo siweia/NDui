@@ -921,3 +921,5 @@ L["OverAbsorbTip"] = "|nWenn aktiviert, wird die Absorptionsleiste angezeigt, we
 L["ShowHealthAbsorb"] = "Aktuell+Absorbieren"
 L["LeaderOnly"] = "Nur Anführeralarm"
 L["LeaderOnlyTip"] = "|nWenn aktiviert, werden Benachrichtigungen nur vom Leiter oder Assistenten gesendet."
+L["SingingSocket"] = "Siren ring enhanced" -- need translation
+L["SingingSocketTip"] = "|nIf enabled, add a quick singing sockets selection tool onto Siren ring panel." -- need translation
