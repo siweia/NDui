@@ -18,4 +18,5 @@
 	<Script file="QuickJoin.lua"/>
 	<Script file="RaidTool.lua"/>
 	<Script file="TradeTabs.lua"/>
+	<Script file="SingingSockets.lua"/>
 </Ui>
