@@ -205,15 +205,6 @@ function S:ReskinRematchElements()
 	B.StripTextures(toolbar)
 	S.RematchButton(toolbar.TotalsButton)
 
-	if ALPTRematchOptionButton then
-		ALPTRematchOptionButton:SetPushedTexture(0)
-		ALPTRematchOptionButton:SetHighlightTexture(DB.bdTex)
-		ALPTRematchOptionButton:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
-		local tex = ALPTRematchOptionButton:GetNormalTexture()
-		tex:SetTexCoord(unpack(DB.TexCoord))
-		B.CreateBDFrame(tex)
-	end
-
 	for _, name in pairs({"SummonButton", "SaveButton", "SaveAsButton", "FindBattleButton"}) do
 		local button = Rematch.bottombar[name]
 		if button then
