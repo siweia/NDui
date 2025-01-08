@@ -55,3 +55,6 @@ module:RegisterSeasonSpells(TIER, INSTANCE)
 
 INSTANCE = 1268 -- 驭雷栖巢
 module:RegisterSeasonSpells(TIER, INSTANCE)
+
+INSTANCE = 1298 -- 水闸行动
+module:RegisterSeasonSpells(TIER, INSTANCE)

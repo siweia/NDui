@@ -43,7 +43,7 @@ C.themes["Blizzard_Collections"] = function()
 	-- [[ General ]]
 
 	CollectionsJournal.bg = B.ReskinPortraitFrame(CollectionsJournal) -- need this for Rematch skin
-	for i = 1, 5 do
+	for i = 1, 6 do
 		local tab = _G["CollectionsJournalTab"..i]
 		B.ReskinTab(tab)
 		if i ~= 1 then
@@ -183,12 +183,14 @@ C.themes["Blizzard_Collections"] = function()
 		B.ReskinIcon(select(index, button:GetRegions()), nil)
 		button:SetNormalTexture(0)
 	end
-	reskinDynamicButton(MountJournal.ToggleDynamicFlightFlyoutButton, 1)
+	reskinDynamicButton(MountJournal.ToggleDynamicFlightFlyoutButton, DB.isNewPatch and 3 or 1)
 
-	local flyout = MountJournal.DynamicFlightFlyout
-	flyout.Background:Hide()
-	reskinDynamicButton(flyout.OpenDynamicFlightSkillTreeButton, 4)
-	reskinDynamicButton(flyout.DynamicFlightModeButton, 4)
+	local flyout = MountJournal.ToggleDynamicFlightFlyoutButton.popup or MountJournal.DynamicFlightFlyout
+	if flyout then
+		flyout.Background:Hide()
+		reskinDynamicButton(flyout.OpenDynamicFlightSkillTreeButton, 4)
+		reskinDynamicButton(flyout.DynamicFlightModeButton, 4)
+	end
 
 	-- Pet card
 
@@ -633,4 +635,25 @@ C.themes["Blizzard_Collections"] = function()
 			reskinHPet = true
 		end
 	end)
+
+	-- WarbandSceneJournal
+	if WarbandSceneJournal then
+		local iconsFrame = WarbandSceneJournal.IconsFrame
+		if iconsFrame then
+			B.StripTextures(iconsFrame)
+
+			local controls = iconsFrame.Icons and iconsFrame.Icons.Controls
+			if controls then
+				local showCheck = controls and controls.ShowOwned and controls.ShowOwned.Checkbox
+				if showCheck then
+					B.ReskinCheck(showCheck)
+					showCheck:SetSize(28, 28)
+				end
+				if controls.PagingControls then
+					B.ReskinArrow(controls.PagingControls.PrevPageButton, "left")
+					B.ReskinArrow(controls.PagingControls.NextPageButton, "right")
+				end
+			end
+		end
+	end
 end

@@ -206,7 +206,7 @@ function lib:CreateButton(id, name, header, config)
 		KeyBound = LibStub("LibKeyBound-1.0", true)
 	end
 
-	local button = setmetatable(CreateFrame("CheckButton", name, header, "SecureActionButtonTemplate, ActionButtonTemplate"), Generic_MT)
+	local button = setmetatable(CreateFrame("CheckButton", name, header, "SecureActionButtonTemplate, ActionButtonTemplate, FlyoutPopupButtonTemplate"), Generic_MT)
 	button:RegisterForDrag("LeftButton", "RightButton")
 	if WoWRetail then
 		button:RegisterForClicks("AnyDown", "AnyUp")
@@ -2158,7 +2158,9 @@ if ActionButton_UpdateFlyout then
 		if self.FlyoutBorder then
 			self.FlyoutBorder:Hide()
 		end
-		self.FlyoutBorderShadow:Hide()
+		if self.FlyoutBorderShadow then
+			self.FlyoutBorderShadow:Hide()
+		end
 		if self._state_type == "action" then
 			-- based on ActionButton_UpdateFlyout in ActionButton.lua
 			local actionType = GetActionInfo(self._state_action)
@@ -2193,7 +2195,11 @@ if ActionButton_UpdateFlyout then
 	end
 else
 	function UpdateFlyout(self, isButtonDownOverride)
-		self.FlyoutBorderShadow:Hide()
+		if not self.FlyoutArrowContainer then return end -- isNewPatch
+
+		if self.FlyoutBorderShadow then
+			self.FlyoutBorderShadow:Hide()
+		end
 		if self._state_type == "action" then
 			-- based on ActionButton_UpdateFlyout in ActionButton.lua
 			local actionType = GetActionInfo(self._state_action)
