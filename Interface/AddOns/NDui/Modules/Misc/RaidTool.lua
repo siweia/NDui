@@ -517,6 +517,8 @@ function M:RaidTool_CreateMenu(parent)
 end
 
 function M:RaidTool_EasyMarker()
+	if DB.isNewPatch then return end
+
 	-- TODO: replace with the newest dropdown template
 	local menuList = {}
 
