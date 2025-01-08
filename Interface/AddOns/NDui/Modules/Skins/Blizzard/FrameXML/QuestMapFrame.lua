@@ -55,12 +55,14 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(QuestMapFrame.DetailsFrame.BackFrame)
 
 	local campaignOverview = QuestMapFrame.CampaignOverview
-	campaignOverview.BG:SetAlpha(0)
-	ReskinQuestHeader(campaignOverview.Header)
+	if campaignOverview then -- isNewPath, removed?
+		campaignOverview.BG:SetAlpha(0)
+		ReskinQuestHeader(campaignOverview.Header)
+		B.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
+	end
 
 	QuestScrollFrame.Edge:Hide()
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
-	B.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
 	B.ReskinEditBox(QuestScrollFrame.SearchBox)
 
 	-- Quest details
@@ -142,7 +144,9 @@ tinsert(C.defaultThemes, function()
 	local mapLegend = QuestMapFrame.MapLegend
 	if mapLegend then
 		B.StripTextures(mapLegend.BorderFrame)
-		B.Reskin(mapLegend.BackButton)
+		if mapLegend.BackButton then -- isNewPatch
+			B.Reskin(mapLegend.BackButton)
+		end
 		B.ReskinTrimScroll(mapLegend.ScrollFrame.ScrollBar)
 		B.StripTextures(mapLegend.ScrollFrame)
 		B.CreateBDFrame(mapLegend.ScrollFrame, .25)
