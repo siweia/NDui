@@ -75,6 +75,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 256044) -- 致命狙击
 module:RegisterDebuff(TIER, INSTANCE, 0, 256474) -- 竭心毒剂
 
 INSTANCE = 1012 -- 暴富矿区
+module:RegisterSeasonSpells(TIER, INSTANCE)
 module:RegisterDebuff(TIER, INSTANCE, 0, 263074) -- 溃烂撕咬
 module:RegisterDebuff(TIER, INSTANCE, 0, 280605) -- 脑部冻结
 module:RegisterDebuff(TIER, INSTANCE, 0, 257337) -- 电击之爪

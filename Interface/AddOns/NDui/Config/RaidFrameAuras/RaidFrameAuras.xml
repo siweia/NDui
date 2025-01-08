@@ -31,4 +31,5 @@
 
 	<Script file="TWW\Party-TWW.lua"/>
 	<Script file="TWW\NerubarPalace.lua"/>
+	<Script file="TWW\Undermine.lua"/>
 </Ui>
