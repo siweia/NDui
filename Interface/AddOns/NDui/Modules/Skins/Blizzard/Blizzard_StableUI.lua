@@ -35,7 +35,7 @@ C.themes["Blizzard_StableUI"] = function()
 
 		B.ReskinModelControl(modelScene)
 
-		if petInfo.Specialization then
+		if DB.isNewPatch and petInfo.Specialization then
 			B.ReskinDropDown(petInfo.Specialization)
 		end
 	end
