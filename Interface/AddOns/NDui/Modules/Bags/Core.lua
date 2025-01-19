@@ -1112,7 +1112,9 @@ function module:OnLogin()
 	C_Container.SetInsertItemsLeftToRight(false)
 
 	-- Init
+	C.db["Bags"]["GatherEmpty"] = not C.db["Bags"]["GatherEmpty"]
 	ToggleAllBags()
+	C.db["Bags"]["GatherEmpty"] = not C.db["Bags"]["GatherEmpty"]
 	ToggleAllBags()
 	module.initComplete = true
 
