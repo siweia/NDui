@@ -229,6 +229,7 @@ cargBags:RegisterPlugin("BagBar", function(self, bags)
 		end
 	end
 
+	updater(bar) -- bag groups might be empty on login
 	self.implementation:RegisterEvent("BAG_UPDATE", bar, updater)
 	self.implementation:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", bar, updater)
 	self.implementation:RegisterEvent("ITEM_LOCK_CHANGED", bar, onLock)
