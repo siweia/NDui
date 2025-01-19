@@ -5,12 +5,12 @@ if DB.Client ~= "zhCN" then return end
 local strsplit, pairs = string.split, pairs
 
 local hx = {
-	"更新适配支持1.15.5；",
+	"Postal美化更新；",
+	"修正查询面板的错误；",
 	"界面美化更新；",
-	"名字超链接的复制调整；",
-	"邮件联系人调整；",
-	"修正赛季模式下的排队眼睛位置；",
-	"修正公会信息条的错误。",
+	"修正背包拆分的报错；",
+	"猎人守护条添加赛季的猎鹰守护；",
+	"技能缺失提示列表更新。",
 }
 
 local f
