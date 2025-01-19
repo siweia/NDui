@@ -261,6 +261,7 @@ DB.ReminderBuffs = {
 	HUNTER = {
 		{	spells = {	-- 雄鹰守护
 				[13165] = true,
+				[469145] = true,
 			},
 			depend = 13165,
 			combat = true,

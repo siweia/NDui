@@ -14,6 +14,7 @@ local aspects = {
 	[6] = {spellID = 13161, known = false}, -- 野兽
 	[7] = {spellID = 20043, known = false}, -- 野性
 	[8] = {spellID = 409580, known = false}, -- 雄狮之心
+	[9] = {spellID = 469145, known = false}, -- 猎鹰守护
 }
 
 local knownAspect = {}
