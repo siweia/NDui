@@ -172,8 +172,10 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.Reskin(itemBuyFrame.BackButton)
 	B.Reskin(itemBuyFrame.BidFrame.BidButton)
 	B.Reskin(itemBuyFrame.BuyoutFrame.BuyoutButton)
-	B.ReskinInput(AuctionHouseFrameGold)
-	B.ReskinInput(AuctionHouseFrameSilver)
+	if not DB.isNewPatch then
+		B.ReskinInput(AuctionHouseFrameGold)
+		B.ReskinInput(AuctionHouseFrameSilver)
+	end
 	reskinItemDisplay(itemBuyFrame.ItemDisplay)
 	reskinItemList(itemBuyFrame.ItemList, true)
 
@@ -222,8 +224,10 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 
 	B.ReskinTab(AuctionHouseFrameAuctionsFrameAuctionsTab)
 	B.ReskinTab(AuctionHouseFrameAuctionsFrameBidsTab)
-	B.ReskinInput(AuctionHouseFrameAuctionsFrameGold)
-	B.ReskinInput(AuctionHouseFrameAuctionsFrameSilver)
+	if not DB.isNewPatch then
+		B.ReskinInput(AuctionHouseFrameAuctionsFrameGold)
+		B.ReskinInput(AuctionHouseFrameAuctionsFrameSilver)
+	end
 	B.Reskin(AuctionHouseFrameAuctionsFrame.CancelAuctionButton)
 	B.Reskin(AuctionHouseFrameAuctionsFrame.BidFrame.BidButton)
 	B.Reskin(AuctionHouseFrameAuctionsFrame.BuyoutFrame.BuyoutButton)
