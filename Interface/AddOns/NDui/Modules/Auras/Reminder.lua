@@ -72,10 +72,14 @@ function A:Reminder_Create(cfg)
 	frame:SetSize(iconSize, iconSize)
 	B.PixelIcon(frame)
 	B.CreateSD(frame)
-	for spell in pairs(cfg.spells) do
-		frame.Icon:SetTexture(GetSpellTexture(spell))
-		break
+	local texture = cfg.texture
+	if not texture then
+		for spell in pairs(cfg.spells) do
+			texture = GetSpellTexture(spell)
+			break
+		end
 	end
+	frame.Icon:SetTexture(texture)
 	frame.text = B.CreateFS(frame, 14, L["Lack"], false, "TOP", 1, 15)
 	frame:Hide()
 	cfg.frame = frame

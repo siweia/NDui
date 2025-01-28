@@ -189,8 +189,9 @@ DB.ReminderBuffs = {
 				[1459] = true,
 				[8096] = true,  -- 智力卷轴
 				[23028] = true, -- 奥术光辉
-				[11396] = true, -- 奥术光辉
+				[11396] = true, -- 强效智力
 			},
+			texture = 135932,
 			depend = 1459,
 			combat = true,
 			instance = true,
