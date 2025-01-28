@@ -167,7 +167,11 @@ C.themes["Blizzard_AuctionUI"] = function()
 	B.ReskinRadio(AuctionsShortAuctionButton)
 	B.ReskinRadio(AuctionsMediumAuctionButton)
 	B.ReskinRadio(AuctionsLongAuctionButton)
+
 	B.ReskinDropDown(BrowseDropdown)
+	BrowseDropdown:SetWidth(120)
+	BrowseDropdown:ClearAllPoints()
+	BrowseDropdown:SetPoint("TOPLEFT", BrowseLevelText, "BOTTOMRIGHT", 5, 4)
 
 	local inputs = {"BrowseMinLevel", "BrowseMaxLevel", "AuctionsStackSizeEntry", "AuctionsNumStacksEntry"}
 	for i = 1, #inputs do
