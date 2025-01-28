@@ -564,9 +564,6 @@ function module:SetupMinimap()
 
 	self:UpdateMinimapScale()
 	self:ShowMinimapClock()
-	if not DB.isNewPatch then
-		B.HideOption(InterfaceOptionsDisplayPanelShowMinimapClock)
-	end
 	self:ShowCalendar()
 
 	-- Mousewheel Zoom

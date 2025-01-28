@@ -121,11 +121,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(LFDRoleCheckPopupDeclineButton)
 	B.ReskinTrimScroll(LFDQueueFrameSpecific.ScrollBar)
 	B.ReskinTrimScroll(LFDQueueFrameRandomScrollFrame.ScrollBar)
-	if DB.isNewPatch then
-		B.ReskinDropDown(LFDQueueFrameTypeDropdown)
-	else
-		B.ReskinDropDown(LFDQueueFrameTypeDropDown)
-	end
+	B.ReskinDropDown(LFDQueueFrameTypeDropdown)
 	B.Reskin(LFDQueueFrameFindGroupButton)
 	B.Reskin(LFDQueueFramePartyBackfillBackfillButton)
 	B.Reskin(LFDQueueFramePartyBackfillNoBackfillButton)

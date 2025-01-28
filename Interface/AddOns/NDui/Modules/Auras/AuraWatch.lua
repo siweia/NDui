@@ -11,7 +11,7 @@ local InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty =
 local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell = GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell
 local GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 
-local GetItemCooldown = C_Container.GetItemCooldown or GetItemCooldown -- isNewPatch
+local GetItemCooldown = C_Container.GetItemCooldown or GetItemCooldown
 
 -- DataConvert
 local function DataAnalyze(v)

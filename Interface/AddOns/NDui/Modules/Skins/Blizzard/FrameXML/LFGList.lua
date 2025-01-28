@@ -188,13 +188,8 @@ tinsert(C.defaultThemes, function()
 	B.ReskinInput(entryCreation.Name)
 	B.ReskinInput(entryCreation.ItemLevel.EditBox)
 	B.ReskinInput(entryCreation.VoiceChat.EditBox)
-	if DB.isNewPatch then
-		B.ReskinDropDown(entryCreation.GroupDropdown)
-		B.ReskinDropDown(entryCreation.ActivityDropdown)
-	else
-		B.ReskinDropDown(entryCreation.GroupDropDown)
-		B.ReskinDropDown(entryCreation.ActivityDropDown)
-	end
+	B.ReskinDropDown(entryCreation.GroupDropdown)
+	B.ReskinDropDown(entryCreation.ActivityDropdown)
 	B.ReskinDropDown(entryCreation.PlayStyleDropdown)
 	B.ReskinCheck(entryCreation.MythicPlusRating.CheckButton)
 	B.ReskinInput(entryCreation.MythicPlusRating.EditBox)
@@ -274,11 +269,13 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(LFGListInviteDialog.AcknowledgeButton)
 
 	local LFGListCreateRoleDialog = LFGListCreateRoleDialog
-	B.StripTextures(LFGListCreateRoleDialog)
-	B.SetBD(LFGListCreateRoleDialog)
-	B.ReskinRole(LFGListCreateRoleDialog.DamagerButton)
-	B.ReskinRole(LFGListCreateRoleDialog.TankButton)
-	B.ReskinRole(LFGListCreateRoleDialog.HealerButton)
-	B.Reskin(LFGListCreateRoleDialog.SignUpButton)
-	B.Reskin(LFGListCreateRoleDialog.CancelButton)
+	if LFGListCreateRoleDialog then -- isNewPatch, removed?
+		B.StripTextures(LFGListCreateRoleDialog)
+		B.SetBD(LFGListCreateRoleDialog)
+		B.ReskinRole(LFGListCreateRoleDialog.DamagerButton)
+		B.ReskinRole(LFGListCreateRoleDialog.TankButton)
+		B.ReskinRole(LFGListCreateRoleDialog.HealerButton)
+		B.Reskin(LFGListCreateRoleDialog.SignUpButton)
+		B.Reskin(LFGListCreateRoleDialog.CancelButton)
+	end
 end)

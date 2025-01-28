@@ -75,11 +75,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- Instance select
 	EncounterJournalInstanceSelectBG:SetAlpha(0)
-	if DB.isNewPatch then
-		B.ReskinDropDown(EncounterJournal.instanceSelect.ExpansionDropdown)
-	else
-		B.ReskinDropDown(EncounterJournal.instanceSelect.tierDropDown)
-	end
+	B.ReskinDropDown(EncounterJournal.instanceSelect.ExpansionDropdown)
 	B.ReskinTrimScroll(EncounterJournal.instanceSelect.ScrollBar)
 
 	hooksecurefunc(EncounterJournal.instanceSelect.ScrollBox, "Update", function(self)
@@ -234,14 +230,10 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
 	B.ReskinTrimScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
-		B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.filter)
-		B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.slotFilter)
-		B.ReskinDropDown(EncounterJournalEncounterFrameInfoDifficulty)
-	else
-		reskinFilterToggle(EncounterJournalEncounterFrameInfoDifficulty)
-	end
+	B.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
+	B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.filter)
+	B.ReskinDropDown(EncounterJournal.encounter.info.LootContainer.slotFilter)
+	B.ReskinDropDown(EncounterJournalEncounterFrameInfoDifficulty)
 
 	local buttons = {
 		EncounterJournalEncounterFrameInfoFilterToggle,

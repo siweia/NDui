@@ -20,7 +20,7 @@ local CHEF_HAT = 134020
 local THERMAL_ANVIL = 87216
 local tabList = {}
 
-local GetItemCooldown = C_Container.GetItemCooldown or GetItemCooldown -- isNewPatch
+local GetItemCooldown = C_Container.GetItemCooldown or GetItemCooldown
 
 local onlyPrimary = {
 	[171] = true, -- Alchemy

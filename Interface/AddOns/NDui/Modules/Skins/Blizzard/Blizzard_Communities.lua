@@ -64,13 +64,8 @@ C.themes["Blizzard_Communities"] = function()
 
 	B.ReskinPortraitFrame(CommunitiesFrame)
 	CommunitiesFrame.PortraitOverlay:SetAlpha(0)
-	if DB.isNewPatch then
-		B.ReskinDropDown(CommunitiesFrame.StreamDropdown)
-		B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropdown)
-	else
-		B.ReskinDropDown(CommunitiesFrame.StreamDropDownMenu)
-		B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropDownMenu)
-	end
+	B.ReskinDropDown(CommunitiesFrame.StreamDropdown)
+	B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropdown)
 	B.StripTextures(CommunitiesFrame.MaximizeMinimizeFrame)
 	B.ReskinMinMax(CommunitiesFrame.MaximizeMinimizeFrame)
 	CommunitiesFrame.MaximizeMinimizeFrame.MinimizeButton:SetDisabledTexture(0)
@@ -196,11 +191,7 @@ C.themes["Blizzard_Communities"] = function()
 		B.StripTextures(dialog)
 		dialog.BG:Hide()
 		B.SetBD(dialog)
-		if DB.isNewPatch then
-			B.ReskinDropDown(dialog.CommunitiesListDropdown)
-		else
-			B.ReskinDropDown(dialog.CommunitiesListDropDownMenu)
-		end
+		B.ReskinDropDown(dialog.CommunitiesListDropdown)
 		if dialog.Selector then
 			B.StripTextures(dialog.Selector)
 			B.Reskin(dialog.Selector.OkayButton)
@@ -236,11 +227,7 @@ C.themes["Blizzard_Communities"] = function()
 		bg:SetPoint("BOTTOMRIGHT", -4, 3)
 		B.StripTextures(dialog.Description)
 		B.CreateBDFrame(dialog.Description, .25)
-		if DB.isNewPatch then
-			B.ReskinCheck(dialog.TypeCheckbox)
-		else
-			B.ReskinCheck(dialog.TypeCheckBox)
-		end
+		B.ReskinCheck(dialog.TypeCheckbox)
 		B.Reskin(dialog.Accept)
 		B.Reskin(dialog.Delete)
 		B.Reskin(dialog.Cancel)
@@ -255,13 +242,8 @@ C.themes["Blizzard_Communities"] = function()
 		B.Reskin(dialog.Copy)
 		B.Reskin(dialog.Close)
 		B.ReskinArrow(dialog.MaximizeButton, "down")
-		if DB.isNewPatch then
-			B.ReskinDropDown(dialog.ExpiresDropdown)
-			B.ReskinDropDown(dialog.UsesDropdown)
-		else
-			B.ReskinDropDown(dialog.ExpiresDropDownMenu)
-			B.ReskinDropDown(dialog.UsesDropDownMenu)
-		end
+		B.ReskinDropDown(dialog.ExpiresDropdown)
+		B.ReskinDropDown(dialog.UsesDropdown)
 		B.Reskin(dialog.GenerateLinkButton)
 
 		dialog.InviteManager.ArtOverlay:Hide()
@@ -299,11 +281,7 @@ C.themes["Blizzard_Communities"] = function()
 	-- Roster
 	CommunitiesFrame.MemberList.InsetFrame:Hide()
 	B.StripTextures(CommunitiesFrame.MemberList.ColumnDisplay)
-	if DB.isNewPatch then
-		B.ReskinDropDown(CommunitiesFrame.GuildMemberListDropdown)
-	else
-		B.ReskinDropDown(CommunitiesFrame.GuildMemberListDropDownMenu)
-	end
+	B.ReskinDropDown(CommunitiesFrame.GuildMemberListDropdown)
 	CommunitiesFrame.MemberList.ScrollBar:GetChildren():Hide()
 	B.ReskinTrimScroll(CommunitiesFrame.MemberList.ScrollBar)
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)

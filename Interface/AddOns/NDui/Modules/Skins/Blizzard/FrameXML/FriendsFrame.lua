@@ -4,12 +4,14 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	for i = 1, 5 do
 		local tab = _G["FriendsFrameTab"..i]
-		tab.bg = B.ReskinTab(tab)
-		local hl = _G["FriendsFrameTab"..i.."HighlightTexture"]
-		hl:SetPoint("TOPLEFT", tab.bg, C.mult, -C.mult)
-		hl:SetPoint("BOTTOMRIGHT", tab.bg, -C.mult, C.mult)
-		if i == 1 then
-			tab:SetPoint("BOTTOMLEFT", -2, -31)
+		if tab then
+			tab.bg = B.ReskinTab(tab)
+			local hl = _G["FriendsFrameTab"..i.."HighlightTexture"]
+			hl:SetPoint("TOPLEFT", tab.bg, C.mult, -C.mult)
+			hl:SetPoint("BOTTOMRIGHT", tab.bg, -C.mult, C.mult)
+			if i == 1 then
+				tab:SetPoint("BOTTOMLEFT", -2, -31)
+			end
 		end
 	end
 	FriendsFrameIcon:Hide()
@@ -85,11 +87,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	if not DB.isNewPatch then
-		FriendsFrameStatusDropDown:ClearAllPoints()
-		FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
-	end
-
 	for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
 		button:SetPushedTexture(0)
 		button:GetRegions():SetTexCoord(.08, .92, .08, .92)
@@ -139,15 +136,9 @@ tinsert(C.defaultThemes, function()
 	B.ReskinScroll(FriendsFrameIgnoreScrollFrameScrollBar)
 	B.ReskinScroll(FriendsFriendsScrollFrameScrollBar)
 	B.ReskinScroll(WhoListScrollFrameScrollBar)
-	if DB.isNewPatch then
-		B.ReskinDropDown(FriendsFrameStatusDropdown)
-		B.ReskinDropDown(WhoFrameDropdown)
-		B.ReskinDropDown(FriendsFriendsFrameDropdown)
-	else
-		B.ReskinDropDown(FriendsFrameStatusDropDown)
-		B.ReskinDropDown(WhoFrameDropDown)
-		B.ReskinDropDown(FriendsFriendsFrameDropDown)
-	end
+	B.ReskinDropDown(FriendsFrameStatusDropdown)
+	B.ReskinDropDown(WhoFrameDropdown)
+	B.ReskinDropDown(FriendsFriendsFrameDropdown)
 	B.Reskin(FriendsListFrameContinueButton)
 	B.StripTextures(FriendsFriendsList)
 	B.CreateBDFrame(FriendsFriendsList, .25)
@@ -239,11 +230,7 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(GuildControlPopupFrame)
 	GuildControlPopupFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 3, 0)
 	B.SetBD(GuildControlPopupFrame)
-	if DB.isNewPatch then
-		B.ReskinDropDown(GuildControlPopupFrameDropdown)
-	else
-		B.ReskinDropDown(GuildControlPopupFrameDropDown)
-	end
+	B.ReskinDropDown(GuildControlPopupFrameDropdown)
 	B.ReskinArrow(GuildControlPopupFrameAddRankButton, "right")
 	B.StripTextures(GuildControlPopupFrameEditBox)
 	local bg = B.CreateBDFrame(GuildControlPopupFrameEditBox, 0, true)

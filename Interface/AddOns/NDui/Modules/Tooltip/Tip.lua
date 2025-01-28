@@ -576,10 +576,3 @@ end)
 TT:RegisterTooltips("Blizzard_LookingForGroupUI", function()
 	TT.ReskinTooltip(LFGBrowseSearchEntryTooltip)
 end)
-
-if not DB.isNewPatch then
-	TT:RegisterTooltips("Blizzard_Calendar", function()
-		CalendarContextMenu:HookScript("OnShow", TT.ReskinTooltip)
-		CalendarInviteStatusContextMenu:HookScript("OnShow", TT.ReskinTooltip)
-	end)
-end

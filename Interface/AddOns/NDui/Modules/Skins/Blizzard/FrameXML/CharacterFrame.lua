@@ -313,22 +313,19 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(ReputationDetailFrame)
 	B.SetBD(ReputationDetailFrame)
 	B.ReskinClose(ReputationDetailCloseButton)
-	if DB.isNewPatch then
-		B.ReskinCheck(ReputationDetailInactiveCheckbox)
-		B.ReskinCheck(ReputationDetailMainScreenCheckbox)
-	else
-		B.ReskinCheck(ReputationDetailInactiveCheckBox)
-		B.ReskinCheck(ReputationDetailMainScreenCheckBox)
-	end
+	B.ReskinCheck(ReputationDetailInactiveCheckbox)
+	B.ReskinCheck(ReputationDetailMainScreenCheckbox)
 	B.ReskinScroll(ReputationListScrollFrameScrollBar)
 	select(3, ReputationDetailFrame:GetRegions()):Hide()
 
-	local atWarCheck = ReputationDetailAtWarCheckBox or ReputationDetailAtWarCheckbox -- isNewPatch
-	B.ReskinCheck(atWarCheck)
-	local atWarCheckTex = atWarCheck:GetCheckedTexture()
-	atWarCheckTex:ClearAllPoints()
-	atWarCheckTex:SetSize(26, 26)
-	atWarCheckTex:SetPoint("CENTER")
+	local atWarCheck = ReputationDetailAtWarCheckbox
+	if atWarCheck then
+		B.ReskinCheck(atWarCheck)
+		local atWarCheckTex = atWarCheck:GetCheckedTexture()
+		atWarCheckTex:ClearAllPoints()
+		atWarCheckTex:SetSize(26, 26)
+		atWarCheckTex:SetPoint("CENTER")
+	end
 
 	-- SkillFrame
 	B.StripTextures(SkillFrame)
@@ -379,13 +376,8 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(TokenFramePopup)
 	B.SetBD(TokenFramePopup)
 	B.ReskinClose(TokenFramePopupCloseButton)
-	if DB.isNewPatch then
-		B.ReskinCheck(TokenFramePopupInactiveCheckbox)
-		B.ReskinCheck(TokenFramePopupBackpackCheckbox)
-	else
-		B.ReskinCheck(TokenFramePopupInactiveCheckBox)
-		B.ReskinCheck(TokenFramePopupBackpackCheckBox)
-	end
+	B.ReskinCheck(TokenFramePopupInactiveCheckbox)
+	B.ReskinCheck(TokenFramePopupBackpackCheckbox)
 	B.ReskinScroll(TokenFrameContainerScrollBar)
 
 	local function updateButtons()

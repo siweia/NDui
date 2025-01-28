@@ -98,11 +98,7 @@ C.themes["Blizzard_GlyphUI"] = function()
 
 	B.ReskinInput(GlyphFrameSearchBox)
 	B.ReskinScroll(GlyphFrameScrollFrameScrollBar)
-	if DB.isNewPatch then
-		B.ReskinFilterButton(GlyphFrame.FilterDropdown)
-	else
-		B.ReskinDropDown(GlyphFrameFilterDropDown)
-	end
+	B.ReskinFilterButton(GlyphFrame.FilterDropdown)
 	GlyphFrameSideInset:DisableDrawLayer("BACKGROUND")
 	GlyphFrameSideInset:DisableDrawLayer("BORDER")
 	B.ReskinIcon(GlyphFrameClearInfoFrameIcon)

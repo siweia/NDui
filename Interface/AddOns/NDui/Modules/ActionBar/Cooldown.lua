@@ -211,7 +211,4 @@ function module:OnLogin()
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)
-	if not DB.isNewPatch then
-		B.HideOption(InterfaceOptionsActionBarsPanelCountdownCooldowns)
-	end
 end

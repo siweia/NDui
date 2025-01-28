@@ -126,16 +126,8 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinInput(PetJournalSearchBox)
 	B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateLeftButton, "left")
 	B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, "right")
-	if DB.isNewPatch then
-		B.ReskinFilterButton(PetJournal.FilterDropdown)
-		B.ReskinFilterButton(MountJournal.FilterDropdown)
-	else
-		B.ReskinFilterButton(PetJournalFilterButton)
-		B.ReskinFilterButton(MountJournalFilterButton)
-
-		MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
-		PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
-	end
+	B.ReskinFilterButton(PetJournal.FilterDropdown)
+	B.ReskinFilterButton(MountJournal.FilterDropdown)
 
 	local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
 	if togglePlayer then
@@ -164,11 +156,7 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinInput(ToyBox.searchBox)
 	B.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(ToyBox.PagingFrame.NextPageButton, "right")
-	if DB.isNewPatch then
-		B.ReskinFilterButton(ToyBox.FilterDropdown)
-	else
-		B.ReskinFilterButton(ToyBoxFilterButton)
-	end
+	B.ReskinFilterButton(ToyBox.FilterDropdown)
 
 	-- Progress bar
 
@@ -228,13 +216,8 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(icons)
 	B.ReskinInput(HeirloomsJournalSearchBox)
-	if DB.isNewPatch then
-		B.ReskinDropDown(HeirloomsJournal.ClassDropdown)
-		B.ReskinFilterButton(HeirloomsJournal.FilterDropdown)
-	else
-		B.ReskinDropDown(HeirloomsJournalClassDropDown)
-		B.ReskinFilterButton(HeirloomsJournal.FilterButton)
-	end
+	B.ReskinDropDown(HeirloomsJournal.ClassDropdown)
+	B.ReskinFilterButton(HeirloomsJournal.FilterDropdown)
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, "right")
 
@@ -323,13 +306,8 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(ItemsCollectionFrame)
 	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
-	if DB.isNewPatch then
-		B.ReskinDropDown(ItemsCollectionFrame.WeaponDropdown)
-	else
-		B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
-	end
+	B.ReskinDropDown(ItemsCollectionFrame.WeaponDropdown)
 	B.ReskinInput(WardrobeCollectionFrameSearchBox)
-
 	B.ReskinTab(WardrobeCollectionFrameTab1)
 
 	B.ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
@@ -367,9 +345,7 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end
 
-	if DB.isNewPatch then
-		-- Outfit Frame
-		B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
-		B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
-	end
+	-- Outfit Frame
+	B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
+	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
 end

@@ -69,10 +69,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinCheck(PVPFrame.TankIcon.checkButton)
 	B.ReskinCheck(PVPFrame.HealerIcon.checkButton)
 	B.ReskinCheck(PVPFrame.DPSIcon.checkButton)
-
-	if DB.isNewPatch then
-		B.StripTextures(PVPConquestFrame)
-		B.StripTextures(PVPTeamManagementFrame)
-		B.StripTextures(PVPTeamManagementFrameWeeklyDisplay)
-	end
+	B.StripTextures(PVPConquestFrame)
+	B.StripTextures(PVPTeamManagementFrame)
+	B.StripTextures(PVPTeamManagementFrameWeeklyDisplay)
 end)

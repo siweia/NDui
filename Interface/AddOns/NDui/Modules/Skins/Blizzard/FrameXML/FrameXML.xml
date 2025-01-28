@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="AddonList.lua"/>
 	<Script file="AlertFrames.lua"/>
-	<Script file="AudioOptionsFrame.lua"/>
 	<Script file="Bags.lua"/>
 	<Script file="BattlefieldFrame.lua"/>
 	<Script file="CharacterFrame.lua"/>
@@ -19,7 +18,6 @@
 	<Script file="GossipFrame.lua"/>
 	<Script file="GuildRegistrarFrame.lua"/>
 	<Script file="HelpFrame.lua"/>
-	<Script file="InterfaceOptionsFrame.lua"/>
 	<Script file="ItemTextFrame.lua"/>
 	<Script file="LFGList.lua"/>
 	<Script file="LootFrame.lua"/>
@@ -49,6 +47,5 @@
 	<Script file="TradeFrame.lua"/>
 	<Script file="TutorialFrame.lua"/>
 	<Script file="UIDropDownMenu.lua"/>
-	<Script file="VideoOptionsFrame.lua"/>
 	<Script file="WorldMapFrame.lua"/>
 </Ui>
