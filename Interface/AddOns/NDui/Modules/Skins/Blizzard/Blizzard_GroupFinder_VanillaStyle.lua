@@ -45,7 +45,7 @@ C.themes["Blizzard_GroupFinder_VanillaStyle"] = function()
 	B.ReskinTab(LFGParentFrameTab2)
 
 	B.StripTextures(LFGListingFrameActivityView)
-	B.ReskinTrimScroll(LFGListingFrameActivityViewScrollBar)
+--	B.ReskinTrimScroll(LFGListingFrameActivityViewScrollBar)
 	
 	hooksecurefunc("LFGListingActivityView_InitActivityButton", handleCheckButton)
 	hooksecurefunc("LFGListingActivityView_InitActivityGroupButton", handleCheckButton)
