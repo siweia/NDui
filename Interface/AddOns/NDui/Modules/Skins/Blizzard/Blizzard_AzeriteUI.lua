@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local r, g, b = DB.r, DB.g, DB.b
 
 C.themes["Blizzard_AzeriteUI"] = function()
 	B.ReskinPortraitFrame(AzeriteEmpoweredItemUI)
@@ -33,8 +34,6 @@ local function updateEssenceButton(button)
 end
 
 C.themes["Blizzard_AzeriteEssenceUI"] = function()
-	local r, g, b = DB.r, DB.g, DB.b
-
 	B.ReskinPortraitFrame(AzeriteEssenceUI)
 	B.StripTextures(AzeriteEssenceUI.PowerLevelBadgeFrame)
 	B.ReskinTrimScroll(AzeriteEssenceUI.EssenceList.ScrollBar)

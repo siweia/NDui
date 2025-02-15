@@ -1,4 +1,4 @@
-Copyright © 2011-2024 siweia <https://github.com/siweia/NDui>
+Copyright © 2011-2025 siweia <https://github.com/siweia/NDui>
 
 The contents of this addon, excluding third-party resources, are
 copyrighted to its authors with all rights reserved.

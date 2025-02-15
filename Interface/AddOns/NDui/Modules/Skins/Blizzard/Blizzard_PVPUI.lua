@@ -38,28 +38,30 @@ C.themes["Blizzard_PVPUI"] = function()
 	-- Category buttons
 
 	local iconSize = 60-2*C.mult
-	for i = 1, 3 do
+	for i = 1, 4 do
 		local bu = PVPQueueFrame["CategoryButton"..i]
-		local icon = bu.Icon
-		local cu = bu.CurrencyDisplay
-
-		bu.Ring:Hide()
-		B.Reskin(bu, true)
-		bu.Background:SetInside(bu.__bg)
-		bu.Background:SetColorTexture(r, g, b, .25)
-		bu.Background:SetAlpha(1)
-
-		icon:SetPoint("LEFT", bu, "LEFT")
-		icon:SetSize(iconSize, iconSize)
-		B.ReskinIcon(icon)
-
-		if cu then
-			local ic = cu.Icon
-
-			ic:SetSize(16, 16)
-			ic:SetPoint("TOPLEFT", bu.Name, "BOTTOMLEFT", 0, -8)
-			cu.Amount:SetPoint("LEFT", ic, "RIGHT", 4, 0)
-			B.ReskinIcon(ic)
+		if bu then
+			local icon = bu.Icon
+			local cu = bu.CurrencyDisplay
+	
+			bu.Ring:Hide()
+			B.Reskin(bu, true)
+			bu.Background:SetInside(bu.__bg)
+			bu.Background:SetColorTexture(r, g, b, .25)
+			bu.Background:SetAlpha(1)
+	
+			icon:SetPoint("LEFT", bu, "LEFT")
+			icon:SetSize(iconSize, iconSize)
+			B.ReskinIcon(icon)
+	
+			if cu then
+				local ic = cu.Icon
+	
+				ic:SetSize(16, 16)
+				ic:SetPoint("TOPLEFT", bu.Name, "BOTTOMLEFT", 0, -8)
+				cu.Amount:SetPoint("LEFT", ic, "RIGHT", 4, 0)
+				B.ReskinIcon(ic)
+			end
 		end
 	end
 
@@ -218,4 +220,25 @@ C.themes["Blizzard_PVPUI"] = function()
 			end
 		end
 	end)
+
+	-- PlunderstormFrame
+	if PlunderstormFrame then
+		PlunderstormFrame.Inset:Hide()
+		B.Reskin(PlunderstormFrame.StartQueue)
+
+		local panel = PVPQueueFrame.HonorInset.PlunderstormPanel
+		if panel then
+			B.Reskin(panel.PlunderstoreButton)
+			B.ReplaceIconString(panel.PlunderDisplay)
+			hooksecurefunc(panel.PlunderDisplay, "SetText", B.ReplaceIconString)
+		end
+
+		local popup = PlunderstormFramePopup
+		if popup then
+			B.StripTextures(popup)
+			B.SetBD(popup)
+			B.Reskin(popup.AcceptButton)
+			B.Reskin(popup.DeclineButton)
+		end
+	end
 end
