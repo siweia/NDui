@@ -1,4 +1,4 @@
-## Interface: 40401, 40402
+## Interface: 40402
 ## Title: |cff0080ffNDui|r |cffc79c6eClassic|r
 ## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
