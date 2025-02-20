@@ -138,7 +138,8 @@ function Bar:ReskinBars()
 	end
 	--leave vehicle
 	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"])
-
+	--extra action button
+	Bar:StyleActionButton(ExtraActionButton1)
 	--spell flyout
 	SpellFlyoutBackgroundEnd:SetTexture(nil)
 	SpellFlyoutHorizontalBackground:SetTexture(nil)

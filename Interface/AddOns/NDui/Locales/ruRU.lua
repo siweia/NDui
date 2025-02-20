@@ -49,6 +49,7 @@ L["AutoQuestTip"] = "|nЕсли флажок установлен, квесты 
 L["AutoQuestIgnoreTip"] = "|nYou no longer auto interact quests with current NPC. You can hold key ALT and click the name above to undo this." -- need translation
 L["StanceBar"] = "Панель стоек"
 L["ShowStanceBar"] = "Показывать панель стоек"
+L["Extrabar"] = "Дополнительная панель умений"
 L["LeaveVehicle"] = "Кнопка выхода из транспорта"
 L["Pet Actionbar"] = "Панель команд питомца"
 L["Actionbar"] = "Панель команд"

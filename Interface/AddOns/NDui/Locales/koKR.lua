@@ -49,6 +49,7 @@ L["AutoQuestTip"] = "|n자동임무 완료 사용 시, 1개의 완료 퀘스트�
 L["AutoQuestIgnoreTip"] = "|n더이상 대상 NPC와 자동 임무 수락/완료를 하지 않습니다. ALT를 누른상태에서 NPC클릭시 차단을 해제할 수 있습니다."
 L["StanceBar"] = "추가 액션바"
 L["ShowStanceBar"] = "추가 액션바 사용"
+L["Extrabar"] = "Extra Actionbar" -- need translation
 L["LeaveVehicle"] = "취소"
 L["Pet Actionbar"] = "팻 액션바"
 L["Actionbar"] = "액션바"

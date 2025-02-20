@@ -49,6 +49,7 @@ L["AutoQuestTip"] = "|nIf checked, quests will be interacted automatically.|nGos
 L["AutoQuestIgnoreTip"] = "|nYou no longer auto interact quests with current NPC. You can hold key ALT and click the name above to undo this."
 L["StanceBar"] = "Stance Actionbar"
 L["ShowStanceBar"] = "Show StanceBar"
+L["Extrabar"] = "Extra Actionbar"
 L["LeaveVehicle"] = "Leave Vehicle Button"
 L["Pet Actionbar"] = "Pet Actionbar"
 L["Actionbar"] = "Actionbar"
