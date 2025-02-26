@@ -92,6 +92,7 @@ function cargBags:ReplaceBlizzard(name)
 	OpenBag = toggleBag		-- fixed the loot won alert frame
 
 	BankFrame:UnregisterAllEvents()
+	BankFrame:SetParent(NDui[1].HiddenFrame)
 end
 
 --- Flags the implementation to handle Blizzards Bag-Toggle-Functions
