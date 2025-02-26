@@ -245,6 +245,8 @@ G.DefaultSettings = {
 		AutoBuffs = false,
 		ShowRoleMode = 1,
 		OverAbsorb = false,
+		PrivateSize = 30,
+		ReversePrivate = false,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
