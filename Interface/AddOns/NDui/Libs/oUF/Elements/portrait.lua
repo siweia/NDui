@@ -71,7 +71,13 @@ local function Update(self, event, unit)
 				element:SetUnit(unit)
 			end
 		else
-			local class = element.showClass and UnitClassBase(unit)
+			local class, _
+			if(element.showClass) then
+				-- BUG: UnitClassBase can't be trusted
+				--      https://github.com/Stanzilla/WoWUIBugs/issues/621
+				_, class = UnitClass(unit)
+			end
+
 			if(class) then
 				element:SetAtlas('classicon-' .. class)
 			else
@@ -124,11 +130,9 @@ local function Enable(self, unit)
 		-- The quest log uses PARTY_MEMBER_{ENABLE,DISABLE} to handle updating of
 		-- party members overlapping quests. This will probably be enough to handle
 		-- model updating.
-		--
-		-- DISABLE isn't used as it fires when we most likely don't have the
-		-- information we want.
-		if(unit == 'party') then
+		if(unit == 'party' or unit == 'target') then
 			self:RegisterEvent('PARTY_MEMBER_ENABLE', Path)
+			self:RegisterEvent('PARTY_MEMBER_DISABLE', Path)
 		end
 
 		element:Show()
@@ -146,6 +150,7 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_PORTRAIT_UPDATE', Path)
 		self:UnregisterEvent('PORTRAITS_UPDATED', Path)
 		self:UnregisterEvent('PARTY_MEMBER_ENABLE', Path)
+		self:UnregisterEvent('PARTY_MEMBER_DISABLE', Path)
 		self:UnregisterEvent('UNIT_CONNECTION', Path)
 	end
 end
