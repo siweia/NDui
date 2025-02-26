@@ -36,6 +36,7 @@ local function AddBankTabSettingsToTooltip(tooltip, depositFlags)
 end
 
 local function UpdateTooltip(self, id)
+	if not AccountBankPanel.purchasedBankTabData then return end
 	local data = AccountBankPanel.purchasedBankTabData[id]
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
@@ -134,8 +135,9 @@ function BagTab:UpdateButton()
 end
 
 function BagTab:OnClick(btn)
-	local currentTabID = self:GetID()
+	if not AccountBankPanel.purchasedBankTabData then return end
 
+	local currentTabID = self:GetID()
 	local data = AccountBankPanel.purchasedBankTabData[currentTabID]
 	if not data then
 		--StaticPopup_Show("CONFIRM_BUY_BANK_TAB", nil, nil, {bankType = ACCOUNT_BANK_TYPE})
@@ -185,6 +187,7 @@ cargBags:RegisterPlugin("BagTab", function(self, bags)
 	end
 
 	hooksecurefunc(AccountBankPanel, "RefreshBankTabs", function(self)
+		if not AccountBankPanel.purchasedBankTabData then return end
 		for index, data in pairs(self.purchasedBankTabData) do
 			bar.buttons[index].Icon:SetTexture(data.icon)
 		end
