@@ -8,7 +8,8 @@ local format, wipe, select, next = string.format, table.wipe, select, next
 local SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS = SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS
 local PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT = PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT
 local GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID
-local GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
+local GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization = GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization
+local C_SpecializationInfo_SetSpecialization = C_SpecializationInfo.SetSpecialization
 local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
 local C_SpecializationInfo_CanPlayerUsePVPTalentUI = C_SpecializationInfo.CanPlayerUsePVPTalentUI
 local STARTER_BUILD = Constants.TraitConsts.STARTER_BUILD_TRAIT_CONFIG_ID
@@ -100,7 +101,7 @@ info.onLeave = B.HideTooltip
 
 local function selectSpec(_, specIndex)
 	if currentSpecIndex == specIndex then return end
-	SetSpecialization(specIndex)
+	C_SpecializationInfo_SetSpecialization(specIndex)
 	DropDownList1:Hide()
 end
 
