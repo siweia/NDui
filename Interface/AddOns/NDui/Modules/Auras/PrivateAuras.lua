@@ -118,6 +118,8 @@ function PA:Update()
 end
 
 function PA:OnLogin()
+	if not C.db["Auras"]["BuffFrame"] then return end
+
 	PA.Auras = CreateFrame("Frame", "NDui_PrivateAuras", UIParent)
 	PA.Auras:SetSize(30, 30)
 	PA.Auras.mover = B.Mover(PA.Auras, "PrivateAuras", "PrivateAuras", {"TOPRIGHT", A.DebuffFrame.mover, "BOTTOMRIGHT", 0, -12})
