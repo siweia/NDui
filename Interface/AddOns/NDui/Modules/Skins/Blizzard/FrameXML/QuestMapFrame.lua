@@ -144,7 +144,7 @@ tinsert(C.defaultThemes, function()
 	local mapLegend = QuestMapFrame.MapLegend
 	if mapLegend then
 		B.StripTextures(mapLegend.BorderFrame)
-		if mapLegend.BackButton then -- isNewPatch
+		if mapLegend.BackButton then
 			B.Reskin(mapLegend.BackButton)
 		end
 		B.ReskinTrimScroll(mapLegend.ScrollFrame.ScrollBar)
