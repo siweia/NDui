@@ -141,10 +141,10 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc(_G.ObjectiveTrackerUIWidgetContainer, "UpdateWidgetLayout", ReskinPowerBarWidget)
 	ReskinPowerBarWidget(_G.ObjectiveTrackerUIWidgetContainer)
 
-	-- if font outline enabled in tooltip, fix text shows in two lines on Torghast info
+	--[[ if font outline enabled in tooltip, fix text shows in two lines on Torghast info
 	hooksecurefunc(_G.UIWidgetTemplateTextWithStateMixin, "Setup", function(self)
 		self.Text:SetWidth(self.Text:GetStringWidth() + 2)
-	end)
+	end)]]
 
 	-- needs review, might remove this in the future
 	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)

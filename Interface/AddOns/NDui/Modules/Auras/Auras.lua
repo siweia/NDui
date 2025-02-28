@@ -60,7 +60,7 @@ function A:BuildBuffFrame()
 	A.DebuffFrame:ClearAllPoints()
 	A.DebuffFrame:SetPoint("TOPRIGHT", A.DebuffFrame.mover)
 
-	A:CreatePrivateAuras()
+--	A:CreatePrivateAuras()
 end
 
 local day, hour, minute = 86400, 3600, 60
@@ -359,12 +359,12 @@ local auraAnchor = {
 	},
 
 	durationAnchor = {
-        point = "TOP",
-        relativeTo = UIParent,
-        relativePoint = "BOTTOM",
-        offsetX = 0,
-        offsetY = 0,
-    },
+		point = "TOP",
+		relativeTo = UIParent,
+		relativePoint = "BOTTOM",
+		offsetX = 0,
+		offsetY = 0,
+	},
 }
 
 function A:CreatePrivateAuras()

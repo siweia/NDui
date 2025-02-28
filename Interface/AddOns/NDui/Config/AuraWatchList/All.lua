@@ -388,7 +388,7 @@ local list = {
 		{AuraID = 228323, UnitID = "target", Value = true},	-- 克罗塔的护盾
 	},
 	["InternalCD"] = { -- 自定义内置冷却组
-		{IntID = 450978, Duration = 13.7},	-- 皎月风暴，猎人英雄天赋
+		--{IntID = 450978, Duration = 13.7},	-- 皎月风暴，猎人英雄天赋
 		{IntID = 114018, Duration = 15, OnSuccess = true, UnitID = "all"},	-- 帷幕
 		--{IntID = 240447, Duration = 20},	-- 大米，践踏
 		--{IntID = 316958, Duration = 30, OnSuccess = true, UnitID = "all"},	-- 红土

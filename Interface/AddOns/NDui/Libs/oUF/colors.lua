@@ -120,9 +120,10 @@ if(not customClassColors()) then
 
 	local eventHandler = CreateFrame('Frame')
 	eventHandler:RegisterEvent('ADDON_LOADED')
+	eventHandler:RegisterEvent('PLAYER_ENTERING_WORLD')
 	eventHandler:SetScript('OnEvent', function(self)
 		if(customClassColors()) then
-			self:UnregisterEvent('ADDON_LOADED')
+			self:UnregisterAllEvents()
 			self:SetScript('OnEvent', nil)
 		end
 	end)

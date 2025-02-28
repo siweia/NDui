@@ -152,6 +152,13 @@ tinsert(C.defaultThemes, function()
 		B.CreateBDFrame(mapLegend.ScrollFrame, .25)
 	end
 
+	-- Events
+	local event = QuestMapFrame.EventsFrame
+	if event then
+		B.StripTextures(event.BorderFrame)
+		B.ReskinTrimScroll(event.ScrollBar)
+	end
+
 	-- [[ Quest log popup detail frame ]]
 
 	local QuestLogPopupDetailFrame = QuestLogPopupDetailFrame

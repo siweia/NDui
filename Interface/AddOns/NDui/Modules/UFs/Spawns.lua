@@ -133,6 +133,7 @@ local function CreateBossStyle(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
 	UF:CreateClickSets(self)
+	UF:CreatePrivateAuras(self)
 end
 
 local function CreateArenaStyle(self)
@@ -170,6 +171,7 @@ local function CreateRaidStyle(self)
 	if self.raidType ~= "simple" then
 		UF:CreateRaidAuras(self)
 	end
+	UF:CreatePrivateAuras(self)
 end
 
 local function CreateSimpleRaidStyle(self)
