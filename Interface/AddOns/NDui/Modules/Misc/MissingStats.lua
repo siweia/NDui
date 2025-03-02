@@ -93,11 +93,7 @@ function M:MissingStats()
 		local displaySpeed = format("%.2f", speed)
 		if offhandSpeed then
 			offhandSpeed = format("%.2f", offhandSpeed)
-		end
-		if offhandSpeed then
-			displaySpeed = BreakUpLargeNumbers(displaySpeed).." / "..offhandSpeed
-		else
-			displaySpeed = BreakUpLargeNumbers(displaySpeed)
+			displaySpeed = displaySpeed.." / "..offhandSpeed
 		end
 		PaperDollFrame_SetLabelAndText(statFrame, WEAPON_SPEED, displaySpeed, false, speed)
 
