@@ -14,7 +14,6 @@ tinsert(C.defaultThemes, function()
 
 	local overlayFrames = WorldMapFrame.overlayFrames
 	B.ReskinDropDown(overlayFrames[1])
-	B.StripTextures(overlayFrames[2], 3)
 	B.StripTextures(overlayFrames[3], 3)
 	overlayFrames[3].ActiveTexture:SetTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Toggle")
 	B.ReskinFilterReset(overlayFrames[2].ResetButton)
