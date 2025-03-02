@@ -269,6 +269,7 @@ local delveList = {
 	{uiMapID = 2255, delveID = 7790}, -- The Spiral Weave
 	{uiMapID = 2255, delveID = 7784}, -- Tak-Rethan Abyss
 	{uiMapID = 2255, delveID = 7786}, -- TThe Underkeep
+	{uiMapID = 2346, delveID = 8246},
 }
 
 info.onEnter = function(self)
