@@ -111,25 +111,14 @@ function M:HandleNDuiTitle()
 		end
 	end
 
-	if DB.isNewPatch then
-		hooksecurefunc("AddonList_InitAddon", function(entry)
-			if not entry.logoHooked then
-				replaceIconString(entry.Title)
-				hooksecurefunc(entry.Title, "SetText", replaceIconString)
-	
-				entry.logoHooked = true
-			end
-		end)
-	else
-		hooksecurefunc("AddonList_InitButton", function(entry)
-			if not entry.logoHooked then
-				replaceIconString(entry.Title)
-				hooksecurefunc(entry.Title, "SetText", replaceIconString)
-	
-				entry.logoHooked = true
-			end
-		end)
-	end
+	hooksecurefunc("AddonList_InitAddon", function(entry)
+		if not entry.logoHooked then
+			replaceIconString(entry.Title)
+			hooksecurefunc(entry.Title, "SetText", replaceIconString)
+
+			entry.logoHooked = true
+		end
+	end)
 end
 
 -- Fix guild news jam

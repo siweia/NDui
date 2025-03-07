@@ -185,7 +185,7 @@ C.themes["Blizzard_Collections"] = function()
 		B.ReskinIcon(select(index, button:GetRegions()), nil)
 		button:SetNormalTexture(0)
 	end
-	reskinDynamicButton(MountJournal.ToggleDynamicFlightFlyoutButton, DB.isNewPatch and 3 or 1)
+	reskinDynamicButton(MountJournal.ToggleDynamicFlightFlyoutButton, 3)
 
 	local flyout = MountJournal.ToggleDynamicFlightFlyoutButton.popup or MountJournal.DynamicFlightFlyout
 	if flyout then

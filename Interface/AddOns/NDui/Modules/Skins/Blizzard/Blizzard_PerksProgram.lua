@@ -31,7 +31,9 @@ end
 local function SetupFramBG(frame)
 	local bg = B.SetBD(frame)
 	bg:SetFrameLevel(0)
-	bg.__shadow:SetFrameLevel(0)
+	if bg.__shadow then
+		bg.__shadow:SetFrameLevel(0)
+	end
 end
 
 C.themes["Blizzard_PerksProgram"] = function()
