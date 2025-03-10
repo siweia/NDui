@@ -94,6 +94,7 @@ local isIgnoredZone = {
 }
 local defaultList = {
 	[6149] = true, -- 奥妮克希亚龙蛋
+	[6699] = true, -- 错放的奇珍，地下堡
 }
 local isIgnoredIDs = {}
 
