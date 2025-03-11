@@ -323,7 +323,6 @@ C.DeprecatedAuras = {
 		{AuraID = 302274, UnitID = "player"},	-- 爆裂冲击
 		{AuraID = 298669, UnitID = "player"},	-- 跳电
 		{AuraID = 294929, UnitID = "player"},	-- 烈焰撕咬
-		{AuraID = 291937, UnitID = "player", Flash = true},	-- 垃圾掩体
 		{AuraID = 259533, UnitID = "player", Flash = true},	-- 艾泽里特催化剂，暴富
 	-- 尼奥罗萨
 		-- 黑龙帝王拉希奥
