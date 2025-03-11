@@ -30,8 +30,8 @@ local list = {
 		{AuraID = 164273, UnitID = "player", Combat = true, Value = true},	-- 独来独往
 		{AuraID = 260242, UnitID = "player"},	-- 弹无虚发
 		{AuraID = 342076, UnitID = "player"},	-- 行云流水
-		{AuraID = 389020, UnitID = "player"},	-- 子弹风暴
 		{AuraID = 424571, UnitID = "player"},	-- 风行者的指引
+		{AuraID = 474293, UnitID = "player"},	-- 移动活靶
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 3355, UnitID = "target", Caster = "player"},		-- 冰冻陷阱
@@ -68,6 +68,7 @@ local list = {
 		{AuraID = 375893, UnitID = "target", Caster = "player"},	-- 死亡飞轮
 		{AuraID = 424567, UnitID = "target", Caster = "player", Flash = true},	-- 狂野本能
 		--{AuraID = 430703, UnitID = "target", Caster = "player"},	-- 黑蚀箭
+		{AuraID = 466872, UnitID = "target", Caster = "player", Flash = true},	-- 瞭望印记
 
 		{AuraID = 410167, UnitID = "target", Caster = "player"},	-- 破甲，生存4T
 	},
@@ -124,6 +125,8 @@ local list = {
 		{AuraID = 378747, UnitID = "player", Flash = true},	-- 凶暴兽群
 		{AuraID = 459759, UnitID = "player", Flash = true, Stack = 4},	-- 黑鸦
 		{AuraID = 459689, UnitID = "player", Flash = true, Stack = 5},	-- 毒蛇钉刺
+		{AuraID = 389020, UnitID = "player"},	-- 子弹风暴
+		{AuraID = 474257, UnitID = "player"},	-- 锁定目标
 
 		{AuraID = 394366, UnitID = "player"},	-- 密迹寻踪，射击2T
 		{AuraID = 394384, UnitID = "player", Flash = true},	-- 集中瞄准，射击4T
