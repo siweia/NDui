@@ -2,6 +2,7 @@
 	<Script file="Blizzard_AchievementUI.lua"/>
 	<Script file="Blizzard_ArchaeologyUI.lua"/>
 	<Script file="Blizzard_AuctionUI.lua"/>
+	<Script file="Blizzard_AuctionHouseUI.lua"/>
 	<Script file="Blizzard_BarbershopUI.lua"/>
 	<Script file="Blizzard_BattlefieldMap.lua"/>
 	<Script file="Blizzard_BindingUI.lua"/>
