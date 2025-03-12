@@ -127,6 +127,9 @@ local list = {
 		{AuraID = 459689, UnitID = "player", Flash = true, Stack = 5},	-- 毒蛇钉刺
 		{AuraID = 389020, UnitID = "player"},	-- 子弹风暴
 		{AuraID = 474257, UnitID = "player"},	-- 锁定目标
+		{AuraID = 472324, UnitID = "player"},	-- 野猪
+		{AuraID = 471881, UnitID = "player"},	-- 双足飞龙
+		{AuraID = 472640, UnitID = "player"},	-- 猪突猛进
 
 		{AuraID = 394366, UnitID = "player"},	-- 密迹寻踪，射击2T
 		{AuraID = 394384, UnitID = "player", Flash = true},	-- 集中瞄准，射击4T
