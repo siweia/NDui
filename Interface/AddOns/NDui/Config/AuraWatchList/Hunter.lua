@@ -130,6 +130,7 @@ local list = {
 		{AuraID = 472324, UnitID = "player"},	-- 野猪
 		{AuraID = 471881, UnitID = "player"},	-- 双足飞龙
 		{AuraID = 472640, UnitID = "player"},	-- 猪突猛进
+		{AuraID = 472325, UnitID = "player", Flash = true},	-- 熊
 
 		{AuraID = 394366, UnitID = "player"},	-- 密迹寻踪，射击2T
 		{AuraID = 394384, UnitID = "player", Flash = true},	-- 集中瞄准，射击4T
@@ -146,6 +147,7 @@ local list = {
 		{AuraID = 199803, UnitID = "focus", Caster = "player"},	-- 精确瞄准
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
+		{AuraID = 471877, UnitID = "player"},	-- 猎群领袖之嚎
 		{SlotID = 13},		-- 饰品1
 		{SlotID = 14},		-- 饰品2
 		{SpellID = 186265},	-- 灵龟守护
