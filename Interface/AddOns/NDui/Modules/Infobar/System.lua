@@ -10,17 +10,12 @@ local ipairs, tinsert, wipe, sort = ipairs, tinsert, wipe, sort
 local format, floor, min, max = format, floor, min, max
 local GetFramerate, GetTime = GetFramerate, GetTime
 local GetCVarBool, SetCVar = GetCVarBool, SetCVar
-local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage
 local UpdateAddOnMemoryUsage, GetAddOnMemoryUsage = UpdateAddOnMemoryUsage, GetAddOnMemoryUsage
 local IsShiftKeyDown = IsShiftKeyDown
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
-local ResetCPUUsage, collectgarbage, gcinfo = ResetCPUUsage, collectgarbage, gcinfo
+local collectgarbage, gcinfo = collectgarbage, gcinfo
 
 local showMoreString = "%d %s (%s)"
-local usageString = "%.3f ms"
-local enableString = "|cff55ff55"..VIDEO_OPTIONS_ENABLED
-local disableString = "|cffff5555"..VIDEO_OPTIONS_DISABLED
-local scriptProfileStatus = GetCVarBool("scriptProfile")
 local entered
 
 local function formatMemory(value)
@@ -34,12 +29,6 @@ end
 local function sortByMemory(a, b)
 	if a and b then
 		return (a[3] == b[3] and a[2] < b[2]) or a[3] > b[3]
-	end
-end
-
-local function sortByCPU(a, b)
-	if a and b then
-		return (a[4] == b[4] and a[2] < b[2]) or a[4] > b[4]
 	end
 end
 
@@ -75,22 +64,6 @@ local function UpdateMemory()
 		end
 	end
 	sort(infoTable, sortByMemory)
-
-	return total
-end
-
-local function UpdateCPU()
-	UpdateAddOnCPUUsage()
-
-	local total = 0
-	for _, data in ipairs(infoTable) do
-		if IsAddOnLoaded(data[1]) then
-			local addonCPU = GetAddOnCPUUsage(data[1])
-			data[4] = addonCPU
-			total = total + addonCPU
-		end
-	end
-	sort(infoTable, sortByCPU)
 
 	return total
 end
@@ -132,61 +105,31 @@ info.onEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_"..anchor, 0, offset)
 	GameTooltip:ClearLines()
 
-	if self.showMemory or not scriptProfileStatus then
-		local totalMemory = UpdateMemory()
-		GameTooltip:AddDoubleLine(L["System"], formatMemory(totalMemory), 0,.6,1, .6,.8,1)
-		GameTooltip:AddLine(" ")
+	local totalMemory = UpdateMemory()
+	GameTooltip:AddDoubleLine(L["System"], formatMemory(totalMemory), 0,.6,1, .6,.8,1)
+	GameTooltip:AddLine(" ")
 
-		local numEnabled = 0
-		for _, data in ipairs(infoTable) do
-			if IsAddOnLoaded(data[1]) then
-				numEnabled = numEnabled + 1
-				if numEnabled <= maxShown then
-					local r, g, b = smoothColor(data[3], totalMemory)
-					GameTooltip:AddDoubleLine(data[2], formatMemory(data[3]), 1,1,1, r,g,b)
-				end
+	local numEnabled = 0
+	for _, data in ipairs(infoTable) do
+		if IsAddOnLoaded(data[1]) then
+			numEnabled = numEnabled + 1
+			if numEnabled <= maxShown then
+				local r, g, b = smoothColor(data[3], totalMemory)
+				GameTooltip:AddDoubleLine(data[2], formatMemory(data[3]), 1,1,1, r,g,b)
 			end
 		end
+	end
 
-		if not isShiftKeyDown and (numEnabled > maxAddOns) then
-			local hiddenMemory = 0
-			for i = (maxAddOns + 1), numEnabled do
-				hiddenMemory = hiddenMemory + infoTable[i][3]
-			end
-			GameTooltip:AddDoubleLine(format(showMoreString, numEnabled - maxAddOns, L["Hidden"], L["Hold Shift"]), formatMemory(hiddenMemory), .6,.8,1, .6,.8,1)
+	if not isShiftKeyDown and (numEnabled > maxAddOns) then
+		local hiddenMemory = 0
+		for i = (maxAddOns + 1), numEnabled do
+			hiddenMemory = hiddenMemory + infoTable[i][3]
 		end
-	else
-		local totalCPU = UpdateCPU()
-		local passedTime = max(1, GetTime() - module.loginTime)
-		GameTooltip:AddDoubleLine(L["System"], format(usageString, totalCPU / passedTime, 0,.6,1, .6,.8,1))
-		GameTooltip:AddLine(" ")
-
-		local numEnabled = 0
-		for _, data in ipairs(infoTable) do
-			if IsAddOnLoaded(data[1]) then
-				numEnabled = numEnabled + 1
-				if numEnabled <= maxShown then
-					local r, g, b = smoothColor(data[4], totalCPU)
-					GameTooltip:AddDoubleLine(data[2], format(usageString, data[4] / passedTime), 1,1,1, r,g,b)
-				end
-			end
-		end
-
-		if not isShiftKeyDown and (numEnabled > maxAddOns) then
-			local hiddenUsage = 0
-			for i = (maxAddOns + 1), numEnabled do
-				hiddenUsage = hiddenUsage + infoTable[i][4]
-			end
-			GameTooltip:AddDoubleLine(format(showMoreString, numEnabled - maxAddOns, L["Hidden"], L["Hold Shift"]), format(usageString, hiddenUsage / passedTime), .6,.8,1, .6,.8,1)
-		end
+		GameTooltip:AddDoubleLine(format(showMoreString, numEnabled - maxAddOns, L["Hidden"], L["Hold Shift"]), formatMemory(hiddenMemory), .6,.8,1, .6,.8,1)
 	end
 
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Collect Memory"].." ", 1,1,1, .6,.8,1)
-	if scriptProfileStatus then
-		GameTooltip:AddDoubleLine(" ", DB.RightButton..L["SwitchSystemInfo"].." ", 1,1,1, .6,.8,1)
-	end
-	GameTooltip:AddDoubleLine(" ", DB.ScrollButton..L["CPU Usage"]..": "..(GetCVarBool("scriptProfile") and enableString or disableString).." ", 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 end
 
@@ -195,39 +138,11 @@ info.onLeave = function()
 	GameTooltip:Hide()
 end
 
-StaticPopupDialogs["CPUUSAGE"] = {
-	text = L["ReloadUI Required"],
-	button1 = APPLY,
-	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
-	OnAccept = function() ReloadUI() end,
-	whileDead = 1,
-}
-
 info.onMouseUp = function(self, btn)
 	if btn == "LeftButton" then
-		if scriptProfileStatus then
-			ResetCPUUsage()
-			module.loginTime = GetTime()
-		end
 		local before = gcinfo()
 		collectgarbage("collect")
 		print(format("|cff66C6FF%s:|r %s", L["Collect Memory"], formatMemory(before - gcinfo())))
-		self:onEnter()
-	elseif btn == "RightButton" and scriptProfileStatus then
-		self.showMemory = not self.showMemory
-		self:onEnter()
-	elseif btn == "MiddleButton" then
-		if GetCVarBool("scriptProfile") then
-			SetCVar("scriptProfile", 0)
-		else
-			SetCVar("scriptProfile", 1)
-		end
-
-		if GetCVarBool("scriptProfile") == scriptProfileStatus then
-			StaticPopup_Hide("CPUUSAGE")
-		else
-			StaticPopup_Show("CPUUSAGE")
-		end
 		self:onEnter()
 	end
 end
