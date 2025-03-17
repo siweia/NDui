@@ -444,6 +444,8 @@ do
 			fs:SetTextColor(cr, cg, cb)
 		elseif color == "system" then
 			fs:SetTextColor(1, .8, 0)
+		elseif color == "info" then
+			fs:SetTextColor(.6, .8, 1)
 		end
 		if anchor and x and y then
 			fs:SetPoint(anchor, x, y)
