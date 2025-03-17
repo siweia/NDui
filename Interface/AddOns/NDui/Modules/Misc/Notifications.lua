@@ -94,6 +94,7 @@ local isIgnoredZone = {
 }
 local defaultList = {
 	[6149] = true, -- 奥妮克希亚龙蛋
+	[6699] = true, -- 错放的奇珍，地下堡
 }
 local isIgnoredIDs = {}
 
@@ -426,6 +427,7 @@ local spellList = {
 	[390386] = true,	-- 守护巨龙之怒
 	[309658] = true,	-- 死亡凶蛮战鼓
 	[444257] = true,	-- 掣雷之鼓
+	[466904] = true, 	-- 鹞鹰尖啸
 
 	[384893] = true,	-- 足以乱真的救急电缆11.0工程战复
 	[453949] = true,	-- 不可抗拒的红色按钮11.0工程战复工具

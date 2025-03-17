@@ -394,6 +394,7 @@ tinsert(C.defaultThemes, function()
 					B.ReskinIcon(icon)
 				end
 				if child.ToggleCollapseButton then
+					child.ToggleCollapseButton:GetPushedTexture():SetAlpha(0)
 					B.ReskinCollapse(child.ToggleCollapseButton, true)
 					updateToggleCollapse(child.ToggleCollapseButton)
 					hooksecurefunc(child.ToggleCollapseButton, "RefreshIcon", updateToggleCollapse)

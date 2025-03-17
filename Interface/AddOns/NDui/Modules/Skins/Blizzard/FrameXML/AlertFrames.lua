@@ -353,6 +353,7 @@ tinsert(C.defaultThemes, function()
 	AlertTemplateFunc[NewMountAlertSystem] = AlertTemplateFunc[NewPetAlertSystem]
 	AlertTemplateFunc[NewRuneforgePowerAlertSystem] = AlertTemplateFunc[NewPetAlertSystem]
 	AlertTemplateFunc[NewCosmeticAlertFrameSystem] = AlertTemplateFunc[NewPetAlertSystem]
+	AlertTemplateFunc[NewWarbandSceneAlertSystem] = AlertTemplateFunc[NewPetAlertSystem]
 
 	hooksecurefunc(AlertFrame, "AddAlertFrame", function(_, frame)
 		local func = AlertTemplateFunc[frame.queue]

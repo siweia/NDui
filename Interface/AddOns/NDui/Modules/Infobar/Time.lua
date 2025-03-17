@@ -268,8 +268,9 @@ local delveList = {
 	{uiMapID = 2214, delveID = 7788}, -- The Dread Pit
 	{uiMapID = 2255, delveID = 7790}, -- The Spiral Weave
 	{uiMapID = 2255, delveID = 7784}, -- Tak-Rethan Abyss
-	{uiMapID = 2255, delveID = 7786}, -- TThe Underkeep
+	{uiMapID = 2255, delveID = 7786}, -- The Underkeep
 	{uiMapID = 2346, delveID = 8246},
+	{uiMapID = 2214, delveID = 8181},
 }
 
 info.onEnter = function(self)
