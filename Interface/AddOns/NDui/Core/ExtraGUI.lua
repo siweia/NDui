@@ -672,7 +672,7 @@ function G:SetupSpellsIndicator(parent)
 	local scroll = G:CreateScroll(frame, 240, 485)
 	scroll.box = B.CreateEditBox(frame, 50, 25)
 	scroll.box:SetPoint("TOPLEFT", 10, -10)
-	scroll.box:SetMaxLetters(6)
+	scroll.box:SetMaxLetters(8) -- might have 8 digits for spellID
 	B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["ID Intro"], "info", true)
 
 	scroll.add = B.CreateButton(frame, 45, 25, ADD)
