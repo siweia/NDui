@@ -127,10 +127,10 @@ function G:SetupRaidDebuffs(parent)
 		end
 	end
 	AddNewDungeon(dungeons, 1210) -- 暗焰裂口
-	AddNewDungeon(dungeons, 71) -- 格瑞姆巴托
-	AddNewDungeon(dungeons, 1023) -- 围攻伯拉勒斯
-	AddNewDungeon(dungeons, 1182) -- 通灵战潮
-	AddNewDungeon(dungeons, 1184) -- 塞兹仙林的迷雾
+	--AddNewDungeon(dungeons, 71) -- 格瑞姆巴托
+	--AddNewDungeon(dungeons, 1023) -- 围攻伯拉勒斯
+	--AddNewDungeon(dungeons, 1182) -- 通灵战潮
+	--AddNewDungeon(dungeons, 1184) -- 塞兹仙林的迷雾
 
 	AddNewDungeon(dungeons, 1298) -- 水闸行动
 	AddNewDungeon(dungeons, 1187) -- 伤逝剧场
