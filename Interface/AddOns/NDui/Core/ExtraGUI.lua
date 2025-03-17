@@ -709,7 +709,7 @@ function G:SetupBuffIndicator(parent)
 		local scroll = G:CreateScroll(frame, 240, 200)
 		scroll.box = B.CreateEditBox(frame, value.width, 25)
 		scroll.box:SetPoint("TOPLEFT", 10, -10)
-		scroll.box:SetMaxLetters(6)
+		scroll.box:SetMaxLetters(8) -- might have 8 digits for spellID
 		B.AddTooltip(scroll.box, "ANCHOR_TOPRIGHT", L["ID Intro"], "info", true)
 
 		scroll.add = B.CreateButton(frame, 45, 25, ADD)
