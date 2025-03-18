@@ -807,7 +807,7 @@ function M:ToggleAddOnProfiler()
 	local function updateCheck(bu)
 		local checked = bu:GetChecked()
         C_CVar.SetCVar("addonProfilerEnabled", checked and 1 or 0)
-		NDuiADB["AddonProfile"] = checked
+		NDuiADB["AddOnProfiler"] = checked
 	end
 
 	local bu = CreateFrame("CheckButton", nil, AddonList, "OptionsBaseCheckButtonTemplate")
@@ -815,7 +815,7 @@ function M:ToggleAddOnProfiler()
 	bu:SetPoint("BOTTOM", 0, 2)
 	B.ReskinCheck(bu)
 	B.CreateFS(bu, 14, L["CPU Usage"], "info", "LEFT", 30, 0)
-	bu:SetChecked(not(not NDuiADB["AddonProfile"]))
+	bu:SetChecked(not(not NDuiADB["AddOnProfiler"]))
 
 	C_CVar.RegisterCVar("addonProfilerEnabled", 1)
 	updateCheck(bu)
