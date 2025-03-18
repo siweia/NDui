@@ -47,7 +47,6 @@ function S:PostalSkin()
 	B.Reskin(PostalForwardButton)
 	B.ReskinArrow(Postal_ModuleMenuButton, "down")
 	B.ReskinArrow(Postal_OpenAllMenuButton, "down")
-	B.ReskinArrow(Postal_BlackBookButton, "down")
 	for i = 1, 7 do
 		local cb = _G["PostalInboxCB"..i]
 		if cb then
@@ -58,7 +57,11 @@ function S:PostalSkin()
 	Postal_ModuleMenuButton:ClearAllPoints()
 	Postal_ModuleMenuButton:SetPoint("RIGHT", MailFrame.CloseButton, "LEFT", -2, 0)
 	Postal_OpenAllMenuButton:SetPoint("LEFT", PostalOpenAllButton, "RIGHT", 2, 0)
-	Postal_BlackBookButton:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 2, 0)
+
+	if Postal_BlackBookButton then
+		B.ReskinArrow(Postal_BlackBookButton, "down")
+		Postal_BlackBookButton:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 2, 0)
+	end
 
 	for i = 1, 16 do
 		local button = _G["Postal_QuickAttachButton"..i]
