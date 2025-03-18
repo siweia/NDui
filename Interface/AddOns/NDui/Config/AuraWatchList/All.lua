@@ -156,8 +156,6 @@ local list = {
 		{AuraID = 80353, UnitID = "player"},	-- 时间扭曲
 		{AuraID = 264667, UnitID = "player"},	-- 原始狂怒
 		{AuraID = 390386, UnitID = "player"},	-- 守护巨龙之怒，龙希尔
-		{AuraID = 363534, UnitID = "player"},	-- 回溯，龙希尔
-		{AuraID = 357170, UnitID = "player"},	-- 时间膨胀，龙希尔
 		{AuraID = 178207, UnitID = "player"},	-- 狂怒战鼓
 		{AuraID = 230935, UnitID = "player"},	-- 高山战鼓
 		{AuraID = 256740, UnitID = "player"},	-- 漩涡战鼓
@@ -165,6 +163,7 @@ local list = {
 		{AuraID = 102364, UnitID = "player"},	-- 青铜龙的祝福
 		{AuraID = 292686, UnitID = "player"},	-- 制皮鼓
 		{AuraID = 381301, UnitID = "player"},	-- 野性皮革战鼓
+		{AuraID = 466904, UnitID = "player"},	-- 鹞鹰尖啸，射击
 		-- 团队增益或减伤
 		{AuraID = 1022, UnitID = "player"},		-- 保护祝福
 		{AuraID = 6940, UnitID = "player"},		-- 牺牲祝福
@@ -195,6 +194,8 @@ local list = {
 		{AuraID = 238698, UnitID = "player"},	-- 吸血光环
 		{AuraID = 209426, UnitID = "player"},	-- 幻影打击
 		{AuraID = 374227, UnitID = "player"},	-- 微风
+		{AuraID = 363534, UnitID = "player"},	-- 回溯，龙希尔
+		{AuraID = 357170, UnitID = "player"},	-- 时间膨胀，龙希尔
 		{AuraID = 114018, UnitID = "player", Flash = true},	-- 帷幕
 		{AuraID = 115834, UnitID = "player", Flash = true},
 	},
