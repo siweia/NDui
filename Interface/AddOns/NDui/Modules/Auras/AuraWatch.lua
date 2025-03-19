@@ -360,6 +360,7 @@ function A:AuraWatch_SetupCD(index, name, icon, start, duration, _, type, id, ch
 	if frame.Statusbar then
 		frame.duration = duration
 		frame.start = start
+		frame.expires = nil
 		frame.elapsed = 0
 		frame:SetScript("OnUpdate", A.AuraWatch_UpdateTimer)
 	end

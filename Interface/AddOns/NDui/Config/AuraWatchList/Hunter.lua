@@ -147,7 +147,7 @@ local list = {
 		{AuraID = 199803, UnitID = "focus", Caster = "player"},	-- 精确瞄准
 	},
 	["Spell Cooldown"] = {	-- 冷却计时组
-		--{AuraID = 471877, UnitID = "player"},	-- 猎群领袖之嚎
+		{AuraID = 471877, UnitID = "player"},	-- 猎群领袖之嚎
 		{SlotID = 13},		-- 饰品1
 		{SlotID = 14},		-- 饰品2
 		{SpellID = 186265},	-- 灵龟守护
