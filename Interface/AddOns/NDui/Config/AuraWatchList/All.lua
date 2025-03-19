@@ -344,6 +344,7 @@ local list = {
 		{AuraID = 273721, UnitID = "target", Flash = true},	-- 围攻，1号易伤
 		{AuraID = 423588, UnitID = "target", Value = true},	-- 修道院，圣光屏障
 		{AuraID = 423839, UnitID = "target", Value = true},	-- 风暴复仇，驭雷栖巢
+		{AuraID = 445256, UnitID = "target", Value = true},	-- 虚空壳壁，驭雷栖巢
 		-- S1
 		{AuraID = 445409, UnitID = "target", Value = true},	-- 加固壳壁，斯卡莫拉克
 		-- S2
