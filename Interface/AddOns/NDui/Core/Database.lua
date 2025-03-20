@@ -240,6 +240,7 @@ DB.ReminderBuffs = {
 			depends = {6673, 5242, 6192, 11549, 11550, 11551, 25289, 2048, 47436},
 			gemini = {
 				[GetSpellInfo(469)] = true, -- 命令怒吼
+				[GetSpellInfo(12318)] = true, -- 统御之力
 			},
 			combat = true,
 			instance = true,
@@ -251,6 +252,7 @@ DB.ReminderBuffs = {
 			depend = 469,
 			gemini = {
 				[GetSpellInfo(6673)] = true, -- 战斗怒吼
+				[GetSpellInfo(12318)] = true, -- 统御之力
 			},
 			combat = true,
 			instance = true,
