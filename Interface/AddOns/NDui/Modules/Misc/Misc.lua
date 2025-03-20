@@ -741,18 +741,11 @@ function M:AutoEquipBySpec()
 		local talentName = ""
 		local higher = 0
 		for i = 1, 3 do
-			local name, nameCata, pointsSpent, _, pointsSpentCata = GetTalentTabInfo(i)
+			local _, name, _, _, pointsSpent = GetTalentTabInfo(i)
 			if not name then break end
-			if DB.isCata then
-				if pointsSpentCata > higher then
-					higher = pointsSpentCata
-					talentName = nameCata
-				end
-			else
-				if pointsSpent > higher then
-					higher = pointsSpent
-					talentName = name
-				end
+			if pointsSpent > higher then
+				higher = pointsSpent
+				talentName = name
 			end
 		end
 		if talentName == "" then return end
