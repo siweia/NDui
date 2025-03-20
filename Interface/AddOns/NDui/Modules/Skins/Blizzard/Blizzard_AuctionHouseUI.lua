@@ -174,6 +174,10 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.Reskin(itemBuyFrame.BuyoutFrame.BuyoutButton)
 	reskinItemDisplay(itemBuyFrame.ItemDisplay)
 	reskinItemList(itemBuyFrame.ItemList, true)
+	if BidAmountGold then
+		B.ReskinInput(BidAmountGold)
+		B.ReskinInput(BidAmountSilver)
+	end
 
 	local commBuyFrame = AuctionHouseFrame.CommoditiesBuyFrame
 	B.Reskin(commBuyFrame.BackButton)
