@@ -23,13 +23,6 @@ local function reskinPickerOptions(self)
 	end
 end
 
-local function ReskinVoicePicker(voicePicker)
-	local customFrame = voicePicker:GetChildren()
-	B.StripTextures(customFrame)
-	B.SetBD(customFrame, .7)
-	voicePicker:HookScript("OnShow", reskinPickerOptions)
-end
-
 tinsert(C.defaultThemes, function()
 	B.StripTextures(ChatConfigFrame)
 	B.SetBD(ChatConfigFrame)
@@ -38,7 +31,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("ChatConfig_UpdateCheckboxes", function(frame)
 		if not FCF_GetCurrentChatFrame() then return end
 
-		local nameString = frame:GetName().."CheckBox"
+		local nameString = frame:GetName().."Checkbox"
 		for index in ipairs(frame.checkBoxTable) do
 			local checkBoxName = nameString..index
 			local checkbox = _G[checkBoxName]
@@ -66,7 +59,7 @@ tinsert(C.defaultThemes, function()
 	hooksecurefunc("ChatConfig_CreateTieredCheckboxes", function(frame, checkBoxTable)
 		if frame.styled then return end
 
-		local nameString = frame:GetName().."CheckBox"
+		local nameString = frame:GetName().."Checkbox"
 		for index, value in ipairs(checkBoxTable) do
 			local checkBoxName = nameString..index
 			B.ReskinCheck(_G[checkBoxName])
@@ -262,8 +255,5 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- voice pickers
-	ReskinVoicePicker(TextToSpeechFrameTtsVoicePicker)
-	ReskinVoicePicker(TextToSpeechFrameTtsVoiceAlternatePicker)
-
 	B.StripTextures(ChatConfigTextToSpeechChannelSettingsLeft)
 end)

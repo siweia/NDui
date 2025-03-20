@@ -126,17 +126,14 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinInput(PetJournalSearchBox)
 	B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateLeftButton, "left")
 	B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, "right")
-	B.ReskinFilterButton(PetJournalFilterButton)
-	B.ReskinFilterButton(MountJournalFilterButton)
+	B.ReskinFilterButton(PetJournal.FilterDropdown)
+	B.ReskinFilterButton(MountJournal.FilterDropdown)
 
 	local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
 	if togglePlayer then
 		B.ReskinCheck(togglePlayer)
 		togglePlayer:SetSize(28, 28)
 	end
-
-	MountJournalFilterButton:SetPoint("TOPRIGHT", MountJournal.LeftInset, -5, -8)
-	PetJournalFilterButton:SetPoint("TOPRIGHT", PetJournalLeftInset, -5, -8)
 
 	-- Pet card
 
@@ -157,9 +154,9 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(iconsFrame)
 	B.ReskinInput(ToyBox.searchBox)
-	B.ReskinFilterButton(ToyBoxFilterButton)
 	B.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(ToyBox.PagingFrame.NextPageButton, "right")
+	B.ReskinFilterButton(ToyBox.FilterDropdown)
 
 	-- Progress bar
 
@@ -219,8 +216,8 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(icons)
 	B.ReskinInput(HeirloomsJournalSearchBox)
-	B.ReskinDropDown(HeirloomsJournalClassDropDown)
-	B.ReskinFilterButton(HeirloomsJournal.FilterButton)
+	B.ReskinDropDown(HeirloomsJournal.ClassDropdown)
+	B.ReskinFilterButton(HeirloomsJournal.FilterDropdown)
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, "right")
 
@@ -309,9 +306,8 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(ItemsCollectionFrame)
 	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
-	B.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
+	B.ReskinDropDown(ItemsCollectionFrame.WeaponDropdown)
 	B.ReskinInput(WardrobeCollectionFrameSearchBox)
-
 	B.ReskinTab(WardrobeCollectionFrameTab1)
 
 	B.ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
@@ -325,4 +321,31 @@ C.themes["Blizzard_Collections"] = function()
 	progressBar.text:SetPoint("CENTER", 0, 1)
 	progressBar:SetStatusBarTexture(DB.bdTex)
 	B.CreateBDFrame(progressBar, .25)
+
+	-- [[ Wardrobe ]]
+
+	local WardrobeFrame = WardrobeFrame
+	local WardrobeTransmogFrame = WardrobeTransmogFrame
+
+	B.ReskinPortraitFrame(WardrobeFrame)
+	B.StripTextures(WardrobeTransmogFrame)
+	B.Reskin(WardrobeTransmogFrame.ApplyButton)
+	B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+
+	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand", "Ranged"}
+	for i = 1, #slots do
+		local slot = WardrobeTransmogFrame[slots[i].."Button"]
+		if slot then
+			slot.Border:Hide()
+			B.ReskinIcon(slot.Icon)
+			slot:SetHighlightTexture(DB.bdTex)
+			local hl = slot:GetHighlightTexture()
+			hl:SetVertexColor(1, 1, 1, .25)
+			hl:SetAllPoints(slot.Icon)
+		end
+	end
+
+	-- Outfit Frame
+	B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
+	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
 end

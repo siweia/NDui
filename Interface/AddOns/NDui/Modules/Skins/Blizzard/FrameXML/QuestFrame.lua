@@ -119,8 +119,6 @@ tinsert(C.defaultThemes, function()
 	CurrentQuestsText:SetShadowColor(0, 0, 0)
 
 	-- Quest NPC model
-	if DB.isCata then
-
 	B.StripTextures(QuestModelScene)
 	B.StripTextures(QuestNPCModelTextFrame)
 	local bg = B.SetBD(QuestModelScene)
@@ -130,21 +128,6 @@ tinsert(C.defaultThemes, function()
 		x = x + 6
 		QuestModelScene:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
 	end)
-
-	else
-	
-		B.StripTextures(QuestNPCModel)
-		B.SetBD(QuestNPCModel)
-		B.StripTextures(QuestNPCModelTextFrame)
-		B.SetBD(QuestNPCModelTextFrame)
-	
-		hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
-			x = x + 6
-			QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
-		end)
-	
-		B.ReskinScroll(QuestNPCModelTextScrollFrameScrollBar)
-	end
 
 	-- QuestLogFrame
 

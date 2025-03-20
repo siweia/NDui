@@ -315,8 +315,8 @@ info.onEvent = function(self, event, arg1)
 		if arg1 then C_GuildInfo_GuildRoster() end
 	end
 
-	local online = select(3, GetNumGuildMembers())
-	self.text:SetText(GUILD..": "..DB.MyColor..online)
+	local _, numOnline, allOnline = GetNumGuildMembers()
+	self.text:SetText(GUILD..": "..DB.MyColor..(allOnline or numOnline))
 
 	if infoFrame and infoFrame:IsShown() then
 		info:GuildPanel_Refresh()

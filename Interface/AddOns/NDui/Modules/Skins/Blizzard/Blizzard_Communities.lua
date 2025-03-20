@@ -34,19 +34,12 @@ C.themes["Blizzard_Communities"] = function()
 
 	B.ReskinPortraitFrame(CommunitiesFrame)
 	CommunitiesFrame.PortraitOverlay:SetAlpha(0)
-	B.ReskinDropDown(CommunitiesFrame.StreamDropDownMenu)
+	B.ReskinDropDown(CommunitiesFrame.StreamDropdown)
+	B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropdown)
 	B.StripTextures(CommunitiesFrame.MaximizeMinimizeFrame)
 	B.ReskinMinMax(CommunitiesFrame.MaximizeMinimizeFrame)
 	CommunitiesFrame.MaximizeMinimizeFrame.MinimizeButton:SetDisabledTexture(0)
 	B.ReskinArrow(CommunitiesFrame.AddToChatButton, "down")
-	B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropDownMenu)
-
-	for i = 1, 5 do
-		local tab = _G["CommunitiesFrameTab"..i]
-		if tab then
-			B.ReskinTab(tab)
-		end
-	end
 
 	for _, name in next, {"InvitationFrame", "TicketFrame"} do
 		local frame = CommunitiesFrame[name]
@@ -81,56 +74,30 @@ C.themes["Blizzard_Communities"] = function()
 	B.StripTextures(CommunitiesFrameCommunitiesList)
 	CommunitiesFrameCommunitiesList.InsetFrame:Hide()
 	CommunitiesFrameCommunitiesList.FilligreeOverlay:Hide()
-	if DB.isCata then
-		B.StripTextures(ClubFinderGuildFinderFrame.DisabledFrame)
-		B.ReskinTrimScroll(CommunitiesFrameCommunitiesList.ScrollBar)
 
-		hooksecurefunc(CommunitiesFrameCommunitiesList.ScrollBox, "Update", function(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local child = select(i, self.ScrollTarget:GetChildren())
-				if not child.bg then
-					child.bg = B.CreateBDFrame(child, 0, true)
-					child.bg:SetPoint("TOPLEFT", 5, -5)
-					child.bg:SetPoint("BOTTOMRIGHT", -10, 5)
-	
-					child:SetHighlightTexture(0)
-					child.IconRing:SetAlpha(0)
-					child.__iconBorder = B.ReskinIcon(child.Icon)
-					child.Background:Hide()
-					child.Selection:SetAlpha(0)
-					hooksecurefunc(child.Selection, "SetShown", updateCommunitiesSelection)
-				end
-	
-				child.CircleMask:Hide()
-				child.__iconBorder:SetShown(child.IconRing:IsShown())
-			end
-		end)
-	else
-		B.ReskinScroll(CommunitiesFrameCommunitiesListListScrollFrame.ScrollBar)
-		CommunitiesFrameCommunitiesListListScrollFrame.ScrollBar.Background:Hide()
+	B.StripTextures(ClubFinderGuildFinderFrame.DisabledFrame)
+	B.ReskinTrimScroll(CommunitiesFrameCommunitiesList.ScrollBar)
 
-		hooksecurefunc(CommunitiesFrameCommunitiesList, "Update", function(self)
-			local buttons = self.ListScrollFrame.buttons
-			for i = 1, #buttons do
-				local button = buttons[i]
-				if not button.bg then
-					button.bg = B.CreateBDFrame(button, 0, true)
-					button.bg:SetPoint("TOPLEFT", 5, -5)
-					button.bg:SetPoint("BOTTOMRIGHT", -10, 5)
-	
-					button:SetHighlightTexture(0)
-					button.IconRing:SetAlpha(0)
-					button.__iconBorder = B.ReskinIcon(button.Icon)
-					button.Background:Hide()
-					button.Selection:SetAlpha(0)
-					hooksecurefunc(button.Selection, "SetShown", updateCommunitiesSelection)
-				end
-	
-				button.CircleMask:Hide()
-				button.__iconBorder:SetShown(button.IconRing:IsShown())
+	hooksecurefunc(CommunitiesFrameCommunitiesList.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if not child.bg then
+				child.bg = B.CreateBDFrame(child, 0, true)
+				child.bg:SetPoint("TOPLEFT", 5, -5)
+				child.bg:SetPoint("BOTTOMRIGHT", -10, 5)
+
+				child:SetHighlightTexture(0)
+				child.IconRing:SetAlpha(0)
+				child.__iconBorder = B.ReskinIcon(child.Icon)
+				child.Background:Hide()
+				child.Selection:SetAlpha(0)
+				hooksecurefunc(child.Selection, "SetShown", updateCommunitiesSelection)
 			end
-		end)
-	end
+
+			child.CircleMask:Hide()
+			child.__iconBorder:SetShown(child.IconRing:IsShown())
+		end
+	end)
 
 	for _, name in next, {"ChatTab", "RosterTab", "GuildBenefitsTab", "GuildInfoTab"} do
 		local tab = CommunitiesFrame[name]
@@ -147,11 +114,7 @@ C.themes["Blizzard_Communities"] = function()
 	-- ChatTab
 	B.Reskin(CommunitiesFrame.InviteButton)
 	B.StripTextures(CommunitiesFrame.Chat)
-	if DB.isCata then
-		B.ReskinTrimScroll(CommunitiesFrame.Chat.ScrollBar)
-	else
-		B.ReskinScroll(CommunitiesFrame.Chat.MessageFrame.ScrollBar)
-	end
+	B.ReskinTrimScroll(CommunitiesFrame.Chat.ScrollBar)
 	CommunitiesFrame.ChatEditBox:DisableDrawLayer("BACKGROUND")
 	local bg1 = B.CreateBDFrame(CommunitiesFrame.Chat.InsetFrame, .25)
 	bg1:SetPoint("TOPLEFT", 1, -3)
@@ -165,25 +128,18 @@ C.themes["Blizzard_Communities"] = function()
 		B.StripTextures(dialog)
 		dialog.BG:Hide()
 		B.SetBD(dialog)
-		B.ReskinDropDown(dialog.CommunitiesListDropDownMenu)
-		if dialog.Selector then -- isCata
+		B.ReskinDropDown(dialog.CommunitiesListDropdown)
+
+		if dialog.Selector then
 			B.StripTextures(dialog.Selector)
 			B.Reskin(dialog.Selector.OkayButton)
 			B.Reskin(dialog.Selector.CancelButton)
-		else
-			B.Reskin(dialog.OkayButton)
-			B.Reskin(dialog.CancelButton)
 		end
 		B.ReskinCheck(dialog.ScrollFrame.Child.QuickJoinButton)
 		dialog.ScrollFrame.Child.QuickJoinButton:SetSize(25, 25)
 		B.Reskin(dialog.ScrollFrame.Child.AllButton)
 		B.Reskin(dialog.ScrollFrame.Child.NoneButton)
-		if DB.isCata then
-			B.ReskinTrimScroll(dialog.ScrollFrame.ScrollBar)
-		else
-			B.ReskinScroll(dialog.ScrollFrame.ScrollBar)
-			dialog.ScrollFrame.ScrollBar.Background:Hide()
-		end
+		B.ReskinTrimScroll(dialog.ScrollFrame.ScrollBar)
 
 		hooksecurefunc(dialog, "Refresh", function(self)
 			local frame = self.ScrollFrame.Child
@@ -209,7 +165,8 @@ C.themes["Blizzard_Communities"] = function()
 		bg:SetPoint("BOTTOMRIGHT", -4, 3)
 		B.StripTextures(dialog.Description)
 		B.CreateBDFrame(dialog.Description, .25)
-		B.ReskinCheck(dialog.TypeCheckBox)
+		B.ReskinCheck(dialog.TypeCheckbox)
+
 		B.Reskin(dialog.Accept)
 		B.Reskin(dialog.Delete)
 		B.Reskin(dialog.Cancel)
@@ -224,20 +181,14 @@ C.themes["Blizzard_Communities"] = function()
 		B.Reskin(dialog.Copy)
 		B.Reskin(dialog.Close)
 		B.ReskinArrow(dialog.MaximizeButton, "down")
-		B.ReskinDropDown(dialog.ExpiresDropDownMenu)
-		B.ReskinDropDown(dialog.UsesDropDownMenu)
+		B.ReskinDropDown(dialog.ExpiresDropdown)
+		B.ReskinDropDown(dialog.UsesDropdown)
 		B.Reskin(dialog.GenerateLinkButton)
 
 		dialog.InviteManager.ArtOverlay:Hide()
 		B.StripTextures(dialog.InviteManager.ColumnDisplay)
-		if DB.isCata then
-			dialog.InviteManager.ScrollBar:GetChildren():Hide()
-			B.ReskinTrimScroll(dialog.InviteManager.ScrollBar)
-		else
-			dialog.InviteManager.ListScrollFrame.Background:Hide()
-			B.ReskinScroll(dialog.InviteManager.ListScrollFrame.scrollBar)
-			dialog.InviteManager.ListScrollFrame.scrollBar.Background:Hide()
-		end
+		dialog.InviteManager.ScrollBar:GetChildren():Hide()
+		B.ReskinTrimScroll(dialog.InviteManager.ScrollBar)
 
 		hooksecurefunc(dialog, "Update", function(self)
 			local column = self.InviteManager.ColumnDisplay
@@ -269,45 +220,39 @@ C.themes["Blizzard_Communities"] = function()
 	-- Roster
 	CommunitiesFrame.MemberList.InsetFrame:Hide()
 	B.StripTextures(CommunitiesFrame.MemberList.ColumnDisplay)
-	if DB.isCata then
-		B.ReskinDropDown(CommunitiesFrame.GuildMemberListDropDownMenu)
-		CommunitiesFrame.MemberList.ScrollBar:GetChildren():Hide()
-		B.ReskinTrimScroll(CommunitiesFrame.MemberList.ScrollBar)
-		B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
-		B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
+	B.ReskinDropDown(CommunitiesFrame.GuildMemberListDropdown)
+	CommunitiesFrame.MemberList.ScrollBar:GetChildren():Hide()
+	B.ReskinTrimScroll(CommunitiesFrame.MemberList.ScrollBar)
+	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
+	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
 
-		hooksecurefunc(CommunitiesFrame.MemberList.ScrollBox, "Update", function(self)
-			for i = 1, self.ScrollTarget:GetNumChildren() do
-				local child = select(i, self.ScrollTarget:GetChildren())
-				if not child.styled then
-					hooksecurefunc(child, "RefreshExpandedColumns", updateNameFrame)
-					child.styled = true
-				end
-	
-				local header = child.ProfessionHeader
-				if header and not header.styled then
-					for i = 1, 3 do
-						select(i, header:GetRegions()):Hide()
-					end
-					header.bg = B.CreateBDFrame(header, .25)
-					header.bg:SetInside()
-					header:SetHighlightTexture(DB.bdTex)
-					header:GetHighlightTexture():SetVertexColor(r, g, b, .25)
-					header:GetHighlightTexture():SetInside(header.bg)
-					B.CreateBDFrame(header.Icon)
-					header.styled = true
-				end
-	
-				if child and child.bg then
-					child.bg:SetShown(child.Class:IsShown())
-				end
+	hooksecurefunc(CommunitiesFrame.MemberList.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if not child.styled then
+				hooksecurefunc(child, "RefreshExpandedColumns", updateNameFrame)
+				child.styled = true
 			end
-		end)
-	else
-		B.CreateBDFrame(CommunitiesFrame.MemberList.ListScrollFrame, .25)
-		B.ReskinScroll(CommunitiesFrame.MemberList.ListScrollFrame.scrollBar)
-		CommunitiesFrame.MemberList.ListScrollFrame.scrollBar.Background:Hide()
-	end
+
+			local header = child.ProfessionHeader
+			if header and not header.styled then
+				for i = 1, 3 do
+					select(i, header:GetRegions()):Hide()
+				end
+				header.bg = B.CreateBDFrame(header, .25)
+				header.bg:SetInside()
+				header:SetHighlightTexture(DB.bdTex)
+				header:GetHighlightTexture():SetVertexColor(r, g, b, .25)
+				header:GetHighlightTexture():SetInside(header.bg)
+				B.CreateBDFrame(header.Icon)
+				header.styled = true
+			end
+
+			if child and child.bg then
+				child.bg:SetShown(child.Class:IsShown())
+			end
+		end
+	end)
 	B.ReskinCheck(CommunitiesFrame.MemberList.ShowOfflineButton)
 	CommunitiesFrame.MemberList.ShowOfflineButton:SetSize(25, 25)
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.CommunitiesSettingsButton)
@@ -332,39 +277,11 @@ C.themes["Blizzard_Communities"] = function()
 		local dialog = CommunitiesAvatarPickerDialog
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
-		if DB.isCata then
-			B.ReskinTrimScroll(CommunitiesAvatarPickerDialog.ScrollBar)
-			if dialog.Selector then
-				B.StripTextures(dialog.Selector)
-				B.Reskin(dialog.Selector.OkayButton)
-				B.Reskin(dialog.Selector.CancelButton)
-			end
-		else
-			CommunitiesAvatarPickerDialogTop:Hide()
-			CommunitiesAvatarPickerDialogMiddle:Hide()
-			CommunitiesAvatarPickerDialogBottom:Hide()
-			B.ReskinScroll(CommunitiesAvatarPickerDialogScrollBar)
-			B.Reskin(dialog.OkayButton)
-			B.Reskin(dialog.CancelButton)
-
-			hooksecurefunc(CommunitiesAvatarPickerDialog.ScrollFrame, "Refresh", function(self)
-				for i = 1, 5 do
-					for j = 1, 6 do
-						local avatarButton = self.avatarButtons[i][j]
-						if avatarButton:IsShown() and not avatarButton.bg then
-							avatarButton.bg = B.ReskinIcon(avatarButton.Icon)
-							avatarButton.Selected:SetTexture("")
-							avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-						end
-	
-						if avatarButton.Selected:IsShown() then
-							avatarButton.bg:SetVertexColor(r, g, b)
-						else
-							avatarButton.bg:SetVertexColor(0, 0, 0)
-						end
-					end
-				end
-			end)
+		B.ReskinTrimScroll(CommunitiesAvatarPickerDialog.ScrollBar)
+		if dialog.Selector then
+			B.StripTextures(dialog.Selector)
+			B.Reskin(dialog.Selector.OkayButton)
+			B.Reskin(dialog.Selector.CancelButton)
 		end
 	end
 
@@ -378,33 +295,7 @@ C.themes["Blizzard_Communities"] = function()
 				child.styled = true
 			end
 		end
-
-		if DB.isCata then return end
-
-		for _, button in ipairs(self.ListScrollFrame.buttons or {}) do
-			if button and not button.hooked then
-				hooksecurefunc(button, "RefreshExpandedColumns", updateNameFrame)
-				if button.ProfessionHeader then
-					local header = button.ProfessionHeader
-					for i = 1, 3 do
-						select(i, header:GetRegions()):Hide()
-					end
-					B.CreateBDFrame(header, .45)
-					header:SetHighlightTexture(DB.bdTex)
-					header:GetHighlightTexture():SetVertexColor(r, g, b, .25)
-					B.CreateBDFrame(header.Icon)
-				end
-
-				button.hooked = true
-			end
-			if button and button.bg then
-				button.bg:SetShown(button.Class:IsShown())
-			end
-		end
 	end)
-
-	if not DB.isCata then return end
-
 
 	-- Benefits
 	CommunitiesFrame.GuildBenefitsFrame.Perks:GetRegions():SetAlpha(0)

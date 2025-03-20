@@ -11,9 +11,8 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(RaidFrameRaidInfoButton)
 	B.Reskin(RaidFrameConvertToRaidButton)
 	B.ReskinClose(RaidInfoCloseButton)
-	B.ReskinScroll(RaidInfoScrollFrameScrollBar)
+	B.ReskinTrimScroll(RaidInfoFrame.ScrollBar)
 	B.ReskinClose(RaidParentFrameCloseButton)
-
 	B.ReskinPortraitFrame(RaidParentFrame)
 
 	if RaidInfoInstanceLabel then

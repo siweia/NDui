@@ -10,7 +10,7 @@ local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INT
 local LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL
 local UnitIsPVP, UnitFactionGroup, UnitRealmRelationship, UnitGUID = UnitIsPVP, UnitFactionGroup, UnitRealmRelationship, UnitGUID
 local UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction = UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction
-local InCombatLockdown, IsShiftKeyDown, GetMouseFocus, GetItemInfo = InCombatLockdown, IsShiftKeyDown, GetMouseFocus, GetItemInfo
+local InCombatLockdown, IsShiftKeyDown, GetItemInfo = InCombatLockdown, IsShiftKeyDown, GetItemInfo
 local GetCreatureDifficultyColor, UnitCreatureType, UnitClassification = GetCreatureDifficultyColor, UnitCreatureType, UnitClassification
 local UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel
 local GetRaidTargetIndex, GetGuildInfo, IsInGuild = GetRaidTargetIndex, GetGuildInfo, IsInGuild
@@ -24,10 +24,19 @@ local classification = {
 }
 local npcIDstring = "%s "..DB.InfoColor.."%s"
 
+function TT:GetMouseFocus()
+	if GetMouseFoci then
+		local frames = GetMouseFoci()
+		return frames and frames[1]
+	else
+		return GetMouseFocus()
+	end
+end
+
 function TT:GetUnit()
 	local _, unit = self:GetUnit()
 	if not unit then
-		local mFocus = GetMouseFocus()
+		local mFocus = TT:GetMouseFocus()
 		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute("unit")))
 	end
 	return unit
@@ -205,15 +214,15 @@ function TT:OnTooltipSetUnit()
 		local diff = GetCreatureDifficultyColor(level)
 		local classify = UnitClassification(unit)
 		local textLevel = format("%s%s%s|r", B.HexRGB(diff), boss or format("%d", level), classification[classify] or "")
-		local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
-		local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
-		local levelString = format(("%s%s %s %s"), textLevel, pvpFlag, unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
-
 		local tiptextLevel = TT.GetLevelLine(self)
 		if tiptextLevel then
-			tiptextLevel:SetText(levelString)
-		else
-			GameTooltip:AddLine(levelString)
+			local reaction = UnitReaction(unit, "player")
+			local standingText = not isPlayer and reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction].."|r " or ""
+
+			local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
+			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
+
+			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, standingText..unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 		end
 	end
 
@@ -228,9 +237,7 @@ function TT:OnTooltipSetUnit()
 		local guid = UnitGUID(unit)
 		local npcID = guid and B.GetNPCID(guid)
 		if npcID then
-			local reaction = UnitReaction(unit, "player")
-			local standingText = reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction]
-			self:AddLine(format(npcIDstring, standingText or "", npcID))
+			self:AddLine(format(npcIDstring, "NpcID:", npcID))
 		end
 	end
 
@@ -564,9 +571,4 @@ end)
 
 TT:RegisterTooltips("Blizzard_LookingForGroupUI", function()
 	TT.ReskinTooltip(LFGBrowseSearchEntryTooltip)
-end)
-
-TT:RegisterTooltips("Blizzard_Calendar", function()
-	CalendarContextMenu:HookScript("OnShow", TT.ReskinTooltip)
-	CalendarInviteStatusContextMenu:HookScript("OnShow", TT.ReskinTooltip)
 end)

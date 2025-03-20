@@ -42,7 +42,7 @@ C.themes["Blizzard_EventTrace"] = function()
 	B.ReskinPortraitFrame(EventTrace)
 
 	local subtitleBar = EventTrace.SubtitleBar
-	B.ReskinFilterButton(subtitleBar.OptionsDropDown)
+	B.ReskinFilterButton(subtitleBar.OptionsDropdown)
 
 	local logBar = EventTrace.Log.Bar
 	local filterBar = EventTrace.Filter.Bar

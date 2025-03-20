@@ -305,7 +305,7 @@ function Bar:CreateBars()
 			Bar:StyleActionButton(button)
 		end
 	end
---[[
+
 	local function delayUpdate()
 		Bar:UpdateBarConfig()
 		B:UnregisterEvent("PLAYER_REGEN_ENABLED", delayUpdate)
@@ -318,9 +318,6 @@ function Bar:CreateBars()
 			end
 			Bar:UpdateBarConfig()
 		end
-	end)]]
-	InterfaceOptionsActionBarsPanelLockActionBars:HookScript("OnClick", function()
-		Bar:UpdateBarConfig()
 	end)
 end
 

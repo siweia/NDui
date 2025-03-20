@@ -556,7 +556,6 @@ function module:SetupMinimap()
 
 	self:UpdateMinimapScale()
 	self:ShowMinimapClock()
-	B.HideOption(InterfaceOptionsDisplayPanelShowMinimapClock)
 	self:ShowCalendar()
 
 	-- Mousewheel Zoom

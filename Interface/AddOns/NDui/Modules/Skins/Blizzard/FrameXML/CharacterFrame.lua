@@ -15,9 +15,7 @@ function B:ReskinIconSelector()
 	B.Reskin(self.BorderBox.OkayButton)
 	B.Reskin(self.BorderBox.CancelButton)
 	B.ReskinTrimScroll(self.IconSelector.ScrollBar)
-	if self.BorderBox.IconTypeDropDown then
-		B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
-	end
+	B.ReskinDropDown(self.BorderBox.IconTypeDropdown)
 
 	hooksecurefunc(self.IconSelector.ScrollBox, "Update", function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
@@ -126,10 +124,10 @@ tinsert(C.defaultThemes, function()
 
 	if not DB.isCata then
 		B.ReskinRotationButtons(CharacterModelFrame)
-		B.ReskinDropDown(PlayerStatFrameLeftDropDown)
-		B.ReskinDropDown(PlayerStatFrameRightDropDown)
-		B.ReskinDropDown(PlayerTitleDropDown)
-		PlayerTitleDropDownText:SetPoint("LEFT", 27, 2)
+		B.ReskinDropDown(PlayerStatFrameLeftDropdown)
+		B.ReskinDropDown(PlayerStatFrameRightDropdown)
+		B.ReskinDropDown(PlayerTitleDropdown)
+		PlayerTitleDropdown.Text:SetPoint("LEFT", 27, 2) -- needs review
 
 		B.StripTextures(CharacterAttributesFrame)
 		local bg = B.CreateBDFrame(CharacterAttributesFrame, .25)
@@ -365,12 +363,12 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(ReputationDetailFrame)
 	B.SetBD(ReputationDetailFrame)
 	B.ReskinClose(ReputationDetailCloseButton)
-	B.ReskinCheck(ReputationDetailInactiveCheckBox)
-	B.ReskinCheck(ReputationDetailMainScreenCheckBox)
+	B.ReskinCheck(ReputationDetailInactiveCheckbox)
+	B.ReskinCheck(ReputationDetailMainScreenCheckbox)
 	B.ReskinScroll(ReputationListScrollFrameScrollBar)
 	select(3, ReputationDetailFrame:GetRegions()):Hide()
 
-	local atWarCheck = ReputationDetailAtWarCheckBox
+	local atWarCheck = ReputationDetailAtWarCheckbox
 	B.ReskinCheck(atWarCheck)
 	local atWarCheckTex = atWarCheck:GetCheckedTexture()
 	atWarCheckTex:ClearAllPoints()
@@ -602,8 +600,8 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(TokenFramePopup)
 	B.SetBD(TokenFramePopup)
 	B.ReskinClose(TokenFramePopupCloseButton)
-	B.ReskinCheck(TokenFramePopupInactiveCheckBox)
-	B.ReskinCheck(TokenFramePopupBackpackCheckBox)
+	B.ReskinCheck(TokenFramePopupInactiveCheckbox)
+	B.ReskinCheck(TokenFramePopupBackpackCheckbox)
 	B.ReskinScroll(TokenFrameContainerScrollBar)
 
 	local function updateButtons()

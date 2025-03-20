@@ -2284,11 +2284,11 @@ Action.GetSpellId              = function(self)
 	end
 end
 Action.GetLossOfControlCooldown = function(self) return GetActionLossOfControlCooldown(self._state_action) end
-if C_UnitAuras then
+if C_UnitAuras and C_UnitAuras.GetCooldownAuraBySpellID and C_ActionBar and C_ActionBar.GetItemActionOnEquipSpellID then
 	Action.GetPassiveCooldownSpellID = function(self)
 		local _actionType, actionID = GetActionInfo(self._state_action)
 		local onEquipPassiveSpellID
-		if actionID and not WoWCata then
+		if actionID then
 			onEquipPassiveSpellID = C_ActionBar.GetItemActionOnEquipSpellID(self._state_action)
 		end
 		if onEquipPassiveSpellID then

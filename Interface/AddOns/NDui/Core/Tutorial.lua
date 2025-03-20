@@ -373,10 +373,6 @@ SlashCmdList["NDUI"] = HelloWorld
 SLASH_NDUI1 = "/ndui"
 
 function module:OnLogin()
-	-- Hide options
-	B.HideOption(Advanced_UseUIScale)
-	B.HideOption(Advanced_UIScaleSlider)
-
 	-- Tutorial and settings
 	ForceAddonSkins()
 	if not C.db["Tutorial"]["Complete"] then HelloWorld() end

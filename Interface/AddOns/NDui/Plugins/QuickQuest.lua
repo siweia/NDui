@@ -12,7 +12,7 @@ local created
 local function setupCheckButton()
 	if created then return end
 
-	local mono = CreateFrame("CheckButton", nil, WorldMapFrame, "OptionsCheckButtonTemplate")
+	local mono = CreateFrame("CheckButton", nil, WorldMapFrame, "OptionsBaseCheckButtonTemplate")
 	mono:SetHitRectInsets(-5, -5, -5, -5)
 	mono:SetPoint("TOPRIGHT", -140, 0)
 	mono:SetSize(26, 26)
