@@ -30,7 +30,6 @@ C.themes["Blizzard_BarbershopUI"] = function()
 	B.Reskin(BarberShopFrameOkayButton)
 	B.Reskin(BarberShopFrameCancelButton)
 	B.Reskin(BarberShopFrameResetButton)
-	BarberShopFrameMoneyFrame:GetRegions():Hide()
 
 	for i = 1, BarberShopFrame:GetNumChildren() do
 		local child = select(i, BarberShopFrame:GetChildren())
