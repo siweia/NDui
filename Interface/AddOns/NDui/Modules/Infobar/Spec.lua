@@ -18,15 +18,17 @@ info.eventList = {
 
 info.onEvent = function(self)
 	local text = ""
+	local higher = 0
 	for i = 1, 5 do
 		local _, name, _, _, pointsSpent = GetTalentTabInfo(i)
 		if not name then break end
-		text = text.."-"..pointsSpent
+		if pointsSpent > higher then
+			higher = pointsSpent
+			text = name
+		end
 	end
 	if text == "" then
 		text = NONE
-	else
-		text = strsub(text, 2)
 	end
 	local points = UnitCharacterPoints("player")
 	if points > 0 then
