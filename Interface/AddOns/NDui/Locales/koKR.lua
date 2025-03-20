@@ -362,6 +362,7 @@ L["Details Skin"] = "Details스킨 사용"
 L["Reset to default list"] = "기본리스트를 로딩하시겠습니까?"
 L["Flash"] = "밝음"
 L["Flash Intro"] = "|n스킬이 활성화 시 아니콘이 밝음으로 표시."
+L["Show SpecLevelByShift"] = "Show iLvl by SHIFT" -- need translation
 L["Instance Type"] = "|n추가하려는 ID가 속한 던전유형을 선택.|n|n오리지널 버전과 던전외 데이타는 공대-기타 사항에 있음."
 L["Dungeons Intro"] = "|n추가하려는 ID가 속한 던전을 선택하세요."
 L["Raid Intro"] = "|n추가하려는 ID가 속한 레이드던전을 선택하세요."

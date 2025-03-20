@@ -479,6 +479,7 @@ G.DefaultSettings = {
 		FactionIcon = true,
 		TargetBy = true,
 		Scale = 1,
+		SpecLevelByShift = true,
 		HideRealm = false,
 		HideTitle = false,
 		HideJunkGuild = true,
@@ -1379,7 +1380,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "HideRealm", L["Hide Realm"].."*"},
 		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*", true},
 		{1, "Tooltip", "ItemQuality", L["ShowItemQuality"].."*"},
-		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"], true},
+		{1, "Tooltip", "SpecLevelByShift", NewTag..L["Show SpecLevelByShift"].."*", true},
+		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"]},
 	},
 	[13] = {
 		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemQuality"]},

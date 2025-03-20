@@ -241,6 +241,10 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
+	if isPlayer then
+		TT.InspectUnitItemLevel(self, unit)
+	end
+
 	self.StatusBar:SetStatusBarColor(r, g, b)
 end
 
