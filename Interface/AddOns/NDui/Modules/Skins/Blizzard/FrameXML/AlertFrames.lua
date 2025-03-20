@@ -60,7 +60,7 @@ tinsert(C.defaultThemes, function()
 				B.ReskinIcon(frame.Icon.Texture)
 
 				frame.GuildBanner:SetTexture("")
-				frame.OldAchievement:SetTexture("")
+				if frame.OldAchievement then frame.OldAchievement:SetTexture("") end
 				frame.GuildBorder:SetTexture("")
 				frame.Icon.Bling:SetTexture("")
 			end
