@@ -277,6 +277,7 @@ function module:RemoveMapFog()
 	bu:SetPoint("TOPLEFT", 20, 0)
 	bu:SetSize(26, 26)
 	B.ReskinCheck(bu)
+	bu.__bg = true
 	bu:SetChecked(C.db["Map"]["MapReveal"])
 	bu.text = B.CreateFS(bu, 14, L["Map Reveal"], false, "LEFT", 25, 0)
 
