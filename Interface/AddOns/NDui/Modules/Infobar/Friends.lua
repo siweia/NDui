@@ -10,7 +10,7 @@ local C_Timer_After = C_Timer.After
 local C_FriendList_GetNumFriends = C_FriendList.GetNumFriends
 local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
-local BNet_GetClientEmbeddedAtlas, FriendsFrame_GetFormattedCharacterName = BNet_GetClientEmbeddedAtlas, FriendsFrame_GetFormattedCharacterName
+local FriendsFrame_GetFormattedCharacterName = FriendsFrame_GetFormattedCharacterName
 local BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor = BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor
 local HybridScrollFrame_GetOffset, HybridScrollFrame_Update = HybridScrollFrame_GetOffset, HybridScrollFrame_Update
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
@@ -35,13 +35,6 @@ local noteString = "|T"..DB.copyTex..":12|t %s"
 local broadcastString = "|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)"
 local onlineString = gsub(ERR_FRIEND_ONLINE_SS, ".+h", "")
 local offlineString = gsub(ERR_FRIEND_OFFLINE_S, "%%s", "")
-
--- BNet_GetClientEmbeddedAtlas return incorrect texture for some clients
-local function GetClientLogo(client, size)
-	size = size or 0
-	local atlas = BNet_GetClientAtlas("Battlenet-ClientIcon-", client)
-	return CreateAtlasMarkup(atlas, size, size, 0, 0)
-end
 
 local menuList = {
 	[1] = {text = L["Join or Invite"], isTitle = true, notCheckable = true}
@@ -351,7 +344,7 @@ local function buttonOnEnter(self)
 			local level = gameAccountInfo.characterLevel
 			local gameText = gameAccountInfo.richPresence or ""
 			local wowProjectID = gameAccountInfo.wowProjectID
-			local clientString = GetClientLogo(client, 16)
+			local clientString = ""
 			local timerunningSeasonID = gameAccountInfo.timerunningSeasonID
 			if client == BNET_CLIENT_WOW then
 				if charName ~= "" then -- fix for weird account
@@ -381,6 +374,13 @@ local function buttonOnEnter(self)
 					GameTooltip:AddLine(format("%s%s", inactiveZone, zoneName))
 				end
 			else
+				if C_Texture.IsTitleIconTextureReady(client, Enum.TitleIconVersion.Small) then
+					C_Texture.GetTitleIconTexture(client, Enum.TitleIconVersion.Small, function(success, texture)
+						if success then
+							clientString = BNet_GetClientEmbeddedTexture(texture, 32, 32, 0)
+						end
+					end)
+				end
 				GameTooltip:AddLine(format("|cffffffff%s%s", clientString, accountName))
 				if gameText ~= "" then
 					GameTooltip:AddLine(format("%s%s", inactiveZone, gameText))
