@@ -331,6 +331,7 @@ C.themes["Blizzard_Collections"] = function()
 	B.StripTextures(WardrobeTransmogFrame)
 	B.Reskin(WardrobeTransmogFrame.ApplyButton)
 	B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+	WardrobeTransmogFrame.Model.ClearAllPendingButton:DisableDrawLayer("BACKGROUND")
 
 	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand", "Ranged"}
 	for i = 1, #slots do
