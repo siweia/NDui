@@ -1774,7 +1774,7 @@ do
 
 	local function cancelPicker()
 		local swatch = ColorPickerFrame.__swatch
-		local r, g, b = ColorPicker_GetPreviousValues()
+		local r, g, b = ColorPickerFrame:GetPreviousValues()
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b = r, g, b
 	end
@@ -1782,7 +1782,7 @@ do
 	local function openColorPicker(self)
 		local r, g, b = self.color.r, self.color.g, self.color.b
 		ColorPickerFrame.__swatch = self
-		ColorPickerFrame.func = updatePicker
+		ColorPickerFrame.swatchFunc = updatePicker
 		ColorPickerFrame.previousValues = {r = r, g = g, b = b}
 		ColorPickerFrame.cancelFunc = cancelPicker
 		ColorPickerFrame:SetColorRGB(r, g, b)
