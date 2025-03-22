@@ -746,10 +746,11 @@ function module:OnLogin()
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 6, "AmmoItem", filters.bagAmmo)
+		AddNewContainer("Bag", 8, "BagBOE", filters.bagBOE)
 		AddNewContainer("Bag", 7, "Equipment", filters.bagEquipment)
-		AddNewContainer("Bag", 9, "Consumable", filters.bagConsumable)
-		AddNewContainer("Bag", 8, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 10, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 10, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 9, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 11, "BagQuest", filters.bagQuest)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
@@ -767,10 +768,11 @@ function module:OnLogin()
 		end
 		AddNewContainer("Bank", 6, "bankAmmoItem", filters.bankAmmo)
 		AddNewContainer("Bank", 8, "BankLegendary", filters.bankLegendary)
+		AddNewContainer("Bank", 9, "BankBOE", filters.bankBOE)
 		AddNewContainer("Bank", 7, "BankEquipment", filters.bankEquipment)
-		AddNewContainer("Bank", 10, "BankConsumable", filters.bankConsumable)
-		AddNewContainer("Bank", 9, "BankGoods", filters.bankGoods)
-		AddNewContainer("Bank", 11, "BankQuest", filters.bankQuest)
+		AddNewContainer("Bank", 11, "BankConsumable", filters.bankConsumable)
+		AddNewContainer("Bank", 10, "BankGoods", filters.bankGoods)
+		AddNewContainer("Bank", 12, "BankQuest", filters.bankQuest)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
@@ -1033,6 +1035,8 @@ function module:OnLogin()
 			label = QUESTS_LABEL
 		elseif strmatch(name, "Custom%d") then
 			label = GetCustomGroupTitle(settings.Index)
+		elseif strmatch(name, "BOE") then
+			label = ITEM_BIND_ON_EQUIP
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)

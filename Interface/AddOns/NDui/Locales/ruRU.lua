@@ -523,6 +523,7 @@ L["FilterLegendary"] = "Фильтр легендарок"
 L["FilterFavourite"] = "Фильтр предпочтительного"
 L["FilterGoods"] = "Фильтр хозяйственных товаров"
 L["FilterQuest"] = "Фильтр квестовых предметов"
+L["FilterBOE"] = "Filter BOE items" -- need translation
 L["EnhancedTradeSkills"] = "Улучшенное окно профессий"
 L["SmoothAmount"] = "Частота плавности"
 L["SmoothAmountTip"] = "|nНастраивает частоту плавности для полос здоровья.|nЧем меньше, тем плавнее."
