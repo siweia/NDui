@@ -923,3 +923,4 @@ L["LeaderOnly"] = "Leader alert only" -- need translation
 L["LeaderOnlyTip"] = "|nIf enabled, notifications only send by leader or assistant." -- need translation
 L["SingingSocket"] = "Siren ring enhanced" -- need translation
 L["SingingSocketTip"] = "|nIf enabled, add a quick singing sockets selection tool onto Siren ring panel." -- need translation
+L["CPU Usage Warning"] = "You are using CPU Profiling. This causes decreased performance. Do you want to disable it or continue?" -- need translation

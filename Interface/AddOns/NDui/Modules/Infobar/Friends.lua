@@ -10,7 +10,7 @@ local C_Timer_After = C_Timer.After
 local C_FriendList_GetNumFriends = C_FriendList.GetNumFriends
 local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
-local BNet_GetClientEmbeddedAtlas, BNet_GetBattlenetClientAtlas, FriendsFrame_GetFormattedCharacterName = BNet_GetClientEmbeddedAtlas, BNet_GetBattlenetClientAtlas, FriendsFrame_GetFormattedCharacterName
+local FriendsFrame_GetFormattedCharacterName = FriendsFrame_GetFormattedCharacterName
 local BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor = BNGetNumFriends, GetRealZoneText, GetQuestDifficultyColor
 local HybridScrollFrame_GetOffset, HybridScrollFrame_Update = HybridScrollFrame_GetOffset, HybridScrollFrame_Update
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
@@ -344,7 +344,7 @@ local function buttonOnEnter(self)
 			local level = gameAccountInfo.characterLevel
 			local gameText = gameAccountInfo.richPresence or ""
 			local wowProjectID = gameAccountInfo.wowProjectID
-			local clientString = BNet_GetClientEmbeddedAtlas(client, 16)
+			local clientString = ""
 			local timerunningSeasonID = gameAccountInfo.timerunningSeasonID
 			if client == BNET_CLIENT_WOW then
 				if charName ~= "" then -- fix for weird account
@@ -374,6 +374,13 @@ local function buttonOnEnter(self)
 					GameTooltip:AddLine(format("%s%s", inactiveZone, zoneName))
 				end
 			else
+				if C_Texture.IsTitleIconTextureReady(client, Enum.TitleIconVersion.Small) then
+					C_Texture.GetTitleIconTexture(client, Enum.TitleIconVersion.Small, function(success, texture)
+						if success then
+							clientString = BNet_GetClientEmbeddedTexture(texture, 32, 32, 0)
+						end
+					end)
+				end
 				GameTooltip:AddLine(format("|cffffffff%s%s", clientString, accountName))
 				if gameText ~= "" then
 					GameTooltip:AddLine(format("%s%s", inactiveZone, gameText))
@@ -454,7 +461,6 @@ function info:FriendsPanel_UpdateButton(button)
 		button.name:SetText(format("%s%s|r %s%s", levelColor, level, B.HexRGB(classColor), name))
 		button.zone:SetText(format("%s%s", zoneColor, area))
 		C_Texture.SetTitleIconTexture(button.gameIcon, BNET_CLIENT_WOW, Enum.TitleIconVersion.Medium)
-		--button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(BNET_CLIENT_WOW))
 
 		button.isBNet = nil
 		button.data = friendTable[index]
@@ -475,12 +481,10 @@ function info:FriendsPanel_UpdateButton(button)
 
 		if client == CLIENT_WOW_DIFF then
 			C_Texture.SetTitleIconTexture(button.gameIcon, BNET_CLIENT_WOW, Enum.TitleIconVersion.Medium)
-			--button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(BNET_CLIENT_WOW))
 		elseif client == BNET_CLIENT_WOW then
 			button.gameIcon:SetTexture("Interface\\FriendsFrame\\PlusManz-"..factionName)
 		else
 			C_Texture.SetTitleIconTexture(button.gameIcon, client, Enum.TitleIconVersion.Medium)
-			--button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(client))
 		end
 
 		button.isBNet = true

@@ -178,6 +178,16 @@ function INFO:GetTooltipAnchor(info)
 	end
 end
 
+StaticPopupDialogs["CPUUSAGE_WARNING"] = {
+	text = L["CPU Usage Warning"],
+	button1 = DISABLE,
+	button2 = CONTINUE,
+	OnAccept = function() SetCVar("scriptProfile", 0) ReloadUI() end,
+	showAlert = 1,
+	whileDead = 1,
+	hideOnEscape = false,
+}
+
 function INFO:OnLogin()
 	if NDuiADB["DisableInfobars"] then return end
 
@@ -189,4 +199,8 @@ function INFO:OnLogin()
 	INFO:BackgroundLines()
 	INFO:UpdateInfobarSize()
 	INFO:Infobar_UpdateAnchor()
+
+	if GetCVarBool("scriptProfile") then
+		StaticPopup_Show("CPUUSAGE_WARNING")
+	end
 end
