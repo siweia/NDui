@@ -133,7 +133,7 @@ G.DefaultSettings = {
 		FilterGoods = false,
 		FilterQuest = false,
 		FilterEquipSet = false,
-		FilterBOE = true,
+		FilterBOE = false,
 	},
 	Auras = {
 		Reminder = true,
