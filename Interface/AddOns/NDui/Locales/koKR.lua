@@ -539,6 +539,7 @@ L["FilterCollection"] = "Filter collections"
 L["FilterFavourite"] = "나의 필터링"
 L["FilterGoods"] = "재료등 잡템 필터링"
 L["FilterQuest"] = "퀘템 필터링"
+L["FilterBOE"] = "Filter BOE items" -- need translation
 L["EnhancedTradeSkills"] = "전문스킬과 마부창 확장"
 L["SmoothAmount"] = "부드러운 프레임 변화"
 L["SmoothAmountTip"] = "|n유닛프레임과 네임플레이트의 체력등의 프레임 변화를 조절합니다.|n프레임이 높을 수록 부드러움이 감소합니다."
