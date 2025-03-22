@@ -31,17 +31,17 @@ function M:RaidTool_Header()
 	B.CreateFS(frame, 14, L["Raid Tool"], true)
 	B.Mover(frame, L["Raid Tool"], "RaidManager", C.Skins.RMPos)
 
-	-- Fake icon
+	--[[ Fake icon
 	local left = CreateFrame("Frame", nil, frame)
 	left:SetPoint("RIGHT", frame, "LEFT", -3, 0)
 	left:SetSize(28, 28)
 	B.ReskinMenuButton(left)
-	local leftString = B.CreateFS(left, 14, GetNumGroupMembers(), true)
+	local leftString = B.CreateFS(left, 14, GetNumGroupMembers(), true)]]
 
 	M:RaidTool_Visibility(frame)
 	B:RegisterEvent("GROUP_ROSTER_UPDATE", function()
 		M:RaidTool_Visibility(frame)
-		leftString:SetText(GetNumGroupMembers())
+		--leftString:SetText(GetNumGroupMembers())
 	end)
 
 	frame:RegisterForClicks("AnyUp")
@@ -277,6 +277,7 @@ function M:RaidTool_Marker(parent)
 		end
 	end
 	if markerButton then
+		B.StripTextures(markerButton)
 		markerButton:ClearAllPoints()
 		markerButton:SetPoint("RIGHT", parent, "LEFT", -3, 0)
 		markerButton:SetParent(parent)
@@ -596,15 +597,14 @@ local iconTexture = {
 	"Interface\\TargetingFrame\\UI-RaidTargetingIcon_3",
 	"Interface\\TargetingFrame\\UI-RaidTargetingIcon_7",
 	"Interface\\TargetingFrame\\UI-RaidTargetingIcon_1",
-	--"Interface\\TargetingFrame\\UI-RaidTargetingIcon_2",
-	--"Interface\\TargetingFrame\\UI-RaidTargetingIcon_5",
-	--"Interface\\TargetingFrame\\UI-RaidTargetingIcon_8",
+	"Interface\\TargetingFrame\\UI-RaidTargetingIcon_2",
+	"Interface\\TargetingFrame\\UI-RaidTargetingIcon_5",
+	"Interface\\TargetingFrame\\UI-RaidTargetingIcon_8",
 	"Interface\\Buttons\\UI-GroupLoot-Pass-Up",
 }
 local maxButtons = #iconTexture
 
 function M:RaidTool_WorldMarker()
-
 	local frame = CreateFrame("Frame", "NDui_WorldMarkers", UIParent)
 	frame:SetPoint("RIGHT", -100, 0)
 	B.CreateMF(frame, nil, true)
@@ -681,7 +681,7 @@ function M:RaidTool_Init()
 	--M:RaidTool_RoleCount(frame)
 	--M:RaidTool_CombatRes(frame)
 	M:RaidTool_ReadyCheck(frame)
-	--M:RaidTool_Marker(frame)
+	M:RaidTool_Marker(frame)
 	M:RaidTool_BuffChecker(frame)
 	M:RaidTool_CreateMenu(frame)
 
