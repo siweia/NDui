@@ -272,7 +272,7 @@ function module:MapData_ResetTexturePool(texture)
 end
 
 function module:RemoveMapFog()
-	local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsBaseCheckButtonTemplate")
+	local bu = CreateFrame("CheckButton", nil, WorldMapFrame, "OptionsBaseCheckButtonTemplate")
 	bu:SetHitRectInsets(-5, -5, -5, -5)
 	bu:SetPoint("TOPLEFT", 20, 0)
 	bu:SetSize(26, 26)
