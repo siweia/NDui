@@ -130,6 +130,9 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 
 	B.Modules = modules
 
+	C_CVar.RegisterCVar("addonProfilerEnabled", 1)
+	C_CVar.SetCVar("addonProfilerEnabled", 0)
+
 	if B.InitCallback then B:InitCallback() end
 end)
 
