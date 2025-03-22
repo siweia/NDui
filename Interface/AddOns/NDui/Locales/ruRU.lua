@@ -923,3 +923,4 @@ L["LeaderOnly"] = "Только от РЛ"
 L["LeaderOnlyTip"] = "|nЕсли включено, уведомления отправляются только рл или ра."
 L["SingingSocket"] = "Улучшение Перстеня Цирци" 
 L["SingingSocketTip"] = "|nЕсли включено, добавляет инструмент для быстрой установки сокетов в Перстень Цирци"
+L["CPU Usage Warning"] = "You are using CPU Profiling. This causes decreased performance. Do you want to disable it or continue?" -- need translation
