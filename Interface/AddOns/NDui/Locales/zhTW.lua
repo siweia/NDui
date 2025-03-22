@@ -859,6 +859,7 @@ L["KeyDown"] = "按下快捷列施法"
 L["ButtonLock"] = "鎖定快捷列"
 L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
 L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
+L["CPU Usage Warning"] = "你打開了CPU使用記錄，這會導致性能下降，你想禁用它還是繼續？"
 L["SortByRole"] = "按職責排序"
 L["SortByRoleTip"] = "|n勾選後，按職責對小隊成員進行排序。否則按小隊成員編號排序。"
 L["SortAscending"] = "升序排序"
