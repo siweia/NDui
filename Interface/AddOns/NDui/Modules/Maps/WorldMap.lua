@@ -279,6 +279,7 @@ function module:RemoveMapFog()
 	B.ReskinCheck(bu)
 	bu:SetChecked(C.db["Map"]["MapReveal"])
 	bu.text = B.CreateFS(bu, 14, L["Map Reveal"], false, "LEFT", 25, 0)
+	bu:SetFrameLevel(3)
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate("MapExplorationPinTemplate") do
 		hooksecurefunc(pin, "RefreshOverlays", module.MapData_RefreshOverlays)
@@ -321,6 +322,7 @@ function module:SetupWorldMap()
 	end)
 
 	B.CreateMF(WorldMapFrame, nil, true)
+	B.CreateMF(WorldMapTitleButton, WorldMapFrame, true)
 	self.UpdateMapScale(WorldMapFrame)
 	WorldMapFrame:HookScript("OnShow", self.UpdateMapAnchor)
 	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
