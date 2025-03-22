@@ -863,6 +863,7 @@ L["KeyDown"] = "Cast on keydown"
 L["ButtonLock"] = "Lock actionbars"
 L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
 L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
+L["CPU Usage Warning"] = "You are using CPU Profiling. This causes decreased performance. Do you want to disable it or continue?"
 L["SortByRole"] = "Sort by role"
 L["SortByRoleTip"] = "|nIf checked, sort party members by role.|n|nIf unchecked, sort party members by index."
 L["SortAscending"] = "Sort Ascending"
