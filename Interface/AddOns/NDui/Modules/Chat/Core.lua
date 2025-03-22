@@ -136,6 +136,10 @@ function module:SkinChat()
 	B.StripTextures(tab, 7)
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
+	local minimize = _G[name.."MinimizeButton"]
+	if minimize then
+		B.HideObject(minimize)
+	end
 	B.HideObject(self.buttonFrame)
 	--B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
