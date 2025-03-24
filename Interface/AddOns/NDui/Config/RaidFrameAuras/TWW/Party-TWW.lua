@@ -46,6 +46,7 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 432031) -- 抓握之血(BOSS战)
 
 INSTANCE = 1267 -- 圣焰隐修院
 module:RegisterSeasonSpells(TIER, INSTANCE)
+module:RegisterDebuff(TIER, INSTANCE, 0, 446403) -- 牺牲烈焰
 
 INSTANCE = 1210 -- 暗焰裂口
 module:RegisterSeasonSpells(TIER, INSTANCE)
