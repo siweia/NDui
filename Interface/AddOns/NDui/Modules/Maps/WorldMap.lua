@@ -286,7 +286,16 @@ function module:SetupWorldMap()
 	self:RemoveMapFog()
 end
 
+function module:MapFunc()
+	WorldMapFrame:SetAttribute("UIPanelLayout-area", nil)
+	WorldMapFrame:SetAttribute("UIPanelLayout-enabled", false)
+	WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
+	tinsert(UISpecialFrames, "WorldMapFrame")
+	B:UnregisterEvent("PLAYER_ENTERING_WORLD", self.MapFunc)
+end
+
 function module:OnLogin()
 	self:SetupWorldMap()
 	self:SetupMinimap()
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", self.MapFunc)
 end
