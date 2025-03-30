@@ -825,3 +825,4 @@ L["HideInCombat"] = "Hide in combat" -- need translation
 L["HideInCombatTip"] = "|nSelect the way to hide GameTooltip in combat.|nGameTooltip only visible when you hold the modified key you selected." -- need translation
 L["MoreFontSize"] = "More font size" -- need translation
 L["EditFont"] = "Editbox fontsize" -- need translation
+L["SortByRole"] = "Сортировать по роли"
