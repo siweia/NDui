@@ -451,7 +451,7 @@ function UF:OnLogin()
 				"showSolo", true,
 				"showParty", true,
 				"showRaid", true,
-				"sortMethod", "NAME",
+				"sortMethod", "INDEX",
 				"columnAnchorPoint", "LEFT",
 				"oUF-initialConfigFunction", ([[
 					self:SetWidth(%d)
@@ -460,14 +460,13 @@ function UF:OnLogin()
 				return group
 			end
 
-			local ascRole = "TANK,HEALER,DAMAGER,NONE"
-			local descRole = "NONE,DAMAGER,HEALER,TANK"
-
 			function UF:CreateAndUpdatePartyHeader()
 				local index = C.db["UFs"]["PartyDirec"]
 				local sortData = UF.PartyDirections[index]
 				local partyWidth, partyHeight = C.db["UFs"]["PartyWidth"], C.db["UFs"]["PartyHeight"]
 				local partyFrameHeight = partyHeight + C.db["UFs"]["PartyPowerHeight"] + C.mult
+				local spacing = C.db["UFs"]["PartySpacing"]
+				local SortByRole = C.db["UFs"]["SortByRole"]
 
 				if not party then
 					party = CreatePartyHeader("oUF_Party", partyWidth, partyFrameHeight)
@@ -477,18 +476,18 @@ function UF:OnLogin()
 					partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0})
 				end
 
-				local moverWidth = index < 3 and partyWidth or (partyWidth+5)*5-5
-				local moverHeight = index < 3 and (partyFrameHeight+5)*5-5 or partyFrameHeight
+				local moverWidth = index < 3 and partyWidth or (partyWidth+spacing)*5-spacing
+				local moverHeight = index < 3 and (partyFrameHeight+spacing)*5-spacing or partyFrameHeight
 				partyMover:SetSize(moverWidth, moverHeight)
 				party:ClearAllPoints()
 				party:SetPoint(sortData.initAnchor, partyMover)
 
 				ResetHeaderPoints(party)
 				party:SetAttribute("point", sortData.point)
-				party:SetAttribute("xOffset", sortData.xOffset)
-				party:SetAttribute("yOffset", sortData.yOffset)
-				party:SetAttribute("groupingOrder", C.db["UFs"]["DescRole"] and descRole or ascRole)
-				party:SetAttribute("groupBy", "ASSIGNEDROLE")
+				party:SetAttribute("xOffset", sortData.xOffset/5*spacing)
+				party:SetAttribute("yOffset", sortData.yOffset/5*spacing)
+				party:SetAttribute("groupingOrder", "TANK,HEALER,DAMAGER,NONE")
+				party:SetAttribute("groupBy", SortByRole and "ASSIGNEDROLE")
 			end
 
 			UF:CreateAndUpdatePartyHeader()
