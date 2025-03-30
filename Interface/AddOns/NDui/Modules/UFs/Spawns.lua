@@ -668,6 +668,7 @@ function UF:OnLogin()
 				local raidWidth, raidHeight = C.db["UFs"]["RaidWidth"], C.db["UFs"]["RaidHeight"]
 				local raidFrameHeight = raidHeight + C.db["UFs"]["RaidPowerHeight"] + C.mult
 				local indexSpacing = C.db["UFs"]["TeamIndex"] and 20 or 0
+				local spacing = C.db["UFs"]["RaidSpacing"]
 
 				local sortData = UF.RaidDirections[index]
 				for i = 1, numGroups do
@@ -688,29 +689,29 @@ function UF:OnLogin()
 						raidMover = B.Mover(groups[i], L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50})
 					end
 
-					local groupWidth = index < 5 and raidWidth+5 or (raidWidth+5)*5
-					local groupHeight = index < 5 and (raidFrameHeight+5)*5 or raidFrameHeight+5
+					local groupWidth = index < 5 and raidWidth+spacing or (raidWidth+spacing)*5
+					local groupHeight = index < 5 and (raidFrameHeight+spacing)*5 or raidFrameHeight+spacing
 					local numX = ceil(numGroups/rows)
 					local numY = min(rows, numGroups)
 					local indexSpacings = indexSpacing*(numY-1)
 					if index < 5 then
-						raidMover:SetSize(groupWidth*numX - 5, groupHeight*numY - 5 + indexSpacings)
+						raidMover:SetSize(groupWidth*numX - spacing, groupHeight*numY - spacing + indexSpacings)
 					else
-						raidMover:SetSize(groupWidth*numY - 5 + indexSpacings, groupHeight*numX - 5)
+						raidMover:SetSize(groupWidth*numY - spacing + indexSpacings, groupHeight*numX - spacing)
 					end
 
-					if direction then
+					--if direction then
 						ResetHeaderPoints(group)
 						group:SetAttribute("point", sortData.point)
-						group:SetAttribute("xOffset", sortData.xOffset)
-						group:SetAttribute("yOffset", sortData.yOffset)
-					end
+						group:SetAttribute("xOffset", sortData.xOffset/5*spacing)
+						group:SetAttribute("yOffset", sortData.yOffset/5*spacing)
+					--end
 
 					group:ClearAllPoints()
 					if i == 1 then
 						group:SetPoint(sortData.initAnchor, raidMover)
 					elseif (i-1) % rows == 0 then
-						group:SetPoint(sortData.initAnchor, groups[i-rows], sortData.relAnchor, sortData.x, sortData.y)
+						group:SetPoint(sortData.initAnchor, groups[i-rows], sortData.relAnchor, sortData.x/5*spacing, sortData.y/5*spacing)
 					else
 						local x = floor((i-1)/rows)
 						local y = (i-1)%rows
