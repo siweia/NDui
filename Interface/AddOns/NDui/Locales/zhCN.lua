@@ -863,3 +863,4 @@ L["KeyDown"] = "按下快捷键施法"
 L["ButtonLock"] = "锁定动作条"
 L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
 L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
+L["SortByRole"] = "按职责排序"

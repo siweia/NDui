@@ -214,6 +214,7 @@ G.DefaultSettings = {
 		PartyWidth = 100,
 		PartyHeight = 32,
 		PartyPowerHeight = 2,
+		PartySpacing = 5,
 		PartyPetFrame = false,
 		PartyPetWidth = 100,
 		PartyPetHeight = 22,
@@ -243,6 +244,7 @@ G.DefaultSettings = {
 		RCCName = true,
 		HideTip = false,
 		LibHealComm = false,
+		SortByRole = true,
 		AutoBuffs = false,
 		ShowRoleMode = 1,
 
@@ -1155,9 +1157,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "FCTFontSize", L["FCTFontSize"].."*", true, {12, 40, 1}, updateScrollingFont},
 	},
 	[4] = {
-		{1, "UFs", "RaidFrame", IsNew..HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
+		{1, "UFs", "RaidFrame", NewTag..HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
 		{1, "UFs", "SimpleMode", L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
-		{1, "UFs", "PartyFrame", L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
+		{1, "UFs", "PartyFrame", NewTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
 		{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},

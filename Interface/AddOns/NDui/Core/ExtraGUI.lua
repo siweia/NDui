@@ -1175,7 +1175,7 @@ function G:SetupRaidFrame(parent)
 	createOptionSlider(scroll.child, L["Power Height"], 0, 30, defaultValue[3], -260, "RaidPowerHeight", resizeRaidFrame)
 	createOptionSlider(scroll.child, L["Num Groups"], 2, 8, defaultValue[4], -340, "NumGroups", updateNumGroups)
 	createOptionSlider(scroll.child, L["RaidRows"], 1, 8, defaultValue[5], -420, "RaidRows", updateNumGroups)
-	createOptionSlider(scroll.child, L["Spacing"], 0, 5, defaultValue[6], -500, "RaidSpacing", updateNumGroups)
+	createOptionSlider(scroll.child, L["Spacing"], 0, 10, defaultValue[6], -500, "RaidSpacing", updateNumGroups)
 end
 
 function G:SetupSimpleRaidFrame(parent)
@@ -1242,15 +1242,17 @@ function G:SetupPartyFrame(parent)
 		end
 	end
 
-	local defaultValue = {100, 32, 2}
+	local defaultValue = {100, 32, 2, 5}
 	local options = {}
 	for i = 1, 4 do
 		options[i] = UF.PartyDirections[i].name
 	end
-	createOptionDropdown(scroll.child, L["GrowthDirection"], -30, options, nil, "UFs", "PartyDirec", 1, resizePartyFrame)
-	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -100, "PartyWidth", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -180, "PartyHeight", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Power Height"], 0, 30, defaultValue[3], -260, "PartyPowerHeight", resizePartyFrame)
+	createOptionCheck(scroll.child, -10, L["SortByRole"], "UFs", "SortByRole", resizePartyFrame)
+	createOptionDropdown(scroll.child, L["GrowthDirection"], -70, options, nil, "UFs", "PartyDirec", 1, resizePartyFrame)
+	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -150, "PartyWidth", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -230, "PartyHeight", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 0, 30, defaultValue[3], -310, "PartyPowerHeight", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Spacing"], 0, 10, defaultValue[4], -390, "PartySpacing", resizePartyFrame)
 end
 
 function G:SetupPartyPetFrame(parent)
