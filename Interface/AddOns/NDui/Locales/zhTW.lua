@@ -826,3 +826,6 @@ L["HideInCombatTip"] = "|n選擇戰鬥中隱藏滑鼠提示的方式。|n當切�
 L["MoreFontSize"] = "更多字體大小"
 L["EditFont"] = "輸入框字體大小"
 L["SortByRole"] = "按職責排序"
+L["SortByRoleTip"] = "|n勾選後，按職責對小隊成員進行排序。否則按小隊成員編號排序。"
+L["SortAscending"] = "升序排序"
+L["SortAscendingTip"] = "|n勾選後，按升序對小隊成員進行排序。否則按降序排序。"

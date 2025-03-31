@@ -826,3 +826,6 @@ L["HideInCombatTip"] = "|nSelect the way to hide GameTooltip in combat.|nGameToo
 L["MoreFontSize"] = "More font size" -- need translation
 L["EditFont"] = "Editbox fontsize" -- need translation
 L["SortByRole"] = "Сортировать по роли"
+L["SortByRoleTip"] = "|nIf checked, sort party members by role.|n|nIf unchecked, sort party members by index." -- need translation
+L["SortAscending"] = "Sort Ascending" -- need translation
+L["SortAscendingTip"] = "|nIf checked, sort party members by ascending order.|n|nIf unchecked, sort party members by descending order." -- need translation
