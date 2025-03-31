@@ -923,3 +923,6 @@ L["SingingSocket"] = "Улучшение Перстеня Цирци"
 L["SingingSocketTip"] = "|nЕсли включено, добавляет инструмент для быстрой установки сокетов в Перстень Цирци"
 L["CPU Usage Warning"] = "You are using CPU Profiling. This causes decreased performance. Do you want to disable it or continue?" -- need translation
 L["SortByRole"] = "Сортировать по роли"
+L["SortByRoleTip"] = "|nIf checked, sort party members by role.|n|nIf unchecked, sort party members by index." -- need translation
+L["SortAscending"] = "Sort Ascending" -- need translation
+L["SortAscendingTip"] = "|nIf checked, sort party members by ascending order.|n|nIf unchecked, sort party members by descending order." -- need translation

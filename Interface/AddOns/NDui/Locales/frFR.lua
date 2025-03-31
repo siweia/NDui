@@ -923,3 +923,6 @@ L["SingingSocket"] = "Siren ring enhanced" -- need translation
 L["SingingSocketTip"] = "|nIf enabled, add a quick singing sockets selection tool onto Siren ring panel." -- need translation
 L["CPU Usage Warning"] = "You are using CPU Profiling. This causes decreased performance. Do you want to disable it or continue?" -- need translation
 L["SortByRole"] = "Sort by role" -- need translation
+L["SortByRoleTip"] = "|nIf checked, sort party members by role.|n|nIf unchecked, sort party members by index." -- need translation
+L["SortAscending"] = "Sort Ascending" -- need translation
+L["SortAscendingTip"] = "|nIf checked, sort party members by ascending order.|n|nIf unchecked, sort party members by descending order." -- need translation
