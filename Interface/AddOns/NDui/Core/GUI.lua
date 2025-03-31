@@ -209,7 +209,6 @@ G.DefaultSettings = {
 		RaidBuffIndicator = true,
 		PartyFrame = true,
 		PartyDirec = 2,
-		PWOnRight = false,
 		PartyWidth = 100,
 		PartyHeight = 32,
 		PartyPowerHeight = 2,
@@ -244,6 +243,7 @@ G.DefaultSettings = {
 		HideTip = false,
 		LibHealComm = false,
 		SortByRole = true,
+		SortAscending = false,
 		AutoBuffs = false,
 		ShowRoleMode = 1,
 

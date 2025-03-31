@@ -472,7 +472,8 @@ function UF:OnLogin()
 				local partyWidth, partyHeight = C.db["UFs"]["PartyWidth"], C.db["UFs"]["PartyHeight"]
 				local partyFrameHeight = partyHeight + C.db["UFs"]["PartyPowerHeight"] + C.mult
 				local spacing = C.db["UFs"]["PartySpacing"]
-				local SortByRole = C.db["UFs"]["SortByRole"]
+				local sortByRole = C.db["UFs"]["SortByRole"]
+				local sortAscending = C.db["UFs"]["SortAscending"]
 
 				if not party then
 					party = CreatePartyHeader("oUF_Party", partyWidth, partyFrameHeight)
@@ -493,7 +494,8 @@ function UF:OnLogin()
 				party:SetAttribute("xOffset", sortData.xOffset/5*spacing)
 				party:SetAttribute("yOffset", sortData.yOffset/5*spacing)
 				party:SetAttribute("groupingOrder", "TANK,HEALER,DAMAGER,NONE")
-				party:SetAttribute("groupBy", SortByRole and "ASSIGNEDROLE")
+				party:SetAttribute("groupBy", sortByRole and "ASSIGNEDROLE")
+				party:SetAttribute("sortDir", sortAscending and "ASC" or "DESC")
 			end
 
 			UF:CreateAndUpdatePartyHeader()
