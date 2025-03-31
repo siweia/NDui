@@ -1247,12 +1247,13 @@ function G:SetupPartyFrame(parent)
 	for i = 1, 4 do
 		options[i] = UF.PartyDirections[i].name
 	end
-	createOptionCheck(scroll.child, -10, L["SortByRole"], "UFs", "SortByRole", resizePartyFrame)
-	createOptionDropdown(scroll.child, L["GrowthDirection"], -70, options, nil, "UFs", "PartyDirec", 1, resizePartyFrame)
-	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -150, "PartyWidth", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -230, "PartyHeight", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Power Height"], 0, 30, defaultValue[3], -310, "PartyPowerHeight", resizePartyFrame)
-	createOptionSlider(scroll.child, L["Spacing"], 0, 10, defaultValue[4], -390, "PartySpacing", resizePartyFrame)
+	createOptionCheck(scroll.child, -10, L["SortByRole"], "UFs", "SortByRole", resizePartyFrame, L["SortByRoleTip"])
+	createOptionCheck(scroll.child, -40, L["SortAscending"], "UFs", "SortAscending", resizePartyFrame, L["SortAscendingTip"])
+	createOptionDropdown(scroll.child, L["GrowthDirection"], -100, options, nil, "UFs", "PartyDirec", 1, resizePartyFrame)
+	createOptionSlider(scroll.child, L["Width"], 80, 200, defaultValue[1], -180, "PartyWidth", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Height"], 25, 60, defaultValue[2], -260, "PartyHeight", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Power Height"], 0, 30, defaultValue[3], -340, "PartyPowerHeight", resizePartyFrame)
+	createOptionSlider(scroll.child, L["Spacing"], 0, 10, defaultValue[4], -420, "PartySpacing", resizePartyFrame)
 end
 
 function G:SetupPartyPetFrame(parent)

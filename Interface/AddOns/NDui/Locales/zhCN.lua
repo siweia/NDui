@@ -864,3 +864,6 @@ L["ButtonLock"] = "锁定动作条"
 L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
 L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
 L["SortByRole"] = "按职责排序"
+L["SortByRoleTip"] = "|n勾选后，按职责对小队成员进行排序。否则按照小队成员编号排序。"
+L["SortAscending"] = "按升序排序"
+L["SortAscendingTip"] = "|n勾选后，按升序对小队成员进行排序。否则按降序排序。"
