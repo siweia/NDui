@@ -156,6 +156,7 @@ tinsert(C.defaultThemes, function()
 	local event = QuestMapFrame.EventsFrame
 	if event then
 		B.StripTextures(event)
+		B.CreateBDFrame(event, .25)
 		B.ReskinTrimScroll(event.ScrollBar)
 		event.ScrollBox.Background:Hide()
 
