@@ -126,7 +126,7 @@ local list = {
 		{AuraID = 459759, UnitID = "player", Flash = true, Stack = 4},	-- 黑鸦
 		{AuraID = 459689, UnitID = "player", Flash = true, Stack = 5},	-- 毒蛇钉刺
 		{AuraID = 389020, UnitID = "player"},	-- 子弹风暴
-		{AuraID = 474257, UnitID = "player"},	-- 锁定目标
+		--{AuraID = 474257, UnitID = "player"},	-- 锁定目标
 		{AuraID = 472324, UnitID = "player"},	-- 野猪
 		{AuraID = 471881, UnitID = "player"},	-- 双足飞龙
 		{AuraID = 472640, UnitID = "player"},	-- 猪突猛进

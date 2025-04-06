@@ -1,4 +1,4 @@
-## Interface: 110007, 110100
+## Interface: 110100
 ## Title: |cff0080ffBaudErrorFrame|r
 ## Title-zhCN: |cff0080ffBaudErrorFrame|r 报错收集
 ## Title-zhTW: |cff0080ffBaudErrorFrame|r 報錯收集
@@ -6,5 +6,17 @@
 ## Author: Baudzilla, wolftankk, Siweia
 ## Version: NDui Mod
 ## SavedVariables: BaudErrorFrameConfig
+
+## Category-enUS: Development Tools
+## Category-deDE: Entwicklungstools
+## Category-esES: Herramientas de Desarrollo
+## Category-esMX: Herramientas de Desarrollo
+## Category-frFR: Outils de Développement
+## Category-itIT:
+## Category-koKR:
+## Category-ptBR: Ferramentas de Desenvolvimento
+## Category-ruRU: Инструменты разработки
+## Category-zhCN: 开发工具
+## Category-zhTW: 開發工具
 
 BaudErrorFrame.xml
