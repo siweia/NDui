@@ -10,10 +10,9 @@ DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isNewPatch = select(4, GetBuildInfo()) >= 110100 -- 11.1.0
-DB.isWW = select(4, GetBuildInfo()) >= 110000 -- 11.0.0
 
 -- Deprecated
-if DB.isWW then -- FIXME
+do
 	local function EasyMenu_Initialize( frame, level, menuList )
 		for index = 1, #menuList do
 			local value = menuList[index]
