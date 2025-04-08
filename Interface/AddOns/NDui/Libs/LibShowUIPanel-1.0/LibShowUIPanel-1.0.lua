@@ -25,6 +25,8 @@ Lib.Delegate = Lib.Delegate or (function()
     end
 end)()
 
+if not Lib.Delegate then return end
+
 local Delegate = Lib.Delegate
 
 local function GetUIPanelWindowInfo(frame, name)
