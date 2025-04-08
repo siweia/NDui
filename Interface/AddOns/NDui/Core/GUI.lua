@@ -1244,7 +1244,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Map", "DisableMap", "|cffff0000"..L["DisableMap"], nil, nil, nil, L["DisableMapTip"]},
 		{1, "Map", "MapRevealGlow", L["MapRevealGlow"].."*", nil, nil, nil, L["MapRevealGlowTip"]},
 		{1, "Map", "MapFader", L["MapFader"].."*", true, nil, updateMapFader},
-		{3, "Map", "MapScale", L["Map Scale"], nil, {.5, 1, .1}},
+		{3, "Map", "MapScale", L["Map Scale"], nil, {.5, 2, .1}},
 		{3, "Map", "MaxMapScale", L["Maximize Map Scale"].."*", true, {.5, 1, .1}},
 		{},--blank
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {.5, 3, .1}, updateMinimapScale},
