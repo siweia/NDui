@@ -859,3 +859,7 @@ L["KeyDown"] = "Cast on keydown" -- need translation
 L["ButtonLock"] = "Lock actionbars" -- need translation
 L["KeyDownTip"] = OPTION_TOOLTIP_ACTION_BUTTON_USE_KEY_DOWN
 L["ButtonLockTip"] = OPTION_TOOLTIP_LOCK_ACTIONBAR
+L["SortByRole"] = "Sort by role" -- need translation
+L["SortByRoleTip"] = "|nIf checked, sort party members by role.|n|nIf unchecked, sort party members by index." -- need translation
+L["SortAscending"] = "Sort Ascending" -- need translation
+L["SortAscendingTip"] = "|nIf checked, sort party members by ascending order.|n|nIf unchecked, sort party members by descending order." -- need translation
