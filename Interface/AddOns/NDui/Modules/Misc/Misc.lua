@@ -33,7 +33,7 @@ end
 function M:OnLogin()
 	for name, func in next, MISC_LIST do
 		if name and type(func) == "function" then
-			func()
+			xpcall(func, geterrorhandler())
 		end
 	end
 
