@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local S = B:RegisterModule("Skins")
 
 local pairs, wipe = pairs, wipe
+local xpcall = xpcall
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 C.defaultThemes = {}
@@ -19,7 +20,7 @@ function S:LoadSkins(list)
 	for addonName, func in pairs(list) do
 		local isLoaded, isFinished = IsAddOnLoaded(addonName)
 		if isLoaded and isFinished then
-			func()
+			xpcall(func, geterrorhandler())
 			list[addonName] = nil
 		end
 	end
@@ -30,7 +31,7 @@ function S:LoadAddOnSkins()
 
 	-- Reskin Blizzard UIs
 	for _, func in pairs(C.defaultThemes) do
-		func()
+		xpcall(func, geterrorhandler())
 	end
 	wipe(C.defaultThemes)
 
@@ -44,13 +45,13 @@ function S:LoadAddOnSkins()
 	B:RegisterEvent("ADDON_LOADED", function(_, addonName)
 		local func = C.themes[addonName]
 		if func then
-			func()
+			xpcall(func, geterrorhandler())
 			C.themes[addonName] = nil
 		end
 
 		local func = C.otherSkins[addonName]
 		if func then
-			func()
+			xpcall(func, geterrorhandler())
 			C.otherSkins[addonName] = nil
 		end
 	end)
