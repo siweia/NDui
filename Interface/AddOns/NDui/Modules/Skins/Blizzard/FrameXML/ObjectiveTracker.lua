@@ -99,6 +99,15 @@ local function reskinMinimizeButton(button, header)
 	end
 end
 
+local function GetMawBuffsAnchor(frame)
+	local center = frame:GetCenter()
+	if center and center < GetScreenWidth()/2 then
+		return "LEFT"
+	else
+		return "RIGHT"
+	end
+end
+
 local function container_OnClick(container)
 	local direc = GetMawBuffsAnchor(container)
 	if not container.lastDirec or container.lastDirec ~= direc then
