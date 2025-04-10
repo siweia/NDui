@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-NDui"
-local MINOR_VERSION = 120
+local MINOR_VERSION = 121
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -47,7 +47,7 @@ local WoWWrath = (WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC)
 local WoWCata = (WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC)
 
 -- Enable custom flyouts for WoW Retail
-local UseCustomFlyout = WoWRetail or FlyoutButtonMixin
+local UseCustomFlyout = WoWRetail or (FlyoutButtonMixin and not ActionButton_UpdateFlyout)
 
 local KeyBound = LibStub("LibKeyBound-1.0", true)
 local CBH = LibStub("CallbackHandler-1.0")
@@ -1074,7 +1074,7 @@ function Generic:OnEnter()
 		UpdateNewAction(self)
 	end
 
-	if FlyoutButtonMixin then
+	if FlyoutButtonMixin and UseCustomFlyout then
 		FlyoutButtonMixin.OnEnter(self)
 	else
 		UpdateFlyout(self)
@@ -1082,7 +1082,7 @@ function Generic:OnEnter()
 end
 
 function Generic:OnLeave()
-	if FlyoutButtonMixin then
+	if FlyoutButtonMixin and UseCustomFlyout then
 		FlyoutButtonMixin.OnLeave(self)
 	else
 		UpdateFlyout(self)
@@ -1261,7 +1261,7 @@ function InitializeEventHandler()
 	lib.eventFrame:RegisterEvent("SPELL_UPDATE_ICON")
 	if not WoWClassic and not WoWBCC then
 		if not WoWWrath then
-			lib.eventFrame.showGlow = true
+			lib.eventFrame.showGlow = true -- NDui
 			lib.eventFrame:RegisterEvent("ARCHAEOLOGY_CLOSED")
 			lib.eventFrame:RegisterEvent("UPDATE_SUMMONPETS_ACTION")
 			lib.eventFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
@@ -1644,6 +1644,8 @@ function Generic:UpdateAction(force)
 	end
 end
 -- NDui: add quality border
+local GetProfessionQuality = C_ActionBar and C_ActionBar.GetProfessionQuality
+
 local function ClearProfessionQuality(self)
 	if self.ProfessionQuality then
 		self.ProfessionQuality:Hide()
@@ -1655,7 +1657,7 @@ local function UpdateProfessionQuality(self)
 
 	local action = self._state_action
 	if action and IsItemAction(action) then
-		local quality = C_ActionBar.GetProfessionQuality(action)
+		local quality = GetProfessionQuality(action)
 		if quality then
 			if not self.ProfessionQuality then
 				self.ProfessionQuality = CreateFrame("Frame", nil, self)
@@ -1687,7 +1689,9 @@ function Update(self)
 		UpdateUsable(self)
 		UpdateCooldown(self)
 		UpdateFlash(self)
-		UpdateProfessionQuality(self)
+		if GetProfessionQuality then
+			UpdateProfessionQuality(self)
+		end
 	else
 		ActiveButtons[self] = nil
 		ActionButtons[self] = nil
@@ -1697,7 +1701,9 @@ function Update(self)
 		end
 		self.cooldown:Hide()
 		self:SetChecked(false)
-		ClearProfessionQuality(self)
+		if GetProfessionQuality then
+			ClearProfessionQuality(self)
+		end
 
 		if self.chargeCooldown then
 			EndChargeCooldown(self.chargeCooldown)
@@ -2044,7 +2050,7 @@ function UpdateHotkeys(self)
 		self.HotKey:Show()
 	end
 end
-
+-- NDui: custom glow
 function ShowOverlayGlow(self)
 	if LCG and lib.eventFrame.showGlow then
 		LCG.ShowOverlayGlow(self)
