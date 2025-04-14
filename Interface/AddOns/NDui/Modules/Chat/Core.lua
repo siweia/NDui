@@ -143,10 +143,10 @@ function module:SkinChat()
 		minimize:GetPushedTexture():SetAlpha(0)
 		minimize.__texture:DoCollapse(false)
 		minimize:ClearAllPoints()
-		minimize:SetPoint("TOPLEFT", self, "TOPRIGHT", 5, 0)
+		minimize:SetPoint("CENTER", self, "TOPLEFT", -2, -3)
 	end
 
-	B.HideObject(self.buttonFrame)
+	B.HideOption(self.buttonFrame)
 	--B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
 	module:ToggleChatFrameTextures(self)
@@ -392,20 +392,19 @@ function module:ToggleLanguageFilter()
 end
 
 function module:HandleMinimizedFrame()
-	local minimized = _G[self:GetName().."Minimized"]
-	if minimized and not minimized.styled then
-		B.StripTextures(minimized)
-		B.Reskin(minimized)
-		minimized.__bg:SetInside(nil, 5, 5)
+	local minFrame = self.minFrame
+	if minFrame and not minFrame.styled then
+		B.StripTextures(minFrame)
+		B.Reskin(minFrame)
+		minFrame.__bg:SetInside(nil, 5, 5)
 
-		local maximizeButton = _G[self:GetName().."MinimizedMaximizeButton"]
+		local maximizeButton = _G[minFrame:GetName().."MaximizeButton"]
 		if maximizeButton then
 			B.ReskinCollapse(maximizeButton)
-			maximizeButton:SetPoint("RIGHT", -3, -5)
 			maximizeButton.__texture:DoCollapse(true)
 		end
 
-		minimized.styled = true
+		minFrame.styled = true
 	end
 end
 
@@ -431,7 +430,7 @@ function module:OnLogin()
 	hooksecurefunc("FCFTab_UpdateColors", module.UpdateTabColors)
 	hooksecurefunc("FloatingChatFrame_OnEvent", module.UpdateTabEventColors)
 	hooksecurefunc("ChatFrame_MessageEventHandler", module.PlayWhisperSound)
-	hooksecurefunc("FCF_CreateMinimizedFrame", module.HandleMinimizedFrame)
+	hooksecurefunc("FCF_MinimizeFrame", module.HandleMinimizedFrame)
 
 	-- Default
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
