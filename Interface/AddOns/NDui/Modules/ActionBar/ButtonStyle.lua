@@ -142,6 +142,8 @@ local replaces = {
 	{CAPSLOCK_KEY_TEXT, "CL"},
 	{"BUTTON", "M"},
 	{"NUMPAD", "N"},
+	{"(META%-)", "m"},
+	{"(Meta%-)", "m"},
 	{"(ALT%-)", "a"},
 	{"(CTRL%-)", "c"},
 	{"(SHIFT%-)", "s"},
