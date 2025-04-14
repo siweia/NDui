@@ -48,7 +48,7 @@ end
 
 local function BlackBackground(self)
 	local frame = B.SetBD(self.Background)
-	frame:SetPoint("BOTTOMRIGHT", 26, -7)
+	frame:SetPoint("BOTTOMRIGHT", 3, -7)
 	frame:SetShown(C.db["Chat"]["ChatBGType"] == 2)
 
 	return frame
@@ -138,8 +138,14 @@ function module:SkinChat()
 
 	local minimize = _G[name.."MinimizeButton"]
 	if minimize then
-		B.HideObject(minimize)
+		B.ReskinCollapse(minimize)
+		minimize:GetNormalTexture():SetAlpha(0)
+		minimize:GetPushedTexture():SetAlpha(0)
+		minimize.__texture:DoCollapse(false)
+		minimize:ClearAllPoints()
+		minimize:SetPoint("TOPLEFT", self, "TOPRIGHT", 5, 0)
 	end
+
 	B.HideObject(self.buttonFrame)
 	--B.HideObject(self.ScrollBar)
 	B.HideObject(self.ScrollToBottomButton)
@@ -386,6 +392,24 @@ function module:ToggleLanguageFilter()
 	end
 end
 
+function module:HandleMinimizedFrame()
+	local minimized = _G[self:GetName().."Minimized"]
+	if minimized and not minimized.styled then
+		B.StripTextures(minimized)
+		B.Reskin(minimized)
+		minimized.__bg:SetInside(nil, 5, 5)
+
+		local maximizeButton = _G[self:GetName().."MinimizedMaximizeButton"]
+		if maximizeButton then
+			B.ReskinCollapse(maximizeButton)
+			maximizeButton:SetPoint("RIGHT", -3, -5)
+			maximizeButton.__texture:DoCollapse(true)
+		end
+
+		minimized.styled = true
+	end
+end
+
 function module:OnLogin()
 	fontFile = not C.db["Chat"]["SysFont"] and DB.Font[1]
 	fontOutline = C.db["Skins"]["FontOutline"] and "OUTLINE" or ""
@@ -408,6 +432,7 @@ function module:OnLogin()
 	hooksecurefunc("FCFTab_UpdateColors", module.UpdateTabColors)
 	hooksecurefunc("FloatingChatFrame_OnEvent", module.UpdateTabEventColors)
 	hooksecurefunc("ChatFrame_MessageEventHandler", module.PlayWhisperSound)
+	hooksecurefunc("FCF_CreateMinimizedFrame", module.HandleMinimizedFrame)
 
 	-- Default
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
