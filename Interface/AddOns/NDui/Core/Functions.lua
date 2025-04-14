@@ -1405,7 +1405,7 @@ do
 		local bg = B.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()
 		bg:SetSize(13, 13)
-		bg:SetPoint("TOPLEFT", self:GetNormalTexture())
+		bg:SetPoint("LEFT", self:GetNormalTexture())
 		self.bg = bg
 
 		self.__texture = bg:CreateTexture(nil, "OVERLAY")
