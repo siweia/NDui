@@ -66,7 +66,7 @@ end
 function module:ChatCopy_CreateMenu()
 	menu = CreateFrame("Frame", nil, UIParent)
 	menu:SetSize(25, 100)
-	menu:SetPoint("TOPRIGHT", _G.ChatFrame1, 25, 0)
+	menu:SetPoint("TOPRIGHT", _G.ChatFrame1, 28, 0)
 	menu:SetShown(C.db["Chat"]["ChatMenu"])
 
 	_G.ChatFrameMenuButton:ClearAllPoints()
@@ -120,7 +120,7 @@ function module:ChatCopy_Create()
 	end)
 
 	local copy = CreateFrame("Button", nil, UIParent)
-	copy:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, 22, 0)
+	copy:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, 3, -6)
 	copy:SetSize(20, 20)
 	copy:SetAlpha(.5)
 	copy.Icon = copy:CreateTexture(nil, "ARTWORK")
