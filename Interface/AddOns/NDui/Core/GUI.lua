@@ -1662,7 +1662,6 @@ function G:AddSponsor()
 	CreateDonationIcon(f, DB.curseforgeTex, "CurseForge", 240)
 	if DB.Client == "zhCN" or DB.Client == "zhTW" then
 		CreateDonationIcon(f, DB.boxTex, "新手盒子", 280)
-		CreateDonationIcon(f, DB.sponsorTex, "海豚加速器", 320)
 	end
 end
 
