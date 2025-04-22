@@ -120,7 +120,7 @@ function module:ChatCopy_Create()
 	end)
 
 	local copy = CreateFrame("Button", nil, UIParent)
-	copy:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, 3, 10)
+	copy:SetPoint("TOPRIGHT", _G.ChatFrame1, 3, 0)
 	copy:SetSize(20, 20)
 	copy:SetAlpha(.5)
 	copy.Icon = copy:CreateTexture(nil, "ARTWORK")
