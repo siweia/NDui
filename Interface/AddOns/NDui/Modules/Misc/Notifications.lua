@@ -601,7 +601,7 @@ end
 -- Incompatible check
 local IncompatibleAddOns = {
 	["BigFoot"] = true,
-	["_ShiGuang"] = true,
+	["OrzUI"] = true,
 	["!!!163UI!!!"] = true,
 	["Aurora"] = true,
 	["AuroraClassic"] = true, -- my own addon
