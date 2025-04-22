@@ -48,7 +48,7 @@ end
 
 local function BlackBackground(self)
 	local frame = B.SetBD(self.Background)
-	frame:SetPoint("BOTTOMRIGHT", 3, -7)
+	frame:SetPoint("BOTTOMRIGHT", 2, -7)
 	frame:SetShown(C.db["Chat"]["ChatBGType"] == 2)
 
 	return frame
