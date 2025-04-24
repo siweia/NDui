@@ -151,7 +151,7 @@ info.onMouseUp = function(self, btn)
 		if NDuiADB["ShowSlots"] then
 			ToggleAllBags()
 		else
-			--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
+			if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 			ToggleCharacter("TokenFrame")
 		end
 	end

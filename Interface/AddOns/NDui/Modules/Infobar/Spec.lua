@@ -221,7 +221,7 @@ info.onMouseUp = function(self, btn)
 	if not currentSpecIndex or currentSpecIndex == 5 then return end
 
 	if btn == "LeftButton" then
-		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		PlayerSpellsUtil.ToggleClassTalentOrSpecFrame()
 	else
 		BuildSpecMenu()
