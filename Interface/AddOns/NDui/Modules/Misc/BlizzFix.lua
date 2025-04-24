@@ -139,3 +139,28 @@ do
 	end
 	CommunitiesFrameGuildDetailsFrameNews:SetScript("OnEvent", updateGuildNews)
 end
+
+-- Fix Professions drag taint in combat
+do
+	local done
+	local function setupMisc(event, addon)
+		if event == "ADDON_LOADED" and addon == "Blizzard_ProfessionsBook" then
+			ProfessionsBookFrame:HookScript("OnShow", function()
+				if not done then
+					if InCombatLockdown() then
+						B:RegisterEvent("PLAYER_REGEN_ENABLED", setupMisc)
+					else
+						B.CreateMF(ProfessionsBookFrame)
+					end
+					done = true
+				end
+			end)
+			B:UnregisterEvent(event, setupMisc)
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			B.CreateMF(ProfessionsBookFrame)
+			B:UnregisterEvent(event, setupMisc)
+		end
+	end
+
+	B:RegisterEvent("ADDON_LOADED", setupMisc)
+end

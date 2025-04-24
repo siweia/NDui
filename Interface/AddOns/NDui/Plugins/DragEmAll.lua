@@ -93,7 +93,7 @@ local lodFrames = {
 	Blizzard_OrderHallUI		= { ["OrderHallTalentFrame"] = false, },
 	Blizzard_ScrappingMachineUI	= { ["ScrappingMachineFrame"] = false },
 	Blizzard_Professions		= { ["InspectRecipeFrame"] = false, ["ProfessionsFrame"] = false },
-	Blizzard_ProfessionsBook	= { ["ProfessionsBookFrame"] = false },
+	--Blizzard_ProfessionsBook	= { ["ProfessionsBookFrame"] = false },
 	Blizzard_ProfessionsCustomerOrders	= { ["ProfessionsCustomerOrdersFrame"] = false },
 	Blizzard_TalentUI			= { ["PlayerTalentFrame"] = false, ["PVPTalentPrestigeLevelDialog"] = false, },
 	Blizzard_TimeManager		= { ["TimeManagerFrame"] = false },
