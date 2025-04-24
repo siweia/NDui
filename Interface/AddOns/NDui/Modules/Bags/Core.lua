@@ -256,7 +256,7 @@ local function CloseOrRestoreBags(self, btn)
 		account:SetPoint(unpack(bank.__anchor))
 		PlaySound(SOUNDKIT.IG_MINIMAP_OPEN)
 	else
-		CloseAllBags()
+		module:CloseBags()
 	end
 end
 
@@ -892,7 +892,9 @@ function module:OpenBags()
 end
 
 function module:CloseBags()
-	CloseAllBags()
+	if self.Bags and self.Bags:IsShown() then
+		ToggleAllBags()
+	end
 end
 
 function module:OnLogin()
