@@ -1512,7 +1512,9 @@ function module:OnLogin()
 	end)
 
 	B:RegisterEvent("GET_ITEM_INFO_RECEIVED", function()
-		updater.delay = 1
-		updater:Show()
+		if module.Bags and module.Bags:IsShown() then
+			updater.delay = 1
+			updater:Show()
+		end
 	end)
 end
