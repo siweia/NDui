@@ -67,6 +67,7 @@ local list = {
 		{AuraID = 449947, UnitID = "player", Text = NPE_JUMP},	-- 奸邪发射机，跳3下
 		{AuraID = 1213433, UnitID = "player", Text = L["Crit"]},	-- 哈哈棱镜
 		{AuraID = 1213434, UnitID = "player", Text = L["Haste"]},	-- 哈哈棱镜
+		{AuraID = 466681, UnitID = "player"},	-- 纸牌屋
 		-- 10.0 饰品
 		{AuraID = 381476, UnitID = "player"},	-- 爆发烈焰
 		{AuraID = 383941, UnitID = "player"},	-- 崩坏之力
