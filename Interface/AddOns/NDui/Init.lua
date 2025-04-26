@@ -133,7 +133,7 @@ B:RegisterEvent("PLAYER_LOGIN", function()
 
 	for _, module in next, initQueue do
 		if module.OnLogin then
-			module:OnLogin()
+			xpcall(module.OnLogin, geterrorhandler(), module)
 		else
 			print("Module <"..module.name.."> does not loaded.")
 		end

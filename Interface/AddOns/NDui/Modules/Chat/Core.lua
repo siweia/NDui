@@ -143,7 +143,17 @@ function module:SkinChat()
 	B.StripTextures(tab, 7)
 	hooksecurefunc(tab, "SetAlpha", module.TabSetAlpha)
 
-	B.HideObject(self.buttonFrame)
+	local minimize = self.buttonFrame.minimizeButton
+	if minimize then
+		B.ReskinCollapse(minimize)
+		minimize:GetNormalTexture():SetAlpha(0)
+		minimize:GetPushedTexture():SetAlpha(0)
+		minimize.__texture:DoCollapse(false)
+		minimize:SetIgnoreParentScale(true)
+		minimize:SetScale(UIParent:GetScale())
+	end
+
+	B.HideOption(self.buttonFrame)
 	module:ToggleChatFrameTextures(self)
 
 	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error
@@ -419,6 +429,23 @@ function module:ToggleLanguageFilter()
 	end
 end
 
+function module:HandleMinimizedFrame()
+	local minFrame = self.minFrame
+	if minFrame and not minFrame.styled then
+		B.StripTextures(minFrame)
+		B.Reskin(minFrame)
+		minFrame.__bg:SetInside(nil, 5, 5)
+
+		local maximizeButton = _G[minFrame:GetName().."MaximizeButton"]
+		if maximizeButton then
+			B.ReskinCollapse(maximizeButton)
+			maximizeButton.__texture:DoCollapse(true)
+		end
+
+		minFrame.styled = true
+	end
+end
+
 function module:OnLogin()
 	fontFile = not C.db["Chat"]["SysFont"] and DB.Font[1]
 	fontOutline = C.db["Skins"]["FontOutline"] and "OUTLINE" or ""
@@ -441,6 +468,7 @@ function module:OnLogin()
 	hooksecurefunc("FCFTab_UpdateColors", module.UpdateTabColors)
 	hooksecurefunc("FloatingChatFrame_OnEvent", module.UpdateTabEventColors)
 	hooksecurefunc("ChatFrame_MessageEventHandler", module.PlayWhisperSound)
+	hooksecurefunc("FCF_MinimizeFrame", module.HandleMinimizedFrame)
 
 	-- Default
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper

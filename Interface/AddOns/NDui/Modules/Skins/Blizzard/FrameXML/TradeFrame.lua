@@ -21,12 +21,15 @@ tinsert(C.defaultThemes, function()
 	TradeFrame.RecipientOverlay:Hide()
 	B.Reskin(TradeFrameTradeButton)
 	B.Reskin(TradeFrameCancelButton)
-	B.ReskinInput(TradePlayerInputMoneyFrameGold)
-	B.ReskinInput(TradePlayerInputMoneyFrameSilver)
-	B.ReskinInput(TradePlayerInputMoneyFrameCopper)
 
-	TradePlayerInputMoneyFrameSilver:SetPoint("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
-	TradePlayerInputMoneyFrameCopper:SetPoint("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
+	if not TradePlayerInputMoneyFrame:IsForbidden() then
+		B.ReskinInput(TradePlayerInputMoneyFrameGold)
+		B.ReskinInput(TradePlayerInputMoneyFrameSilver)
+		B.ReskinInput(TradePlayerInputMoneyFrameCopper)
+	
+		TradePlayerInputMoneyFrameSilver:SetPoint("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
+		TradePlayerInputMoneyFrameCopper:SetPoint("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
+	end
 
 	local function reskinButton(bu)
 		bu:SetNormalTexture(0)

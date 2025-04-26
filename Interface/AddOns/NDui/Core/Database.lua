@@ -9,11 +9,10 @@ DB.Version = C_AddOns.GetAddOnMetadata("NDui", "Version")
 DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
-DB.isNewPatch = select(4, GetBuildInfo()) >= 110100 -- 11.1.0
-DB.isWW = select(4, GetBuildInfo()) >= 110000 -- 11.0.0
+DB.isNewPatch = select(4, GetBuildInfo()) >= 110105 -- 11.1.5
 
 -- Deprecated
-if DB.isWW then -- FIXME
+do
 	local function EasyMenu_Initialize( frame, level, menuList )
 		for index = 1, #menuList do
 			local value = menuList[index]
@@ -93,7 +92,6 @@ DB.closeTex = Media.."Hutu\\close"
 DB.ArrowUp = Media.."Hutu\\arrow"
 DB.afdianTex = Media.."Hutu\\Afdian"
 DB.patreonTex = Media.."Hutu\\Patreon"
-DB.sponsorTex = Media.."Hutu\\Sponsor"
 DB.curseforgeTex = Media.."Hutu\\CURSEFORGE"
 DB.boxTex = Media.."Hutu\\Box"
 DB.mailTex = "Interface\\Minimap\\Tracking\\Mailbox"

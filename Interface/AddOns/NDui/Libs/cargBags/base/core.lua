@@ -26,7 +26,7 @@ local global = C_AddOns.GetAddOnMetadata(parent, 'X-cargBags')
 --  This class provides the underlying fundamental functions, such as
 --  class-generation, helper-functions and the Blizzard-replacement
 local cargBags = CreateFrame("Button")
-
+local isNewPatch = NDui[4].isNewPatch
 
 ns.cargBags = cargBags
 if(global) then
@@ -87,8 +87,10 @@ function cargBags:ReplaceBlizzard(name)
 
 	OpenAllBags = toggleBag	-- Name is misleading, Blizz-function actually toggles bags
 	OpenBackpack = toggleBag -- Blizz does not provide toggling here
-	CloseAllBags = closeBag
-	CloseBackpack = closeBag
+	if not isNewPatch then -- causing taint in 11.1.5
+		CloseAllBags = closeBag
+		CloseBackpack = closeBag
+	end
 	OpenBag = toggleBag		-- fixed the loot won alert frame
 
 	BankFrame:UnregisterAllEvents()

@@ -45,7 +45,7 @@ info.onEvent = function(self)
 end
 
 local pvpTalents
-local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(104).iconFileID
+local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(DB.isNewPatch and 1792 or 104).iconFileID
 
 info.onEnter = function(self)
 	if not currentSpecIndex or currentSpecIndex == 5 then return end
@@ -221,7 +221,7 @@ info.onMouseUp = function(self, btn)
 	if not currentSpecIndex or currentSpecIndex == 5 then return end
 
 	if btn == "LeftButton" then
-		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		PlayerSpellsUtil.ToggleClassTalentOrSpecFrame()
 	else
 		BuildSpecMenu()

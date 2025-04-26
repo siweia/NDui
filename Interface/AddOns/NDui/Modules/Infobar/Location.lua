@@ -96,7 +96,7 @@ local zoneString = "|cffffff00|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIc
 
 info.onMouseUp = function(_, btn)
 	if btn == "LeftButton" then
-		--if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleFrame(WorldMapFrame)
 	elseif btn == "RightButton" then
 		local mapID = C_Map_GetBestMapForUnit("player")

@@ -265,7 +265,7 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 			return title
 		end
 --[[
-		local data = not DB.isWW and C_TooltipInfo.GetUnit(unit) -- FIXME: ColorMixin error
+		local data = C_TooltipInfo.GetUnit(unit) -- FIXME: ColorMixin error
 		if not data then return "" end
 
 		local lineData = data.lines[GetCVarBool("colorblindmode") and 3 or 2]
