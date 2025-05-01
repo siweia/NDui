@@ -385,7 +385,7 @@ function UF:OnLogin()
 		oUF:RegisterStyle("Boss", CreateBossStyle)
 		oUF:SetActiveStyle("Boss")
 		local boss = {}
-		for i = 1, 8 do -- MAX_BOSS_FRAMES, 8 in 9.2?
+		for i = 1, 10 do -- MAX_BOSS_FRAMES, 10 in 11.0?
 			boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
 			local moverWidth, moverHeight = boss[i]:GetWidth(), boss[i]:GetHeight()+8
 			local title = i > 5 and "Boss"..i or L["BossFrame"]..i
