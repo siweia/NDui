@@ -119,11 +119,9 @@ end
 local function BuildUnitIDTable()
 	for _, VALUE in pairs(AuraList) do
 		for _, value in pairs(VALUE.List) do
-			local flag = true
-			for _, v in pairs(UnitIDTable) do
-				if value.UnitID == v then flag = false end
+			if value.UnitID and not UnitIDTable[value.UnitID] then
+				UnitIDTable[value.UnitID] = true
 			end
-			if flag then tinsert(UnitIDTable, value.UnitID) end
 		end
 	end
 end
@@ -720,6 +718,7 @@ end
 -- Event
 function A.AuraWatch_OnEvent(event, ...)
 	if not C.db["AuraWatch"]["Enable"] then
+		B:UnregisterEvent("UNIT_AURA", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)
@@ -730,10 +729,21 @@ function A.AuraWatch_OnEvent(event, ...)
 		InitSetup()
 		if not IntCD.MoveHandle then A:AuraWatch_SetupInt(2825, nil, 0, "player") end
 		B:UnregisterEvent(event, A.AuraWatch_OnEvent)
+	elseif event == "UNIT_AURA" then
+		if not UnitIDTable[...] then return end
+		A:AuraWatch_PreCleanup()
+		A:AuraWatch_UpdateCD()
+		local inCombat = InCombatLockdown()
+		for unit in pairs(UnitIDTable) do
+			A:UpdateAuraWatch(unit, inCombat)
+		end
+		A:AuraWatch_PostCleanup()
+		A:AuraWatch_Centralize()
 	else
 		A:AuraWatch_UpdateInt(event, ...)
 	end
 end
+B:RegisterEvent("UNIT_AURA", A.AuraWatch_OnEvent)
 B:RegisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
 B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)
@@ -763,15 +773,15 @@ function A:AuraWatch_OnUpdate(elapsed)
 		A:AuraWatch_UpdateCD()
 
 		local inCombat = InCombatLockdown()
-		for _, value in pairs(UnitIDTable) do
-			A:UpdateAuraWatch(value, inCombat)
+		for unit in pairs(UnitIDTable) do
+			A:UpdateAuraWatch(unit, inCombat)
 		end
 
 		A:AuraWatch_PostCleanup()
 		A:AuraWatch_Centralize()
 	end
 end
-updater:SetScript("OnUpdate", A.AuraWatch_OnUpdate)
+--updater:SetScript("OnUpdate", A.AuraWatch_OnUpdate)
 
 -- Mover
 SlashCmdList.AuraWatch = function(msg)
@@ -823,7 +833,7 @@ SlashCmdList.AuraWatch = function(msg)
 		for _, value in pairs(FrameList) do
 			value[1].MoveHandle:Hide()
 		end
-		updater:SetScript("OnUpdate", A.AuraWatch_OnUpdate)
+		--updater:SetScript("OnUpdate", A.AuraWatch_OnUpdate)
 
 		if IntCD.MoveHandle then
 			IntCD.MoveHandle:Hide()
