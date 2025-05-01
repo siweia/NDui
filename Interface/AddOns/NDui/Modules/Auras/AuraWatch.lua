@@ -119,11 +119,9 @@ end
 local function BuildUnitIDTable()
 	for _, VALUE in pairs(AuraList) do
 		for _, value in pairs(VALUE.List) do
-			local flag = true
-			for _, v in pairs(UnitIDTable) do
-				if value.UnitID == v then flag = false end
+			if value.UnitID and not UnitIDTable[value.UnitID] then
+				UnitIDTable[value.UnitID] = true
 			end
-			if flag then tinsert(UnitIDTable, value.UnitID) end
 		end
 	end
 end
@@ -523,6 +521,100 @@ function A:UpdateAuraWatch(unit, inCombat)
 	A:UpdateAuraWatchByFilter(unit, "HARMFUL", inCombat)
 end
 
+--[[
+/dump C_UnitAuras.GetAuraSlots("player", "HELPFUL")
+/dump C_UnitAuras.GetAuraDataBySlot("player", 16)
+]]
+
+local allBuffs, allDebuffs, buffsChanged, debuffsChanged = {}, {}, {}, {}
+local buffFilter, debuffFilter = "HELPFUL", "HARMFUL"
+
+function A:AuraWatch_UpdateAuras(event, unit, updateInfo)
+	local isFullUpdate = not updateInfo or updateInfo.isFullUpdate
+
+	if not allBuffs[unit] then allBuffs[unit] = {} end
+	if not allDebuffs[unit] then allDebuffs[unit] = {} end
+
+	buffsChanged[unit], debuffsChanged[unit] = false, false
+
+	if isFullUpdate then
+		-- Buffs
+		allBuffs[unit] = wipe(allBuffs[unit] or {})
+		buffsChanged[unit] = true
+
+		local slots = {C_UnitAuras.GetAuraSlots(unit, buffFilter)}
+		for i = 2, #slots do
+			local data = C_UnitAuras.GetAuraDataBySlot(unit, slots[i])
+			if data then
+				allBuffs[unit][data.auraInstanceID] = data
+			end
+		end
+		-- Debuffs
+		allDebuffs[unit] = wipe(allDebuffs[unit] or {})
+		debuffsChanged[unit] = true
+
+		slots = {C_UnitAuras.GetAuraSlots(unit, debuffFilter)}
+		for i = 2, #slots do
+			local data = C_UnitAuras.GetAuraDataBySlot(unit, slots[i])
+			if data then
+				allDebuffs[unit][data.auraInstanceID] = data
+			end
+		end
+	else
+		if updateInfo.addedAuras then
+			for _, data in next, updateInfo.addedAuras do
+				if data.isHelpful and not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, buffFilter) then
+					allBuffs[unit][data.auraInstanceID] = data
+					buffsChanged[unit] = true
+				elseif data.isHarmful and not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, debuffFilter) then
+					allDebuffs[unit][data.auraInstanceID] = data
+					debuffsChanged[unit] = true
+				end
+			end
+		end
+
+		if updateInfo.updatedAuraInstanceIDs then
+			for _, auraInstanceID in next, updateInfo.updatedAuraInstanceIDs do
+				if allBuffs[unit][auraInstanceID] then
+					allBuffs[unit][auraInstanceID] = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+					buffsChanged[unit] = true
+				elseif allDebuffs[unit][auraInstanceID] then
+					allDebuffs[unit][auraInstanceID] = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+					debuffsChanged[unit] = true
+				end
+			end
+		end
+
+		if updateInfo.removedAuraInstanceIDs then
+			for _, auraInstanceID in next, updateInfo.removedAuraInstanceIDs do
+				if allBuffs[unit][auraInstanceID] then
+					allBuffs[unit][auraInstanceID] = nil
+					buffsChanged[unit] = true
+				elseif allDebuffs[unit][auraInstanceID] then
+					allDebuffs[unit][auraInstanceID] = nil
+					debuffsChanged[unit] = true
+				end
+			end
+		end
+	end
+
+	if buffsChanged[unit] or debuffsChanged[unit] then
+		A:AuraWatch_PreCleanup()
+		local inCombat = InCombatLockdown()
+		local INDEX = 1
+		for auraInstanceID, auraData in next, allBuffs[unit] do
+			A:AuraWatch_UpdateAura(unit, INDEX, buffFilter, auraData.name, auraData.icon, auraData.applications, auraData.duration, auraData.expirationTime, auraData.sourceUnit, auraData.spellId, (auraData.points[1] == 0 and tonumber(auraData.points[2]) or tonumber(auraData.points[1])), inCombat)
+			INDEX = INDEX + 1
+		end
+	
+		INDEX = 1
+		for auraInstanceID, auraData in next, allDebuffs[unit] do
+			A:AuraWatch_UpdateAura(unit, INDEX, debuffFilter, auraData.name, auraData.icon, auraData.applications, auraData.duration, auraData.expirationTime, auraData.sourceUnit, auraData.spellId, (auraData.points[1] == 0 and tonumber(auraData.points[2]) or tonumber(auraData.points[1])), inCombat)
+			INDEX = INDEX + 1
+		end
+	end
+end
+
 -- Update InternalCD
 function A:AuraWatch_SortBars()
 	if not IntCD.MoveHandle then
@@ -720,6 +812,7 @@ end
 -- Event
 function A.AuraWatch_OnEvent(event, ...)
 	if not C.db["AuraWatch"]["Enable"] then
+		B:UnregisterEvent("UNIT_AURA", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)
@@ -730,10 +823,21 @@ function A.AuraWatch_OnEvent(event, ...)
 		InitSetup()
 		if not IntCD.MoveHandle then A:AuraWatch_SetupInt(2825, nil, 0, "player") end
 		B:UnregisterEvent(event, A.AuraWatch_OnEvent)
+	elseif event == "UNIT_AURA" then
+		local unit, updateInfo = ...
+		if unit and UnitIDTable[unit] then
+			print(unit)
+			--A:AuraWatch_PreCleanup()
+			--A:AuraWatch_UpdateCD()
+			A:AuraWatch_UpdateAuras(event, unit, updateInfo)
+			A:AuraWatch_PostCleanup()
+			A:AuraWatch_Centralize()
+		end
 	else
 		A:AuraWatch_UpdateInt(event, ...)
 	end
 end
+B:RegisterEvent("UNIT_AURA", A.AuraWatch_OnEvent)
 B:RegisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
 B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)
@@ -763,15 +867,15 @@ function A:AuraWatch_OnUpdate(elapsed)
 		A:AuraWatch_UpdateCD()
 
 		local inCombat = InCombatLockdown()
-		for _, value in pairs(UnitIDTable) do
-			A:UpdateAuraWatch(value, inCombat)
+		for unit in pairs(UnitIDTable) do
+			A:UpdateAuraWatch(unit, inCombat)
 		end
 
 		A:AuraWatch_PostCleanup()
 		A:AuraWatch_Centralize()
 	end
 end
-updater:SetScript("OnUpdate", A.AuraWatch_OnUpdate)
+--updater:SetScript("OnUpdate", A.AuraWatch_OnUpdate)
 
 -- Mover
 SlashCmdList.AuraWatch = function(msg)
