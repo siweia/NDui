@@ -158,6 +158,9 @@ G.DefaultSettings = {
 		DeprecatedAuras = false,
 		MinCD = 3,
 	},
+	Avada = {
+		Enable = false,
+	},
 	UFs = {
 		Enable = true,
 		Portrait = true,

@@ -1127,6 +1127,12 @@ function UF:ResizePlayerPlate()
 				plate.lumos[i]:SetSize(iconSize, iconSize)
 			end
 		end
+		if plate.Avada then
+			local iconSize = (barWidth+2*C.mult - C.margin*5)/6
+			for i = 1, 6 do
+				plate.Avada[i]:SetSize(iconSize, iconSize)
+			end
+		end
 		if plate.dices then
 			local parent = C.db["Nameplate"]["TargetPower"] and plate.Health or plate.ClassPowerBar
 			local size = (barWidth - 10)/6
@@ -1152,6 +1158,7 @@ function UF:CreatePlayerPlate()
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
+	UF:AvadaKedavra(self)
 	if C.db["Auras"]["ClassAuras"] then
 		local AURA = B:GetModule("Auras")
 		if AURA then
