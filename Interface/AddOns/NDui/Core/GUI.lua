@@ -626,6 +626,7 @@ G.AccountSettings = {
 	IgnoreNotes = {},
 	GlowMode = 3,
 	IgnoredRares = "",
+	AvadaData = {},
 }
 
 -- Initial settings

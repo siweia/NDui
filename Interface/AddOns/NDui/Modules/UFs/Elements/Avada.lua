@@ -260,6 +260,7 @@ function UF:AvadaKedavra(self)
 		self.Avada[i] = bu
 	end
 	avadaButtons = self.Avada
+	UF.avadaData = auraData
 
 	B:RegisterEvent("UNIT_AURA", UF.Avada_OnAura)
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.Avada_OnEvent, true)

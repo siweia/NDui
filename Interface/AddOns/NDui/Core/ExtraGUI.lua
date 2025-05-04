@@ -8,6 +8,7 @@ local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonum
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
 local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
 local IsControlKeyDown = IsControlKeyDown
+local myFullName = DB.MyFullName
 
 local function sortBars(barTable)
 	local num = 1
@@ -2359,4 +2360,154 @@ function G:NameplatePowerUnits(parent)
 	for npcID in pairs(UF.PowerUnits) do
 		createBar(scroll.child, npcID)
 	end
+end
+
+function G:SetupAvada()
+	local guiName = "NDuiGUI_AvadaSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = CreateFrame("Frame", guiName, UIParent, "BackdropTemplate")
+	panel:SetSize(620, 295)
+	panel:SetPoint("CENTER")
+	B.SetBD(panel)
+	extraGUIs[guiName] = panel
+
+	local buttons = {}
+	if not NDuiADB["AvadaData"][myFullName] then
+		NDuiADB["AvadaData"][myFullName] = {}
+	end
+
+	local function updateButtons()
+		local specID = GetSpecializationInfo(GetSpecialization())
+		if not specID then return end
+		local currentID = NDuiADB["AvadaData"][myFullName][specID]
+		if not currentID then
+			NDuiADB["AvadaData"][myFullName][specID] = 1
+			currentID = 1
+		end
+		for i = 1, 10 do
+			local bu = buttons[i]
+			if bu then
+				if currentID == i then
+					print(i)
+					bu.bg:SetBackdropBorderColor(1, .8, 0)
+				else
+					bu.bg:SetBackdropBorderColor(0, 0, 0)
+				end
+			end
+		end
+	end
+
+	local function buttonClick(self)
+		local specID = GetSpecializationInfo(GetSpecialization())
+		if specID then
+			NDuiADB["AvadaData"][myFullName][specID] = self:GetID()
+		end
+		updateButtons()
+	end
+
+	for i = 1, 10 do
+		local bu = CreateFrame("Button", nil, panel, "BackdropTemplate")
+		bu:SetSize(30, 30)
+		bu:SetPoint("TOPLEFT", 5 + (i-1)*35, -5)
+		bu.bg = B.CreateBDFrame(bu, .25)
+		bu:SetID(i)
+		bu:SetScript("OnDoubleClick", buttonClick)
+		B.CreateFS(bu, 20, i, true)
+		local hl = bu:CreateTexture(nil, "HIGHLIGHT")
+		hl:SetAllPoints(bu.bg)
+		hl:SetColorTexture(1, 1, 1, .25)
+
+		buttons[i] = bu
+	end
+
+	local close = CreateFrame("Button", nil, panel)
+	close:SetSize(20, 20)
+	close:SetPoint("TOPRIGHT", -2, -2)
+	close.Icon = close:CreateTexture(nil, "ARTWORK")
+	close.Icon:SetAllPoints()
+	close.Icon:SetTexture("Interface\\BUTTONS\\UI-GroupLoot-Pass-Up")
+	close:SetHighlightTexture(close.Icon:GetTexture())
+	close:SetScript("OnClick", function()
+		panel:Hide()
+	end)
+
+	local frame = CreateFrame("Frame", nil, panel, "BackdropTemplate")
+	frame:SetSize(610, 250)
+	frame:SetPoint("BOTTOM", 0, 5)
+	B.CreateBDFrame(frame, .25)
+
+	local UF = B:GetModule("UnitFrames")
+	frame.buttons = {}
+	local unitOptions = {"player", "target", "pet"}
+	local typeOptions = {"buff", "debuff", "cd"}
+	local EMPTY_ICON = "Interface\\Icons\\INV_Misc_QuestionMark"
+
+	local function showTooltip(self)
+		if not self.spellID then return end
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:SetSpellByID(self.spellID)
+		GameTooltip:Show()
+	end
+
+	local function createOptionGroup(parent, i)
+		parent.options = {}
+
+		local unitOption = G:CreateDropdown(parent, L["Unit*"], 1, 1, unitOptions, "监控来源", 88, 28)
+		unitOption:SetFrameLevel(20)
+		unitOption:ClearAllPoints()
+		unitOption:SetPoint("TOP", parent, "BOTTOM", 0, -30)
+		parent.options[1] = unitOption
+
+		local typeOption = G:CreateDropdown(parent, L["Type*"], 1, 1, typeOptions, "监控类型", 88, 28)
+		typeOption:SetFrameLevel(20)
+		typeOption:ClearAllPoints()
+		typeOption:SetPoint("TOP", parent, "BOTTOM", 0, -90)
+		parent.options[2] = typeOption
+
+		local spellOption = G:CreateEditbox(parent, "ID*", 1, 1, "输入法术ID", 88, 28)
+		spellOption:ClearAllPoints()
+		spellOption:SetPoint("TOP", parent, "BOTTOM", 0, -150)
+		spellOption:SetJustifyH("CENTER")
+		parent.options[3] = spellOption
+	end
+
+	local function updateOptionGroup()
+		for i = 1, 6 do
+			local spellID = UF.avadaData[i].spellID
+			local bu = frame.buttons[i]
+			if bu then
+				bu.Icon:SetTexture(spellID and GetSpellTexture(spellID) or EMPTY_ICON)
+				bu.spellID = spellID
+				bu.options[1].Text:SetText(UF.avadaData[i].unit or "")
+				bu.options[2].Text:SetText(UF.avadaData[i].type or "")
+				bu.options[3]:SetText(UF.avadaData[i].spellID or "")
+			end
+		end
+	end
+
+	for i = 1, 6 do
+		local bu = B.CreateButton(frame, 50, 50, true, EMPTY_ICON)
+		bu:SetPoint("TOPLEFT", 30 + (i-1)*100, -10)
+		bu:SetScript("OnEnter", showTooltip)
+		bu:SetScript("OnLeave", B.HideTooltip)
+		createOptionGroup(bu, i)
+		frame.buttons[i] = bu
+	end
+
+	local function refreshAll()
+		if not panel:IsShown() then return end
+		updateOptionGroup()
+		updateButtons()
+	end
+
+	refreshAll()
+	B:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED", refreshAll)
+	panel:HookScript("OnShow", refreshAll)
+end
+
+function hehe()
+	G:SetupAvada()
 end
