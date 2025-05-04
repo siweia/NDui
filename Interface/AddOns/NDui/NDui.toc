@@ -3,6 +3,6 @@
 ## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
 ## Notes: Empty toc for Curseforge
-## Version: 3.17.1
-## X-Support: BC Classic
+## Version: 3.17.2
+## X-Support: WLK Classic
 ## X-Website: https://github.com/siweia/NDui/tree/TBC
