@@ -2373,17 +2373,24 @@ function G:SetupAvada()
 	B.SetBD(panel)
 	extraGUIs[guiName] = panel
 
+	local frame = CreateFrame("Frame", nil, panel, "BackdropTemplate")
+	frame:SetSize(610, 250)
+	frame:SetPoint("BOTTOM", 0, 5)
+	B.CreateBDFrame(frame, .25)
+
+	local UF = B:GetModule("UnitFrames")
 	local buttons = {}
-	if not NDuiADB["AvadaData"][myFullName] then
-		NDuiADB["AvadaData"][myFullName] = {}
+	local iconString = "|T%s:18:22:0:0:64:64:5:59:5:59:255:255:255|t"
+	if not NDuiADB["AvadaIndex"][myFullName] then
+		NDuiADB["AvadaIndex"][myFullName] = {}
 	end
 
-	local function updateButtons()
+	local function updateProfileButtons()
 		local specID = GetSpecializationInfo(GetSpecialization())
 		if not specID then return end
-		local currentID = NDuiADB["AvadaData"][myFullName][specID]
+		local currentID = NDuiADB["AvadaIndex"][myFullName][specID]
 		if not currentID then
-			NDuiADB["AvadaData"][myFullName][specID] = 1
+			NDuiADB["AvadaIndex"][myFullName][specID] = 1
 			currentID = 1
 		end
 		for i = 1, 10 do
@@ -2399,12 +2406,66 @@ function G:SetupAvada()
 		end
 	end
 
-	local function buttonClick(self)
+	local function updateOptionGroup()
+		for i = 1, 6 do
+			local spellID = UF.avadaData[i].spellID
+			local bu = frame.buttons[i]
+			if bu then
+				bu.Icon:SetTexture(spellID and GetSpellTexture(spellID) or EMPTY_ICON)
+				bu.spellID = spellID
+				bu.options[1].Text:SetText(UF.avadaData[i].unit or "")
+				bu.options[2].Text:SetText(UF.avadaData[i].type or "")
+				bu.options[3]:SetText(UF.avadaData[i].spellID or "")
+			end
+		end
+	end
+
+	local function buttonSelected(self)
 		local specID = GetSpecializationInfo(GetSpecialization())
 		if specID then
-			NDuiADB["AvadaData"][myFullName][specID] = self:GetID()
+			NDuiADB["AvadaIndex"][myFullName][specID] = self:GetID()
 		end
-		updateButtons()
+		UF:Avada_RefreshAll()
+		updateOptionGroup()
+		updateProfileButtons()
+	end
+
+	local function stringParser(str)
+		local data = {}
+		for result in gmatch(str, "[^N]+") do
+			local iconIndex, spellID = strmatch(result, "(%d+)Z%w+Z%w+Z(%d+)")
+			data[tonumber(iconIndex)] = tonumber(spellID)
+		end
+		return data
+	end
+
+	local function showCurrentSpells(self)
+		local specID = GetSpecializationInfo(GetSpecialization())
+		if not specID then return end
+		local buttonID = self:GetID()
+		local buttonString
+		if buttonID == 1 then
+			buttonString = UF.defaultStrings[DB.MyClass][GetSpecialization()]
+		else
+			buttonString = NDuiADB["AvadaProfile"][specID] and NDuiADB["AvadaProfile"][specID][buttonID] or ""
+		end
+		local toolipText = ""
+		local currentData = stringParser(buttonString)
+		if currentData then
+			for i = 1, 6 do
+				local spellID = currentData[i]
+				if spellID then
+					local spellName = GetSpellName(spellID) or UNKNOWN
+					toolipText = toolipText..format(iconString, GetSpellTexture(spellID))..spellName.."\n"
+				end
+			end
+		end
+		if toolipText == "" then toolipText = NONE end
+
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(toolipText)
+		GameTooltip:Show()
 	end
 
 	for i = 1, 10 do
@@ -2413,15 +2474,34 @@ function G:SetupAvada()
 		bu:SetPoint("TOPLEFT", 5 + (i-1)*35, -5)
 		bu.bg = B.CreateBDFrame(bu, .25)
 		bu:SetID(i)
-		bu:SetScript("OnDoubleClick", buttonClick)
+		bu:SetScript("OnDoubleClick", buttonSelected)
 		B.CreateFS(bu, 20, i, true)
 		local hl = bu:CreateTexture(nil, "HIGHLIGHT")
 		hl:SetAllPoints(bu.bg)
 		hl:SetColorTexture(1, 1, 1, .25)
+		bu:SetScript("OnEnter", showCurrentSpells)
+		bu:SetScript("OnLeave", B.HideTooltip)
 
 		buttons[i] = bu
 	end
 
+	local save = B.CreateButton(panel, 80, 25, SAVE)
+	save:SetPoint("TOPRIGHT", -200, -5)
+	save:SetScript("OnClick", function()
+		local str = ""
+		for i = 1, 6 do
+			local unitStr = frame.buttons[i].options[1].Text:GetText()
+			local typeStr = frame.buttons[i].options[2].Text:GetText()
+			local spellID = frame.buttons[i].options[3]:GetText()
+			if unitStr and typeStr and spellID then
+				str = str..i.."Z"..unitStr.."Z"..typeStr.."Z"..spellID.."N"
+			end
+		end
+		local specID = GetSpecializationInfo(GetSpecialization())
+		local current = NDuiADB["AvadaIndex"][myFullName][specID]
+		if not NDuiADB["AvadaProfile"][specID] then NDuiADB["AvadaProfile"][specID] = {} end
+		NDuiADB["AvadaProfile"][specID][current] = str
+	end)
 	local close = CreateFrame("Button", nil, panel)
 	close:SetSize(20, 20)
 	close:SetPoint("TOPRIGHT", -2, -2)
@@ -2433,12 +2513,6 @@ function G:SetupAvada()
 		panel:Hide()
 	end)
 
-	local frame = CreateFrame("Frame", nil, panel, "BackdropTemplate")
-	frame:SetSize(610, 250)
-	frame:SetPoint("BOTTOM", 0, 5)
-	B.CreateBDFrame(frame, .25)
-
-	local UF = B:GetModule("UnitFrames")
 	frame.buttons = {}
 	local unitOptions = {"player", "target", "pet"}
 	local typeOptions = {"buff", "debuff", "cd"}
@@ -2474,20 +2548,6 @@ function G:SetupAvada()
 		parent.options[3] = spellOption
 	end
 
-	local function updateOptionGroup()
-		for i = 1, 6 do
-			local spellID = UF.avadaData[i].spellID
-			local bu = frame.buttons[i]
-			if bu then
-				bu.Icon:SetTexture(spellID and GetSpellTexture(spellID) or EMPTY_ICON)
-				bu.spellID = spellID
-				bu.options[1].Text:SetText(UF.avadaData[i].unit or "")
-				bu.options[2].Text:SetText(UF.avadaData[i].type or "")
-				bu.options[3]:SetText(UF.avadaData[i].spellID or "")
-			end
-		end
-	end
-
 	for i = 1, 6 do
 		local bu = B.CreateButton(frame, 50, 50, true, EMPTY_ICON)
 		bu:SetPoint("TOPLEFT", 30 + (i-1)*100, -10)
@@ -2500,7 +2560,7 @@ function G:SetupAvada()
 	local function refreshAll()
 		if not panel:IsShown() then return end
 		updateOptionGroup()
-		updateButtons()
+		updateProfileButtons()
 	end
 
 	refreshAll()
