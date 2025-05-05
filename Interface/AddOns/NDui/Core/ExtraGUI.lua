@@ -2371,6 +2371,7 @@ function G:SetupAvada()
 	panel:SetSize(620, 295)
 	panel:SetPoint("CENTER")
 	B.SetBD(panel)
+	B.CreateMF(panel)
 	extraGUIs[guiName] = panel
 
 	local frame = CreateFrame("Frame", nil, panel, "BackdropTemplate")
@@ -2384,6 +2385,7 @@ function G:SetupAvada()
 	if not NDuiADB["AvadaIndex"][myFullName] then
 		NDuiADB["AvadaIndex"][myFullName] = {}
 	end
+	local refreshAll
 
 	local function updateProfileButtons()
 		local specID = GetSpecializationInfo(GetSpecialization())
@@ -2397,7 +2399,6 @@ function G:SetupAvada()
 			local bu = buttons[i]
 			if bu then
 				if currentID == i then
-					print(i)
 					bu.bg:SetBackdropBorderColor(1, .8, 0)
 				else
 					bu.bg:SetBackdropBorderColor(0, 0, 0)
@@ -2426,8 +2427,7 @@ function G:SetupAvada()
 			NDuiADB["AvadaIndex"][myFullName][specID] = self:GetID()
 		end
 		UF:Avada_RefreshAll()
-		updateOptionGroup()
-		updateProfileButtons()
+		refreshAll()
 	end
 
 	local function stringParser(str)
@@ -2445,7 +2445,7 @@ function G:SetupAvada()
 		local buttonID = self:GetID()
 		local buttonString
 		if buttonID == 1 then
-			buttonString = UF.defaultStrings[DB.MyClass][GetSpecialization()]
+			buttonString = UF.defaultStrings[specID]
 		else
 			buttonString = NDuiADB["AvadaProfile"][specID] and NDuiADB["AvadaProfile"][specID][buttonID] or ""
 		end
@@ -2485,8 +2485,8 @@ function G:SetupAvada()
 		buttons[i] = bu
 	end
 
-	local save = B.CreateButton(panel, 80, 25, SAVE)
-	save:SetPoint("TOPRIGHT", -200, -5)
+	local save = B.CreateButton(panel, 80, 30, SAVE, 18)
+	save:SetPoint("TOPRIGHT", -150, -5)
 	save:SetScript("OnClick", function()
 		local str = ""
 		for i = 1, 6 do
@@ -2501,6 +2501,8 @@ function G:SetupAvada()
 		local current = NDuiADB["AvadaIndex"][myFullName][specID]
 		if not NDuiADB["AvadaProfile"][specID] then NDuiADB["AvadaProfile"][specID] = {} end
 		NDuiADB["AvadaProfile"][specID][current] = str
+		UF:Avada_RefreshAll()
+		refreshAll()
 	end)
 	local close = CreateFrame("Button", nil, panel)
 	close:SetSize(20, 20)
@@ -2557,7 +2559,7 @@ function G:SetupAvada()
 		frame.buttons[i] = bu
 	end
 
-	local function refreshAll()
+	function refreshAll()
 		if not panel:IsShown() then return end
 		updateOptionGroup()
 		updateProfileButtons()

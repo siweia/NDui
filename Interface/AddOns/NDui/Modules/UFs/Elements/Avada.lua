@@ -6,6 +6,7 @@ local wipe, gmatch, strmatch = table.wipe, string.gmatch, string.match
 local GetSpecialization = GetSpecialization
 local GetSpellTexture = C_Spell.GetSpellTexture
 local EMPTY_TEXTURE = "Interface\\Icons\\INV_Misc_QuestionMark"
+local myFullName = DB.MyFullName
 
 UF.defaultStrings = {
 	-- HUNTER
