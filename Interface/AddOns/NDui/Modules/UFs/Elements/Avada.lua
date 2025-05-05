@@ -104,7 +104,7 @@ function UF:Avada_RefreshIcons()
 	if not specID then return end
 
 	wipe(auraData)
-	local profileIndex = NDuiADB["AvadaData"][myFullName] and NDuiADB["AvadaData"][myFullName][specID]
+	local profileIndex = NDuiADB["AvadaIndex"][myFullName] and NDuiADB["AvadaIndex"][myFullName][specID]
 	local classString = NDuiADB["AvadaProfile"][specID] and NDuiADB["AvadaProfile"][specID][profileIndex] or UF.defaultStrings[specID]
 	if classString then
 		stringParser(classString)
