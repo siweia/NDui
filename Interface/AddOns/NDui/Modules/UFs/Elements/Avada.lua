@@ -55,7 +55,7 @@ UF.defaultStrings = {
 	-- EVOKER
 	[1467] = "", -- Devastation
 	[1468] = "", -- Preservation
-	[1469] = "", -- Augmentation
+	[1473] = "", -- Augmentation
 	-- MONK
 	[268] = "", -- Brewmaster
 	[269] = "", -- Windwalker
