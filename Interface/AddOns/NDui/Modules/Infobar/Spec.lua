@@ -23,7 +23,7 @@ local currentSpecIndex, currentLootIndex, newMenu, numSpecs, numLocal
 
 info.eventList = {
 	"PLAYER_ENTERING_WORLD",
-	"ACTIVE_TALENT_GROUP_CHANGED",
+	"ACTIVE_PLAYER_SPECIALIZATION_CHANGED",
 	"PLAYER_LOOT_SPEC_UPDATED",
 }
 
@@ -209,12 +209,12 @@ local function BuildSpecMenu()
 	numLocal = #newMenu
 
 	refreshDefaultLootSpec()
-	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", refreshDefaultLootSpec)
+	B:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED", refreshDefaultLootSpec)
 
 	refreshAllTraits()
 	B:RegisterEvent("TRAIT_CONFIG_DELETED", refreshAllTraits)
 	B:RegisterEvent("TRAIT_CONFIG_UPDATED", refreshAllTraits)
-	B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", refreshAllTraits)
+	B:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED", refreshAllTraits)
 end
 
 info.onMouseUp = function(self, btn)
