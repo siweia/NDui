@@ -2385,7 +2385,7 @@ function G:SetupAvada()
 	if not NDuiADB["AvadaIndex"][myFullName] then
 		NDuiADB["AvadaIndex"][myFullName] = {}
 	end
-	local refreshAll
+	local refreshAllFrames
 
 	local function updateProfileButtons()
 		local specID = GetSpecializationInfo(GetSpecialization())
@@ -2427,7 +2427,7 @@ function G:SetupAvada()
 			NDuiADB["AvadaIndex"][myFullName][specID] = self:GetID()
 		end
 		UF:Avada_RefreshAll()
-		refreshAll()
+		refreshAllFrames()
 	end
 
 	local function stringParser(str)
@@ -2502,7 +2502,7 @@ function G:SetupAvada()
 		if not NDuiADB["AvadaProfile"][specID] then NDuiADB["AvadaProfile"][specID] = {} end
 		NDuiADB["AvadaProfile"][specID][current] = str
 		UF:Avada_RefreshAll()
-		refreshAll()
+		refreshAllFrames()
 	end)
 	local close = CreateFrame("Button", nil, panel)
 	close:SetSize(20, 20)
@@ -2559,15 +2559,15 @@ function G:SetupAvada()
 		frame.buttons[i] = bu
 	end
 
-	function refreshAll()
+	function refreshAllFrames()
 		if not panel:IsShown() then return end
 		updateOptionGroup()
 		updateProfileButtons()
 	end
 
-	refreshAll()
-	B:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED", refreshAll)
-	panel:HookScript("OnShow", refreshAll)
+	refreshAllFrames()
+	B:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED", refreshAllFrames)
+	panel:HookScript("OnShow", refreshAllFrames)
 end
 
 function hehe()
