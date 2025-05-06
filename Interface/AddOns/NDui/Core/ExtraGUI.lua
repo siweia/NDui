@@ -2382,6 +2382,7 @@ function G:SetupAvada()
 	local UF = B:GetModule("UnitFrames")
 	local buttons = {}
 	local iconString = "|T%s:18:22:0:0:64:64:5:59:5:59:255:255:255|t"
+	local EMPTY_ICON = "Interface\\Icons\\INV_Misc_QuestionMark"
 	if not NDuiADB["AvadaIndex"][myFullName] then
 		NDuiADB["AvadaIndex"][myFullName] = {}
 	end
@@ -2455,8 +2456,9 @@ function G:SetupAvada()
 			for i = 1, 6 do
 				local spellID = currentData[i]
 				if spellID then
-					local spellName = GetSpellName(spellID) or UNKNOWN
-					toolipText = toolipText..format(iconString, GetSpellTexture(spellID))..spellName.."\n"
+					local spellName = GetSpellName(spellID) or spellID
+					print(spellID)
+					toolipText = toolipText..format(iconString, GetSpellTexture(spellID) or EMPTY_ICON)..spellName.."\n"
 				end
 			end
 		end
@@ -2488,6 +2490,12 @@ function G:SetupAvada()
 	local save = B.CreateButton(panel, 80, 30, SAVE, 18)
 	save:SetPoint("TOPRIGHT", -150, -5)
 	save:SetScript("OnClick", function()
+		local specID = GetSpecializationInfo(GetSpecialization())
+		local current = NDuiADB["AvadaIndex"][myFullName][specID]
+		if current == 1 then
+			print("1是默认的，不能改")
+			return
+		end
 		local str = ""
 		for i = 1, 6 do
 			local unitStr = frame.buttons[i].options[1].Text:GetText()
@@ -2497,8 +2505,6 @@ function G:SetupAvada()
 				str = str..i.."Z"..unitStr.."Z"..typeStr.."Z"..spellID.."N"
 			end
 		end
-		local specID = GetSpecializationInfo(GetSpecialization())
-		local current = NDuiADB["AvadaIndex"][myFullName][specID]
 		if not NDuiADB["AvadaProfile"][specID] then NDuiADB["AvadaProfile"][specID] = {} end
 		NDuiADB["AvadaProfile"][specID][current] = str
 		UF:Avada_RefreshAll()
@@ -2518,10 +2524,9 @@ function G:SetupAvada()
 	frame.buttons = {}
 	local unitOptions = {"player", "target", "pet"}
 	local typeOptions = {"buff", "debuff", "cd"}
-	local EMPTY_ICON = "Interface\\Icons\\INV_Misc_QuestionMark"
 
 	local function showTooltip(self)
-		if not self.spellID then return end
+		if not (self.spellID and GetSpellName(self.spellID)) then return end
 		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
 		GameTooltip:ClearLines()
 		GameTooltip:SetSpellByID(self.spellID)
