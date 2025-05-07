@@ -11,7 +11,7 @@ local myFullName = DB.MyFullName
 UF.defaultStrings = {
 	-- HUNTER
 	[253] = "1ZplayerZcdZ34026N2ZplayerZcdZ217200N3ZpetZbuffZ272790N4ZplayerZbuffZ268877N5ZplayerZcdZ19574N6ZplayerZcdZ359844", -- Beast Mastery
-	[254] = "1ZplayerZcdZ19434N2ZplayerZcdZ257044N3ZplayerZbuffZ257622N4ZplayerZbuffZ474293N5ZplayerZbuffZ194594N6ZplayerZcdZ288613", -- Marksmanship
+	[254] = "1ZplayerZcdZ19434N2ZplayerZcdZ257044N3ZplayerZbuffZ257622N4ZplayerZbuffZ474293N5ZplayerZbuffZ389020N6ZplayerZcdZ288613", -- Marksmanship
 	[255] = "1ZplayerZcdZ259489N2ZplayerZcdZ259495N3ZplayerZcdZ212431N4ZplayerZcdZ212436N5ZplayerZcdZ203415N6ZplayerZcdZ360952", -- Survival
 	-- DK
 	[250] = "", -- Blood
@@ -101,7 +101,9 @@ local function stringParser(str)
 end
 
 function UF:Avada_RefreshIcons()
-	local specID = GetSpecializationInfo(GetSpecialization())
+	local specIndex = GetSpecialization()
+	if specIndex > 4 then specIndex = 1 end -- use 1st spec for lower level
+	local specID = GetSpecializationInfo(specIndex)
 	if not specID then return end
 
 	wipe(auraData)
