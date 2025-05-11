@@ -200,22 +200,21 @@ function module:RegisterActionButton()
 	end
 end
 
+function module:OnSetHideCountdownNumbers(hide)
+	local disable = not (hide or self.noCooldownCount or self:IsForbidden())
+	if disable then
+		self:SetHideCountdownNumbers(true)
+	end
+end
+
 function module:OnLogin()
 	if not C.db["Actionbar"]["Cooldown"] then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, "SetCooldown", module.StartTimer)
-
+	hooksecurefunc(cooldownIndex, "SetHideCountdownNumbers", module.OnSetHideCountdownNumbers)
 	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", module.HideCooldownNumbers)
-
 	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", module.ActionbarUpateCooldown)
-
-	if _G["ActionBarButtonEventsFrame"].frames then
-		for _, frame in pairs(_G["ActionBarButtonEventsFrame"].frames) do
-			module.RegisterActionButton(frame)
-		end
-	end
-	hooksecurefunc(ActionBarButtonEventsFrameMixin, "RegisterFrame", module.RegisterActionButton)
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)

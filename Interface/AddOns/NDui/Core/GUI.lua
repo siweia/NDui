@@ -158,6 +158,9 @@ G.DefaultSettings = {
 		DeprecatedAuras = false,
 		MinCD = 3,
 	},
+	Avada = {
+		Enable = false,
+	},
 	UFs = {
 		Enable = true,
 		Portrait = true,
@@ -623,6 +626,8 @@ G.AccountSettings = {
 	IgnoreNotes = {},
 	GlowMode = 3,
 	IgnoredRares = "",
+	AvadaIndex = {},
+	AvadaProfile = {},
 }
 
 -- Initial settings

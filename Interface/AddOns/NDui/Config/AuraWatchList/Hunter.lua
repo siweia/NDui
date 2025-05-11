@@ -69,6 +69,7 @@ local list = {
 		{AuraID = 424567, UnitID = "target", Caster = "player", Flash = true},	-- 狂野本能
 		--{AuraID = 430703, UnitID = "target", Caster = "player"},	-- 黑蚀箭
 		{AuraID = 466872, UnitID = "target", Caster = "player", Flash = true},	-- 瞭望印记
+		{AuraID = 212431, UnitID = "target", Caster = "player"},	-- 爆炸射击
 
 		{AuraID = 410167, UnitID = "target", Caster = "player"},	-- 破甲，生存4T
 	},

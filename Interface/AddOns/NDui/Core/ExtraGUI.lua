@@ -8,6 +8,7 @@ local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonum
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
 local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
 local IsControlKeyDown = IsControlKeyDown
+local myFullName = DB.MyFullName
 
 local function sortBars(barTable)
 	local num = 1
@@ -2359,4 +2360,335 @@ function G:NameplatePowerUnits(parent)
 	for npcID in pairs(UF.PowerUnits) do
 		createBar(scroll.child, npcID)
 	end
+end
+
+function G:SetupAvada()
+	local guiName = "NDuiGUI_AvadaSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = CreateFrame("Frame", guiName, UIParent, "BackdropTemplate")
+	panel:SetSize(620, 295)
+	panel:SetPoint("CENTER")
+	B.SetBD(panel)
+	B.CreateMF(panel)
+	extraGUIs[guiName] = panel
+
+	local frame = CreateFrame("Frame", nil, panel, "BackdropTemplate")
+	frame:SetSize(610, 250)
+	frame:SetPoint("BOTTOM", 0, 5)
+	B.CreateBDFrame(frame, .25)
+
+	local UF = B:GetModule("UnitFrames")
+	local profileButtons = {}
+	local iconString = "|T%s:18:22:0:0:64:64:5:59:5:59:255:255:255|t"
+	local EMPTY_ICON = "Interface\\Icons\\INV_Misc_QuestionMark"
+	if not NDuiADB["AvadaIndex"][myFullName] then
+		NDuiADB["AvadaIndex"][myFullName] = {}
+	end
+	local prevSpecID = 0
+	local currentID = 1
+	local refreshAllFrames
+	local currentSpecID
+
+	local function updateProfileButtons()
+		local activeID = NDuiADB["AvadaIndex"][myFullName][currentSpecID] or 1
+		if currentSpecID ~= prevSpecID then -- refresh button when spec changed
+			currentID = activeID
+			prevSpecID = currentSpecID
+		end
+
+		for i = 1, 10 do
+			local bu = profileButtons[i]
+			if bu then
+				if activeID == i then
+					bu.bg:SetBackdropColor(0, 1, 0, .25)
+				else
+					bu.bg:SetBackdropColor(0, 0, 0, .25)
+				end
+				if currentID == i then
+					bu.bg:SetBackdropBorderColor(1, .8, 0)
+				else
+					bu.bg:SetBackdropBorderColor(0, 0, 0)
+				end
+			end
+		end
+	end
+
+	local spellData = {}
+	local function stringParserByIndex(index)
+		wipe(spellData)
+
+		local str
+		if index == 1 then
+			str = UF.defaultStrings[currentSpecID]
+		else
+			str = NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][index] or ""
+		end
+
+		for result in gmatch(str, "[^N]+") do
+			local iconIndex, unit, iconType, spellID = strmatch(result, "(%d+)Z(%w+)Z(%w+)Z(%d+)")
+			iconIndex = tonumber(iconIndex)
+			spellData[iconIndex] = {index = iconIndex, unit = unit, type = iconType, spellID = tonumber(spellID)}
+		end
+	end
+
+	local function updateOptionGroup()
+		for i = 1, 6 do
+			local bu = frame.buttons[i]
+			if bu then
+				bu.spellID = spellData[i] and spellData[i].spellID
+				bu.Icon:SetTexture(bu.spellID and GetSpellTexture(bu.spellID) or EMPTY_ICON)
+				bu.options[1].Text:SetText(spellData[i] and spellData[i].unit or "")
+				bu.options[2].Text:SetText(spellData[i] and spellData[i].type or "")
+				bu.options[3]:SetText(spellData[i] and spellData[i].spellID or "")
+			end
+		end
+	end
+
+	local function buttonSelected(self)
+		currentID = self:GetID()
+		refreshAllFrames()
+	end
+
+	local function showCurrentSpells(self)
+		stringParserByIndex(self:GetID())
+
+		local toolipText = ""
+		if next(spellData) then
+			for i = 1, 6 do
+				local spellID = spellData[i] and spellData[i].spellID
+				if spellID then
+					local spellName = GetSpellName(spellID) or spellID
+					toolipText = toolipText..format(iconString, GetSpellTexture(spellID) or EMPTY_ICON)..spellName.."\n"
+				end
+			end
+		end
+		if toolipText == "" then toolipText = NONE end
+
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(toolipText)
+		GameTooltip:Show()
+	end
+
+	for i = 1, 10 do
+		local bu = B.CreateButton(panel, 30, 30, true)
+		bu:SetPoint("TOPLEFT", 5 + (i-1)*35, -5)
+		bu:SetID(i)
+		B.CreateFS(bu, 20, i, "info")
+		bu:SetScript("OnClick", buttonSelected)
+		bu:SetScript("OnEnter", showCurrentSpells)
+		bu:SetScript("OnLeave", B.HideTooltip)
+
+		profileButtons[i] = bu
+	end
+
+	local close = B.CreateButton(panel, 30, 30, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
+	close:SetPoint("TOPRIGHT", -5, -5)
+	close:SetScript("OnClick", function()
+		panel:Hide()
+	end)
+
+	local load = B.CreateButton(panel, 30, 30, true, "Atlas:streamcinematic-downloadicon")
+	load.Icon:SetTexCoord(.25, .75, .25, .75)
+	load:SetPoint("LEFT", profileButtons[10], "RIGHT", 5, 0)
+	load.title = "加载设置"
+	B.AddTooltip(load, "ANCHOR_RIGHT", "将当前方案加载到监控", "info")
+	load:SetScript("OnClick", function()
+		if currentID ~= 1 and (NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][currentID]) then
+			NDuiADB["AvadaIndex"][myFullName][currentSpecID] = currentID
+			UIErrorsFrame:AddMessage(DB.InfoColor.."已加载配置"..currentID)
+		else
+			NDuiADB["AvadaIndex"][myFullName][currentSpecID] = nil
+			UIErrorsFrame:AddMessage(DB.InfoColor.."已加载默认配置")
+		end
+		UF:Avada_RefreshAll()
+		updateProfileButtons()
+	end)
+
+	local save = B.CreateButton(panel, 30, 30, true, "Interface\\RAIDFRAME\\ReadyCheck-Ready")
+	save:SetPoint("LEFT", load, "RIGHT", 5, 0)
+	save.title = "保存设置"
+	B.AddTooltip(save, "ANCHOR_RIGHT", "保存你设置的监控方案", "info")
+	save:SetScript("OnClick", function()
+		if currentID == 1 then
+			UIErrorsFrame:AddMessage(DB.InfoColor.."1号位是默认设置，无法修改。")
+			return
+		end
+		local str = ""
+		for i = 1, 6 do
+			local unitStr = frame.buttons[i].options[1].Text:GetText()
+			local typeStr = frame.buttons[i].options[2].Text:GetText()
+			local spellID = frame.buttons[i].options[3]:GetText()
+			if unitStr and typeStr and spellID then
+				str = str..i.."Z"..unitStr.."Z"..typeStr.."Z"..spellID.."N"
+			end
+		end
+
+		if not NDuiADB["AvadaProfile"][currentSpecID] then NDuiADB["AvadaProfile"][currentSpecID] = {} end
+		NDuiADB["AvadaProfile"][currentSpecID][currentID] = str ~= "" and str
+	end)
+
+	local undo = B.CreateButton(panel, 30, 30, true, "Atlas:common-icon-undo")
+	undo:SetPoint("LEFT", save, "RIGHT", 5, 0)
+	undo.Icon:SetInside(undo, 2, 2)
+	undo.title = "清除设置"
+	B.AddTooltip(undo, "ANCHOR_RIGHT", "将下方设置清空", "info")
+	undo:SetScript("OnClick", function()
+		for i = 1, 6 do
+			frame.buttons[i].Icon:SetTexture(EMPTY_ICON)
+			frame.buttons[i].options[1].Text:SetText()
+			frame.buttons[i].options[2].Text:SetText()
+			frame.buttons[i].options[3]:SetText("")
+		end
+	end)
+
+	StaticPopupDialogs["NDUI_AVADA_EXPORT"] = {
+		text = L["Export"],
+		button1 = OKAY,
+		OnShow = function(self)
+			local text
+			if currentID == 1 then
+				text = UF.defaultStrings[currentSpecID]
+			else
+				text = NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][currentID] or ""
+			end
+			self.editBox:SetText(text or "")
+			self.editBox:HighlightText()
+		end,
+		EditBoxOnEscapePressed = function(self)
+			self:GetParent():Hide()
+		end,
+		whileDead = 1,
+		hasEditBox = 1,
+		editBoxWidth = 250,
+	}
+
+	local function strTestFailed(str)
+		local iconIndex, unit, iconType, spellID
+		for result in gmatch(str, "[^N]+") do
+			iconIndex, unit, iconType, spellID = strmatch(result, "(%d+)Z(%w+)Z(%w+)Z(%d+)")
+			if not (iconIndex and unit and iconType and spellID) then
+				return true
+			end
+		end
+	end
+
+	StaticPopupDialogs["NDUI_AVADA_IMPORT"] = {
+		text = L["Import"],
+		button1 = OKAY,
+		button2 = CANCEL,
+		OnAccept = function(self)
+			if currentID == 1 then
+				UIErrorsFrame:AddMessage(DB.InfoColor.."1号位是默认设置，无法修改。")
+				return
+			end
+			local text = self.editBox:GetText()
+			if strTestFailed(text) then
+				UIErrorsFrame:AddMessage(DB.InfoColor..L["Data Exception"])
+				return
+			end
+			if not NDuiADB["AvadaProfile"][currentSpecID] then NDuiADB["AvadaProfile"][currentSpecID] = {} end
+			NDuiADB["AvadaProfile"][currentSpecID][currentID] = text
+			refreshAllFrames()
+		end,
+		EditBoxOnEscapePressed = function(self)
+			self:GetParent():Hide()
+		end,
+		whileDead = 1,
+		showAlert = 1,
+		hasEditBox = 1,
+		editBoxWidth = 250,
+	}
+
+	local function exportAvadaStyle()
+		StaticPopup_Hide("NDUI_AVADA_IMPORT")
+		StaticPopup_Show("NDUI_AVADA_EXPORT")
+	end
+
+	local function importAvadaStyle()
+		StaticPopup_Hide("NDUI_AVADA_EXPORT")
+		StaticPopup_Show("NDUI_AVADA_IMPORT")
+	end
+
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", function()
+		StaticPopup_Hide("NDUI_AVADA_EXPORT")
+		StaticPopup_Hide("NDUI_AVADA_IMPORT")
+	end)
+
+	local export = B.CreateButton(panel, 30, 30, true, DB.ArrowUp)
+	export:SetPoint("LEFT", undo, "RIGHT", 5, 0)
+	export:SetScript("OnClick", exportAvadaStyle)
+	export.title = L["Export"]
+	B.AddTooltip(export, "ANCHOR_RIGHT", "导出当前设置", "info")
+
+	local import = B.CreateButton(panel, 30, 30, true, DB.ArrowUp)
+	import.Icon:SetRotation(rad(180))
+	import:SetPoint("LEFT", export, "RIGHT", 5, 0)
+	import:SetScript("OnClick", importAvadaStyle)
+	import.title = L["Import"]
+	B.AddTooltip(import, "ANCHOR_RIGHT", "导入他人分享的设置", "info")
+
+	frame.buttons = {}
+	local unitOptions = {"player", "target", "pet"}
+	local typeOptions = {"buff", "debuff", "cd"}
+
+	local function showTooltip(self)
+		if not (self.spellID and GetSpellName(self.spellID)) then return end
+		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+		GameTooltip:ClearLines()
+		GameTooltip:SetSpellByID(self.spellID)
+		GameTooltip:Show()
+	end
+
+	local function createOptionGroup(parent, i)
+		parent.options = {}
+
+		local unitOption = G:CreateDropdown(parent, L["Unit*"], 1, 1, unitOptions, "监控来源", 88, 28)
+		unitOption:SetFrameLevel(20)
+		unitOption:ClearAllPoints()
+		unitOption:SetPoint("TOP", parent, "BOTTOM", 0, -30)
+		parent.options[1] = unitOption
+
+		local typeOption = G:CreateDropdown(parent, L["Type*"], 1, 1, typeOptions, "监控类型", 88, 28)
+		typeOption:SetFrameLevel(20)
+		typeOption:ClearAllPoints()
+		typeOption:SetPoint("TOP", parent, "BOTTOM", 0, -90)
+		parent.options[2] = typeOption
+
+		local spellOption = G:CreateEditbox(parent, "ID*", 1, 1, "输入法术ID", 88, 28)
+		spellOption:ClearAllPoints()
+		spellOption:SetPoint("TOP", parent, "BOTTOM", 0, -150)
+		spellOption:SetJustifyH("CENTER")
+		parent.options[3] = spellOption
+	end
+
+	for i = 1, 6 do
+		local bu = B.CreateButton(frame, 50, 50, true, EMPTY_ICON)
+		bu:SetPoint("TOPLEFT", 30 + (i-1)*100, -10)
+		bu:SetScript("OnEnter", showTooltip)
+		bu:SetScript("OnLeave", B.HideTooltip)
+		createOptionGroup(bu, i)
+		frame.buttons[i] = bu
+	end
+
+	function refreshAllFrames()
+		local specIndex = GetSpecialization()
+		if specIndex > 4 then specIndex = 1 end -- use 1st spec for lower level
+		currentSpecID = GetSpecializationInfo(specIndex)
+
+		if not panel:IsShown() then return end
+		updateProfileButtons()
+		stringParserByIndex(currentID)
+		updateOptionGroup()
+	end
+
+	refreshAllFrames()
+	B:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED", refreshAllFrames)
+	panel:HookScript("OnShow", refreshAllFrames)
+end
+
+function hehe()
+	G:SetupAvada()
 end

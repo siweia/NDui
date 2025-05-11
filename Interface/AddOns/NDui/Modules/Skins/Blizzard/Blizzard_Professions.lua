@@ -62,7 +62,7 @@ end
 local function reskinSlotButton(button)
 	if button and not button.styled then
 		button.bg = B.ReskinIcon(button.Icon)
-		B.ReskinIconBorder(button.IconBorder, true)
+		B.ReskinIconBorder(button.IconBorder, true, true)
 		if button.SlotBackground then
 			button.SlotBackground:Hide()
 		end
@@ -396,7 +396,7 @@ C.themes["Blizzard_Professions"] = function()
 			if not button then return end
 			B.StripTextures(button)
 			button.bg = B.ReskinIcon(button.Icon)
-			B.ReskinIconBorder(button.IconBorder, true)
+			B.ReskinIconBorder(button.IconBorder, true, true)
 		end
 		handleRewardButton(rewardsFrame.RewardItem1)
 		handleRewardButton(rewardsFrame.RewardItem2)

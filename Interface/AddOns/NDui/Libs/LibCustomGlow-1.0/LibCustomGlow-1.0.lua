@@ -6,7 +6,7 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
 local MAJOR_VERSION = "LibCustomGlow-1.0-NDui"
-local MINOR_VERSION = 20
+local MINOR_VERSION = 21
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
@@ -36,47 +36,47 @@ lib.stopList = {}
 
 local GlowParent = UIParent
 local GlowMaskPool = {
-    createFunc = function(self)
-        return self.parent:CreateMaskTexture()
-    end,
-    resetFunc = function(self, mask)
-        mask:Hide()
-        mask:ClearAllPoints()
-    end,
-    AddObject = function(self, object)
-        local dummy = true
-        self.activeObjects[object] = dummy
-        self.activeObjectCount = self.activeObjectCount + 1
-    end,
-    ReclaimObject = function(self, object)
-        tinsert(self.inactiveObjects, object)
-        self.activeObjects[object] = nil
-        self.activeObjectCount = self.activeObjectCount - 1
-    end,
-    Release = function(self, object)
-        local active = self.activeObjects[object] ~= nil
-        if active then
-            self:resetFunc(object)
-            self:ReclaimObject(object)
-        end
-        return active
-    end,
-    Acquire = function(self)
-        local object = tremove(self.inactiveObjects)
-        local new = object == nil
-        if new then
-            object = self:createFunc()
-            self:resetFunc(object, new)
-        end
-        self:AddObject(object)
-        return object, new
-    end,
-    Init = function(self, parent)
-        self.activeObjects = {}
-        self.inactiveObjects = {}
-        self.activeObjectCount = 0
-        self.parent = parent
-    end
+	createFunc = function(self)
+		return self.parent:CreateMaskTexture()
+	end,
+	resetFunc = function(self, mask)
+		mask:Hide()
+		mask:ClearAllPoints()
+	end,
+	AddObject = function(self, object)
+		local dummy = true
+		self.activeObjects[object] = dummy
+		self.activeObjectCount = self.activeObjectCount + 1
+	end,
+	ReclaimObject = function(self, object)
+		tinsert(self.inactiveObjects, object)
+		self.activeObjects[object] = nil
+		self.activeObjectCount = self.activeObjectCount - 1
+	end,
+	Release = function(self, object)
+		local active = self.activeObjects[object] ~= nil
+		if active then
+			self:resetFunc(object)
+			self:ReclaimObject(object)
+		end
+		return active
+	end,
+	Acquire = function(self)
+		local object = tremove(self.inactiveObjects)
+		local new = object == nil
+		if new then
+			object = self:createFunc()
+			self:resetFunc(object, new)
+		end
+		self:AddObject(object)
+		return object, new
+	end,
+	Init = function(self, parent)
+		self.activeObjects = {}
+		self.inactiveObjects = {}
+		self.activeObjectCount = 0
+		self.parent = parent
+	end
 }
 GlowMaskPool:Init(GlowParent)
 
@@ -736,7 +736,9 @@ end
 
 function lib.ButtonGlow_Stop(r)
 	if r._ButtonGlow then
-		if r._ButtonGlow.animIn:IsPlaying() then
+		if r._ButtonGlow.animOut:IsPlaying() then
+			-- Do nothing the animOut finishing will release
+		elseif r._ButtonGlow.animIn:IsPlaying() then
 			r._ButtonGlow.animIn:Stop()
 			ButtonGlowPool:Release(r._ButtonGlow)
 		elseif r:IsVisible() then
@@ -750,7 +752,6 @@ end
 table.insert(lib.glowList, "Action Button Glow")
 lib.startList["Action Button Glow"] = lib.ButtonGlow_Start
 lib.stopList["Action Button Glow"] = lib.ButtonGlow_Stop
-
 
 -- ProcGlow
 
@@ -796,7 +797,7 @@ local function InitProcGlow(f)
 	local flipbookRepeat = f.ProcLoopAnim:CreateAnimation("FlipBook")
 	flipbookRepeat:SetChildKey("ProcLoop")
 	flipbookRepeat:SetDuration(1)
-    flipbookRepeat:SetOrder(0)
+	flipbookRepeat:SetOrder(0)
 	flipbookRepeat:SetFlipBookRows(6)
 	flipbookRepeat:SetFlipBookColumns(5)
 	flipbookRepeat:SetFlipBookFrames(30)
