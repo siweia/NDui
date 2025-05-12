@@ -204,9 +204,10 @@ UF.VariousTagIndex = {
 
 function UF:UpdateFrameHealthTag()
 	local mystyle = self.mystyle
-	local valueType
+	local valueType, showValue
 	if mystyle == "player" or mystyle == "target" then
 		valueType = UF.VariousTagIndex[C.db["UFs"]["PlayerHPTag"]]
+		showValue = C.db["UFs"]["PlayerAbsorb"] and "[curAbsorb] "
 	elseif mystyle == "focus" then
 		valueType = UF.VariousTagIndex[C.db["UFs"]["FocusHPTag"]]
 	elseif mystyle == "boss" or mystyle == "arena" then
@@ -215,8 +216,7 @@ function UF:UpdateFrameHealthTag()
 		valueType = UF.VariousTagIndex[C.db["UFs"]["PetHPTag"]]
 	end
 
-	local showValue = C.db["UFs"]["PlayerAbsorb"] and mystyle == "player" and "[curAbsorb] " or ""
-	self:Tag(self.healthValue, showValue.."[VariousHP("..valueType..")]")
+	self:Tag(self.healthValue, (showValue or "").."[VariousHP("..valueType..")]")
 	self.healthValue:UpdateTag()
 end
 
