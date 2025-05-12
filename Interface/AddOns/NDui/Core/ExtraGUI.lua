@@ -2505,15 +2505,15 @@ function G:SetupAvada()
 	local load = B.CreateButton(panel, 30, 30, true, "Atlas:streamcinematic-downloadicon")
 	load.Icon:SetTexCoord(.27, .73, .27, .73)
 	load:SetPoint("LEFT", profileButtons[10], "RIGHT", 5, 0)
-	load.title = "加载设置"
-	B.AddTooltip(load, "ANCHOR_RIGHT", "将当前方案加载到监控", "info")
+	load.title = L["LoadProfile"]
+	B.AddTooltip(load, "ANCHOR_RIGHT", L["LoadProfileTip"], "info")
 	load:SetScript("OnClick", function()
 		if currentID ~= 1 and (NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][currentID]) then
 			NDuiADB["AvadaIndex"][myFullName][currentSpecID] = currentID
-			UIErrorsFrame:AddMessage(DB.InfoColor.."已加载配置"..currentID)
+			UIErrorsFrame:AddMessage(DB.InfoColor..format(L["LoadProfileIndex"], currentID))
 		else
 			NDuiADB["AvadaIndex"][myFullName][currentSpecID] = nil
-			UIErrorsFrame:AddMessage(DB.InfoColor.."已加载默认配置")
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["LoadProfileDefault"])
 		end
 		UF:Avada_RefreshAll()
 		updateProfileButtons()
@@ -2521,11 +2521,11 @@ function G:SetupAvada()
 
 	local save = B.CreateButton(panel, 30, 30, true, "Interface\\RAIDFRAME\\ReadyCheck-Ready")
 	save:SetPoint("LEFT", load, "RIGHT", 5, 0)
-	save.title = "保存设置"
-	B.AddTooltip(save, "ANCHOR_RIGHT", "保存你设置的监控方案", "info")
+	save.title = L["SaveProfile"]
+	B.AddTooltip(save, "ANCHOR_RIGHT", L["SaveProfileTip"], "info")
 	save:SetScript("OnClick", function()
 		if currentID == 1 then
-			UIErrorsFrame:AddMessage(DB.InfoColor.."1号位是默认设置，无法修改。")
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
 			return
 		end
 		local str = ""
@@ -2544,11 +2544,11 @@ function G:SetupAvada()
 	local undo = B.CreateButton(panel, 30, 30, true, "Atlas:common-icon-undo")
 	undo:SetPoint("LEFT", save, "RIGHT", 5, 0)
 	undo.Icon:SetInside(undo, 2, 2)
-	undo.title = "清除设置"
-	B.AddTooltip(undo, "ANCHOR_RIGHT", "将下方设置清空", "info")
+	undo.title = L["ClearProfile"]
+	B.AddTooltip(undo, "ANCHOR_RIGHT", L["ClearProfileTip"], "info")
 	undo:SetScript("OnClick", function()
 		if currentID == 1 then
-			UIErrorsFrame:AddMessage(DB.InfoColor.."1号位是默认设置，无法修改。")
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
 			return
 		end
 		for i = 1, 6 do
@@ -2596,7 +2596,7 @@ function G:SetupAvada()
 		button2 = CANCEL,
 		OnAccept = function(self)
 			if currentID == 1 then
-				UIErrorsFrame:AddMessage(DB.InfoColor.."1号位是默认设置，无法修改。")
+				UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
 				return
 			end
 			local text = self.editBox:GetText()
@@ -2636,14 +2636,14 @@ function G:SetupAvada()
 	export:SetPoint("LEFT", undo, "RIGHT", 5, 0)
 	export:SetScript("OnClick", exportAvadaStyle)
 	export.title = L["Export"]
-	B.AddTooltip(export, "ANCHOR_RIGHT", "导出当前设置", "info")
+	B.AddTooltip(export, "ANCHOR_RIGHT")
 
 	local import = B.CreateButton(panel, 30, 30, true, DB.ArrowUp)
 	import.Icon:SetRotation(rad(180))
 	import:SetPoint("LEFT", export, "RIGHT", 5, 0)
 	import:SetScript("OnClick", importAvadaStyle)
 	import.title = L["Import"]
-	B.AddTooltip(import, "ANCHOR_RIGHT", "导入他人分享的设置", "info")
+	B.AddTooltip(import, "ANCHOR_RIGHT")
 
 	frame.buttons = {}
 	local unitOptions = {"player", "target", "pet"}
@@ -2668,19 +2668,19 @@ function G:SetupAvada()
 	local function createOptionGroup(parent, i)
 		parent.options = {}
 
-		local unitOption = G:CreateDropdown(parent, L["Unit*"], 1, 1, unitOptions, "监控来源", 88, 28)
+		local unitOption = G:CreateDropdown(parent, L["Unit*"], 1, 1, unitOptions, L["AvadaUnitOptionTip"], 88, 28)
 		unitOption:SetFrameLevel(20)
 		unitOption:ClearAllPoints()
 		unitOption:SetPoint("TOP", parent, "BOTTOM", 0, -30)
 		parent.options[1] = unitOption
 
-		local typeOption = G:CreateDropdown(parent, L["Type*"], 1, 1, typeOptions, "监控类型", 88, 28)
+		local typeOption = G:CreateDropdown(parent, L["Type*"], 1, 1, typeOptions, L["AvadaTypeOptionTip"], 88, 28)
 		typeOption:SetFrameLevel(20)
 		typeOption:ClearAllPoints()
 		typeOption:SetPoint("TOP", parent, "BOTTOM", 0, -90)
 		parent.options[2] = typeOption
 
-		local spellOption = G:CreateEditbox(parent, "ID*", 1, 1, "输入法术ID", 88, 28)
+		local spellOption = G:CreateEditbox(parent, "ID*", 1, 1, L["AvadaIDOptionTip"], 88, 28)
 		spellOption:ClearAllPoints()
 		spellOption:SetPoint("TOP", parent, "BOTTOM", 0, -150)
 		spellOption:SetJustifyH("CENTER")
@@ -2741,6 +2741,5 @@ function G:SetupAvada()
 	panel:HookScript("OnShow", refreshAllFrames)
 end
 
-function hehe()
-	G:SetupAvada()
-end
+SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
+SLASH_NDUI_AVADACONFIG1 = "/aa"
