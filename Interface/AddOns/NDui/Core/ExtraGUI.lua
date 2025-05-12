@@ -2503,7 +2503,7 @@ function G:SetupAvada()
 	end)
 
 	local load = B.CreateButton(panel, 30, 30, true, "Atlas:streamcinematic-downloadicon")
-	load.Icon:SetTexCoord(.25, .75, .25, .75)
+	load.Icon:SetTexCoord(.27, .73, .27, .73)
 	load:SetPoint("LEFT", profileButtons[10], "RIGHT", 5, 0)
 	load.title = "加载设置"
 	B.AddTooltip(load, "ANCHOR_RIGHT", "将当前方案加载到监控", "info")
@@ -2547,6 +2547,10 @@ function G:SetupAvada()
 	undo.title = "清除设置"
 	B.AddTooltip(undo, "ANCHOR_RIGHT", "将下方设置清空", "info")
 	undo:SetScript("OnClick", function()
+		if currentID == 1 then
+			UIErrorsFrame:AddMessage(DB.InfoColor.."1号位是默认设置，无法修改。")
+			return
+		end
 		for i = 1, 6 do
 			frame.buttons[i].Icon:SetTexture(EMPTY_ICON)
 			frame.buttons[i].options[1].Text:SetText()
@@ -2683,11 +2687,40 @@ function G:SetupAvada()
 		parent.options[3] = spellOption
 	end
 
+	local function GetCursorID()
+		local infoType, itemID, _, spellID = GetCursorInfo()
+		return infoType == "item" and itemID or infoType == "spell" and spellID or nil
+	end
+
+	local function receiveCursor(button)
+		if CursorHasItem() then
+			local itemID = GetCursorID()
+			if itemID then
+				ClearCursor()
+				button.Icon:SetTexture(GetItemIcon(itemID) or EMPTY_ICON)
+				button.options[1].Text:SetText("player")
+				button.options[2].Text:SetText("item")
+				button.options[3]:SetText(itemID)
+			end
+		elseif CursorHasSpell() then
+			local spellID = GetCursorID()
+			if spellID then
+				ClearCursor()
+				button.Icon:SetTexture(GetSpellTexture(spellID) or EMPTY_ICON)
+				button.options[1].Text:SetText("player")
+				button.options[2].Text:SetText("cd")
+				button.options[3]:SetText(spellID)
+			end
+		end
+	end
+
 	for i = 1, 6 do
 		local bu = B.CreateButton(frame, 50, 50, true, EMPTY_ICON)
 		bu:SetPoint("TOPLEFT", 30 + (i-1)*100, -10)
 		bu:SetScript("OnEnter", showTooltip)
 		bu:SetScript("OnLeave", B.HideTooltip)
+		bu:SetScript("OnMouseDown", receiveCursor)
+		bu:SetScript("OnReceiveDrag", receiveCursor)
 		createOptionGroup(bu, i)
 		frame.buttons[i] = bu
 	end
