@@ -260,9 +260,32 @@ function UF:Avada_OnAura(unit)
 	end
 end
 
-function UF:AvadaKedavra(self)
-	if not C.db["Avada"]["Enable"] then return end
+function UF:Avada_Toggle(frame)
+	frame = frame or oUF_PlayerPlate
+	if not frame then return end
 
+	if C.db["Avada"]["Enable"] then
+		for i = 1, 6 do frame.Avada[i]:Show() end
+		B:RegisterEvent("UNIT_AURA", UF.Avada_OnAura)
+		frame:RegisterEvent("PLAYER_TARGET_CHANGED", UF.Avada_OnEvent, true)
+		frame:RegisterEvent("SPELL_UPDATE_COOLDOWN", UF.Avada_OnEvent, true)
+		frame:RegisterEvent("SPELL_UPDATE_CHARGES", UF.Avada_OnEvent, true)
+		frame:RegisterEvent("BAG_UPDATE_COOLDOWN", UF.Avada_OnEvent, true)
+
+		UF.Avada_RefreshAll(frame)
+		frame:RegisterEvent("PLAYER_TALENT_UPDATE", UF.Avada_RefreshAll, true)
+	else
+		for i = 1, 6 do frame.Avada[i]:Hide() end
+		B:UnregisterEvent("UNIT_AURA", UF.Avada_OnAura)
+		frame:UnregisterEvent("PLAYER_TARGET_CHANGED", UF.Avada_OnEvent)
+		frame:UnregisterEvent("SPELL_UPDATE_COOLDOWN", UF.Avada_OnEvent)
+		frame:UnregisterEvent("SPELL_UPDATE_CHARGES", UF.Avada_OnEvent)
+		frame:UnregisterEvent("BAG_UPDATE_COOLDOWN", UF.Avada_OnEvent)
+		frame:UnregisterEvent("PLAYER_TALENT_UPDATE", UF.Avada_RefreshAll, true)
+	end
+end
+
+function UF:AvadaKedavra(self)
 	local iconSize = (C.db["Nameplate"]["PPWidth"]+2*C.mult - C.margin*(maxButtons-1))/maxButtons
 
 	self.Avada = {}
@@ -287,12 +310,5 @@ function UF:AvadaKedavra(self)
 	avadaButtons = self.Avada
 	UF.avadaData = auraData
 
-	B:RegisterEvent("UNIT_AURA", UF.Avada_OnAura)
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.Avada_OnEvent, true)
-	self:RegisterEvent("SPELL_UPDATE_COOLDOWN", UF.Avada_OnEvent, true)
-	self:RegisterEvent("SPELL_UPDATE_CHARGES", UF.Avada_OnEvent, true)
-	self:RegisterEvent("BAG_UPDATE_COOLDOWN", UF.Avada_OnEvent, true)
-
-	UF.Avada_RefreshAll(self)
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", UF.Avada_RefreshAll, true)
+	UF:Avada_Toggle(self)
 end

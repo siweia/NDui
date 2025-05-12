@@ -38,6 +38,7 @@ L["Tutorial Page2"] = "|cffff0000ATTENTION: Les paramètres ci-dessous sont part
 L["Tutorial Page3"] = "Terminé! Vous avez terminé le tutoriel.|n|n|cffff0000ATTENTION:|r|n|nNotez que la plupart des barres d'information contiennent des fonctions supplémentaires;|n|nVous pouvez facilement définir la focalisation en maintenant SHIFT et clic gauche sur l'unité;|n|nLa plupart des paramètres peuvent être modifiés dans |cffffcc00NDuiConsole|r.|r"
 L["Help Title"] = "Infos d'aide"
 L["Help Intro"] = "Merci d'avoir choisi |cff0080ffNDui|r, il y a quelques commandes pour vous comme suit.|n|nSi c'est la première fois que vous utilisez |cff0080ffNDui|r, merci de cliquer sur le bouton ci-dessous."
+L["Cmd aa intro"] = "customize class auras" -- need translation
 L["Cmd bb intro"] = "raccourcis claviers faciles"
 L["Cmd mm intro"] = "Débloquer les éléments de l'interface utilisateur"
 L["Cmd rl intro"] = "recharger tous les addons"

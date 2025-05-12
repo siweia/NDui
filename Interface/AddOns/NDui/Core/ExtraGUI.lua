@@ -2693,6 +2693,10 @@ function G:SetupAvada()
 	end
 
 	local function receiveCursor(button)
+		if currentID == 1 then
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
+			return
+		end
 		if CursorHasItem() then
 			local itemID = GetCursorID()
 			if itemID then

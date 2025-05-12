@@ -38,6 +38,7 @@ L["Tutorial Page2"] = "|cffff0000ACHTUNG: Die folgenden Einstellungen werden im 
 L["Tutorial Page3"] = "Fertig! Du hast das Tutorial abgeschlossen.|n|n|cffff0000CAUTIONS:|r|n|nUnd beachte, dass die meisten Infoleisten zusätzliche Funktionen enthalten;|n|nDu kannst den Fokus einfach einstellen, indem Du SHIFT gedrückt hälsct und mit der linken Maustaste auf das Gerät klickst;|n|nDie meisten Einstellungen können geändert werden in |cffffcc00NDuiConsole|r.|r"
 L["Help Title"] = "Hilfe Info"
 L["Help Intro"] = "Danke für die Auswahl |cff0080ffNDui|r, Es gibt einige Befehle für Dich wie folgt.|n|nWenn Du das zum ersten Mal verwendest |cff0080ffNDui|r, Bitte gehe zu einem Tutorial, indem Du auf die Schaltfläche unten klickst."
+L["Cmd aa intro"] = "customize class auras" -- need translation
 L["Cmd bb intro"] = "Einfache Tastenbindung"
 L["Cmd mm intro"] = "UI Elemente freischalten"
 L["Cmd rl intro"] = "alle Addons neu laden"

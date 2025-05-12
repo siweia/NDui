@@ -38,6 +38,7 @@ L["Tutorial Page2"] = "|cffff0000注意: 本页的设置为账号共享。|r|n|n
 L["Tutorial Page3"] = "设置完毕！点击|cffffcc00应用|r后重载插件生效。|n|n|cffff0000注意:|r|n|n信息条的每一个模块都有额外功能，请务必查看一遍；|n|n大部分的设置在控制面板中都可以修改。|r"
 L["Help Title"] = "帮助说明"
 L["Help Intro"] = "欢迎使用NDui，以下列举了一些常用命令。|n|n如果你是首次使用NDui，请务必进行一次设置向导。"
+L["Cmd aa intro"] = "个人资源条监控"
 L["Cmd bb intro"] = "快速按键绑定"
 L["Cmd mm intro"] = "移动界面元素"
 L["Cmd rl intro"] = "重新载入插件"

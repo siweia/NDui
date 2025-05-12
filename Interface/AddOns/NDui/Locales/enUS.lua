@@ -38,6 +38,7 @@ L["Tutorial Page2"] = "|cffff0000CAUTIONS: The settings below are shared in acco
 L["Tutorial Page3"] = "Done! You have complete the tutorial.|n|n|cffff0000CAUTIONS:|r|n|nAnd note that, most of the infobars contain extra functions;|n|nYou can easily set focus by holding SHIFT and LEFT click on the unit;|n|nMost of the settings can be changed in |cffffcc00NDuiConsole|r.|r"
 L["Help Title"] = "Help Info"
 L["Help Intro"] = "Thanks for choosing |cff0080ffNDui|r, there are some commands for you as follows.|n|nIf this is your first time using |cff0080ffNDui|r, please go for a tutorial by clicking the button below."
+L["Cmd aa intro"] = "customize class auras"
 L["Cmd bb intro"] = "easy key-bindings"
 L["Cmd mm intro"] = "unlock UI elements"
 L["Cmd rl intro"] = "reload all the addons"

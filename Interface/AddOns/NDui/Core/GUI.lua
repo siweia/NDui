@@ -953,6 +953,15 @@ local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
 
+local function toggleAvada()
+	B:GetModule("UnitFrames"):Avada_Toggle()
+end
+
+local function toggleAvadaGUI()
+	G:SetupAvada()
+	if f then f:Hide() end
+end
+
 local function togglePlayerPlate()
 	refreshNameplates()
 	B:GetModule("UnitFrames"):TogglePlayerPlate()
@@ -1337,6 +1346,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{3, "Nameplate", "PPFadeoutAlpha", L["PlayerPlate FadeoutAlpha"].."*", true, {0, .5, .05}, togglePlateVisibility},
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
+		{1, "Avada", "Enable", HeaderTag.."Test Project*", true, toggleAvadaGUI, toggleAvada},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["Width"].."*", false, {100, 500, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {2, 15, 1}, refreshNameplates},
