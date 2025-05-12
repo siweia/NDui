@@ -6,6 +6,7 @@ local _G = _G
 local unpack, pairs, ipairs, tinsert = unpack, pairs, ipairs, tinsert
 local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonumber
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
+local GetItemIcon = C_Item.GetItemIconByID
 local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
 local IsControlKeyDown = IsControlKeyDown
 local myFullName = DB.MyFullName
@@ -369,7 +370,7 @@ function G:SetupClickCast(parent)
 			value = textIndex[value] or value
 			local itemID = strmatch(value, "item:(%d+)")
 			if itemID then
-				texture = C_Item.GetItemIconByID(itemID)
+				texture = GetItemIcon(itemID)
 			else
 				texture = 136243
 			end
@@ -2438,9 +2439,15 @@ function G:SetupAvada()
 			local bu = frame.buttons[i]
 			if bu then
 				bu.spellID = spellData[i] and spellData[i].spellID
-				bu.Icon:SetTexture(bu.spellID and GetSpellTexture(bu.spellID) or EMPTY_ICON)
+				local spellType = spellData[i] and spellData[i].type
+				local texture = bu.spellID and GetSpellTexture(bu.spellID)
+				if spellType == "item" then
+					texture = bu.spellID and GetItemIcon(bu.spellID)
+				end
+				bu.spellType = spellType
+				bu.Icon:SetTexture(texture or EMPTY_ICON)
 				bu.options[1].Text:SetText(spellData[i] and spellData[i].unit or "")
-				bu.options[2].Text:SetText(spellData[i] and spellData[i].type or "")
+				bu.options[2].Text:SetText(spellType or "")
 				bu.options[3]:SetText(spellData[i] and spellData[i].spellID or "")
 			end
 		end
@@ -2459,8 +2466,13 @@ function G:SetupAvada()
 			for i = 1, 6 do
 				local spellID = spellData[i] and spellData[i].spellID
 				if spellID then
+					local texture = GetSpellTexture(spellID)
 					local spellName = GetSpellName(spellID) or spellID
-					toolipText = toolipText..format(iconString, GetSpellTexture(spellID) or EMPTY_ICON)..spellName.."\n"
+					if spellData[i].type == "item" then
+						spellName = C_Item.GetItemInfo(spellID) or spellID
+						texture = GetItemIcon(spellID)
+					end
+					toolipText = toolipText..format(iconString, texture or EMPTY_ICON)..spellName.."\n"
 				end
 			end
 		end
@@ -2525,9 +2537,8 @@ function G:SetupAvada()
 				str = str..i.."Z"..unitStr.."Z"..typeStr.."Z"..spellID.."N"
 			end
 		end
-
 		if not NDuiADB["AvadaProfile"][currentSpecID] then NDuiADB["AvadaProfile"][currentSpecID] = {} end
-		NDuiADB["AvadaProfile"][currentSpecID][currentID] = str ~= "" and str
+		NDuiADB["AvadaProfile"][currentSpecID][currentID] = str ~= "" and str or nil
 	end)
 
 	local undo = B.CreateButton(panel, 30, 30, true, "Atlas:common-icon-undo")
@@ -2632,14 +2643,22 @@ function G:SetupAvada()
 
 	frame.buttons = {}
 	local unitOptions = {"player", "target", "pet"}
-	local typeOptions = {"buff", "debuff", "cd"}
+	local typeOptions = {"buff", "debuff", "cd", "item"}
 
 	local function showTooltip(self)
-		if not (self.spellID and GetSpellName(self.spellID)) then return end
-		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-		GameTooltip:ClearLines()
-		GameTooltip:SetSpellByID(self.spellID)
-		GameTooltip:Show()
+		local spellID = self.spellID
+		if not spellID then return end
+		if self.spellType == "item" then
+			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+			GameTooltip:ClearLines()
+			GameTooltip:SetItemByID(spellID)
+			GameTooltip:Show()
+		else
+			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+			GameTooltip:ClearLines()
+			GameTooltip:SetSpellByID(spellID)
+			GameTooltip:Show()
+		end
 	end
 
 	local function createOptionGroup(parent, i)
