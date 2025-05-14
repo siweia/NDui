@@ -212,6 +212,67 @@ function M:ItemLevel_UpdatePlayer()
 	M:ItemLevel_SetupLevel(CharacterFrame, "Character", "player")
 end
 
+local function GetItemSlotLevel(unit, index)
+	local level
+	local itemLink = GetInventoryItemLink(unit, index)
+	if itemLink then
+		level = select(4, GetItemInfo(itemLink))
+	end
+	return tonumber(level) or 0
+end
+
+-- P1 174,187,200,213
+-- P2 200,213,226,239
+-- P3 200,226,239,252
+-- P4 200,246,259,272
+local function GetILvlTextColor(level)
+	if level >= 372 then
+		return 1, .5, 0
+	elseif level >= 359 then
+		return .63, .2, .93
+	elseif level >= 346 then
+		return 0, .43, .87
+	elseif level >= 272 then
+		return .12, 1, 0
+	else
+		return 1, 1, 1
+	end
+end
+
+function M:UpdateUnitILvl(unit, text)
+	if not text then return end
+
+	local total, level = 0
+	for index = 1, 15 do
+		if index ~= 4 then
+			level = GetItemSlotLevel(unit, index)
+			if level > 0 then
+				total = total + level
+			end
+		end
+	end
+
+	local mainhand = GetItemSlotLevel(unit, 16)
+	local offhand = GetItemSlotLevel(unit, 17)
+	local ranged = GetItemSlotLevel(unit, 18)
+
+	--[[
+ 		Note: We have to unify iLvl with others who use MerInspect,
+		 although it seems incorrect for Hunter with two melee weapons.
+	]]
+	if mainhand > 0 and offhand > 0 then
+		total = total + mainhand + offhand
+	elseif offhand > 0 and ranged > 0 then
+		total = total + offhand + ranged
+	else
+		total = total + max(mainhand, offhand, ranged) * 2
+	end
+
+	local average = B:Round(total/16, 1)
+	text:SetText(average)
+	text:SetTextColor(GetILvlTextColor(average))
+end
+
 function M:UpdateInspectILvl()
 	if not M.InspectILvl then return end
 

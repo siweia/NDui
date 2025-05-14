@@ -242,7 +242,6 @@ G.DefaultSettings = {
 		CCName = true,
 		RCCName = true,
 		HideTip = false,
-		LibHealComm = false,
 		SortByRole = true,
 		SortAscending = false,
 		AutoBuffs = false,
@@ -1192,7 +1191,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "HideTip", L["HideTooltip"].."*", true, nil, updateRaidTextScale, L["HideTooltipTip"]},
 		{1, "UFs", "RCCName", L["ClassColor Name"].."*", nil, nil, updateRaidTextScale},
 		{1, "UFs", "SpecRaidPos", L["Spec RaidPos"], true, nil, nil, L["SpecRaidPosTip"]},
-		{1, "UFs", "LibHealComm", HeaderTag..L["HealPrediction"]},
 	},
 	[5] = {
 		{1, "Nameplate", "Enable", HeaderTag..L["Enable Nameplate"], nil, setupNameplateSize, refreshNameplates},
