@@ -2,6 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Settings")
 local pairs, wipe = pairs, table.wipe
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 -- Addon Info
 print("|cff0080ff< NDui >|cff70C0F5----------------")

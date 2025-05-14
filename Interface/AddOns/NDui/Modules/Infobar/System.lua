@@ -12,7 +12,7 @@ local GetFramerate, GetTime = GetFramerate, GetTime
 local GetNumAddOns, GetAddOnInfo, GetCVarBool, SetCVar = GetNumAddOns, GetAddOnInfo, GetCVarBool, SetCVar
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage
 local UpdateAddOnMemoryUsage, GetAddOnMemoryUsage = UpdateAddOnMemoryUsage, GetAddOnMemoryUsage
-local IsShiftKeyDown, IsAddOnLoaded = IsShiftKeyDown, IsAddOnLoaded
+local IsShiftKeyDown, IsAddOnLoaded = IsShiftKeyDown, C_AddOns.IsAddOnLoaded
 local ResetCPUUsage, collectgarbage, gcinfo = ResetCPUUsage, collectgarbage, gcinfo
 
 local showMoreString = "%d %s (%s)"

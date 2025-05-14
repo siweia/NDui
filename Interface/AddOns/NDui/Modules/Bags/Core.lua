@@ -696,7 +696,7 @@ function module:OnLogin()
 	-- Settings
 	local iconSize = C.db["Bags"]["IconSize"]
 	local showNewItem = C.db["Bags"]["ShowNewItem"]
-	local hasPawn = IsAddOnLoaded("Pawn")
+	local hasPawn = C_AddOns.IsAddOnLoaded("Pawn")
 
 	-- Init
 	local Backpack = cargBags:NewImplementation("NDui_Backpack")

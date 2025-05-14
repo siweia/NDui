@@ -407,7 +407,7 @@ end
 
 function M:MailBox()
 	if not C.db["Misc"]["Mail"] then return end
-	if IsAddOnLoaded("Postal") then return end
+	if C_AddOns.IsAddOnLoaded("Postal") then return end
 
 	-- Delete buttons
 	for i = 1, 7 do

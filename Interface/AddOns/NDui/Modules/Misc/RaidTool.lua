@@ -8,12 +8,13 @@ local IsInGroup, IsInRaid, IsInInstance = IsInGroup, IsInRaid, IsInInstance
 local UnitIsGroupLeader, UnitIsGroupAssistant = UnitIsGroupLeader, UnitIsGroupAssistant
 local GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex, SetRaidTarget = GetInstanceInfo, GetNumGroupMembers, GetRaidRosterInfo, GetRaidTargetIndex, SetRaidTarget
 local GetSpellCharges, GetSpellInfo, UnitAura = GetSpellCharges, GetSpellInfo, UnitAura
-local GetTime, SendChatMessage, IsAddOnLoaded = GetTime, SendChatMessage, IsAddOnLoaded
+local GetTime, SendChatMessage = GetTime, SendChatMessage
 local IsAltKeyDown, IsControlKeyDown, InCombatLockdown = IsAltKeyDown, IsControlKeyDown, InCombatLockdown
 local UnitExists, UninviteUnit, LeaveParty = UnitExists, UninviteUnit, LeaveParty
 local ConvertToParty, ConvertToRaid = ConvertToParty, ConvertToRaid
 local DoReadyCheck, GetReadyCheckStatus = DoReadyCheck, GetReadyCheckStatus
 local C_Timer_After = C_Timer.After
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 
 function M:RaidTool_Visibility(frame)
 	if IsInGroup() then

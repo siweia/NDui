@@ -444,7 +444,7 @@ end
 function M:CharacterStatePanel() -- no longer available, need to be removed
 	if not C.db["Skins"]["BlizzardSkins"] then return end   -- disable if skins off, needs review
 
-	hasOtherAddon = IsAddOnLoaded("CharacterStatsTBC")
+	hasOtherAddon = C_AddOns.IsAddOnLoaded("CharacterStatsTBC")
 
 	local statPanel = CreateFrame("Frame", "NDuiStatPanel", PaperDollFrame)
 	statPanel:SetSize(200, 422)
@@ -516,7 +516,7 @@ function M:CharacterStatePanel() -- no longer available, need to be removed
 	end)
 
 	-- Block LeatrixPlus toggle
-	if IsAddOnLoaded("Leatrix_Plus") then
+	if C_AddOns.IsAddOnLoaded("Leatrix_Plus") then
 		local function resetModelAnchor(frame, _, _, x, y)
 			if x ~= 65 or y ~= -78 then
 				frame:ClearAllPoints()

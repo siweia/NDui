@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 
 tinsert(C.defaultThemes, function()
 	if not IsAddOnLoaded("Blizzard_CUFProfiles") then return end

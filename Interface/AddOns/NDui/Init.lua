@@ -108,7 +108,7 @@ end
 
 B:RegisterEvent("PLAYER_LOGIN", function()
 	-- Initial
-	if IsAddOnLoaded("SexyMap") then C.db["Map"]["DisableMinimap"] = true end
+	if C_AddOns.IsAddOnLoaded("SexyMap") then C.db["Map"]["DisableMinimap"] = true end
 	SetCVar("useUiScale", "1") -- Fix blizzard chatframe offset
 	B:SetupUIScale()
 	B:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)

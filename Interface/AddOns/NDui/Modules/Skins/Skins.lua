@@ -4,7 +4,7 @@ local S = B:RegisterModule("Skins")
 
 local pairs, wipe = pairs, wipe
 local xpcall = xpcall
-local IsAddOnLoaded = IsAddOnLoaded
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 local LE_ITEM_QUALITY_COMMON, BAG_ITEM_QUALITY_COLORS = LE_ITEM_QUALITY_COMMON, BAG_ITEM_QUALITY_COLORS
 
 C.defaultThemes = {}

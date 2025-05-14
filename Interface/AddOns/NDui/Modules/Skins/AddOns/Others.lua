@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded or IsAddOnLoaded
 
 function S:WhatsTraining()
 	if not IsAddOnLoaded("WhatsTraining") then return end

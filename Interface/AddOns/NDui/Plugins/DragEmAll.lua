@@ -44,7 +44,7 @@ local frames = {
 }
 
 local function CharacterFrameMoveCheck()
-	if IsAddOnLoaded("RXPGuides") then return end
+	if C_AddOns.IsAddOnLoaded("RXPGuides") then return end
 
 	frames["PaperDollFrame"] = "CharacterFrame"
 	frames["ReputationFrame"] = true
