@@ -10,7 +10,7 @@ DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isClassic = select(4, GetBuildInfo()) < 90000
 DB.isNewPatch = select(4, GetBuildInfo()) >= 40402 -- 4.4.2 Cata
-DB.isCata = select(4, GetBuildInfo()) >= 40400 -- 4.4.0 Cata
+DB.isMop = select(4, GetBuildInfo()) >= 50500 -- 5.5.0 MoP
 
 -- Deprecated
 do
