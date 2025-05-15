@@ -10,7 +10,7 @@ local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INT
 local LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL
 local UnitIsPVP, UnitFactionGroup, UnitRealmRelationship, UnitGUID = UnitIsPVP, UnitFactionGroup, UnitRealmRelationship, UnitGUID
 local UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction = UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction
-local InCombatLockdown, IsShiftKeyDown, GetItemInfo = InCombatLockdown, IsShiftKeyDown, GetItemInfo
+local InCombatLockdown, IsShiftKeyDown = InCombatLockdown, IsShiftKeyDown
 local GetCreatureDifficultyColor, UnitCreatureType, UnitClassification = GetCreatureDifficultyColor, UnitCreatureType, UnitClassification
 local UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel
 local GetRaidTargetIndex, GetGuildInfo, IsInGuild = GetRaidTargetIndex, GetGuildInfo, IsInGuild
@@ -396,7 +396,7 @@ function TT:ReskinTooltip()
 	if C.db["Tooltip"]["ItemQuality"] and self.GetItem then
 		local _, item = self:GetItem()
 		if item then
-			local quality = select(3, GetItemInfo(item))
+			local quality = select(3, C_Item.GetItemInfo(item))
 			local color = DB.QualityColors[quality or 1]
 			if color then
 				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)

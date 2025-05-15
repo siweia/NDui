@@ -54,7 +54,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 
 		local skillLink = GetTradeSkillItemLink(id)
 		if skillLink then
-			local quality = select(3, GetItemInfo(skillLink))
+			local quality = select(3, C_Item.GetItemInfo(skillLink))
 			if quality and quality > 1 then
 				local r, g, b = GetItemQualityColor(quality)
 				TradeSkillSkillName:SetTextColor(r, g, b)

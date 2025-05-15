@@ -3,6 +3,8 @@ local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 
 C.themes["Blizzard_TalentUI"] = function()
+	if DB.isMop then return end
+
 	B.ReskinPortraitFrame(PlayerTalentFrame)
 	B.Reskin(PlayerTalentFrameToggleSummariesButton)
 	B.Reskin(PlayerTalentFrameLearnButton)
@@ -101,6 +103,7 @@ C.themes["Blizzard_GlyphUI"] = function()
 	B.ReskinFilterButton(GlyphFrame.FilterDropdown)
 	GlyphFrameSideInset:DisableDrawLayer("BACKGROUND")
 	GlyphFrameSideInset:DisableDrawLayer("BORDER")
+	GlyphFrameSideInset:Hide()
 	B.ReskinIcon(GlyphFrameClearInfoFrameIcon)
 
 	for i = 1, 3 do
@@ -119,18 +122,19 @@ C.themes["Blizzard_GlyphUI"] = function()
 	for i = 1, 12 do
 		local bu = _G["GlyphFrameScrollFrameButton"..i]
 		local ic = _G["GlyphFrameScrollFrameButton"..i.."Icon"]
+		if bu then
+			bu:SetNormalTexture(0)
+			B.ReskinIcon(ic)
 
-		bu:SetNormalTexture(0)
-		B.ReskinIcon(ic)
-
-		local bg = B.CreateBDFrame(bu, .25)
-		bg:SetPoint("TOPLEFT", ic, "TOPRIGHT", 2, 0)
-		bg:SetPoint("BOTTOMRIGHT", -2, 2)
-		local hl = bu:GetHighlightTexture()
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetInside()
-		local selected = bu.selectedTex
-		selected:SetInside(bg)
-		selected:SetColorTexture(r, g, b, .2)
+			local bg = B.CreateBDFrame(bu, .25)
+			bg:SetPoint("TOPLEFT", ic, "TOPRIGHT", 2, 0)
+			bg:SetPoint("BOTTOMRIGHT", -2, 2)
+			local hl = bu:GetHighlightTexture()
+			hl:SetColorTexture(1, 1, 1, .25)
+			hl:SetInside()
+			local selected = bu.selectedTex
+			selected:SetInside(bg)
+			selected:SetColorTexture(r, g, b, .2)
+		end
 	end
 end

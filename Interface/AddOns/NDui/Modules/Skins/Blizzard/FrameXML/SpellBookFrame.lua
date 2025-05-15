@@ -66,15 +66,17 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	hooksecurefunc("SpellBookFrame_Update", function()
-		for i = 2, 5 do
-			local tab = _G["SpellBookFrameTabButton"..i]
-			if tab then
-				tab:ClearAllPoints()
-				tab:SetPoint("TOPLEFT", _G["SpellBookFrameTabButton"..(i-1)], "TOPRIGHT", -15, 0)
+	if not DB.isMop then
+		hooksecurefunc("SpellBookFrame_Update", function()
+			for i = 2, 5 do
+				local tab = _G["SpellBookFrameTabButton"..i]
+				if tab then
+					tab:ClearAllPoints()
+					tab:SetPoint("TOPLEFT", _G["SpellBookFrameTabButton"..(i-1)], "TOPRIGHT", -15, 0)
+				end
 			end
-		end
-	end)
+		end)
+	end
 
 	for i = 1, SPELLS_PER_PAGE do
 		local bu = _G["SpellButton"..i]
@@ -95,7 +97,7 @@ tinsert(C.defaultThemes, function()
 
 	SpellBookSkillLineTab1:SetPoint("TOPLEFT", SpellBookSideTabsFrame, "TOPRIGHT", 2, -36)
 
-	hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", function()
+	local function updateSkillLineTabs()
 		for i = 1, GetNumSpellTabs() do
 			local tab = _G["SpellBookSkillLineTab"..i]
 			local nt = tab:GetNormalTexture()
@@ -112,7 +114,12 @@ tinsert(C.defaultThemes, function()
 				tab.styled = true
 			end
 		end
-	end)
+	end
+	if DB.isMop then
+		hooksecurefunc(SpellBookFrame, "UpdateSkillLineTabs", updateSkillLineTabs)
+	else
+		hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", updateSkillLineTabs)
+	end
 
 	-- Professions
 

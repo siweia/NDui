@@ -9,7 +9,7 @@ local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendCh
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
 local GetSpellLink, GetSpellInfo, GetSpellCooldown = GetSpellLink, GetSpellInfo, GetSpellCooldown
 local GetActionInfo, GetMacroSpell, GetMacroItem = GetActionInfo, GetMacroSpell, GetMacroItem
-local GetItemInfo, GetItemInfoFromHyperlink = GetItemInfo, GetItemInfoFromHyperlink
+local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local GetMinimapZoneText = GetMinimapZoneText
 local AuraUtil_FindAuraByName = AuraUtil.FindAuraByName
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
@@ -373,7 +373,7 @@ function M:AnalyzeButtonCooldown()
 	if spellType == "spell" then
 		M:SendCurrentSpell(thisTime, id)
 	elseif spellType == "item" then
-		local itemName, itemLink = GetItemInfo(id)
+		local itemName, itemLink = C_Item.GetItemInfo(id)
 		M:SendCurrentItem(thisTime, id, itemLink or itemName)
 	elseif spellType == "macro" then
 		local spellID = GetMacroSpell(id)

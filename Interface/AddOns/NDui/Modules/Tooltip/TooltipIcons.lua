@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
 local gsub, unpack, strfind = gsub, unpack, strfind
-local GetItemIcon, GetSpellTexture = GetItemIcon, GetSpellTexture
+local GetSpellTexture = GetSpellTexture
 local newString = "0:0:64:64:5:59:5:59"
 
 function TT:SetupTooltipIcon(icon)
@@ -32,7 +32,7 @@ function TT:HookTooltipSetItem()
 	if not self.tipModified then
 		local _, link = self:GetItem()
 		if link then
-			TT.SetupTooltipIcon(self, GetItemIcon(link))
+			TT.SetupTooltipIcon(self, C_Item.GetItemIconByID(link))
 		end
 
 		self.tipModified = true

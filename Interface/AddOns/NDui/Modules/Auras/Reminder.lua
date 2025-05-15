@@ -5,7 +5,8 @@ local A = B:GetModule("Auras")
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = 36
 local frames, parentFrame = {}
-local InCombatLockdown, GetZonePVPInfo, UnitIsDeadOrGhost = InCombatLockdown, GetZonePVPInfo, UnitIsDeadOrGhost
+local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
+local InCombatLockdown, UnitIsDeadOrGhost = InCombatLockdown, UnitIsDeadOrGhost
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
 local pairs, tinsert, next = pairs, table.insert, next
 

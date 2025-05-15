@@ -5,7 +5,7 @@ local M = B:GetModule("Misc")
 local wipe, select, pairs, tonumber = wipe, select, pairs, tonumber
 local strsplit, strfind, tinsert = strsplit, strfind, tinsert
 local InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney, TakeInboxItem = InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney, TakeInboxItem
-local GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo = GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo
+local GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem = GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem
 local GetSendMailPrice, GetMoney = GetSendMailPrice, GetMoney
 local C_Timer_After = C_Timer.After
 local C_Mail_HasInboxMoney = C_Mail.HasInboxMoney
@@ -51,7 +51,7 @@ function M:InboxItem_OnEnter()
 		if itemAttached > 1 then
 			GameTooltip:AddLine(L["Attach List"])
 			for itemID, count in pairs(inboxItems) do
-				local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID)
+				local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = C_Item.GetItemInfo(itemID)
 				if itemName then
 					local r, g, b = GetItemQualityColor(itemQuality)
 					GameTooltip:AddDoubleLine(" |T"..itemTexture..":12:12:0:0:50:50:4:46:4:46|t "..itemName, count, r, g, b)

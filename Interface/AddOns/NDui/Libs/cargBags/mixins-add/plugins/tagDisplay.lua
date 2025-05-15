@@ -121,8 +121,8 @@ tagPool["space"] = function(tag)
 end
 
 tagPool["item"] = function(self, item)
-	local bags = GetItemCount(item, nil)
-	local total = GetItemCount(item, true)
+	local bags = C_Item.GetItemCount(item, nil)
+	local total = C_Item.GetItemCount(item, true)
 	local bank = total-bags
 
 	if(total > 0) then

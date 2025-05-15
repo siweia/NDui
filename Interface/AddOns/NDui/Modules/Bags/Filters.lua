@@ -104,8 +104,8 @@ end
 
 local collectionBlackList = {}
 local collectionIDs = {
-	[LE_ITEM_MISCELLANEOUS_MOUNT] = LE_ITEM_CLASS_MISCELLANEOUS,
-	[LE_ITEM_MISCELLANEOUS_COMPANION_PET] = LE_ITEM_CLASS_MISCELLANEOUS,
+	[Enum.ItemMiscellaneousSubclass.Mount] = Enum.ItemClass.Miscellaneous,
+	[Enum.ItemMiscellaneousSubclass.CompanionPet] = Enum.ItemClass.Miscellaneous,
 }
 local function isMountOrPet(item)
 	return not collectionBlackList[item.id] and item.subClassID and collectionIDs[item.subClassID] == item.classID

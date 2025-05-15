@@ -28,7 +28,7 @@ local function IsAlreadyKnown(link, index)
 		local speciesID = select(2, strsplit(":", link))
 		return isPetCollected(speciesID)
 	elseif strmatch(link, "item:") then
-		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
+		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = C_Item.GetItemInfo(link)
 		if not name then return end
 
 		if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then

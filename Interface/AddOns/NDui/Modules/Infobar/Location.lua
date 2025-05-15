@@ -10,6 +10,7 @@ local format, unpack = string.format, unpack
 local SELECTED_DOCK_FRAME, ChatFrame_OpenChat = SELECTED_DOCK_FRAME, ChatFrame_OpenChat
 local GetSubZoneText, GetZoneText, GetZonePVPInfo, IsInInstance = GetSubZoneText, GetZoneText, GetZonePVPInfo, IsInInstance
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
+local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
 
 local zoneInfo = {
 	sanctuary = {SANCTUARY_TERRITORY, {.41, .8, .94}},

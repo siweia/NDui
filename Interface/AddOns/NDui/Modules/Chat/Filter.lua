@@ -7,7 +7,7 @@ local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 local min, max, tremove = math.min, math.max, table.remove
 local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup, C_Timer.After
 local Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar = Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar
-local GetItemInfo, GetItemStats = GetItemInfo, GetItemStats
+local GetItemStats = GetItemStats
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
 
 -- Filter Chat symbols
@@ -171,7 +171,7 @@ end
 
 -- Show itemlevel on chat hyperlinks
 local function isItemHasLevel(link)
-	local name, _, rarity, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
+	local name, _, rarity, level, _, _, _, _, _, _, _, classID = C_Item.GetItemInfo(link)
 	if name and level and rarity > 1 and (classID == LE_ITEM_CLASS_WEAPON or classID == LE_ITEM_CLASS_ARMOR) then
 		return name, level
 	end

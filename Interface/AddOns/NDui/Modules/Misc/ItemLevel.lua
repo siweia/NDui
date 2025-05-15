@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local pairs, select, next, wipe = pairs, select, next, wipe
-local UnitGUID, GetItemInfo = UnitGUID, GetItemInfo
+local UnitGUID, GetItemInfo = UnitGUID, C_Item.GetItemInfo
 local GetContainerItemLink = C_Container.GetContainerItemLink
 local GetInventoryItemLink = GetInventoryItemLink
 local GetTradePlayerItemLink, GetTradeTargetItemLink = GetTradePlayerItemLink, GetTradeTargetItemLink

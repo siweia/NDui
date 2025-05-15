@@ -7,7 +7,6 @@ local tonumber, strmatch = tonumber, strmatch
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumAuctionItems, GetAuctionItemInfo = GetNumAuctionItems, GetAuctionItemInfo
 local FauxScrollFrame_GetOffset, SetMoneyFrameColor = FauxScrollFrame_GetOffset, SetMoneyFrameColor
-local GetItemInfo = GetItemInfo
 local BuyMerchantItem = BuyMerchantItem
 local GetMerchantItemLink = GetMerchantItemLink
 local GetMerchantItemMaxStack = GetMerchantItemMaxStack
@@ -355,7 +354,7 @@ do
 			id = self:GetID()
 			itemLink = GetMerchantItemLink(id)
 			if not itemLink then return end
-			local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
+			local name, _, quality, _, _, _, _, maxStack, _, texture = C_Item.GetItemInfo(itemLink)
 			if maxStack and maxStack > 1 then
 				if not cache[itemLink] then
 					local r, g, b = GetItemQualityColor(quality or 1)

@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local Bar = B:RegisterModule("Actionbar")
-local LAB = LibStub("LibActionButton-1.0")
+local LAB = LibStub("LibActionButton-1.0-NDui")
 
 local _G = _G
 local tinsert, next = tinsert, next

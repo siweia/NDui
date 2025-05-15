@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
 local strmatch, format, tonumber, select, strfind = string.match, string.format, tonumber, select, string.find
-local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount, GetItemInfo, GetUnitName
+local UnitAura, GetUnitName = UnitAura, GetUnitName
 local GetCurrencyListInfo = GetCurrencyListInfo
 local BAGSLOT, BANK = BAGSLOT, BANK
 local SELL_PRICE_TEXT = format("|cffffffff%s%s%%s|r", SELL_PRICE, HEADER_COLON)
@@ -43,7 +43,7 @@ function TT:UpdateItemSellPrice()
 	if frame.showSellPrice or frame.objectType or name and (strfind(name, "TradeSkill") or strfind(name, "Character")) then
 		local link = select(2, self:GetItem())
 		if link then
-			local price = select(11, GetItemInfo(link))
+			local price = select(11, C_Item.GetItemInfo(link))
 			if price and price > 0 then
 				local cost = (tonumber(frame.count) or 1) * price
 				self:AddLine(format(SELL_PRICE_TEXT, setupMoneyString(cost)))
@@ -68,9 +68,9 @@ function TT:AddLineForID(id, linkType, noadd)
 	if not noadd then self:AddLine(" ") end
 
 	if linkType == types.item then
-		local bagCount = GetItemCount(id)
-		local bankCount = GetItemCount(id, true) - bagCount
-		local name, _, _, itemLevel, _, _, _, itemStackCount, _, _, _, classID = GetItemInfo(id)
+		local bagCount = C_Item.GetItemCount(id)
+		local bankCount = C_Item.GetItemCount(id, true) - bagCount
+		local name, _, _, itemLevel, _, _, _, itemStackCount, _, _, _, classID = C_Item.GetItemInfo(id)
 		if bankCount > 0 then
 			self:AddDoubleLine(BAGSLOT.."/"..BANK..":", DB.InfoColor..bagCount.."/"..bankCount)
 		elseif bagCount > 0 then

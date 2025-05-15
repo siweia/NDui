@@ -33,7 +33,7 @@ local function reskinMerchantInteract(button)
 end
 
 local function UpdateMerchantItemQuality(self, link)
-	local quality = link and select(3, GetItemInfo(link))
+	local quality = link and select(3, C_Item.GetItemInfo(link))
 	local textR, textG, textB = 1, 1, 1
 	local borderR, borderG, borderB = 0, 0, 0
 	if quality then

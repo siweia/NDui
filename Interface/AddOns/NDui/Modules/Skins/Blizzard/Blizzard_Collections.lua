@@ -139,10 +139,10 @@ C.themes["Blizzard_Collections"] = function()
 
 	local card = PetJournalPetCard
 	B.CreateBDFrame(card, .25)
-	card.PetBackground:Hide()
-	card.ShadowOverlay:Hide()
-	B.ReskinArrow(card.modelScene.RotateLeftButton, "left")
-	B.ReskinArrow(card.modelScene.RotateRightButton, "right")
+	if card.PetBackground then card.PetBackground:Hide() end
+	if card.ShadowOverlay then card.ShadowOverlay:Hide() end
+--	B.ReskinArrow(card.modelScene.RotateLeftButton, "left")
+--	B.ReskinArrow(card.modelScene.RotateRightButton, "right")
 
 	local petIcon = card.PetInfo.icon
 	petIcon.bg = B.ReskinIcon(petIcon)
@@ -179,7 +179,7 @@ C.themes["Blizzard_Collections"] = function()
 		local itemID = bu.itemID
 
 		if PlayerHasToy(itemID) then
-			local quality = select(3, GetItemInfo(itemID))
+			local quality = select(3, C_Item.GetItemInfo(itemID))
 			if quality then
 				local r, g, b = GetItemQualityColor(quality)
 				text:SetTextColor(r, g, b)

@@ -9,7 +9,7 @@ local AuraList, FrameList, UnitIDTable, IntTable, IntCD, myTable, cooldownTable 
 local pairs, select, tinsert, tremove, wipe, strfind = pairs, select, table.insert, table.remove, table.wipe, strfind
 local InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty = InCombatLockdown, UnitAura, GetPlayerInfoByGUID, UnitInRaid, UnitInParty
 local GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell = GetTime, GetSpellInfo, GetSpellCooldown, GetSpellCharges, GetTotemInfo, IsPlayerSpell
-local GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
+local GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown = C_Item.GetItemInfo, GetInventoryItemLink, GetInventoryItemCooldown
 
 local GetItemCooldown = C_Container.GetItemCooldown or GetItemCooldown
 

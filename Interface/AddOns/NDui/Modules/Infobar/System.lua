@@ -50,12 +50,12 @@ end
 
 local infoTable = {}
 local function BuildAddonList()
-	local numAddons = GetNumAddOns()
+	local numAddons = C_AddOns.GetNumAddOns()
 	if numAddons == #infoTable then return end
 
 	wipe(infoTable)
 	for i = 1, numAddons do
-		local _, title, _, loadable = GetAddOnInfo(i)
+		local _, title, _, loadable = C_AddOns.GetAddOnInfo(i)
 		if loadable then
 			tinsert(infoTable, {i, title, 0, 0})
 		end

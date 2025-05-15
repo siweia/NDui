@@ -358,7 +358,7 @@ function G:SetupClickCast(parent)
 			value = textIndex[value] or value
 			local itemID = strmatch(value, "item:(%d+)")
 			if itemID then
-				texture = GetItemIcon(itemID)
+				texture = C_Item.GetItemIconByID(itemID)
 			else
 				texture = 136243
 			end
