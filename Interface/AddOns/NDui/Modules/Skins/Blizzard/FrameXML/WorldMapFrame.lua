@@ -34,21 +34,6 @@ tinsert(C.defaultThemes, function()
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 	B.ReskinScroll(QuestMapDetailsScrollFrameScrollBar)
 
-	C_Timer.After(3, function()
-		if CodexQuestMapDropdown then
-			B.ReskinDropDown(CodexQuestMapDropdown)
-			CodexQuestMapDropdownButton.SetWidth = B.Dummy
-		end
-
-		-- Check all buttons
-		for i = 1, WorldMapFrame:GetNumChildren() do
-			local child = select(i, WorldMapFrame:GetChildren())
-			if child:IsObjectType("Button") and child.Text and not child.bg then
-				B.Reskin(child)
-			end
-		end
-	end)
-
 	B.StripTextures(OpacityFrame)
 	B.SetBD(OpacityFrame)
 	B.ReskinSlider(OpacityFrameSlider, true)
