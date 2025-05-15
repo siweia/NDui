@@ -8,7 +8,7 @@ local GetSpellTexture = C_Spell.GetSpellTexture
 local EMPTY_TEXTURE = "Interface\\Icons\\INV_Misc_QuestionMark"
 local myFullName = DB.MyFullName
 
-UF.defaultStrings = {
+UF.DefaultAvada = {
 	[0] = "", -- None
 	-- HUNTER
 	[253] = "1ZplayerZcdZ34026N2ZplayerZcdZ217200N3ZpetZbuffZ272790N4ZplayerZbuffZ268877N5ZplayerZcdZ19574N6ZplayerZcdZ359844", -- Beast Mastery
@@ -113,7 +113,7 @@ function UF:Avada_RefreshIcons()
 
 	wipe(auraData)
 	local profileIndex = NDuiADB["AvadaIndex"][myFullName] and NDuiADB["AvadaIndex"][myFullName][specID]
-	local classString = NDuiADB["AvadaProfile"][specID] and NDuiADB["AvadaProfile"][specID][profileIndex] or UF.defaultStrings[specID]
+	local classString = NDuiADB["AvadaProfile"][specID] and NDuiADB["AvadaProfile"][specID][profileIndex] or UF.DefaultAvada[specID]
 	if classString then
 		stringParser(classString)
 	end

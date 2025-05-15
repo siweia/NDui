@@ -2422,7 +2422,7 @@ function G:SetupAvada()
 
 		local str
 		if index == 1 then
-			str = UF.defaultStrings[currentSpecID]
+			str = UF.DefaultAvada[currentSpecID]
 		else
 			str = NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][index] or ""
 		end
@@ -2565,7 +2565,7 @@ function G:SetupAvada()
 		OnShow = function(self)
 			local text
 			if currentID == 1 then
-				text = UF.defaultStrings[currentSpecID]
+				text = UF.DefaultAvada[currentSpecID]
 			else
 				text = NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][currentID] or ""
 			end
