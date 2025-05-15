@@ -285,7 +285,7 @@ function UF:Avada_Toggle(frame)
 		frame:RegisterEvent("BAG_UPDATE_COOLDOWN", UF.Avada_OnEvent, true)
 
 		UF.Avada_RefreshAll(frame)
-		frame:RegisterEvent("PLAYER_TALENT_UPDATE", UF.Avada_RefreshAll, true)
+		frame:RegisterEvent("TRAIT_CONFIG_UPDATED", UF.Avada_RefreshAll, true)
 	else
 		for i = 1, 6 do frame.Avada[i]:Hide() end
 		B:UnregisterEvent("UNIT_AURA", UF.Avada_OnAura)
@@ -293,7 +293,7 @@ function UF:Avada_Toggle(frame)
 		frame:UnregisterEvent("SPELL_UPDATE_COOLDOWN", UF.Avada_OnEvent)
 		frame:UnregisterEvent("SPELL_UPDATE_CHARGES", UF.Avada_OnEvent)
 		frame:UnregisterEvent("BAG_UPDATE_COOLDOWN", UF.Avada_OnEvent)
-		frame:UnregisterEvent("PLAYER_TALENT_UPDATE", UF.Avada_RefreshAll, true)
+		frame:UnregisterEvent("TRAIT_CONFIG_UPDATED", UF.Avada_RefreshAll, true)
 	end
 end
 

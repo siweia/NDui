@@ -2701,6 +2701,8 @@ function G:SetupAvada()
 			local itemID = GetCursorID()
 			if itemID then
 				ClearCursor()
+				button.spellID = itemID
+				button.spellType = "item"
 				button.Icon:SetTexture(GetItemIcon(itemID) or EMPTY_ICON)
 				button.options[1].Text:SetText("player")
 				button.options[2].Text:SetText("item")
@@ -2710,6 +2712,8 @@ function G:SetupAvada()
 			local spellID = GetCursorID()
 			if spellID then
 				ClearCursor()
+				button.spellID = spellID
+				button.spellType = "cd"
 				button.Icon:SetTexture(GetSpellTexture(spellID) or EMPTY_ICON)
 				button.options[1].Text:SetText("player")
 				button.options[2].Text:SetText("cd")
