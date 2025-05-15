@@ -9,7 +9,7 @@ DB.Version = C_AddOns.GetAddOnMetadata("NDui", "Version")
 DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
-DB.isNewPatch = select(4, GetBuildInfo()) >= 110105 -- 11.1.5
+DB.isNewPatch = select(4, GetBuildInfo()) >= 110107 -- 11.1.7
 
 -- Deprecated
 do

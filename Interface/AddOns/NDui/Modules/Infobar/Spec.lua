@@ -45,7 +45,7 @@ info.onEvent = function(self)
 end
 
 local pvpTalents
-local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(DB.isNewPatch and 1792 or 104).iconFileID
+local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(1792).iconFileID
 
 info.onEnter = function(self)
 	if not currentSpecIndex or currentSpecIndex == 5 then return end
