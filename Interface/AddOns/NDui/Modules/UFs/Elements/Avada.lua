@@ -72,6 +72,10 @@ UF.AvadaValueSpells = { -- 显示数值的法术
 	[77535] = true, -- 鲜血护盾
 }
 
+UF.AvadaGemini = { -- 自动转换的法术
+	[5394] = 157153, -- 治疗之泉图腾自动转暴雨图腾
+}
+
 local avadaButtons, auraData, avadaValue = {}, {}
 local maxButtons = 6
 for i = 1, maxButtons do
@@ -101,7 +105,12 @@ local function stringParser(str)
 	for result in gmatch(str, "[^N]+") do
 		local iconIndex, unit, iconType, spellID = strmatch(result, "(%d+)Z(%w+)Z(%w+)Z(%d+)")
 		iconIndex = tonumber(iconIndex)
-		auraData[iconIndex] = {index = iconIndex, unit = unit, type = iconType, spellID = tonumber(spellID)}
+		spellID = tonumber(spellID)
+		local geminiSpell = UF.AvadaGemini[spellID]
+		if geminiSpell and IsPlayerSpell(geminiSpell) then
+			spellID = geminiSpell
+		end
+		auraData[iconIndex] = {index = iconIndex, unit = unit, type = iconType, spellID = spellID}
 	end
 end
 
