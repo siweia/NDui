@@ -4,6 +4,7 @@
 	<Script file="Druid.lua"/>
 	<Script file="Hunter.lua"/>
 	<Script file="Mage.lua"/>
+	<Script file="Monk.lua"/>
 	<Script file="Paladin.lua"/>
 	<Script file="Priest.lua"/>
 	<Script file="Rogue.lua"/>

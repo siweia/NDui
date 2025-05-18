@@ -62,6 +62,7 @@ C.CornerBuffs = {
 		[26669]  = {"RIGHT", {1, .8, 0}, true},			-- 闪避
 	},
 	["DEATHKNIGHT"] = {},
+	["MONK"] = {},
 }
 
 -- 角标黑名单

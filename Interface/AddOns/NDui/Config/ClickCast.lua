@@ -50,4 +50,5 @@ C.ClickCastList = {
 	["WARRIOR"] = {},
 	["WARLOCK"] = {},
 	["DEATHKNIGHT"] = {},
+	["MONK"] = {},
 }
