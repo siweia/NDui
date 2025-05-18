@@ -74,7 +74,9 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.Reskin(MountJournalMountButton)
 	B.Reskin(PetJournalSummonButton)
-	B.Reskin(PetJournalFindBattle)
+	if DB.isMop then
+		B.Reskin(PetJournalFindBattle)
+	end
 
 	B.ReskinTrimScroll(MountJournal.ScrollBar)
 	hooksecurefunc(MountJournal.ScrollBox, "Update", reskinFrameButton)
