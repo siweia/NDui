@@ -41,7 +41,7 @@ local frames = {
 	["StackSplitFrame"] = false,
 	["TabardFrame"] = false,
 	["TaxiFrame"] = false,
-	["TradeFrame"] = false,
+	--["TradeFrame"] = false,
 	["TutorialFrame"] = false,
 }
 
