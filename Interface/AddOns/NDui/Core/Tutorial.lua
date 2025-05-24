@@ -353,6 +353,7 @@ local function HelloWorld()
 	local c1, c2 = "|cffFFFF00", "|cff00FF00"
 	local lines = {
 		c1.." /ww "..c2..L["Cmd ww intro"].."|r",
+		" /aa "..c2..L["Cmd aa intro"].."|r",
 		" /bb "..c2..L["Cmd bb intro"].."|r",
 		" /mm /mmm "..c2..L["Cmd mm intro"].."|r",
 		" /rl "..c2..L["Cmd rl intro"].."|r",

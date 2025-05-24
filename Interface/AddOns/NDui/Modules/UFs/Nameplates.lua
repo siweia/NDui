@@ -1121,12 +1121,6 @@ function UF:ResizePlayerPlate()
 		if plate.Stagger then
 			plate.Stagger:SetSize(barWidth, barHeight)
 		end
-		if plate.lumos then
-			local iconSize = (barWidth+2*C.mult - C.margin*4)/5
-			for i = 1, 5 do
-				plate.lumos[i]:SetSize(iconSize, iconSize)
-			end
-		end
 		if plate.Avada then
 			local iconSize = (barWidth+2*C.mult - C.margin*5)/6
 			for i = 1, 6 do
@@ -1159,12 +1153,6 @@ function UF:CreatePlayerPlate()
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
 	UF:AvadaKedavra(self)
-	if C.db["Auras"]["ClassAuras"] then
-		local AURA = B:GetModule("Auras")
-		if AURA then
-			AURA:CreateLumos(self)
-		end
-	end
 
 	local textFrame = CreateFrame("Frame", nil, self.Power)
 	textFrame:SetAllPoints()

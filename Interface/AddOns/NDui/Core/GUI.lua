@@ -139,7 +139,6 @@ G.DefaultSettings = {
 		Totems = true,
 		VerticalTotems = true,
 		TotemSize = 32,
-		ClassAuras = true,
 		BuffFrame = true,
 		HideBlizBuff = false,
 		ReverseBuff = false,
@@ -414,7 +413,6 @@ G.DefaultSettings = {
 		AKSProgress = false,
 		PPFadeout = true,
 		PPFadeoutAlpha = 0,
-		PPOnFire = false,
 		TargetPower = false,
 		MinScale = 1,
 		MinAlpha = 1,
@@ -953,6 +951,15 @@ local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
 
+local function toggleAvada()
+	B:GetModule("UnitFrames"):Avada_Toggle()
+end
+
+local function toggleAvadaGUI()
+	G:SetupAvada()
+	if f then f:Hide() end
+end
+
 local function togglePlayerPlate()
 	refreshNameplates()
 	B:GetModule("UnitFrames"):TogglePlayerPlate()
@@ -1156,14 +1163,14 @@ G.TabList = {
 	L["Unitframes"],
 	IsNew..L["RaidFrame"],
 	L["Nameplate"],
-	L["PlayerPlate"],
+	IsNew..L["PlayerPlate"],
 	L["Auras"],
-	IsNew..L["Raid Tools"],
+	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	IsNew..L["Misc"],
+	L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
 }
@@ -1331,12 +1338,11 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"].."*", nil, nil, togglePlayerPlate},
 		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
-		{1, "Auras", "ClassAuras", L["Enable ClassAuras"]},
+		{1, "Avada", "Enable", IsNew..HeaderTag..L["Enable ClassAuras"].."*", nil, toggleAvadaGUI, toggleAvada},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
-		{1, "Nameplate", "PPOnFire", L["PlayerPlate OnFire"], nil, nil, nil, L["PPOnFireTip"]},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
-		{3, "Nameplate", "PPFadeoutAlpha", L["PlayerPlate FadeoutAlpha"].."*", true, {0, .5, .05}, togglePlateVisibility},
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
+		{3, "Nameplate", "PPFadeoutAlpha", L["PlayerPlate FadeoutAlpha"].."*", true, {0, .5, .05}, togglePlateVisibility},
 		{},--blank
 		{3, "Nameplate", "PPWidth", L["Width"].."*", false, {100, 500, 1}, refreshNameplates},
 		{3, "Nameplate", "PPBarHeight", L["PlayerPlate CPHeight"].."*", true, {2, 15, 1}, refreshNameplates},

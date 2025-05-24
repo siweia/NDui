@@ -6,6 +6,7 @@ local _G = _G
 local unpack, pairs, ipairs, tinsert = unpack, pairs, ipairs, tinsert
 local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonumber
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
+local GetItemIcon = C_Item.GetItemIconByID
 local GetInstanceInfo, EJ_GetInstanceInfo = GetInstanceInfo, EJ_GetInstanceInfo
 local IsControlKeyDown = IsControlKeyDown
 local myFullName = DB.MyFullName
@@ -369,7 +370,7 @@ function G:SetupClickCast(parent)
 			value = textIndex[value] or value
 			local itemID = strmatch(value, "item:(%d+)")
 			if itemID then
-				texture = C_Item.GetItemIconByID(itemID)
+				texture = GetItemIcon(itemID)
 			else
 				texture = 136243
 			end
@@ -2421,7 +2422,7 @@ function G:SetupAvada()
 
 		local str
 		if index == 1 then
-			str = UF.defaultStrings[currentSpecID]
+			str = UF.DefaultAvada[currentSpecID]
 		else
 			str = NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][index] or ""
 		end
@@ -2438,9 +2439,15 @@ function G:SetupAvada()
 			local bu = frame.buttons[i]
 			if bu then
 				bu.spellID = spellData[i] and spellData[i].spellID
-				bu.Icon:SetTexture(bu.spellID and GetSpellTexture(bu.spellID) or EMPTY_ICON)
+				local spellType = spellData[i] and spellData[i].type
+				local texture = bu.spellID and GetSpellTexture(bu.spellID)
+				if spellType == "item" then
+					texture = bu.spellID and GetItemIcon(bu.spellID)
+				end
+				bu.spellType = spellType
+				bu.Icon:SetTexture(texture or EMPTY_ICON)
 				bu.options[1].Text:SetText(spellData[i] and spellData[i].unit or "")
-				bu.options[2].Text:SetText(spellData[i] and spellData[i].type or "")
+				bu.options[2].Text:SetText(spellType or "")
 				bu.options[3]:SetText(spellData[i] and spellData[i].spellID or "")
 			end
 		end
@@ -2459,8 +2466,13 @@ function G:SetupAvada()
 			for i = 1, 6 do
 				local spellID = spellData[i] and spellData[i].spellID
 				if spellID then
+					local texture = GetSpellTexture(spellID)
 					local spellName = GetSpellName(spellID) or spellID
-					toolipText = toolipText..format(iconString, GetSpellTexture(spellID) or EMPTY_ICON)..spellName.."\n"
+					if spellData[i].type == "item" then
+						spellName = C_Item.GetItemInfo(spellID) or spellID
+						texture = GetItemIcon(spellID)
+					end
+					toolipText = toolipText..format(iconString, texture or EMPTY_ICON)..spellName.."\n"
 				end
 			end
 		end
@@ -2491,17 +2503,17 @@ function G:SetupAvada()
 	end)
 
 	local load = B.CreateButton(panel, 30, 30, true, "Atlas:streamcinematic-downloadicon")
-	load.Icon:SetTexCoord(.25, .75, .25, .75)
+	load.Icon:SetTexCoord(.27, .73, .27, .73)
 	load:SetPoint("LEFT", profileButtons[10], "RIGHT", 5, 0)
-	load.title = "加载设置"
-	B.AddTooltip(load, "ANCHOR_RIGHT", "将当前方案加载到监控", "info")
+	load.title = L["LoadProfile"]
+	B.AddTooltip(load, "ANCHOR_RIGHT", L["LoadProfileTip"], "info")
 	load:SetScript("OnClick", function()
 		if currentID ~= 1 and (NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][currentID]) then
 			NDuiADB["AvadaIndex"][myFullName][currentSpecID] = currentID
-			UIErrorsFrame:AddMessage(DB.InfoColor.."已加载配置"..currentID)
+			UIErrorsFrame:AddMessage(DB.InfoColor..format(L["LoadProfileIndex"], currentID))
 		else
 			NDuiADB["AvadaIndex"][myFullName][currentSpecID] = nil
-			UIErrorsFrame:AddMessage(DB.InfoColor.."已加载默认配置")
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["LoadProfileDefault"])
 		end
 		UF:Avada_RefreshAll()
 		updateProfileButtons()
@@ -2509,11 +2521,11 @@ function G:SetupAvada()
 
 	local save = B.CreateButton(panel, 30, 30, true, "Interface\\RAIDFRAME\\ReadyCheck-Ready")
 	save:SetPoint("LEFT", load, "RIGHT", 5, 0)
-	save.title = "保存设置"
-	B.AddTooltip(save, "ANCHOR_RIGHT", "保存你设置的监控方案", "info")
+	save.title = L["SaveProfile"]
+	B.AddTooltip(save, "ANCHOR_RIGHT", L["SaveProfileTip"], "info")
 	save:SetScript("OnClick", function()
 		if currentID == 1 then
-			UIErrorsFrame:AddMessage(DB.InfoColor.."1号位是默认设置，无法修改。")
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
 			return
 		end
 		local str = ""
@@ -2525,17 +2537,20 @@ function G:SetupAvada()
 				str = str..i.."Z"..unitStr.."Z"..typeStr.."Z"..spellID.."N"
 			end
 		end
-
 		if not NDuiADB["AvadaProfile"][currentSpecID] then NDuiADB["AvadaProfile"][currentSpecID] = {} end
-		NDuiADB["AvadaProfile"][currentSpecID][currentID] = str ~= "" and str
+		NDuiADB["AvadaProfile"][currentSpecID][currentID] = str ~= "" and str or nil
 	end)
 
 	local undo = B.CreateButton(panel, 30, 30, true, "Atlas:common-icon-undo")
 	undo:SetPoint("LEFT", save, "RIGHT", 5, 0)
 	undo.Icon:SetInside(undo, 2, 2)
-	undo.title = "清除设置"
-	B.AddTooltip(undo, "ANCHOR_RIGHT", "将下方设置清空", "info")
+	undo.title = L["ClearProfile"]
+	B.AddTooltip(undo, "ANCHOR_RIGHT", L["ClearProfileTip"], "info")
 	undo:SetScript("OnClick", function()
+		if currentID == 1 then
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
+			return
+		end
 		for i = 1, 6 do
 			frame.buttons[i].Icon:SetTexture(EMPTY_ICON)
 			frame.buttons[i].options[1].Text:SetText()
@@ -2550,7 +2565,7 @@ function G:SetupAvada()
 		OnShow = function(self)
 			local text
 			if currentID == 1 then
-				text = UF.defaultStrings[currentSpecID]
+				text = UF.DefaultAvada[currentSpecID]
 			else
 				text = NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][currentID] or ""
 			end
@@ -2581,7 +2596,7 @@ function G:SetupAvada()
 		button2 = CANCEL,
 		OnAccept = function(self)
 			if currentID == 1 then
-				UIErrorsFrame:AddMessage(DB.InfoColor.."1号位是默认设置，无法修改。")
+				UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
 				return
 			end
 			local text = self.editBox:GetText()
@@ -2621,47 +2636,90 @@ function G:SetupAvada()
 	export:SetPoint("LEFT", undo, "RIGHT", 5, 0)
 	export:SetScript("OnClick", exportAvadaStyle)
 	export.title = L["Export"]
-	B.AddTooltip(export, "ANCHOR_RIGHT", "导出当前设置", "info")
+	B.AddTooltip(export, "ANCHOR_RIGHT")
 
 	local import = B.CreateButton(panel, 30, 30, true, DB.ArrowUp)
 	import.Icon:SetRotation(rad(180))
 	import:SetPoint("LEFT", export, "RIGHT", 5, 0)
 	import:SetScript("OnClick", importAvadaStyle)
 	import.title = L["Import"]
-	B.AddTooltip(import, "ANCHOR_RIGHT", "导入他人分享的设置", "info")
+	B.AddTooltip(import, "ANCHOR_RIGHT")
 
 	frame.buttons = {}
 	local unitOptions = {"player", "target", "pet"}
-	local typeOptions = {"buff", "debuff", "cd"}
+	local typeOptions = {"buff", "debuff", "cd", "item"}
 
 	local function showTooltip(self)
-		if not (self.spellID and GetSpellName(self.spellID)) then return end
-		GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-		GameTooltip:ClearLines()
-		GameTooltip:SetSpellByID(self.spellID)
-		GameTooltip:Show()
+		local spellID = self.spellID
+		if not spellID then return end
+		if self.spellType == "item" then
+			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+			GameTooltip:ClearLines()
+			GameTooltip:SetItemByID(spellID)
+			GameTooltip:Show()
+		else
+			GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+			GameTooltip:ClearLines()
+			GameTooltip:SetSpellByID(spellID)
+			GameTooltip:Show()
+		end
 	end
 
 	local function createOptionGroup(parent, i)
 		parent.options = {}
 
-		local unitOption = G:CreateDropdown(parent, L["Unit*"], 1, 1, unitOptions, "监控来源", 88, 28)
+		local unitOption = G:CreateDropdown(parent, L["Unit*"], 1, 1, unitOptions, L["AvadaUnitOptionTip"], 88, 28)
 		unitOption:SetFrameLevel(20)
 		unitOption:ClearAllPoints()
 		unitOption:SetPoint("TOP", parent, "BOTTOM", 0, -30)
 		parent.options[1] = unitOption
 
-		local typeOption = G:CreateDropdown(parent, L["Type*"], 1, 1, typeOptions, "监控类型", 88, 28)
+		local typeOption = G:CreateDropdown(parent, L["Type*"], 1, 1, typeOptions, L["AvadaTypeOptionTip"], 88, 28)
 		typeOption:SetFrameLevel(20)
 		typeOption:ClearAllPoints()
 		typeOption:SetPoint("TOP", parent, "BOTTOM", 0, -90)
 		parent.options[2] = typeOption
 
-		local spellOption = G:CreateEditbox(parent, "ID*", 1, 1, "输入法术ID", 88, 28)
+		local spellOption = G:CreateEditbox(parent, "ID*", 1, 1, L["AvadaIDOptionTip"], 88, 28)
 		spellOption:ClearAllPoints()
 		spellOption:SetPoint("TOP", parent, "BOTTOM", 0, -150)
 		spellOption:SetJustifyH("CENTER")
 		parent.options[3] = spellOption
+	end
+
+	local function GetCursorID()
+		local infoType, itemID, _, spellID = GetCursorInfo()
+		return infoType == "item" and itemID or infoType == "spell" and spellID or nil
+	end
+
+	local function receiveCursor(button)
+		if currentID == 1 then
+			UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
+			return
+		end
+		if CursorHasItem() then
+			local itemID = GetCursorID()
+			if itemID then
+				ClearCursor()
+				button.spellID = itemID
+				button.spellType = "item"
+				button.Icon:SetTexture(GetItemIcon(itemID) or EMPTY_ICON)
+				button.options[1].Text:SetText("player")
+				button.options[2].Text:SetText("item")
+				button.options[3]:SetText(itemID)
+			end
+		elseif CursorHasSpell() then
+			local spellID = GetCursorID()
+			if spellID then
+				ClearCursor()
+				button.spellID = spellID
+				button.spellType = "cd"
+				button.Icon:SetTexture(GetSpellTexture(spellID) or EMPTY_ICON)
+				button.options[1].Text:SetText("player")
+				button.options[2].Text:SetText("cd")
+				button.options[3]:SetText(spellID)
+			end
+		end
 	end
 
 	for i = 1, 6 do
@@ -2669,6 +2727,8 @@ function G:SetupAvada()
 		bu:SetPoint("TOPLEFT", 30 + (i-1)*100, -10)
 		bu:SetScript("OnEnter", showTooltip)
 		bu:SetScript("OnLeave", B.HideTooltip)
+		bu:SetScript("OnMouseDown", receiveCursor)
+		bu:SetScript("OnReceiveDrag", receiveCursor)
 		createOptionGroup(bu, i)
 		frame.buttons[i] = bu
 	end
@@ -2689,6 +2749,5 @@ function G:SetupAvada()
 	panel:HookScript("OnShow", refreshAllFrames)
 end
 
-function hehe()
-	G:SetupAvada()
-end
+SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
+SLASH_NDUI_AVADACONFIG1 = "/aa"
