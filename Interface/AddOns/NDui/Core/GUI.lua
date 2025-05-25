@@ -626,6 +626,7 @@ G.AccountSettings = {
 	IgnoredRares = "",
 	AvadaIndex = {},
 	AvadaProfile = {},
+	AddOnProfiler = false,
 }
 
 -- Initial settings
