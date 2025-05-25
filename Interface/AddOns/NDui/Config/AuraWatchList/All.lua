@@ -56,6 +56,7 @@ local list = {
 		{AuraID = 371124, UnitID = "player"},	-- 沉静西风药水
 		{AuraID = 371024, UnitID = "player"},	-- 元素强能药水
 		{AuraID = 371028, UnitID = "player"},	-- 究极元素强能药水
+		{AuraID = 431932, UnitID = "player"},	-- 淬火药水
 		-- 11.0 饰品
 		{AuraID = 92099, UnitID = "player"},	-- 灰鳞的优雅
 		{AuraID = 268769, UnitID = "player"},	-- 望远镜饰品
