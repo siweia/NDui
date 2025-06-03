@@ -66,6 +66,7 @@ function M:OnLogin()
 	M:EnhancedPicker()
 	M:UpdateMaxZoomLevel()
 	M:HandleNDuiTitle()
+	M:ToggleAddOnProfiler()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -800,4 +801,24 @@ end
 
 function M:UpdateMaxZoomLevel()
 	SetCVar("cameraDistanceMaxZoomFactor", C.db["Misc"]["MaxZoom"])
+end
+
+function M:ToggleAddOnProfiler()
+	local function CheckState()
+		return NDuiADB["AddOnProfiler"]
+	end
+
+	C_AddOnProfiler.IsEnabled = function()
+		return CheckState()
+	end
+
+	local bu = CreateFrame("CheckButton", nil, AddonList, "OptionsBaseCheckButtonTemplate")
+	bu:SetHitRectInsets(-5, -5, -5, -5)
+	bu:SetPoint("BOTTOM", 0, 2)
+	B.ReskinCheck(bu)
+	B.CreateFS(bu, 14, L["CPU Usage"], "info", "LEFT", 30, 0)
+	bu:SetChecked(CheckState())
+	bu:SetScript("OnClick", function()
+		NDuiADB["AddOnProfiler"] = bu:GetChecked()
+	end)
 end

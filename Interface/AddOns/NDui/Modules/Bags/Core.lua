@@ -233,6 +233,17 @@ function module:CreateBagTab(settings, columns)
 	bagTab.UpdateAnchor = updateBagBar
 	bagTab:UpdateAnchor()
 
+	local purchaseButton = CreateFrame("Button", "NDui_BankPurchaseButton", bagTab, "InsecureActionButtonTemplate")
+	purchaseButton:SetSize(120, 22)
+	purchaseButton:SetPoint("TOP", bagTab, "BOTTOM", 0, -5)
+	B.CreateFS(purchaseButton, 14, PURCHASE, "info")
+	B.Reskin(purchaseButton)
+	purchaseButton:Hide()
+
+	purchaseButton:RegisterForClicks("AnyUp", "AnyDown")
+	purchaseButton:SetAttribute("type", "click")
+	purchaseButton:SetAttribute("clickbutton", _G.AccountBankPanel.PurchasePrompt.TabCostFrame.PurchaseButton)
+
 	self.BagBar = bagTab
 end
 
@@ -1497,6 +1508,9 @@ function module:OnLogin()
 			f.bank:SetShown(panelIndex == 1)
 			f.reagent:SetShown(panelIndex == 2)
 			f.accountbank:SetShown(panelIndex == 3)
+			if _G["NDui_BankPurchaseButton"] then
+				_G["NDui_BankPurchaseButton"]:SetShown(panelIndex == 3 and C_Bank.CanPurchaseBankTab(ACCOUNT_BANK_TYPE))
+			end
 		end
 	end)
 
