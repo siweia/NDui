@@ -194,7 +194,7 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 			local button = slot.Button
 			if button and not button.styled then
 				button.bg = B.ReskinIcon(button.Icon)
-				B.ReskinIconBorder(button.IconBorder, true)
+				B.ReskinIconBorder(button.IconBorder, true, true)
 				if button.SlotBackground then
 					button.SlotBackground:Hide()
 				end
