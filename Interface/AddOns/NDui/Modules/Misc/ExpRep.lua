@@ -94,6 +94,7 @@ function M:SetupScript(bar)
 end
 
 function M:Expbar()
+	if C.db["Map"]["DisableMinimap"] then return end
 	if not C.db["Misc"]["ExpRep"] then return end
 
 	local bar = CreateFrame("StatusBar", nil, MinimapCluster)

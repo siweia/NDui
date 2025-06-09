@@ -250,7 +250,6 @@ local IncompatibleAddOns = {
 	["ClassicQuestLog"] = true,
 	["QuestGuru"] = true,
 	["QuestLogEx"] = true,
-	["SexyMap"] = true,
 	["TrackingEye"] = true,
 }
 local AddonDependency = {

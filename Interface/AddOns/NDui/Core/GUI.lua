@@ -309,6 +309,7 @@ G.DefaultSettings = {
 	},
 	Map = {
 		DisableMap = false,
+		DisableMinimap = false,
 		Clock = false,
 		CombatPulse = true,
 		MapScale = .7,
@@ -610,6 +611,10 @@ loader:SetScript("OnEvent", function(self, _, addon)
 			NDuiADB["TexStyle"] = 2 -- reset value if not exists
 		end
 		DB.normTex = G.TextureList[NDuiADB["TexStyle"]].texture
+	end
+
+	if not C.db["Map"]["DisableMinimap"] then
+		GetMinimapShape = B.GetMinimapShape
 	end
 
 	self:UnregisterAllEvents()
@@ -1249,6 +1254,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Map", "MapScale", L["Map Scale"], nil, {.5, 2, .1}},
 		{3, "Map", "MaxMapScale", L["Maximize Map Scale"].."*", true, {.5, 1, .1}},
 		{},--blank
+		{1, "Map", "DisableMinimap", "|cffff0000"..L["DisableMinimap"], nil, nil, nil, L["DisableMinimapTip"]},
 		{3, "Map", "MinimapScale", L["Minimap Scale"].."*", nil, {.5, 3, .1}, updateMinimapScale},
 		{3, "Map", "MinimapSize", L["Minimap Size"].."*", true, {100, 500, 1}, updateMinimapScale},
 		{1, "Map", "Clock", L["Minimap Clock"].."*", nil, nil, showMinimapClock},
