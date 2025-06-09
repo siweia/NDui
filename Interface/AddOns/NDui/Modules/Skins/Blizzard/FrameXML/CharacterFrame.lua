@@ -18,6 +18,9 @@ function B:ReskinIconSelector()
 	if self.BorderBox.IconTypeDropDown then
 		B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
 	end
+	if self.BorderBox.IconTypeDropdown then -- DB.isMop
+		B.ReskinDropDown(self.BorderBox.IconTypeDropdown)
+	end
 
 	hooksecurefunc(self.IconSelector.ScrollBox, "Update", function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do

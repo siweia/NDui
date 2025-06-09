@@ -22,6 +22,19 @@ C.themes["Blizzard_TalentUI"] = function()
 		PlayerTalentFrameTitleGlowRight:SetTexture("")
 		PlayerTalentFrameTitleGlowCenter:SetTexture("")
 
+		local function updateTab(tab)
+			if not tab.styled then
+				tab:GetRegions():Hide()
+				tab:SetCheckedTexture(DB.pushedTex)
+				tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+				B.ReskinIcon(tab:GetNormalTexture(), .25)
+
+				tab.styled = true
+			end
+		end
+		updateTab(PlayerSpecTab1)
+		updateTab(PlayerSpecTab2)
+
 		hooksecurefunc("PlayerTalentFrame_UpdateTabs", function()
 			for i = 1, NUM_TALENT_FRAME_TABS do
 				local tab = _G["PlayerTalentFrameTab"..i]
@@ -119,7 +132,7 @@ C.themes["Blizzard_TalentUI"] = function()
 			if selected then
 				bu.bg:SetBackdropColor(r, g, b, .25)
 			elseif isKnown then
-				bu.bg:SetBackdropColor(r, g, b, .6)
+				bu.bg:SetBackdropColor(r, g, b, .4)
 			else
 				bu.bg:SetBackdropColor(0, 0, 0, .25)
 			end
