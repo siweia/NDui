@@ -35,7 +35,7 @@ local function initUpdater()
 		setItems = setItems or {}
 		wipe(setItems)
 
-		for setID = 1, C_EquipmentSet.GetNumEquipmentSets() do
+		for setID = 0, C_EquipmentSet.GetNumEquipmentSets() do
 			local locations = C_EquipmentSet.GetItemLocations(setID)
 			if locations then
 				for _, location in pairs(locations) do
