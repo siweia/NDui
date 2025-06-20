@@ -152,49 +152,20 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
 
 	local function reskinToolButton(button)
-		if DB.isNewPatch then
-			button.Border:Hide()
-			button:SetPushedTexture(0)
-			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			B.ReskinIcon(button.Icon)
-			return
-		end
-		local border = _G[button:GetName().."Border"]
-		if border then border:Hide() end
+		button.Border:Hide()
 		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		B.ReskinIcon(button.texture)
+		B.ReskinIcon(button.Icon)
 	end
-
-	if DB.isNewPatch then
-		reskinToolButton(PetJournal.HealPetSpellFrame.Button)
-	else
-	reskinToolButton(PetJournalHealPetButton)
-	end
+	reskinToolButton(PetJournal.HealPetSpellFrame.Button)
+	reskinToolButton(PetJournal.SummonRandomPetSpellFrame.Button)
 
 	PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
 	PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
 
-	if DB.isNewPatch then
-		reskinToolButton(PetJournal.SummonRandomPetSpellFrame.Button)
-	else
-	reskinToolButton(PetJournalSummonRandomFavoritePetButton)
-	end
-
 	-- Favourite mount button
 
-	if DB.isNewPatch then
-		reskinToolButton(MountJournal.SummonRandomFavoriteSpellFrame.Button)
-	else
-	reskinToolButton(MountJournalSummonRandomFavoriteButton)
-	local movedButton
-	MountJournal:HookScript("OnShow", function()
-		if not InCombatLockdown() and not movedButton then
-			MountJournalSummonRandomFavoriteButton:SetPoint("TOPRIGHT", -10, -26)
-			movedButton = true
-		end
-	end)
-	end
+	reskinToolButton(MountJournal.SummonRandomFavoriteSpellFrame.Button)
 
 	local function reskinDynamicButton(button, index)
 		if button.Border then button.Border:Hide() end
