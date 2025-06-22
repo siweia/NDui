@@ -51,14 +51,12 @@ C.themes["Blizzard_DelvesDashboardUI"] = function()
 	B.Reskin(DelvesDashboardFrame.ButtonPanelLayoutFrame.CompanionConfigButtonPanel.CompanionConfigButton)
 end
 
-local function handleRewards(self)
-	for rewardFrame in self.rewardPool:EnumerateActive() do
-		if not rewardFrame.bg then
-			B.CreateBDFrame(rewardFrame, .25)
-			rewardFrame.NameFrame:SetAlpha(0)
-			rewardFrame.bg = B.ReskinIcon(rewardFrame.Icon)
-			B.ReskinIconBorder(rewardFrame.IconBorder, true)
-		end
+local function handleReward(rewardFrame)
+	if not rewardFrame.bg then
+		B.CreateBDFrame(rewardFrame, .25)
+		rewardFrame.NameFrame:SetAlpha(0)
+		rewardFrame.bg = B.ReskinIcon(rewardFrame.Icon)
+		B.ReskinIconBorder(rewardFrame.IconBorder, true)
 	end
 end
 
@@ -67,6 +65,7 @@ C.themes["Blizzard_DelvesDifficultyPicker"] = function()
 	B.ReskinDropDown(DelvesDifficultyPickerFrame.Dropdown)
 	B.Reskin(DelvesDifficultyPickerFrame.EnterDelveButton)
 
-	DelvesDifficultyPickerFrame.DelveRewardsContainerFrame:HookScript("OnShow", handleRewards)
-	hooksecurefunc(DelvesDifficultyPickerFrame.DelveRewardsContainerFrame, "SetRewards", handleRewards)
+	hooksecurefunc(DelvesDifficultyPickerFrame.DelveRewardsContainerFrame.ScrollBox, "Update", function(self)
+		self:ForEachFrame(handleReward)
+	end)
 end
