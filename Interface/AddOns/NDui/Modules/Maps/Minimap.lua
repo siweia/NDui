@@ -689,6 +689,7 @@ function module:SetupMinimap()
 	B.HideObject(Minimap.ZoomIn)
 	B.HideObject(Minimap.ZoomOut)
 	B.HideObject(MinimapCompassTexture)
+	MinimapCluster:KillEditMode()
 
 	_G.MinimapCluster.Tracking:SetAlpha(0)
 	_G.MinimapCluster.Tracking:SetScale(0.0001)
