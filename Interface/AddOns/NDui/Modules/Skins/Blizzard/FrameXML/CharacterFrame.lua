@@ -361,20 +361,22 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	B.ReskinPortraitFrame(CurrencyTransferMenu)
-	B.CreateBDFrame(CurrencyTransferMenu.SourceSelector, .25)
-	CurrencyTransferMenu.SourceSelector.SourceLabel:SetWidth(56)
-	B.ReskinDropDown(CurrencyTransferMenu.SourceSelector.Dropdown)
-	B.ReskinIcon(CurrencyTransferMenu.SourceBalancePreview.BalanceInfo.CurrencyIcon)
-	B.ReskinIcon(CurrencyTransferMenu.PlayerBalancePreview.BalanceInfo.CurrencyIcon)
-	B.Reskin(CurrencyTransferMenu.ConfirmButton)
-	B.Reskin(CurrencyTransferMenu.CancelButton)
+	if not DB.isNewPatch then
+		B.CreateBDFrame(CurrencyTransferMenu.SourceSelector, .25)
+		CurrencyTransferMenu.SourceSelector.SourceLabel:SetWidth(56)
+		B.ReskinDropDown(CurrencyTransferMenu.SourceSelector.Dropdown)
+		B.ReskinIcon(CurrencyTransferMenu.SourceBalancePreview.BalanceInfo.CurrencyIcon)
+		B.ReskinIcon(CurrencyTransferMenu.PlayerBalancePreview.BalanceInfo.CurrencyIcon)
+		B.Reskin(CurrencyTransferMenu.ConfirmButton)
+		B.Reskin(CurrencyTransferMenu.CancelButton)
 
-	local amountSelector = CurrencyTransferMenu.AmountSelector
-	if amountSelector then
-		B.CreateBDFrame(amountSelector, .25)
-		B.Reskin(amountSelector.MaxQuantityButton)
-		B.ReskinEditBox(amountSelector.InputBox)
-		amountSelector.InputBox.__bg:SetInside(nil, 3, 3)
+		local amountSelector = CurrencyTransferMenu.AmountSelector
+		if amountSelector then
+			B.CreateBDFrame(amountSelector, .25)
+			B.Reskin(amountSelector.MaxQuantityButton)
+			B.ReskinEditBox(amountSelector.InputBox)
+			amountSelector.InputBox.__bg:SetInside(nil, 3, 3)
+		end
 	end
 
 	hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)

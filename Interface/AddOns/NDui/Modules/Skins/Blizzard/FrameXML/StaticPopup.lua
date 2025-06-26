@@ -33,27 +33,39 @@ tinsert(C.defaultThemes, function()
 		local silver = _G["StaticPopup"..i.."MoneyInputFrameSilver"]
 		local copper = _G["StaticPopup"..i.."MoneyInputFrameCopper"]
 
-		_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
+		local ItemFrameNameFrame = _G["StaticPopup"..i.."ItemFrameNameFrame"]
+		if ItemFrameNameFrame then
+			ItemFrameNameFrame:Hide()
+		end
 
-		bu:SetNormalTexture(0)
-		bu:SetHighlightTexture(0)
-		bu:SetPushedTexture(0)
-		bu.bg = B.ReskinIcon(icon)
-		B.ReskinIconBorder(bu.IconBorder)
+		if bu then
+			bu:SetNormalTexture(0)
+			bu:SetHighlightTexture(0)
+			bu:SetPushedTexture(0)
+			bu.bg = B.ReskinIcon(icon)
+			B.ReskinIconBorder(bu.IconBorder)
 
-		local bg = B.CreateBDFrame(bu, .25)
-		bg:SetPoint("TOPLEFT", bu.bg, "TOPRIGHT", 2, 0)
-		bg:SetPoint("BOTTOMRIGHT", bu.bg, 115, 0)
+			local bg = B.CreateBDFrame(bu, .25)
+			bg:SetPoint("TOPLEFT", bu.bg, "TOPRIGHT", 2, 0)
+			bg:SetPoint("BOTTOMRIGHT", bu.bg, 115, 0)
+		end
 
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
-		frame.Border:Hide()
-		B.SetBD(frame)
-		for j = 1, 4 do
-			B.Reskin(frame["button"..j])
+		if not DB.isNewPatch then
+			frame.Border:Hide()
+			for j = 1, 4 do
+				B.Reskin(frame["button"..j])
+			end
+			B.Reskin(frame.extraButton)
+		else
+			B.StripTextures(frame)
+			for j = 1, 4 do
+				B.Reskin(_G["StaticPopup"..i.."Button"..j])
+			end
 		end
-		B.Reskin(frame.extraButton)
+		B.SetBD(frame)
 		B.ReskinClose(close)
 
 		close.minimize = close:CreateTexture(nil, "OVERLAY")
