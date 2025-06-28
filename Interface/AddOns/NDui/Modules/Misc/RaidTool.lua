@@ -403,7 +403,15 @@ function M:RaidTool_CountDown(parent)
 			end
 		else
 			if IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid())) then
-				if SlashCmdList.pull then
+				if IsAddOnLoaded("DBM-Core") then
+					if reset then
+						SlashCmdList["DEADLYBOSSMODS"]("pull "..C.db["Misc"]["DBMCount"])
+					else
+						SlashCmdList["DEADLYBOSSMODS"]("pull 0")
+					end
+					reset = not reset
+				elseif IsAddOnLoaded("BigWigs") then
+					if not SlashCmdList.pull then return end
 					if reset then
 						SlashCmdList.pull(C.db["Misc"]["DBMCount"])
 					else
@@ -413,25 +421,6 @@ function M:RaidTool_CountDown(parent)
 				else
 					UIErrorsFrame:AddMessage(DB.InfoColor..L["DBM Required"])
 				end
-				--[[
-				if IsAddOnLoaded("DBM-Core") then
-					if reset then
-						SlashCmdList["DEADLYBOSSMODS"]("pull "..C.db["Misc"]["DBMCount"])
-					else
-						SlashCmdList["DEADLYBOSSMODS"]("pull 0")
-					end
-					reset = not reset
-				elseif IsAddOnLoaded("BigWigs") then
-					if not SlashCmdList["BIGWIGSPULL"] then LoadAddOn("BigWigs_Plugins") end
-					if reset then
-						SlashCmdList["BIGWIGSPULL"](C.db["Misc"]["DBMCount"])
-					else
-						SlashCmdList["BIGWIGSPULL"]("0")
-					end
-					reset = not reset
-				else
-					UIErrorsFrame:AddMessage(DB.InfoColor..L["DBM Required"])
-				end]]
 			else
 				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
 			end
