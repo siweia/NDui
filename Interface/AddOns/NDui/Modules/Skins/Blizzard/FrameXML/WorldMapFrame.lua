@@ -26,8 +26,10 @@ tinsert(C.defaultThemes, function()
 	if MiniBorderRight then MiniBorderRight:Hide() end
 	B.ReskinMinMax(WorldMapFrame.MaximizeMinimizeFrame)
 	B.ReskinCheck(WorldMapTrackQuest)
-	B.ReskinCheck(WorldMapQuestShowObjectives)
-	B.ReskinCheck(WorldMapShowDigsites)
+	if not DB.isMop then
+		B.ReskinCheck(WorldMapQuestShowObjectives)
+		B.ReskinCheck(WorldMapShowDigsites)
+	end
 
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 	B.ReskinScroll(QuestMapDetailsScrollFrameScrollBar)
