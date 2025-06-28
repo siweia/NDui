@@ -380,6 +380,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	local frame = EncounterJournalMonthlyActivitiesFrame
 	if frame then
 		B.StripTextures(frame)
+		B.ReskinTrimScroll(frame.FilterList.ScrollBar)
 		B.ReskinTrimScroll(frame.ScrollBar)
 		if frame.ThemeContainer then
 			frame.ThemeContainer:SetAlpha(0)
