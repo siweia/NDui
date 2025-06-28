@@ -403,6 +403,17 @@ function M:RaidTool_CountDown(parent)
 			end
 		else
 			if IsInGroup() and (UnitIsGroupLeader("player") or (UnitIsGroupAssistant("player") and IsInRaid())) then
+				if SlashCmdList.pull then
+					if reset then
+						SlashCmdList.pull(C.db["Misc"]["DBMCount"])
+					else
+						SlashCmdList.pull(0)
+					end
+					reset = not reset
+				else
+					UIErrorsFrame:AddMessage(DB.InfoColor..L["DBM Required"])
+				end
+				--[[
 				if IsAddOnLoaded("DBM-Core") then
 					if reset then
 						SlashCmdList["DEADLYBOSSMODS"]("pull "..C.db["Misc"]["DBMCount"])
@@ -420,7 +431,7 @@ function M:RaidTool_CountDown(parent)
 					reset = not reset
 				else
 					UIErrorsFrame:AddMessage(DB.InfoColor..L["DBM Required"])
-				end
+				end]]
 			else
 				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)
 			end
