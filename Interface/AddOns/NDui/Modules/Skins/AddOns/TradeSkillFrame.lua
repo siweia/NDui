@@ -40,9 +40,11 @@ function S:EnhancedTradeSkill()
 	TradeSkillCancelButton:SetPoint("BOTTOMRIGHT", TradeSkillFrame, "BOTTOMRIGHT", -42, 54)
 	TradeSkillCreateButton:ClearAllPoints()
 	TradeSkillCreateButton:SetPoint("RIGHT", TradeSkillCancelButton, "LEFT", -1, 0)
-	TradeSkillInvSlotDropdown:ClearAllPoints()
-	TradeSkillInvSlotDropdown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
-	TradeSkillFrameAvailableFilterCheckButton:SetPoint("TOPLEFT", 230, -70)
+	if not DB.isMop then
+		TradeSkillInvSlotDropdown:ClearAllPoints()
+		TradeSkillInvSlotDropdown:SetPoint("TOPLEFT", TradeSkillFrame, "TOPLEFT", 510, -40)
+		TradeSkillFrameAvailableFilterCheckButton:SetPoint("TOPLEFT", 230, -70)
+	end
 
 	if C.db["Skins"]["BlizzardSkins"] then
 		TradeSkillFrame:SetHeight(512)
