@@ -16,16 +16,18 @@ function Bar:CreateExtrabar()
 	frame:SetHeight(size + 2*padding)
 	frame.mover = B.Mover(frame, L["Extrabar"], "Extrabar", {"BOTTOM", UIParent, "BOTTOM", 250, 100})
 
+	ExtraAbilityContainer:SetScript("OnShow", nil)
+	ExtraAbilityContainer:SetScript("OnUpdate", nil)
+	ExtraAbilityContainer.OnUpdate = nil -- remove BaseLayoutMixin.OnUpdate
+	ExtraAbilityContainer.IsLayoutFrame = nil -- dont let it get readded
+	ExtraAbilityContainer:KillEditMode()
+
 	ExtraActionBarFrame:EnableMouse(false)
 	ExtraActionBarFrame:ClearAllPoints()
 	ExtraActionBarFrame:SetPoint("CENTER", frame)
-	ExtraActionBarFrame.ignoreFramePositionManager = true
-
-	hooksecurefunc(ExtraActionBarFrame, "SetParent", function(self, parent)
-		if parent == ExtraAbilityContainer then
-			self:SetParent(frame)
-		end
-	end)
+	ExtraActionBarFrame.ignoreInLayout = true
+	ExtraActionBarFrame:SetIgnoreParentScale(true)
+	ExtraActionBarFrame:SetScale(UIParent:GetScale())
 
 	local button = ExtraActionButton1
 	tinsert(buttonList, button)
@@ -44,7 +46,7 @@ function Bar:CreateExtrabar()
 	ZoneAbilityFrame:SetParent(zoneFrame)
 	ZoneAbilityFrame:ClearAllPoints()
 	ZoneAbilityFrame:SetPoint("CENTER", zoneFrame)
-	ZoneAbilityFrame.ignoreFramePositionManager = true
+	ZoneAbilityFrame.ignoreInLayout = true
 	ZoneAbilityFrame.Style:SetAlpha(0)
 
 	hooksecurefunc(ZoneAbilityFrame, "UpdateDisplayedZoneAbilities", function(self)

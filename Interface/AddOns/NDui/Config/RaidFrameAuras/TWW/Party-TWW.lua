@@ -60,3 +60,6 @@ module:RegisterDebuff(TIER, INSTANCE, 0, 424797) -- 混沌脆弱
 
 INSTANCE = 1298 -- 水闸行动
 module:RegisterSeasonSpells(TIER, INSTANCE)
+
+INSTANCE = 1303 -- 奥尔达尼生态圆顶
+module:RegisterSeasonSpells(TIER, INSTANCE)

@@ -143,6 +143,12 @@ function G:SetupRaidDebuffs(parent)
 		[1] = EJ_GetInstanceInfo(1273), -- 尼鲁巴尔王宫
 		[2] = EJ_GetInstanceInfo(1296), -- Liberation of Undermine
 	}
+	if DB.isNewPatch then
+		AddNewDungeon(dungeons, 1303) -- 奥尔达尼生态圆顶
+		AddNewDungeon(dungeons, 1185) -- 赎罪大厅
+		AddNewDungeon(dungeons, 1194) -- 集市
+		raids[3] = EJ_GetInstanceInfo(1302) -- 法力熔炉：欧米伽
+	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()

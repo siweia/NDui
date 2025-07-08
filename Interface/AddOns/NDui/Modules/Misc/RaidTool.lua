@@ -411,15 +411,20 @@ function M:RaidTool_CountDown(parent)
 					end
 					reset = not reset
 				elseif IsAddOnLoaded("BigWigs") then
-					if not SlashCmdList["BIGWIGSPULL"] then LoadAddOn("BigWigs_Plugins") end
+					if not SlashCmdList.pull then return end
 					if reset then
-						SlashCmdList["BIGWIGSPULL"](C.db["Misc"]["DBMCount"])
+						SlashCmdList.pull(C.db["Misc"]["DBMCount"])
 					else
-						SlashCmdList["BIGWIGSPULL"]("0")
+						SlashCmdList.pull(0)
 					end
 					reset = not reset
 				else
-					UIErrorsFrame:AddMessage(DB.InfoColor..L["DBM Required"])
+					if reset then
+						C_PartyInfo.DoCountdown(C.db["Misc"]["DBMCount"])
+					else
+						C_PartyInfo.DoCountdown(0)
+					end
+					reset = not reset
 				end
 			else
 				UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_LEADER)

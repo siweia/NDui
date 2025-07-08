@@ -1,5 +1,5 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Button name="NDuiAuraTemplate" inherits="SecureActionButtonTemplate, BackdropTemplate" virtual="true" framelevel="4">
+	<Button name="NDuiAuraTemplate" inherits="SecureActionButtonTemplate, BackdropTemplate" virtual="true" framelevel="4" registerForClicks="RightButtonUp, RightButtonDown">
 		<Size x="30" y="30"/>
 		<Attributes>
 			<Attribute name="type" value="cancelaura"/>

@@ -157,17 +157,21 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(WhoFrameGroupInviteButton)
 	B.Reskin(AddFriendEntryFrameAcceptButton)
 	B.Reskin(AddFriendEntryFrameCancelButton)
-	B.Reskin(AddFriendInfoFrameContinueButton)
+	if not DB.isNewPatch then
+		B.Reskin(AddFriendInfoFrameContinueButton)
+	end
 
 	for i = 1, 4 do
 		B.StripTextures(_G["WhoFrameColumnHeader"..i])
 	end
 
 	B.StripTextures(WhoFrameListInset)
-	WhoFrameEditBoxInset:Hide()
-	local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
-	whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
-	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
+	if not DB.isNewPatch then
+		WhoFrameEditBoxInset:Hide()
+		local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
+		whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
+		whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
+	end
 
 	for i = 1, 3 do
 		B.StripTextures(_G["FriendsTabHeaderTab"..i])
