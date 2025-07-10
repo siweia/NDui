@@ -12,7 +12,7 @@ local ICON_SIZE = 36
 local hideNumbers, active, hooked = {}, {}, {}
 
 local day, hour, minute = 86400, 3600, 60
-function module.FormattedTimer(s)
+function module.FormattedTimer(s, modRate)
 	if s >= day then
 		return format("%d"..DB.MyColor.."d", s/day + .5), s%day
 	elseif s > hour then
@@ -26,9 +26,9 @@ function module.FormattedTimer(s)
 	else
 		local colorStr = (s < 3 and "|cffff0000") or (s < 10 and "|cffffff00") or "|cffcccc33"
 		if s < C.db["Actionbar"]["TenthTH"] then
-			return format(colorStr.."%.1f|r", s), s - format("%.1f", s)
+			return format(colorStr.."%.1f|r", s), (s - format("%.1f", s)) / modRate
 		else
-			return format(colorStr.."%d|r", s + .5), s - floor(s)
+			return format(colorStr.."%d|r", s + .5), (s - floor(s)) / modRate
 		end
 	end
 end
@@ -64,9 +64,10 @@ function module:TimerOnUpdate(elapsed)
 	if self.nextUpdate > 0 then
 		self.nextUpdate = self.nextUpdate - elapsed
 	else
-		local remain = self.duration - (GetTime() - self.start)
+		local passTime = GetTime() - self.start
+		local remain = passTime >= 0 and ((self.duration - passTime) / self.modRate) or self.duration
 		if remain > 0 then
-			local getTime, nextUpdate = module.FormattedTimer(remain)
+			local getTime, nextUpdate = module.FormattedTimer(remain, self.modRate)
 			self.text:SetText(getTime)
 			self.nextUpdate = nextUpdate
 		else
@@ -90,7 +91,7 @@ function module:OnCreate()
 	scaler.timer = timer
 
 	local text = timer:CreateFontString(nil, "BACKGROUND")
-	text:SetPoint("CENTER", 2, 0)
+	text:SetPoint("CENTER", 1, 0)
 	text:SetJustifyH("CENTER")
 	timer.text = text
 
@@ -101,7 +102,7 @@ function module:OnCreate()
 	return timer
 end
 
-function module:StartTimer(start, duration)
+function module:StartTimer(start, duration, modRate)
 	if self:IsForbidden() then return end
 	if self.noCooldownCount or hideNumbers[self] then return end
 
@@ -112,13 +113,15 @@ function module:StartTimer(start, duration)
 	end
 
 	local parent = self:GetParent()
-    start = tonumber(start) or 0
-    duration = tonumber(duration) or 0
+	start = tonumber(start) or 0
+	duration = tonumber(duration) or 0
+	modRate = tonumber(modRate) or 1
 
 	if start > 0 and duration > MIN_DURATION then
 		local timer = self.timer or module.OnCreate(self)
 		timer.start = start
 		timer.duration = duration
+		timer.modRate = modRate
 		timer.enabled = true
 		timer.nextUpdate = 0
 
@@ -143,6 +146,11 @@ function module:StartTimer(start, duration)
 		else
 			self:Hide()
 		end
+	end
+
+	-- Disable blizzard cooldown numbers
+	if self.SetHideCountdownNumbers then
+		self:SetHideCountdownNumbers(true)
 	end
 end
 
@@ -169,10 +177,10 @@ end
 
 function module:CooldownUpdate()
 	local button = self:GetParent()
-	local start, duration = GetActionCooldown(button.action)
+	local start, duration, _, modRate = GetActionCooldown(button.action)
 
 	if shouldUpdateTimer(self, start) then
-		module.StartTimer(self, start, duration)
+		module.StartTimer(self, start, duration, modRate)
 	end
 end
 
@@ -192,22 +200,21 @@ function module:RegisterActionButton()
 	end
 end
 
+function module:OnSetHideCountdownNumbers(hide)
+	local disable = not (hide or self.noCooldownCount or self:IsForbidden())
+	if disable then
+		self:SetHideCountdownNumbers(true)
+	end
+end
+
 function module:OnLogin()
 	if not C.db["Actionbar"]["Cooldown"] then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, "SetCooldown", module.StartTimer)
-
+	hooksecurefunc(cooldownIndex, "SetHideCountdownNumbers", module.OnSetHideCountdownNumbers)
 	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", module.HideCooldownNumbers)
-
 	B:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", module.ActionbarUpateCooldown)
-
-	if _G["ActionBarButtonEventsFrame"].frames then
-		for _, frame in pairs(_G["ActionBarButtonEventsFrame"].frames) do
-			module.RegisterActionButton(frame)
-		end
-	end
-	hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", module.RegisterActionButton)
 
 	-- Hide Default Cooldown
 	SetCVar("countdownForCooldowns", 0)
