@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	-- Dressup Frame
 
-	B.ReskinPortraitFrame(DressUpFrame, 13, -10, -35, 75)
+	B.ReskinPortraitFrame(DressUpFrame)
 	B.Reskin(DressUpFrameCancelButton)
 	B.Reskin(DressUpFrameResetButton)
 	B.ReskinRotationButtons(DressUpModelFrame)
