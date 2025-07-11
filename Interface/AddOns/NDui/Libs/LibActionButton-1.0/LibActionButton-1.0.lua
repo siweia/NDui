@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-NDui"
-local MINOR_VERSION = 124
+local MINOR_VERSION = 125
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -45,6 +45,7 @@ local WoWClassic = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC)
 local WoWBCC = (WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
 local WoWWrath = (WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC)
 local WoWCata = (WOW_PROJECT_ID == WOW_PROJECT_CATACLYSM_CLASSIC)
+local WoWMists = (WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC)
 
 -- Enable custom flyouts for WoW Retail
 local UseCustomFlyout = WoWRetail or (FlyoutButtonMixin and not ActionButton_UpdateFlyout)
@@ -1671,6 +1672,144 @@ local function UpdateProfessionQuality(self)
 	ClearProfessionQuality(self)
 end
 
+-- Assisted Combat
+
+local AssistedCombat = CreateFrame("Frame")
+AssistedCombat.AssistantButtons = {}
+AssistedCombat.HighlightButtons = {}
+AssistedCombat:Hide()
+AssistedCombat:SetScript("OnUpdate", function(self, elapsed)
+	self.elapsed = (self.elapsed or 0) + elapsed
+	if self.elapsed > .1 then
+		local nextCastSpell = C_AssistedCombat.GetNextCastSpell()
+		if not self.lastSpell or nextCastSpell ~= self.lastSpell then
+			for button in next, self.AssistantButtons do
+				if button:IsVisible() then
+					button.icon:SetTexture(button:GetTexture())
+					UpdateOverlayGlow(button)
+				end
+			end
+
+			self:UpdateAllHighlightForSpell(nextCastSpell)
+
+			self.lastSpell = nextCastSpell
+		end
+
+		self.elapsed = 0
+	end
+end)
+
+AssistedCombat:SetScript("OnEvent", function(self)
+	self.affectingCombat = UnitAffectingCombat("player")
+	self:ForceUpdate()
+end)
+
+function AssistedCombat:ForceUpdate()
+	self.elapsed = 0
+	self.lastSpell = nil
+end
+
+function AssistedCombat:SetHighlightFrameShown(button, shown)
+	local highlightFrame = button.AssistedCombatHighlightFrame
+	if shown then
+		if not highlightFrame then
+			highlightFrame = CreateFrame("FRAME", nil, button, "ActionBarButtonAssistedCombatHighlightTemplate")
+			button.AssistedCombatHighlightFrame = highlightFrame
+			highlightFrame:SetAllPoints()
+			highlightFrame.Flipbook.Anim:Play()
+			highlightFrame.Flipbook.Anim:Stop()
+		end
+		local size = highlightFrame:GetSize()
+		highlightFrame.Flipbook:SetSize(size * 1.6, size * 1.6)
+		highlightFrame:Show()
+		if self.affectingCombat then
+			highlightFrame.Flipbook.Anim:Play()
+		else
+			highlightFrame.Flipbook.Anim:Stop()
+		end
+	elseif highlightFrame then
+		highlightFrame:Hide()
+	end
+end
+
+function AssistedCombat:GetSpellForHighlight(button)
+	if button._state_type == "action" and button._state_action then
+		local actionType, id, subType = GetActionInfo(button._state_action)
+		if actionType == "macro" then
+			if subType == "spell" then
+				return id
+			else
+				return 0
+			end
+		elseif actionType == "spell" and subType ~= "assistedcombat" then
+			if AssistedCombatManager:IsRotationSpell(id) then
+				return id
+			end
+		end
+	end
+	return nil
+end
+
+function AssistedCombat:UpdateAllHighlightForSpell(spellID)
+	for button, actionSpellID in pairs(self.HighlightButtons) do
+		local show = actionSpellID == spellID
+		self:SetHighlightFrameShown(button, show)
+	end
+end
+
+function AssistedCombat:UpdateState()
+	if next(self.AssistantButtons) or next(self.HighlightButtons) then
+		self:Show()
+	else
+		self:Hide()
+	end
+end
+
+local function UpdateAssistedCombat(self)
+	if self._state_type ~= "action" then return end
+
+	local action = self._state_action
+	if action and C_ActionBar.IsAssistedCombatAction(action) then
+		AssistedCombat.AssistantButtons[self] = true
+	else
+		AssistedCombat.AssistantButtons[self] = nil
+	end
+
+	if AssistedCombatManager:IsAssistedHighlightActive() then
+		local spellID = AssistedCombat:GetSpellForHighlight(self)
+		AssistedCombat.HighlightButtons[self] = spellID
+		AssistedCombat:SetHighlightFrameShown(self, AssistedCombat.lastSpell and spellID == AssistedCombat.lastSpell)
+	end
+
+	AssistedCombat:UpdateState()
+end
+
+if AssistedCombatManager then
+	hooksecurefunc(AssistedCombatManager, "UpdateAssistedHighlightState", function(self, wasActive)
+		local isActive = self:IsAssistedHighlightActive()
+		if isActive and not wasActive then
+			wipe(AssistedCombat.HighlightButtons)
+			for button in next, ActionButtons do
+				AssistedCombat.HighlightButtons[button] = AssistedCombat:GetSpellForHighlight(button)
+			end
+			AssistedCombat.lastSpell = nil
+
+			AssistedCombat:RegisterEvent("PLAYER_REGEN_ENABLED")
+			AssistedCombat:RegisterEvent("PLAYER_REGEN_DISABLED")
+		elseif wasActive then
+			AssistedCombat:UpdateAllHighlightForSpell(nil)
+			wipe(AssistedCombat.HighlightButtons)
+
+			AssistedCombat:UnregisterEvent("PLAYER_REGEN_ENABLED")
+			AssistedCombat:UnregisterEvent("PLAYER_REGEN_DISABLED")
+		end
+
+		AssistedCombat:UpdateState()
+	end)
+else
+	UpdateAssistedCombat = function() end
+end
+
 function Update(self)
 	if self:HasAction() then
 		ActiveButtons[self] = true
@@ -1804,6 +1943,8 @@ function Update(self)
 	UpdateNewAction(self)
 
 	UpdateSpellHighlight(self)
+
+	UpdateAssistedCombat(self)
 
 	if GameTooltip_GetOwnerForbidden() == self then
 		UpdateTooltip(self)
@@ -2513,7 +2654,7 @@ Custom.RunCustom               = function(self, unit, button) return self._state
 Custom.GetPassiveCooldownSpellID = function(self) return nil end
 
 --- WoW Classic overrides
-if not WoWRetail and not WoWCata then
+if not WoWRetail and not WoWCata and not WoWMists then
 	UpdateOverlayGlow = function() end
 end
 
@@ -2531,7 +2672,13 @@ if oldversion and next(lib.buttonRegistry) then
 		if oldversion < 23 then
 			if button.overlay then
 				button.overlay:Hide()
-				ActionButton_HideOverlayGlow(button)
+
+				if ActionButtonSpellAlertManager then
+					ActionButtonSpellAlertManager:HideAlert(button)
+				else
+					ActionButton_HideOverlayGlow(button)
+				end
+
 				button.overlay = nil
 				UpdateOverlayGlow(button)
 			end
