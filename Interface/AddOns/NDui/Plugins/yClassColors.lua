@@ -54,7 +54,7 @@ end
 local function updateGuildView()
 	currentView = currentView or GetCVar("guildRosterView")
 
-	local playerArea = GetRealZoneText()
+	local playerArea = GetAreaText()
 	local buttons = GuildRosterContainer.buttons
 
 	for _, button in ipairs(buttons) do
@@ -154,7 +154,7 @@ hooksecurefunc(C_FriendList, "SortWho", function(sortType)
 end)
 
 hooksecurefunc(WhoFrame.ScrollBox, "Update", function(self)
-	local playerZone = GetRealZoneText()
+	local playerZone = GetAreaText()
 	local playerGuild = GetGuildInfo("player")
 	local playerRace = UnitRace("player")
 

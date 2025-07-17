@@ -37,13 +37,13 @@ info.eventList = {
 }
 
 info.onEvent = function(self)
-	subzone = GetSubZoneText()
-	zone = GetZoneText()
+	subzone = GetMinimapZoneText()
+	zone = GetAreaText()
 	pvpType, _, faction = GetZonePVPInfo()
 	pvpType = pvpType or "neutral"
 
 	local r, g, b = unpack(zoneInfo[pvpType][2])
-	self.text:SetText((subzone ~= "") and subzone or zone)
+	self.text:SetText(subzone)
 	self.text:SetTextColor(r, g, b)
 end
 
