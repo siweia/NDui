@@ -455,7 +455,7 @@ function info:FriendsPanel_UpdateButton(button)
 	if index <= onlineFriends then
 		local name, level, class, area, status = unpack(friendTable[index])
 		button.status:SetTexture(status)
-		local zoneColor = GetRealZoneText() == area and activeZone or inactiveZone
+		local zoneColor = GetAreaText() == area and activeZone or inactiveZone
 		local levelColor = B.HexRGB(GetQuestDifficultyColor(level))
 		local classColor = DB.ClassColors[class] or levelColor
 		button.name:SetText(format("%s%s|r %s%s", levelColor, level, B.HexRGB(classColor), name))
@@ -474,7 +474,7 @@ function info:FriendsPanel_UpdateButton(button)
 		if client == BNET_CLIENT_WOW then
 			local color = DB.ClassColors[class] or GetQuestDifficultyColor(1)
 			name = B.HexRGB(color)..charName
-			zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
+			zoneColor = GetAreaText() == infoText and activeZone or inactiveZone
 		end
 		button.name:SetText(format("%s%s|r (%s|r)", DB.InfoColor, accountName, name))
 		button.zone:SetText(format("%s%s", zoneColor, infoText))
