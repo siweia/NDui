@@ -566,20 +566,24 @@ function M:JerryWay()
 
 	SlashCmdList["NDUI_JERRY_WAY"] = function(msg)
 		msg = gsub(msg, "(%d)[%.,] (%d)", "%1 %2")
-		local x, y, z = strmatch(msg, "(%S+)%s(%S+)(.*)")
-		if x and y then
-			local mapID = C_Map_GetBestMapForUnit("player")
-			if mapID then
-				local mapInfo = C_Map_GetMapInfo(mapID)
-				local mapName = mapInfo and mapInfo.name
-				if mapName then
-					x = GetCorrectCoord(x)
-					y = GetCorrectCoord(y)
-					if x and y then
-						print(format(pointString, mapID, x*100, y*100, mapName, x, y, z or ""))
-						C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x/100, y/100))
-						C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-					end
+
+		local mapID, x, y, z = strmatch(msg, "^#(%d+)%s+(%S+)%s+(%S+)(.*)")
+		if not mapID then
+			mapID = C_Map.GetBestMapForUnit("player")
+			x, y, z = strmatch(msg, "(%S+)%s+(%S+)(.*)")
+		end
+
+		if tonumber(mapID) and tonumber(x) and tonumber(y) then
+			local mapInfo = C_Map.GetMapInfo(mapID)
+			local mapName = mapInfo and mapInfo.name
+			if mapName then
+				x = GetCorrectCoord(x)
+				y = GetCorrectCoord(y)
+				if x and y then
+					print(format(pointString, mapID, x*100, y*100, mapName, x, y, z or ""))
+					C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x/100, y/100))
+					C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+					--C_Map.OpenWorldMap(mapID)
 				end
 			end
 		end
