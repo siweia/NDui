@@ -27,11 +27,14 @@ C.themes["Blizzard_InspectUI"] = function()
 		if icon then icon:SetShown(button.hasItem) end
 	end)
 
-	B.ReskinPortraitFrame(InspectFrame, 15, -15, -35, 73)
+	B.ReskinPortraitFrame(InspectFrame)
 	B.StripTextures(InspectPaperDollFrame)
 
-	for i = 1, 3 do
-		B.ReskinTab(_G["InspectFrameTab"..i])
+	for i = 1, 4 do
+		local tab = _G["InspectFrameTab"..i]
+		if tab then
+			B.ReskinTab(tab)
+		end
 	end
 
 	B.ReskinRotationButtons(InspectModelFrame)

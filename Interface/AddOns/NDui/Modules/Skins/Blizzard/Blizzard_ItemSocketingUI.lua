@@ -46,8 +46,8 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 	if not ItemSocketingFrame.CloseButton then
 		ItemSocketingFrame.CloseButton = ItemSocketingCloseButton
 	end
-	B.ReskinPortraitFrame(ItemSocketingFrame, 10, -10, 0, 15)
+	B.ReskinPortraitFrame(ItemSocketingFrame)
 	B.CreateBDFrame(ItemSocketingScrollFrame, .25)
 	B.Reskin(ItemSocketingSocketButton)
-	B.ReskinScroll(ItemSocketingScrollFrameScrollBar)
+	B.ReskinTrimScroll(ItemSocketingScrollFrame.ScrollBar)
 end

@@ -21,6 +21,7 @@ C.themes["Blizzard_TalentUI"] = function()
 		PlayerTalentFrameTitleGlowLeft:SetTexture("")
 		PlayerTalentFrameTitleGlowRight:SetTexture("")
 		PlayerTalentFrameTitleGlowCenter:SetTexture("")
+		B.ReskinIcon(PlayerTalentFrameTalentsClearInfoFrameIcon)
 
 		local function updateTab(tab)
 			if not tab.styled then

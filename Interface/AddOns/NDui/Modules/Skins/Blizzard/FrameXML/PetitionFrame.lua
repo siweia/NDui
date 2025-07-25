@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	B.ReskinPortraitFrame(PetitionFrame, 15, -15, -30, 65)
+	B.ReskinPortraitFrame(PetitionFrame)
 	B.Reskin(PetitionFrameSignButton)
 	B.Reskin(PetitionFrameRequestButton)
 	B.Reskin(PetitionFrameRenameButton)

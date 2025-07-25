@@ -33,6 +33,7 @@ tinsert(C.defaultThemes, function()
 
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 	B.ReskinScroll(QuestMapDetailsScrollFrameScrollBar)
+	B.ReskinDropDown(WorldMapFrame.WorldMapOptionsDropDown)
 
 	C_Timer.After(3, function()
 		if CodexQuestMapDropdown then

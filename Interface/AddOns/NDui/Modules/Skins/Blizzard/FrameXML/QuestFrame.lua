@@ -47,7 +47,7 @@ local function ReskinQuestItem(button)
 end
 
 tinsert(C.defaultThemes, function()
-	B.ReskinPortraitFrame(QuestFrame, 15, -15, -30, 65)
+	B.ReskinPortraitFrame(QuestFrame)
 
 	B.StripTextures(QuestFrameDetailPanel)
 	B.StripTextures(QuestFrameRewardPanel)
@@ -131,10 +131,10 @@ tinsert(C.defaultThemes, function()
 
 	-- QuestLogFrame
 
-	B.ReskinPortraitFrame(QuestLogFrame, 10, -10, 0, 5)
+	B.ReskinPortraitFrame(QuestLogFrame)
 	B.Reskin(QuestLogFrameTrackButton)
 	B.Reskin(QuestLogFrameCancelButton)
-	B.ReskinPortraitFrame(QuestLogDetailFrame, 10, -10, 0, 0)
+	B.ReskinPortraitFrame(QuestLogDetailFrame)
 
 	hooksecurefunc("QuestLog_Update", function()
 		for _, button in pairs(QuestLogListScrollFrame.buttons) do

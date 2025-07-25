@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
 	-- WorldStateScoreFrame
-	B.ReskinPortraitFrame(WorldStateScoreFrame, 13, -15, -90, 70)
+	B.ReskinPortraitFrame(WorldStateScoreFrame)
 	B.ReskinScroll(WorldStateScoreScrollFrameScrollBar)
 	WorldStateScoreScrollFrameScrollBar:SetPoint("TOPLEFT", WorldStateScoreScrollFrame, "TOPRIGHT", 38, -16) -- don't overlay with scroll buttons
 	for i = 1, 3 do
@@ -15,7 +15,7 @@ tinsert(C.defaultThemes, function()
 	ArenaAvailableServicesText:SetTextColor(1, 1, 1)
 	ArenaAvailableServicesText:SetShadowColor(0, 0, 0)
 
-	B.ReskinPortraitFrame(ArenaRegistrarFrame, 15, -15, -30, 65)
+	B.ReskinPortraitFrame(ArenaRegistrarFrame)
 	B.StripTextures(ArenaRegistrarGreetingFrame)
 	ArenaRegistrarFrameEditBox:SetHeight(20)
 	ArenaRegistrarFrameEditBox:DisableDrawLayer("BACKGROUND")

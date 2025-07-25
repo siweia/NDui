@@ -89,7 +89,7 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	B.ReskinPortraitFrame(GossipFrame, 15, -15, -30, 65)
+	B.ReskinPortraitFrame(GossipFrame)
 
 	-- Text on QuestFrame
 	local MAX_NUM_QUESTS = MAX_NUM_QUESTS or 25

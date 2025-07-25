@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	B.ReskinPortraitFrame(TabardFrame, 15, -15, -35, 73)
+	B.ReskinPortraitFrame(TabardFrame)
 	B.StripTextures(TabardFrameCostFrame)
 	B.CreateBDFrame(TabardFrameCostFrame, .25)
 	B.Reskin(TabardFrameAcceptButton)
