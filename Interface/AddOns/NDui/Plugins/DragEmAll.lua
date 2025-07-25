@@ -41,6 +41,7 @@ local frames = {
 	["TaxiFrame"] = false,
 	--["TradeFrame"] = false,
 	["TutorialFrame"] = false,
+	["PlayerPowerBarAlt"] = false,
 }
 
 local function CharacterFrameMoveCheck()
