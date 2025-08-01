@@ -210,6 +210,7 @@ local function updateBagBar(bar)
 end
 
 function module:CreateBagBar(settings, columns)
+	if DB.isNewPatch then return end
 	local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
 	bagBar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagBar)
@@ -224,6 +225,7 @@ function module:CreateBagBar(settings, columns)
 end
 
 function module:CreateBagTab(settings, columns)
+	if DB.isNewPatch then return end
 	local bagTab = self:SpawnPlugin("BagTab", settings.Bags)
 	bagTab:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagTab)
@@ -435,6 +437,7 @@ end
 
 local function ToggleBackpacks(self)
 	local parent = self.__owner
+	if not parent.BagBar then return end
 	B:TogglePanel(parent.BagBar)
 	if parent.BagBar:IsShown() then
 		self.bg:SetBackdropBorderColor(1, .8, 0)
@@ -1495,24 +1498,26 @@ function module:OnLogin()
 	SetCVar("professionAccessorySlotsExampleShown", 1)
 
 	-- Bank frame paging
-	local bankNameIndex = {
-		["BankSlotsFrame"] = 1,
-		["ReagentBankFrame"] = 2,
-		["AccountBankPanel"] = 3,
-	}
-	hooksecurefunc("BankFrame_ShowPanel", function(sidePanelName)
-		local panelIndex = bankNameIndex[sidePanelName]
-		if panelIndex then
-			BankFrame.selectedTab = panelIndex
-			BankFrame.activeTabIndex = panelIndex
-			f.bank:SetShown(panelIndex == 1)
-			f.reagent:SetShown(panelIndex == 2)
-			f.accountbank:SetShown(panelIndex == 3)
-			if _G["NDui_BankPurchaseButton"] then
-				_G["NDui_BankPurchaseButton"]:SetShown(panelIndex == 3 and C_Bank.CanPurchaseBankTab(ACCOUNT_BANK_TYPE))
+	if BankFrame_ShowPanel then
+		local bankNameIndex = {
+			["BankSlotsFrame"] = 1,
+			["ReagentBankFrame"] = 2,
+			["AccountBankPanel"] = 3,
+		}
+		hooksecurefunc("BankFrame_ShowPanel", function(sidePanelName)
+			local panelIndex = bankNameIndex[sidePanelName]
+			if panelIndex then
+				BankFrame.selectedTab = panelIndex
+				BankFrame.activeTabIndex = panelIndex
+				f.bank:SetShown(panelIndex == 1)
+				f.reagent:SetShown(panelIndex == 2)
+				f.accountbank:SetShown(panelIndex == 3)
+				if _G["NDui_BankPurchaseButton"] then
+					_G["NDui_BankPurchaseButton"]:SetShown(panelIndex == 3 and C_Bank.CanPurchaseBankTab(ACCOUNT_BANK_TYPE))
+				end
 			end
-		end
-	end)
+		end)
+	end
 
 	-- Delay updates for data jam
 	local updater = CreateFrame("Frame", nil, f.main)

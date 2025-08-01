@@ -142,19 +142,21 @@ tinsert(C.defaultThemes, function()
 	for i = 1, 13 do
 		local frameName = "ContainerFrame"..i
 		local frame = _G[frameName]
-		local name = frame.TitleText or _G[frameName.."TitleText"]
-		name:SetDrawLayer("OVERLAY")
-		name:ClearAllPoints()
-		name:SetPoint("TOP", 0, -10)
-		B.ReskinClose(frame.CloseButton)
+		if frame then
+			local name = frame.TitleText or _G[frameName.."TitleText"]
+			name:SetDrawLayer("OVERLAY")
+			name:ClearAllPoints()
+			name:SetPoint("TOP", 0, -10)
+			B.ReskinClose(frame.CloseButton)
 
-		B.StripTextures(frame)
-		B.SetBD(frame)
-		frame.PortraitContainer:Hide()
-		if frame.Bg then frame.Bg:Hide() end
-		createBagIcon(frame, i)
-		hooksecurefunc(frame, "Update", updateContainer)
-		hooksecurefunc(frame, "UpdateItemSlots", handleBagSlots)
+			B.StripTextures(frame)
+			B.SetBD(frame)
+			frame.PortraitContainer:Hide()
+			if frame.Bg then frame.Bg:Hide() end
+			createBagIcon(frame, i)
+			hooksecurefunc(frame, "Update", updateContainer)
+			hooksecurefunc(frame, "UpdateItemSlots", handleBagSlots)
+		end
 	end
 
 	B.StripTextures(BackpackTokenFrame)
@@ -184,15 +186,18 @@ tinsert(C.defaultThemes, function()
 
 	-- [[ Bank ]]
 
-	BankFrameMoneyFrameBorder:Hide()
-	B.StripTextures(BankSlotsFrame)
-	BankSlotsFrame.EdgeShadows:Hide()
+	if not DB.isNewPatch then
+		BankFrameMoneyFrameBorder:Hide()
+		B.StripTextures(BankSlotsFrame)
+		BankSlotsFrame.EdgeShadows:Hide()
+
+		B.Reskin(BankFramePurchaseButton)
+		B.ReskinTab(BankFrameTab1)
+		B.ReskinTab(BankFrameTab2)
+		B.ReskinTab(BankFrameTab3)
+	end
 
 	B.ReskinPortraitFrame(BankFrame)
-	B.Reskin(BankFramePurchaseButton)
-	B.ReskinTab(BankFrameTab1)
-	B.ReskinTab(BankFrameTab2)
-	B.ReskinTab(BankFrameTab3)
 	B.ReskinInput(BankItemSearchBox)
 
 	for i = 1, 28 do

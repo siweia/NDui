@@ -161,6 +161,7 @@ end
 
 -- Register the plugin
 cargBags:RegisterPlugin("BagTab", function(self, bags)
+	if DB.isNewPatch then return end
 	if(cargBags.ParseBags) then
 		bags = cargBags:ParseBags(bags)
 	end
