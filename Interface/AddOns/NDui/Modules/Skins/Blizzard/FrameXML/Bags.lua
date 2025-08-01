@@ -40,6 +40,7 @@ local function ReskinSortButton(button)
 end
 
 local function ReskinBagSlot(bu)
+	if not bu then return end
 	bu:SetNormalTexture(0)
 	bu:SetPushedTexture(0)
 	if bu.Background then bu.Background:SetAlpha(0) end
@@ -195,10 +196,37 @@ tinsert(C.defaultThemes, function()
 		B.ReskinTab(BankFrameTab1)
 		B.ReskinTab(BankFrameTab2)
 		B.ReskinTab(BankFrameTab3)
+	else
+		handleMoneyFrame(BankPanel)
+		B.StripTextures(BankPanel)
+		BankPanel.EdgeShadows:Hide()
+		ReskinSortButton(BankPanel.AutoSortButton)
+		B.Reskin(BankPanel.AutoDepositFrame.DepositButton)
+		B.ReskinCheck(BankPanel.AutoDepositFrame.IncludeReagentsCheckbox)
+		B.Reskin(BankPanel.MoneyFrame.WithdrawButton)
+		B.Reskin(BankPanel.MoneyFrame.DepositButton)
+
+		hooksecurefunc(BankPanel, "GenerateItemSlotsForSelectedTab", handleBagSlots)
+
+		hooksecurefunc(BankPanel, "RefreshBankTabs", function(self)
+			for tab in self.bankTabPool:EnumerateActive() do
+				handleBankTab(tab)
+			end
+		end)
+		handleBankTab(BankPanel.PurchaseTab)
+
+		for i = 1, 3 do
+			local tab = select(i, BankFrame.TabSystem:GetChildren())
+			if tab then
+				B.ReskinTab(tab)
+			end
+		end
 	end
 
 	B.ReskinPortraitFrame(BankFrame)
 	B.ReskinInput(BankItemSearchBox)
+
+	if DB.isNewPatch then return end
 
 	for i = 1, 28 do
 		ReskinBagSlot(_G["BankFrameItem"..i])
