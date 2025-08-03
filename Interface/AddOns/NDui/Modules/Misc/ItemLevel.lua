@@ -478,7 +478,9 @@ function M:ItemLevel_Containers()
 		end
 	end
 	hooksecurefunc(ContainerFrameCombinedBags, "UpdateItemSlots", M.ItemLevel_HandleSlots)
-	hooksecurefunc(AccountBankPanel, "GenerateItemSlotsForSelectedTab", M.ItemLevel_HandleSlots)
+	if not DB.isNewPatch then
+		hooksecurefunc(AccountBankPanel, "GenerateItemSlotsForSelectedTab", M.ItemLevel_HandleSlots)
+	end
 end
 
 function M:ShowItemLevel()
