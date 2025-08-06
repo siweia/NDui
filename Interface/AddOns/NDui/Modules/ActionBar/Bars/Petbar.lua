@@ -14,13 +14,14 @@ function Bar:CreatePetbar()
 	frame.mover = B.Mover(frame, L["Pet Actionbar"], "PetBar", {"BOTTOM", _G.NDui_ActionBar2, "TOP", 0, margin})
 	Bar.movers[10] = frame.mover
 
-	PetActionBarFrame:SetParent(frame)
-	PetActionBarFrame:EnableMouse(false)
-	SlidingActionBarTexture0:SetTexture(nil)
-	SlidingActionBarTexture1:SetTexture(nil)
+	--PetActionBarFrame:SetParent(frame)
+	--PetActionBarFrame:EnableMouse(false)
+	--SlidingActionBarTexture0:SetTexture(nil)
+	--SlidingActionBarTexture1:SetTexture(nil)
 
 	for i = 1, num do
 		local button = _G["PetActionButton"..i]
+		button:SetParent(frame)
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
 		local hotkey = button.HotKey
