@@ -114,22 +114,20 @@ function G:SetupRaidDebuffs(parent)
 	local maxLevel = GetMaxPlayerLevel()
 	local dungeons = {}
 
-	for id = 63, 71 do
-		AddNewDungeon(dungeons, id)
-	end
-	AddNewDungeon(dungeons, 76) -- 祖尔格拉布
-	AddNewDungeon(dungeons, 77) -- 祖阿曼
-	AddNewDungeon(dungeons, 184) -- 时光之末
-	AddNewDungeon(dungeons, 185) -- 永恒之井
-	AddNewDungeon(dungeons, 186) -- 暮光审判
+	AddNewDungeon(dungeons, 324) -- 围攻砮皂寺
+	AddNewDungeon(dungeons, 312) -- 影踪禅院
+	AddNewDungeon(dungeons, 303) -- 残阳关
+	AddNewDungeon(dungeons, 316) -- 血色修道院
+	AddNewDungeon(dungeons, 311) -- 血色大厅
+	AddNewDungeon(dungeons, 246) -- 通灵学院
+	AddNewDungeon(dungeons, 313) -- 青龙寺
+	AddNewDungeon(dungeons, 302) -- 风暴烈酒酿造厂
+	AddNewDungeon(dungeons, 321) -- 魔古山宫殿
 
 	local raids = {
-		[1] = EJ_GetInstanceInfo(75),
-		[2] = EJ_GetInstanceInfo(72),
-		[3] = EJ_GetInstanceInfo(74),
-		[4] = EJ_GetInstanceInfo(73),
-		[5] = EJ_GetInstanceInfo(78),
-		[6] = EJ_GetInstanceInfo(187),
+		[1] = EJ_GetInstanceInfo(317),
+		[2] = EJ_GetInstanceInfo(320),
+		[3] = EJ_GetInstanceInfo(330),
 	}
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)

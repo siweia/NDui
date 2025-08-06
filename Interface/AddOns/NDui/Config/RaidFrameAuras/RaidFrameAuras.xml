@@ -30,4 +30,9 @@
 	<Script file="Cata\ThroneFourWinds.lua"/>
 	<Script file="Cata\Firelands.lua"/>
 	<Script file="Cata\DragonSoul.lua"/>
+
+	<Script file="Mists\Party.lua"/>
+	<Script file="Mists\MogushanVaults.lua"/>
+	<Script file="Mists\HeartofFear.lua"/>
+	<Script file="Mists\TerraceofEndlessSpring.lua"/>
 </Ui>
