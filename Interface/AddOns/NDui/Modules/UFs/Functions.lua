@@ -18,6 +18,10 @@ local function ReplacePowerColor(name, index, color)
 	oUF.colors.power[index] = oUF.colors.power[name]
 end
 ReplacePowerColor("MANA", 0, {0, .4, 1})
+ReplacePowerColor("SOUL_SHARDS", 7, {.58, .51, .79})
+ReplacePowerColor("HOLY_POWER", 9, {.88, .88, .06})
+ReplacePowerColor("CHI", 12, {0, 1, .59})
+ReplacePowerColor("ARCANE_CHARGES", 16, {.41, .8, .94})
 
 -- Various values
 local function retVal(self, val1, val2, val3, val4, val5)

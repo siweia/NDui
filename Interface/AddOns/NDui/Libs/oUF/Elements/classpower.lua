@@ -54,6 +54,7 @@ local _, PlayerClass = UnitClass('player')
 local SPEC_MAGE_ARCANE = _G.SPEC_MAGE_ARCANE or 1
 local SPEC_MONK_WINDWALKER = _G.SPEC_MONK_WINDWALKER or 3
 local SPEC_WARLOCK_DESTRUCTION = _G.SPEC_WARLOCK_DESTRUCTION or 3
+local SPEC_PRIEST_SHADOW = _G.SPEC_PRIEST_SHADOW or 3
 
 local SPELL_POWER_ENERGY = Enum.PowerType.Energy or 3
 local SPELL_POWER_COMBO_POINTS = Enum.PowerType.ComboPoints or 4
@@ -61,6 +62,7 @@ local SPELL_POWER_SOUL_SHARDS = Enum.PowerType.SoulShards or 7
 local SPELL_POWER_HOLY_POWER = Enum.PowerType.HolyPower or 9
 local SPELL_POWER_CHI = Enum.PowerType.Chi or 12
 local SPELL_POWER_ARCANE_CHARGES = Enum.PowerType.ArcaneCharges or 16
+local SPELL_POWER_SHADOW_ORBS = Enum.PowerType.ShadowOrbs or 28
 
 -- Holds the class specific stuff.
 local ClassPowerID, ClassPowerType
@@ -309,6 +311,10 @@ do
 		ClassPowerID = SPELL_POWER_ARCANE_CHARGES
 		ClassPowerType = 'ARCANE_CHARGES'
 		RequireSpec = SPEC_MAGE_ARCANE
+	elseif(PlayerClass == 'PRIEST') then
+		ClassPowerID = SPELL_POWER_SHADOW_ORBS
+		ClassPowerType = 'SHADOW_ORBS'
+		RequireSpec = SPEC_PRIEST_SHADOW
 	end
 end
 
