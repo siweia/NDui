@@ -29,6 +29,7 @@
 	<Script file="ModelPreviewFrame.lua"/>
 	<Script file="MovieFrame.lua"/>
 	<Script file="NavigationBar.lua"/>
+	<Script file="PetBattleUI.lua"/>
 	<Script file="PetitionFrame.lua"/>
 	<Script file="PetStable.lua"/>
 	<Script file="ProductChoiceFrame.lua"/>
