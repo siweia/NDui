@@ -34,11 +34,11 @@ local function isItemInBagReagent(item)
 end
 
 local function isItemInBank(item)
-	return item.bagId == -1 or (item.bagId > 5 and item.bagId < 13)
+	return (item.bagId > 5 and item.bagId < 12)
 end
 
 local function isItemInAccountBank(item)
-	return item.bagId > 12 and item.bagId < 18
+	return item.bagId > 11 and item.bagId < 17
 end
 
 local function isItemJunk(item)
@@ -128,10 +128,9 @@ local function isItemCustom(item, index)
 	return customIndex and customIndex == index
 end
 
-local emptyBags = {[0] = true, [11] = true}
 local function isEmptySlot(item)
 	if not C.db["Bags"]["GatherEmpty"] then return end
-	return module.initComplete and not item.texture and emptyBags[module.BagsType[item.bagId]]
+	return module.initComplete and not item.texture
 end
 
 local function isTradeGoods(item)

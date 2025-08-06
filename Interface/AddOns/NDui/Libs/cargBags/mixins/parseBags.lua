@@ -42,6 +42,17 @@ local bagStrings = {
 	["keyring"]			= { -2 },
 	["accountbank"]		= { 13, 14, 15, 16, 17 },
 }
+--[=[
+-1 Character slots
+0-4 Backpack slots
+5 reagent slot
+6-11 Bank slots
+12-16 Account bank slots
+]=]
+if NDui[4].isNewPatch then
+	bagStrings["bank"] = { 6, 7, 8, 9, 10, 11}
+	bagStrings["accountbank"] = { 12, 13, 14, 15, 16 }
+end
 cargBags.BagStrings = bagStrings
 
 --[[!
