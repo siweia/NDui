@@ -113,7 +113,6 @@ G.DefaultSettings = {
 		SplitCount = 1,
 		SpecialBagsColor = true,
 		iLvlToShow = 1,
-		AutoDeposit = false,
 		PetTrash = true,
 		BagsPerRow = 6,
 		BankPerRow = 10,

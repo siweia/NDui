@@ -115,10 +115,13 @@ function module:IsPetTrashCurrency(itemID)
 	return C.db["Bags"]["PetTrash"] and petTrashCurrenies[itemID]
 end
 
+local toyBlackList = {
+	[167698] = true, -- 隐秘之鱼护目镜
+}
 local function isItemCollection(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterCollection"] then return end
-	return item.id and C_ToyBox_GetToyInfo(item.id) or isMountOrPet(item)
+	return item.id and C_ToyBox_GetToyInfo(item.id) and not toyBlackList[item.id] or isMountOrPet(item)
 end
 
 local function isItemCustom(item, index)
@@ -207,7 +210,6 @@ function module:GetFilters()
 	filters.bankAOE = function(item) return isItemInBank(item) and isWarboundUntilEquipped(item) end
 	filters.bankLower = function(item) return isItemInBank(item) and isItemLowerLevel(item) end
 
-	filters.onlyReagent = function(item) return item.bagId == -3 and not isEmptySlot(item) end -- reagent bank
 	filters.onlyBagReagent = function(item) return (isItemInBagReagent(item) and not isEmptySlot(item)) or (hasReagentBagEquipped() and isItemInBag(item) and isTradeGoods(item)) end -- reagent bagslot
 
 	filters.accountbank = function(item) return isItemInAccountBank(item) and not isEmptySlot(item) end

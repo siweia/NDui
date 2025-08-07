@@ -138,8 +138,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	if C.db["Bags"]["Enable"] then return end
-
 	for i = 1, 13 do
 		local frameName = "ContainerFrame"..i
 		local frame = _G[frameName]
@@ -225,6 +223,31 @@ tinsert(C.defaultThemes, function()
 
 	B.ReskinPortraitFrame(BankFrame)
 	B.ReskinInput(BankItemSearchBox)
+
+	local popup = BankCleanUpConfirmationPopup
+	if popup then
+		B.StripTextures(popup)
+		B.SetBD(popup)
+		B.Reskin(popup.AcceptButton)
+		B.Reskin(popup.CancelButton)
+		B.ReskinCheck(popup.HidePopupCheckbox.Checkbox)
+	end
+
+	local menu = BankPanel.TabSettingsMenu
+	if menu then
+		B.StripTextures(menu)
+		B.ReskinIconSelector(menu)
+		menu.DepositSettingsMenu:DisableDrawLayer("OVERLAY")
+
+		for _, child in pairs({menu.DepositSettingsMenu:GetChildren()}) do
+			if child:IsObjectType("CheckButton") then
+				B.ReskinCheck(child)
+				child:SetSize(24, 24)
+			elseif child.Arrow then
+				B.ReskinDropDown(child)
+			end
+		end
+	end
 
 	if DB.isNewPatch then return end
 

@@ -7,9 +7,10 @@ local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
-local AccountBankPanel = AccountBankPanel
-local BANK_TAB1 = Enum.BagIndex.AccountBankTab_1 or 13
+local BANK_TAB1 = Enum.BagIndex.CharacterBankTab_1 or 6
+local ACCOUNT_TAB1 = Enum.BagIndex.AccountBankTab_1 or 12
 local ACCOUNT_BANK_TYPE = Enum.BankType.Account or 2
+local tabButtons = {}
 
 function Implementation:GetBagTabClass()
 	return self:GetClass("BagTab", true, "BagTab")
@@ -36,11 +37,10 @@ local function AddBankTabSettingsToTooltip(tooltip, depositFlags)
 end
 
 local function UpdateTooltip(self, id)
-	if not AccountBankPanel.purchasedBankTabData then return end
-	local data = AccountBankPanel.purchasedBankTabData[id]
+	if not BankFrame.BankPanel.purchasedBankTabData then return end
+	local data = BankFrame.BankPanel.purchasedBankTabData[id]
 	if not data then return end
 
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 	GameTooltip_SetTitle(GameTooltip, data.name, NORMAL_FONT_COLOR)
 	AddBankTabSettingsToTooltip(GameTooltip, data.depositFlags)
@@ -48,13 +48,12 @@ local function UpdateTooltip(self, id)
 	GameTooltip:Show()
 end
 
-local buttonNum = 0
-function BagTab:Create(bagID)
-	buttonNum = buttonNum + 1
-	local name = addon.."BagTab"..buttonNum
+function BagTab:Create(bagID, i, account)
+	local bagId = (account and ACCOUNT_TAB1 or BANK_TAB1) + i - 1
+	local name = addon.."BagTab_ID"..bagId
 	local button = setmetatable(CreateFrame("Button", name, nil, "BackdropTemplate"), self.__index)
-	button:SetID(buttonNum)
-	button.bagId = buttonNum + BANK_TAB1 - 1
+	button.bagId = bagId
+	button:SetID(i)
 
 	B.PixelIcon(button, BagTab.bgTex, true)
 	button:RegisterForDrag("LeftButton", "RightButton")
@@ -132,22 +131,23 @@ function BagTab:UpdateButton()
 end
 
 function BagTab:OnClick(btn)
-	if not AccountBankPanel.purchasedBankTabData then return end
+	if not BankFrame.BankPanel.purchasedBankTabData then return end
 
 	local currentTabID = self:GetID()
-	local data = AccountBankPanel.purchasedBankTabData[currentTabID]
+	local data = BankFrame.BankPanel.purchasedBankTabData[currentTabID]
 	if not data then return end
 
 	if btn == "LeftButton" then
 		self.bar.buttons[currentTabID]:UpdateButton()
 	else -- right button
-		local menu = AccountBankPanel.TabSettingsMenu
+		local menu = BankFrame.BankPanel.TabSettingsMenu
 		if menu then
 			if menu:IsShown() then menu:Hide() end
 			menu:SetParent(UIParent)
 			menu:ClearAllPoints()
 			menu:SetPoint("CENTER", 0, 100)
 			menu:EnableMouse(true)
+			menu:SetFrameStrata("DIALOG")
 			menu:TriggerEvent(BankPanelTabSettingsMenuMixin.Event.OpenTabSettingsRequested, self.bagId)
 		end
 	end
@@ -160,8 +160,9 @@ local function updater(self)
 end
 
 -- Register the plugin
-cargBags:RegisterPlugin("BagTab", function(self, bags)
-	if DB.isNewPatch then return end
+local hooked
+
+cargBags:RegisterPlugin("BagTab", function(self, bags, account)
 	if(cargBags.ParseBags) then
 		bags = cargBags:ParseBags(bags)
 	end
@@ -175,19 +176,26 @@ cargBags:RegisterPlugin("BagTab", function(self, bags)
 	local buttonClass = self.implementation:GetBagTabClass()
 	bar.buttons = {}
 	for i = 1, #bags do
-		local button = buttonClass:Create(bags[i])
+		local button = buttonClass:Create(bags[i], i, account)
 		button:SetParent(bar)
 		button.hidden = true
 		button.bar = bar
-		table.insert(bar.buttons, button)
+		bar.buttons[i] = button
 	end
 
-	hooksecurefunc(AccountBankPanel, "RefreshBankTabs", function(self)
-		if not AccountBankPanel.purchasedBankTabData then return end
-		for index, data in pairs(self.purchasedBankTabData) do
-			bar.buttons[index].Icon:SetTexture(data.icon)
-		end
-	end)
+	if not hooked then
+		hooked = true
+
+		hooksecurefunc(BankFrame.BankPanel, "RefreshBankTabs", function(self)
+			if not self.purchasedBankTabData then return end
+
+			for _, data in pairs(self.purchasedBankTabData) do
+				if _G["NDuiBagTab_ID"..data.ID] then
+					_G["NDuiBagTab_ID"..data.ID].Icon:SetTexture(data.icon)
+				end
+			end
+		end)
+	end
 
 	updater(bar)
 
