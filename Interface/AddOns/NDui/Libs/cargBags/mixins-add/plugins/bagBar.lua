@@ -231,9 +231,6 @@ cargBags:RegisterPlugin("BagBar", function(self, bags)
 	end
 
 	self.implementation:RegisterEvent("BAG_UPDATE", bar, updater)
-	if not DB.isNewPatch then
-		self.implementation:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", bar, updater)
-	end
 	self.implementation:RegisterEvent("ITEM_LOCK_CHANGED", bar, onLock)
 
 	return bar

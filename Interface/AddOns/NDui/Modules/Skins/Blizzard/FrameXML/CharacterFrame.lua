@@ -362,7 +362,7 @@ tinsert(C.defaultThemes, function()
 
 	B.ReskinPortraitFrame(CurrencyTransferMenu)
 
-	local transferMenu = CurrencyTransferMenu.Content or CurrencyTransferMenu -- isNewPatch
+	local transferMenu = CurrencyTransferMenu.Content
 	if transferMenu then
 		B.CreateBDFrame(transferMenu.SourceSelector, .25)
 		transferMenu.SourceSelector.SourceLabel:SetWidth(56)

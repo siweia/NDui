@@ -53,17 +53,9 @@ tinsert(C.defaultThemes, function()
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
-		if not DB.isNewPatch then
-			frame.Border:Hide()
-			for j = 1, 4 do
-				B.Reskin(frame["button"..j])
-			end
-			B.Reskin(frame.extraButton)
-		else
-			B.StripTextures(frame)
-			for j = 1, 4 do
-				B.Reskin(_G["StaticPopup"..i.."Button"..j])
-			end
+		B.StripTextures(frame)
+		for j = 1, 4 do
+			B.Reskin(_G["StaticPopup"..i.."Button"..j])
 		end
 		B.SetBD(frame)
 		B.ReskinClose(close)
