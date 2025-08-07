@@ -1019,7 +1019,7 @@ function module:OnLogin()
 		self:GetContainer("Bank"):Show()
 
 		if not initBagType then
-			module:UpdateAllBags() -- Initialize bagType
+			--module:UpdateAllBags() -- Initialize bagType
 			module:UpdateBagSize()
 			initBagType = true
 		end

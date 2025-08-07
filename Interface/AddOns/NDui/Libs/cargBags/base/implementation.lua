@@ -420,7 +420,11 @@ end
 	@param slotID <number> [optional]
 	@callback Container:OnBagUpdate(bagID, slotID)
 ]]
+local isUpdating = false
 function Implementation:BAG_UPDATE(_, bagID, slotID)
+	if isUpdating then return end
+	isUpdating = true
+
 	if self.isSorting then return end
 
 	if(bagID and slotID) then
@@ -428,16 +432,12 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 	elseif(bagID) then
 		self:UpdateBag(bagID)
 	else
-		if DB.isNewPatch then
-			for bagID = 0, 16 do
-				self:UpdateBag(bagID)
-			end
-		else
-			for bagID = -3, 17 do
-				self:UpdateBag(bagID)
-			end
+		for bagID = 0, 16 do
+			self:UpdateBag(bagID)
 		end
 	end
+
+	isUpdating = false
 end
 
 --[[!
