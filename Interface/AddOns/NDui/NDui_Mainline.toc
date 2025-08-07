@@ -1,9 +1,9 @@
-## Interface: 110107
+## Interface: 110200
 ## Title: |cff0080ffNDui|r
 ## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Simpy, Tuller, zork.
 ## Author: Siweia
 ## Notes: More than a UI.
-## Version: 8.9.4
+## Version: 8.10.0
 ## X-Support: TWW
 ## X-Website: https://github.com/siweia/NDui
 ## X-Curse-Project-ID: 324377

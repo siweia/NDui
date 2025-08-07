@@ -91,11 +91,7 @@ function M:OnLogin()
 	if deleteDialog.OnShow then
 		hooksecurefunc(deleteDialog, "OnShow", function(self)
 			if C.db["Misc"]["InstantDelete"] then
-				if DB.isNewPatch then
-					self.EditBox:SetText(DELETE_ITEM_CONFIRM_STRING)
-				else
-					self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
-				end
+				self.EditBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 			end
 		end)
 	end
@@ -829,4 +825,16 @@ function M:ToggleAddOnProfiler()
 	bu:SetScript("OnClick", function()
 		NDuiADB["AddOnProfiler"] = bu:GetChecked()
 	end)
+end
+
+function hhl()
+	local choiceInfo = C_PlayerChoice.GetCurrentPlayerChoiceInfo()
+if choiceInfo then
+    local optionInfo = choiceInfo.options and choiceInfo.options[1]
+    if optionInfo then
+        for _, button in ipairs(optionInfo.buttons) do
+            C_PlayerChoice.SendPlayerChoiceResponse(button.id)
+        end
+    end
+end
 end
