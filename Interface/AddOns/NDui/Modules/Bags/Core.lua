@@ -1408,6 +1408,7 @@ function module:OnLogin()
 	hooksecurefunc(BankFrame.BankPanel, "SetBankType", function(self, bankType)
 		module.Bags:GetContainer("Bank"):SetShown(bankType == CHAR_BANK_TYPE)
 		module.Bags:GetContainer("Account"):SetShown(bankType == ACCOUNT_BANK_TYPE)
+		module:UpdateAllBags()
 		if _G["NDui_BankPurchaseButton"] then
 			_G["NDui_BankPurchaseButton"]:SetShown(bankType == ACCOUNT_BANK_TYPE and C_Bank.CanPurchaseBankTab(ACCOUNT_BANK_TYPE))
 		end

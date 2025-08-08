@@ -391,7 +391,7 @@ local closed
 function Implementation:UpdateBag(bagID)
 	local numSlots
 	if(closed) then
-		numSlots, closed = 0
+		numSlots, bagID = 0, closed
 	else
 		numSlots = GetContainerNumSlots(bagID)
 	end
@@ -429,8 +429,19 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 	elseif(bagID) then
 		self:UpdateBag(bagID)
 	else
-		for bagID = 0, 16 do
+		for bagID = 0, 5 do
 			self:UpdateBag(bagID)
+		end
+
+		local bankType = BankFrame.BankPanel.bankType
+		if bankType == Enum.BankType.Character then
+			for bagID = 6, 11 do
+				self:UpdateBag(bagID)
+			end
+		elseif bankType == Enum.BankType.Account then
+			for bagID = 12, 16 do
+				self:UpdateBag(bagID)
+			end
 		end
 	end
 
