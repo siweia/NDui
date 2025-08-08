@@ -132,7 +132,7 @@ cargBags:SetScript("OnEvent", function(self, event)
 		self.atBank = true
 
 		if(impl:IsShown()) then
-			impl:OnEvent("BAG_UPDATE")
+		--	impl:OnEvent("BAG_UPDATE") -- No need to update twice here, needs review
 		else
 			impl:Show()
 		end
