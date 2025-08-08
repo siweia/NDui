@@ -1958,8 +1958,8 @@ function G:SetupActionbarStyle(parent)
 		text = L["Export"],
 		button1 = OKAY,
 		OnShow = function(self)
-			self.editBox:SetText(Bar:ExportActionbarStyle())
-			self.editBox:HighlightText()
+			self.EditBox:SetText(Bar:ExportActionbarStyle())
+			self.EditBox:HighlightText()
 		end,
 		EditBoxOnEscapePressed = function(self)
 			self:GetParent():Hide()
@@ -1977,7 +1977,7 @@ function G:SetupActionbarStyle(parent)
 			self.button1:Disable()
 		end,
 		OnAccept = function(self)
-			Bar:ImportActionbarStyle(self.editBox:GetText())
+			Bar:ImportActionbarStyle(self.EditBox:GetText())
 		end,
 		EditBoxOnTextChanged = function(self)
 			local button1 = self:GetParent().button1
@@ -2575,8 +2575,8 @@ function G:SetupAvada()
 			else
 				text = NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][currentID] or ""
 			end
-			self.editBox:SetText(text or "")
-			self.editBox:HighlightText()
+			self.EditBox:SetText(text or "")
+			self.EditBox:HighlightText()
 		end,
 		EditBoxOnEscapePressed = function(self)
 			self:GetParent():Hide()
@@ -2605,7 +2605,7 @@ function G:SetupAvada()
 				UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
 				return
 			end
-			local text = self.editBox:GetText()
+			local text = self.EditBox:GetText()
 			if strTestFailed(text) then
 				UIErrorsFrame:AddMessage(DB.InfoColor..L["Data Exception"])
 				return
