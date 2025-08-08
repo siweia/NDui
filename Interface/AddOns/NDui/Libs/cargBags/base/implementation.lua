@@ -419,10 +419,10 @@ end
 ]]
 local isUpdating = false
 function Implementation:BAG_UPDATE(_, bagID, slotID)
+	if self.isSorting then return end
+
 	if isUpdating then return end
 	isUpdating = true
-
-	if self.isSorting then return end
 
 	if(bagID and slotID) then
 		self:UpdateSlot(bagID, slotID)
