@@ -418,15 +418,18 @@ end
 	@callback Container:OnBagUpdate(bagID, slotID)
 ]]
 local isUpdating = false
+local bankUpdateQueue = {}
+local bankUpdateTimer
+local bankUpdateTimeGap = 0.1
+
 function Implementation:BAG_UPDATE(_, bagID, slotID)
 	if self.isSorting then return end
-
 	if isUpdating then return end
 	isUpdating = true
 
-	if(bagID and slotID) then
+	if bagID and slotID then
 		self:UpdateSlot(bagID, slotID)
-	elseif(bagID) then
+	elseif bagID then
 		self:UpdateBag(bagID)
 	else
 		for bagID = 0, 5 do
@@ -434,15 +437,32 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 		end
 
 		local bankType = BankFrame.BankPanel.bankType
+		wipe(bankUpdateQueue)
+
 		if bankType == Enum.BankType.Character then
 			for bagID = 6, 11 do
-				self:UpdateBag(bagID)
+				tinsert(bankUpdateQueue, bagID)
 			end
 		elseif bankType == Enum.BankType.Account then
 			for bagID = 12, 16 do
-				self:UpdateBag(bagID)
+				tinsert(bankUpdateQueue, bagID)
 			end
 		end
+
+		if bankUpdateTimer then
+			bankUpdateTimer:Cancel()
+			bankUpdateTimer = nil
+		end
+
+		bankUpdateTimer = C_Timer.NewTicker(bankUpdateTimeGap, function()
+			if #bankUpdateQueue > 0 then
+				local nextBag = tremove(bankUpdateQueue, 1)
+				self:UpdateBag(nextBag)
+			else
+				bankUpdateTimer:Cancel()
+				bankUpdateTimer = nil
+			end
+		end)
 	end
 
 	isUpdating = false
