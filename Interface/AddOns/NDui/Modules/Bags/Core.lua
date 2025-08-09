@@ -623,7 +623,7 @@ StaticPopupDialogs["NDUI_RENAMECUSTOMGROUP"] = {
 	button2 = CANCEL,
 	OnAccept = function(self)
 		local index = module.selectGroupIndex
-		local text = self.editBox:GetText()
+		local text = self.EditBox:GetText()
 		C.db["Bags"]["CustomNames"][index] = text ~= "" and text or nil
 
 		module.CustomMenu[index+2].text = GetCustomGroupTitle(index)
