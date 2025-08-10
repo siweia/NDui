@@ -59,12 +59,12 @@ StaticPopupDialogs["NDUI_IGNORE_NOTE"] = {
 	OnShow = function(self)
 		local savedNote = NDuiADB["IgnoreNotes"][unitName]
 		if savedNote then
-			self.editBox:SetText(savedNote)
-			self.editBox:HighlightText()
+			self.EditBox:SetText(savedNote)
+			self.EditBox:HighlightText()
 		end
 	end,
 	OnAccept = function(self)
-		local text = self.editBox:GetText()
+		local text = self.EditBox:GetText()
 		if text and text ~= "" then
 			NDuiADB["IgnoreNotes"][unitName] = text
 		else
