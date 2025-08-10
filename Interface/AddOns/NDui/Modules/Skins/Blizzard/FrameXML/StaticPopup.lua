@@ -25,17 +25,17 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
-		local bu = _G["StaticPopup"..i.."ItemFrame"]
-		local icon = _G["StaticPopup"..i.."ItemFrameIconTexture"]
+		local itemFrame = frame.ItemFrame
+		local bu = frame.ItemFrame.Item
+		local icon = _G["StaticPopup"..i.."IconTexture"]
 		local close = _G["StaticPopup"..i.."CloseButton"]
 
 		local gold = _G["StaticPopup"..i.."MoneyInputFrameGold"]
 		local silver = _G["StaticPopup"..i.."MoneyInputFrameSilver"]
 		local copper = _G["StaticPopup"..i.."MoneyInputFrameCopper"]
 
-		local ItemFrameNameFrame = _G["StaticPopup"..i.."ItemFrameNameFrame"]
-		if ItemFrameNameFrame then
-			ItemFrameNameFrame:Hide()
+		if itemFrame.NameFrame then
+			itemFrame.NameFrame:Hide()
 		end
 
 		if bu then
