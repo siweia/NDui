@@ -134,21 +134,21 @@ function G:SetupRaidDebuffs(parent)
 	--AddNewDungeon(dungeons, 1182) -- 通灵战潮
 	--AddNewDungeon(dungeons, 1184) -- 塞兹仙林的迷雾
 
+	-- isNewPatch, remove in future
 	AddNewDungeon(dungeons, 1298) -- 水闸行动
 	AddNewDungeon(dungeons, 1187) -- 伤逝剧场
 	AddNewDungeon(dungeons, 1178) -- 麦卡贡行动
 	AddNewDungeon(dungeons, 1012) -- 暴富矿区！！
 
+	AddNewDungeon(dungeons, 1303) -- 奥尔达尼生态圆顶
+	AddNewDungeon(dungeons, 1185) -- 赎罪大厅
+	AddNewDungeon(dungeons, 1194) -- 集市
+
 	local raids = {
 		[1] = EJ_GetInstanceInfo(1273), -- 尼鲁巴尔王宫
 		[2] = EJ_GetInstanceInfo(1296), -- Liberation of Undermine
+		[3] = EJ_GetInstanceInfo(1302), -- 法力熔炉：欧米伽
 	}
-	if DB.isNewPatch then
-		AddNewDungeon(dungeons, 1303) -- 奥尔达尼生态圆顶
-		AddNewDungeon(dungeons, 1185) -- 赎罪大厅
-		AddNewDungeon(dungeons, 1194) -- 集市
-		raids[3] = EJ_GetInstanceInfo(1302) -- 法力熔炉：欧米伽
-	end
 
 	options[1] = G:CreateDropdown(frame, DUNGEONS.."*", 120, -30, dungeons, L["Dungeons Intro"], 130, 30)
 	options[1]:Hide()
@@ -1958,8 +1958,8 @@ function G:SetupActionbarStyle(parent)
 		text = L["Export"],
 		button1 = OKAY,
 		OnShow = function(self)
-			self.editBox:SetText(Bar:ExportActionbarStyle())
-			self.editBox:HighlightText()
+			self.EditBox:SetText(Bar:ExportActionbarStyle())
+			self.EditBox:HighlightText()
 		end,
 		EditBoxOnEscapePressed = function(self)
 			self:GetParent():Hide()
@@ -1977,7 +1977,7 @@ function G:SetupActionbarStyle(parent)
 			self.button1:Disable()
 		end,
 		OnAccept = function(self)
-			Bar:ImportActionbarStyle(self.editBox:GetText())
+			Bar:ImportActionbarStyle(self.EditBox:GetText())
 		end,
 		EditBoxOnTextChanged = function(self)
 			local button1 = self:GetParent().button1
@@ -2575,8 +2575,8 @@ function G:SetupAvada()
 			else
 				text = NDuiADB["AvadaProfile"][currentSpecID] and NDuiADB["AvadaProfile"][currentSpecID][currentID] or ""
 			end
-			self.editBox:SetText(text or "")
-			self.editBox:HighlightText()
+			self.EditBox:SetText(text or "")
+			self.EditBox:HighlightText()
 		end,
 		EditBoxOnEscapePressed = function(self)
 			self:GetParent():Hide()
@@ -2605,7 +2605,7 @@ function G:SetupAvada()
 				UIErrorsFrame:AddMessage(DB.InfoColor..L["Profile1Warning"])
 				return
 			end
-			local text = self.editBox:GetText()
+			local text = self.EditBox:GetText()
 			if strTestFailed(text) then
 				UIErrorsFrame:AddMessage(DB.InfoColor..L["Data Exception"])
 				return

@@ -25,17 +25,17 @@ tinsert(C.defaultThemes, function()
 
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
-		local bu = _G["StaticPopup"..i.."ItemFrame"]
-		local icon = _G["StaticPopup"..i.."ItemFrameIconTexture"]
+		local itemFrame = frame.ItemFrame
+		local bu = frame.ItemFrame.Item
+		local icon = _G["StaticPopup"..i.."IconTexture"]
 		local close = _G["StaticPopup"..i.."CloseButton"]
 
 		local gold = _G["StaticPopup"..i.."MoneyInputFrameGold"]
 		local silver = _G["StaticPopup"..i.."MoneyInputFrameSilver"]
 		local copper = _G["StaticPopup"..i.."MoneyInputFrameCopper"]
 
-		local ItemFrameNameFrame = _G["StaticPopup"..i.."ItemFrameNameFrame"]
-		if ItemFrameNameFrame then
-			ItemFrameNameFrame:Hide()
+		if itemFrame.NameFrame then
+			itemFrame.NameFrame:Hide()
 		end
 
 		if bu then
@@ -53,17 +53,9 @@ tinsert(C.defaultThemes, function()
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
-		if not DB.isNewPatch then
-			frame.Border:Hide()
-			for j = 1, 4 do
-				B.Reskin(frame["button"..j])
-			end
-			B.Reskin(frame.extraButton)
-		else
-			B.StripTextures(frame)
-			for j = 1, 4 do
-				B.Reskin(_G["StaticPopup"..i.."Button"..j])
-			end
+		B.StripTextures(frame)
+		for j = 1, 4 do
+			B.Reskin(_G["StaticPopup"..i.."Button"..j])
 		end
 		B.SetBD(frame)
 		B.ReskinClose(close)
@@ -76,7 +68,8 @@ tinsert(C.defaultThemes, function()
 		close:HookScript("OnEnter", colorMinimize)
 		close:HookScript("OnLeave", clearMinimize)
 
-		B.ReskinInput(_G["StaticPopup"..i.."EditBox"], 20)
+		B.ReskinInput(frame.EditBox, 20)
+		frame.EditBox.NineSlice:SetAlpha(0)
 		B.ReskinInput(gold)
 		B.ReskinInput(silver)
 		B.ReskinInput(copper)

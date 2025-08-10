@@ -113,7 +113,6 @@ G.DefaultSettings = {
 		SplitCount = 1,
 		SpecialBagsColor = true,
 		iLvlToShow = 1,
-		AutoDeposit = false,
 		PetTrash = true,
 		BagsPerRow = 6,
 		BankPerRow = 10,
@@ -1162,7 +1161,7 @@ G.TabList = {
 	L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
-	IsNew..L["RaidFrame"],
+	L["RaidFrame"],
 	L["Nameplate"],
 	IsNew..L["PlayerPlate"],
 	L["Auras"],
@@ -1246,9 +1245,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "FCTFontSize", L["FCTFontSize"].."*", true, {12, 40, 1}, updateScrollingFont},
 	},
 	[4] = {
-		{1, "UFs", "RaidFrame", IsNew..HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
+		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
 		{1, "UFs", "SimpleMode", L["SimpleRaidFrame"], true, setupSimpleRaidFrame, nil, L["SimpleRaidFrameTip"]},
-		{1, "UFs", "PartyFrame", IsNew..HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
+		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
 		{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},

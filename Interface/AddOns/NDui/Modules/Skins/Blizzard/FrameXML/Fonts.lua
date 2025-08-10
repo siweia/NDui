@@ -146,6 +146,7 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(PriceFontGray)
 	ReskinFont(PriceFontGreen)
 	ReskinFont(PriceFontRed)
+	ReskinFont(UserScaledFontGameHighlightSmall) -- add in 11.2
 	-- new font family in 11.0.2
 	for i = 12, 22 do
 		local font = _G["ObjectiveTrackerFont"..i]
