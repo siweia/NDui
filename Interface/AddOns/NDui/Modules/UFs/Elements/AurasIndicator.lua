@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
+local GetSpecialization = C_SpecializationInfo.GetSpecialization
 local invalidPrio = -1
 
 local class, instName = DB.MyClass
