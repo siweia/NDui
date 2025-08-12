@@ -44,8 +44,10 @@ C.themes["Blizzard_InspectUI"] = function()
 
 	for i = 1, 3 do
 		local tName = "InspectPVPTeam"..i
-		B.StripTextures(_G[tName])
-		B.CreateBDFrame(_G[tName.."Background"], .25)
+		if _G[tName] then
+			B.StripTextures(_G[tName])
+			B.CreateBDFrame(_G[tName.."Background"], .25)
+		end
 	end
 
 	-- Talent
