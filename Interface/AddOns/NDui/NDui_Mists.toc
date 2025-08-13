@@ -3,7 +3,7 @@
 ## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
 ## Notes: More than a UI.
-## Version: 4.9.8
+## Version: 5.0.0
 ## X-Support: MoP Classic
 ## X-Website: https://github.com/siweia/NDui/tree/TBC
 ## X-Curse-Project-ID: 338794
