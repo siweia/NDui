@@ -118,4 +118,5 @@ C.themes["Blizzard_PVPUI"] = function()
 	B.CreateBDFrame(WarGamesQueueFrameScrollFrameScrollBar, .25)
 	B.Reskin(WarGameStartButton)
 	B.ReskinScroll(WarGamesQueueFrameScrollFrameScrollBar)
+	B.ReskinScroll(WarGamesQueueFrameInfoScrollFrame.ScrollBar)
 end

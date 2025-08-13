@@ -39,28 +39,21 @@ C.themes["Blizzard_InspectUI"] = function()
 
 	B.ReskinRotationButtons(InspectModelFrame)
 
-	-- PVP,
-	B.StripTextures(InspectPVPFrame)
+	for i = 1, 6 do
+		local row = InspectTalentFrame.InspectTalents["tier"..i]
+		for j = 1, 3 do
+			local bu = row["talent"..j]
 
-	for i = 1, 3 do
-		local tName = "InspectPVPTeam"..i
-		if _G[tName] then
-			B.StripTextures(_G[tName])
-			B.CreateBDFrame(_G[tName.."Background"], .25)
+			bu.Slot:Hide()
+			bu.border:SetTexture("")
+
+			B.ReskinIcon(bu.icon)
 		end
 	end
 
-	-- Talent
+	-- PVP,
+	B.StripTextures(InspectPVPFrame)
 	B.StripTextures(InspectTalentFrame)
-	B.StripTextures(InspectTalentFramePointsBar)
-	B.ReskinScroll(InspectTalentFrameScrollFrameScrollBar)
-	if InspectTalentFrameCloseButton then
-		InspectTalentFrameCloseButton:Hide() -- should be removed by blizzard in future builds
-	end
-
-	for i = 1, 3 do
-		B.ReskinTab(_G["InspectTalentFrameTab"..i])
-	end
 
 	for i = 1, MAX_NUM_TALENTS do
 		local talent = _G["InspectTalentFrameTalent"..i]
