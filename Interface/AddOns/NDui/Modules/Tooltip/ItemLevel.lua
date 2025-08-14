@@ -15,32 +15,32 @@ local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
 TT.TierSets = {
-	-- HUNTER
-	[229269] = true, [229270] = true, [229271] = true, [229272] = true, [229274] = true, 
 	-- WARRIOR
-	[229233] = true, [229234] = true, [229235] = true, [229236] = true, [229238] = true, 
+	[237608] = true, [237609] = true, [237610] = true, [237611] = true, [237613] = true,
 	-- PALADIN
-	[229242] = true, [229243] = true, [229244] = true, [229245] = true, [229247] = true, 
+	[237617] = true, [237618] = true, [237619] = true, [237620] = true, [237622] = true,
+	-- HUNTER
+	[237644] = true, [237645] = true, [237646] = true, [237647] = true, [237649] = true,
 	-- ROGUE
-	[229287] = true, [229288] = true, [229289] = true, [229290] = true, [229292] = true, 
+	[237662] = true, [237663] = true, [237664] = true, [237665] = true, [237667] = true,
 	-- PRIEST
-	[229332] = true, [229333] = true, [229334] = true, [229335] = true, [229337] = true, 
+	[237707] = true, [237712] = true, [237708] = true, [237709] = true, [237710] = true,
 	-- DEATHKNIGHT
-	[229251] = true, [229252] = true, [229253] = true, [229254] = true, [229256] = true, 
+	[237626] = true, [237627] = true, [237628] = true, [237629] = true, [237631] = true,
 	-- SHAMAN
-	[229260] = true, [229261] = true, [229262] = true, [229263] = true, [229265] = true, 
+	[237635] = true, [237636] = true, [237637] = true, [237638] = true, [237640] = true,
 	-- MAGE
-	[229341] = true, [229342] = true, [229343] = true, [229344] = true, [229346] = true, 
+	[237718] = true, [237716] = true, [237721] = true, [237719] = true, [237717] = true,
 	-- WARLOCK
-	[229323] = true, [229328] = true, [229324] = true, [229325] = true, [229326] = true, 
+	[237698] = true, [237703] = true, [237699] = true, [237700] = true, [237701] = true,
 	-- MONK
-	[229296] = true, [229297] = true, [229298] = true, [229299] = true, [229301] = true, 
+	[237671] = true, [237672] = true, [237673] = true, [237674] = true, [237676] = true,
 	-- DRUID
-	[229305] = true, [229306] = true, [229307] = true, [229308] = true, [229310] = true, 
+	[237682] = true, [237680] = true, [237685] = true, [237683] = true, [237681] = true,
 	-- DEMONHUNTER
-	[229314] = true, [229315] = true, [229316] = true, [229317] = true, [229319] = true, 
+	[237689] = true, [237690] = true, [237691] = true, [237692] = true, [237694] = true,
 	-- EVOKER
-	[229278] = true, [229279] = true, [229280] = true, [229281] = true, [229283] = true, 
+	[237653] = true, [237654] = true, [237655] = true, [237656] = true, [237658] = true,
 }
 
 local formatSets = {
