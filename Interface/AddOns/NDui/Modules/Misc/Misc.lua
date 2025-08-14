@@ -826,15 +826,3 @@ function M:ToggleAddOnProfiler()
 		NDuiADB["AddOnProfiler"] = bu:GetChecked()
 	end)
 end
-
-function hhl()
-	local choiceInfo = C_PlayerChoice.GetCurrentPlayerChoiceInfo()
-if choiceInfo then
-    local optionInfo = choiceInfo.options and choiceInfo.options[1]
-    if optionInfo then
-        for _, button in ipairs(optionInfo.buttons) do
-            C_PlayerChoice.SendPlayerChoiceResponse(button.id)
-        end
-    end
-end
-end
