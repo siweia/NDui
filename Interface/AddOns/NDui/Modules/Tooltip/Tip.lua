@@ -394,7 +394,7 @@ function TT:ReskinTooltip()
 
 	if not self.tipStyled then
 		self:HideBackdrop()
-		self:DisableDrawLayer("BACKGROUND")
+	--	self:DisableDrawLayer("BACKGROUND")
 		self.bg = B.SetBD(self, .7)
 		self.bg:SetInside(self)
 		self.bg:SetFrameLevel(self:GetFrameLevel())
