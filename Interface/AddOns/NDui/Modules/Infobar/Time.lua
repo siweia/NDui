@@ -108,7 +108,7 @@ local questlist = {
 	{name = C_Map.GetAreaInfo(15141), id = 83333},	-- 觉醒主机
 }
 
-local delvesKeys = {84736, 84737, 84738, 84739}
+local delvesKeys = {91175, 91176, 91177, 91178}
 local keyName = C_CurrencyInfo.GetCurrencyInfo(3028).name
 
 -- Check Invasion Status
@@ -269,11 +269,12 @@ local delveList = {
 	{uiMapID = 2215, delveID = 7780}, -- Mycomancer Cavern
 	{uiMapID = 2214, delveID = 7782}, -- The Waterworks
 	{uiMapID = 2214, delveID = 7788}, -- The Dread Pit
+	{uiMapID = 2214, delveID = 8181}, -- Excavation Site 9
 	{uiMapID = 2255, delveID = 7790}, -- The Spiral Weave
 	{uiMapID = 2255, delveID = 7784}, -- Tak-Rethan Abyss
 	{uiMapID = 2255, delveID = 7786}, -- The Underkeep
 	{uiMapID = 2346, delveID = 8246}, -- Sidestree Sluice
-	{uiMapID = 2214, delveID = 8181}, -- Excavation Site 9
+	{uiMapID = 2371, delveID = 8273}, -- Archival Assault
 }
 
 info.onEnter = function(self)
