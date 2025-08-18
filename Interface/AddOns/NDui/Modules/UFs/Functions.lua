@@ -59,6 +59,12 @@ local function UF_OnLeave(self)
 	self.Highlight:Hide()
 end
 
+function UF:UpdateClickState()
+	self:RegisterForClicks(self.onKeyDown and "AnyDown" or "AnyUp")
+	self.onKeyDown = nil
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED", UF.UpdateClickState, true)
+end
+
 function UF:CreateHeader(self, onKeyDown)
 	local hl = self:CreateTexture(nil, "OVERLAY")
 	hl:SetAllPoints()
@@ -69,7 +75,12 @@ function UF:CreateHeader(self, onKeyDown)
 	hl:Hide()
 	self.Highlight = hl
 
-	self:RegisterForClicks(onKeyDown and "AnyDown" or "AnyUp")
+	if InCombatLockdown() then
+		self.onKeyDown = onKeyDown
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", UF.UpdateClickState, true)
+	else
+		self:RegisterForClicks(onKeyDown and "AnyDown" or "AnyUp")
+	end
 	self:HookScript("OnEnter", UF_OnEnter)
 	self:HookScript("OnLeave", UF_OnLeave)
 end
