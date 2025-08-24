@@ -420,7 +420,7 @@ end
 local isUpdating = false
 local bankUpdateQueue = {}
 local bankUpdateTimer
-local bankUpdateTimeGap = 0.1
+local bankUpdateTimeGap = 0.05
 
 function Implementation:BAG_UPDATE(_, bagID, slotID)
 	if self.isSorting then return end
