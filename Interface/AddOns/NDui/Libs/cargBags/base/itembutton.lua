@@ -85,7 +85,6 @@ end
 	@return button <ItemButton>
 	@callback button:OnCreate(tpl)
 ]]
-
 function ItemButton:Create(tpl, parent)
 	local impl = self.implementation
 	impl.numSlots = (impl.numSlots or 0) + 1

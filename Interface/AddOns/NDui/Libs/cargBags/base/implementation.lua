@@ -48,7 +48,7 @@ function Implementation:New(name)
 	if(self.instances[name]) then return error(("cargBags: Implementation '%s' already exists!"):format(name)) end
 	if(_G[name]) then return error(("cargBags: Global '%s' for Implementation is already used!"):format(name)) end
 
-	local impl = setmetatable(CreateFrame("Button", name, UIParent), self.__index)
+	local impl = setmetatable(CreateFrame("Frame", name, UIParent), self.__index)
 	impl.name = name
 
 	impl:SetAllPoints()
