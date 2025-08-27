@@ -2502,14 +2502,13 @@ function G:SetupAvada()
 		profileButtons[i] = bu
 	end
 
-	local close = B.CreateButton(panel, 30, 30, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
+	local close = B.CreateButton(panel, 30, 30, true, "Atlas:common-icon-redx")
 	close:SetPoint("TOPRIGHT", -5, -5)
 	close:SetScript("OnClick", function()
 		panel:Hide()
 	end)
 
-	local load = B.CreateButton(panel, 30, 30, true, "Atlas:streamcinematic-downloadicon")
-	load.Icon:SetTexCoord(.27, .73, .27, .73)
+	local load = B.CreateButton(panel, 30, 30, true, "Atlas:Garr_Building-AddFollowerPlus")
 	load:SetPoint("LEFT", profileButtons[10], "RIGHT", 5, 0)
 	load.title = L["LoadProfile"]
 	B.AddTooltip(load, "ANCHOR_RIGHT", L["LoadProfileTip"], "info")
@@ -2525,7 +2524,7 @@ function G:SetupAvada()
 		updateProfileButtons()
 	end)
 
-	local save = B.CreateButton(panel, 30, 30, true, "Interface\\RAIDFRAME\\ReadyCheck-Ready")
+	local save = B.CreateButton(panel, 30, 30, true, "Atlas:common-icon-checkmark")
 	save:SetPoint("LEFT", load, "RIGHT", 5, 0)
 	save.title = L["SaveProfile"]
 	B.AddTooltip(save, "ANCHOR_RIGHT", L["SaveProfileTip"], "info")

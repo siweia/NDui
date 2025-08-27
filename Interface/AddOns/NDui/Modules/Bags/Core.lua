@@ -270,7 +270,7 @@ local function CloseOrRestoreBags(self, btn)
 end
 
 function module:CreateCloseButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
+	local bu = B.CreateButton(self, 22, 22, true, "Atlas:common-icon-redx")
 	bu:RegisterForClicks("AnyUp")
 	bu.__owner = f
 	bu:SetScript("OnClick", CloseOrRestoreBags)
@@ -281,9 +281,7 @@ function module:CreateCloseButton(f)
 end
 
 function module:CreateAccountBankButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, 235423)
-	bu.Icon:SetTexCoord(.6, .9, .1, .4)
-	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -C.mult)
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Factionchange")
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
 		if not C_Bank.CanViewBank(ACCOUNT_BANK_TYPE) then return end
@@ -336,7 +334,7 @@ function module:CreateAccountMoney()
 end
 
 function module:CreateBankButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Banker")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Battleground_Strongbox_Gold_"..DB.MyFaction)
 	bu:SetScript("OnClick", function()
 		if not C_Bank.CanViewBank(CHAR_BANK_TYPE) then return end
 
@@ -358,8 +356,7 @@ local function updateAccountBankDeposit(bu)
 end
 
 function module:CreateAccountBankDeposit()
-	local bu = B.CreateButton(self, 22, 22, true, "Atlas:GreenCross")
-	bu.Icon:SetOutside()
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Paperdollinfoframe\\Character-Plus")
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
 		if btn == "RightButton" then
@@ -381,8 +378,7 @@ function module:CreateAccountBankDeposit()
 end
 
 function module:CreateBankDeposit()
-	local bu = B.CreateButton(self, 22, 22, true, "Atlas:GreenCross")
-	bu.Icon:SetOutside()
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Paperdollinfoframe\\Character-Plus")
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnDoubleClick", function(_, btn)
 		if btn == "LeftButton" then
@@ -409,7 +405,7 @@ local function ToggleBackpacks(self)
 end
 
 function module:CreateBagToggle(click)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\Button-Backpack-Up")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\inv_misc_bag_08")
 	bu.__owner = self
 	bu:SetScript("OnClick", ToggleBackpacks)
 	bu.title = BACKPACK_TOOLTIP
@@ -422,7 +418,7 @@ function module:CreateBagToggle(click)
 end
 
 function module:CreateSortButton(name)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\INV_Pet_Broom")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Inv_Pet_Broom")
 	bu:SetScript("OnClick", function()
 		if C.db["Bags"]["BagSortMode"] == 3 then
 			UIErrorsFrame:AddMessage(DB.InfoColor..L["BagSortDisabled"])
@@ -561,9 +557,7 @@ function module:CreateSplitButton()
 	editbox:SetJustifyH("CENTER")
 	editbox:SetScript("OnTextChanged", saveSplitCount)
 
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\HELPFRAME\\ReportLagIcon-AuctionHouse")
-	bu.Icon:SetPoint("TOPLEFT", -1, 3)
-	bu.Icon:SetPoint("BOTTOMRIGHT", 1, -3)
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Ability_Monk_CounteractMagic")
 	bu.__turnOff = function()
 		B.SetBorderColor(bu.bg)
 		bu.text = nil
@@ -678,9 +672,7 @@ function module:CreateFavouriteButton()
 
 	local enabledText = DB.InfoColor..L["FavouriteMode Enabled"]
 
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Common\\friendship-heart")
-	bu.Icon:SetPoint("TOPLEFT", -5, 2.5)
-	bu.Icon:SetPoint("BOTTOMRIGHT", 5, -1.5)
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\PetBattle_Health")
 	bu.__turnOff = function()
 		B.SetBorderColor(bu.bg)
 		bu.text = nil
@@ -737,9 +729,7 @@ local customJunkEnable
 function module:CreateJunkButton()
 	local enabledText = DB.InfoColor..L["JunkMode Enabled"]
 
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\BUTTONS\\UI-GroupLoot-Coin-Up")
-	bu.Icon:SetPoint("TOPLEFT", C.mult, -3)
-	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -3)
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Spell_ChargePositive")
 	bu.__turnOff = function()
 		B.SetBorderColor(bu.bg)
 		bu.text = nil
@@ -794,9 +784,7 @@ local deleteEnable
 function module:CreateDeleteButton()
 	local enabledText = DB.InfoColor..L["DeleteMode Enabled"]
 
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\UI-GroupLoot-Pass-Up")
-	bu.Icon:SetPoint("TOPLEFT", 3, -2)
-	bu.Icon:SetPoint("BOTTOMRIGHT", -1, 2)
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Spell_ChargeNegative")
 	bu.__turnOff = function()
 		B.SetBorderColor(bu.bg)
 		bu.text = nil

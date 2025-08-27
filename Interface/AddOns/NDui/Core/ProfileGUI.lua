@@ -207,9 +207,9 @@ function G:CreateProfileBar(parent, index)
 	if index == 1 then
 		B.PixelIcon(icon, nil, true) -- character
 		SetPortraitTexture(icon.Icon, "player")
+		icon.Icon:SetTexCoord(.15, .85, .15, .85)
 	else
-		B.PixelIcon(icon, 235423, true) -- share
-		icon.Icon:SetTexCoord(.6, .9, .1, .4)
+		B.PixelIcon(icon, "Interface\\Icons\\RaceChange", true) -- share
 		icon.index = index
 		G:FindProfleUser(icon)
 		icon:SetScript("OnEnter", G.Icon_OnEnter)
@@ -234,21 +234,19 @@ function G:CreateProfileBar(parent, index)
 	note.title = L["ProfileName"]
 	B.AddTooltip(note, "ANCHOR_TOP", L["ProfileNameTip"], "info")
 
-	local reset = G:CreateProfileIcon(bar, 1, "Atlas:transmog-icon-revert", L["ResetProfile"], L["ResetProfileTip"])
+	local reset = G:CreateProfileIcon(bar, 1, "Atlas:common-icon-redx", L["ResetProfile"], L["ResetProfileTip"])
 	reset:SetScript("OnClick", G.Reset_OnClick)
 	bar.reset = reset
 
-	local apply = G:CreateProfileIcon(bar, 2, "Interface\\RAIDFRAME\\ReadyCheck-Ready", L["SelectProfile"], L["SelectProfileTip"])
+	local apply = G:CreateProfileIcon(bar, 2, "Atlas:common-icon-checkmark", L["SelectProfile"], L["SelectProfileTip"])
 	apply:SetScript("OnClick", G.Apply_OnClick)
 	bar.apply = apply
 
-	local download = G:CreateProfileIcon(bar, 3, "Atlas:streamcinematic-downloadicon", L["DownloadProfile"], L["DownloadProfileTip"])
-	download.Icon:SetTexCoord(.25, .75, .25, .75)
+	local download = G:CreateProfileIcon(bar, 3, "Atlas:ui-questtrackerbutton-secondary-collapse", L["DownloadProfile"], L["DownloadProfileTip"])
 	download:SetScript("OnClick", G.Download_OnClick)
 	bar.download = download
 
-	local upload = G:CreateProfileIcon(bar, 4, "Atlas:bags-icon-addslots", L["UploadProfile"], L["UploadProfileTip"])
-	upload.Icon:SetInside(nil, 6, 6)
+	local upload = G:CreateProfileIcon(bar, 4, "Atlas:ui-questtrackerbutton-secondary-expand", L["UploadProfile"], L["UploadProfileTip"])
 	upload:SetScript("OnClick", G.Upload_OnClick)
 	bar.upload = upload
 
