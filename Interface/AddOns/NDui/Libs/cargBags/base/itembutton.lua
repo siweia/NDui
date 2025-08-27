@@ -84,9 +84,9 @@ end
 ]]
 
 local allButtons = {}
-local function GetButton(slot, name)
+local function GetButton(slot, name, tpl)
 	if not allButtons[slot] then
-		allButtons[slot] = CreateFrame("ItemButton", name, nil, "ContainerFrameItemButtonTemplate, BackdropTemplate")
+		allButtons[slot] = CreateFrame("ItemButton", name, nil, tpl..", BackdropTemplate")
 	end
 	return allButtons[slot]
 end
@@ -96,7 +96,7 @@ function ItemButton:Create(tpl, parent)
 	impl.numSlots = (impl.numSlots or 0) + 1
 	local name = ("%sSlot%d"):format(impl.name, impl.numSlots)
 
-	local button = setmetatable(GetButton(impl.numSlots, name), self.__index)
+	local button = setmetatable(GetButton(impl.numSlots, name, tpl), self.__index)
 	button:SetParent(parent or UIParent)
 
 	if(button.Scaffold) then button:Scaffold(tpl) end
