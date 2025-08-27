@@ -139,7 +139,7 @@ local tagStrings = {
 	end]],
 
 	['arcanecharges'] = [[function()
-		if(GetSpecialization() == SPEC_MAGE_ARCANE) then
+		if(C_SpecializationInfo.GetSpecialization() == SPEC_MAGE_ARCANE) then
 			local num = UnitPower('player', Enum.PowerType.ArcaneCharges)
 			if(num > 0) then
 				return num
@@ -159,7 +159,7 @@ local tagStrings = {
 	end]],
 
 	['chi'] = [[function()
-		if(GetSpecialization() == SPEC_MONK_WINDWALKER) then
+		if(C_SpecializationInfo.GetSpecialization() == SPEC_MONK_WINDWALKER) then
 			local num = UnitPower('player', Enum.PowerType.Chi)
 			if(num > 0) then
 				return num
@@ -237,7 +237,7 @@ local tagStrings = {
 	end]],
 
 	['holypower'] = [[function()
-		if(GetSpecialization() == SPEC_PALADIN_RETRIBUTION) then
+		if(C_SpecializationInfo.GetSpecialization() == SPEC_PALADIN_RETRIBUTION) then
 			local num = UnitPower('player', Enum.PowerType.HolyPower)
 			if(num > 0) then
 				return num
