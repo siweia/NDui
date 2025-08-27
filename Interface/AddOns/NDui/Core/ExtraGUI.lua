@@ -2502,7 +2502,7 @@ function G:SetupAvada()
 		profileButtons[i] = bu
 	end
 
-	local close = B.CreateButton(panel, 30, 30, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
+	local close = B.CreateButton(panel, 30, 30, true, "Atlas:common-icon-redx")
 	close:SetPoint("TOPRIGHT", -5, -5)
 	close:SetScript("OnClick", function()
 		panel:Hide()
@@ -2525,7 +2525,7 @@ function G:SetupAvada()
 		updateProfileButtons()
 	end)
 
-	local save = B.CreateButton(panel, 30, 30, true, "Interface\\RAIDFRAME\\ReadyCheck-Ready")
+	local save = B.CreateButton(panel, 30, 30, true, "Atlas:common-icon-checkmark")
 	save:SetPoint("LEFT", load, "RIGHT", 5, 0)
 	save.title = L["SaveProfile"]
 	B.AddTooltip(save, "ANCHOR_RIGHT", L["SaveProfileTip"], "info")

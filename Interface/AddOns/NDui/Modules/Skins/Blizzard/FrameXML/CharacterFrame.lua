@@ -278,9 +278,9 @@ tinsert(C.defaultThemes, function()
 				texture.__owner = texture:GetParent()
 			end
 			if texture.__owner:IsCollapsed() then
-				texture:SetAtlas("Soulbinds_Collection_CategoryHeader_Expand")
+				texture:SetAtlas("ui-questtrackerbutton-secondary-expand")
 			else
-				texture:SetAtlas("Soulbinds_Collection_CategoryHeader_Collapse")
+				texture:SetAtlas("ui-questtrackerbutton-secondary-collapse")
 			end
 		end
 	end

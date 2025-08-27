@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 local MAX_CONTAINER_ITEMS = 36
-local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
+local backpackTexture = "Interface\\Icons\\inv_misc_bag_08"
 
 local function handleMoneyFrame(frame)
 	if frame.MoneyFrame then

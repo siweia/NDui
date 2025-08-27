@@ -79,7 +79,7 @@ tinsert(C.defaultThemes, function()
 	end
 
 	local function UpdateHeaderExpand(self, expanded)
-		local atlas = expanded and "Soulbinds_Collection_CategoryHeader_Collapse" or "Soulbinds_Collection_CategoryHeader_Expand"
+		local atlas = expanded and "ui-questtrackerbutton-secondary-collapse" or "ui-questtrackerbutton-secondary-expand"
 		self.__texture:SetAtlas(atlas, true)
 
 		UpdateKeybindButtons(self)

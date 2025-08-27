@@ -124,7 +124,7 @@ function S:RematchLockButton(button)
 end
 
 local function updateCollapseTexture(button, isExpanded)
-	local atlas = isExpanded and "Soulbinds_Collection_CategoryHeader_Collapse" or "Soulbinds_Collection_CategoryHeader_Expand"
+	local atlas = isExpanded and "ui-questtrackerbutton-secondary-collapse" or "ui-questtrackerbutton-secondary-expand"
 	button.__texture:SetAtlas(atlas, true)
 end
 

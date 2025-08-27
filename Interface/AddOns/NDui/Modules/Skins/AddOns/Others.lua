@@ -15,9 +15,9 @@ function S:FriendGroups()
 			self:SetPoint("TOPLEFT", 4, 1)
 			self.bg:Show()
 			if strfind(texture, "PlusButton") then
-				self:SetAtlas("Soulbinds_Collection_CategoryHeader_Collapse", true)
+				self:SetAtlas("ui-questtrackerbutton-secondary-collapse", true)
 			elseif strfind(texture, "MinusButton") then
-				self:SetAtlas("Soulbinds_Collection_CategoryHeader_Expand", true)
+				self:SetAtlas("ui-questtrackerbutton-secondary-expand", true)
 			else
 				self:SetPoint("TOPLEFT", 4, -3)
 				self.bg:Hide()
