@@ -227,6 +227,7 @@ function module:CreateBagTab(settings, columns, account)
 	bagTab:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagTab)
 	bagTab.highlightFunction = highlightFunction
+	bagTab.isGlobal = true
 	bagTab:Hide()
 	bagTab.columns = columns
 	bagTab.UpdateAnchor = updateBagBar
@@ -269,7 +270,7 @@ local function CloseOrRestoreBags(self, btn)
 end
 
 function module:CreateCloseButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
+	local bu = B.CreateButton(self, 22, 22, true, "Atlas:common-icon-redx")
 	bu:RegisterForClicks("AnyUp")
 	bu.__owner = f
 	bu:SetScript("OnClick", CloseOrRestoreBags)
@@ -280,9 +281,7 @@ function module:CreateCloseButton(f)
 end
 
 function module:CreateAccountBankButton(f)
-	local bu = B.CreateButton(self, 22, 22, true, 235423)
-	bu.Icon:SetTexCoord(.6, .9, .1, .4)
-	bu.Icon:SetPoint("BOTTOMRIGHT", -C.mult, -C.mult)
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Factionchange")
 	bu:RegisterForClicks("AnyUp")
 	bu:SetScript("OnClick", function(_, btn)
 		if not C_Bank.CanViewBank(ACCOUNT_BANK_TYPE) then return end
@@ -408,7 +407,7 @@ local function ToggleBackpacks(self)
 end
 
 function module:CreateBagToggle(click)
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Buttons\\Button-Backpack-Up")
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\inv_misc_bag_08")
 	bu.__owner = self
 	bu:SetScript("OnClick", ToggleBackpacks)
 	bu.title = BACKPACK_TOOLTIP
@@ -560,9 +559,7 @@ function module:CreateSplitButton()
 	editbox:SetJustifyH("CENTER")
 	editbox:SetScript("OnTextChanged", saveSplitCount)
 
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\HELPFRAME\\ReportLagIcon-AuctionHouse")
-	bu.Icon:SetPoint("TOPLEFT", -1, 3)
-	bu.Icon:SetPoint("BOTTOMRIGHT", 1, -3)
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Ability_Monk_CounteractMagic")
 	bu.__turnOff = function()
 		B.SetBorderColor(bu.bg)
 		bu.text = nil
@@ -677,9 +674,7 @@ function module:CreateFavouriteButton()
 
 	local enabledText = DB.InfoColor..L["FavouriteMode Enabled"]
 
-	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Common\\friendship-heart")
-	bu.Icon:SetPoint("TOPLEFT", -5, 2.5)
-	bu.Icon:SetPoint("BOTTOMRIGHT", 5, -1.5)
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\PetBattle_Health")
 	bu.__turnOff = function()
 		B.SetBorderColor(bu.bg)
 		bu.text = nil

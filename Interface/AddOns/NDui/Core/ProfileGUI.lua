@@ -207,9 +207,9 @@ function G:CreateProfileBar(parent, index)
 	if index == 1 then
 		B.PixelIcon(icon, nil, true) -- character
 		SetPortraitTexture(icon.Icon, "player")
+		icon.Icon:SetTexCoord(.15, .85, .15, .85)
 	else
-		B.PixelIcon(icon, 235423, true) -- share
-		icon.Icon:SetTexCoord(.6, .9, .1, .4)
+		B.PixelIcon(icon, "Interface\\Icons\\RaceChange", true) -- share
 		icon.index = index
 		G:FindProfleUser(icon)
 		icon:SetScript("OnEnter", G.Icon_OnEnter)
@@ -238,7 +238,7 @@ function G:CreateProfileBar(parent, index)
 	reset:SetScript("OnClick", G.Reset_OnClick)
 	bar.reset = reset
 
-	local apply = G:CreateProfileIcon(bar, 2, "Interface\\RAIDFRAME\\ReadyCheck-Ready", L["SelectProfile"], L["SelectProfileTip"])
+	local apply = G:CreateProfileIcon(bar, 2, "Atlas:common-icon-checkmark", L["SelectProfile"], L["SelectProfileTip"])
 	apply:SetScript("OnClick", G.Apply_OnClick)
 	bar.apply = apply
 

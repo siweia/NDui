@@ -551,7 +551,7 @@ do
 		self.__shadow:SetOutside(self, size or 4, size or 4)
 		self.__shadow:SetBackdrop(shadowBackdrop)
 		self.__shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
-		self.__shadow:SetFrameLevel(1)
+		self.__shadow:SetFrameLevel(0) -- needs review
 
 		return self.__shadow
 	end
@@ -1375,7 +1375,7 @@ do
 
 	-- Handle collapse
 	local function updateCollapseTexture(texture, collapsed)
-		local atlas = collapsed and "Soulbinds_Collection_CategoryHeader_Expand" or "Soulbinds_Collection_CategoryHeader_Collapse"
+		local atlas = collapsed and "ui-questtrackerbutton-secondary-expand" or "ui-questtrackerbutton-secondary-collapse"
 		texture:SetAtlas(atlas, true)
 	end
 

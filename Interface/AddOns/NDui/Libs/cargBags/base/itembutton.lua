@@ -48,11 +48,8 @@ local ItemButton = cargBags:NewClass("ItemButton", nil, "ItemButton")
 ]]
 function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagId
-	return (bagID and "ContainerFrameItemButtonTemplate")
-		or "",
-		(BANK_SLOTS[bagID] and BankFrame.BankPanel) -- combine in 11.2
-		or (bagID and _G["ContainerFrame"..(bagID + 1)])
-		or ""
+	return (bagID and "ContainerFrameItemButtonTemplate") or "",
+		(BANK_SLOTS[bagID] and BankFrame.BankPanel) or (bagID and _G["ContainerFrame"..(bagID + 1)]) or ""
 end
 
 local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end}
@@ -86,12 +83,21 @@ end
 	@callback button:OnCreate(tpl)
 ]]
 
+local allButtons = {}
+local function GetButton(slot, name, tpl)
+	if not allButtons[slot] then
+		allButtons[slot] = CreateFrame("ItemButton", name, nil, tpl..", BackdropTemplate")
+	end
+	return allButtons[slot]
+end
+
 function ItemButton:Create(tpl, parent)
 	local impl = self.implementation
 	impl.numSlots = (impl.numSlots or 0) + 1
 	local name = ("%sSlot%d"):format(impl.name, impl.numSlots)
 
-	local button = setmetatable(CreateFrame("ItemButton", name, parent, tpl..", BackdropTemplate"), self.__index)
+	local button = setmetatable(GetButton(impl.numSlots, name, tpl), self.__index)
+	button:SetParent(parent or UIParent)
 
 	if(button.Scaffold) then button:Scaffold(tpl) end
 	if(button.OnCreate) then button:OnCreate(tpl) end

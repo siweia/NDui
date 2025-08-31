@@ -92,7 +92,7 @@ function M:ContactButton_Create(parent, index)
 	button:RegisterForClicks("AnyUp")
 	button:SetScript("OnClick", M.ContactButton_OnClick)
 
-	button.delete = B.CreateButton(button, 20, 20, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
+	button.delete = B.CreateButton(button, 20, 20, true, "Atlas:common-icon-redx")
 	button.delete:SetPoint("LEFT", button, "RIGHT", 2, 0)
 	button.delete.__owner = button
 	button.delete:SetScript("OnClick", M.ContactButton_Delete)

@@ -41,7 +41,7 @@ end}
 ]]
 function Container:New(name, ...)
 	local implName = self.implementation.name
-	local container = setmetatable(CreateFrame("Button", implName..name), self.__index)
+	local container = setmetatable(CreateFrame("Frame", implName..name), self.__index)
 
 	container.name = name
 	container.buttons = {}

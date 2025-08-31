@@ -48,7 +48,7 @@ function Implementation:New(name)
 	if(self.instances[name]) then return error(("cargBags: Implementation '%s' already exists!"):format(name)) end
 	if(_G[name]) then return error(("cargBags: Global '%s' for Implementation is already used!"):format(name)) end
 
-	local impl = setmetatable(CreateFrame("Button", name, UIParent), self.__index)
+	local impl = setmetatable(CreateFrame("Frame", name, UIParent), self.__index)
 	impl.name = name
 
 	impl:SetAllPoints()
@@ -322,7 +322,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	if info then
 		i.texture, i.count, i.locked, i.quality, i.link, i.id, i.hasPrice = info.iconFileID, info.stackCount, info.isLocked, (info.quality or 1), info.hyperlink, info.itemID, (not info.hasNoValue)
 
-		--i.isInSet, i.setName = C_Container.GetContainerItemEquipmentSetInfo(bagID, slotID)
+		i.isInSet, i.setName = C_Container.GetContainerItemEquipmentSetInfo(bagID, slotID)
 
 		i.cdStart, i.cdFinish, i.cdEnable = C_Container.GetContainerItemCooldown(bagID, slotID)
 
@@ -418,9 +418,6 @@ end
 	@callback Container:OnBagUpdate(bagID, slotID)
 ]]
 local isUpdating = false
-local bankUpdateQueue = {}
-local bankUpdateTimer
-local bankUpdateTimeGap = 0.1
 
 function Implementation:BAG_UPDATE(_, bagID, slotID)
 	if self.isSorting then return end
@@ -437,32 +434,16 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 		end
 
 		local bankType = BankFrame.BankPanel.bankType
-		wipe(bankUpdateQueue)
 
 		if bankType == Enum.BankType.Character then
 			for bagID = 6, 11 do
-				tinsert(bankUpdateQueue, bagID)
+				self:UpdateBag(bagID)
 			end
 		elseif bankType == Enum.BankType.Account then
 			for bagID = 12, 16 do
-				tinsert(bankUpdateQueue, bagID)
+				self:UpdateBag(bagID)
 			end
 		end
-
-		if bankUpdateTimer then
-			bankUpdateTimer:Cancel()
-			bankUpdateTimer = nil
-		end
-
-		bankUpdateTimer = C_Timer.NewTicker(bankUpdateTimeGap, function()
-			if #bankUpdateQueue > 0 then
-				local nextBag = tremove(bankUpdateQueue, 1)
-				self:UpdateBag(nextBag)
-			else
-				bankUpdateTimer:Cancel()
-				bankUpdateTimer = nil
-			end
-		end)
 	end
 
 	isUpdating = false
