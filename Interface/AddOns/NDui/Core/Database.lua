@@ -188,6 +188,14 @@ DB.ReminderBuffs = {
 			instance = true,
 			inGroup = true,
 		},
+		{	itemID = 190958, -- 究极秘术
+			spells = {
+				[368512] = true,
+			},
+			equip = true,
+			instance = true,
+			inGroup = true,
+		},
 		--[=[
 		{	itemID = 178742, -- 瓶装毒素饰品
 			spells = {
@@ -196,14 +204,6 @@ DB.ReminderBuffs = {
 			equip = true,
 			instance = true,
 			combat = true,
-		},
-		{	itemID = 190958, -- 究极秘术
-			spells = {
-				[368512] = true,
-			},
-			equip = true,
-			instance = true,
-			inGroup = true,
 		},
 		]=]
 	},
