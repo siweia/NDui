@@ -132,6 +132,7 @@ G.DefaultSettings = {
 		FilterStone = false,
 		FilterAOE = true,
 		FilterLower = true,
+		FilterLegacy = false,
 	},
 	Auras = {
 		Reminder = true,

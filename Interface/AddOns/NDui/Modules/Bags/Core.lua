@@ -121,7 +121,7 @@ local BagSmartFilter = {
 		elseif text == "aoe" then
 			return item.bindOn == "accountequip"
 		else
-			return IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) or IsItemMatched(item.name, text)
+			return IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) or IsItemMatched(item.name, text) or IsItemMatched((item.expacID or 0) + 1, text)
 		end
 	end,
 	_default = "default",
@@ -888,11 +888,12 @@ function module:OnLogin()
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 6, "BagReagent", filters.onlyBagReagent)
-		AddNewContainer("Bag", 18, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 19, "Junk", filters.bagsJunk)
 		AddNewContainer("Bag", 9, "EquipSet", filters.bagEquipSet)
 		AddNewContainer("Bag", 10, "BagAOE", filters.bagAOE)
 		AddNewContainer("Bag", 7, "AzeriteItem", filters.bagAzeriteItem)
-		AddNewContainer("Bag", 17, "BagLower", filters.bagLower)
+		AddNewContainer("Bag", 17, "BagLegacy", filters.bagLegacy)
+		AddNewContainer("Bag", 18, "BagLower", filters.bagLower)
 		AddNewContainer("Bag", 8, "Equipment", filters.bagEquipment)
 		AddNewContainer("Bag", 11, "BagCollection", filters.bagCollection)
 		AddNewContainer("Bag", 14, "BagStone", filters.bagStone)
@@ -913,7 +914,8 @@ function module:OnLogin()
 		AddNewContainer("Bank", 9, "BankAOE", filters.bankAOE)
 		AddNewContainer("Bank", 6, "BankAzeriteItem", filters.bankAzeriteItem)
 		AddNewContainer("Bank", 10, "BankLegendary", filters.bankLegendary)
-		AddNewContainer("Bank", 16, "BankLower", filters.bankLower)
+		AddNewContainer("Bank", 16, "BankLegacy", filters.bankLegacy)
+		AddNewContainer("Bank", 17, "BankLower", filters.bankLower)
 		AddNewContainer("Bank", 7, "BankEquipment", filters.bankEquipment)
 		AddNewContainer("Bank", 11, "BankCollection", filters.bankCollection)
 		AddNewContainer("Bank", 14, "BankConsumable", filters.bankConsumable)
@@ -930,10 +932,11 @@ function module:OnLogin()
 		for i = 1, 5 do
 			AddNewContainer("Account", i, "AccountCustom"..i, filters["accountCustom"..i])
 		end
-		AddNewContainer("Account", 7, "AccountAOE", filters.accountAOE)
+		AddNewContainer("Account", 8, "AccountAOE", filters.accountAOE)
+		AddNewContainer("Account", 7, "AccountLegacy", filters.accountLegacy)
 		AddNewContainer("Account", 6, "AccountEquipment", filters.accountEquipment)
-		AddNewContainer("Account", 9, "AccountConsumable", filters.accountConsumable)
-		AddNewContainer("Account", 8, "AccountGoods", filters.accountGoods)
+		AddNewContainer("Account", 10, "AccountConsumable", filters.accountConsumable)
+		AddNewContainer("Account", 9, "AccountGoods", filters.accountGoods)
 
 		f.accountbank = MyContainer:New("Account", {Bags = "accountbank", BagType = "Account"})
 		f.accountbank:SetFilter(filters.accountbank, true)
@@ -1268,6 +1271,8 @@ function module:OnLogin()
 			label = ITEM_ACCOUNTBOUND_UNTIL_EQUIP
 		elseif strmatch(name, "Lower") then
 			label = L["LowerItem"]
+		elseif strmatch(name, "Legacy") then
+			label = L["LegacyItem"]
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)
