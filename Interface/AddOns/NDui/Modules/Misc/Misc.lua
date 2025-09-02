@@ -674,18 +674,9 @@ function M:AutoEquipBySpec()
 		if not UnitIsUnit(unit, "player") then return end
 		if not changeSpells[spellID] then return end
 
-		local talentName = ""
-		local higher = 0
-		for i = 1, 3 do
-			local _, nameCata, _, _, pointsSpentCata = GetTalentTabInfo(i)
-			if not nameCata then break end
-			if pointsSpentCata > higher then
-				higher = pointsSpentCata
-				talentName = nameCata
-			end
-		end
-		if talentName == "" then return end
-
+		local spec = C_SpecializationInfo.GetSpecialization()
+		if not spec or spec < 1 then return end
+		local _, talentName = C_SpecializationInfo.GetSpecializationInfo(spec)
 		local setID = C_EquipmentSet.GetEquipmentSetID(talentName)
 		if setID then
 			local _, _, _, hasEquipped = C_EquipmentSet.GetEquipmentSetInfo(setID)
