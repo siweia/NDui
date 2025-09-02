@@ -26,7 +26,7 @@ tinsert(C.defaultThemes, function()
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
 		local itemFrame = frame.ItemFrame
-		local bu = frame.ItemFrame.Item
+		local bu = itemFrame.Item
 		local icon = _G["StaticPopup"..i.."IconTexture"]
 		local close = _G["StaticPopup"..i.."CloseButton"]
 
