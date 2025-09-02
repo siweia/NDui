@@ -65,30 +65,14 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	if DB.isMop then
-		for i = 1, 4 do
-			local notch = GossipFrame.FriendshipStatusBar["Notch"..i]
-			if notch then
-				notch:SetColorTexture(0, 0, 0)
-				notch:SetSize(C.mult, 16)
-			end
-		end
-		GossipFrame.FriendshipStatusBar.BarBorder:Hide()
-	else
-		NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
-		B.StripTextures(NPCFriendshipStatusBar)
-		NPCFriendshipStatusBar:SetStatusBarTexture(DB.normTex)
-		B.CreateBDFrame(NPCFriendshipStatusBar, .25)
-
-		for i = 1, 4 do
-			local notch = _G["NPCFriendshipStatusBarNotch"..i]
-			if notch then
-				notch:SetColorTexture(0, 0, 0)
-				notch:SetSize(C.mult, 16)
-			end
+	for i = 1, 4 do
+		local notch = GossipFrame.FriendshipStatusBar["Notch"..i]
+		if notch then
+			notch:SetColorTexture(0, 0, 0)
+			notch:SetSize(C.mult, 16)
 		end
 	end
-
+	GossipFrame.FriendshipStatusBar.BarBorder:Hide()
 	B.ReskinPortraitFrame(GossipFrame)
 
 	-- Text on QuestFrame

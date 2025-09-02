@@ -75,11 +75,6 @@ function module:ReskinRegions()
 	MiniMapBattlefieldFrame:ClearAllPoints()
 	MiniMapBattlefieldFrame:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
 	MiniMapBattlefieldFrame:SetFrameLevel(999)
-	if not DB.isMop then
-		MiniMapBattlefieldBorder:Hide()
-		MiniMapBattlefieldIcon:SetAlpha(0)
-		BattlegroundShine:SetTexture(nil)
-	end
 
 	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
 	queueIcon:SetPoint("CENTER", MiniMapBattlefieldFrame)

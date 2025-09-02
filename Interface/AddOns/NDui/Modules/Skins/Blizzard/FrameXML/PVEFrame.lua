@@ -59,9 +59,7 @@ tinsert(C.defaultThemes, function()
 	GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\LFGFrame\\UI-LFR-PORTRAIT")
 	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
-	if DB.isMop then
-		GroupFinderFrameGroupButton4.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
-	end
+	GroupFinderFrameGroupButton4.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
 
 	local iconSize = 60-2*C.mult
 	for i = 1, 4 do

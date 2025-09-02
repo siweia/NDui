@@ -66,18 +66,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	if not DB.isMop then
-		hooksecurefunc("SpellBookFrame_Update", function()
-			for i = 2, 5 do
-				local tab = _G["SpellBookFrameTabButton"..i]
-				if tab then
-					tab:ClearAllPoints()
-					tab:SetPoint("TOPLEFT", _G["SpellBookFrameTabButton"..(i-1)], "TOPRIGHT", -15, 0)
-				end
-			end
-		end)
-	end
-
 	for i = 1, SPELLS_PER_PAGE do
 		local bu = _G["SpellButton"..i]
 		local ic = _G["SpellButton"..i.."IconTexture"]
@@ -118,11 +106,7 @@ tinsert(C.defaultThemes, function()
 			updateTab(_G["SpellBookSkillLineTab"..i])
 		end
 	end
-	if DB.isMop then
-		hooksecurefunc(SpellBookFrame, "UpdateSkillLineTabs", updateSkillLineTabs)
-	else
-		hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", updateSkillLineTabs)
-	end
+	hooksecurefunc(SpellBookFrame, "UpdateSkillLineTabs", updateSkillLineTabs)
 
 	-- Professions
 
@@ -198,56 +182,54 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	if DB.isMop then
-		local coreTabsSkinned = false
-		hooksecurefunc(SpellBookCoreAbilitiesFrame, "UpdateTabs", function(self)
-			if coreTabsSkinned then return end
-			coreTabsSkinned = true
+	local coreTabsSkinned = false
+	hooksecurefunc(SpellBookCoreAbilitiesFrame, "UpdateTabs", function(self)
+		if coreTabsSkinned then return end
+		coreTabsSkinned = true
 
-			for i = 1, GetNumSpecializations() do
-				local tab = self.SpecTabs[i]
-				if tab then
-					updateTab(tab)
-					if i == 1 then
-						tab:SetPoint("TOPLEFT", self, "TOPRIGHT", 2, -53)
-					end
+		for i = 1, GetNumSpecializations() do
+			local tab = self.SpecTabs[i]
+			if tab then
+				updateTab(tab)
+				if i == 1 then
+					tab:SetPoint("TOPLEFT", self, "TOPRIGHT", 2, -53)
 				end
 			end
-		end)
+		end
+	end)
 
-		hooksecurefunc("SpellBook_UpdateCoreAbilitiesTab", function()
-			for i = 1, #SpellBookCoreAbilitiesFrame.Abilities do
-				local bu = SpellBook_GetCoreAbilityButton(i)
-				if not bu.reskinned then
-					bu.EmptySlot:SetAlpha(0)
-					bu.ActiveTexture:SetAlpha(0)
-					bu.FutureTexture:SetAlpha(0)
-					bu.RequiredLevel:SetTextColor(1, 1, 1)
-					bu:SetNormalTexture(0)
-					bu:SetPushedTexture(0)
-					bu.iconTexture.bg = B.ReskinIcon(bu.iconTexture)
-					bu.highlightTexture:SetColorTexture(1, 1, 1, .25)
+	hooksecurefunc("SpellBook_UpdateCoreAbilitiesTab", function()
+		for i = 1, #SpellBookCoreAbilitiesFrame.Abilities do
+			local bu = SpellBook_GetCoreAbilityButton(i)
+			if not bu.reskinned then
+				bu.EmptySlot:SetAlpha(0)
+				bu.ActiveTexture:SetAlpha(0)
+				bu.FutureTexture:SetAlpha(0)
+				bu.RequiredLevel:SetTextColor(1, 1, 1)
+				bu:SetNormalTexture(0)
+				bu:SetPushedTexture(0)
+				bu.iconTexture.bg = B.ReskinIcon(bu.iconTexture)
+				bu.highlightTexture:SetColorTexture(1, 1, 1, .25)
 
-					if bu.FutureTexture:IsShown() then
-						bu.Name:SetTextColor(.8, .8, .8)
-						bu.InfoText:SetTextColor(.7, .7, .7)
-					else
-						bu.Name:SetTextColor(1, 1, 1)
-						bu.InfoText:SetTextColor(.9, .9, .9)
-					end
-					bu.reskinned = true
+				if bu.FutureTexture:IsShown() then
+					bu.Name:SetTextColor(.8, .8, .8)
+					bu.InfoText:SetTextColor(.7, .7, .7)
+				else
+					bu.Name:SetTextColor(1, 1, 1)
+					bu.InfoText:SetTextColor(.9, .9, .9)
 				end
+				bu.reskinned = true
 			end
-		end)
+		end
+	end)
 
-		hooksecurefunc("SpellBook_UpdateWhatHasChangedTab", function()
-			for i = 1, #SpellBookWhatHasChanged.ChangedItems do
-				local bu = SpellBook_GetWhatChangedItem(i)
-				bu.Ring:Hide()
-				select(2, bu:GetRegions()):Hide()
-				bu:SetTextColor("P", .9, .9, .9)
-				bu.Title:SetTextColor(1, 1, 1)
-			end
-		end)
-	end
+	hooksecurefunc("SpellBook_UpdateWhatHasChangedTab", function()
+		for i = 1, #SpellBookWhatHasChanged.ChangedItems do
+			local bu = SpellBook_GetWhatChangedItem(i)
+			bu.Ring:Hide()
+			select(2, bu:GetRegions()):Hide()
+			bu:SetTextColor("P", .9, .9, .9)
+			bu.Title:SetTextColor(1, 1, 1)
+		end
+	end)
 end)

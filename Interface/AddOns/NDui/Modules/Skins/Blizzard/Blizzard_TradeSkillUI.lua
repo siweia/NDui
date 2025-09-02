@@ -11,11 +11,8 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	B.ReskinArrow(TradeSkillDecrementButton, "left")
 	B.ReskinArrow(TradeSkillIncrementButton, "right")
 	B.ReskinInput(TradeSkillInputBox)
-	if DB.isMop then
-		B.ReskinInput(TradeSkillFrameSearchBox)
-	else
-		B.ReskinInput(TradeSkillFrameEditBox)
-	end
+	B.ReskinInput(TradeSkillFrameSearchBox)
+
 	TradeSkillFrameBottomLeftTexture:Hide()
 	TradeSkillFrameBottomRightTexture:Hide()
 
@@ -29,11 +26,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 
 	B.ReskinCollapse(TradeSkillCollapseAllButton)
 	TradeSkillExpandButtonFrame:DisableDrawLayer("BACKGROUND")
-	if DB.isMop then
-		B.ReskinFilterButton(TradeSkillFrame.FilterDropdown)
-	else
-		B.ReskinCheck(TradeSkillFrameAvailableFilterCheckButton)
-	end
+	B.ReskinFilterButton(TradeSkillFrame.FilterDropdown)
 
 	hooksecurefunc("TradeSkillFrame_Update", function()
 		for i = 1, 22 do
@@ -44,10 +37,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 			end
 		end
 	end)
-	if not DB.isMop then
-		B.ReskinDropDown(TradeSkillSubClassDropdown)
-		B.ReskinDropDown(TradeSkillInvSlotDropdown)
-	end
+
 	B.StripTextures(TradeSkillDetailScrollChildFrame)
 	B.StripTextures(TradeSkillSkillIcon)
 	B.CreateBDFrame(TradeSkillSkillIcon)

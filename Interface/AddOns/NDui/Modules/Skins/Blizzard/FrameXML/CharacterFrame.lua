@@ -15,10 +15,7 @@ function B:ReskinIconSelector()
 	B.Reskin(self.BorderBox.OkayButton)
 	B.Reskin(self.BorderBox.CancelButton)
 	B.ReskinTrimScroll(self.IconSelector.ScrollBar)
-	if self.BorderBox.IconTypeDropDown then
-		B.ReskinDropDown(self.BorderBox.IconTypeDropDown.DropDownMenu)
-	end
-	if self.BorderBox.IconTypeDropdown then -- DB.isMop
+	if self.BorderBox.IconTypeDropdown then
 		B.ReskinDropDown(self.BorderBox.IconTypeDropdown)
 	end
 
