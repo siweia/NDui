@@ -129,11 +129,9 @@ C.themes["Blizzard_TalentUI"] = function()
 		local function updateSelection(bu)
 			local selection = bu:GetID()
 			local talentGroup = PlayerTalentFrame and PlayerTalentFrame.talentGroup or 1
-			local _, _, _, selected, _, _, _, _, _, isKnown = GetTalentInfoByID(selection, talentGroup)
+			local _, _, _, selected = GetTalentInfoByID(selection, talentGroup)
 			if selected then
 				bu.bg:SetBackdropColor(r, g, b, .25)
-			elseif isKnown then
-				bu.bg:SetBackdropColor(r, g, b, .4)
 			else
 				bu.bg:SetBackdropColor(0, 0, 0, .25)
 			end
