@@ -822,7 +822,7 @@ do
 	end)
 end
 
--- Fix errors in Cata beta
-if not GuildControlUIRankSettingsFrameRosterLabel then
-	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
+-- Fix errors in mop
+if not QuestLogDailyQuestCount then
+	QuestLogDailyQuestCount = CreateFrame("Frame")
 end
