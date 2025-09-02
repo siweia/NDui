@@ -82,11 +82,11 @@ C.themes["Blizzard_TalentUI"] = function()
 		end
 
 		hooksecurefunc("PlayerTalentFrame_UpdateSpecFrame", function(self, spec)
-			local playerTalentSpec = GetSpecialization(nil, self.isPet, 1)
+			local playerTalentSpec = GetSpecialization(nil, self.isPet, PlayerSpecTab2:GetChecked() and 2 or 1)
 			local shownSpec = spec or playerTalentSpec or 1
 			local numSpecs = GetNumSpecializations(nil, self.isPet)
 			local sex = self.isPet and UnitSex("pet") or UnitSex("player")
-			local id, _, _, icon, role = GetSpecializationInfo(shownSpec, nil, self.isPet, nil, sex)
+			local id, _, _, icon = GetSpecializationInfo(shownSpec, nil, self.isPet, nil, sex)
 			if not id then return end
 
 			local scrollChild = self.spellsScroll.child
