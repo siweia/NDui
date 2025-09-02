@@ -23,6 +23,8 @@ ReplacePowerColor("HOLY_POWER", 9, {.88, .88, .06})
 ReplacePowerColor("CHI", 12, {0, 1, .59})
 ReplacePowerColor("ARCANE_CHARGES", 16, {.41, .8, .94})
 ReplacePowerColor("SHADOW_ORBS", 28, {.61, .38, 1})
+ReplacePowerColor("BURNING_EMBERS", 28, {222/255, 95/255, 95/255})
+ReplacePowerColor("DEMONIC_FURY", 28, {95/255, 222/255, 95/255})
 
 -- Various values
 local function retVal(self, val1, val2, val3, val4, val5)
