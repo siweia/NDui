@@ -46,7 +46,6 @@ function M:OnLogin()
 	M:UpdateFasterLoot()
 	M:UpdateErrorBlocker()
 	M:TradeTargetInfo()
-	M:ToggleTaxiDismount()
 	M:BidPriceHighlight()
 	M:BlockStrangerInvite()
 	M:QuickMenuButton()
@@ -512,28 +511,6 @@ function M:QuickMenuButton()
 
 	Menu.ModifyMenu("MENU_UNIT_RAID_PLAYER", function(_, rootDescription, data)
 		M:CustomMenu_GuildInvite(rootDescription, data)
-	end)
-end
-
--- Auto dismount on Taxi
-function M:ToggleTaxiDismount()
-	local lastTaxiIndex
-
-	local function retryTaxi()
-		if InCombatLockdown() then return end
-		if lastTaxiIndex then
-			TakeTaxiNode(lastTaxiIndex)
-			lastTaxiIndex = nil
-		end
-	end
-
-	hooksecurefunc("TakeTaxiNode", function(index)
-		if not C.db["Misc"]["AutoDismount"] then return end
-		if not IsMounted() then return end
-
-		Dismount()
-		lastTaxiIndex = index
-		C_Timer_After(.5, retryTaxi)
 	end)
 end
 
