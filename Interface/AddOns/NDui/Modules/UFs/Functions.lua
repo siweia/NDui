@@ -1250,6 +1250,16 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType)
 		end
 		element.prevColor = element.thisColor
 	end
+
+	local amount = element[1].amount
+	if amount then
+		if powerType == "DEMONIC_FURY" then
+			amount:SetText(UnitPower("player", 15))
+			amount:Show()
+		else
+			amount:Hide()
+		end
+	end
 end
 
 function UF:OnUpdateRunes(elapsed)
@@ -1293,6 +1303,7 @@ function UF:CreateClassPower(self)
 	end
 
 	local isDK = DB.MyClass == "DEATHKNIGHT"
+	local isWL = DB.MyClass == "WARLOCK"
 	local bar = CreateFrame("Frame", "$parentClassPowerBar", self.Health)
 	bar:SetSize(barWidth, barHeight)
 	bar:SetPoint(unpack(barPoint))
@@ -1327,6 +1338,9 @@ function UF:CreateClassPower(self)
 		if isDK then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
 		end
+	end
+	if isWL then
+		bars[1].amount = B.CreateFS(bars[1], 13, "")
 	end
 
 	if isDK then
