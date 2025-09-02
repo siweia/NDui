@@ -9,7 +9,7 @@ DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
 DB.isClassic = select(4, GetBuildInfo()) < 90000
-DB.isNewPatch = select(4, GetBuildInfo()) >= 40402 -- 4.4.2 Cata
+DB.isNewPatch = select(4, GetBuildInfo()) >= 50501 -- 5.5.1
 DB.isMop = select(4, GetBuildInfo()) >= 50500 -- 5.5.0 MoP
 
 -- Deprecated

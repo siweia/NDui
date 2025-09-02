@@ -123,9 +123,16 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
-	whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
-	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
+	if DB.isNewPatch then
+		local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
+		whoBg:SetPoint("TOPLEFT", WhoFrameEditBox, -3, -2)
+		whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBox, -1, 2)
+	else
+		WhoFrameEditBoxInset:Hide()
+		local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
+		whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
+		whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
+	end
 
 	B.ReskinPortraitFrame(FriendsFrame)
 	B.Reskin(FriendsFrameAddFriendButton)
@@ -158,13 +165,11 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(FriendsFriendsSendRequestButton)
 	B.Reskin(FriendsFriendsCloseButton)
 	B.Reskin(AddFriendInfoFrameContinueButton)
+	B.StripTextures(WhoFrameListInset)
 
 	for i = 1, 4 do
 		B.StripTextures(_G["WhoFrameColumnHeader"..i])
 	end
-
-	B.StripTextures(WhoFrameListInset)
-	WhoFrameEditBoxInset:Hide()
 
 	for i = 1, 2 do
 		B.StripTextures(_G["FriendsTabHeaderTab"..i])

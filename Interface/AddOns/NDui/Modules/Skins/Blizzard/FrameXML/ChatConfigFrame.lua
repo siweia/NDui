@@ -224,6 +224,7 @@ tinsert(C.defaultThemes, function()
 	-- TextToSpeech
 	B.StripTextures(TextToSpeechButton, 2)
 
+	if not DB.isNewPatch then
 	B.Reskin(TextToSpeechFramePlaySampleButton)
 	B.Reskin(TextToSpeechFramePlaySampleAlternateButton)
 	B.Reskin(TextToSpeechDefaultButton)
@@ -233,6 +234,7 @@ tinsert(C.defaultThemes, function()
 	B.ReskinDropDown(TextToSpeechFrameTtsVoiceAlternateDropdown)
 	B.ReskinSlider(TextToSpeechFrameAdjustRateSlider)
 	B.ReskinSlider(TextToSpeechFrameAdjustVolumeSlider)
+	end
 
 	local checkboxes = {
 		"PlayActivitySoundWhenNotFocusedCheckButton",
