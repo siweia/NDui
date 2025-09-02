@@ -329,7 +329,7 @@ tinsert(C.defaultThemes, function()
 
 	-- BonusRollLootWonFrame
 	hooksecurefunc("LootWonAlertFrame_SetUp", function(frame)
-		local lootItem = frame.lootItem
+		local lootItem = frame.lootItem or frame
 		if not frame.bg then
 			frame.bg = B.SetBD(frame)
 			frame.bg:SetPoint("TOPLEFT", 10, -10)

@@ -5,9 +5,8 @@ local B, C, L, DB = unpack(ns)
 
 C.themes["Blizzard_GuildBankUI"] = function()
 	B.StripTextures(GuildBankFrame)
-	B.SetBD(GuildBankFrame, nil, 10, 0, 0, 6)
-	local closeButton = select(11, GuildBankFrame:GetChildren())
-	if closeButton then B.ReskinClose(closeButton) end
+	B.SetBD(GuildBankFrame)
+	B.ReskinClose(GuildBankFrame.CloseButton)
 
 	GuildBankFrame.Emblem:SetAlpha(0)
 	B.Reskin(GuildBankFrame.WithdrawButton)
@@ -16,6 +15,8 @@ C.themes["Blizzard_GuildBankUI"] = function()
 	B.ReskinScroll(GuildBankInfoScrollFrameScrollBar)
 	B.Reskin(GuildBankFrame.BuyInfo.PurchaseButton)
 	B.Reskin(GuildBankFrame.Info.SaveButton)
+	B.ReskinEditBox(GuildItemSearchBox)
+	GuildBankFrame.MoneyFrameBG:Hide()
 
 	GuildBankFrame.WithdrawButton:SetPoint("RIGHT", GuildBankFrame.DepositButton, "LEFT", -2, 0)
 

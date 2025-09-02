@@ -66,12 +66,27 @@ C.themes["Blizzard_PVPUI"] = function()
 	if HonorQueueFrameTypeDropdown then
 		B.ReskinDropDown(HonorQueueFrameTypeDropdown)
 	end
+	if HonorQueueFrameTypeDropDown then
+		B.StripTextures(HonorQueueFrameTypeDropDown)
+		local button = HonorQueueFrameTypeDropDownButton
+		if button then
+			B.Reskin(button, true)
+			local tex = button:CreateTexture(nil, "ARTWORK")
+			tex:SetAllPoints(button)
+			B.SetupArrow(tex, "down")
+			button.__texture = tex
+			button:HookScript("OnEnter", B.Texture_OnEnter)
+			button:HookScript("OnLeave", B.Texture_OnLeave)
+		end
+	end
 
 	B.StripTextures(HonorQueueFrame.Inset)
 
 	local bonusFrame = HonorQueueFrame.BonusFrame
+	B.StripTextures(bonusFrame)
 	bonusFrame.WorldBattlesTexture:Hide()
 	bonusFrame.ShadowOverlay:Hide()
+	B.Reskin(bonusFrame.DiceButton)
 
 	for _, bonusButton in pairs({"RandomBGButton", "CallToArmsButton", "WorldPVP1Button", "WorldPVP2Button"}) do
 		local bu = bonusFrame[bonusButton]
@@ -92,6 +107,8 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- Conquest frame
 
+	B.StripTextures(ConquestQueueFrame)
+	ConquestQueueFrame.ShadowOverlay:Hide()
 	B.StripTextures(ConquestQueueFrame.Inset)
 	B.Reskin(ConquestJoinButton)
 
@@ -111,6 +128,12 @@ C.themes["Blizzard_PVPUI"] = function()
 			bu.SelectedTexture:SetColorTexture(r, g, b, .25)
 			bu.SelectedTexture:SetInside(bu.__bg)
 		end
+	end
+
+	local bar = ConquestQueueFrameConquestBar
+	if bar then
+		B.StripTextures(bar)
+		B.CreateBDFrame(bar, .25)
 	end
 
 	-- WarGames frame, blizzard is now WIP
