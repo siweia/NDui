@@ -1457,7 +1457,7 @@ do
 		B.StripTextures(self)
 		local bg = B.SetBD(self, nil, x, y, x2, y2)
 		local frameName = self.GetName and self:GetName()
-		local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName.."Portrait"])
+		local portrait = (frameName and _G[frameName.."Portrait"]) or self.PortraitTexture or self.portrait
 		if portrait then
 			portrait:SetAlpha(0)
 		end
