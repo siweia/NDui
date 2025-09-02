@@ -1,4 +1,4 @@
-## Interface: 50500
+## Interface: 50500, 50501
 ## Title: |cff0080ffBaudErrorFrame|r
 ## Title-zhCN: |cff0080ffBaudErrorFrame|r 报错收集
 ## Title-zhTW: |cff0080ffBaudErrorFrame|r 報錯收集
