@@ -41,11 +41,7 @@ end
 local anchorCache = {}
 
 local function CheckForBagReagent(name)
-	local pass = true
-	if name == "BagReagent" and GetContainerNumSlots(5) == 0 then
-		pass = false
-	end
-	return pass
+	return not (name == "BagReagent" and GetContainerNumSlots(5) == 0)
 end
 
 function module:UpdateBagsAnchor(parent, bags)
