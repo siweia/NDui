@@ -21,6 +21,7 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 		SingingThunder = {r=0.97, g=0.82, b=0.29},
 		SingingSea = {r=0.47, g=0.67, b=1},
 		SingingWind = {r=1, g=0.47, b=0.47},
+		Fiber = {r=0.9, g=0.8, b=0.5}
 	}
 
 	for i = 1, MAX_NUM_SOCKETS do
