@@ -250,7 +250,7 @@ G.DefaultSettings = {
 		AutoBuffs = false,
 		ShowRoleMode = 1,
 		OverAbsorb = false,
-		PrivateSize = 30,
+		PrivateSize = 22,
 		ReversePrivate = false,
 
 		PlayerWidth = 245,
@@ -1257,6 +1257,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "BuffClickThru", L["BuffClickThru"].."*", true, nil, updateRaidAurasOptions, L["ClickThroughTip"]},
 		{3, "UFs", "RaidDebuffSize", L["RaidDebuffSize"].."*", nil, {5, 30, 1}, updateRaidAurasOptions},
 		{3, "UFs", "RaidBuffSize", L["RaidBuffSize"].."*", true, {5, 30, 1}, updateRaidAurasOptions},
+		{3, "UFs", "PrivateSize", "PrivateAuras", nil, {5, 30, 1}},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", HeaderTag..L["RaidBuffIndicator"].."*", nil, setupSpellsIndicator, updateRaidAurasOptions, L["RaidBuffIndicatorTip"]},
 		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"].."*", nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}, updateRaidAurasOptions},
