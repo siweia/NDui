@@ -337,21 +337,10 @@ function S:ERT()
 
 	S:RegisterSkin("Blizzard_EncounterJournal", function()
 		local encounterInfo = EncounterJournal.encounter.info
-		local ERTTab, ERTFrame
-
-		for i = encounterInfo:GetNumChildren(), 1, -1 do
-			if ERTTab and ERTFrame then break end
-
-			local child = select(i, encounterInfo:GetChildren())
-			if child.unSelected then
-				ERTTab = child
-			elseif child.scrollframe then
-				ERTFrame = child
-			end
-		end
+		local ERTTab, ERTFrame = encounterInfo.waJournalTab, encounterInfo.waJournal
 
 		reskinTab(ERTTab)
-		B.ReskinScroll(ERTFrame.scrollframe.ScrollBar)
+		B.ReskinTrimScroll(ERTFrame.scrollframe.ScrollBar)
 
 		local scrollChild = ERTFrame.scrollframe:GetScrollChild()
 
