@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 
+local STATICPOPUP_NUMDIALOGS = STATICPOPUP_NUMDIALOGS or 4
+
 local function colorMinimize(f)
 	if f:IsEnabled() then
 		f.minimize:SetVertexColor(r, g, b)

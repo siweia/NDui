@@ -28,7 +28,7 @@ local function resetFrameStrata(frame)
 	frame.bg:SetFrameStrata("LOW")
 end
 
-local function ReskinProfessionsFlyout(parent)
+local function ReskinProfessionsFlyout(_, parent)
 	if flyoutFrame then return end
 
 	for i = 1, parent:GetNumChildren() do
