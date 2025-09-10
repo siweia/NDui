@@ -232,9 +232,4 @@ C.themes["Blizzard_ProfessionsCustomerOrders"] = function()
 	hooksecurefunc(frame.MyOrdersPage.OrderList.ScrollBox, "Update", function(self)
 		self:ForEachFrame(reskinOrderIcon)
 	end)
-
-	-- Item flyout
-	if OpenProfessionsItemFlyout then
-		hooksecurefunc("OpenProfessionsItemFlyout", B.ReskinProfessionsFlyout)
-	end
 end

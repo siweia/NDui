@@ -77,7 +77,7 @@ function M:GuildBest_Create()
 			if DetailsKeystoneInfoFrame and DetailsKeystoneInfoFrame:IsShown() then
 				DetailsKeystoneInfoFrame:Hide()
 			else
-				SlashCmdList.KEYSTONE()
+				SlashCmdList.KEYSTONE("/keys", ChatFrame1.editBox)
 			end
 		end)
 		local tex = button:CreateTexture()

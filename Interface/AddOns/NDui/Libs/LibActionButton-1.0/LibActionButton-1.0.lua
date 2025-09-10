@@ -2217,6 +2217,7 @@ function UpdateAssistedCombatRotationFrame(self)
 	-- create frame if needed
 	if show and not assistedCombatRotationFrame then
 		assistedCombatRotationFrame = CreateFrame("Frame", nil, self, "ActionBarButtonAssistedCombatRotationTemplate")
+		assistedCombatRotationFrame.UpdateGlow = function() end
 		self.AssistedCombatRotationFrame = assistedCombatRotationFrame
 	end
 

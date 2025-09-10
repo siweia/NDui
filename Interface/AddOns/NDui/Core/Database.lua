@@ -9,7 +9,7 @@ DB.Version = C_AddOns.GetAddOnMetadata("NDui", "Version")
 DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
-DB.isNewPatch = select(4, GetBuildInfo()) >= 110200 -- 11.2.0
+DB.isNewPatch = select(4, GetBuildInfo()) >= 110205 -- 11.2.5
 
 -- Deprecated
 do
@@ -188,6 +188,14 @@ DB.ReminderBuffs = {
 			instance = true,
 			inGroup = true,
 		},
+		{	itemID = 190958, -- 究极秘术
+			spells = {
+				[368512] = true,
+			},
+			equip = true,
+			instance = true,
+			inGroup = true,
+		},
 		--[=[
 		{	itemID = 178742, -- 瓶装毒素饰品
 			spells = {
@@ -196,14 +204,6 @@ DB.ReminderBuffs = {
 			equip = true,
 			instance = true,
 			combat = true,
-		},
-		{	itemID = 190958, -- 究极秘术
-			spells = {
-				[368512] = true,
-			},
-			equip = true,
-			instance = true,
-			inGroup = true,
 		},
 		]=]
 	},

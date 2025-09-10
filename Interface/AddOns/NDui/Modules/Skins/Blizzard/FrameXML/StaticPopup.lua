@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local r, g, b = DB.r, DB.g, DB.b
 
+local STATICPOPUP_NUMDIALOGS = STATICPOPUP_NUMDIALOGS or 4
+
 local function colorMinimize(f)
 	if f:IsEnabled() then
 		f.minimize:SetVertexColor(r, g, b)
@@ -26,7 +28,7 @@ tinsert(C.defaultThemes, function()
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
 		local itemFrame = frame.ItemFrame
-		local bu = frame.ItemFrame.Item
+		local bu = itemFrame.Item
 		local icon = _G["StaticPopup"..i.."IconTexture"]
 		local close = _G["StaticPopup"..i.."CloseButton"]
 

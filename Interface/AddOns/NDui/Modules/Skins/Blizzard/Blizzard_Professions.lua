@@ -28,7 +28,7 @@ local function resetFrameStrata(frame)
 	frame.bg:SetFrameStrata("LOW")
 end
 
-function B:ReskinProfessionsFlyout(parent)
+local function ReskinProfessionsFlyout(_, parent)
 	if flyoutFrame then return end
 
 	for i = 1, parent:GetNumChildren() do
@@ -48,6 +48,12 @@ function B:ReskinProfessionsFlyout(parent)
 
 			break
 		end
+	end
+end
+
+C.themes["Blizzard_ProfessionsTemplates"] = function()
+	if OpenProfessionsItemFlyout then
+		hooksecurefunc("OpenProfessionsItemFlyout", ReskinProfessionsFlyout)
 	end
 end
 
@@ -304,11 +310,6 @@ C.themes["Blizzard_Professions"] = function()
 
 	-- log
 	reskinOutputLog(craftingPage.CraftingOutputLog)
-
-	-- Item flyout
-	if OpenProfessionsItemFlyout then
-		hooksecurefunc("OpenProfessionsItemFlyout", B.ReskinProfessionsFlyout)
-	end
 
 	-- Order page
 	if not frame.OrdersPage then return end -- not exists in retail yet
