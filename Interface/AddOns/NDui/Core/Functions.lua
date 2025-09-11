@@ -1375,7 +1375,7 @@ do
 
 	-- Handle collapse
 	local function updateCollapseTexture(texture, collapsed)
-		local atlas = collapsed and "ui-questtrackerbutton-secondary-expand" or "ui-questtrackerbutton-secondary-collapse"
+		local atlas = collapsed and "Soulbinds_Collection_CategoryHeader_Expand" or "Soulbinds_Collection_CategoryHeader_Collapse"
 		texture:SetAtlas(atlas, true)
 	end
 
