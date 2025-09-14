@@ -134,6 +134,7 @@ local list = {
 		{AuraID = 472325, UnitID = "player", Flash = true},	-- 熊
 		{AuraID = 468703, UnitID = "player"},	-- 毒蛇韵律
 		{AuraID = 468704, UnitID = "player"},	-- 毒蛇祝福
+		{AuraID = 1232992, UnitID = "player"},	-- 钟鸣灾厄
 
 		{AuraID = 394366, UnitID = "player"},	-- 密迹寻踪，射击2T
 		{AuraID = 394384, UnitID = "player", Flash = true},	-- 集中瞄准，射击4T
