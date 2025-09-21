@@ -245,7 +245,7 @@ function M:GuildBest()
 	if not C.db["Misc"]["MDGuildBest"] then return end
 
 	hasAngryKeystones = C_AddOns.IsAddOnLoaded("AngryKeystones")
-	if C.AddOns.IsAddOnLoaded("Blizzard_ChallengesUI") and ChallengesFrame then
+	if C_AddOns.IsAddOnLoaded("Blizzard_ChallengesUI") and ChallengesFrame then
 		LoadGuildBest()
 	else
 		B:RegisterEvent("ADDON_LOADED", M.GuildBest_OnLoad)
