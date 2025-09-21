@@ -112,6 +112,7 @@ function ItemButton:Create(tpl, parent)
 	if btnICO then btnICO:SetTexture("") end
 
 	button:RegisterForDrag("LeftButton") -- fix button drag in 9.0
+	button.UpdateTooltip = ContainerFrameItemButtonMixin.OnUpdate
 
 	return button
 end
