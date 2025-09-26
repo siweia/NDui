@@ -126,6 +126,7 @@ function TT:GetUnitItemLevel(unit)
 						end
 
 						if unit ~= "player" then
+							level = B.GetItemLevel(itemLink) or level
 							if i < 16 then
 								total = total + level
 							elseif i == 16 then
