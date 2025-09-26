@@ -79,7 +79,7 @@ function M:OnLogin()
 	if deleteDialog.OnShow then
 		hooksecurefunc(deleteDialog, "OnShow", function(self)
 			if C.db["Misc"]["InstantDelete"] then
-				self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
+				self.EditBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 			end
 		end)
 	end
