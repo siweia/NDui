@@ -124,9 +124,10 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	if DB.isNewPatch then
+		B.StripTextures(WhoFrameEditBox, 2)
 		local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
-		whoBg:SetPoint("TOPLEFT", WhoFrameEditBox, -3, -2)
-		whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBox, -1, 2)
+		whoBg:SetPoint("TOPLEFT", WhoFrameEditBox, -3, -4)
+		whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBox, -1, 4)
 	else
 		WhoFrameEditBoxInset:Hide()
 		local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
