@@ -79,7 +79,9 @@ local function Update(self, event, unit)
 	-- BUG: UnitPhaseReason returns wrong data for friendly NPCs in phased scenarios like WM or Chromie Time
 	-- https://github.com/Stanzilla/WoWUIBugs/issues/49
 	local phaseReason = UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitPhaseReason(unit) or nil
-	if(phaseReason) then
+	local worldtier = phaseReason == Enum.PhaseReason.TimerunningHwt -- phased in open world (hero / nonhero) but not phased in dungeons
+	local shouldShow = (worldtier and not IsInInstance()) or (not worldtier and reason)
+	if(shouldShow) then
 		element:Show()
 	else
 		element:Hide()
@@ -95,7 +97,7 @@ local function Update(self, event, unit)
 	* phaseReason   - the reason why the unit is in a different phase (number?)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(not phaseReason, phaseReason)
+		return element:PostUpdate(not shouldShow, phaseReason)
 	end
 end
 

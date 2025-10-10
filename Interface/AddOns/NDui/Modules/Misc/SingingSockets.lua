@@ -34,7 +34,7 @@ function M:Socket_OnClick()
 		for slotID = 1, C_Container.GetContainerNumSlots(bagID) do
 			if C_Container.GetContainerItemID(bagID, slotID) == self.gemID then
 				C_Container.PickupContainerItem(bagID, slotID)
-				ClickSocketButton(self.socketID)
+				C_ItemSocketInfo.ClickSocketButton(self.socketID)
 				ClearCursor()
 				return
 			end
@@ -49,7 +49,7 @@ function M:CreateSingingSockets()
 	for i = 1, 3 do
 		local frame = CreateFrame("Frame", "NDuiSingingSocket"..i, ItemSocketingFrame)
 		frame:SetSize(iconSize*2, iconSize*2)
-		frame:SetPoint("TOP", _G["ItemSocketingSocket"..i], "BOTTOM", 0, -50)
+		frame:SetPoint("TOP", ItemSocketingFrame.SocketingContainer.SocketFrames[i], "BOTTOM", 0, -50)
 		B.SetBD(frame)
 		M.SingingFrames[i] = frame
 
@@ -77,7 +77,7 @@ function M:CreateFiberSockets()
 
 	local frame = CreateFrame("Frame", "NDuiFiberSockets", ItemSocketingFrame)
 	frame:SetSize(iconSize*4, iconSize*2)
-	frame:SetPoint("TOP", _G["ItemSocketingSocket1"], "BOTTOM", 0, -50)
+	frame:SetPoint("TOP", ItemSocketingFrame.SocketingContainer.Socket1, "BOTTOM", 0, -50)
 	B.SetBD(frame)
 
 	for index, gemID in pairs(fiberSockets)  do
@@ -107,15 +107,15 @@ function M:SetupSingingSockets()
 		end
 		if M.FiberSockets then M.FiberSockets:Hide() end
 
-		local socketType = GetSocketTypes(1)
+		local socketType = C_ItemSocketInfo.GetSocketTypes(1)
 		if socketType == "SingingThunder" then
 			M:CreateSingingSockets()
 			for i = 1, 3 do
-				M.SingingFrames[i]:SetShown(not GetExistingSocketInfo(i))
+				M.SingingFrames[i]:SetShown(not C_ItemSocketInfo.GetExistingSocketInfo(i))
 			end
 		elseif socketType == "Fiber" then
 			M:CreateFiberSockets()
-			M.FiberSockets:SetShown(not GetExistingSocketInfo(1))
+			M.FiberSockets:SetShown(not C_ItemSocketInfo.GetExistingSocketInfo(1))
 		end
 	end)
 end

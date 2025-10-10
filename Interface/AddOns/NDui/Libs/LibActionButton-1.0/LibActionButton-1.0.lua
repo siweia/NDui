@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-NDui"
-local MINOR_VERSION = 131
+local MINOR_VERSION = 133
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -112,9 +112,12 @@ local UpdateFlyout, ShowGrid, HideGrid, UpdateGrid, SetupSecureSnippets, WrapOnC
 local ShowOverlayGlow, HideOverlayGlow
 local ClearChargeCooldown
 
+local SpellVFX_ClearReticle, SpellVFX_ClearInterruptDisplay, SpellVFX_PlaySpellCastAnim, SpellVFX_PlayTargettingReticleAnim, SpellVFX_StopTargettingReticleAnim, SpellVFX_StopSpellCastAnim, SpellVFX_PlaySpellInterruptedAnim
+local SpellVFX_CastingAnim_OnHide, SpellVFX_CastingAnim_Finish_OnFinished
+
 local GetFlyoutHandler
 
-local InitializeEventHandler, OnEvent, ForAllButtons, OnUpdate
+local InitializeEventHandler, OnEvent, ForAllButtons, ForAllButtonsWithSpell, OnUpdate
 
 local function GameTooltip_GetOwnerForbidden()
 	if GameTooltip:IsForbidden() then
@@ -145,6 +148,7 @@ local DefaultConfig = {
 	flyoutDirection = "UP",
 	actionButtonUI = false, -- register the button with SetActionUIButton, this has some side-effects if the button changes from action type to another type, but is required for certain UI integrations. Recommended to only set on pure type=action buttons
 	assistedHighlight = true, -- requires actionButtonUI to be set to work
+	spellCastVFX = false, -- enable cast vfx
 	text = {
 		hotkey = {
 			font = {
@@ -194,6 +198,13 @@ local DefaultConfig = {
 	},
 }
 
+local ActionButtonCastType =
+{
+	Cast = 1,
+	Channel = 2,
+	Empowered = 3,
+}
+
 --- Create a new action button.
 -- @param id Internal id of the button (not used by LibActionButton-1.0, only for tracking inside the calling addon)
 -- @param name Name of the button frame to be created (not used by LibActionButton-1.0 aside from naming the frame)
@@ -239,6 +250,12 @@ function lib:CreateButton(id, name, header, config)
 
 	SetupSecureSnippets(button)
 	WrapOnClick(button)
+
+	-- update animation scripts
+	if button.SpellCastAnimFrame then
+		button.SpellCastAnimFrame:SetScript("OnHide", SpellVFX_CastingAnim_OnHide)
+		button.SpellCastAnimFrame.EndBurst.FinishCastAnim:SetScript("OnFinished", SpellVFX_CastingAnim_Finish_OnFinished)
+	end
 
 	-- if there is no button yet, initialize events later
 	local InitializeEvents = not next(ButtonRegistry)
@@ -1221,6 +1238,15 @@ function ForAllButtons(method, onlyWithAction)
 	end
 end
 
+function ForAllButtonsWithSpell(spellID, method, ...)
+	assert(type(method) == "function")
+	for button in next, ActiveButtons do
+		if button:GetSpellId() == spellID then
+			method(button, ...)
+		end
+	end
+end
+
 function InitializeEventHandler()
 	lib.eventFrame:SetScript("OnEvent", OnEvent)
 	lib.eventFrame:RegisterEvent("CVAR_UPDATE")
@@ -1275,6 +1301,21 @@ function InitializeEventHandler()
 
 	lib.eventFrame:RegisterEvent("LOSS_OF_CONTROL_ADDED")
 	lib.eventFrame:RegisterEvent("LOSS_OF_CONTROL_UPDATE")
+
+	if WoWRetail then
+		lib.eventFrame:RegisterEvent("UNIT_SPELLCAST_SENT")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_FAILED", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_START", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_STOP", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_START", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_RETICLE_TARGET", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_RETICLE_CLEAR", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_EMPOWER_START", "player")
+		lib.eventFrame:RegisterUnitEvent("UNIT_SPELLCAST_EMPOWER_STOP", "player")
+	end
 
 	if UseCustomFlyout then
 		lib.eventFrame:RegisterEvent("PLAYER_LOGIN")
@@ -1496,6 +1537,49 @@ function OnEvent(frame, event, arg1, ...)
 				UpdateAssistedCombatRotationFrame(button)
 			end
 		end
+	elseif event == "UNIT_SPELLCAST_INTERRUPTED" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_PlaySpellInterruptedAnim)
+	elseif event == "UNIT_SPELLCAST_START" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_PlaySpellCastAnim, ActionButtonCastType.Cast)
+	elseif event == "UNIT_SPELLCAST_STOP" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_StopSpellCastAnim, true, ActionButtonCastType.Cast)
+		ForAllButtonsWithSpell(spellID, SpellVFX_StopTargettingReticleAnim)
+	elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_StopSpellCastAnim, false, ActionButtonCastType.Cast)
+		ForAllButtonsWithSpell(spellID, SpellVFX_StopTargettingReticleAnim)
+	elseif event == "UNIT_SPELLCAST_SENT" then
+		local _, _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_StopTargettingReticleAnim)
+	elseif event == "UNIT_SPELLCAST_FAILED" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_StopTargettingReticleAnim)
+	elseif event == "UNIT_SPELLCAST_EMPOWER_START" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_PlaySpellCastAnim, ActionButtonCastType.Empowered)
+	elseif event == "UNIT_SPELLCAST_EMPOWER_STOP" then
+		local _, spellID, castComplete = ...
+		local interrupted = not castComplete
+		if interrupted then
+			ForAllButtonsWithSpell(spellID, SpellVFX_PlaySpellInterruptedAnim)
+		else
+			ForAllButtonsWithSpell(spellID, SpellVFX_StopSpellCastAnim, interrupted, ActionButtonCastType.Empowered)
+		end
+	elseif event == "UNIT_SPELLCAST_CHANNEL_START" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_PlaySpellCastAnim, ActionButtonCastType.Channel)
+	elseif event == "UNIT_SPELLCAST_CHANNEL_STOP" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_StopSpellCastAnim, false, ActionButtonCastType.Channel)
+	elseif event == "UNIT_SPELLCAST_RETICLE_TARGET" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_PlayTargettingReticleAnim)
+	elseif event == "UNIT_SPELLCAST_RETICLE_CLEAR" then
+		local _, spellID = ...
+		ForAllButtonsWithSpell(spellID, SpellVFX_StopTargettingReticleAnim)
 	elseif event == "AssistedCombatManager.OnAssistedHighlightSpellChange" then
 		for button in next, ActiveButtons do
 			UpdatedAssistedHighlightFrame(button)
@@ -2118,6 +2202,86 @@ function UpdateOverlayGlow(self)
 	end
 end
 
+function SpellVFX_CastingAnim_OnHide(self)
+	local parent = self:GetParent()
+	SpellVFX_ClearReticle(parent)
+	parent.cooldown:SetSwipeColor(0, 0, 0, 1)
+	UpdateCooldown(parent)
+end
+
+function SpellVFX_CastingAnim_Finish_OnFinished(self)
+	self:GetParent():GetParent():Hide()
+	local parentButton = self:GetParent():GetParent():GetParent()
+	SpellVFX_StopSpellCastAnim(parentButton, false, parentButton.actionButtonCastType)
+end
+
+function SpellVFX_ClearReticle(self)
+	if self.TargetReticleAnimFrame:IsShown() then
+		self.TargetReticleAnimFrame:Hide()
+	end
+end
+
+function SpellVFX_ClearInterruptDisplay(self)
+	if self.InterruptDisplay:IsShown() then
+		self.InterruptDisplay:Hide()
+	end
+end
+
+function SpellVFX_PlaySpellCastAnim(self, actionButtonCastType)
+	if not self.config.spellCastVFX then return end
+
+	-- __Swipe_Hook is to stop Masque from re-setting it
+	self.cooldown.__Swipe_Hook = true
+	self.cooldown:SetSwipeColor(0, 0, 0, 0)
+	self.cooldown.__Swipe_Hook = nil
+
+	SpellVFX_ClearInterruptDisplay(self)
+	SpellVFX_ClearReticle(self)
+	self.SpellCastAnimFrame:Setup(actionButtonCastType)
+	self.actionButtonCastType = actionButtonCastType
+end
+
+function SpellVFX_PlayTargettingReticleAnim(self)
+	if not self.config.spellCastVFX then return end
+
+	if self.InterruptDisplay:IsShown() then
+		self.InterruptDisplay:Hide()
+	end
+	if not self._state_type == "action" or not C_ActionBar.IsAssistedCombatAction(self._state_action) then
+		self.TargetReticleAnimFrame:Setup()
+	end
+end
+
+function SpellVFX_StopTargettingReticleAnim(self)
+	if self.TargetReticleAnimFrame:IsShown() then
+		self.TargetReticleAnimFrame:Hide()
+	end
+end
+
+function SpellVFX_StopSpellCastAnim(self, forceStop, actionButtonCastType)
+	SpellVFX_StopTargettingReticleAnim(self)
+
+	if (self.actionButtonCastType == actionButtonCastType) then
+		if(forceStop) then
+			self.SpellCastAnimFrame:Hide()
+		elseif(self.SpellCastAnimFrame.Fill.CastingAnim:IsPlaying()) then
+			self.SpellCastAnimFrame:FinishAnimAndPlayBurst()
+		end
+		self.actionButtonCastType = nil
+	end
+end
+
+function SpellVFX_PlaySpellInterruptedAnim(self)
+	if not self.config.spellCastVFX then return end
+
+	SpellVFX_StopSpellCastAnim(self, true, self.actionButtonCastType)
+	--Hide if it's already showing to clear the anim.
+	if self.InterruptDisplay:IsShown() then
+		self.InterruptDisplay:Hide()
+	end
+	self.InterruptDisplay:Show()
+end
+
 function ClearNewActionHighlight(action, preventIdenticalActionsFromClearing, value)
 	lib.ACTION_HIGHLIGHT_MARKS[action] = value
 
@@ -2218,7 +2382,7 @@ function UpdateAssistedCombatRotationFrame(self)
 	-- create frame if needed
 	if show and not assistedCombatRotationFrame then
 		assistedCombatRotationFrame = CreateFrame("Frame", nil, self, "ActionBarButtonAssistedCombatRotationTemplate")
-		assistedCombatRotationFrame.UpdateGlow = function() end
+		assistedCombatRotationFrame.UpdateGlow = function() end -- NDui mod: remove glow texture
 		self.AssistedCombatRotationFrame = assistedCombatRotationFrame
 	end
 
