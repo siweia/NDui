@@ -1840,7 +1840,7 @@ do
 	end
 
 	function B:CreateSlider(name, minValue, maxValue, step, x, y, width)
-		local slider = CreateFrame("Slider", nil, self, "TextToSpeechSliderTemplate")
+		local slider = CreateFrame("Slider", nil, self, "OptionsSliderTemplate")
 		slider:SetPoint("TOPLEFT", x, y)
 		slider:SetWidth(width or 200)
 		slider:SetMinMaxValues(minValue, maxValue)
