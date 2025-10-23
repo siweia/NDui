@@ -155,7 +155,7 @@ end
 -- Faster Looting
 local lootDelay = 0
 function M:DoFasterLoot()
-	if GetLootMethod() == "master" then return end
+	if C_PartyInfo.GetLootMethod() == "master" then return end
 
 	if GetTime() - lootDelay >= .3 then
 		lootDelay = GetTime()
