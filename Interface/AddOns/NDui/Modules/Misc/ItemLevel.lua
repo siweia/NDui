@@ -334,7 +334,7 @@ end
 
 function M.ItemLevel_ScrappingShow(event, addon)
 	if addon == "Blizzard_ScrappingMachineUI" then
-		hooksecurefunc(ScrappingMachineFrame, "SetupScrapButtonPool", M.ItemLevel_ScrappingSetup)
+		hooksecurefunc(ScrappingMachineFrame, "UpdateScrapButtonState", M.ItemLevel_ScrappingSetup)
 
 		B:UnregisterEvent(event, M.ItemLevel_ScrappingShow)
 	end
