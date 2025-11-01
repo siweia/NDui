@@ -63,7 +63,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	B.ReskinRole(HonorQueueFrame.RoleInset.DPSIcon)
 	B.Reskin(HonorQueueFrameSoloQueueButton)
 	B.Reskin(HonorQueueFrameGroupQueueButton)
-	if HonorQueueFrameTypeDropdown then
+	if HonorQueueFrameTypeDropdown then -- not exists yet
 		B.ReskinDropDown(HonorQueueFrameTypeDropdown)
 	end
 	if HonorQueueFrameTypeDropDown then
@@ -72,14 +72,19 @@ C.themes["Blizzard_PVPUI"] = function()
 		if button then
 			B.Reskin(button, true)
 			local tex = button:CreateTexture(nil, "ARTWORK")
-			tex:SetAllPoints(button)
+			tex:SetInside(button, 3, 3)
 			B.SetupArrow(tex, "down")
 			button.__texture = tex
 			button:HookScript("OnEnter", B.Texture_OnEnter)
 			button:HookScript("OnLeave", B.Texture_OnLeave)
+
+			button.__bg:ClearAllPoints()
+			button.__bg:SetPoint("TOPLEFT", button, -150, -2)
+			button.__bg:SetPoint("BOTTOMRIGHT", button)
+			button.__bg:SetFrameLevel(3)
 		end
 	end
-
+	B.ReskinScroll(HonorQueueFrameSpecificFrameScrollBar)
 	B.StripTextures(HonorQueueFrame.Inset)
 
 	local bonusFrame = HonorQueueFrame.BonusFrame
@@ -138,8 +143,18 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- WarGames frame, blizzard is now WIP
 	B.StripTextures(WarGamesQueueFrame)
-	B.CreateBDFrame(WarGamesQueueFrameScrollFrameScrollBar, .25)
-	B.Reskin(WarGameStartButton)
+	WarGamesQueueFrame.HorizontalBar:SetAlpha(0)
 	B.ReskinScroll(WarGamesQueueFrameScrollFrameScrollBar)
-	B.ReskinTrimScroll(WarGamesQueueFrameInfoScrollFrame.ScrollBar)
+
+	for _, child in pairs({WarGamesQueueFrame:GetChildren()}) do
+		if child:IsObjectType("Button") then
+			B.Reskin(child)
+			break
+		end
+	end
+
+	B.StripTextures(WarGamesQueueFrameInfoScrollFrame)
+	B.CreateBDFrame(WarGamesQueueFrameInfoScrollFrame, .25)
+	WarGamesQueueFrameInfoScrollFrame.ScrollBar:SetAlpha(0)
+	B.ReskinScroll(WarGamesQueueFrameInfoScrollFrameScrollBar)
 end
