@@ -793,9 +793,8 @@ do
 end
 
 -- Fix errors in mop
-if not QuestLogDailyQuestCount then
-	QuestLogDailyQuestCount = CreateFrame("Frame")
-end
+TalentMicroButtonAlert.MicroButton = CreateFrame("Frame")
+TalentMicroButtonAlert.MicroButton.EvaluateAlertVisibility = function() end
 
 -- Unregister talent event
 if PlayerTalentFrame then
