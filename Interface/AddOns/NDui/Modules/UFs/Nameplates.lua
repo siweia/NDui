@@ -13,7 +13,6 @@ local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local C_NamePlate_SetNamePlateEnemyClickThrough = C_NamePlate.SetNamePlateEnemyClickThrough
 local C_NamePlate_SetNamePlateFriendlyClickThrough = C_NamePlate.SetNamePlateFriendlyClickThrough
 local INTERRUPTED = INTERRUPTED
-local _QuestieTooltips, _QuestiePlayer
 
 -- Init
 function UF:UpdatePlateCVars()
@@ -45,22 +44,6 @@ function UF:SetupCVars()
 	SetCVar("nameplateSelectedScale", 1)
 	SetCVar("nameplateLargerScale", 1)
 	SetCVar("nameplateGlobalScale", 1)
-
-	if C_AddOns.IsAddOnLoaded("Questie") and QuestieLoader then
-		_QuestiePlayer = QuestieLoader:ImportModule("QuestiePlayer")
-		_QuestieTooltips = QuestieLoader:ImportModule("QuestieTooltips")
-
-		local _QuestieEventHandler = QuestieLoader:ImportModule("QuestEventHandler")
-		if _QuestieEventHandler and _QuestieEventHandler.private then
-			hooksecurefunc(_QuestieEventHandler.private, "UpdateAllQuests", function()
-				for _, plate in pairs(C_NamePlate.GetNamePlates()) do
-					if plate.unitFrame then
-						UF.UpdateQuestIndicator(plate.unitFrame)
-					end
-				end
-			end)
-		end
-	end
 end
 
 function UF:BlockAddons()
@@ -477,98 +460,6 @@ function UF:UpdateQuestUnit(_, unit)
 	end
 end
 
-function UF:UpdateForQuestie(npcID)
-	local data = _QuestieTooltips.lookupByKey and _QuestieTooltips.lookupByKey["m_"..npcID]
-	if data then
-		local foundObjective, progressText
-		for _, tooltip in pairs(data) do
-			if not tooltip.npc then
-				local questID = tooltip.questId
-				if questID then
-					if _QuestiePlayer.currentQuestlog[questID] then
-						foundObjective = true
-
-						if tooltip.objective and tooltip.objective.Needed then
-							progressText = tooltip.objective.Needed - tooltip.objective.Collected
-							if progressText == 0 then
-								foundObjective = nil
-							end
-							break
-						end
-					end
-				end
-			end
-		end
-
-		if foundObjective then
-			self.questIcon:Show()
-			self.questCount:SetText(progressText)
-		end
-	end
-end
-
-function UF:UpdateCodexQuestUnit(name)
-	if name and CodexMap.tooltips[name] then
-		for _, meta in pairs(CodexMap.tooltips[name]) do
-			local questData = meta["quest"]
-			local quests = CodexDB.quests.loc
-
-			if questData then
-				for questIndex = 1, GetNumQuestLogEntries() do
-					local _, _, _, header, _, _, _, questId = GetQuestLogTitle(questIndex)
-					if not header and quests[questId] and questData == quests[questId].T then
-						local objectives = GetNumQuestLeaderBoards(questIndex)
-						local foundObjective, progressText = nil
-						if objectives then
-							for i = 1, objectives do
-								local text, type = GetQuestLogLeaderBoard(i, questIndex)
-								if type == "monster" then
-									local _, _, monsterName, objNum, objNeeded = strfind(text, Codex:SanitizePattern(QUEST_MONSTERS_KILLED))
-									if meta["spawn"] == monsterName then
-										progressText = objNeeded - objNum
-										foundObjective = true
-										break
-									end
-								elseif table.getn(meta["item"]) > 0 and type == "item" and meta["dropRate"] then
-									local _, _, itemName, objNum, objNeeded = strfind(text, Codex:SanitizePattern(QUEST_OBJECTS_FOUND))
-									for _, item in pairs(meta["item"]) do
-										if item == itemName then
-											progressText = objNeeded - objNum
-											foundObjective = true
-											break
-										end
-									end
-								end
-							end
-						end
-
-						if foundObjective and progressText > 0 then
-							self.questIcon:Show()
-							self.questCount:SetText(progressText)
-						elseif not foundObjective then
-							self.questIcon:Show()
-						end
-					end
-				end
-			end
-		end
-	end
-end
-
-function UF:UpdateQuestIndicator()
-	if not C.db["Nameplate"]["QuestIndicator"] then return end
-
-	self.questIcon:Hide()
-	self.questCount:SetText("")
-	if isInInstance then return end
-
-	if CodexMap then
-		UF.UpdateCodexQuestUnit(self, self.unitName)
-	elseif _QuestieTooltips and _QuestiePlayer then
-		UF.UpdateForQuestie(self, self.npcID)
-	end
-end
-
 function UF:AddQuestIcon(self)
 	if not C.db["Nameplate"]["QuestIndicator"] then return end
 
@@ -584,7 +475,6 @@ function UF:AddQuestIcon(self)
 	self.questIcon = qicon
 	self.questCount = count
 	--self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
-	self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestIndicator, true)
 end
 
 -- Unit classification
