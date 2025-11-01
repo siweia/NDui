@@ -811,3 +811,12 @@ end
 if not QuestLogDailyQuestCount then
 	QuestLogDailyQuestCount = CreateFrame("Frame")
 end
+
+-- Unregister talent event
+if PlayerTalentFrame then
+	PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+else
+	hooksecurefunc("TalentFrame_LoadUI", function()
+		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+	end)
+end
