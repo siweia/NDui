@@ -39,6 +39,7 @@ end
 C.themes["Blizzard_Collections"] = function()
 	-- [[ General ]]
 
+	B.StripTextures(CollectionsJournal,	true) -- kill portrait
 	CollectionsJournal.bg = B.ReskinPortraitFrame(CollectionsJournal) -- need this for Rematch skin
 	for i = 1, 5 do
 		local tab = _G["CollectionsJournalTab"..i]
@@ -65,6 +66,7 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournal.RightInset:Hide()
 	PetJournal.PetCardInset:Hide()
 	PetJournal.loadoutBorder:Hide()
+	PetJournalTutorialButton.Ring:Hide()
 
 	B.StripTextures(MountJournal.MountCount)
 	B.CreateBDFrame(MountJournal.MountCount, .25)
