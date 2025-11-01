@@ -141,9 +141,5 @@ C.themes["Blizzard_PVPUI"] = function()
 	B.CreateBDFrame(WarGamesQueueFrameScrollFrameScrollBar, .25)
 	B.Reskin(WarGameStartButton)
 	B.ReskinScroll(WarGamesQueueFrameScrollFrameScrollBar)
-	if DB.isNewPatch then
-		B.ReskinTrimScroll(WarGamesQueueFrameInfoScrollFrame.ScrollBar)
-	else
-		B.ReskinScroll(WarGamesQueueFrameInfoScrollFrame.ScrollBar)
-	end
+	B.ReskinTrimScroll(WarGamesQueueFrameInfoScrollFrame.ScrollBar)
 end

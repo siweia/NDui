@@ -21,8 +21,6 @@ local function updateMinorButtonState(button)
 end
 
 tinsert(C.defaultThemes, function()
-	if DB.isNewPatch then
-
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
 		local itemFrame = frame.ItemFrame
@@ -73,46 +71,6 @@ tinsert(C.defaultThemes, function()
 		B.ReskinInput(gold)
 		B.ReskinInput(silver)
 		B.ReskinInput(copper)
-	end
-
-	else
-		for i = 1, 4 do
-			local frame = _G["StaticPopup"..i]
-			local bu = _G["StaticPopup"..i.."ItemFrame"]
-			local close = _G["StaticPopup"..i.."CloseButton"]
-
-			local gold = _G["StaticPopup"..i.."MoneyInputFrameGold"]
-			local silver = _G["StaticPopup"..i.."MoneyInputFrameSilver"]
-			local copper = _G["StaticPopup"..i.."MoneyInputFrameCopper"]
-
-			_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
-			_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
-
-			bu:SetNormalTexture(0)
-			bu:SetHighlightTexture(0)
-			bu:SetPushedTexture(0)
-			B.CreateBDFrame(bu)
-			bu.IconBorder:SetAlpha(0)
-
-			B.StripTextures(frame)
-			B.SetBD(frame)
-			for j = 1, 4 do
-				B.Reskin(frame["button"..j])
-			end
-			B.Reskin(frame["extraButton"])
-			B.ReskinClose(close)
-
-			close.minimize = close:CreateTexture(nil, "OVERLAY")
-			close.minimize:SetSize(9, 1)
-			close.minimize:SetPoint("CENTER")
-			close.minimize:SetTexture(DB.bdTex)
-			close.minimize:SetVertexColor(1, 1, 1)
-			close:HookScript("OnEnter", colorMinimize)
-			close:HookScript("OnLeave", clearMinimize)
-
-			B.ReskinInput(_G["StaticPopup"..i.."EditBox"], 20)
-			B:UpdateMoneyDisplay(gold, silver, copper)
-		end
 	end
 
 	hooksecurefunc("StaticPopup_Show", function(which, _, _, data)
