@@ -531,20 +531,11 @@ function M:BaudErrorFrameHelpTip()
 	local button, count = _G.BaudErrorFrameMinimapButton, _G.BaudErrorFrameMinimapCount
 	if not button then return end
 
-	local errorInfo = {
-		text = L["BaudErrorTip"],
-		buttonStyle = HelpTip.ButtonStyle.GotIt,
-		targetPoint = HelpTip.Point.TopEdgeCenter,
-		alignment = HelpTip.Alignment.Right,
-		offsetX = -15,
-		onAcknowledgeCallback = B.HelpInfoAcknowledge,
-		callbackArg = "BaudError",
-	}
 	hooksecurefunc(count, "SetText", function(_, text)
 		if not NDuiADB["Help"]["BaudError"] then
 			text = tonumber(text)
 			if text and text > 0 then
-				HelpTip:Show(button, errorInfo)
+				B:ShowHelpTip(button, L["BaudErrorTip"], "TOP", -90, 15, nil, "BaudError", 80)
 			end
 		end
 	end)
@@ -793,16 +784,10 @@ do
 		end
 	end)
 
-	local altPowerInfo = {
-		text = L["Drag AltBar Tip"],
-		buttonStyle = HelpTip.ButtonStyle.GotIt,
-		targetPoint = HelpTip.Point.RightEdgeCenter,
-		onAcknowledgeCallback = B.HelpInfoAcknowledge,
-		callbackArg = "AltPower",
-	}
 	PlayerPowerBarAlt:HookScript("OnEnter", function(self)
 		if not NDuiADB["Help"]["AltPower"] then
 			HelpTip:Show(self, altPowerInfo)
+			B:ShowHelpTip(self, L["Drag AltBar Tip"], "RIGHT", 20, 0, nil, "AltPower")
 		end
 	end)
 end

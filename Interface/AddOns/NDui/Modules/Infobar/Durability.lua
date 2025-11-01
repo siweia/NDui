@@ -14,7 +14,6 @@ local C_Timer_After, IsShiftKeyDown = C_Timer.After, IsShiftKeyDown
 
 local repairCostString = gsub(REPAIR_COST, HEADER_COLON, ":")
 local lowDurabilityCap = .25
-local needToRepair
 
 local localSlots = {
 	[1] = {1, INVTYPE_HEAD, 1000},
@@ -28,21 +27,6 @@ local localSlots = {
 	[9] = {16, INVTYPE_WEAPONMAINHAND, 1000},
 	[10] = {17, INVTYPE_WEAPONOFFHAND, 1000},
 	[11] = {18, INVTYPE_RANGED, 1000}
-}
-
-local function hideAlertWhileCombat()
-	if InCombatLockdown() then
-		info:RegisterEvent("PLAYER_REGEN_ENABLED")
-		info:UnregisterEvent("UPDATE_INVENTORY_DURABILITY")
-	end
-end
-
-local lowDurabilityInfo = {
-	text = L["Low Durability"],
-	buttonStyle = HelpTip.ButtonStyle.Okay,
-	targetPoint = HelpTip.Point.TopEdgeCenter,
-	onAcknowledgeCallback = hideAlertWhileCombat,
-	offsetY = 10,
 }
 
 local lastClick = 0
@@ -106,12 +90,10 @@ info.onEvent = function(self, event)
 		self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
 	end
 
-	if isLowDurability() then
-		HelpTip:Show(info, lowDurabilityInfo)
-		needToRepair = true
+	if isLowDurability() and ((lastClick == 0) or (GetTime() - lastClick > 60*30)) then -- only half an hour
+		B:ShowHelpTip(info, L["Low Durability"], "TOP", 0, 20, SaveClickTime, "Durability")
 	else
-		HelpTip:Hide(info, L["Low Durability"])
-		needToRepair = false
+		B:HideHelpTip("Durability")
 	end
 end
 
@@ -213,17 +195,9 @@ local function merchantClose()
 	B:UnregisterEvent("MERCHANT_CLOSED", merchantClose)
 end
 
-local autoRepairInfo = {
-	text = L["AutoRepairInfo"],
-	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.RightEdgeCenter,
-	onAcknowledgeCallback = B.HelpInfoAcknowledge,
-	callbackArg = "AutoRepair",
-}
-
 local function merchantShow()
 	if not NDuiADB["Help"]["AutoRepair"] then
-		HelpTip:Show(MerchantFrame, autoRepairInfo)
+		B:ShowHelpTip(MerchantFrame, L["AutoRepairInfo"], "RIGHT", 20, 0, nil, "AutoRepair")
 	end
 
 	if IsShiftKeyDown() or NDuiADB["RepairType"] == 0 or not CanMerchantRepair() then return end
@@ -232,20 +206,3 @@ local function merchantShow()
 	B:RegisterEvent("MERCHANT_CLOSED", merchantClose)
 end
 B:RegisterEvent("MERCHANT_SHOW", merchantShow)
-
-local repairGossipIDs = {
-	[37005] = true, -- 基维斯
-	[44982] = true, -- 里弗斯
-}
-B:RegisterEvent("GOSSIP_SHOW", function()
-	if IsShiftKeyDown() then return end
-	if not needToRepair then return end
-
-	local options = C_GossipInfo.GetOptions()
-	for i = 1, #options do
-		local option = options[i]
-		if repairGossipIDs[option.gossipOptionID] then
-			C_GossipInfo.SelectOption(option.gossipOptionID)
-		end
-	end
-end)

@@ -5,18 +5,9 @@ local module = B:GetModule("Chat")
 local tinsert, pairs = tinsert, pairs
 local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
 
-local chatSwitchInfo = {
-	text = L["ChatSwitchHelp"],
-	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.TopEdgeCenter,
-	offsetY = 50,
-	onAcknowledgeCallback = B.HelpInfoAcknowledge,
-	callbackArg = "ChatSwitch",
-}
-
 local function chatSwitchTip()
 	if not NDuiADB["Help"]["ChatSwitch"] then
-		HelpTip:Show(ChatFrame1, chatSwitchInfo)
+		B:ShowHelpTip(ChatFrame1, L["ChatSwitchHelp"], "TOP", 0, 50, nil, "ChatSwitch")
 	end
 end
 

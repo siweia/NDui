@@ -445,19 +445,10 @@ function module:ShowMinimapClock()
 	end
 end
 
-local minimapInfo = {
-	text = L["MinimapHelp"],
-	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.LeftEdgeCenter,
-	onAcknowledgeCallback = B.HelpInfoAcknowledge,
-	callbackArg = "MinimapInfo",
-	alignment = 3,
-}
-
 function module:ShowMinimapHelpInfo()
 	Minimap:HookScript("OnEnter", function()
 		if not NDuiADB["Help"]["MinimapInfo"] then
-			HelpTip:Show(MinimapCluster, minimapInfo)
+			B:ShowHelpTip(MinimapCluster, L["MinimapHelp"], "LEFT", -20, -50, nil, "MinimapInfo")
 		end
 	end)
 end

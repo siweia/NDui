@@ -153,23 +153,12 @@ function M:VersionCheck_Compare(new, old)
 	end
 end
 
-function M:VersionCheck_Create(text)
-	if not NDuiADB["VersionCheck"] then return end
-
-	HelpTip:Show(ChatFrame1, {
-		text = text,
-		buttonStyle = HelpTip.ButtonStyle.Okay,
-		targetPoint = HelpTip.Point.TopEdgeCenter,
-		offsetY = 10,
-	})
-end
-
 local hasChecked
 function M:VersionCheck_Initial()
 	if not hasChecked then
 		if M:VersionCheck_Compare(NDuiADB["DetectVersion"], DB.Version) == "IsNew" then
 			local release = gsub(NDuiADB["DetectVersion"], "(%d+)$", "0")
-			M:VersionCheck_Create(format(L["Outdated NDui"], release))
+			B:ShowHelpTip(ChatFrame1, format(L["Outdated NDui"], release), "TOP", 0, 70, nil, "Version")
 		end
 
 		hasChecked = true
