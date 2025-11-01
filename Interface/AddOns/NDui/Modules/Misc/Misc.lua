@@ -83,30 +83,6 @@ function M:OnLogin()
 			end
 		end)
 	end
-
-	-- Fix blizz error
-	MAIN_MENU_MICRO_ALERT_PRIORITY = MAIN_MENU_MICRO_ALERT_PRIORITY or {}
-
-	-- Fix blizz bug in addon list
-	local _AddonTooltip_Update = AddonTooltip_Update
-	function AddonTooltip_Update(owner)
-		if not owner then return end
-		if owner:GetID() < 1 then return end
-		_AddonTooltip_Update(owner)
-	end
-
-	-- Fix MasterLooterFrame anchor issue
-	hooksecurefunc(MasterLooterFrame, "Show", function(self)
-		self:ClearAllPoints()
-	end)
-
-	-- Fix inspect error in wrath beta
-	if not InspectTalentFrameSpentPoints then
-		InspectTalentFrameSpentPoints = CreateFrame("Frame")
-	end
-	if not BrowseBidText then
-		BrowseBidText = CreateFrame("Frame")
-	end
 end
 
 -- Get Naked
@@ -368,64 +344,6 @@ do
 
 		_MerchantItemButton_OnModifiedClick(self, ...)
 	end
-end
-
--- Fix Drag Collections taint
-do
-	local done
-	local function setupMisc(event, addon)
-		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
-			CollectionsJournal:HookScript("OnShow", function()
-				if not done then
-					if InCombatLockdown() then
-						B:RegisterEvent("PLAYER_REGEN_ENABLED", setupMisc)
-					else
-						B.CreateMF(CollectionsJournal)
-					end
-					done = true
-				end
-			end)
-			B:UnregisterEvent(event, setupMisc)
-		elseif event == "PLAYER_REGEN_ENABLED" then
-			B.CreateMF(CollectionsJournal)
-			B:UnregisterEvent(event, setupMisc)
-		end
-	end
-
-	B:RegisterEvent("ADDON_LOADED", setupMisc)
-end
-
--- Select target when click on raid units
-do
-	local function fixRaidGroupButton()
-		for i = 1, 40 do
-			local bu = _G["RaidGroupButton"..i]
-			if bu and bu.unit and not bu.clickFixed then
-				bu:SetAttribute("type", "target")
-				bu:SetAttribute("unit", bu.unit)
-
-				bu.clickFixed = true
-			end
-		end
-	end
-
-	local function setupMisc(event, addon)
-		if event == "ADDON_LOADED" and addon == "Blizzard_RaidUI" then
-			if not InCombatLockdown() then
-				fixRaidGroupButton()
-			else
-				B:RegisterEvent("PLAYER_REGEN_ENABLED", setupMisc)
-			end
-			B:UnregisterEvent(event, setupMisc)
-		elseif event == "PLAYER_REGEN_ENABLED" then
-			if RaidGroupButton1 and RaidGroupButton1:GetAttribute("type") ~= "target" then
-				fixRaidGroupButton()
-				B:UnregisterEvent(event, setupMisc)
-			end
-		end
-	end
-
-	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
 -- Buttons to enhance popup menu
@@ -789,18 +707,5 @@ do
 			HelpTip:Show(self, altPowerInfo)
 			B:ShowHelpTip(self, L["Drag AltBar Tip"], "RIGHT", 20, 0, nil, "AltPower")
 		end
-	end)
-end
-
--- Fix errors in mop
-TalentMicroButtonAlert.MicroButton = CreateFrame("Frame")
-TalentMicroButtonAlert.MicroButton.EvaluateAlertVisibility = function() end
-
--- Unregister talent event
-if PlayerTalentFrame then
-	PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-else
-	hooksecurefunc("TalentFrame_LoadUI", function()
-		PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 	end)
 end
