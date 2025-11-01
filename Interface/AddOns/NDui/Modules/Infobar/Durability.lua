@@ -14,6 +14,7 @@ local C_Timer_After, IsShiftKeyDown = C_Timer.After, IsShiftKeyDown
 
 local repairCostString = gsub(REPAIR_COST, HEADER_COLON, ":")
 local lowDurabilityCap = .25
+local needToRepair
 
 local localSlots = {
 	[1] = {1, INVTYPE_HEAD, 1000},
@@ -28,8 +29,6 @@ local localSlots = {
 	[10] = {17, INVTYPE_WEAPONOFFHAND, 1000},
 	[11] = {18, INVTYPE_RANGED, 1000}
 }
-
-local lastClick = 0
 
 local function sortSlots(a, b)
 	if a and b then
@@ -74,10 +73,6 @@ info.eventList = {
 	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD"
 }
 
-local function SaveClickTime()
-	lastClick = GetTime()
-end
-
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
 		self:UnregisterEvent(event)
@@ -90,10 +85,12 @@ info.onEvent = function(self, event)
 		self.text:SetText(L["D"]..": "..DB.MyColor..NONE)
 	end
 
-	if isLowDurability() and ((lastClick == 0) or (GetTime() - lastClick > 60*30)) then -- only half an hour
-		B:ShowHelpTip(info, L["Low Durability"], "TOP", 0, 20, SaveClickTime, "Durability")
+	if isLowDurability() then
+		B:ShowHelpTip(info, L["Low Durability"], "TOP", 0, 20, nil, "Durability")
+		needToRepair = true
 	else
 		B:HideHelpTip("Durability")
+		needToRepair = false
 	end
 end
 
@@ -206,3 +203,20 @@ local function merchantShow()
 	B:RegisterEvent("MERCHANT_CLOSED", merchantClose)
 end
 B:RegisterEvent("MERCHANT_SHOW", merchantShow)
+
+local repairGossipIDs = {
+	[37005] = true, -- 基维斯
+	[44982] = true, -- 里弗斯
+}
+B:RegisterEvent("GOSSIP_SHOW", function()
+	if IsShiftKeyDown() then return end
+	if not needToRepair then return end
+
+	local options = C_GossipInfo.GetOptions()
+	for i = 1, #options do
+		local option = options[i]
+		if repairGossipIDs[option.gossipOptionID] then
+			C_GossipInfo.SelectOption(option.gossipOptionID)
+		end
+	end
+end)
