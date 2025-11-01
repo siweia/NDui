@@ -447,12 +447,12 @@ function UF:UpdateQuestUnit(_, unit)
 
 	if questProgress then
 		self.questCount:SetText(questProgress)
-		self.questIcon:SetAtlas(DB.objectTex)
+		--self.questIcon:SetAtlas(DB.objectTex)
 		self.questIcon:Show()
 	else
 		self.questCount:SetText("")
 		if isLootQuest then
-			self.questIcon:SetAtlas(DB.questTex)
+			--self.questIcon:SetAtlas(DB.questTex)
 			self.questIcon:Show()
 		else
 			self.questIcon:Hide()
@@ -474,7 +474,7 @@ function UF:AddQuestIcon(self)
 
 	self.questIcon = qicon
 	self.questCount = count
-	--self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
+	self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
 end
 
 -- Unit classification
@@ -911,8 +911,7 @@ function UF:PostUpdatePlates(event, unit)
 	if event ~= "NAME_PLATE_UNIT_REMOVED" then
 		UF.UpdateUnitPower(self)
 		UF.UpdateTargetChange(self)
-		--UF.UpdateQuestUnit(self, event, unit)
-		UF.UpdateQuestIndicator(self)
+		UF.UpdateQuestUnit(self, event, unit)
 		UF.UpdateUnitClassify(self, unit)
 		UF:UpdateTargetClassPower()
 
