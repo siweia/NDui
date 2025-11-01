@@ -156,3 +156,21 @@ end
 -- Fix errors in mop
 TalentMicroButtonAlert.MicroButton = CreateFrame("Frame")
 TalentMicroButtonAlert.MicroButton.EvaluateAlertVisibility = function() end
+
+-- Fix gossip icon desaturation
+local function handleQuestGossip(button)
+	local icon = button.Icon
+	if not icon then return end
+
+	icon:SetDesaturated(false)
+
+	local data = button:GetElementData()
+	local info = data and data.info
+	if info and not info.isComplete then
+		icon:SetDesaturated(true)
+	end
+end
+
+hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, "Update", function(self)
+	self:ForEachFrame(handleQuestGossip)
+end)
