@@ -239,9 +239,17 @@ end
 hooksecurefunc("ChatEdit_CustomTabPressed", module.UpdateTabChannelSwitch)
 
 -- Quick Scroll
+local chatScrollInfo = {
+	text = L["ChatScrollHelp"],
+	buttonStyle = HelpTip.ButtonStyle.GotIt,
+	targetPoint = HelpTip.Point.RightEdgeCenter,
+	onAcknowledgeCallback = B.HelpInfoAcknowledge,
+	callbackArg = "ChatScroll",
+}
+
 function module:QuickMouseScroll(dir)
 	if not NDuiADB["Help"]["ChatScroll"] then
-		B:ShowHelpTip(ChatFrame1, L["ChatScrollHelp"], "RIGHT", 20, 0, nil, "ChatScroll")
+		HelpTip:Show(ChatFrame1, chatScrollInfo)
 	end
 
 	if dir > 0 then

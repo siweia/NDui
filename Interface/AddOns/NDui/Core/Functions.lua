@@ -396,53 +396,8 @@ end
 -- UI widgets
 do
 	-- HelpTip
-	function B:HelpInfoAcknowledge()
-		self.__owner:Hide()
-		NDuiADB["Help"][self.__arg] = true
-		if self.__callback then self.__callback() end
-	end
-
-	local helpTipTable = {}
-	local pointInfo = {
-		["TOP"] = {relF = "BOTTOM", degree = 0, arrowX = 0, arrowY = -5, glowX = 0, glowY = -4},
-		["BOTTOM"] = {relF = "TOP", degree = 180, arrowX = 0, arrowY = 5, glowX = 0, glowY = 4},
-		["LEFT"] = {relF = "RIGHT", degree = 90, arrowX = 5, arrowY = 0, glowX = 4, glowY = 0},
-		["RIGHT"] = {relF = "LEFT", degree = 270, arrowX = -5, arrowY = 0, glowX = -4, glowY = 0},
-	}
-
-	function B:ShowHelpTip(parent, text, targetPoint, offsetX, offsetY, callback, callbackArg, arrowX, arrowY)
-		local info = helpTipTable[callbackArg]
-		if not info then
-			local anchorInfo = pointInfo[targetPoint]
-			info = CreateFrame("Frame", nil, parent, "MicroButtonAlertTemplate")
-			info:SetPoint(anchorInfo.relF, parent, targetPoint, offsetX or 0, offsetY or 0)
-			info.Text:SetText(text.."|n|n|n")
-			info.CloseButton:Hide()
-			info.okay = B.CreateButton(info, 110, 22, L["GotIt"], 14)
-			info.okay:SetPoint("BOTTOM", 0, 12)
-			info.okay.__owner = info
-			info.okay.__arg = callbackArg
-			info.okay.__callback = callback
-			info.okay:SetScript("OnClick", B.HelpInfoAcknowledge)
-
-			info.Arrow:ClearAllPoints()
-			info.Arrow:SetPoint("CENTER", info, anchorInfo.relF, arrowX or anchorInfo.arrowX, arrowY or anchorInfo.arrowY)
-
-			info.Arrow.Glow:ClearAllPoints()
-			info.Arrow.Glow:SetPoint("CENTER", info.Arrow.Arrow, "CENTER", anchorInfo.glowX, anchorInfo.glowY)
-			info.Arrow.Glow:SetRotation(rad(anchorInfo.degree))
-			info.Arrow.Arrow:SetRotation(rad(anchorInfo.degree))
-
-			helpTipTable[callbackArg] = info
-		end
-		info:Show()
-	end
-
-	function B:HideHelpTip(callbackArg)
-		local info = helpTipTable[callbackArg]
-		if info then
-			info:Hide()
-		end
+	function B.HelpInfoAcknowledge(callbackArg)
+		NDuiADB["Help"][callbackArg] = true
 	end
 
 	-- Dropdown menu
