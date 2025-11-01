@@ -511,6 +511,7 @@ G.DefaultSettings = {
 		FasterLoot = true,
 		AutoQuest = false,
 		IgnoreQuestNPC = {},
+		PetFilter = true,
 		QuestNotification = false,
 		QuestProgress = false,
 		OnlyCompleteRing = false,
@@ -1410,6 +1411,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "Autoequip", L["AutoEquip"].."*", true, nil, nil, L["AutoEquipTip"]},
 		{1, "Misc", "Screenshot", L["Auto ScreenShot"].."*", nil, nil, updateScreenShot},
 		{1, "Misc", "BlizzMover", L["BlizzMover"], true, nil, nil, L["BlizzMoverTip"]},
+		{1, "Misc", "PetFilter", L["Show PetFilter"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
