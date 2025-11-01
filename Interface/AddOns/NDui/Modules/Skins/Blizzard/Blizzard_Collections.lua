@@ -63,6 +63,8 @@ C.themes["Blizzard_Collections"] = function()
 	MountJournal.MountDisplay.ShadowOverlay:Hide()
 	PetJournal.LeftInset:Hide()
 	PetJournal.RightInset:Hide()
+	PetJournal.PetCardInset:Hide()
+	PetJournal.loadoutBorder:Hide()
 
 	B.StripTextures(MountJournal.MountCount)
 	B.CreateBDFrame(MountJournal.MountCount, .25)
