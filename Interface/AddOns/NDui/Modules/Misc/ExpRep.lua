@@ -51,15 +51,6 @@ function M:ExpBar_UpdateTooltip()
 		end
 	end
 
-	if DB.MyClass == "HUNTER" then
-		local currXP, nextXP = GetPetExperience()
-		if nextXP ~= 0 then
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(PET.." Lv"..UnitLevel("pet"), 0,.6,1)
-			GameTooltip:AddDoubleLine(XP..":", currXP.." / "..nextXP.." ("..floor(currXP/nextXP*100).."%)", .6,.8,1, 1,1,1)
-		end
-	end
-
 	if GetWatchedFactionInfo() then
 		local name, standing, barMin, barMax, value = GetWatchedFactionInfo()
 		--[[if standing == MAX_REPUTATION_REACTION then
