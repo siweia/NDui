@@ -28,7 +28,7 @@ module:RegisterDebuff(TIER, INSTANCE, BOSS, 1227784) -- 奥术暴怒
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1237212) -- 贯体束丝
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1237307) -- 巢穴编织
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1243771) -- 奥能黏液
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 1247054) -- 超能灌注
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 1247045) -- 超能灌注
 
 BOSS = 2685 -- 缚魂者娜欣达利
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1226827) -- 碎魂法球
@@ -47,7 +47,7 @@ BOSS = 2687 -- 熔炉编织者阿拉兹
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1228188) -- 沉默风暴
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1228214) -- 星界收割
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1228506) -- 非凡力量
-module:RegisterDebuff(TIER, INSTANCE, BOSS, 1232275) -- 奥术抹消
+module:RegisterDebuff(TIER, INSTANCE, BOSS, 1232775) -- 奥术抹消
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1232412) -- 聚焦之虹
 -- module:RegisterDebuff(TIER, INSTANCE, BOSS, 1233979) -- 星界收割
 module:RegisterDebuff(TIER, INSTANCE, BOSS, 1234324) -- 光子轰击
