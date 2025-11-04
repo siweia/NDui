@@ -97,41 +97,19 @@ function M:IgnoreNote()
 		callbackArg = "IgnoreNote",
 	}
 
-	if DB.isNewPatch then
-		local ignoreWindow = FriendsFrame.IgnoreListWindow
-		if ignoreWindow then
-			ignoreWindow:HookScript("OnShow", function(frame)
-				if not NDuiADB["Help"]["IgnoreNote"] then
-					HelpTip:Show(frame, ignoreHelpInfo)
-				end
-			end)
-
-			hooksecurefunc(ignoreWindow.ScrollBox, "Update", function(self)
-				self:ForEachFrame(M.IgnoreButton_Hook)
-			end)
-
-			ignoreWindow.UnignorePlayerButton:HookScript("OnClick", function()
-				local name = C_FriendList.GetIgnoreName(C_FriendList.GetSelectedIgnore())
-				if name then
-					if not strmatch(name, "-") then
-						name = name.."-"..DB.MyRealm
-					end
-					NDuiADB["IgnoreNotes"][name] = nil
-				end
-			end)
-		end
-	else
-		IgnoreListFrame:HookScript("OnShow", function(frame)
+	local ignoreWindow = FriendsFrame.IgnoreListWindow
+	if ignoreWindow then
+		ignoreWindow:HookScript("OnShow", function(frame)
 			if not NDuiADB["Help"]["IgnoreNote"] then
 				HelpTip:Show(frame, ignoreHelpInfo)
 			end
 		end)
 
-		hooksecurefunc(IgnoreListFrame.ScrollBox, "Update", function(self)
+		hooksecurefunc(ignoreWindow.ScrollBox, "Update", function(self)
 			self:ForEachFrame(M.IgnoreButton_Hook)
 		end)
 
-		FriendsFrameUnsquelchButton:HookScript("OnClick", function()
+		ignoreWindow.UnignorePlayerButton:HookScript("OnClick", function()
 			local name = C_FriendList.GetIgnoreName(C_FriendList.GetSelectedIgnore())
 			if name then
 				if not strmatch(name, "-") then
