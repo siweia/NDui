@@ -229,18 +229,17 @@ function module:CreateBagTab(settings, columns, account)
 	bagTab.UpdateAnchor = updateBagBar
 	bagTab:UpdateAnchor()
 
-	if account then
-		local purchaseButton = CreateFrame("Button", "NDui_BankPurchaseButton", bagTab, "InsecureActionButtonTemplate")
-		purchaseButton:SetSize(120, 22)
-		purchaseButton:SetPoint("TOP", bagTab, "BOTTOM", 0, -5)
-		B.CreateFS(purchaseButton, 14, PURCHASE, "info")
-		B.Reskin(purchaseButton)
-		purchaseButton:Hide()
+	local purchaseButton = CreateFrame("Button", "NDui_"..account.."PurchaseButton", bagTab, "InsecureActionButtonTemplate")
+	purchaseButton:SetSize(120, 22)
+	purchaseButton:SetPoint("TOP", bagTab, "BOTTOM", 0, -5)
+	B.CreateFS(purchaseButton, 14, PURCHASE, "info")
+	B.Reskin(purchaseButton)
+	purchaseButton:Hide()
 
-		purchaseButton:RegisterForClicks("AnyUp", "AnyDown")
-		purchaseButton:SetAttribute("type", "click")
-		purchaseButton:SetAttribute("clickbutton", _G.BankFrame.BankPanel.PurchasePrompt.TabCostFrame.PurchaseButton)
-	end
+	purchaseButton:RegisterForClicks("AnyUp", "AnyDown")
+	purchaseButton:SetAttribute("type", "click")
+	purchaseButton:SetAttribute("clickbutton", _G.BankPanel.PurchasePrompt.TabCostFrame.PurchaseButton)
+	bagTab.purchaseButton = purchaseButton
 
 	self.BagBar = bagTab
 end
@@ -849,6 +848,13 @@ function module:CloseBags()
 	end
 end
 
+function module:GetPurchaseButton()
+	local panel = _G.BankPanel
+	local prompt = panel and panel.PurchasePrompt
+	local cost = prompt and prompt.TabCostFrame
+	return cost and cost.PurchaseButton
+end
+
 function module:OnLogin()
 	if not C.db["Bags"]["Enable"] then return end
 
@@ -963,6 +969,11 @@ function module:OnLogin()
 		BankFrame.BankPanel:Hide()
 		self:GetContainer("Bank"):Hide()
 		self:GetContainer("Account"):Hide()
+
+		local purchaseButton = module:GetPurchaseButton()
+		if purchaseButton then
+			purchaseButton:SetAttribute("overrideBankType", nil)
+		end
 	end
 
 	local MyButton = Backpack:GetItemButtonClass()
@@ -1288,12 +1299,12 @@ function module:OnLogin()
 			buttons[6] = module.CreateJunkButton(self)
 			buttons[7] = module.CreateDeleteButton(self)
 		elseif name == "Bank" then
-			module.CreateBagTab(self, settings, 6)
+			module.CreateBagTab(self, settings, 6, "Bank")
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[4] = module.CreateBankDeposit(self)
 			buttons[5] = module.CreateAccountBankButton(self, f)
 		elseif name == "Account" then
-			module.CreateBagTab(self, settings, 5, "account")
+			module.CreateBagTab(self, settings, 5, "Account")
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[4] = module.CreateAccountBankDeposit(self)
 			buttons[5] = module.CreateBankButton(self, f)
@@ -1420,12 +1431,21 @@ function module:OnLogin()
 
 	-- Bank frame paging
 	hooksecurefunc(BankFrame.BankPanel, "SetBankType", function(self, bankType)
-		module.Bags:GetContainer("Bank"):SetShown(bankType == CHAR_BANK_TYPE)
-		module.Bags:GetContainer("Account"):SetShown(bankType == ACCOUNT_BANK_TYPE)
-		module:UpdateAllBags()
-		if _G["NDui_BankPurchaseButton"] then
-			_G["NDui_BankPurchaseButton"]:SetShown(bankType == ACCOUNT_BANK_TYPE and C_Bank.CanPurchaseBankTab(ACCOUNT_BANK_TYPE))
+		local bank = module.Bags:GetContainer("Bank")
+		if bank then
+			bank:SetShown(bankType == CHAR_BANK_TYPE)
+			bank.BagBar.purchaseButton:SetShown(C_Bank.CanPurchaseBankTab(bankType))
 		end
+		local account = module.Bags:GetContainer("Account")
+		if account then
+			account:SetShown(bankType == ACCOUNT_BANK_TYPE)
+			account.BagBar.purchaseButton:SetShown(C_Bank.CanPurchaseBankTab(bankType))
+		end
+		local purchaseButton = module:GetPurchaseButton()
+		if purchaseButton then
+			purchaseButton:SetAttribute("overrideBankType", bankType)
+		end
+		module:UpdateAllBags()
 	end)
 
 	-- Delay updates for data jam
