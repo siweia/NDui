@@ -53,7 +53,11 @@ tinsert(C.defaultThemes, function()
 
 		B.StripTextures(frame)
 		for j = 1, 4 do
-			B.Reskin(_G["StaticPopup"..i.."Button"..j])
+			local button = _G["StaticPopup"..i.."Button"..j]
+			if button then
+				B.StripTextures(button)
+				B.Reskin(button)
+			end
 		end
 		B.SetBD(frame)
 		B.ReskinClose(close)
