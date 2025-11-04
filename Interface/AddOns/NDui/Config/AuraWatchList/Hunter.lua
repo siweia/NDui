@@ -17,10 +17,8 @@ local list = {
 	},
 	["Target Aura"] = {		-- 目标光环组
 		{AuraID = 1130, UnitID = "target"}, -- 猎人印记
-		{AuraID = 88691, UnitID = "target"}, -- 死亡标记
 		{AuraID = 1513, UnitID = "target", Caster = "player"},		-- 恐吓野兽
 		{AuraID = 1978, UnitID = "target", Caster = "player"},		-- 毒蛇钉刺
-		{AuraID = 88453, UnitID = "target", Caster = "player"},		-- 毒蛇钉刺
 		{AuraID = 19503, UnitID = "target", Caster = "player"},		-- 驱散射击
 		{AuraID = 5116, UnitID = "target", Caster = "player"},		-- 震荡射击
 		{AuraID = 3674, UnitID = "target", Caster = "player"},		-- 黑箭
@@ -30,7 +28,6 @@ local list = {
 		{AuraID = 82654, UnitID = "target", Caster = "player"},		-- 蜘蛛毒刺
 		{AuraID = 5116, UnitID = "target", Caster = "player"},		-- 晕眩
 		{AuraID = 20736, UnitID = "target", Caster = "player"},		-- 扰乱射击
-		{AuraID = 2974, UnitID = "target", Caster = "player"},		-- 摔绊
 		{AuraID = 24394, UnitID = "target", Caster = "pet"},		-- 胁迫
 	},
 	["Special Aura"] = {	-- 玩家重要光环组
@@ -40,7 +37,6 @@ local list = {
 		{AuraID = 19577, UnitID = "player"},	-- 胁迫
 		{AuraID = 53220, UnitID = "player"},	-- 强化稳固射击
 		{AuraID = 56453, UnitID = "player"},	-- 荷枪实弹
-		{AuraID = 94007, UnitID = "player"},	-- 血性大发
 		{AuraID = 82921, UnitID = "player"},	-- 狂轰滥炸
 		{AuraID = 19263, UnitID = "player"},	-- 威慑
 		{AuraID = 64420, UnitID = "player"},	-- 狙击训练
