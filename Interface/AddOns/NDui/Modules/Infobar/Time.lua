@@ -116,7 +116,7 @@ local region = GetCVar("portal")
 local legionZoneTime = {
 	["EU"] = 1565168400, -- CN-16
 	["US"] = 1565197200, -- CN-8
-	["CN"] = 1565226000, -- CN time 8/8/2019 09:00 [1]
+	["CN"] = 1762450200, -- CN time 11/7/2019 01:30 [1]
 }
 local bfaZoneTime = {
 	["CN"] = 1546743600, -- CN time 1/6/2019 11:00 [1]
