@@ -114,9 +114,9 @@ local keyName = C_CurrencyInfo.GetCurrencyInfo(3028).name
 -- Check Invasion Status
 local region = GetCVar("portal")
 local legionZoneTime = {
-	["EU"] = 1565168400, -- CN-16
-	["US"] = 1565197200, -- CN-8
-	["CN"] = 1762450200, -- CN time 11/7/2019 01:30 [1]
+	["EU"] = 1762434000, -- 2025-11-06 13:00 UTC+0
+	["US"] = 1762421400, -- 2025-11-06 01:30 UTC-8
+	["CN"] = 1762450200, -- CN time 11/7/2025 01:30 [1]
 }
 local bfaZoneTime = {
 	["CN"] = 1546743600, -- CN time 1/6/2019 11:00 [1]
