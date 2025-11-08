@@ -10,7 +10,7 @@ local function SetupInstance(instance)
 		instance.wasHidden = true
 	end
 	-- reset texture if using Details default texture
-	local needReset = instance.row_info.texture == "Details Hyanda" -- details change it from 'BantoBar'
+	local needReset = instance.row_info.texture == "You Are the Best!" -- details change it from 'BantoBar'
 	instance:ChangeSkin("Minimalistic")
 	instance:InstanceWallpaper(false)
 	instance:DesaturateMenu(true)
