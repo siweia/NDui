@@ -483,7 +483,7 @@ function module:OnLogin()
 	module:ChatCopy()
 	module:UrlCopy()
 	module:WhisperInvite()
-	module:ToggleLanguageFilter()
+	--module:ToggleLanguageFilter()
 
 	-- Lock chatframe
 	if C.db["Chat"]["Lock"] then
