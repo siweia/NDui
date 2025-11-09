@@ -190,8 +190,6 @@ DB.ReminderBuffs = {
 		{	spells = {	-- 奥术智慧
 				[1459] = true,	-- 奥术光辉
 				[8096] = true,  -- 智力卷轴
-				[79058] = true, -- 奥术智慧
-				[61024] = true, -- 达拉然智慧
 				[61316] = true, -- 达拉然光辉
 				--[46302] = true, -- 基鲁的胜利之歌
 			},
@@ -228,9 +226,10 @@ DB.ReminderBuffs = {
 			pvp = true,
 		},
 		{	spells = {	-- 心灵之火
-				[48168] = true,
+				[588] = true,
+				[73413] = true,
 			},
-			depend = 48168,
+			depend = 588,
 			combat = true,
 			instance = true,
 			pvp = true,
@@ -255,9 +254,7 @@ DB.ReminderBuffs = {
 	WARRIOR = {
 		{	spells = {
 				[6673] = true,	-- 战斗怒吼
-				[8076] = true,  -- 大地之力
 				[57330] = true, -- 寒冬号角
-				[93435] = true, -- 勇气咆哮		
 			},
 			texture = GetSpellTexture(6673),
 			depend = 6673,
@@ -288,18 +285,10 @@ DB.ReminderBuffs = {
 	HUNTER = {
 		{	spells = {	-- 雄鹰守护
 				[13165] = true,
-				[61846] = true, -- 龙鹰
+				[5118] = true, -- 猎豹守护
 				[109260] = true, -- 铁鹰
 			},
 			depend = 13165,
-			combat = true,
-			instance = true,
-			pvp = true,
-		},
-		{	spells = {	--- 强击光环
-				[19506] = true,
-			},
-			depend = 19506,
 			combat = true,
 			instance = true,
 			pvp = true,
@@ -316,9 +305,7 @@ DB.ReminderBuffs = {
 	DEATHKNIGHT = {
 		{	spells = {
 				[57330] = true,	-- 寒冬号角
-				[8076] = true,  -- 大地之力
 				[6673] = true, 	-- 战斗怒吼
-				[93435] = true, -- 勇气咆哮
 			},
 			texture = GetSpellTexture(57330),
 			depend = 57330,
