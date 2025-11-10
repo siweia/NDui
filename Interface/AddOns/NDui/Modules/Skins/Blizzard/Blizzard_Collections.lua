@@ -575,7 +575,7 @@ C.themes["Blizzard_Collections"] = function()
 
 	local specButton = WardrobeTransmogFrame.SpecDropdown
 	if specButton then
-		B.StripTextures(specButton)
+		B.StripTextures(specButton, 0)
 		B.ReskinArrow(specButton, "down")
 		specButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
 	end

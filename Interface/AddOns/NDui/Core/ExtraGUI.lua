@@ -134,12 +134,11 @@ function G:SetupRaidDebuffs(parent)
 	--AddNewDungeon(dungeons, 1182) -- 通灵战潮
 	--AddNewDungeon(dungeons, 1184) -- 塞兹仙林的迷雾
 
-	-- isNewPatch, remove in future
-	AddNewDungeon(dungeons, 1298) -- 水闸行动
-	AddNewDungeon(dungeons, 1187) -- 伤逝剧场
-	AddNewDungeon(dungeons, 1178) -- 麦卡贡行动
-	AddNewDungeon(dungeons, 1012) -- 暴富矿区！！
+	--AddNewDungeon(dungeons, 1187) -- 伤逝剧场
+	--AddNewDungeon(dungeons, 1178) -- 麦卡贡行动
+	--AddNewDungeon(dungeons, 1012) -- 暴富矿区！！
 
+	AddNewDungeon(dungeons, 1298) -- 水闸行动
 	AddNewDungeon(dungeons, 1303) -- 奥尔达尼生态圆顶
 	AddNewDungeon(dungeons, 1185) -- 赎罪大厅
 	AddNewDungeon(dungeons, 1194) -- 集市
