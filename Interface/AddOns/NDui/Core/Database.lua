@@ -187,11 +187,10 @@ DB.BuffList = {
 -- Reminder Buffs Checklist
 DB.ReminderBuffs = {
 	MAGE = {
-		{	spells = {	-- 奥术智慧
+		{	spells = {
 				[1459] = true,	-- 奥术光辉
-				[8096] = true,  -- 智力卷轴
 				[61316] = true, -- 达拉然光辉
-				--[46302] = true, -- 基鲁的胜利之歌
+				[126309] = true, -- 静水，猎人宠物
 			},
 			texture = GetSpellTexture(1459),
 			depend = 1459,
@@ -211,13 +210,13 @@ DB.ReminderBuffs = {
 		},
 	},
 	PRIEST = {
-		{	spells = {	-- 真言术耐
-				[21562] = true, -- 坚韧祷言
-				[8099] = true,  -- 耐力卷轴
+		{	spells = {
+				[21562] = true, -- 真言术：韧
 				[469] = true,	-- 命令怒吼
-				[6307] = true,   -- 血之契印
-				[90364] = true,  -- 其拉虫群坚韧
-				[72590] = true,  -- 坚韧
+				--[6307] = true,   -- 血之契印
+				[90364] = true,  -- 其拉虫群坚韧，猎人宠物
+				[109773] = true,  -- 黑暗意图
+				[111923] = true,  -- 坚韧
 			},
 			texture = GetSpellTexture(21562),
 			depend = 1243,
@@ -236,18 +235,16 @@ DB.ReminderBuffs = {
 		},
 	},
 	DRUID = {
-		{	spells = {	-- 野性印记
-				[1126] = true,
+		{	spells = {
+				[1126] = true,	 -- 野性印记
+				[20217] = true,  -- 王者祝福
+				[90363] = true,  -- 页岩蛛之拥，猎人宠物
+				[117667] = true, -- 帝王传承
+				[72586] = true,  -- 遗忘王者祝福
 			},
 			depend = 1126,
 			combat = true,
 			instance = true,
-			pvp = true,
-		},
-		{	spells = {	--- 荆棘术
-				[467] = true,
-			},
-			depend = 467,
 			pvp = true,
 		},
 	},
@@ -255,6 +252,7 @@ DB.ReminderBuffs = {
 		{	spells = {
 				[6673] = true,	-- 战斗怒吼
 				[57330] = true, -- 寒冬号角
+				[19506] = true, -- 强击光环
 			},
 			texture = GetSpellTexture(6673),
 			depend = 6673,
@@ -267,10 +265,11 @@ DB.ReminderBuffs = {
 		},
 		{	spells = {
 				[469] = true,	-- 命令怒吼
-				[6307] = true,   -- 血之契印
-				[90364] = true,  -- 其拉虫群坚韧
-				[72590] = true,  -- 坚韧
-				[21562] = true,  -- 真言术：韧	
+				[21562] = true, -- 真言术：韧
+				--[6307] = true,   -- 血之契印
+				[90364] = true,  -- 其拉虫群坚韧，猎人宠物
+				[109773] = true,  -- 黑暗意图
+				[111923] = true,  -- 坚韧
 			},
 			texture = GetSpellTexture(469),
 			depend = 469,
@@ -283,9 +282,9 @@ DB.ReminderBuffs = {
 		},
 	},
 	HUNTER = {
-		{	spells = {	-- 雄鹰守护
-				[13165] = true,
-				[5118] = true, -- 猎豹守护
+		{	spells = {
+				[13165] = true,  -- 雄鹰守护
+				[5118] = true,   -- 猎豹守护
 				[109260] = true, -- 铁鹰
 			},
 			depend = 13165,
@@ -299,13 +298,16 @@ DB.ReminderBuffs = {
 				[109773] = true,	-- 黑暗意图
 			},
 			depend = 109773,
+			combat = true,
 			instance = true,
+			pvp = true,
 		},
 	},
 	DEATHKNIGHT = {
 		{	spells = {
 				[57330] = true,	-- 寒冬号角
 				[6673] = true, 	-- 战斗怒吼
+				[19506] = true, -- 强击光环
 			},
 			texture = GetSpellTexture(57330),
 			depend = 57330,
@@ -318,8 +320,39 @@ DB.ReminderBuffs = {
 		{	spells = {	-- 正义之怒
 				[25780] = true,
 			},
-			depend = 20925,
+			depend = 84839, -- 复仇之力
 			instance = true,
+		},
+		{	spells = {
+				[19740] = true,  -- 力量祝福
+				[116956] = true, -- 风之优雅
+				[93435] = true,  -- 勇气咆哮，猎人宠物
+				[128997] = true, -- 灵魂兽祝福，猎人宠物
+			},
+			texture = GetSpellTexture(19740),
+			depend = 19740,
+			gemini = {
+				[GetSpellInfo(20217)] = true, -- 王者祝福
+			},
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+		{	spells = {
+				[117667] = true, -- 帝王传承
+				[1126] = true,   -- 野性印记
+				[20217] = true,  -- 王者祝福
+				[90363] = true,  -- 页岩蛛之拥，猎人宠物
+				[72586] = true,  -- 遗忘王者祝福
+			},
+			texture = GetSpellTexture(20217),
+			depend = 20217,
+			gemini = {
+				[GetSpellInfo(19740)] = true, -- 力量祝福
+			},
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
 	SHAMAN = {
@@ -329,6 +362,37 @@ DB.ReminderBuffs = {
 			},
 			depend = 52127,
 			instance = true,
+		},
+	},
+	MONK = {
+		{	spells = {
+				[116781] = true, -- 白虎传承
+				[24932] = true,  -- 兽群领袖
+				[1459] = true,   -- 奥术光辉
+				[61316] = true,  -- 达拉然光辉
+				[126309] = true, -- 静水，猎人宠物
+				[24604] = true,  -- 狂怒之嚎，猎人宠物
+				[90309] = true,  -- 惊人咆哮，猎人宠物
+				[126373] = true, -- 无畏之嚎，猎人宠物
+			},
+			texture = GetSpellTexture(116781),
+			depend = 116781,
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+		{	spells = {
+				[117667] = true, -- 帝王传承
+				[1126] = true,   -- 野性印记
+				[20217] = true,  -- 王者祝福
+				[90363] = true,  -- 页岩蛛之拥，猎人宠物
+				[72586] = true,  -- 遗忘王者祝福
+			},
+			texture = GetSpellTexture(117667),
+			depend = 117667,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
 }
