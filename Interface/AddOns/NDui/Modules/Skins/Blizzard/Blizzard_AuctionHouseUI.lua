@@ -121,6 +121,7 @@ local function reskinItemDisplay(itemDisplay, needInit)
 		itemButton.CircleMask:Hide()
 		itemButton.useCircularIconBorder = true
 	end
+	B.StripTextures(itemButton)
 	itemButton.bg = B.ReskinIcon(itemButton.Icon)
 	B.ReskinIconBorder(itemButton.IconBorder, needInit)
 
@@ -176,6 +177,11 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.Reskin(itemBuyFrame.BuyoutFrame.BuyoutButton)
 	reskinItemDisplay(itemBuyFrame.ItemDisplay)
 	reskinItemList(itemBuyFrame.ItemList, true)
+	if BidAmountGold then
+		B.ReskinInput(BidAmountGold)
+		B.ReskinInput(BidAmountSilver)
+		B.ReskinInput(BidAmountCopper)
+	end
 
 	local commBuyFrame = AuctionHouseFrame.CommoditiesBuyFrame
 	B.Reskin(commBuyFrame.BackButton)

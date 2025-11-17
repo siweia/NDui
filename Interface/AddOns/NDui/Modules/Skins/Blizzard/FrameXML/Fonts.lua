@@ -130,6 +130,11 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(ChatBubbleFont, 13)
 	ReskinFont(GameFontNormal)
 	ReskinFont(GameFontNormalHuge2)
+	ReskinFont(PriceFont)
+	ReskinFont(PriceFontWhite)
+	ReskinFont(PriceFontGray)
+	ReskinFont(PriceFontGreen)
+	ReskinFont(PriceFontRed)
 
 	-- Refont RaidFrame Health
 	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
