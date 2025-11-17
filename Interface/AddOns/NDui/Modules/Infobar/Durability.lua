@@ -73,6 +73,11 @@ info.eventList = {
 	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD"
 }
 
+local lastClick = 0
+local function SaveClickTime()
+	lastClick = GetTime()
+end
+
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
 		self:UnregisterEvent(event)
@@ -86,7 +91,9 @@ info.onEvent = function(self, event)
 	end
 
 	if isLowDurability() then
-		B:ShowHelpTip(info, L["Low Durability"], "TOP", 0, 20, nil, "Durability")
+		if (lastClick == 0) or (GetTime() - lastClick > 60*5) then -- 5 minutes
+			B:ShowHelpTip(info, L["Low Durability"], "TOP", 0, 20, SaveClickTime, "Durability")
+		end
 		needToRepair = true
 	else
 		B:HideHelpTip("Durability")
