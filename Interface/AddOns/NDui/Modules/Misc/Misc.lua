@@ -874,3 +874,7 @@ end
 if not GuildControlUIRankSettingsFrameRosterLabel then
 	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame")
 end
+
+if not TalentMicroButtonAlert then
+	TalentMicroButtonAlert = CreateFrame("Frame")
+end
