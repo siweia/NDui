@@ -13,6 +13,8 @@ tinsert(C.defaultThemes, function()
 	}
 
 	for _, alert in pairs(microButtons) do
-		B.ReskinClose(alert.CloseButton)
+		if alert.CloseButton then
+			B.ReskinClose(alert.CloseButton)
+		end
 	end
 end)
