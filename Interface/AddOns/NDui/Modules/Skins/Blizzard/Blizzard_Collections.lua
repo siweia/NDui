@@ -322,6 +322,70 @@ C.themes["Blizzard_Collections"] = function()
 	progressBar:SetStatusBarTexture(DB.bdTex)
 	B.CreateBDFrame(progressBar, .25)
 
+	B.ReskinTab(WardrobeCollectionFrameTab2)
+
+	-- ItemSetsCollection
+
+	local SetsCollectionFrame = WardrobeCollectionFrame.SetsCollectionFrame
+	SetsCollectionFrame.LeftInset:Hide()
+	SetsCollectionFrame.RightInset:Hide()
+	B.CreateBDFrame(SetsCollectionFrame.Model, .25)
+
+	B.ReskinTrimScroll(SetsCollectionFrame.ListContainer.ScrollBar)
+	hooksecurefunc(SetsCollectionFrame.ListContainer.ScrollBox, "Update", function(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if not child.styled then
+				child.Background:Hide()
+				child.HighlightTexture:SetTexture("")
+
+				local icon = child.IconFrame and child.IconFrame.Icon or child.Icon
+				if icon then
+					icon:SetSize(42, 42)
+					B.ReskinIcon(icon)
+					if child.IconCover then
+						child.IconCover:SetOutside(icon)
+					end
+				end
+
+				child.SelectedTexture:SetDrawLayer("BACKGROUND")
+				child.SelectedTexture:SetColorTexture(cr, cg, cb, .25)
+				child.SelectedTexture:ClearAllPoints()
+				child.SelectedTexture:SetPoint("TOPLEFT", 4, -2)
+				child.SelectedTexture:SetPoint("BOTTOMRIGHT", -1, 2)
+				B.CreateBDFrame(child.SelectedTexture, .25)
+
+				child.styled = true
+			end
+		end
+	end)
+
+	local DetailsFrame = SetsCollectionFrame.DetailsFrame
+	DetailsFrame.ModelFadeTexture:Hide()
+	DetailsFrame.IconRowBackground:Hide()
+	B.ReskinDropDown(DetailsFrame.VariantSetsDropdown)
+
+	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(_, itemFrame)
+		local ic = itemFrame.Icon
+		if not ic.bg then
+			ic.bg = B.ReskinIcon(ic)
+		end
+		itemFrame.IconBorder:SetTexture("")
+
+		if itemFrame.collected then
+			local quality = C_TransmogCollection.GetSourceInfo(itemFrame.sourceID).quality
+			local color = DB.QualityColors[quality or 1]
+			ic.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+		else
+			ic.bg:SetBackdropBorderColor(0, 0, 0)
+		end
+	end)
+
+	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
+	B.StripTextures(SetsTransmogFrame)
+	B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
+	B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
+
 	-- [[ Wardrobe ]]
 
 	local WardrobeFrame = WardrobeFrame
