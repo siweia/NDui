@@ -34,6 +34,7 @@ local frames = {
 	["PVEFrame"] = false,
 	["PVPFrame"] = (not DB.isCata),
 	["QuestFrame"] = false,
+	["QuestLogFrame"] = false,
 	["QuestLogDetailFrame"] = false,
 	["RaidParentFrame"] = false,
 	["SendMailFrame"] = true,
