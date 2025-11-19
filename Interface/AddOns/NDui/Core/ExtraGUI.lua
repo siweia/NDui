@@ -1879,8 +1879,8 @@ function G:SetupActionbarStyle(parent)
 		text = L["Export"],
 		button1 = OKAY,
 		OnShow = function(self)
-			self.editBox:SetText(Bar:ExportActionbarStyle())
-			self.editBox:HighlightText()
+			self.EditBox:SetText(Bar:ExportActionbarStyle())
+			self.EditBox:HighlightText()
 		end,
 		EditBoxOnEscapePressed = function(self)
 			self:GetParent():Hide()
@@ -1898,7 +1898,7 @@ function G:SetupActionbarStyle(parent)
 			self.button1:Disable()
 		end,
 		OnAccept = function(self)
-			Bar:ImportActionbarStyle(self.editBox:GetText())
+			Bar:ImportActionbarStyle(self.EditBox:GetText())
 		end,
 		EditBoxOnTextChanged = function(self)
 			local button1 = self:GetParent().button1

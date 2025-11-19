@@ -83,7 +83,7 @@ function M:OnLogin()
 	if deleteDialog.OnShow then
 		hooksecurefunc(deleteDialog, "OnShow", function(self)
 			if C.db["Misc"]["InstantDelete"] then
-				self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
+				self.EditBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 			end
 		end)
 	end
@@ -228,6 +228,8 @@ end
 
 -- Faster Looting
 local lootDelay = 0
+local GetLootMethod = C_PartyInfo and C_PartyInfo.GetLootMethod or GetLootMethod
+
 function M:DoFasterLoot()
 	if GetLootMethod() == "master" then return end
 
