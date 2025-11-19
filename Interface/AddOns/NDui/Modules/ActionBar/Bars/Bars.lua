@@ -232,9 +232,9 @@ function Bar:CreateBars()
 		[3] = {page = 5, bindName = "MULTIACTIONBAR2BUTTON", anchor = {"RIGHT", _G.NDui_ActionBar1, "TOPLEFT", -margin, -padding/2}},
 		[4] = {page = 3, bindName = "MULTIACTIONBAR3BUTTON", anchor = {"RIGHT", UIParent, "RIGHT", -1, 0}},
 		[5] = {page = 4, bindName = "MULTIACTIONBAR4BUTTON", anchor = {"RIGHT", _G.NDui_ActionBar4, "LEFT", margin, 0}},
-		[6] = {page = 13, bindName = "MULTIACTIONBAR5BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 0}},
-		[7] = {page = 14, bindName = "MULTIACTIONBAR6BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 40}},
-		[8] = {page = 15, bindName = "MULTIACTIONBAR7BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 80}},
+		[6] = {page = 13, bindName = "NDUIBAR5BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 0}},
+		[7] = {page = 14, bindName = "NDUIBAR6BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 40}},
+		[8] = {page = 15, bindName = "NDUIBAR7BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 80}},
 	}
 
 	if C.db["Actionbar"]["DemonPage"] and DB.MyClass == "WARLOCK" then
@@ -327,6 +327,8 @@ function Bar:OnLogin()
 
 	if not C.db["Actionbar"]["Enable"] then return end
 
+	_G.BINDING_HEADER_NDUI = C_AddOns.GetAddOnMetadata("NDui", "Title")
+
 	Bar.movers = {}
 	Bar:CreateBars()
 	Bar:CreateLeaveVehicle()
@@ -338,7 +340,11 @@ function Bar:OnLogin()
 	Bar:UpdateAllSize()
 	Bar:HideBlizz()
 
-	Bar:ReassignBindings()
+	if C_PetBattles.IsInBattle() then
+		Bar:ClearBindings()
+	else
+		Bar:ReassignBindings()
+	end
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.ReassignBindings)
 
 	Bar:HunterAspectBar()
