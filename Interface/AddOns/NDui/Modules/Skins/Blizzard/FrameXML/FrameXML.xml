@@ -10,7 +10,6 @@
 	<Script file="ColorPickerFrame.lua"/>
 	<Script file="CompactRaidFrames.lua"/>
 	<Script file="DressUpFrames.lua"/>
-	<Script file="EquipmentFlyout.lua"/>
 	<Script file="Fonts.lua"/>
 	<Script file="FriendsFrame.lua"/>
 	<Script file="GameMenuFrame.lua"/>
@@ -32,7 +31,6 @@
 	<Script file="PetStable.lua"/>
 	<Script file="ProductChoiceFrame.lua"/>
 	<Script file="PVEFrame.lua"/>
-	<Script file="PVPFrame.lua"/>
 	<Script file="QuestFrame.lua"/>
 	<Script file="QuestInfo.lua"/>
 	<Script file="RaidFrame.lua"/>

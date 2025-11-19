@@ -309,21 +309,6 @@ function M:GuildNewsButtonOnClick(btn)
 	end
 end
 
-function M:ItemLevel_ReplaceGuildNews(_, _, playerName)
-	self.playerName = playerName
-
-	local newText = gsub(self.text:GetText(), "(|Hitem:%d+:.-|h%[(.-)%]|h)", M.ItemLevel_ReplaceItemLink)
-	if newText then
-		self.text:SetText(newText)
-	end
-
-	if not self.hooked then
-		self.text:SetFontObject(Game13Font)
-		self:HookScript("OnClick", M.GuildNewsButtonOnClick) -- copy name by key shift
-		self.hooked = true
-	end
-end
-
 function M:ItemLevel_FlyoutUpdate(bag, slot, quality)
 	if not self.iLvl then
 		self.iLvl = B.CreateFS(self, DB.Font[2]+1, "", false, "BOTTOMLEFT", 1, 1)
@@ -361,45 +346,15 @@ end
 
 function M:ItemLevel_FlyoutSetup()
 	if self.iLvl then self.iLvl:SetText("") end
-	if DB.isCata then
 
 	local location = self.location
 	if not location then return end
 
 	if tonumber(location) then
-		if location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then return end
-
-		local _, _, bags, slot, bag = EquipmentManager_UnpackLocation(location)
-		local itemLocation = self:GetItemLocation()
-
-		local quality = itemLocation and C_Item.GetItemQuality(itemLocation)
-		if bags then
-			M.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
-		else
-			M.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
-		end
-	else
-		local itemLocation = self:GetItemLocation()
-		local quality = itemLocation and C_Item.GetItemQuality(itemLocation)
-		if itemLocation:IsBagAndSlot() then
-			local bag, slot = itemLocation:GetBagAndSlot()
-			M.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
-		elseif itemLocation:IsEquipmentSlot() then
-			local slot = itemLocation:GetEquipmentSlot()
-			M.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
-		end
-	end
-
-	else
-		local location = self.location
-		if not location then return end
-	
-		if tonumber(location) then
-			if location >= PDFITEMFLYOUT_FIRST_SPECIAL_LOCATION then return end
-			local id = EquipmentManager_GetItemInfoByLocation(location)
-			if id then
-				M.ItemLevel_FlyoutUpdateByID(self, id)
-			end
+		if location >= PDFITEMFLYOUT_FIRST_SPECIAL_LOCATION then return end
+		local id = EquipmentManager_GetItemInfoByLocation(location)
+		if id then
+			M.ItemLevel_FlyoutUpdateByID(self, id)
 		end
 	end
 end
@@ -410,34 +365,20 @@ function M:ShowItemLevel()
 	-- iLvl on CharacterFrame
 	CharacterFrame:HookScript("OnShow", M.ItemLevel_UpdatePlayer)
 	B:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", M.ItemLevel_UpdatePlayer)
-	if not DB.isCata then
-		CharacterModelFrameRotateRightButton:ClearAllPoints()
-		CharacterModelFrameRotateRightButton:SetPoint("BOTTOMLEFT", CharacterFrameTab1, "TOPLEFT", 0, 2)
-	end
+	CharacterModelFrameRotateRightButton:ClearAllPoints()
+	CharacterModelFrameRotateRightButton:SetPoint("BOTTOMLEFT", CharacterFrameTab1, "TOPLEFT", 0, 2)
 
 	-- iLvl on InspectFrame
 	B:RegisterEvent("INSPECT_READY", M.ItemLevel_UpdateInspect)
 
 	-- iLvl on FlyoutButtons
-	if DB.isCata then
-
-	hooksecurefunc("EquipmentFlyout_UpdateItems", function()
-		for _, button in pairs(EquipmentFlyoutFrame.buttons) do
+	hooksecurefunc("PaperDollFrameItemFlyout_Show", function()
+		for _, button in pairs(PaperDollFrameItemFlyout.buttons) do
 			if button:IsShown() then
 				M.ItemLevel_FlyoutSetup(button)
 			end
 		end
 	end)
-
-	else
-		hooksecurefunc("PaperDollFrameItemFlyout_Show", function()
-			for _, button in pairs(PaperDollFrameItemFlyout.buttons) do
-				if button:IsShown() then
-					M.ItemLevel_FlyoutSetup(button)
-				end
-			end
-		end)
-	end
 
 	-- Update item quality
 	M.QualityUpdater = CreateFrame("Frame")
@@ -450,10 +391,5 @@ function M:ShowItemLevel()
 	-- iLvl on TradeFrame
 	hooksecurefunc("TradeFrame_UpdatePlayerItem", M.ItemLevel_UpdateTradePlayer)
 	hooksecurefunc("TradeFrame_UpdateTargetItem", M.ItemLevel_UpdateTradeTarget)
-
-	if DB.isCata then
-		-- iLvl on GuildNews
-		hooksecurefunc("GuildNewsButton_SetText", M.ItemLevel_ReplaceGuildNews)
-	end
 end
 M:RegisterMisc("GearInfo", M.ShowItemLevel)

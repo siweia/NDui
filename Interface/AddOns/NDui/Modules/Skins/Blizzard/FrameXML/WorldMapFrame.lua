@@ -27,9 +27,6 @@ tinsert(C.defaultThemes, function()
 	B.ReskinMinMax(WorldMapFrame.MaximizeMinimizeFrame)
 	B.ReskinCheck(WorldMapTrackQuest)
 	B.ReskinCheck(WorldMapQuestShowObjectives)
-	if DB.isCata then
-		B.ReskinCheck(WorldMapShowDigsites)
-	end
 
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 	B.ReskinScroll(QuestMapDetailsScrollFrameScrollBar)

@@ -57,7 +57,6 @@ function M:OnLogin()
 	C_Timer_After(0, M.UpdateMaxZoomLevel)
 	M:AutoEquipBySpec()
 	M:UpdateScreenShot()
-	M:FlyoutOnKeyAlt()
 	M:MoveBlizzFrames()
 
 	-- Auto chatBubbles
@@ -115,32 +114,6 @@ end
 
 -- Get Naked
 function M:NakedIcon()
-	if DB.isCata then
-
-	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
-	bu:SetSize(33, 35)
-	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, 0)
-	B.PixelIcon(bu, "Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH", true)
-	bu.bg:SetPoint("TOPLEFT", 2, -3)
-	bu.bg:SetPoint("BOTTOMRIGHT", 0, -2)
-	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Get Naked"])
-
-	local function UnequipItemInSlot(i)
-		local action = EquipmentManager_UnequipItemInSlot(i)
-		EquipmentManager_RunAction(action)
-	end
-
-	bu:SetScript("OnDoubleClick", function()
-		for i = 1, 18 do
-			local texture = GetInventoryItemTexture("player", i)
-			if texture then
-				UnequipItemInSlot(i)
-			end
-		end
-	end)
-
-	else
-
 	GearManagerToggleButton:SetScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:ClearLines()
@@ -173,7 +146,6 @@ function M:NakedIcon()
 			GearManagerDialog:Show()
 		end
 	end)
-end
 end
 
 -- Reanchor Vehicle
@@ -816,46 +788,6 @@ function M:UpdateScreenShot()
 		M.ScreenShotFrame:Hide()
 		B:UnregisterEvent("ACHIEVEMENT_EARNED", M.ScreenShotOnEvent)
 	end
-end
-
--- Flyout buttons by holding key ALT
-function M:FlyoutOnKeyAlt()
-	if DB.isCata then return end -- isCata: removed
-
-	hooksecurefunc("PaperDollItemSlotButton_OnEnter", function(self)
-		self:RegisterEvent("MODIFIER_STATE_CHANGED")
-		if not InCombatLockdown() then
-			PaperDollItemSlotButton_UpdateFlyout(self) -- taint in combat
-		end
-		if PaperDollFrameItemFlyout:IsShown() then
-			GameTooltip:SetOwner(PaperDollFrameItemFlyoutButtons, "ANCHOR_RIGHT", 6, -PaperDollFrameItemFlyoutButtons:GetHeight() - 6)
-		else
-			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		end
-		local hasItem, _, repairCost = GameTooltip:SetInventoryItem("player", self:GetID(), nil, true)
-		if not hasItem then
-			local text = _G[strupper(strsub(self:GetName(), 10))]
-			if self.checkRelic and UnitHasRelicSlot("player") then
-				text = RELICSLOT
-			end
-			GameTooltip:SetText(text)
-		end
-		if InRepairMode() and repairCost and (repairCost > 0) then
-			GameTooltip:AddLine(REPAIR_COST, nil, nil, nil, true)
-			SetTooltipMoney(GameTooltip, repairCost)
-			GameTooltip:Show()
-		else
-			CursorUpdate(self)
-		end
-	end)
-
-	hooksecurefunc("PaperDollItemSlotButton_OnEvent", function(self, event)
-		if event == "MODIFIER_STATE_CHANGED" then
-			if IsModifiedClick("SHOWITEMFLYOUT") and self:IsMouseOver() then
-				PaperDollItemSlotButton_OnEnter(self)
-			end
-		end
-	end)
 end
 
 -- Move and save blizz frames

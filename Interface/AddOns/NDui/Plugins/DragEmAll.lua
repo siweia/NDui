@@ -32,7 +32,6 @@ local frames = {
 	["PetitionFrame"] = false,
 	["PetStableFrame"] = false,
 	["PVEFrame"] = false,
-	["PVPFrame"] = (not DB.isCata),
 	["QuestFrame"] = false,
 	["QuestLogFrame"] = false,
 	["QuestLogDetailFrame"] = false,
