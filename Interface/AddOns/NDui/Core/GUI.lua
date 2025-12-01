@@ -93,7 +93,7 @@ G.DefaultSettings = {
 		BarStancePerRow = 10,
 		VehButtonSize = 34,
 		MBSize = 22,
-		MBPerRow = 12,
+		MBPerRow = 13,
 		MBSpacing = 5,
 	},
 	Bags = {
