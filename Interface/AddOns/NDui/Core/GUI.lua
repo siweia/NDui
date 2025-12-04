@@ -9,7 +9,7 @@ local guiTab, guiPage, f = {}, {}
 
 -- Default Settings
 G.DefaultSettings = {
-	Reset = false,
+	Reset2 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -714,9 +714,9 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
 
-	if not C.db["Reset"] then
-		C.db["Actionbar"]["Enable"] = true
-		C.db["Reset"] = true
+	if not C.db["Reset2"] then
+		C.db["Actionbar"]["MBPerRow"] = 13
+		C.db["Reset2"] = true
 	end
 
 	B:SetupUIScale(true)

@@ -137,8 +137,9 @@ function Bar:MicroMenu_Setup()
 		end
 	end
 
-	local column = min(12, perRow)
-	local rows = ceil(12/perRow)
+	local maxButtons = 13 -- total buttons
+	local column = min(maxButtons, perRow)
+	local rows = ceil(maxButtons/perRow)
 	local width = column*size + (column-1)*margin
 	local height = size*rows + (rows-1)*margin
 	menubar:SetSize(width, height)
