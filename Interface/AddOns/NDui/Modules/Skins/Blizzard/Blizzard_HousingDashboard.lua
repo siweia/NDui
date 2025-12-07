@@ -11,3 +11,9 @@ C.themes["Blizzard_HousingDashboard"] = function()
 	B.ReskinFilterButton(HousingDashboardFrame.CatalogContent.Filters.FilterDropdown)
 	B.ReskinTrimScroll(HousingDashboardFrame.CatalogContent.OptionsContainer.ScrollBar)
 end
+
+C.themes["Blizzard_HousingModelPreview"] = function()
+	B.StripTextures(HousingModelPreviewFrame)
+	B.SetBD(HousingModelPreviewFrame)
+	B.ReskinClose(HousingModelPreviewFrame.CloseButton)
+end
