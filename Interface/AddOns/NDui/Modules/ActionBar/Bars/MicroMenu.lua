@@ -161,7 +161,7 @@ function Bar:MicroMenu()
 		{"talents", "PlayerSpellsMicroButton"},
 		{"achievements", "AchievementMicroButton"},
 		{"quests", "QuestLogMicroButton"},
-		{"collections", "HousingMicroButton"},
+		{"home", "HousingMicroButton"},
 		{"guild", "GuildMicroButton"},
 		{"LFG", "LFDMicroButton"},
 		{"encounter", "EJMicroButton"},
