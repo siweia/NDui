@@ -13,41 +13,45 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 		PunchcardRed = {r=1, g=0.47, b=0.47},
 		PunchcardYellow = {r=0.97, g=0.82, b=0.29},
 		PunchcardBlue = {r=0.47, g=0.67, b=1},
+		Domination = {r=.24, g=.5, b=.7},
+		Cypher = {r=1, g=.8, b=0},
+		Tinker = {r=1, g=.47, b=.47},
+		Primordial = {r=1, g=0, b=1},
+		Fragrance = {r=1, g=1, b=1},
+		SingingThunder = {r=0.97, g=0.82, b=0.29},
+		SingingSea = {r=0.47, g=0.67, b=1},
+		SingingWind = {r=1, g=0.47, b=0.47},
+		Fiber = {r=0.9, g=0.8, b=0.5}
 	}
 
-	for i = 1, MAX_NUM_SOCKETS do
-		local bu = _G["ItemSocketingSocket"..i]
-		local shine = _G["ItemSocketingSocket"..i.."Shine"]
+	local socketingContainer = ItemSocketingFrame.SocketingContainer
+	for _, socket in ipairs(socketingContainer.SocketFrames) do
+		B.StripTextures(socket)
+		socket:SetPushedTexture(0)
+		socket:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		socket.Icon:SetTexCoord(unpack(DB.TexCoord))
+		socket.bg = B.ReskinIcon(socket.Icon)
 
-		_G["ItemSocketingSocket"..i.."BracketFrame"]:Hide()
-		_G["ItemSocketingSocket"..i.."Background"]:SetAlpha(0)
-		B.StripTextures(bu)
-
-		bu:SetPushedTexture(0)
-		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		bu.icon:SetTexCoord(unpack(DB.TexCoord))
-
-		shine:ClearAllPoints()
-		shine:SetPoint("TOPLEFT", bu)
-		shine:SetPoint("BOTTOMRIGHT", bu, 1, 0)
-
-		bu.bg = B.CreateBDFrame(bu, .25)
+		socket.Shine:ClearAllPoints()
+		socket.Shine:SetOutside()
+		socket.BracketFrame:Hide()
+		socket.Background:SetAlpha(0)
 	end
 
 	hooksecurefunc("ItemSocketingFrame_Update", function()
-		for i = 1, MAX_NUM_SOCKETS do
-			local color = GemTypeInfo[GetSocketTypes(i)]
-			_G["ItemSocketingSocket"..i].bg:SetBackdropBorderColor(color.r, color.g, color.b)
+		for i, socket in ipairs(socketingContainer.SocketFrames) do
+			if not socket:IsShown() then break end
+
+			local color = GemTypeInfo[C_ItemSocketInfo.GetSocketTypes(i)] or GemTypeInfo.Cogwheel
+			socket.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 
 		ItemSocketingDescription:HideBackdrop()
 	end)
 
-	if not ItemSocketingFrame.CloseButton then
-		ItemSocketingFrame.CloseButton = ItemSocketingCloseButton
-	end
-	B.ReskinPortraitFrame(ItemSocketingFrame, 10, -10, 0, 15)
+	B.ReskinPortraitFrame(ItemSocketingFrame)
+	ItemSocketingFrame.BackgroundColor:SetAlpha(0)
 	B.CreateBDFrame(ItemSocketingScrollFrame, .25)
-	B.Reskin(ItemSocketingSocketButton)
-	B.ReskinScroll(ItemSocketingScrollFrameScrollBar)
+	B.Reskin(socketingContainer.ApplySocketsButton)
+	B.ReskinTrimScroll(ItemSocketingScrollFrame.ScrollBar)
 end
