@@ -39,6 +39,7 @@ C.themes["Blizzard_Communities"] = function()
 	B.StripTextures(CommunitiesFrame.MaximizeMinimizeFrame)
 	B.ReskinMinMax(CommunitiesFrame.MaximizeMinimizeFrame)
 	CommunitiesFrame.MaximizeMinimizeFrame.MinimizeButton:SetDisabledTexture(0)
+	B.StripTextures(CommunitiesFrame.AddToChatButton, true)
 	B.ReskinArrow(CommunitiesFrame.AddToChatButton, "down")
 
 	for _, name in next, {"InvitationFrame", "TicketFrame"} do
