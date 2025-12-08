@@ -10,6 +10,8 @@ tinsert(C.defaultThemes, function()
 
 	B.Reskin(RaidFrameRaidInfoButton)
 	B.Reskin(RaidFrameConvertToRaidButton)
+	B.Reskin(RaidInfoExtendButton)
+	B.Reskin(RaidInfoCancelButton)
 	B.ReskinClose(RaidInfoCloseButton)
 	B.ReskinTrimScroll(RaidInfoFrame.ScrollBar)
 	B.ReskinClose(RaidParentFrameCloseButton)
@@ -24,6 +26,5 @@ tinsert(C.defaultThemes, function()
 		end
 		handleHeader(RaidInfoInstanceLabel)
 		handleHeader(RaidInfoIDLabel)
-		B.Reskin(RaidInfoCancelButton)
 	end
 end)
