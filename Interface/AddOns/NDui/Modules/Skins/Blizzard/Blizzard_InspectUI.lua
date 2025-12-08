@@ -27,7 +27,7 @@ C.themes["Blizzard_InspectUI"] = function()
 		if icon then icon:SetShown(button.hasItem) end
 	end)
 
-	B.ReskinPortraitFrame(InspectFrame, 15, -15, -35, 73)
+	B.ReskinPortraitFrame(InspectFrame)
 	B.StripTextures(InspectPaperDollFrame)
 	B.StripTextures(InspectHonorFrame)
 
