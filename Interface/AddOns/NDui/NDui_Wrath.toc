@@ -4,7 +4,7 @@
 ## Author: Siweia
 ## Notes: More than a UI.
 ## Version: 3.20.1
-## X-Support: WLK Classic
+## X-Support: Titan Reforged
 ## X-Website: https://github.com/siweia/NDui/tree/TBC
 ## X-Curse-Project-ID: 338794
 ## X-WoWI-ID: 25188
