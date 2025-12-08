@@ -73,7 +73,7 @@ info.onMouseUp = function(_, btn)
 		if InCombatLockdown() then return end
 		if GetNumTalentGroups() < 2 then return end
 		local idx = GetActiveTalentGroup()
-		SetActiveTalentGroup(idx == 1 and 2 or 1)
+		C_SpecializationInfo.SetActiveSpecGroup(idx == 1 and 2 or 1)
 	else
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
 		ToggleTalentFrame()
