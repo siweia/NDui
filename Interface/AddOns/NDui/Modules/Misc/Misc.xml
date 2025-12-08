@@ -11,7 +11,6 @@
 	<Script file="MDGuildBest.lua"/>
 	<Script file="MissingStats.lua"/>
 	<Script file="Notifications.lua"/>
-	<Script file="OrderHallIcon.lua"/>
 	<Script file="PetFilterTab.lua"/>
 	<Script file="QuestNotification.lua"/>
 	<Script file="QuestTool.lua"/>
