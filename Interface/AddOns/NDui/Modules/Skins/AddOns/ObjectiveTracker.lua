@@ -70,7 +70,7 @@ function S:QuestLogLevel()
 			end
 
 			if questNormalText then
-				questNormalText:SetWidth(questNormalText:GetWidth() + 30)
+				questNormalText:SetWidth(questNormalText:GetWidth() + 50)
 				local width = questNormalText:GetStringWidth()
 				if width then
 					if width <= 210 then
