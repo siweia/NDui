@@ -3,7 +3,7 @@
 ## X-Credits: Elv, Freebaser, Haleth, Haste, Leatrix, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
 ## Notes: More than a UI.
-## Version: 1.51.8
+## Version: 1.52.0
 ## X-Support: Classic
 ## X-Website: https://github.com/siweia/NDui/tree/Era
 ## X-Curse-Project-ID: 338794
