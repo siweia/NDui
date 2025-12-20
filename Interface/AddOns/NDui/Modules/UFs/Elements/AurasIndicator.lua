@@ -27,15 +27,20 @@ local DispellPriority = {
 }
 
 local DispellFilter
-local cleanse = IsSpellKnown(51886)
 do
 	local dispellClasses = {
 		["DRUID"] = {
+			["Magic"] = false,
 			["Curse"] = true,
 			["Poison"] = true,
 		},
-		["PALADIN"] = {
+		["MONK"] = {
 			["Magic"] = true,
+			["Poison"] = true,
+			["Disease"] = true,
+		},
+		["PALADIN"] = {
+			["Magic"] = false,
 			["Poison"] = true,
 			["Disease"] = true,
 		},
@@ -44,15 +49,15 @@ do
 			["Disease"] = true,
 		},
 		["SHAMAN"] = {
-			["Poison"] = cleanse,
-			["Disease"] = cleanse,
-			["Curse"] = cleanse,
+			["Magic"] = false,
+			["Curse"] = true,
 		},
 		["MAGE"] = {
 			["Curse"] = true,
 		},
-		["WARLOCK"] = {
-			["Magic"] = true,
+		["EVOKER"] = {
+			["Magic"] = false,
+			["Poison"] = true,
 		},
 	}
 
@@ -61,29 +66,15 @@ end
 
 local function checkSpecs()
 	if class == "DRUID" then
-		if GetSpecialization() == 4 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
+		DispellFilter.Magic = GetSpecialization() == 4
 	elseif class == "MONK" then
-		if GetSpecialization() == 2 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
+		DispellFilter.Magic = GetSpecialization() == 2
 	elseif class == "PALADIN" then
-		if GetSpecialization() == 1 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
+		DispellFilter.Magic = GetSpecialization() == 1
 	elseif class == "SHAMAN" then
-		if GetSpecialization() == 3 then
-			DispellFilter.Magic = true
-		else
-			DispellFilter.Magic = false
-		end
+		DispellFilter.Magic = GetSpecialization() == 3
+	elseif class == "EVOKER" then
+		DispellFilter.Magic = GetSpecialization() == 2
 	end
 end
 
@@ -112,8 +103,8 @@ end
 function UF:UpdateRaidInfo()
 	checkInstance()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", checkInstance)
-	--checkSpecs()
-	--B:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
+	checkSpecs()
+	B:RegisterEvent("PLAYER_TALENT_UPDATE", checkSpecs)
 	UF:UpdateRaidDebuffs()
 end
 
