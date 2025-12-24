@@ -11,7 +11,7 @@ tinsert(C.defaultThemes, function()
 	ItemTextMaterialBotRight:SetAlpha(0)
 
 	ItemTextFrame.CloseButton = ItemTextCloseButton
-	B.ReskinPortraitFrame(ItemTextFrame, 15, -15, -30, 65)
+	B.ReskinPortraitFrame(ItemTextFrame)
 	B.ReskinScroll(ItemTextScrollFrameScrollBar)
 	B.ReskinArrow(ItemTextPrevPageButton, "left")
 	B.ReskinArrow(ItemTextNextPageButton, "right")
