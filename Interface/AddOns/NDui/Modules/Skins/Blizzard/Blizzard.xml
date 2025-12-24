@@ -56,6 +56,7 @@
 	<Script file="Blizzard_TalentUI.lua"/>
 	<Script file="Blizzard_TorghastLevelPicker.lua"/>
 	<Script file="Blizzard_TrainerUI.lua"/>
+	<Script file="Blizzard_Transmog.lua"/>
 	<Script file="Blizzard_Tutorial.lua"/>
 	<Script file="Blizzard_VoidStorageUI.lua"/>
 	<Script file="Blizzard_WeeklyRewards.lua"/>

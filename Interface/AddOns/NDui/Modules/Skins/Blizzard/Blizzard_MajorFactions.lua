@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 C.themes["Blizzard_MajorFactions"] = function()
+	if DB.isNewPatch then return end -- unseen, needs review
+
 	local frame = _G.MajorFactionRenownFrame
 
 	B.StripTextures(frame)

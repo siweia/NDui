@@ -6,6 +6,7 @@ C.themes["Blizzard_HousingDashboard"] = function()
 	B.Reskin(HousingDashboardFrame.HouseInfoContent.HouseFinderButton)
 	B.ReskinDropDown(HousingDashboardFrame.HouseInfoContent.HouseDropdown)
 	B.ReskinCheck(HousingDashboardFrame.HouseInfoContent.ContentFrame.HouseUpgradeFrame.WatchFavorButton)
+	B.Reskin(HousingDashboardFrame.HouseInfoContent.DashboardNoHousesFrame.NoHouseButton)
 
 	B.ReskinEditBox(HousingDashboardFrame.CatalogContent.SearchBox)
 	B.ReskinFilterButton(HousingDashboardFrame.CatalogContent.Filters.FilterDropdown)

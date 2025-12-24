@@ -18,6 +18,7 @@ tinsert(C.defaultThemes, function()
 		local bu = GroupFinderFrame["groupButton"..i]
 		if bu then
 			bu.ring:Hide()
+			if bu.CircleMask then bu.CircleMask:Hide() end
 			B.Reskin(bu, true)
 			bu.bg:SetColorTexture(r, g, b, .25)
 			bu.bg:SetInside(bu.__bg)

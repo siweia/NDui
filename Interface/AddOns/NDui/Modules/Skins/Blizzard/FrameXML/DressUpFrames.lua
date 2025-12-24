@@ -23,23 +23,43 @@ tinsert(C.defaultThemes, function()
 	B.ReskinMinMax(DressUpFrame.MaximizeMinimizeFrame)
 
 	B.Reskin(DressUpFrame.LinkButton)
-	B.Reskin(DressUpFrame.ToggleOutfitDetailsButton)
-	ResetToggleTexture(DressUpFrame.ToggleOutfitDetailsButton, 1392954) -- 70_professions_scroll_01
+	if DB.isNewPatch then
+		B.Reskin(DressUpFrame.ToggleCustomSetDetailsButton)
+		ResetToggleTexture(DressUpFrame.ToggleCustomSetDetailsButton, 1392954) -- 70_professions_scroll_01
 
-	B.StripTextures(DressUpFrame.OutfitDetailsPanel)
-	local bg = B.SetBD(DressUpFrame.OutfitDetailsPanel)
-	bg:SetInside(nil, 11, 11)
+		B.StripTextures(DressUpFrame.CustomSetDetailsPanel)
+		local bg = B.SetBD(DressUpFrame.CustomSetDetailsPanel)
+		bg:SetInside(nil, 11, 11)
 
-	hooksecurefunc(DressUpFrame.OutfitDetailsPanel, "Refresh", function(self)
-		if self.slotPool then
-			for slot in self.slotPool:EnumerateActive() do
-				if not slot.bg then
-					slot.bg = B.ReskinIcon(slot.Icon)
-					B.ReskinIconBorder(slot.IconBorder, true, true)
+		hooksecurefunc(DressUpFrame.CustomSetDetailsPanel, "Refresh", function(self)
+			if self.slotPool then
+				for slot in self.slotPool:EnumerateActive() do
+					if not slot.bg then
+						slot.bg = B.ReskinIcon(slot.Icon)
+						B.ReskinIconBorder(slot.IconBorder, true, true)
+					end
 				end
 			end
-		end
-	end)
+		end)
+	else
+		B.Reskin(DressUpFrame.ToggleOutfitDetailsButton)
+		ResetToggleTexture(DressUpFrame.ToggleOutfitDetailsButton, 1392954) -- 70_professions_scroll_01
+
+		B.StripTextures(DressUpFrame.OutfitDetailsPanel)
+		local bg = B.SetBD(DressUpFrame.OutfitDetailsPanel)
+		bg:SetInside(nil, 11, 11)
+
+		hooksecurefunc(DressUpFrame.OutfitDetailsPanel, "Refresh", function(self)
+			if self.slotPool then
+				for slot in self.slotPool:EnumerateActive() do
+					if not slot.bg then
+						slot.bg = B.ReskinIcon(slot.Icon)
+						B.ReskinIconBorder(slot.IconBorder, true, true)
+					end
+				end
+			end
+		end)
+	end
 
 	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
 
@@ -66,8 +86,13 @@ tinsert(C.defaultThemes, function()
 		end)
 	end
 
-	B.ReskinDropDown(DressUpFrameOutfitDropdown)
-	B.Reskin(DressUpFrameOutfitDropdown.SaveButton)
+	if DB.isNewPatch then
+		B.ReskinDropDown(DressUpFrameCustomSetDropdown)
+		B.Reskin(DressUpFrameCustomSetDropdown.SaveButton)
+	else
+		B.ReskinDropDown(DressUpFrameOutfitDropdown)
+		B.Reskin(DressUpFrameOutfitDropdown.SaveButton)
+	end
 
 	-- SideDressUp
 
@@ -83,13 +108,16 @@ tinsert(C.defaultThemes, function()
 
 	-- Outfit frame
 
-	B.StripTextures(WardrobeOutfitEditFrame)
-	WardrobeOutfitEditFrame.EditBox:DisableDrawLayer("BACKGROUND")
-	B.SetBD(WardrobeOutfitEditFrame)
-	local bg = B.CreateBDFrame(WardrobeOutfitEditFrame.EditBox, .25, true)
-	bg:SetPoint("TOPLEFT", -5, -3)
-	bg:SetPoint("BOTTOMRIGHT", 5, 3)
-	B.Reskin(WardrobeOutfitEditFrame.AcceptButton)
-	B.Reskin(WardrobeOutfitEditFrame.CancelButton)
-	B.Reskin(WardrobeOutfitEditFrame.DeleteButton)
+	local editFrame = DB.isNewPatch and WardrobeCustomSetEditFrame or WardrobeOutfitEditFrame
+	if editFrame then
+		B.StripTextures(editFrame)
+		editFrame.EditBox:DisableDrawLayer("BACKGROUND")
+		B.SetBD(editFrame)
+		local bg = B.CreateBDFrame(editFrame.EditBox, .25, true)
+		bg:SetPoint("TOPLEFT", -5, -3)
+		bg:SetPoint("BOTTOMRIGHT", 5, 3)
+		B.Reskin(editFrame.AcceptButton)
+		B.Reskin(editFrame.CancelButton)
+		B.Reskin(editFrame.DeleteButton)
+	end
 end)
