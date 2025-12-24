@@ -155,7 +155,7 @@ function module:UrlCopy()
 		return orig(self, link, ...)
 	end
 
-	if not DB.isNewPatch then
+	if ChatFrame_OnHyperlinkShow then
 		hooksecurefunc("ChatFrame_OnHyperlinkShow", self.HyperlinkShowHook)
 	end
 	hooksecurefunc("SetItemRef", self.SetItemRefHook)
