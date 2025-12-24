@@ -311,10 +311,14 @@ function TT:RefreshStatusBar(value)
 	local unit = self.guid and UnitTokenFromGUID(self.guid)
 	local unitHealthMax = unit and UnitHealthMax(unit)
 	if unitHealthMax and unitHealthMax ~= 0 then
-		self.text:SetText(B.Numb(value*unitHealthMax).." | "..B.Numb(unitHealthMax))
+		if not DB.isNewPatch then -- secret value
+			self.text:SetText(B.Numb(value*unitHealthMax).." | "..B.Numb(unitHealthMax))
+		end
 		self:SetStatusBarColor(B.UnitColor(unit))
 	else
-		self.text:SetFormattedText("%d%%", value*100)
+		if not DB.isNewPatch then -- secret value
+			self.text:SetFormattedText("%d%%", value*100)
+		end
 	end
 end
 
