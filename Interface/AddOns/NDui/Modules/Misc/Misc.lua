@@ -67,6 +67,7 @@ function M:OnLogin()
 	M:UpdateMaxZoomLevel()
 	M:HandleNDuiTitle()
 	M:ToggleAddOnProfiler()
+	M:HideBlizzHelpTip()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -825,4 +826,15 @@ function M:ToggleAddOnProfiler()
 	bu:SetScript("OnClick", function()
 		NDuiADB["AddOnProfiler"] = bu:GetChecked()
 	end)
+end
+
+function M:HideBlizzHelpTip()
+	local function AcknowledgeTips()
+		for frame in HelpTip.framePool:EnumerateActive() do
+			frame:Acknowledge()
+		end
+	end
+
+	hooksecurefunc(HelpTip, "Show", AcknowledgeTips)
+	C_Timer.After(1, AcknowledgeTips)
 end
