@@ -40,7 +40,7 @@ local frames = {
 	["TabardFrame"] = false,
 	["TaxiFrame"] = false,
 	["TokenFrame"] = true,
-	["TradeFrame"] = false,
+	--["TradeFrame"] = false,
 	["TutorialFrame"] = false,
 	["SettingsPanel"] = false,
 }
