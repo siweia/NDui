@@ -77,6 +77,13 @@ local function isItemLegacy(item)
 	return CheckEquip(item) and item.expacID and item.expacID < CURRENT_EXPANSION
 end
 
+local function isItemDecor(item)
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterDecor"]then return end
+	if not item.link then return end
+	return C_Item.IsDecorItem(item.link)
+end
+
 local function isItemLowerLevel(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterLower"] then return end
@@ -208,6 +215,7 @@ function module:GetFilters()
 	filters.bagAOE = function(item) return isItemInBag(item) and isWarboundUntilEquipped(item) end
 	filters.bagLower = function(item) return isItemInBag(item) and isItemLowerLevel(item) end
 	filters.bagLegacy = function(item) return isItemInBag(item) and isItemLegacy(item) end
+	filters.bagDecor = function(item) return isItemInBag(item) and isItemDecor(item) end
 
 	filters.onlyBank = function(item) return isItemInBank(item) and not isEmptySlot(item) end
 	filters.bankAzeriteItem = function(item) return isItemInBank(item) and isAzeriteArmor(item) end
@@ -222,6 +230,7 @@ function module:GetFilters()
 	filters.bankAOE = function(item) return isItemInBank(item) and isWarboundUntilEquipped(item) end
 	filters.bankLower = function(item) return isItemInBank(item) and isItemLowerLevel(item) end
 	filters.bankLegacy = function(item) return isItemInBank(item) and isItemLegacy(item) end
+	filters.bankDecor = function(item) return isItemInBag(item) and isItemDecor(item) end
 
 	filters.onlyBagReagent = function(item) return (isItemInBagReagent(item) and not isEmptySlot(item)) or (hasReagentBagEquipped() and isItemInBag(item) and isTradeGoods(item)) end -- reagent bagslot
 

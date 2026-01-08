@@ -564,6 +564,7 @@ L["FilterAnima"] = "Filter anima items"
 L["FilterStone"] = "Filter urzeitliche Steine"
 L["FilterAOE"] = "Filtere Kriegsmeuten BOE"
 L["FilterLegacy"] = "Filter legacy items" -- need translation
+L["FilterDecor"] = "Filter Housing items" -- need translation
 L["Max Rank"] = "Max Rank"
 L["SmoothAmount"] = "Smooth Frequency"
 L["SmoothAmountTip"] = "|nSetup healthbar smooth frequency for unitframes and nameplates.|nThe lower the smoother."
