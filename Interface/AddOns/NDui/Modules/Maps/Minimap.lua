@@ -694,6 +694,11 @@ function module:SetupMinimap()
 	_G.MinimapCluster.Tracking:SetAlpha(0)
 	_G.MinimapCluster.Tracking:SetScale(0.0001)
 
+	-- Housing overlay
+	if MinimapBackdrop.StaticOverlayTexture then
+		MinimapBackdrop.StaticOverlayTexture:SetInside(Minimap)
+		MinimapBackdrop.StaticOverlayTexture:SetTexCoord(.2, .8, .2, .8)
+	end
 
 	-- Add Elements
 	self:CreatePulse()
