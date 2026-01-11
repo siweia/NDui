@@ -21,9 +21,25 @@ local function insecureHide(self)
 	self:Hide()
 end
 
+local looseFrames = {}
+
+local watcher = CreateFrame('Frame')
+watcher:RegisterEvent('PLAYER_REGEN_ENABLED')
+watcher:SetScript('OnEvent', function()
+	for frame in next, looseFrames do
+		frame:SetParent(hiddenParent)
+	end
+
+	table.wipe(looseFrames)
+end)
+
 local function resetParent(self, parent)
 	if(parent ~= hiddenParent) then
-		self:SetParent(hiddenParent)
+		if(InCombatLockdown() and self:IsProtected()) then
+			looseFrames[self] = true
+		else
+			self:SetParent(hiddenParent)
+		end
 	end
 end
 
