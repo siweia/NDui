@@ -10,8 +10,8 @@
 	<Script file="AddOns\TMW.lua"/>
 	<Script file="AddOns\WeakAuras.lua"/>
 	<Script file="AddOns\Details.lua"/>
-	<Script file="AddOns\PremadeGroupsFilter.lua"/>
-	<Script file="AddOns\Rematch.lua"/>
-	<Script file="AddOns\Krowi_AF.lua"/>
+	<Script file="AddOns\ObjectiveTracker.lua"/>
+	<Script file="AddOns\TradeSkillFrame.lua"/>
+
 	<Script file="AddOns\Others.lua"/>
 </Ui>

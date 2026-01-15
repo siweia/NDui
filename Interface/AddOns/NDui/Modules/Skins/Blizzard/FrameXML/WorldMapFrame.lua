@@ -2,35 +2,31 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local WorldMapFrame = WorldMapFrame
-	local BorderFrame = WorldMapFrame.BorderFrame
 
-	B.ReskinPortraitFrame(WorldMapFrame)
-	BorderFrame.NineSlice:Hide()
-	BorderFrame.Tutorial.Ring:Hide()
-	B.ReskinMinMax(BorderFrame.MaximizeMinimizeFrame)
+	local mapBg = B.ReskinPortraitFrame(WorldMapFrame, 7, 0, -7, 25)
+	mapBg:SetFrameStrata("BACKGROUND")
 
-	local overlayFrames = WorldMapFrame.overlayFrames
-	B.ReskinDropDown(overlayFrames[1])
-	B.StripTextures(overlayFrames[3], 3)
-	overlayFrames[3].ActiveTexture:SetTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Toggle")
-	B.ReskinFilterReset(overlayFrames[2].ResetButton)
-
-	local sideToggle = WorldMapFrame.SidePanelToggle
-	sideToggle:SetFrameLevel(3)
-	sideToggle.OpenButton:GetRegions():Hide()
-	B.ReskinArrow(sideToggle.OpenButton, "right")
-	sideToggle.CloseButton:GetRegions():Hide()
-	B.ReskinArrow(sideToggle.CloseButton, "left")
-
-	for i = 1, #overlayFrames do
-		local frame = overlayFrames[i]
-		local dropdown = frame.BountyDropdown
-		if dropdown then
-			B.ReskinArrow(dropdown, "right")
-			break
+	local function updateMapBG(map)
+		if map.isMaximized then
+			mapBg:SetPoint("TOPLEFT", 7, 0)
+		else
+			mapBg:SetPoint("TOPLEFT", 18, 0)
 		end
 	end
+	updateMapBG(WorldMapFrame)
+	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", updateMapBG)
+
+	B.ReskinDropDown(WorldMapZoneMinimapDropdown)
+	B.ReskinDropDown(WorldMapContinentDropdown)
+	B.ReskinDropDown(WorldMapZoneDropdown)
+	B.Reskin(WorldMapZoomOutButton)
+
+	if MiniBorderLeft then MiniBorderLeft:Hide() end
+	if MiniBorderRight then MiniBorderRight:Hide() end
+	B.ReskinMinMax(WorldMapFrame.MaximizeMinimizeFrame)
+
+	B.StripTextures(OpacityFrame)
+	B.SetBD(OpacityFrame)
+	B.ReskinSlider(OpacityFrameSlider, true)
 end)

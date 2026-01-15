@@ -10,7 +10,7 @@ function UF:UpdateRaidBuffsWhite()
 	wipe(UF.RaidBuffsWhite)
 
 	for spellID in pairs(C.RaidBuffsWhite) do
-		local name = C_Spell.GetSpellName(spellID)
+		local name = GetSpellInfo(spellID)
 		if name then
 			if NDuiADB["RaidBuffsWhite"][spellID] == nil then
 				UF.RaidBuffsWhite[spellID] = true

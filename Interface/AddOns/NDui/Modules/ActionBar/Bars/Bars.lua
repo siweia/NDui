@@ -56,7 +56,7 @@ function Bar:UpdateActionSize(name)
 				button:SetPoint("TOPLEFT", frame, padding, -padding)
 			elseif i == 7 then
 				button:SetPoint("TOPLEFT", frame.child, padding, -padding)
-			elseif mod(i-1, 3) == 0 then
+			elseif mod(i-1, 3) ==  0 then
 				button:SetPoint("TOP", frame.buttons[i-3], "BOTTOM", 0, -margin)
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
@@ -71,7 +71,7 @@ function Bar:UpdateActionSize(name)
 			button:ClearAllPoints()
 			if i == 1 then
 				button:SetPoint("TOPLEFT", frame, padding, -padding)
-			elseif mod(i-1, perRow) == 0 then
+			elseif mod(i-1, perRow) ==  0 then
 				button:SetPoint("TOP", frame.buttons[i-perRow], "BOTTOM", 0, -margin)
 			else
 				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
@@ -110,7 +110,6 @@ function Bar:UpdateButtonConfig(i)
 	self.buttonConfig.clickOnDown = GetCVarBool("ActionButtonUseKeyDown")
 	self.buttonConfig.showGrid = C.db["Actionbar"]["Grid"]
 	self.buttonConfig.flyoutDirection = directions[C.db["Actionbar"]["Bar"..i.."Flyout"]]
-	self.buttonConfig.actionButtonUI = true -- rotation highlight
 
 	local hotkey = self.buttonConfig.text.hotkey
 	hotkey.font.font = DB.Font[1]
@@ -128,8 +127,8 @@ function Bar:UpdateButtonConfig(i)
 	count.font.flags = DB.Font[3]
 	count.position.anchor = "BOTTOMRIGHT"
 	count.position.relAnchor = false
-	count.position.offsetX = -2
-	count.position.offsetY = 2
+	count.position.offsetX = 2
+	count.position.offsetY = 0
 	count.justifyH = "RIGHT"
 
 	local macro = self.buttonConfig.text.macro
@@ -198,18 +197,14 @@ function Bar:UpdateBarConfig()
 end
 
 function Bar:ReassignBindings()
-	if InCombatLockdown() or Bar.isHousing then return end
+	if InCombatLockdown() then return end
 
 	for index = 1, 8 do
 		local frame = Bar.headers[index]
-		if frame then
-			ClearOverrideBindings(frame)
-	
-			for _, button in next, frame.buttons do
-				for _, key in next, {GetBindingKey(button.keyBoundTarget)} do
-					if key and key ~= "" then
-						SetOverrideBindingClick(frame, false, key, button:GetName())
-					end
+		for _, button in next, frame.buttons do
+			for _, key in next, {GetBindingKey(button.keyBoundTarget)} do
+				if key and key ~= "" then
+					SetOverrideBindingClick(frame, false, key, button:GetName(), "Keybind")
 				end
 			end
 		end
@@ -221,18 +216,7 @@ function Bar:ClearBindings()
 
 	for index = 1, 8 do
 		local frame = Bar.headers[index]
-		if frame then
-			ClearOverrideBindings(frame)
-		end
-	end
-end
-
-function Bar:UpdateHousingState(state)
-	Bar.isHousing = (state ~= 0)
-	if Bar.isHousing then
-		Bar:ClearBindings()
-	else
-		Bar:ReassignBindings()
+		ClearOverrideBindings(frame)
 	end
 end
 
@@ -248,10 +232,14 @@ function Bar:CreateBars()
 		[3] = {page = 5, bindName = "MULTIACTIONBAR2BUTTON", anchor = {"RIGHT", _G.NDui_ActionBar1, "TOPLEFT", -margin, -padding/2}},
 		[4] = {page = 3, bindName = "MULTIACTIONBAR3BUTTON", anchor = {"RIGHT", UIParent, "RIGHT", -1, 0}},
 		[5] = {page = 4, bindName = "MULTIACTIONBAR4BUTTON", anchor = {"RIGHT", _G.NDui_ActionBar4, "LEFT", margin, 0}},
-		[6] = {page = 13, bindName = "MULTIACTIONBAR5BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 0}},
-		[7] = {page = 14, bindName = "MULTIACTIONBAR6BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 40}},
-		[8] = {page = 15, bindName = "MULTIACTIONBAR7BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 80}},
+		[6] = {page = 13, bindName = "NDUIBAR5BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 0}},
+		[7] = {page = 14, bindName = "NDUIBAR6BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 40}},
+		[8] = {page = 15, bindName = "NDUIBAR7BUTTON", anchor = {"CENTER", UIParent, "CENTER", 0, 80}},
 	}
+
+	if C.db["Actionbar"]["DemonPage"] and DB.MyClass == "WARLOCK" then
+		fullPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]16;[overridebar]18;[shapeshift]17;[vehicleui]16;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;[form:1]7;1"
+	end
 
 	local mIndex = 1
 	for index = 1, 8 do
@@ -333,31 +321,16 @@ function Bar:CreateBars()
 	end)
 end
 
-function Bar:UpdateOverlays()
-	local eventFrame = LAB.eventFrame
-	if not eventFrame then return end
-
-	if C.db["Actionbar"]["ShowGlow"] then
-		eventFrame.showGlow = true
-		eventFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
-		eventFrame:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_HIDE")
-	else
-		eventFrame.showGlow = false
-		eventFrame:UnregisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
-		eventFrame:UnregisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_HIDE")
-	end
-end
-
 function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
 
 	if not C.db["Actionbar"]["Enable"] then return end
 
+	_G.BINDING_HEADER_NDUI = C_AddOns.GetAddOnMetadata("NDui", "Title")
+
 	Bar.movers = {}
 	Bar:CreateBars()
-	Bar:UpdateOverlays()
-	Bar:CreateExtrabar()
 	Bar:CreateLeaveVehicle()
 	Bar:CreatePetbar()
 	Bar:CreateStancebar()
@@ -373,11 +346,7 @@ function Bar:OnLogin()
 		Bar:ReassignBindings()
 	end
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.ReassignBindings)
-	B:RegisterEvent("PET_BATTLE_CLOSE", Bar.ReassignBindings)
-	B:RegisterEvent("PET_BATTLE_OPENING_DONE", Bar.ClearBindings)
-	B:RegisterEvent("HOUSE_EDITOR_MODE_CHANGED", Bar.UpdateHousingState)
 
-	if AdiButtonAuras then
-		AdiButtonAuras:RegisterLAB("LibActionButton-1.0-NDui")
-	end
+	Bar:HunterAspectBar()
+	Bar:TotemBar()
 end

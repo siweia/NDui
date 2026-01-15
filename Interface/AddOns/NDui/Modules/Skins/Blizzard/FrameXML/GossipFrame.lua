@@ -37,10 +37,9 @@ local function replaceTextColor(text, r)
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	QuestFont:SetTextColor(1, 1, 1)
 
+	B.StripTextures(GossipFrame.GreetingPanel)
 	B.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
 	B.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
 
@@ -48,18 +47,18 @@ tinsert(C.defaultThemes, function()
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local button = select(i, self.ScrollTarget:GetChildren())
 			if not button.styled then
+
 				local buttonText = button.GreetingText or button.GetFontString and button:GetFontString()
 				if buttonText then
 					buttonText:SetTextColor(1, 1, 1)
 					hooksecurefunc(buttonText, "SetTextColor", replaceTextColor)
 				end
-				if button.SetText then
-					local buttonText = select(3, button:GetRegions()) -- no parentKey atm
-					if buttonText and buttonText:IsObjectType("FontString") then
-						replaceGossipText(button, button:GetText())
-						hooksecurefunc(button, "SetText", replaceGossipText)
-						hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
-					end
+
+				local buttonText = select(3, button:GetRegions()) -- no parentKey atm
+				if buttonText and buttonText:IsObjectType("FontString") then
+					replaceGossipText(button, button:GetText())
+					hooksecurefunc(button, "SetText", replaceGossipText)
+					hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
 				end
 
 				button.styled = true
@@ -75,20 +74,18 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 	GossipFrame.FriendshipStatusBar.BarBorder:Hide()
-
-	GossipFrameInset:Hide()
-	if GossipFrame.Background then GossipFrame.Background:Hide() end
 	B.ReskinPortraitFrame(GossipFrame)
 
 	-- Text on QuestFrame
-	QuestFrameGreetingPanel:HookScript("OnShow", function(self)
-		for button in self.titleButtonPool:EnumerateActive() do
-			if not button.styled then
-				replaceGossipText(button, button:GetText())
-				hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+	local MAX_NUM_QUESTS = MAX_NUM_QUESTS or 25
 
-				button.styled = true
-			end
+	for i = 1, MAX_NUM_QUESTS do
+		local button = _G["QuestTitleButton"..i]
+		if button and not button.styled then
+			replaceGossipText(button, button:GetText())
+			hooksecurefunc(button, "SetFormattedText", replaceGossipFormat)
+
+			button.styled = true
 		end
-	end)
+	end
 end)

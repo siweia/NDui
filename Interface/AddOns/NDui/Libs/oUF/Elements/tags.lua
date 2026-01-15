@@ -12,25 +12,15 @@ A FontString to hold a tag string. Unlike other elements, this widget must not h
 ## Notes
 
 A `Tag` is a Lua string consisting of a function name surrounded by square brackets. The tag will be replaced by the
-output of the function and displayed as text on the font string widget with that the tag has been registered.
+output of the function and displayed as text on the font string widget with that the tag has been registered. Literals
+can be pre- or appended by separating them with a `>` before or `<` after the function name. The literals will be only
+displayed when the function returns a non-nil value. I.e. `"[perhp<%]"` will display the current health as a percentage
+of the maximum health followed by the % sign.
 
-A `Tag String` is a Lua string consisting of one or multiple tags with optional literals and parameters around them.
-Each tag will be updated individually and the output will follow the tags order. Literals will be displayed in the
-output string regardless of whether the surrounding tag functions return a value. I.e. `"[curhp]/[maxhp]"` will resolve
-to something like `2453/5000`.
-
-There's also an optional prefix and suffix that are separated from the tag name by `$>` and `<$` respectively,
-for example, `"[==$>name<$==]"` will resolve to `==Thrall==`, and `"[perhp<$%]"` will resole to `100%`, however, said
-affixes will only be added if the tag function returns a non-empty string, if it returns `nil` or `""` affixes will be
-omitted.
-
-Additionally, it's possible to pass optional arguments to a tag function to alter its behaviour. Optional arguments are
-defined via `()` at the end of a tag and separated by commas (`,`). For example, `"[name(a,r,g,s)]"`, in this case 4
-additional arguments, `"a"`, `"r"`, `"g"`, and `"s"` will be passed to the name tag function, what to do with them,
-however, is up to a developer to decide.
-
-The full tag syntax looks like this: `"[prefix$>tag<$suffix(a,r,g,s)]"`. The order of optional elements is important,
-while they can be independently omitted, they can't be reordered.
+A `Tag String` is a Lua string consisting of one or multiple tags with optional literals between them. Each tag will be
+updated individually and the output will follow the tags order. Literals will be displayed in the output string
+regardless of whether the surrounding tag functions return a value. I.e. `"[curhp]/[maxhp]"` will resolve to something
+like `2453/5000`.
 
 A `Tag Function` is used to replace a single tag in a tag string by its output. A tag function receives only two
 arguments - the unit and the realUnit of the unit frame used to register the tag (see Options for further details). The
@@ -47,17 +37,15 @@ in the `oUF.Tags.SharedEvents` table as follows: `oUF.Tags.SharedEvents.EVENT_NA
 .overrideUnit    - if specified on the font string widget, the frame's realUnit will be passed as the second argument to
                    every tag function whose name is contained in the relevant tag string. Otherwise the second argument
                    is always nil (boolean)
-.frequentUpdates - defines how often the corresponding tag function(s) should be called. This will override the events
-                   for the tag(s), if any. If the value is a number, it is taken as a time interval in seconds. If the
-                   value is a boolean, the time interval is set to 0.5 seconds (number or boolean)
+.frequentUpdates - defines how often the correspondig tag function(s) should be called. This will override the events for
+                   the tag(s), if any. If the value is a number, it is taken as a time interval in seconds. If the value
+                   is a boolean, the time interval is set to 0.5 seconds (number or boolean)
 
 ## Attributes
 
 .parent - the unit frame on which the tag has been registered
 
 ## Examples
-
-### Example 1
 
     -- define the tag function
     oUF.Tags.Methods['mylayout:threatname'] = function(unit, realUnit)
@@ -75,31 +63,6 @@ in the `oUF.Tags.SharedEvents` table as follows: `oUF.Tags.SharedEvents.EVENT_NA
 
     -- register the tag on the text widget with oUF
     self:Tag(info, '[mylayout:threatname]')
-
-### Example 2
-
-    -- define the tag function that accepts optional arguments
-    oUF.Tags.Methods['mylayout:name'] = function(unit, realUnit, ...)
-        local name = _TAGS['name'](unit, realUnit)
-        local length = tonumber(...)
-        if(length) then
-            return name:sub(1, length) -- please note, this code doesn't support UTF-8 chars
-        else
-            return name
-        end
-    end
-
-    -- add the events
-    oUF.Tags.Events['mylayout:name'] = 'UNIT_NAME_UPDATE'
-
-    -- create the text widget
-    local info = self.Health:CreateFontString(nil, 'OVERLAY', 'GameFontNormal')
-    info:SetPoint('LEFT')
-
-    -- register the tag on the text widget with oUF
-    self:Tag(info, '[mylayout:name(5)]') -- the output will be shortened to 5 characters
-    -- self:Tag(info, '[mylayout:name]') -- alternative, the output won't be adjusted
-    -- self:Tag(info, '[mylayout:name(10)]') -- alternative, the output will be shortened to 10 characters
 --]]
 
 local _, ns = ...
@@ -139,7 +102,7 @@ local tagStrings = {
 	end]],
 
 	['arcanecharges'] = [[function()
-		if(C_SpecializationInfo.GetSpecialization() == SPEC_MAGE_ARCANE) then
+		if(GetSpecialization() == SPEC_MAGE_ARCANE) then
 			local num = UnitPower('player', Enum.PowerType.ArcaneCharges)
 			if(num > 0) then
 				return num
@@ -147,19 +110,8 @@ local tagStrings = {
 		end
 	end]],
 
-	['arenaspec'] = [[function(u)
-		local id = u:match('arena(%d)$')
-		if(id) then
-			local specID = GetArenaOpponentSpec(tonumber(id))
-			if(specID and specID > 0) then
-				local _, specName = GetSpecializationInfoByID(specID)
-				return specName
-			end
-		end
-	end]],
-
 	['chi'] = [[function()
-		if(C_SpecializationInfo.GetSpecialization() == SPEC_MONK_WINDWALKER) then
+		if(GetSpecialization() == SPEC_MONK_WINDWALKER) then
 			local num = UnitPower('player', Enum.PowerType.Chi)
 			if(num > 0) then
 				return num
@@ -237,7 +189,7 @@ local tagStrings = {
 	end]],
 
 	['holypower'] = [[function()
-		if(C_SpecializationInfo.GetSpecialization() == SPEC_PALADIN_RETRIBUTION) then
+		if(GetSpecialization() == SPEC_PALADIN_RETRIBUTION) then
 			local num = UnitPower('player', Enum.PowerType.HolyPower)
 			if(num > 0) then
 				return num
@@ -258,10 +210,7 @@ local tagStrings = {
 	end]],
 
 	['level'] = [[function(u)
-		local l = UnitEffectiveLevel(u)
-		if(UnitIsWildBattlePet(u) or UnitIsBattlePetCompanion(u)) then
-			l = UnitBattlePetLevel(u)
-		end
+		local l = UnitLevel(u)
 
 		if(l > 0) then
 			return l
@@ -335,7 +284,7 @@ local tagStrings = {
 					return Hex(altR, altG, altB)
 				end
 			else
-				return Hex(_COLORS.power[pType] or _COLORS.power.MANA)
+				return Hex(_COLORS.power[pType])
 			end
 		end
 
@@ -468,7 +417,7 @@ local tagStrings = {
 	end]],
 
 	['threatcolor'] = [[function(u)
-		return Hex(GetThreatStatusColor(UnitThreatSituation(u) or 0))
+		return Hex(GetThreatStatusColor(UnitThreatSituation(u)))
 	end]],
 }
 
@@ -536,7 +485,6 @@ _ENV._VARS = vars
 local tagEvents = {
 	['affix']               = 'UNIT_CLASSIFICATION_CHANGED',
 	['arcanecharges']       = 'UNIT_POWER_UPDATE PLAYER_TALENT_UPDATE',
-	['arenaspec']           = 'ARENA_PREP_OPPONENT_SPECIALIZATIONS',
 	['chi']                 = 'UNIT_POWER_UPDATE PLAYER_TALENT_UPDATE',
 	['classification']      = 'UNIT_CLASSIFICATION_CHANGED',
 	['cpoints']             = 'UNIT_POWER_FREQUENT PLAYER_TARGET_CHANGED',
@@ -571,17 +519,13 @@ local tagEvents = {
 	['smartlevel']          = 'UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED',
 	['soulshards']          = 'UNIT_POWER_UPDATE',
 	['status']              = 'UNIT_HEALTH PLAYER_UPDATE_RESTING UNIT_CONNECTION',
-	['threat']              = 'UNIT_THREAT_SITUATION_UPDATE',
-	['threatcolor']         = 'UNIT_THREAT_SITUATION_UPDATE',
 }
 
 local unitlessEvents = {
-	ARENA_PREP_OPPONENT_SPECIALIZATIONS = true,
 	GROUP_ROSTER_UPDATE = true,
 	NEUTRAL_FACTION_SELECT_RESULT = true,
 	PARTY_LEADER_CHANGED = true,
 	PLAYER_LEVEL_UP = true,
-	PLAYER_TALENT_UPDATE = true,
 	PLAYER_TARGET_CHANGED = true,
 	PLAYER_UPDATE_RESTING = true,
 	RUNE_POWER_UPDATE = true,
@@ -603,7 +547,7 @@ eventFrame:SetScript('OnEvent', function(self, event, unit)
 end)
 
 local eventTimer = 0
-local eventTimerThreshold = 0.1
+local eventTimerThreshold = 0.25
 
 eventFrame:SetScript('OnUpdate', function(self, elapsed)
 	eventTimer = eventTimer + elapsed
@@ -981,9 +925,9 @@ oUF.Tags = {
 	end,
 	SetEventUpdateTimer = function(self, timer)
 		if(not timer) then return end
-		if(type(timer) ~= 'number') then return end
+		if(not type(timer) == 'number') then return end
 
-		eventTimerThreshold = math.max(0.05, timer)
+		eventTimerThreshold = math.max(0.1, timer)
 	end,
 }
 

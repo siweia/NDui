@@ -6,7 +6,6 @@ local _G = _G
 local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber, table.wipe, next, select, unpack
 local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, floor, rad = math.min, math.max, math.floor, math.rad
-local CreateColor = CreateColor
 
 -- Math
 do
@@ -118,18 +117,6 @@ do
 			list[word] = true
 		end
 	end
-
-	-- Atlas info
-	function B:GetTextureStrByAtlas(info, sizeX, sizeY)
-		local file = info and info.file
-		if not file then return end
-
-		local width, height, txLeft, txRight, txTop, txBottom = info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
-		local atlasWidth = width / (txRight-txLeft)
-		local atlasHeight = height / (txBottom-txTop)
-
-		return format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", file, (sizeX or 0), (sizeY or 0), atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
-	end
 end
 
 -- Color
@@ -151,7 +138,7 @@ do
 
 	function B.UnitColor(unit)
 		local r, g, b = 1, 1, 1
-		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
+		if UnitIsPlayer(unit) then
 			local class = select(2, UnitClass(unit))
 			if class then
 				r, g, b = B.ClassColor(class)
@@ -173,70 +160,89 @@ end
 do
 	local iLvlDB = {}
 	local itemLevelString = "^"..gsub(ITEM_LEVEL, "%%d", "")
-	local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, "%%s", "(.+)")
-	local isUnknownString = {
-		[TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN] = true,
-		[TRANSMOGRIFY_TOOLTIP_ITEM_UNKNOWN_APPEARANCE_KNOWN] = true,
-	}
+	local RETRIEVING_ITEM_INFO = RETRIEVING_ITEM_INFO
 
-	local slotData = {gems={},gemsColor={}}
-	function B.GetItemLevel(link, arg1, arg2, fullScan)
-		if fullScan then
-			local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
-			if not data then return end
+	local tip = CreateFrame("GameTooltip", "NDui_ScanTooltip", nil, "GameTooltipTemplate")
+	B.ScanTip = tip
 
-			wipe(slotData.gems)
-			wipe(slotData.gemsColor)
-			slotData.iLvl = nil
-			slotData.enchantText = nil
+	function B:InspectItemTextures()
+		if not tip.gems then
+			tip.gems = {}
+		else
+			wipe(tip.gems)
+		end
 
-			local num = 0
-			for i = 2, #data.lines do
-				local lineData = data.lines[i]
-				if not slotData.iLvl then
-					local text = lineData.leftText
-					local found = text and strfind(text, itemLevelString)
-					if found then
-						local level = strmatch(text, "(%d+)%)?$")
-						slotData.iLvl = tonumber(level) or 0
-					end
-				elseif data.id == 158075 then -- heart of azeroth
-					if lineData.essenceIcon then
-						num = num + 1
-						slotData.gems[num] = lineData.essenceIcon
-						slotData.gemsColor[num] = lineData.leftColor
-					end
-				else
-					if lineData.enchantID then
-						slotData.enchantText = strmatch(lineData.leftText, enchantString)
-					elseif lineData.gemIcon then
-						num = num + 1
-						slotData.gems[num] = lineData.gemIcon
-					elseif lineData.socketType then
-						num = num + 1
-						slotData.gems[num] = format("Interface\\ItemSocketingFrame\\UI-EmptySocket-%s", lineData.socketType)
+		for i = 1, 5 do
+			local tex = _G["NDui_ScanTooltipTexture"..i]
+			local texture = tex and tex:IsShown() and tex:GetTexture()
+			if texture then
+				tip.gems[i] = texture
+			end
+		end
+
+		return tip.gems
+	end
+
+	function B:GetEnchantText(link, slotInfo)
+		local enchantID = tonumber(strmatch(link, "item:%d+:(%d+):"))
+		if enchantID then
+			--[[for i = 1, tip:NumLines() do
+				local line = _G["NDui_ScanTooltipTextLeft"..i]
+				if not line then break end
+
+				local text = line:GetText()
+				if text then
+					if i == 1 and text == RETRIEVING_ITEM_INFO then
+						return "tooSoon"
+					elseif i ~= 1 then
+						local r, g, b = line:GetTextColor()
+						r = B:Round(r, 3)
+						g = B:Round(g, 3)
+						b = B:Round(b, 3)
+						if not (r == 1 and g == 1 and b == 1) then
+							return text
+						end
 					end
 				end
-			end
+			end]]
+			return "+"
+		end
+	end
 
-			return slotData
+	function B.GetItemLevel(link, arg1, arg2, fullScan)
+		if fullScan then
+			tip:SetOwner(UIParent, "ANCHOR_NONE")
+			tip:SetInventoryItem(arg1, arg2)
+
+			if not tip.slotInfo then tip.slotInfo = {} else wipe(tip.slotInfo) end
+
+			local slotInfo = tip.slotInfo
+			slotInfo.gems = B:InspectItemTextures()
+			slotInfo.enchantText = B:GetEnchantText(link, slotInfo)
+
+			return slotInfo
 		else
 			if iLvlDB[link] then return iLvlDB[link] end
 
-			local data
+			tip:SetOwner(UIParent, "ANCHOR_NONE")
 			if arg1 and type(arg1) == "string" then
-				data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
+				tip:SetInventoryItem(arg1, arg2)
 			elseif arg1 and type(arg1) == "number" then
-				data = C_TooltipInfo.GetBagItem(arg1, arg2)
+				tip:SetBagItem(arg1, arg2)
 			else
-				data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
+				tip:SetHyperlink(link)
 			end
-			if not data then return end
+
+			local firstLine = _G.NDui_ScanTooltipTextLeft1:GetText()
+			if firstLine == RETRIEVING_ITEM_INFO then
+				return "tooSoon"
+			end
 
 			for i = 2, 5 do
-				local lineData = data.lines[i]
-				if not lineData then break end
-				local text = lineData.leftText
+				local line = _G["NDui_ScanTooltipTextLeft"..i]
+				if not line then break end
+
+				local text = line:GetText()
 				local found = text and strfind(text, itemLevelString)
 				if found then
 					local level = strmatch(text, "(%d+)%)?$")
@@ -244,6 +250,7 @@ do
 					break
 				end
 			end
+
 			return iLvlDB[link]
 		end
 	end
@@ -283,12 +290,9 @@ do
 	function B.GetNPCName(npcID, callback)
 		local name = nameCache[npcID]
 		if not name then
-			name = loadingStr
-			local data = C_TooltipInfo.GetHyperlink(format("unit:Creature-0-0-0-0-%d", npcID))
-			local lineData = data and data.lines
-			if lineData then
-				name = lineData[1] and lineData[1].leftText
-			end
+			tip:SetOwner(UIParent, "ANCHOR_NONE")
+			tip:SetHyperlink(format("unit:Creature-0-0-0-0-%d", npcID))
+			name = _G.NDui_ScanTooltipTextLeft1:GetText() or loadingStr
 			if name == loadingStr then
 				if not pendingNPCs[npcID] then
 					pendingNPCs[npcID] = 1
@@ -304,18 +308,6 @@ do
 		end
 
 		return name
-	end
-
-	function B.IsUnknownTransmog(bagID, slotID)
-		local data = C_TooltipInfo.GetBagItem(bagID, slotID)
-		local lineData = data and data.lines
-		if not lineData then return end
-
-		for i = #lineData, 1, -1 do
-			local line = lineData[i]
-			if line.price then return false end
-			return line.leftText and isUnknownString[line.leftText]
-		end
 	end
 end
 
@@ -399,32 +391,58 @@ do
 			end
 		end
 	end
-
-	-- lock cvar command
-	local lockedCVars = {}
-
-	function B:LockCVar(name, value)
-		lockedCVars[name] = value
-		SetCVar(name, value)
-	end
-
-	function B:UpdateCVars(var, state)
-		local lockedVar = lockedCVars[var]
-		if lockedVar ~= nil and state ~= lockedVar then
-			SetCVar(var, lockedVar)
-			if DB.isDeveloper then
-				print("CVar reset:", var, lockedVar)
-			end
-		end
-	end
-	B:RegisterEvent("CVAR_UPDATE", B.UpdateCVars)
 end
 
 -- UI widgets
 do
 	-- HelpTip
-	function B.HelpInfoAcknowledge(callbackArg)
-		NDuiADB["Help"][callbackArg] = true
+	function B:HelpInfoAcknowledge()
+		self.__owner:Hide()
+		NDuiADB["Help"][self.__arg] = true
+		if self.__callback then self.__callback() end
+	end
+
+	local helpTipTable = {}
+	local pointInfo = {
+		["TOP"] = {relF = "BOTTOM", degree = 0, arrowX = 0, arrowY = -5, glowX = 0, glowY = -4},
+		["BOTTOM"] = {relF = "TOP", degree = 180, arrowX = 0, arrowY = 5, glowX = 0, glowY = 4},
+		["LEFT"] = {relF = "RIGHT", degree = 90, arrowX = 5, arrowY = 0, glowX = 4, glowY = 0},
+		["RIGHT"] = {relF = "LEFT", degree = 270, arrowX = -5, arrowY = 0, glowX = -4, glowY = 0},
+	}
+
+	function B:ShowHelpTip(parent, text, targetPoint, offsetX, offsetY, callback, callbackArg, arrowX, arrowY)
+		local info = helpTipTable[callbackArg]
+		if not info then
+			local anchorInfo = pointInfo[targetPoint]
+			info = CreateFrame("Frame", nil, parent, "MicroButtonAlertTemplate")
+			info:SetPoint(anchorInfo.relF, parent, targetPoint, offsetX or 0, offsetY or 0)
+			info.Text:SetText(text.."|n|n|n")
+			info.CloseButton:Hide()
+			info.okay = B.CreateButton(info, 110, 22, L["GotIt"], 14)
+			info.okay:SetPoint("BOTTOM", 0, 12)
+			info.okay.__owner = info
+			info.okay.__arg = callbackArg
+			info.okay.__callback = callback
+			info.okay:SetScript("OnClick", B.HelpInfoAcknowledge)
+
+			info.Arrow:ClearAllPoints()
+			info.Arrow:SetPoint("CENTER", info, anchorInfo.relF, arrowX or anchorInfo.arrowX, arrowY or anchorInfo.arrowY)
+
+			info.Arrow.Glow:ClearAllPoints()
+			info.Arrow.Glow:SetPoint("CENTER", info.Arrow.Arrow, "CENTER", anchorInfo.glowX, anchorInfo.glowY)
+			info.Arrow.Glow:SetRotation(rad(anchorInfo.degree))
+			info.Arrow.Arrow:SetRotation(rad(anchorInfo.degree))
+
+			helpTipTable[callbackArg] = info
+		end
+		info:Show()
+	end
+
+	function B:HideHelpTip(callbackArg)
+		local info = helpTipTable[callbackArg]
+		if info then
+			info:Hide()
+		end
 	end
 
 	-- Dropdown menu
@@ -444,8 +462,6 @@ do
 			fs:SetTextColor(cr, cg, cb)
 		elseif color == "system" then
 			fs:SetTextColor(1, .8, 0)
-		elseif color == "info" then
-			fs:SetTextColor(.6, .8, 1)
 		end
 		if anchor and x and y then
 			fs:SetPoint(anchor, x, y)
@@ -495,7 +511,6 @@ do
 		local frame = CreateFrame("Frame", nil, self)
 		frame:SetPoint("CENTER")
 		frame:SetSize(size+8, size+8)
-		frame:SetFrameLevel(frame:GetFrameLevel()+1)
 
 		return frame
 	end
@@ -551,7 +566,7 @@ do
 		self.__shadow:SetOutside(self, size or 4, size or 4)
 		self.__shadow:SetBackdrop(shadowBackdrop)
 		self.__shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
-		self.__shadow:SetFrameLevel(0) -- needs review
+		self.__shadow:SetFrameLevel(1)
 
 		return self.__shadow
 	end
@@ -699,54 +714,35 @@ do
 	end
 
 	local AtlasToQuality = {
-		["error"] = 99,
-		["uncollected"] = Enum.ItemQuality.Poor,
-		["gray"] = Enum.ItemQuality.Poor,
-		["white"] = Enum.ItemQuality.Common,
-		["green"] = Enum.ItemQuality.Uncommon,
-		["blue"] = Enum.ItemQuality.Rare,
-		["purple"] = Enum.ItemQuality.Epic,
-		["orange"] = Enum.ItemQuality.Legendary,
-		["artifact"] = Enum.ItemQuality.Artifact,
-		["account"] = Enum.ItemQuality.Heirloom,
-		["epic"] = Enum.ItemQuality.Epic,
-		["legendary"] = Enum.ItemQuality.Legendary,
+		["auctionhouse-itemicon-border-gray"] = LE_ITEM_QUALITY_POOR,
+		["auctionhouse-itemicon-border-white"] = LE_ITEM_QUALITY_COMMON,
+		["auctionhouse-itemicon-border-green"] = LE_ITEM_QUALITY_UNCOMMON,
+		["auctionhouse-itemicon-border-blue"] = LE_ITEM_QUALITY_RARE,
+		["auctionhouse-itemicon-border-purple"] = LE_ITEM_QUALITY_EPIC,
+		["auctionhouse-itemicon-border-orange"] = LE_ITEM_QUALITY_LEGENDARY,
+		["auctionhouse-itemicon-border-artifact"] = LE_ITEM_QUALITY_ARTIFACT,
+		["auctionhouse-itemicon-border-account"] = LE_ITEM_QUALITY_HEIRLOOM,
 	}
-	local function updateIconBorderColorByAtlas(border, atlas)
-		local atlasAbbr = atlas and strmatch(atlas, "%-(%w+)$")
-		local quality = atlasAbbr and AtlasToQuality[strlower(atlasAbbr)]
+	local function updateIconBorderColorByAtlas(self, atlas)
+		local quality = AtlasToQuality[atlas]
 		local color = DB.QualityColors[quality or 1]
-		border.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+		self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
-
-	local greyRGB = DB.QualityColors[0].r
-	local function updateIconBorderColor(border, r, g, b)
-		if not r or r == greyRGB or (r>.99 and g>.99 and b>.99) then
+	local function updateIconBorderColor(self, r, g, b)
+		if not r or (r==.65882 and g==.65882 and b==.65882) or (r>.99 and g>.99 and b>.99) then
 			r, g, b = 0, 0, 0
 		end
-		border.__owner.bg:SetBackdropBorderColor(r, g, b)
-		border:Hide(true) -- fix icon border
+		self.__owner.bg:SetBackdropBorderColor(r, g, b)
 	end
-	local function resetIconBorderColor(border, texture)
-		if not texture then
-			border.__owner.bg:SetBackdropBorderColor(0, 0, 0)
-		end
+	local function resetIconBorderColor(self)
+		self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 	end
-	local function iconBorderShown(border, show)
-		if not show then
-			resetIconBorderColor(border)
-		end
-	end
-	function B:ReskinIconBorder(needInit, useAtlas)
+	function B:ReskinIconBorder(needInit)
 		self:SetAlpha(0)
 		self.__owner = self:GetParent()
 		if not self.__owner.bg then return end
-		if useAtlas or self.__owner.useCircularIconBorder then -- for auction item display
+		if self.__owner.useCircularIconBorder then -- for auction item display
 			hooksecurefunc(self, "SetAtlas", updateIconBorderColorByAtlas)
-			hooksecurefunc(self, "SetTexture", resetIconBorderColor)
-			if needInit then
-				self:SetAtlas(self:GetAtlas()) -- for border with color before hook
-			end
 		else
 			hooksecurefunc(self, "SetVertexColor", updateIconBorderColor)
 			if needInit then
@@ -754,7 +750,6 @@ do
 			end
 		end
 		hooksecurefunc(self, "Hide", resetIconBorderColor)
-		hooksecurefunc(self, "SetShown", iconBorderShown)
 	end
 
 	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
@@ -797,7 +792,7 @@ do
 				if not ticks[i] then
 					ticks[i] = bar:CreateTexture(nil, "OVERLAY")
 					ticks[i]:SetTexture(DB.normTex)
-					ticks[i]:SetVertexColor(0, 0, 0)
+					ticks[i]:SetVertexColor(0, 0, 0, .7)
 					ticks[i]:SetWidth(C.mult)
 					ticks[i]:SetHeight(height)
 				end
@@ -850,6 +845,8 @@ do
 		"TabSpacer2",
 		"_RightSeparator",
 		"_LeftSeparator",
+		"RightSeparator",
+		"LeftSeparator",
 		"Cover",
 		"Border",
 		"Background",
@@ -868,7 +865,7 @@ do
 		if self.SetNormalTexture and not override then self:SetNormalTexture(0) end
 		if self.SetHighlightTexture then self:SetHighlightTexture(0) end
 		if self.SetPushedTexture then self:SetPushedTexture(0) end
-		if self.SetDisabledTexture then self:SetDisabledTexture(0) end
+		if self.SetDisabledTexture then self:SetDisabledTexture("") end
 
 		local buttonName = self.GetName and self:GetName()
 		for _, region in pairs(blizzRegions) do
@@ -914,15 +911,6 @@ do
 	-- Handle tabs
 	function B:ReskinTab()
 		self:DisableDrawLayer("BACKGROUND")
-		if self.LeftHighlight then
-			self.LeftHighlight:SetAlpha(0)
-		end
-		if self.RightHighlight then
-			self.RightHighlight:SetAlpha(0)
-		end
-		if self.MiddleHighlight then
-			self.MiddleHighlight:SetAlpha(0)
-		end
 
 		local bg = B.CreateBDFrame(self)
 		bg:SetPoint("TOPLEFT", 8, -3)
@@ -934,6 +922,8 @@ do
 		hl:ClearAllPoints()
 		hl:SetInside(bg)
 		hl:SetVertexColor(cr, cg, cb, .25)
+
+		return bg
 	end
 
 	function B:ResetTabAnchor()
@@ -1041,21 +1031,26 @@ do
 	end
 
 	-- WowTrimScrollBar
-	function B:ReskinTrimScroll(noTaint)
+	function B:ReskinTrimScroll()
+		local minimal = self:GetWidth() < 10
+
 		B.StripTextures(self)
-		reskinScrollArrow(self.Back, "up", true)
-		reskinScrollArrow(self.Forward, "down", true)
+		reskinScrollArrow(self.Back, "up", minimal)
+		reskinScrollArrow(self.Forward, "down", minimal)
 		if self.Track then
 			self.Track:DisableDrawLayer("ARTWORK")
 		end
 
-		if noTaint then return end
 		local thumb = self:GetThumb()
 		if thumb then
 			thumb:DisableDrawLayer("ARTWORK")
 			thumb:DisableDrawLayer("BACKGROUND")
 			thumb.bg = B.CreateBDFrame(thumb, .25)
 			thumb.bg:SetBackdropColor(cr, cg, cb, .25)
+			if not minimal then
+				thumb.bg:SetPoint("TOPLEFT", 4, -1)
+				thumb.bg:SetPoint("BOTTOMRIGHT", -4, 1)
+			end
 
 			thumb:HookScript("OnEnter", Thumb_OnEnter)
 			thumb:HookScript("OnLeave", Thumb_OnLeave)
@@ -1067,26 +1062,39 @@ do
 	-- Handle dropdown
 	function B:ReskinDropDown()
 		B.StripTextures(self)
-		if self.Arrow then self.Arrow:SetAlpha(0) end
-
-		local bg = B.CreateBDFrame(self, 0, true)
-		bg:SetPoint("TOPLEFT", 0, -2)
-		bg:SetPoint("BOTTOMRIGHT", 0, 2)
-		local tex = self:CreateTexture(nil, "ARTWORK")
-		tex:SetPoint("RIGHT", bg, -3, 0)
-		tex:SetSize(18, 18)
-		B.SetupArrow(tex, "down")
-		self.__texture = tex
-
-		self:HookScript("OnEnter", B.Texture_OnEnter)
-		self:HookScript("OnLeave", B.Texture_OnLeave)
+		if self.Arrow then
+			self.Arrow:SetAlpha(0)
+			if self.Background then self.Background:SetAlpha(0) end
+	
+			local bg = B.CreateBDFrame(self, 0, true)
+			bg:SetPoint("TOPLEFT", 0, -2)
+			bg:SetPoint("BOTTOMRIGHT", 0, 2)
+			local tex = self:CreateTexture(nil, "ARTWORK")
+			tex:SetPoint("RIGHT", bg, -3, 0)
+			tex:SetSize(18, 18)
+			B.SetupArrow(tex, "down")
+			self.__texture = tex
+	
+			self:HookScript("OnEnter", B.Texture_OnEnter)
+			self:HookScript("OnLeave", B.Texture_OnLeave)
+		else
+			local frameName = self.GetName and self:GetName()
+			local down = self.Button or frameName and (_G[frameName.."Button"] or _G[frameName.."_Button"])
+	
+			local bg = B.CreateBDFrame(self, 0, true)
+			bg:SetPoint("TOPLEFT", 16, -4)
+			bg:SetPoint("BOTTOMRIGHT", -18, 8)
+	
+			if down then
+				down:ClearAllPoints()
+				down:SetPoint("RIGHT", bg, -2, 0)
+				B.ReskinArrow(down, "down")
+			end
+		end
 	end
 
 	-- Handle close button
 	function B:Texture_OnEnter()
-		if DB.isDeveloper and not self.IsEnabled then
-			print(self:GetDebugName())
-		end
 		if self.IsEnabled and self:IsEnabled() then
 			if self.bg then
 				self.bg:SetBackdropColor(cr, cg, cb, .25)
@@ -1159,7 +1167,7 @@ do
 		local bg = B.CreateBDFrame(self, 0, true)
 		bg:SetPoint("TOPLEFT", -2, 0)
 		bg:SetPoint("BOTTOMRIGHT")
-		self.__bg = bg
+		self.bg = bg
 
 		if height then self:SetHeight(height) end
 		if width then self:SetWidth(width) end
@@ -1181,13 +1189,12 @@ do
 	function B:ReskinArrow(direction)
 		self:SetSize(16, 16)
 		B.Reskin(self, true)
-		if self.Texture then self.Texture:SetAlpha(0) end
 
 		self:SetDisabledTexture(DB.bdTex)
 		local dis = self:GetDisabledTexture()
-		dis:SetVertexColor(0, 0, 0, .5)
+		dis:SetVertexColor(0, 0, 0, .3)
 		dis:SetDrawLayer("OVERLAY")
-		dis:SetInside()
+		dis:SetAllPoints()
 
 		local tex = self:CreateTexture(nil, "ARTWORK")
 		tex:SetAllPoints()
@@ -1272,16 +1279,16 @@ do
 
 		local ch = self:GetCheckedTexture()
 		ch:SetAtlas("checkmark-minimal")
-		ch:SetDesaturated(true)
 		ch:SetTexCoord(0, 1, 0, 1)
+		ch:SetDesaturated(true)
 		ch:SetVertexColor(cr, cg, cb)
 
 		self.forceSaturation = forceSaturation
 	end
 
 	function B:ReskinRadio()
-		self:GetNormalTexture():SetAlpha(0)
-		self:GetHighlightTexture():SetAlpha(0)
+		self:SetNormalTexture(0)
+		self:SetHighlightTexture(0)
 		self:SetCheckedTexture(DB.bdTex)
 
 		local ch = self:GetCheckedTexture()
@@ -1375,8 +1382,11 @@ do
 
 	-- Handle collapse
 	local function updateCollapseTexture(texture, collapsed)
-		local atlas = collapsed and "Soulbinds_Collection_CategoryHeader_Expand" or "Soulbinds_Collection_CategoryHeader_Collapse"
-		texture:SetAtlas(atlas, true)
+		if collapsed then
+			texture:SetTexCoord(0, .4375, 0, .4375)
+		else
+			texture:SetTexCoord(.5625, 1, 0, .4375)
+		end
 	end
 
 	local function resetCollapseTexture(self, texture)
@@ -1385,9 +1395,9 @@ do
 		self:SetNormalTexture(0)
 
 		if texture and texture ~= "" then
-			if strfind(texture, "Plus") or strfind(texture, "[Cc]losed") then
+			if strfind(texture, "Plus") or strfind(texture, "Closed") then
 				self.__texture:DoCollapse(true)
-			elseif strfind(texture, "Minus") or strfind(texture, "[Oo]pen") then
+			elseif strfind(texture, "Minus") or strfind(texture, "Open") then
 				self.__texture:DoCollapse(false)
 			end
 			self.bg:Show()
@@ -1397,10 +1407,15 @@ do
 		self.settingTexture = nil
 	end
 
+	local function hideCollapseTexture(self)
+		self.bg:Hide()
+	end
+
 	function B:ReskinCollapse(isAtlas)
 		self:SetNormalTexture(0)
 		self:SetHighlightTexture(0)
 		self:SetPushedTexture(0)
+		self:SetDisabledTexture("")
 
 		local bg = B.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()
@@ -1410,6 +1425,8 @@ do
 
 		self.__texture = bg:CreateTexture(nil, "OVERLAY")
 		self.__texture:SetPoint("CENTER")
+		self.__texture:SetSize(7, 7)
+		self.__texture:SetTexture("Interface\\Buttons\\UI-PlusMinus-Buttons")
 		self.__texture.DoCollapse = updateCollapseTexture
 
 		self:HookScript("OnEnter", B.Texture_OnEnter)
@@ -1418,6 +1435,9 @@ do
 			hooksecurefunc(self, "SetNormalAtlas", resetCollapseTexture)
 		else
 			hooksecurefunc(self, "SetNormalTexture", resetCollapseTexture)
+			if self.ClearNormalTexture then
+				hooksecurefunc(self, "ClearNormalTexture", hideCollapseTexture)
+			end
 		end
 	end
 
@@ -1448,18 +1468,17 @@ do
 	end
 
 	-- UI templates
-	function B:ReskinPortraitFrame()
+	function B:ReskinPortraitFrame(x, y, x2, y2)
 		B.StripTextures(self)
-		local bg = B.SetBD(self)
-		bg:SetAllPoints(self)
+		local bg = B.SetBD(self, nil, x, y, x2, y2)
 		local frameName = self.GetName and self:GetName()
-		local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName.."Portrait"])
+		local portrait = (frameName and _G[frameName.."Portrait"]) or self.PortraitTexture or self.portrait
 		if portrait then
 			portrait:SetAlpha(0)
 		end
 		local closeButton = self.CloseButton or (frameName and _G[frameName.."CloseButton"])
 		if closeButton then
-			B.ReskinClose(closeButton)
+			B.ReskinClose(closeButton, bg, -5, -5)
 		end
 		return bg
 	end
@@ -1509,7 +1528,7 @@ do
 
 			local roleIcon = self.HealthBar.RoleIcon
 			roleIcon:ClearAllPoints()
-			roleIcon:SetPoint("CENTER", self.squareBG, "TOPRIGHT", -2, -2)
+			roleIcon:SetPoint("CENTER", self.squareBG, "TOPRIGHT")
 			replaceFollowerRole(roleIcon, roleIcon:GetAtlas())
 			hooksecurefunc(roleIcon, "SetAtlas", replaceFollowerRole)
 
@@ -1524,24 +1543,42 @@ do
 
 	function B:StyleSearchButton()
 		B.StripTextures(self)
-		local bg = B.CreateBDFrame(self, .25)
-		bg:SetInside()
-		local icon = self.icon or self.Icon
-		if icon then
-			B.ReskinIcon(icon)
-		end
+		if self.icon then B.ReskinIcon(self.icon) end
+		B.CreateBDFrame(self, .25)
 
 		self:SetHighlightTexture(DB.bdTex)
 		local hl = self:GetHighlightTexture()
 		hl:SetVertexColor(cr, cg, cb, .25)
-		hl:SetInside(bg)
+		hl:SetInside()
+	end
+
+	local function reskinRotation(self, direction)
+		self:SetSize(20, 20)
+		B.Reskin(self)
+		local tex = self:CreateTexture(nil, "ARTWORK")
+		tex:SetAllPoints()
+		tex:SetTexture("Interface\\Buttons\\UI-RefreshButton")
+		if direction == "left" then
+			tex:SetTexCoord(1, 0, 0, 1)
+		else
+			tex:SetTexCoord(0, 1, 0, 1)
+		end
+	end
+
+	function B:ReskinRotationButtons()
+		local name = self.GetName and self:GetName() or self
+		local leftButton = _G[name.."RotateRightButton"]
+		reskinRotation(leftButton, "left")
+		local rightButton = _G[name.."RotateLeftButton"]
+		reskinRotation(rightButton, "right")
+
+		leftButton:SetPoint("TOPLEFT", 5, -5)
+		rightButton:ClearAllPoints()
+		rightButton:SetPoint("LEFT", leftButton, "RIGHT", 3, 0)
 	end
 
 	function B:AffixesSetup()
-		local list = self.AffixesContainer and self.AffixesContainer.Affixes or self.Affixes
-		if not list then return end
-
-		for _, frame in ipairs(list) do
+		for _, frame in ipairs(self.Affixes) do
 			frame.Border:SetTexture(nil)
 			frame.Portrait:SetTexture(nil)
 			if not frame.bg then
@@ -1558,16 +1595,19 @@ do
 	end
 
 	-- Role Icons
-	local GroupRoleTex = {
-		TANK = "groupfinder-icon-role-micro-tank",
-		HEALER = "groupfinder-icon-role-micro-heal",
-		DAMAGER = "groupfinder-icon-role-micro-dps",
-		DPS = "groupfinder-icon-role-micro-dps",
-	}
+	function B:GetRoleTex()
+		if self == "TANK" then
+			return DB.tankTex
+		elseif self == "DPS" or self == "DAMAGER" then
+			return DB.dpsTex
+		elseif self == "HEALER" then
+			return DB.healTex
+		end
+	end
 
 	function B:ReskinSmallRole(role)
+		self:SetTexture(B.GetRoleTex(role))
 		self:SetTexCoord(0, 1, 0, 1)
-		self:SetAtlas(GroupRoleTex[role])
 	end
 
 	function B:ReskinRole()
@@ -1576,11 +1616,22 @@ do
 		local cover = self.cover or self.Cover
 		if cover then cover:SetTexture("") end
 
-		local checkButton = self.checkButton or self.CheckButton or self.CheckBox or self.Checkbox
+		local checkButton = self.checkButton or self.CheckButton or self.CheckBox
 		if checkButton then
 			checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
 			checkButton:SetPoint("BOTTOMLEFT", -2, -2)
 			B.ReskinCheck(checkButton)
+		end
+
+		local shortageBorder = self.shortageBorder
+		if shortageBorder then
+			shortageBorder:SetTexture("")
+			local icon = self.incentiveIcon
+			icon:SetPoint("BOTTOMRIGHT")
+			icon:SetSize(14, 14)
+			icon.texture:SetSize(14, 14)
+			B.ReskinIcon(icon.texture)
+			icon.border:SetTexture("")
 		end
 	end
 end
@@ -1601,7 +1652,7 @@ do
 	end
 
 	function B:CreateCheckBox()
-		local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsBaseCheckButtonTemplate")
+		local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
 		cb:SetScript("OnClick", nil) -- reset onclick handler
 		B.ReskinCheck(cb)
 
@@ -1734,7 +1785,7 @@ do
 		ColorPickerFrame.swatchFunc = updatePicker
 		ColorPickerFrame.previousValues = {r = r, g = g, b = b}
 		ColorPickerFrame.cancelFunc = cancelPicker
-		ColorPickerFrame.Content.ColorPicker:SetColorRGB(r, g, b)
+		ColorPickerFrame:SetColorRGB(r, g, b)
 		ColorPickerFrame:Show()
 	end
 
@@ -1749,7 +1800,7 @@ do
 	local function resetColorPicker(swatch)
 		local defaultColor = swatch.__default
 		if defaultColor then
-			ColorPickerFrame.Content.ColorPicker:SetColorRGB(defaultColor.r, defaultColor.g, defaultColor.b)
+			ColorPickerFrame:SetColorRGB(defaultColor.r, defaultColor.g, defaultColor.b)
 		end
 	end
 
@@ -1835,6 +1886,19 @@ do
 			frame:Show()
 		end
 	end
+
+	function B:ToggleFriends(index) -- needs review, maybe taint
+		if FriendsFrame:IsShown() then
+			if FriendsFrame.selectedTab ~= index then
+				_G["FriendsFrameTab"..index]:Click()
+			else
+				ToggleFrame(FriendsFrame)
+			end
+		else
+			ToggleFrame(FriendsFrame)
+			_G["FriendsFrameTab"..index]:Click()
+		end
+	end
 end
 
 -- Add API
@@ -1852,7 +1916,7 @@ do
 				frame:SetTexelSnappingBias(0)
 			elseif frame.GetStatusBarTexture then
 				local texture = frame:GetStatusBarTexture()
-				if type(texture) == "table" and texture.SetSnapToPixelGrid then
+				if texture and texture.SetSnapToPixelGrid then
 					texture:SetSnapToPixelGrid(false)
 					texture:SetTexelSnappingBias(0)
 				end
@@ -1920,9 +1984,10 @@ do
 
 	object = EnumerateFrames()
 	while object do
-		if not object:IsForbidden() and not handled[object:GetObjectType()] then
+		local objectType = object.GetObjectType and object:GetObjectType()
+		if objectType and not handled[objectType] and not object:IsForbidden() then
 			addapi(object)
-			handled[object:GetObjectType()] = true
+			handled[objectType] = true
 		end
 
 		object = EnumerateFrames(object)

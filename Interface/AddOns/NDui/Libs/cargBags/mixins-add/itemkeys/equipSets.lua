@@ -28,13 +28,10 @@ local cargBags = ns.cargBags
 
 local ItemKeys = cargBags.itemKeys
 
-local setItems, isUpdating
+local setItems
 
 local function initUpdater()
 	local function updateSets()
-		if isUpdating then return end
-		isUpdating = true
-
 		setItems = setItems or {}
 		wipe(setItems)
 
@@ -42,27 +39,26 @@ local function initUpdater()
 			local locations = C_EquipmentSet.GetItemLocations(setID)
 			if locations then
 				for _, location in pairs(locations) do
-					local _, bank, bags, _, slot, bag = EquipmentManager_UnpackLocation(location)
-					if (bank or bags) and slot and bag then
+					local _, bank, bags, slot, bag = EquipmentManager_UnpackLocation(location)
+					if bags then
 						setItems[bag..":"..slot] = true
 					end
 				end
 			end
 		end
-
-		isUpdating = nil
 	end
 
 	local updater = CreateFrame("Frame")
 	updater:RegisterEvent("BAG_UPDATE")
 	updater:RegisterEvent("EQUIPMENT_SETS_CHANGED")
-	updater:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
-	updater:SetScript("OnEvent", updateSets)
+	updater:SetScript("OnEvent", function()
+		updateSets()
+	end)
 
 	updateSets()
 end
 
-ItemKeys["isItemSet"] = function(item)
+ItemKeys["isInSet"] = function(item)
 	if not setItems then initUpdater() end
 	return setItems[item.bagId..":"..item.slotId]
 end

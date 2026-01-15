@@ -32,9 +32,8 @@ function Bar:CreateLeaveVehicle()
 	button.icon:SetTexCoord(.216, .784, .216, .784)
 	button.icon:SetDrawLayer("ARTWORK")
 	button.icon.__lockdown = true
-	if button.Arrow then button.Arrow:SetAlpha(0) end
 
-	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton.OnEnter)
+	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
 	button:SetScript("OnLeave", B.HideTooltip)
 	button:SetScript("OnClick", function(self)
 		if UnitOnTaxi("player") then

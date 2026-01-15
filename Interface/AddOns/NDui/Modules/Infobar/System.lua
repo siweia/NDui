@@ -9,12 +9,12 @@ local info = module:RegisterInfobar("Fps", C.Infobar.SystemPos)
 local ipairs, tinsert, wipe, sort = ipairs, tinsert, wipe, sort
 local format, floor, min, max = format, floor, min, max
 local GetFramerate, GetTime = GetFramerate, GetTime
-local GetCVarBool, SetCVar = GetCVarBool, SetCVar
+local GetAddOnInfo, GetCVarBool, SetCVar = GetAddOnInfo, GetCVarBool, SetCVar
 local UpdateAddOnCPUUsage, GetAddOnCPUUsage = UpdateAddOnCPUUsage, GetAddOnCPUUsage
 local UpdateAddOnMemoryUsage, GetAddOnMemoryUsage = UpdateAddOnMemoryUsage, GetAddOnMemoryUsage
 local IsShiftKeyDown = IsShiftKeyDown
-local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local ResetCPUUsage, collectgarbage, gcinfo = ResetCPUUsage, collectgarbage, gcinfo
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local showMoreString = "%d %s (%s)"
 local usageString = "%.3f ms"

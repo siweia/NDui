@@ -7,9 +7,8 @@ local info = module:RegisterInfobar("Zone", C.Infobar.LocationPos)
 local mapModule = B:GetModule("Maps")
 
 local format, unpack = string.format, unpack
-local WorldMapFrame, SELECTED_DOCK_FRAME, ChatFrame_OpenChat = WorldMapFrame, SELECTED_DOCK_FRAME, ChatFrame_OpenChat
-local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
-local GetSubZoneText, GetZoneText, IsInInstance = GetSubZoneText, GetZoneText, IsInInstance
+local SELECTED_DOCK_FRAME, ChatFrame_OpenChat = SELECTED_DOCK_FRAME, ChatFrame_OpenChat
+local GetSubZoneText, GetZoneText, GetZonePVPInfo, IsInInstance = GetSubZoneText, GetZoneText, GetZonePVPInfo, IsInInstance
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 
 local zoneInfo = {
@@ -37,13 +36,13 @@ info.eventList = {
 }
 
 info.onEvent = function(self)
-	subzone = GetMinimapZoneText()
-	zone = GetAreaText()
+	subzone = GetSubZoneText()
+	zone = GetZoneText()
 	pvpType, _, faction = GetZonePVPInfo()
 	pvpType = pvpType or "neutral"
 
 	local r, g, b = unpack(zoneInfo[pvpType][2])
-	self.text:SetText(subzone)
+	self.text:SetText((subzone ~= "") and subzone or zone)
 	self.text:SetTextColor(r, g, b)
 end
 
@@ -91,17 +90,13 @@ info.onLeave = function(self)
 	GameTooltip:Hide()
 end
 
-
-local zoneString = "|cffffff00|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a %s: %s (%s) %s]|h|r"
-
 info.onMouseUp = function(_, btn)
 	if btn == "LeftButton" then
-		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-		ToggleFrame(WorldMapFrame)
+		ToggleWorldMap()
 	elseif btn == "RightButton" then
-		local mapID = C_Map_GetBestMapForUnit("player")
 		local hasUnit = UnitExists("target") and not UnitIsPlayer("target")
-		local unitName = hasUnit and UnitName("target") or ""
-		print(format(zoneString, mapID, coordX*10000, coordY*10000, L["My Position"], zone, formatCoords(), unitName))
+		local unitName = nil
+		if hasUnit then unitName = UnitName("target") end
+		ChatFrame_OpenChat(format("%s: %s (%s) %s", L["My Position"], zone, formatCoords(), unitName or ""), SELECTED_DOCK_FRAME)
 	end
 end

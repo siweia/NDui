@@ -27,9 +27,6 @@ local function reskinFrameButton(self)
 				child.DragButton:GetHighlightTexture():SetAllPoints(icon)
 			else
 				child.dragButton.ActiveTexture:SetTexture("")
-				child.dragButton.levelBG:SetAlpha(0)
-				child.dragButton.level:SetFontObject(GameFontNormal)
-				child.dragButton.level:SetTextColor(1, 1, 1)
 				child.dragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				child.dragButton:GetHighlightTexture():SetAllPoints(icon)
 			end
@@ -43,7 +40,7 @@ C.themes["Blizzard_Collections"] = function()
 	-- [[ General ]]
 
 	CollectionsJournal.bg = B.ReskinPortraitFrame(CollectionsJournal) -- need this for Rematch skin
-	for i = 1, 6 do
+	for i = 1, 5 do
 		local tab = _G["CollectionsJournalTab"..i]
 		if tab then
 			B.ReskinTab(tab)
@@ -65,10 +62,7 @@ C.themes["Blizzard_Collections"] = function()
 	MountJournal.MountDisplay.NoMountsTex:SetAlpha(0)
 	MountJournal.MountDisplay.ShadowOverlay:Hide()
 	PetJournal.LeftInset:Hide()
-	PetJournal.RightInset:SetAlpha(0)
-	PetJournal.PetCardInset:Hide()
-	PetJournal.loadoutBorder:SetAlpha(0)
-	PetJournalTutorialButton.Ring:Hide()
+	PetJournal.RightInset:Hide()
 
 	B.StripTextures(MountJournal.MountCount)
 	B.CreateBDFrame(MountJournal.MountCount, .25)
@@ -77,11 +71,9 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournal.PetCount:SetWidth(140)
 	B.CreateBDFrame(MountJournal.MountDisplay.ModelScene, .25)
 	B.ReskinIcon(MountJournal.MountDisplay.InfoButton.Icon)
-	B.ReskinModelControl(MountJournal.MountDisplay.ModelScene)
 
 	B.Reskin(MountJournalMountButton)
 	B.Reskin(PetJournalSummonButton)
-	B.Reskin(PetJournalFindBattle)
 
 	B.ReskinTrimScroll(MountJournal.ScrollBar)
 	hooksecurefunc(MountJournal.ScrollBox, "Update", reskinFrameButton)
@@ -112,13 +104,7 @@ C.themes["Blizzard_Collections"] = function()
 
 		local petID, _, isOwned = C_PetJournal.GetPetInfoByIndex(index)
 		if petID and isOwned then
-			local rarity = select(5, C_PetJournal.GetPetStats(petID))
-			if rarity then
-				local r, g, b = C_Item.GetItemQualityColor(rarity-1)
-				button.name:SetTextColor(r, g, b)
-			else
-				button.name:SetTextColor(1, 1, 1)
-			end
+			button.name:SetTextColor(1, 1, 1)
 		else
 			button.name:SetTextColor(.5, .5, .5)
 		end
@@ -138,176 +124,28 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.ReskinInput(MountJournalSearchBox)
 	B.ReskinInput(PetJournalSearchBox)
+	B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateLeftButton, "left")
+	B.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, "right")
 	B.ReskinFilterButton(PetJournal.FilterDropdown)
 	B.ReskinFilterButton(MountJournal.FilterDropdown)
 
 	local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
-	B.ReskinCheck(togglePlayer)
-	togglePlayer:SetSize(28, 28)
-
-	B.StripTextures(MountJournal.BottomLeftInset)
-	local bg = B.CreateBDFrame(MountJournal.BottomLeftInset, .25)
-	bg:SetPoint("TOPLEFT", 3, 0)
-	bg:SetPoint("BOTTOMRIGHT", -24, 2)
-	PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
-
-	local function reskinToolButton(button)
-		button.Border:Hide()
-		button:SetPushedTexture(0)
-		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		B.ReskinIcon(button.Icon)
-	end
-	reskinToolButton(PetJournal.HealPetSpellFrame.Button)
-	reskinToolButton(PetJournal.SummonRandomPetSpellFrame.Button)
-
-	PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
-	PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
-
-	-- Favourite mount button
-
-	reskinToolButton(MountJournal.SummonRandomFavoriteSpellFrame.Button)
-
-	local function reskinDynamicButton(button, index)
-		if button.Border then button.Border:Hide() end
-		button:SetPushedTexture(0)
-		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		B.ReskinIcon(select(index, button:GetRegions()), nil)
-		button:SetNormalTexture(0)
-	end
-	reskinDynamicButton(MountJournal.ToggleDynamicFlightFlyoutButton, 3)
-
-	local flyout = MountJournal.ToggleDynamicFlightFlyoutButton.popup or MountJournal.DynamicFlightFlyout
-	if flyout then
-		flyout.Background:Hide()
-		reskinDynamicButton(flyout.OpenDynamicFlightSkillTreeButton, 4)
-		reskinDynamicButton(flyout.DynamicFlightModeButton, 4)
+	if togglePlayer then
+		B.ReskinCheck(togglePlayer)
+		togglePlayer:SetSize(28, 28)
 	end
 
 	-- Pet card
 
 	local card = PetJournalPetCard
-
-	PetJournalPetCardBG:Hide()
-	card.PetInfo.levelBG:SetAlpha(0)
-	card.PetInfo.qualityBorder:SetAlpha(0)
-	card.AbilitiesBG1:SetAlpha(0)
-	card.AbilitiesBG2:SetAlpha(0)
-	card.AbilitiesBG3:SetAlpha(0)
-
-	card.PetInfo.level:SetFontObject(GameFontNormal)
-	card.PetInfo.level:SetTextColor(1, 1, 1)
-
-	card.PetInfo.icon.bg = B.ReskinIcon(card.PetInfo.icon)
-
 	B.CreateBDFrame(card, .25)
+	card.PetBackground:Hide()
+	card.ShadowOverlay:Hide()
+	B.ReskinArrow(card.modelScene.RotateLeftButton, "left")
+	B.ReskinArrow(card.modelScene.RotateRightButton, "right")
 
-	for i = 2, 12 do
-		select(i, card.xpBar:GetRegions()):Hide()
-	end
-
-	card.xpBar:SetStatusBarTexture(DB.bdTex)
-	B.CreateBDFrame(card.xpBar, .25)
-
-	PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
-	PetJournalPetCardHealthFramehealthStatusBarRight:Hide()
-	PetJournalPetCardHealthFramehealthStatusBarMiddle:Hide()
-	PetJournalPetCardHealthFramehealthStatusBarBGMiddle:Hide()
-
-	card.HealthFrame.healthBar:SetStatusBarTexture(DB.bdTex)
-	B.CreateBDFrame(card.HealthFrame.healthBar, .25)
-
-	for i = 1, 6 do
-		local bu = card["spell"..i]
-		B.ReskinIcon(bu.icon)
-	end
-
-	hooksecurefunc("PetJournal_UpdatePetCard", function(self)
-		local border = self.PetInfo.qualityBorder
-		local r, g, b
-
-		if border:IsShown() then
-			r, g, b = self.PetInfo.qualityBorder:GetVertexColor()
-		else
-			r, g, b = 0, 0, 0
-		end
-
-		self.PetInfo.icon.bg:SetBackdropBorderColor(r, g, b)
-	end)
-
-	-- Pet loadout
-
-	for i = 1, 3 do
-		local bu = PetJournal.Loadout["Pet"..i]
-
-		_G["PetJournalLoadoutPet"..i.."BG"]:Hide()
-
-		bu.iconBorder:SetAlpha(0)
-		bu.qualityBorder:SetTexture("")
-		bu.levelBG:SetAlpha(0)
-		bu.helpFrame:GetRegions():Hide()
-		bu.dragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-
-		bu.level:SetFontObject(GameFontNormal)
-		bu.level:SetTextColor(1, 1, 1)
-
-		bu.icon.bg = B.ReskinIcon(bu.icon)
-
-		bu.setButton:GetRegions():SetPoint("TOPLEFT", bu.icon, -5, 5)
-		bu.setButton:GetRegions():SetPoint("BOTTOMRIGHT", bu.icon, 5, -5)
-
-		B.CreateBDFrame(bu, .25)
-
-		for i = 2, 12 do
-			select(i, bu.xpBar:GetRegions()):Hide()
-		end
-
-		bu.xpBar:SetStatusBarTexture(DB.bdTex)
-		B.CreateBDFrame(bu.xpBar, .25)
-
-		B.StripTextures(bu.healthFrame.healthBar)
-		bu.healthFrame.healthBar:SetStatusBarTexture(DB.bdTex)
-		B.CreateBDFrame(bu.healthFrame.healthBar, .25)
-
-		for j = 1, 3 do
-			local spell = bu["spell"..j]
-
-			spell:SetPushedTexture(0)
-			spell:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			spell.selected:SetTexture(DB.pushedTex)
-			spell:GetRegions():Hide()
-
-			local flyoutArrow = spell.FlyoutArrow
-			B.SetupArrow(flyoutArrow, "down")
-			flyoutArrow:SetSize(14, 14)
-			flyoutArrow:SetTexCoord(0, 1, 0, 1)
-
-			B.ReskinIcon(spell.icon)
-		end
-	end
-
-	hooksecurefunc("PetJournal_UpdatePetLoadOut", function()
-		for i = 1, 3 do
-			local bu = PetJournal.Loadout["Pet"..i]
-
-			bu.icon.bg:SetShown(not bu.helpFrame:IsShown())
-			bu.icon.bg:SetBackdropBorderColor(bu.qualityBorder:GetVertexColor())
-
-			bu.dragButton:SetEnabled(not bu.helpFrame:IsShown())
-		end
-	end)
-
-	PetJournal.SpellSelect.BgEnd:Hide()
-	PetJournal.SpellSelect.BgTiled:Hide()
-
-	for i = 1, 2 do
-		local bu = PetJournal.SpellSelect["Spell"..i]
-
-		bu:SetCheckedTexture(DB.pushedTex)
-		bu:SetPushedTexture(0)
-		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-
-		B.ReskinIcon(bu.icon)
-	end
+	local petIcon = card.PetInfo.icon
+	petIcon.bg = B.ReskinIcon(petIcon)
 
 	-- [[ Toy box ]]
 
@@ -316,9 +154,9 @@ C.themes["Blizzard_Collections"] = function()
 
 	B.StripTextures(iconsFrame)
 	B.ReskinInput(ToyBox.searchBox)
-	B.ReskinFilterButton(ToyBox.FilterDropdown)
 	B.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(ToyBox.PagingFrame.NextPageButton, "right")
+	B.ReskinFilterButton(ToyBox.FilterDropdown)
 
 	-- Progress bar
 
@@ -341,9 +179,9 @@ C.themes["Blizzard_Collections"] = function()
 		local itemID = bu.itemID
 
 		if PlayerHasToy(itemID) then
-			local quality = select(3, C_Item.GetItemInfo(itemID))
+			local quality = select(3, GetItemInfo(itemID))
 			if quality then
-				local r, g, b = C_Item.GetItemQualityColor(quality)
+				local r, g, b = GetItemQualityColor(quality)
 				text:SetTextColor(r, g, b)
 			else
 				text:SetTextColor(1, 1, 1)
@@ -384,7 +222,6 @@ C.themes["Blizzard_Collections"] = function()
 	B.ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, "right")
 
 	hooksecurefunc(HeirloomsJournal, "UpdateButton", function(_, button)
-		button.level:SetFontObject("GameFontWhiteSmall")
 		button.special:SetTextColor(1, .8, 0)
 	end)
 
@@ -407,16 +244,12 @@ C.themes["Blizzard_Collections"] = function()
 
 			button.slotFrameCollected:SetTexture("")
 			button.slotFrameUncollected:SetTexture("")
-			button.levelBackground:SetAlpha(0)
 			button:SetPushedTexture(0)
 			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			button:GetHighlightTexture():SetAllPoints(ic)
 
 			button.iconTextureUncollected:SetTexCoord(unpack(DB.TexCoord))
 			button.bg = B.ReskinIcon(ic)
-
-			button.level:ClearAllPoints()
-			button.level:SetPoint("BOTTOM", 0, 1)
 
 			local newLevelBg = button:CreateTexture(nil, "OVERLAY")
 			newLevelBg:SetColorTexture(0, 0, 0, .5)
@@ -468,27 +301,14 @@ C.themes["Blizzard_Collections"] = function()
 	-- [[ WardrobeCollectionFrame ]]
 
 	local WardrobeCollectionFrame = WardrobeCollectionFrame
+	if not WardrobeCollectionFrame then return end
 	local ItemsCollectionFrame = WardrobeCollectionFrame.ItemsCollectionFrame
 
 	B.StripTextures(ItemsCollectionFrame)
 	B.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
-	B.ReskinInput(WardrobeCollectionFrameSearchBox)
-	B.ReskinDropDown(WardrobeCollectionFrame.ClassDropdown)
 	B.ReskinDropDown(ItemsCollectionFrame.WeaponDropdown)
-
-	hooksecurefunc(WardrobeCollectionFrame, "SetTab", function(self, tabID)
-		for index = 1, 2 do
-			local tab = self.Tabs[index]
-			if not tab.bg then
-				B.ReskinTab(tab)
-			end
-			if tabID == index then
-				tab.bg:SetBackdropColor(cr, cg, cb, .25)
-			else
-				tab.bg:SetBackdropColor(0, 0, 0, .25)
-			end
-		end
-	end)
+	B.ReskinInput(WardrobeCollectionFrameSearchBox)
+	B.ReskinTab(WardrobeCollectionFrameTab1)
 
 	B.ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, "left")
 	B.ReskinArrow(ItemsCollectionFrame.PagingFrame.NextPageButton, "right")
@@ -501,6 +321,8 @@ C.themes["Blizzard_Collections"] = function()
 	progressBar.text:SetPoint("CENTER", 0, 1)
 	progressBar:SetStatusBarTexture(DB.bdTex)
 	B.CreateBDFrame(progressBar, .25)
+
+	B.ReskinTab(WardrobeCollectionFrameTab2)
 
 	-- ItemSetsCollection
 
@@ -559,94 +381,36 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end)
 
-	if not DB.isNewPatch then
-		local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
-		B.StripTextures(SetsTransmogFrame)
-		B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
-		B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
+	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
+	B.StripTextures(SetsTransmogFrame)
+	B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
+	B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
 
-		-- [[ Wardrobe ]]
+	-- [[ Wardrobe ]]
 
-		local WardrobeFrame = WardrobeFrame
-		local WardrobeTransmogFrame = WardrobeTransmogFrame
+	local WardrobeFrame = WardrobeFrame
+	local WardrobeTransmogFrame = WardrobeTransmogFrame
 
-		B.StripTextures(WardrobeTransmogFrame)
-		B.ReskinPortraitFrame(WardrobeFrame)
-		B.Reskin(WardrobeTransmogFrame.ApplyButton)
+	B.ReskinPortraitFrame(WardrobeFrame)
+	B.StripTextures(WardrobeTransmogFrame)
+	B.Reskin(WardrobeTransmogFrame.ApplyButton)
+	B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+	WardrobeTransmogFrame.Model.ClearAllPendingButton:DisableDrawLayer("BACKGROUND")
 
-		local specButton = WardrobeTransmogFrame.SpecDropdown
-		if specButton then
-			B.StripTextures(specButton, 0)
-			B.ReskinArrow(specButton, "down")
-			specButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
-		end
-		B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
-		B.ReskinModelControl(WardrobeTransmogFrame.ModelScene)
-
-		local modelScene = WardrobeTransmogFrame.ModelScene
-		modelScene.ClearAllPendingButton:DisableDrawLayer("BACKGROUND")
-
-		local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand"}
-		for i = 1, #slots do
-			local slot = modelScene[slots[i].."Button"]
-			if slot then
-				slot.Border:Hide()
-				B.ReskinIcon(slot.Icon)
-				slot:SetHighlightTexture(DB.bdTex)
-				local hl = slot:GetHighlightTexture()
-				hl:SetVertexColor(1, 1, 1, .25)
-				hl:SetAllPoints(slot.Icon)
-			end
-		end
-
-		-- Outfit Frame
-		B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
-		B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
-	end
-
-	-- HPetBattleAny
-	local reskinHPet
-	CollectionsJournal:HookScript("OnShow", function()
-		if not C_AddOns.IsAddOnLoaded("HPetBattleAny") then return end
-		if not reskinHPet then
-			if HPetInitOpenButton then
-				B.Reskin(HPetInitOpenButton)
-			end
-			if HPetAllInfoButton then
-				B.StripTextures(HPetAllInfoButton)
-				B.Reskin(HPetAllInfoButton)
-			end
-
-			if PetJournalBandageButton then
-				PetJournalBandageButton:SetPushedTexture(0)
-				PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-				PetJournalBandageButtonBorder:Hide()
-				PetJournalBandageButton:SetPoint("TOPRIGHT", PetJournalHealPetButton, "TOPLEFT", -3, 0)
-				PetJournalBandageButton:SetPoint("BOTTOMLEFT", PetJournalHealPetButton, "BOTTOMLEFT", -35, 0)
-				B.ReskinIcon(PetJournalBandageButtonIcon)
-			end
-			reskinHPet = true
-		end
-	end)
-
-	-- WarbandSceneJournal
-	if WarbandSceneJournal then
-		local iconsFrame = WarbandSceneJournal.IconsFrame
-		if iconsFrame then
-			B.StripTextures(iconsFrame)
-
-			local controls = iconsFrame.Icons and iconsFrame.Icons.Controls
-			if controls then
-				local showCheck = controls and controls.ShowOwned and controls.ShowOwned.Checkbox
-				if showCheck then
-					B.ReskinCheck(showCheck)
-					showCheck:SetSize(28, 28)
-				end
-				if controls.PagingControls then
-					B.ReskinArrow(controls.PagingControls.PrevPageButton, "left")
-					B.ReskinArrow(controls.PagingControls.NextPageButton, "right")
-				end
-			end
+	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand", "Ranged"}
+	for i = 1, #slots do
+		local slot = WardrobeTransmogFrame[slots[i].."Button"]
+		if slot then
+			slot.Border:Hide()
+			B.ReskinIcon(slot.Icon)
+			slot:SetHighlightTexture(DB.bdTex)
+			local hl = slot:GetHighlightTexture()
+			hl:SetVertexColor(1, 1, 1, .25)
+			hl:SetAllPoints(slot.Icon)
 		end
 	end
+
+	-- Outfit Frame
+	B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
+	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
 end

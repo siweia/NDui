@@ -16,16 +16,12 @@ local B, C, L, DB = unpack(ns)
 local strfind, format, strsplit = string.find, string.format, string.split
 local gsub, pairs, tonumber, tostring = gsub, pairs, tonumber, tostring
 local floor, ceil = math.floor, math.ceil
-local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
-local GetSpellDescription = C_Spell.GetSpellDescription
-local GetSpellName = C_Spell.GetSpellName
 
 DB.Devs = {
-	["寧德-加尔"] = true,
-	["图咿-万色星辰"] = true,
-	["打蛋獵手-地獄吼"] = true,
-	["Huniverster-Koranos"] = true,
-	["Therefire-TheseGoToEleven"] = true,
+	["唛喏-寒冰之王"] = true, -- classic
+	["Huniverster-BadgeofJustice"] = true, -- classic beta
+	["Huniverster-ClassicPTRRealm1"] = true, -- classic ptr
+	["Huniverster-ClassicPTRRealm2"] = true, -- classic ptr
 }
 local function isDeveloper()
 	local rawName = gsub(DB.MyFullName, "%s", "")
@@ -60,11 +56,11 @@ end
 SLASH_NDUI_ENUMFRAME1 = "/nf"
 
 SlashCmdList["NDUI_DUMPSPELL"] = function(arg)
-	local name = GetSpellName(arg)
+	local name = GetSpellInfo(arg)
 	if not name then return end
 	local des = GetSpellDescription(arg)
 	print("|cff70C0F5------------------------")
-	print(" \124T"..C_Spell.GetSpellTexture(arg)..":16:16:::64:64:5:59:5:59\124t", DB.InfoColor..arg)
+	print(" \124T"..GetSpellTexture(arg)..":16:16:::64:64:5:59:5:59\124t", DB.InfoColor..arg)
 	print(NAME, DB.InfoColor..(name or "nil"))
 	print(DESCRIPTION, DB.InfoColor..(des or "nil"))
 	print("|cff70C0F5------------------------")
@@ -134,12 +130,10 @@ do
 
 	SlashCmdList["NDUI_VER_CHECK"] = function(msg)
 		local channel
-		if IsPartyLFG() then
+		if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 			channel = "INSTANCE_CHAT"
 		elseif IsInRaid() then
 			channel = "RAID"
-		elseif IsInGroup() then
-			channel = "PARTY"
 		elseif IsInGuild() then
 			channel = "GUILD"
 		end
@@ -148,24 +142,6 @@ do
 	end
 	SLASH_NDUI_VER_CHECK1 = "/nduiver"
 end
-
-SlashCmdList["NDUI_GET_INSTANCES"] = function()
-	if not EncounterJournal then return end
-	local tierID = EJ_GetCurrentTier()
-	print("local _, ns = ...")
-	print("local B, C, L, DB = unpack(ns)")
-	print("local module = B:GetModule(\"AurasTable\")")
-	print("local TIER = "..tierID)
-	print("local INSTANCE")
-	local i = 0
-	while true do
-		i = i + 1
-		local instID, instName = EJ_GetInstanceByIndex(i, false)
-		if not instID then return end
-		print("INSTANCE = "..instID.." -- "..instName)
-	end
-end
-SLASH_NDUI_GET_INSTANCES1 = "/getinst"
 
 SlashCmdList["NDUI_GET_ENCOUNTERS"] = function()
 	if not EncounterJournal then return end
@@ -191,32 +167,13 @@ SLASH_NDUI_GET_ENCOUNTERS1 = "/getenc"
 
 SlashCmdList["NDUI_DUMPSPELLS"] = function(arg)
 	for spell in gmatch(arg, "%d+") do
-		local name = GetSpellName(spell)
+		local name = GetSpellInfo(spell)
 		if name then
 			print("module:RegisterDebuff(TIER, INSTANCE, BOSS, "..spell..") -- "..name)
 		end
 	end
 end
 SLASH_NDUI_DUMPSPELLS1 = "/getss"
-
-SlashCmdList["NDUI_GET_TIERSETS"] = function()
-	if not EncounterJournal then return end
-	local frame = EncounterJournal.LootJournalItems.ItemSetsFrame
-	local classFilter = frame:GetClassAndSpecFilters()
-	local classInfo = C_CreatureInfo.GetClassInfo(classFilter)
-	local sets = frame.itemSets
-	local setID = sets and sets[1].setID
-	if not setID then return end
-	local data = C_LootJournal.GetItemSetItems(setID)
-	local text = ""
-	for i = 1, 5 do
-		local d = data[i]
-		text = "["..d.itemID.."] = true, "..text
-	end
-	print("--", classInfo.classFile)
-	print(text)
-end
-SLASH_NDUI_GET_TIERSETS1 = "/getts"
 
 -- Grids
 local grid

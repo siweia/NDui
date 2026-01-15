@@ -1,72 +1,8 @@
-local _, ns = ...
+local parent, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
 
 local frame_metatable = Private.frame_metatable
-
-local DebuffTypeColor = _G.DebuffTypeColor
-
-if not DebuffTypeColor then -- isNewPatch, temp fix
-	DebuffTypeColor = {}
-	DebuffTypeColor["none"]	=		{ r = 0.8000, g = 0.0000, b = 0.0000, a = 1 };
-	DebuffTypeColor["Magic"] = 		{ r = 0.0000, g = 0.5059, b = 1.0000, a = 1 };
-	DebuffTypeColor["Curse"] = 		{ r = 0.6235, g = 0.0235, b = 0.8941, a = 1 };
-	DebuffTypeColor["Disease"] =	{ r = 0.9451, g = 0.4157, b = 0.0353, a = 1 };
-	DebuffTypeColor["Poison"] = 	{ r = 0.4824, g = 0.7804, b = 0.0000, a = 1 };
-	DebuffTypeColor["Bleed"] =		{ r = 0.7216, g = 0.0000, b = 0.0588, a = 1 };
-	DebuffTypeColor[""]	= DebuffTypeColor["none"]
-end
-
-local colorMixin = {
-	SetRGBA = function(self, r, g, b, a)
-		if(r > 1 or g > 1 or b > 1) then
-			r, g, b = r / 255, g / 255, b / 255
-		end
-
-		self.r = r
-		self[1] = r
-		self.g = g
-		self[2] = g
-		self.b = b
-		self[3] = b
-		self.a = a
-
-		-- pre-generate the hex color, there's no point to this being generated on the fly
-		self.hex = string.format('ff%02x%02x%02x', self:GetRGBAsBytes())
-	end,
-	SetAtlas = function(self, atlas)
-		self.atlas = atlas
-	end,
-	GetAtlas = function(self)
-		return self.atlas
-	end,
-	GenerateHexColor = function(self)
-		return self.hex
-	end,
-}
-
---[[ Colors: oUF:CreateColor(r, g, b[, a])
-Wrapper for [SharedXML\Color.lua's ColorMixin](https://warcraft.wiki.gg/wiki/ColorMixin), extended to support indexed colors used in oUF, as
-well as extra methods for dealing with atlases.
-
-The rgb values can be either normalized (0-1) or bytes (0-255).
-
-* self - the global oUF object
-* r    - value used as represent the red color (number)
-* g    - value used to represent the green color (number)
-* b    - value used to represent the blue color (number)
-* a    - value used to represent the opacity (number, optional)
-
-## Returns
-
-* color - the ColorMixin-based object
---]]
-function oUF:CreateColor(r, g, b, a)
-	local color = Mixin({}, ColorMixin, colorMixin)
-	color:SetRGBA(r, g, b, a)
-
-	return color
-end
 
 local colors = {
 	smooth = {
@@ -74,44 +10,49 @@ local colors = {
 		1, 1, 0,
 		0, 1, 0
 	},
-	health = oUF:CreateColor(49, 207, 37),
-	disconnected = oUF:CreateColor(0.6, 0.6, 0.6),
-	tapped = oUF:CreateColor(0.6, 0.6, 0.6),
+	health = {49 / 255, 207 / 255, 37 / 255},
+	disconnected = {0.6, 0.6, 0.6},
+	tapped = {0.6, 0.6, 0.6},
 	runes = {
-		oUF:CreateColor(247, 65, 57), -- blood
-		oUF:CreateColor(148, 203, 247), -- frost
-		oUF:CreateColor(173, 235, 66), -- unholy
+		{1, 0, 0},   -- blood
+		{0, 1, 1},   -- frost
+		{0, .5, 0},  -- unholy
+		{.9, .1, 1}, -- death
 	},
 	selection = {
-		[ 0] = oUF:CreateColor(255, 0, 0), -- HOSTILE
-		[ 1] = oUF:CreateColor(255, 129, 0), -- UNFRIENDLY
-		[ 2] = oUF:CreateColor(255, 255, 0), -- NEUTRAL
-		[ 3] = oUF:CreateColor(0, 255, 0), -- FRIENDLY
-		[ 4] = oUF:CreateColor(0, 0, 255), -- PLAYER_SIMPLE
-		[ 5] = oUF:CreateColor(96, 96, 255), -- PLAYER_EXTENDED
-		[ 6] = oUF:CreateColor(170, 170, 255), -- PARTY
-		[ 7] = oUF:CreateColor(170, 255, 170), -- PARTY_PVP
-		[ 8] = oUF:CreateColor(83, 201, 255), -- FRIEND
-		[ 9] = oUF:CreateColor(128, 128, 128), -- DEAD
+		[ 0] = {255 / 255, 0 / 255, 0 / 255}, -- HOSTILE
+		[ 1] = {255 / 255, 129 / 255, 0 / 255}, -- UNFRIENDLY
+		[ 2] = {255 / 255, 255 / 255, 0 / 255}, -- NEUTRAL
+		[ 3] = {0 / 255, 255 / 255, 0 / 255}, -- FRIENDLY
+		[ 4] = {0 / 255, 0 / 255, 255 / 255}, -- PLAYER_SIMPLE
+		[ 5] = {96 / 255, 96 / 255, 255 / 255}, -- PLAYER_EXTENDED
+		[ 6] = {170 / 255, 170 / 255, 255 / 255}, -- PARTY
+		[ 7] = {170 / 255, 255 / 255, 170 / 255}, -- PARTY_PVP
+		[ 8] = {83 / 255, 201 / 255, 255 / 255}, -- FRIEND
+		[ 9] = {128 / 255, 128 / 255, 128 / 255}, -- DEAD
 		-- [10] = {}, -- COMMENTATOR_TEAM_1, unavailable to players
 		-- [11] = {}, -- COMMENTATOR_TEAM_2, unavailable to players
-		[12] = oUF:CreateColor(255, 255, 139), -- SELF, buggy
-		[13] = oUF:CreateColor(0, 153, 0), -- BATTLEGROUND_FRIENDLY_PVP
+		[12] = {255 / 255, 255 / 255, 139 / 255}, -- SELF, buggy
+		[13] = {0 / 255, 153 / 255, 0 / 255}, -- BATTLEGROUND_FRIENDLY_PVP
 	},
 	class = {},
 	debuff = {},
 	reaction = {},
 	power = {},
-	threat = {},
+	happiness = {
+		[1] = {1, 0, 0}, -- need.... | unhappy
+		[2] = {1, 1, 0}, -- new..... | content
+		[3] = {0, 1, 0}, -- colors.. | happy
+	},
 }
 
 -- We do this because people edit the vars directly, and changing the default
 -- globals makes SPICE FLOW!
 local function customClassColors()
-	if(_G.CUSTOM_CLASS_COLORS) then
+	if(CUSTOM_CLASS_COLORS) then
 		local function updateColors()
-			for classToken, color in next, _G.CUSTOM_CLASS_COLORS do
-				colors.class[classToken] = oUF:CreateColor(color.r, color.g, color.b)
+			for classToken, color in next, CUSTOM_CLASS_COLORS do
+				colors.class[classToken] = {color.r, color.g, color.b}
 			end
 
 			for _, obj in next, oUF.objects do
@@ -120,101 +61,66 @@ local function customClassColors()
 		end
 
 		updateColors()
-		_G.CUSTOM_CLASS_COLORS:RegisterCallback(updateColors)
+		CUSTOM_CLASS_COLORS:RegisterCallback(updateColors)
 
 		return true
 	end
 end
 
 if(not customClassColors()) then
-	for classToken, color in next, _G.RAID_CLASS_COLORS do
-		colors.class[classToken] = oUF:CreateColor(color.r, color.g, color.b)
+	for classToken, color in next, RAID_CLASS_COLORS do
+		colors.class[classToken] = {color.r, color.g, color.b}
 	end
 
 	local eventHandler = CreateFrame('Frame')
 	eventHandler:RegisterEvent('ADDON_LOADED')
-	eventHandler:RegisterEvent('PLAYER_ENTERING_WORLD')
 	eventHandler:SetScript('OnEvent', function(self)
 		if(customClassColors()) then
-			self:UnregisterAllEvents()
+			self:UnregisterEvent('ADDON_LOADED')
 			self:SetScript('OnEvent', nil)
 		end
 	end)
 end
 
 for debuffType, color in next, DebuffTypeColor do
-	colors.debuff[debuffType] = oUF:CreateColor(color.r, color.g, color.b)
+	colors.debuff[debuffType] = {color.r, color.g, color.b}
 end
 
-for eclass, color in next, _G.FACTION_BAR_COLORS do
-	colors.reaction[eclass] = oUF:CreateColor(color.r, color.g, color.b)
+for eclass, color in next, FACTION_BAR_COLORS do
+	colors.reaction[eclass] = {color.r, color.g, color.b}
 end
-
-local staggerIndices = {
-	green = 1,
-	yellow = 2,
-	red = 3
-}
 
 for power, color in next, PowerBarColor do
 	if (type(power) == 'string') then
-		if(color.r) then
-			colors.power[power] = oUF:CreateColor(color.r, color.g, color.b)
-
-			if(color.atlas) then
-				colors.power[power]:SetAtlas(color.atlas)
-			end
-		else
-			-- special handling for stagger
+		if(type(select(2, next(color))) == 'table') then
 			colors.power[power] = {}
 
-			for name, color_ in next, color do
-				local index = staggerIndices[name]
-				if(index) then
-					colors.power[power][index] = oUF:CreateColor(color_.r, color_.g, color_.b)
-
-					if(color_.atlas) then
-						colors.power[power][index]:SetAtlas(color_.atlas)
-					end
-				end
+			for index, color in next, color do
+				colors.power[power][index] = {color.r, color.g, color.b}
 			end
+		else
+			colors.power[power] = {color.r, color.g, color.b, atlas = color.atlas}
 		end
 	end
 end
 
--- fallback integer index to named index
--- sourced from PowerBarColor - Blizzard_UnitFrame/Mainline/PowerBarColorUtil.lua
-colors.power[Enum.PowerType.Mana or 0] = colors.power.MANA
-colors.power[Enum.PowerType.Rage or 1] = colors.power.RAGE
-colors.power[Enum.PowerType.Focus or 2] = colors.power.FOCUS
-colors.power[Enum.PowerType.Energy or 3] = colors.power.ENERGY
-colors.power[Enum.PowerType.ComboPoints or 4] = colors.power.COMBO_POINTS
-colors.power[Enum.PowerType.Runes or 5] = colors.power.RUNES
-colors.power[Enum.PowerType.RunicPower or 6] = colors.power.RUNIC_POWER
-colors.power[Enum.PowerType.SoulShards or 7] = colors.power.SOUL_SHARDS
-colors.power[Enum.PowerType.LunarPower or 8] = colors.power.LUNAR_POWER
-colors.power[Enum.PowerType.HolyPower or 9] = colors.power.HOLY_POWER
-colors.power[Enum.PowerType.Maelstrom or 11] = colors.power.MAELSTROM
-colors.power[Enum.PowerType.Insanity or 13] = colors.power.INSANITY
-colors.power[Enum.PowerType.Fury or 17] = colors.power.FURY
-colors.power[Enum.PowerType.Pain or 18] = colors.power.PAIN
-
--- these two don't have fallback values in PowerBarColor, but we want them
-colors.power[Enum.PowerType.Chi or 12] = colors.power.CHI
-colors.power[Enum.PowerType.ArcaneCharges or 16] = colors.power.ARCANE_CHARGES
-
--- there's no official colour for evoker's essence
--- use the average colour of the essence texture instead
-colors.power.ESSENCE = oUF:CreateColor(100, 173, 206)
-colors.power[Enum.PowerType.Essence or 19] = colors.power.ESSENCE
-
--- alternate power, sourced from Blizzard_UnitFrame/Mainline/CompactUnitFrame.lua
-colors.power.ALTERNATE = oUF:CreateColor(0.7, 0.7, 0.6)
-colors.power[Enum.PowerType.Alternate or 10] = colors.power.ALTERNATE
-
-for i = 0, 3 do
-	colors.threat[i] = oUF:CreateColor(GetThreatStatusColor(i))
-end
+-- sourced from FrameXML/Constants.lua
+colors.power[0] = colors.power.MANA
+colors.power[1] = colors.power.RAGE
+colors.power[2] = colors.power.FOCUS
+colors.power[3] = colors.power.ENERGY
+colors.power[4] = colors.power.COMBO_POINTS
+colors.power[5] = colors.power.RUNES
+colors.power[6] = colors.power.RUNIC_POWER
+colors.power[7] = colors.power.SOUL_SHARDS
+colors.power[8] = colors.power.LUNAR_POWER
+colors.power[9] = colors.power.HOLY_POWER
+colors.power[11] = colors.power.MAELSTROM
+colors.power[12] = colors.power.CHI
+colors.power[13] = colors.power.INSANITY
+colors.power[16] = colors.power.ARCANE_CHARGES
+colors.power[17] = colors.power.FURY
+colors.power[18] = colors.power.PAIN
 
 local function colorsAndPercent(a, b, ...)
 	if(a <= 0 or b == 0) then
@@ -228,7 +134,7 @@ local function colorsAndPercent(a, b, ...)
 	return relperc, select((segment * 3) + 1, ...)
 end
 
--- https://warcraft.wiki.gg/wiki/ColorGradient
+-- http://www.wowwiki.com/ColorGradient
 --[[ Colors: oUF:RGBColorGradient(a, b, ...)
 Used to convert a percent value (the quotient of `a` and `b`) into a gradient from 2 or more RGB colors. If more than 2
 colors are passed, the gradient will be between the two colors which perc lies in an evenly divided range. A RGB color

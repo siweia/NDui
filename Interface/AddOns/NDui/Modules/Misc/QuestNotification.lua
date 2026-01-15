@@ -2,42 +2,24 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local strmatch, strfind, gsub, format, floor = strmatch, strfind, gsub, format, floor
-local wipe, mod, tonumber, pairs, print = wipe, mod, tonumber, pairs, print
-local SendChatMessage = SendChatMessage
-local GetQuestLink = GetQuestLink
-local C_QuestLog_GetInfo = C_QuestLog.GetInfo
-local C_QuestLog_IsComplete = C_QuestLog.IsComplete
-local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
-local C_QuestLog_GetQuestTagInfo = C_QuestLog.GetQuestTagInfo
-local C_QuestLog_GetTitleForQuestID = C_QuestLog.GetTitleForQuestID
-local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
-local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
-local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
-local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
-local DAILY, QUEST_COMPLETE, COLLECTED = DAILY, QUEST_COMPLETE, COLLECTED
-local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
-local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
-
 local debugMode = false
 local completedQuest, initComplete = {}
+local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
+local mod, tonumber, pairs, floor = mod, tonumber, pairs, math.floor
+local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
+local QUEST_COMPLETE, LE_QUEST_FREQUENCY_DAILY = QUEST_COMPLETE, LE_QUEST_FREQUENCY_DAILY
 
-local function GetQuestLinkOrName(questID)
-	return GetQuestLink(questID) or C_QuestLog_GetTitleForQuestID(questID) or ""
-end
-
-local function acceptText(questID, daily)
-	local title = GetQuestLinkOrName(questID)
+local function acceptText(link, daily)
 	if daily then
-		return format("%s [%s]%s", L["AcceptQuest"], DAILY, title)
+		return format("%s: [%s]%s", L["AcceptQuest"], DAILY, link)
 	else
-		return format("%s %s", L["AcceptQuest"], title)
+		return format("%s: %s", L["AcceptQuest"], link)
 	end
 end
 
-local function completeText(questID)
+local function completeText(link)
 	PlaySound(soundKitID, "Master")
-	return format("%s %s", GetQuestLinkOrName(questID), QUEST_COMPLETE)
+	return format("%s (%s)", link, QUEST_COMPLETE)
 end
 
 local function sendQuestMsg(msg)
@@ -45,11 +27,11 @@ local function sendQuestMsg(msg)
 
 	if debugMode and DB.isDeveloper then
 		print(msg)
-	elseif (IsPartyLFG() or C_PartyInfo.IsPartyWalkIn()) then
+	elseif IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
 		SendChatMessage(msg, "INSTANCE_CHAT")
 	elseif IsInRaid() then
 		SendChatMessage(msg, "RAID")
-	elseif IsInGroup() then
+	elseif IsInGroup() and not IsInRaid() then
 		SendChatMessage(msg, "PARTY")
 	end
 end
@@ -91,31 +73,19 @@ function M:FindQuestProgress(_, msg)
 	end
 end
 
-local WQcache = {}
-function M:FindQuestAccept(questID)
-	if not questID then return end
-	if C_QuestLog_IsWorldQuest(questID) and WQcache[questID] then return end
-	WQcache[questID] = true
-
-	local tagInfo = C_QuestLog_GetQuestTagInfo(questID)
-	if tagInfo and tagInfo.worldQuestType == LE_QUEST_TAG_TYPE_PROFESSION then return end
-
-	local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
-	if questLogIndex then
-		local info = C_QuestLog_GetInfo(questLogIndex)
-		if info then
-			sendQuestMsg(acceptText(questID, info.frequency == LE_QUEST_FREQUENCY_DAILY))
-		end
+function M:FindQuestAccept(questLogIndex)
+	local name, _, _, _, _, _, frequency = GetQuestLogTitle(questLogIndex)
+	if name then
+		sendQuestMsg(acceptText(name, frequency == LE_QUEST_FREQUENCY_DAILY))
 	end
 end
 
 function M:FindQuestComplete()
-	for i = 1, C_QuestLog_GetNumQuestLogEntries() do
-		local questID = C_QuestLog_GetQuestIDForLogIndex(i)
-		local isComplete = questID and C_QuestLog_IsComplete(questID)
-		if isComplete and not completedQuest[questID] and not C_QuestLog_IsWorldQuest(questID) then
+	for i = 1, GetNumQuestLogEntries() do
+		local name, _, _, _, _, isComplete, _, questID = GetQuestLogTitle(i)
+		if name and isComplete and not completedQuest[questID] then
 			if initComplete then
-				sendQuestMsg(completeText(questID))
+				sendQuestMsg(completeText(name))
 			end
 			completedQuest[questID] = true
 		end
@@ -123,43 +93,17 @@ function M:FindQuestComplete()
 	initComplete = true
 end
 
-function M:FindWorldQuestComplete(questID)
-	if C_QuestLog_IsWorldQuest(questID) then
-		if questID and not completedQuest[questID] then
-			sendQuestMsg(completeText(questID))
-			completedQuest[questID] = true
-		end
-	end
-end
-
--- Dragon glyph notification
-local glyphAchievements = {
-	[16575] = true, -- 觉醒海岸
-	[16576] = true, -- 欧恩哈拉平原
-	[16577] = true, -- 碧蓝林海
-	[16578] = true, -- 索德拉苏斯
-}
-
-function M:FindDragonGlyph(achievementID, criteriaString)
-	if glyphAchievements[achievementID] then
-		sendQuestMsg(criteriaString.." "..COLLECTED)
-	end
-end
-
 function M:QuestNotification()
 	if C.db["Misc"]["QuestNotification"] then
+		M:FindQuestComplete()
 		B:RegisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
 		B:RegisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
-		B:RegisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
 		B:RegisterEvent("UI_INFO_MESSAGE", M.FindQuestProgress)
-		B:RegisterEvent("CRITERIA_EARNED", M.FindDragonGlyph)
 	else
 		wipe(completedQuest)
 		B:UnregisterEvent("QUEST_ACCEPTED", M.FindQuestAccept)
 		B:UnregisterEvent("QUEST_LOG_UPDATE", M.FindQuestComplete)
-		B:UnregisterEvent("QUEST_TURNED_IN", M.FindWorldQuestComplete)
 		B:UnregisterEvent("UI_INFO_MESSAGE", M.FindQuestProgress)
-		B:UnregisterEvent("CRITERIA_EARNED", M.FindDragonGlyph)
 	end
 end
 M:RegisterMisc("QuestNotification", M.QuestNotification)

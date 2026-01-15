@@ -2,9 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("AurasTable")
 
-local pairs, next, format, wipe, unpack = pairs, next, format, wipe, unpack
-local GetSpellName = C_Spell.GetSpellName
-local EJ_GetInstanceInfo = EJ_GetInstanceInfo
+local pairs, next, format, wipe, unpack, tinsert = pairs, next, format, wipe, unpack, tinsert
+local GetRealZoneText, GetSpellInfo = GetRealZoneText, GetSpellInfo
 
 -- AuraWatch
 local AuraWatchList = {}
@@ -27,7 +26,7 @@ local function newAuraFormat(value)
 	local newTable = {}
 	for _, v in pairs(value) do
 		local id = v.AuraID or v.SpellID or v.ItemID or v.SlotID or v.TotemID or v.IntID
-		if id and not v.Disabled then
+		if id then
 			newTable[id] = v
 		end
 	end
@@ -39,10 +38,12 @@ function module:AddNewAuraWatch(class, list)
 		for _, v in pairs(k) do
 			local spellID = v.AuraID or v.SpellID
 			if spellID then
-				local name = GetSpellName(spellID)
-				if not name and not v.Disabled then
+				local name = GetSpellInfo(spellID)
+				if not name then
 					wipe(v)
-					if DB.isDeveloper then print(format("|cffFF0000Invalid spellID:|r '%s' %s", class, spellID)) end
+					if DB.isDeveloper then
+						print(format("|cffFF0000Invalid spellID:|r '%s' %s", class, spellID))
+					end
 				end
 			end
 		end
@@ -66,37 +67,29 @@ function module:AddNewAuraWatch(class, list)
 	end
 end
 
-function module:AddDeprecatedGroup()
-	if C.db["AuraWatch"]["DeprecatedAuras"] then
-		for name, value in pairs(C.DeprecatedAuras) do
-			for _, list in pairs(AuraWatchList["ALL"]) do
-				if list.Name == name then
-					local newTable = newAuraFormat(value)
-					for spellID, v in pairs(newTable) do
-						list.List[spellID] = v
-					end
-				end
-			end
-		end
-	end
-
-	wipe(C.DeprecatedAuras)
-end
-
 -- RaidFrame debuffs
 local RaidDebuffs = {}
+function module:AddRaidDebuffs(list)
+	if not RaidDebuffs[0] then RaidDebuffs[0] = {} end
+
+	for spellID, prio in pairs(list) do
+		if prio > 6 then prio = 6 end
+		RaidDebuffs[0][spellID] = prio
+	end
+end
+
 function module:RegisterDebuff(tierID, instID, _, spellID, level)
-	local instName = EJ_GetInstanceInfo(instID)
+	local instName = GetRealZoneText(instID)
 	if not instName then
 		if DB.isDeveloper then print("Invalid instance ID: "..instID) end
 		return
 	end
 
-	if not RaidDebuffs[instName] then RaidDebuffs[instName] = {} end
+	if not RaidDebuffs[instID] then RaidDebuffs[instID] = {} end
 	if not level then level = 2 end
 	if level > 6 then level = 6 end
 
-	RaidDebuffs[instName][spellID] = level
+	RaidDebuffs[instID][spellID] = level
 end
 
 function module:CheckCornerSpells()
@@ -105,7 +98,7 @@ function module:CheckCornerSpells()
 	if not data then return end
 
 	for spellID in pairs(data) do
-		local name = GetSpellName(spellID)
+		local name = GetSpellInfo(spellID)
 		if not name then
 			if DB.isDeveloper then print("Invalid cornerspell ID: "..spellID) end
 		end
@@ -120,13 +113,13 @@ end
 
 function module:CheckMajorSpells()
 	for spellID in pairs(C.MajorSpells) do
-		local name = GetSpellName(spellID)
+		local name = GetSpellInfo(spellID)
 		if name then
 			if NDuiADB["MajorSpells"][spellID] then
 				NDuiADB["MajorSpells"][spellID] = nil
 			end
 		else
-			if DB.isDeveloper then print("Invalid majorspells ID: "..spellID) end
+			if DB.isDeveloper then print("Invalid cornerspell ID: "..spellID) end
 		end
 	end
 
@@ -139,7 +132,7 @@ end
 
 local function CheckNameplateFilter(list, key)
 	for spellID in pairs(list) do
-		local name = GetSpellName(spellID)
+		local name = GetSpellInfo(spellID)
 		if name then
 			if NDuiADB[key][spellID] then
 				NDuiADB[key][spellID] = nil
@@ -177,21 +170,19 @@ function module:CheckNameplateFilters()
 end
 
 function module:OnLogin()
-	for instName, value in pairs(RaidDebuffs) do
+	for instID, value in pairs(RaidDebuffs) do
 		for spell, priority in pairs(value) do
-			if NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell] and NDuiADB["RaidDebuffs"][instName][spell] == priority then
-				NDuiADB["RaidDebuffs"][instName][spell] = nil
+			if NDuiADB["RaidDebuffs"][instID] and NDuiADB["RaidDebuffs"][instID][spell] and NDuiADB["RaidDebuffs"][instID][spell] == priority then
+				NDuiADB["RaidDebuffs"][instID][spell] = nil
 			end
 		end
 	end
-	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
+	for instID, value in pairs(NDuiADB["RaidDebuffs"]) do
 		if not next(value) then
-			NDuiADB["RaidDebuffs"][instName] = nil
+			NDuiADB["RaidDebuffs"][instID] = nil
 		end
 	end
 
-	RaidDebuffs[0] = {} -- OTHER spells
-	module:AddDeprecatedGroup()
 	C.AuraWatchList = AuraWatchList
 	C.RaidDebuffs = RaidDebuffs
 

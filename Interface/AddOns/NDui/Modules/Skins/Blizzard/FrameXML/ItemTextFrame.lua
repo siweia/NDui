@@ -2,8 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	InboxFrameBg:Hide()
 	ItemTextPrevPageButton:GetRegions():Hide()
 	ItemTextNextPageButton:GetRegions():Hide()
@@ -12,11 +10,16 @@ tinsert(C.defaultThemes, function()
 	ItemTextMaterialBotLeft:SetAlpha(0)
 	ItemTextMaterialBotRight:SetAlpha(0)
 
+	ItemTextFrame.CloseButton = ItemTextCloseButton
 	B.ReskinPortraitFrame(ItemTextFrame)
-	B.ReskinTrimScroll(ItemTextScrollFrame.ScrollBar)
+	B.ReskinScroll(ItemTextScrollFrameScrollBar)
 	B.ReskinArrow(ItemTextPrevPageButton, "left")
 	B.ReskinArrow(ItemTextNextPageButton, "right")
-	ItemTextFramePageBg:SetAlpha(0)
+	--ItemTextFramePageBg:SetAlpha(0)
 	ItemTextPageText:SetTextColor("P", 1, 1, 1)
 	ItemTextPageText.SetTextColor = B.Dummy
+
+	-- fix scrollbar bg, need reviewed
+	ItemTextScrollFrame:DisableDrawLayer("ARTWORK")
+	ItemTextScrollFrame:DisableDrawLayer("BACKGROUND")
 end)

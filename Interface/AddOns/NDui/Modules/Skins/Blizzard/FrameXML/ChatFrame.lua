@@ -1,19 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local r, g, b = DB.r, DB.g, DB.b
-
-local function ReskinChatScroll(self)
-	B.ReskinTrimScroll(self.ScrollBar)
-
-	B.StripTextures(self.ScrollToBottomButton)
-	local flash = self.ScrollToBottomButton.Flash
-	B.SetupArrow(flash, "down")
-	flash:SetVertexColor(1, .8, 0)
-end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	-- Battlenet toast frame
 	BNToastFrame:SetBackdrop(nil)
 	B.SetBD(BNToastFrame)
@@ -24,64 +12,26 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(TimeAlertFrame)
 
 	-- Battletag invite frame
-	local border, send, cancel = BattleTagInviteFrame:GetChildren()
-	border:Hide()
+	BattleTagInviteFrame:SetBackdrop(nil)
+	B.SetBD(BattleTagInviteFrame)
+	local send, cancel = BattleTagInviteFrame:GetChildren()
 	B.Reskin(send)
 	B.Reskin(cancel)
-	B.SetBD(BattleTagInviteFrame)
 
-	local friendTex = "Interface\\HELPFRAME\\ReportLagIcon-Chat"
-	local queueTex = "Interface\\HELPFRAME\\HelpIcon-ItemRestoration"
 	local homeTex = "Interface\\Buttons\\UI-HomeButton"
-
-	QuickJoinToastButton.FriendsButton:SetTexture(friendTex)
-	QuickJoinToastButton.QueueButton:SetTexture(queueTex)
-	QuickJoinToastButton:SetHighlightTexture(0)
-	hooksecurefunc(QuickJoinToastButton, "ToastToFriendFinished", function(self)
-		self.FriendsButton:SetShown(not self.displayedToast)
-	end)
-	hooksecurefunc(QuickJoinToastButton, "UpdateQueueIcon", function(self)
-		if not self.displayedToast then return end
-		self.QueueButton:SetTexture(queueTex)
-		self.FlashingLayer:SetTexture(queueTex)
-		self.FriendsButton:SetShown(false)
-	end)
-	QuickJoinToastButton:HookScript("OnMouseDown", function(self)
-		self.FriendsButton:SetTexture(friendTex)
-	end)
-	QuickJoinToastButton:HookScript("OnMouseUp", function(self)
-		self.FriendsButton:SetTexture(friendTex)
-	end)
-	QuickJoinToastButton.Toast.Background:SetTexture("")
-	local bg = B.SetBD(QuickJoinToastButton.Toast)
-	bg:SetPoint("TOPLEFT", 10, -1)
-	bg:SetPoint("BOTTOMRIGHT", 0, 3)
-	bg:Hide()
-	hooksecurefunc(QuickJoinToastButton, "ShowToast", function() bg:Show() end)
-	hooksecurefunc(QuickJoinToastButton, "HideToast", function() bg:Hide() end)
-
-	-- ChatFrame
 	B.Reskin(ChatFrameChannelButton)
 	ChatFrameChannelButton:SetSize(20, 20)
-	B.Reskin(ChatFrameToggleVoiceDeafenButton)
-	ChatFrameToggleVoiceDeafenButton:SetSize(20, 20)
-	B.Reskin(ChatFrameToggleVoiceMuteButton)
-	ChatFrameToggleVoiceMuteButton:SetSize(20, 20)
 	B.Reskin(ChatFrameMenuButton)
 	ChatFrameMenuButton:SetSize(20, 20)
 	ChatFrameMenuButton:SetNormalTexture(homeTex)
 	ChatFrameMenuButton:SetPushedTexture(homeTex)
 
-	for i = 1, NUM_CHAT_WINDOWS do
-		ReskinChatScroll(_G["ChatFrame"..i])
-	end
-
 	-- ChannelFrame
 	B.ReskinPortraitFrame(ChannelFrame)
 	B.Reskin(ChannelFrame.NewButton)
 	B.Reskin(ChannelFrame.SettingsButton)
-	B.ReskinTrimScroll(ChannelFrame.ChannelList.ScrollBar)
-	B.ReskinTrimScroll(ChannelFrame.ChannelRoster.ScrollBar)
+	B.ReskinScroll(ChannelFrame.ChannelList.ScrollBar)
+	B.ReskinScroll(ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
 
 	hooksecurefunc(ChannelFrame.ChannelList, "Update", function(self)
 		for i = 1, self.Child:GetNumChildren() do

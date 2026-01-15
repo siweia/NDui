@@ -1,6 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+if DB.isNewPatch then return end
+
 local function Highlight_OnEnter(self)
 	self.hl:Show()
 end
@@ -16,8 +18,6 @@ local function HandleRoleAnchor(self, role)
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local r, g, b = DB.r, DB.g, DB.b
 
 	local LFGListFrame = LFGListFrame
@@ -68,13 +68,7 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(searchPanel.BackToGroupButton)
 	B.Reskin(searchPanel.SignUpButton)
 	B.ReskinInput(searchPanel.SearchBox)
-	searchPanel.SearchBox:SetHeight(22)
 	B.ReskinFilterButton(searchPanel.FilterButton)
-	B.ReskinFilterReset(searchPanel.FilterButton.ResetButton)
-
-	searchPanel:HookScript("OnShow", function(self)
-		self.FilterButton:SetSize(90, 21) -- needs review, fix blizzard weired size
-	end)
 
 	searchPanel.RefreshButton:SetSize(24, 24)
 	searchPanel.RefreshButton.Icon:SetPoint("CENTER")

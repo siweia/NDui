@@ -23,8 +23,6 @@ local function updateMinorButtonState(button)
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
 		local itemFrame = frame.ItemFrame
@@ -57,7 +55,11 @@ tinsert(C.defaultThemes, function()
 
 		B.StripTextures(frame)
 		for j = 1, 4 do
-			B.Reskin(_G["StaticPopup"..i.."Button"..j])
+			local button = _G["StaticPopup"..i.."Button"..j]
+			if button then
+				B.StripTextures(button)
+				B.Reskin(button)
+			end
 		end
 		B.SetBD(frame)
 		B.ReskinClose(close)
@@ -118,22 +120,40 @@ tinsert(C.defaultThemes, function()
 			closeButton:SetPushedTexture(0)
 
 			if info.closeButtonIsHide then
-				closeButton.__texture:Hide()
+				for _, pixel in pairs(closeButton.pixels) do
+					pixel:Hide()
+				end
 				closeButton.minimize:Show()
 			else
-				closeButton.__texture:Show()
+				for _, pixel in pairs(closeButton.pixels) do
+					pixel:Show()
+				end
 				closeButton.minimize:Hide()
 			end
 		end
 	end)
 
-	-- Pet battle queue popup
+	-- PlayerReportFrame
+	PlayerReportFrame:HookScript("OnShow", function(self)
+		if not self.styled then
+			B.StripTextures(self)
+			B.SetBD(self)
+			B.StripTextures(self.Comment)
+			B.ReskinInput(self.Comment)
+			B.Reskin(self.ReportButton)
+			B.Reskin(self.CancelButton)
 
-	B.SetBD(PetBattleQueueReadyFrame)
-	B.CreateBDFrame(PetBattleQueueReadyFrame.Art)
-	PetBattleQueueReadyFrame.Border:Hide()
-	B.Reskin(PetBattleQueueReadyFrame.AcceptButton)
-	B.Reskin(PetBattleQueueReadyFrame.DeclineButton)
+			self.styled = true
+		end
+	end)
+
+	-- PVP ready dialog
+	local PVPReadyDialog = PVPReadyDialog
+
+	B.StripTextures(PVPReadyDialog)
+	B.SetBD(PVPReadyDialog)
+	B.Reskin(PVPReadyDialog.enterButton)
+	B.Reskin(PVPReadyDialog.hideButton)
 
 	-- PlayerReportFrame
 	B.StripTextures(ReportFrame)

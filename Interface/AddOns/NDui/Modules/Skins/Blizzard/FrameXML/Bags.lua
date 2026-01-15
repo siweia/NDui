@@ -1,15 +1,9 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local MAX_CONTAINER_ITEMS = 36
-local backpackTexture = "Interface\\Icons\\inv_misc_bag_08"
+local ContainerIDToInventoryID = C_Container and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
 
-local function handleMoneyFrame(frame)
-	if frame.MoneyFrame then
-		B.StripTextures(frame.MoneyFrame)
-		B.CreateBDFrame(frame.MoneyFrame, .25)
-	end
-end
+local backpackTexture = "Interface\\Buttons\\Button-Backpack-Up"
 
 local function createBagIcon(frame, index)
 	if not frame.bagIcon then
@@ -21,29 +15,11 @@ local function createBagIcon(frame, index)
 	if index == 1 then
 		frame.bagIcon:SetTexture(backpackTexture) -- backpack
 	end
-	handleMoneyFrame(frame)
 end
 
-local function replaceSortTexture(texture)
-	texture:SetTexture("Interface\\Icons\\INV_Pet_Broom") -- HD version
-	texture:SetTexCoord(unpack(DB.TexCoord))
-end
-
-local function ReskinSortButton(button)
-	replaceSortTexture(button:GetNormalTexture())
-	replaceSortTexture(button:GetPushedTexture())
-	B.CreateBDFrame(button)
-
-	local highlight = button:GetHighlightTexture()
-	highlight:SetColorTexture(1, 1, 1, .25)
-	highlight:SetAllPoints(button)
-end
-
-local function ReskinBagSlot(bu)
-	if not bu then return end
+local function styleBankButton(bu)
 	bu:SetNormalTexture(0)
 	bu:SetPushedTexture(0)
-	if bu.Background then bu.Background:SetAlpha(0) end
 	bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	bu.searchOverlay:SetOutside()
 
@@ -57,168 +33,92 @@ local function ReskinBagSlot(bu)
 		questTexture:SetSize(1, 1)
 	end
 
-	local hl = bu.SlotHighlightTexture
-	if hl then
-		hl:SetColorTexture(1, .8, 0, .5)
-	end
-end
-
-local function updateContainer(frame)
-	local id = frame:GetID()
-	local name = frame:GetName()
-
-	if id == 0 then
-		BagItemSearchBox:ClearAllPoints()
-		BagItemSearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 50, -35)
-		BagItemAutoSortButton:ClearAllPoints()
-		BagItemAutoSortButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -9, -31)
-	end
-
-	for i = 1, frame.size do
-		local itemButton = _G[name.."Item"..i]
-		local questTexture = _G[name.."Item"..i.."IconQuestTexture"]
-		if itemButton and questTexture:IsShown() then
-			itemButton.IconBorder:SetVertexColor(1, 1, 0)
-		end
-	end
-
-	if frame.bagIcon and id ~= 0 then
-		local invID = C_Container.ContainerIDToInventoryID(id)
-		if invID then
-			local icon = GetInventoryItemTexture("player", invID)
-			frame.bagIcon:SetTexture(icon or backpackTexture)
-		end
-	end
-end
-
-local function emptySlotBG(button)
-	if button.ItemSlotBackground then
-		button.ItemSlotBackground:Hide()
-	end
-end
-
-local function handleBagSlots(self)
-	for button in self.itemButtonPool:EnumerateActive() do
-		if not button.bg then
-			ReskinBagSlot(button)
-		end
-	end
-end
-
-local function handleBankTab(tab)
-	if not tab.styled then
-		tab.Border:SetAlpha(0)
-		tab:SetNormalTexture(0)
-		tab:SetPushedTexture(0)
-		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		tab.SelectedTexture:SetTexture(DB.pushedTex)
-		B.CreateBDFrame(tab)
-		tab.Icon:SetTexCoord(unpack(DB.TexCoord))
-
-		tab.styled = true
+	local highlightTexture = bu.HighlightFrame and bu.HighlightFrame.HighlightTexture
+	if highlightTexture then
+		highlightTexture:SetColorTexture(1, .8, 0, .5)
 	end
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if C.db["Bags"]["Enable"] then return end
+	if not C.db["Skins"]["DefaultBags"] then return end
 
-	for i = 1, 13 do
-		local frameName = "ContainerFrame"..i
-		local frame = _G[frameName]
-		if frame then
-			local name = frame.TitleText or _G[frameName.."TitleText"]
-			name:SetDrawLayer("OVERLAY")
-			name:ClearAllPoints()
-			name:SetPoint("TOP", 0, -10)
-			B.ReskinClose(frame.CloseButton)
+	-- Bags
 
-			B.StripTextures(frame)
-			B.SetBD(frame)
-			frame.PortraitContainer:Hide()
-			if frame.Bg then frame.Bg:Hide() end
-			createBagIcon(frame, i)
-			hooksecurefunc(frame, "Update", updateContainer)
-			hooksecurefunc(frame, "UpdateItemSlots", handleBagSlots)
+	for i = 1, 12 do
+		local con = _G["ContainerFrame"..i]
+		local name = _G["ContainerFrame"..i.."Name"]
+
+		B.StripTextures(con, 0)
+		createBagIcon(con, i)
+		name:ClearAllPoints()
+		name:SetPoint("TOP", 0, -10)
+
+		for k = 1, MAX_CONTAINER_ITEMS do
+			local item = "ContainerFrame"..i.."Item"..k
+			local button = _G[item]
+			local questTexture = _G[item.."IconQuestTexture"]
+
+			questTexture:SetDrawLayer("BACKGROUND")
+			questTexture:SetSize(1, 1)
+
+			button:SetNormalTexture(0)
+			button:SetPushedTexture(0)
+			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+
+			button.icon:SetTexCoord(unpack(DB.TexCoord))
+			button.bg = B.CreateBDFrame(button, .25)
+
+			button.searchOverlay:SetOutside()
+			B.ReskinIconBorder(button.IconBorder)
 		end
+
+		local f = B.SetBD(con)
+		f:SetPoint("TOPLEFT", 8, -4)
+		f:SetPoint("BOTTOMRIGHT", -4, 3)
+
+		B.ReskinClose(_G["ContainerFrame"..i.."CloseButton"], con, -6, -6)
 	end
 
-	B.StripTextures(BackpackTokenFrame)
-	B.CreateBDFrame(BackpackTokenFrame, .25)
+	hooksecurefunc("ContainerFrame_Update", function(frame)
+		local id = frame:GetID()
+		local name = frame:GetName()
 
-	hooksecurefunc(BackpackTokenFrame, "Update", function(self)
-		local tokens = self.Tokens
-		if next(tokens) then
-			for i = 1, #tokens do
-				local token = tokens[i]
-				if not token.styled then
-					B.ReskinIcon(token.Icon)
-					token.styled = true
-				end
+		for i = 1, frame.size do
+			local itemButton = _G[name.."Item"..i]
+			if _G[name.."Item"..i.."IconQuestTexture"]:IsShown() then
+				itemButton.IconBorder:SetVertexColor(1, 1, 0)
+			end
+		end
+
+		if frame.bagIcon and id ~= 0 then
+			local invID = ContainerIDToInventoryID(id)
+			if invID then
+				local icon = GetInventoryItemTexture("player", invID)
+				frame.bagIcon:SetTexture(icon or backpackTexture)
 			end
 		end
 	end)
 
-	B.ReskinEditBox(BagItemSearchBox)
-	ReskinSortButton(BagItemAutoSortButton)
+	-- Bank
 
-	-- Combined bags
-	B.ReskinPortraitFrame(ContainerFrameCombinedBags)
-	createBagIcon(ContainerFrameCombinedBags, 1)
-	ContainerFrameCombinedBags.PortraitButton.Highlight:SetTexture("")
-	hooksecurefunc(ContainerFrameCombinedBags, "UpdateItemSlots", handleBagSlots)
+	BankFrame.CloseButton = BankCloseButton
+	B.ReskinPortraitFrame(BankFrame, 15, -10, 10, 80)
+	B.Reskin(BankFramePurchaseButton)
+	BankSlotsFrame:DisableDrawLayer("BORDER")
+	BankPortraitTexture:Hide()
 
-	-- [[ Bank ]]
+	for i = 1, NUM_BANKGENERIC_SLOTS do
+		styleBankButton(_G["BankFrameItem"..i])
+	end
 
-	handleMoneyFrame(BankPanel)
-	B.StripTextures(BankPanel)
-	BankPanel.EdgeShadows:Hide()
-	ReskinSortButton(BankPanel.AutoSortButton)
-	B.Reskin(BankPanel.AutoDepositFrame.DepositButton)
-	B.ReskinCheck(BankPanel.AutoDepositFrame.IncludeReagentsCheckbox)
-	B.Reskin(BankPanel.MoneyFrame.WithdrawButton)
-	B.Reskin(BankPanel.MoneyFrame.DepositButton)
+	for i = 1, NUM_BANKBAGSLOTS do
+		styleBankButton(BankSlotsFrame["Bag"..i])
+	end
 
-	hooksecurefunc(BankPanel, "GenerateItemSlotsForSelectedTab", handleBagSlots)
-
-	hooksecurefunc(BankPanel, "RefreshBankTabs", function(self)
-		for tab in self.bankTabPool:EnumerateActive() do
-			handleBankTab(tab)
+	hooksecurefunc("BankFrameItemButton_Update", function(button)
+		if not button.isBag and button.IconQuestTexture:IsShown() then
+			button.IconBorder:SetVertexColor(1, 1, 0)
 		end
 	end)
-	handleBankTab(BankPanel.PurchaseTab)
-
-	for i = 1, 3 do
-		local tab = select(i, BankFrame.TabSystem:GetChildren())
-		if tab then
-			B.ReskinTab(tab)
-		end
-	end
-
-	B.ReskinPortraitFrame(BankFrame)
-	B.ReskinInput(BankItemSearchBox)
-
-	local popup = BankCleanUpConfirmationPopup
-	if popup then
-		B.StripTextures(popup)
-		B.SetBD(popup)
-		B.Reskin(popup.AcceptButton)
-		B.Reskin(popup.CancelButton)
-		B.ReskinCheck(popup.HidePopupCheckbox.Checkbox)
-	end
-
-	local menu = BankPanel.TabSettingsMenu
-	if menu then
-		B.StripTextures(menu)
-		B.ReskinIconSelector(menu)
-		menu.DepositSettingsMenu:DisableDrawLayer("OVERLAY")
-
-		for _, child in pairs({menu.DepositSettingsMenu:GetChildren()}) do
-			if child:IsObjectType("CheckButton") then
-				B.ReskinCheck(child)
-				child:SetSize(24, 24)
-			elseif child.Arrow then
-				B.ReskinDropDown(child)
-			end
-		end
-	end
 end)

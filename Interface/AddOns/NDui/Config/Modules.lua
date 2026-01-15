@@ -10,14 +10,14 @@ C.Bars = {
 
 -- BUFF/DEBUFF相关
 C.Auras = {
-	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, 0},			-- BUFF默认位置
+	BuffPos			= {"TOPRIGHT", MinimapCluster, "TOPLEFT", -15, 0},	-- BUFF默认位置
 	TotemsPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -450, 20},	-- 图腾助手默认位置
 
 	-- 技能监控各组初始位置
 	PlayerAuraPos	= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 309},	-- 玩家光环分组
 	TargetAuraPos 	= {"BOTTOMLEFT", UIParent, "BOTTOM", 200, 309},		-- 目标光环分组
 	SpecialPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 336},	-- 玩家重要光环分组
-	FocusPos		= {"BOTTOMLEFT", UIParent, "LEFT", 5, -130},		-- 焦点光环分组
+	FocusPos		= {"BOTTOMLEFT", UIParent, "LEFT", 5, -130},		-- 侧边光环分组
 	CDPos			= {"BOTTOMRIGHT", UIParent, "BOTTOM", -425, 125},	-- 冷却计时分组
 	EnchantPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 377},	-- 附魔及饰品分组
 	RaidBuffPos		= {"CENTER", UIParent, "CENTER", -220, 200},		-- 团队增益分组
@@ -35,6 +35,7 @@ C.UFs = {
 	PlayerPos		= {"TOPRIGHT", UIParent, "BOTTOM", -200, 300},		-- 玩家框体默认位置
 	TargetPos		= {"TOPLEFT", UIParent, "BOTTOM", 200, 300},		-- 目标框体默认位置
 	ToTPos			= {"BOTTOM", UIParent, "BOTTOM", 136, 250},			-- 目标的目标框体默认位置
+	ToToTPos		= {"BOTTOM", UIParent, "BOTTOM", 0, 250},			-- 目标的目标的目标默认位置
 	PetPos			= {"BOTTOM", UIParent, "BOTTOM", -136, 250},		-- 宠物框体默认位置
 	FocusPos		= {"LEFT", UIParent, "LEFT", 5, -150},				-- 焦点框体默认位置
 	PlayerPlate		= {"BOTTOM", UIParent, "BOTTOM", 0, 400},			-- 玩家姓名板默认位置

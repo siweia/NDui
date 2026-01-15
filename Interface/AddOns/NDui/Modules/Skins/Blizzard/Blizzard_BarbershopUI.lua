@@ -1,59 +1,43 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local TT = B:GetModule("Tooltip")
 
 C.themes["Blizzard_BarbershopUI"] = function()
-	local frame = BarberShopFrame
-
-	B.Reskin(frame.AcceptButton)
-	B.Reskin(frame.CancelButton)
-	B.Reskin(frame.ResetButton)
-end
-
-local function ReskinCustomizeButton(button)
-	B.Reskin(button)
-	button.__bg:SetInside(nil, 5, 5)
-end
-
-C.themes["Blizzard_CharacterCustomize"] = function()
-	local frame = CharCustomizeFrame
-
-	ReskinCustomizeButton(frame.SmallButtons.ResetCameraButton)
-	ReskinCustomizeButton(frame.SmallButtons.ZoomOutButton)
-	ReskinCustomizeButton(frame.SmallButtons.ZoomInButton)
-	ReskinCustomizeButton(frame.SmallButtons.RotateLeftButton)
-	ReskinCustomizeButton(frame.SmallButtons.RotateRightButton)
-	ReskinCustomizeButton(frame.RandomizeAppearanceButton)
-
-	hooksecurefunc(frame, "UpdateOptionButtons", function(self)
-		if self.dropdownPool then
-			for option in self.dropdownPool:EnumerateActive() do
-				if not option.styled then
-					B.Reskin(option.Dropdown)
-					B.Reskin(option.DecrementButton)
-					B.Reskin(option.IncrementButton)
-					option.styled = true
-				end
-			end
+	local function updateCheckState(button, checked)
+		if checked then
+			button.bg:SetBackdropBorderColor(1, .8, 0)
+		else
+			button.bg:SetBackdropBorderColor(0, 0, 0)
 		end
+	end
 
-		if self.sliderPool then
-			for slider in self.sliderPool:EnumerateActive() do
-				if not slider.styled then
-					B.ReskinSlider(slider)
-					slider.styled = true
-				end
-			end
-		end
+	local function handleSexButton(button, texcoords)
+		if button.bg then return end
+		button.bg = B.CreateBDFrame(button, .25)
+		button:DisableDrawLayer("OVERLAY")
+		button:DisableDrawLayer("BACKGROUND")
+		button:GetNormalTexture():SetTexCoord(unpack(texcoords))
+		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		local optionPool = self.pools:GetPool("CustomizationOptionCheckButtonTemplate")
-		if optionPool then
-			for button in optionPool:EnumerateActive() do
-				if not button.styled then
-					B.ReskinCheck(button.Button)
-					button.styled = true
-				end
-			end
-		end
+		updateCheckState(button, button:GetChecked())
+		hooksecurefunc(button, "SetChecked", updateCheckState)
+	end
+
+	hooksecurefunc("BarberShop_UpdateSexSelectors", function()
+		handleSexButton(BarberShopFrameMaleButton, {.055, .445, .055, .945})
+		handleSexButton(BarberShopFrameFemaleButton, {.555, .945, .055, .945})
 	end)
+
+	B.Reskin(BarberShopFrameOkayButton)
+	B.Reskin(BarberShopFrameCancelButton)
+	B.Reskin(BarberShopFrameResetButton)
+
+	for i = 1, BarberShopFrame:GetNumChildren() do
+		local child = select(i, BarberShopFrame:GetChildren())
+		if child.Prev then
+			B.ReskinArrow(child.Prev, "left")
+		end
+		if child.Next then
+			B.ReskinArrow(child.Next, "right")
+		end
+	end
 end

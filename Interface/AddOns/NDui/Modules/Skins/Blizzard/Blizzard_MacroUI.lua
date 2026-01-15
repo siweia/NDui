@@ -42,7 +42,7 @@ C.themes["Blizzard_MacroUI"] = function()
 
 	B.ReskinPortraitFrame(MacroFrame)
 	B.CreateBDFrame(MacroFrameScrollFrame, .25)
-	B.ReskinTrimScroll(MacroFrameScrollFrame.ScrollBar)
+	B.ReskinScroll(MacroFrameScrollFrameScrollBar)
 	B.Reskin(MacroDeleteButton)
 	B.Reskin(MacroNewButton)
 	B.Reskin(MacroExitButton)

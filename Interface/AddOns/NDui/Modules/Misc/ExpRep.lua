@@ -25,16 +25,8 @@ local C_Reputation_IsMajorFaction = C_Reputation.IsMajorFaction
 local C_AzeriteItem_IsAzeriteItemAtMaxLevel = C_AzeriteItem.IsAzeriteItemAtMaxLevel
 local C_AzeriteItem_FindActiveAzeriteItem = C_AzeriteItem.FindActiveAzeriteItem
 local C_AzeriteItem_GetAzeriteItemXPInfo = C_AzeriteItem.GetAzeriteItemXPInfo
-local C_AzeriteItem_GetPowerLevel = C_AzeriteItem.GetPowerLevel
-local C_ArtifactUI_IsEquippedArtifactDisabled = C_ArtifactUI.IsEquippedArtifactDisabled
-local C_ArtifactUI_GetEquippedArtifactInfo = C_ArtifactUI.GetEquippedArtifactInfo
 local C_GossipInfo_GetFriendshipReputation = C_GossipInfo.GetFriendshipReputation
 local C_GossipInfo_GetFriendshipReputationRanks = C_GossipInfo.GetFriendshipReputationRanks
-
-local function IsAzeriteAvailable()
-	local itemLocation = C_AzeriteItem_FindActiveAzeriteItem()
-	return itemLocation and itemLocation:IsEquipmentSlot() and not C_AzeriteItem_IsAzeriteItemAtMaxLevel()
-end
 
 function M:ExpBar_Update()
 	local rest = self.restBar
@@ -91,44 +83,6 @@ function M:ExpBar_Update()
 		self:SetStatusBarColor(color.r, color.g, color.b, .85)
 		self:SetMinMaxValues(barMin, barMax)
 		self:SetValue(value)
-		self:Show()
-	elseif C_Housing and C_Housing.GetTrackedHouseGuid() then
-		local current, minBar, maxBar, level = 0, 0, 1, 1
-		if M.houseLevelFavor then
-			current = M.houseLevelFavor.houseFavor
-			level = M.houseLevelFavor.houseLevel
-			minBar = C_Housing.GetHouseLevelFavorForLevel(level)
-			maxBar = C_Housing.GetHouseLevelFavorForLevel(level + 1)
-			self:SetStatusBarColor(1, .8, 0)
-			self:SetBarValues(current, minBar, maxBar, level)
-			self:Show()
-		end
-	elseif IsWatchingHonorAsXP() then
-		local current, barMax = UnitHonor("player"), UnitHonorMax("player")
-		self:SetStatusBarColor(1, .24, 0)
-		self:SetMinMaxValues(0, barMax)
-		self:SetValue(current)
-		self:Show()
-	elseif IsAzeriteAvailable() then
-		local azeriteItemLocation = C_AzeriteItem_FindActiveAzeriteItem()
-		local xp, totalLevelXP = C_AzeriteItem_GetAzeriteItemXPInfo(azeriteItemLocation)
-		self:SetStatusBarColor(.9, .8, .6)
-		self:SetMinMaxValues(0, totalLevelXP)
-		self:SetValue(xp)
-		self:Show()
-	elseif HasArtifactEquipped() then
-		if C_ArtifactUI_IsEquippedArtifactDisabled() then
-			self:SetStatusBarColor(.6, .6, .6)
-			self:SetMinMaxValues(0, 1)
-			self:SetValue(1)
-		else
-			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI_GetEquippedArtifactInfo()
-			local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-			xp = xpForNextPoint == 0 and 0 or xp
-			self:SetStatusBarColor(.9, .8, .6)
-			self:SetMinMaxValues(0, xpForNextPoint)
-			self:SetValue(xp)
-		end
 		self:Show()
 	else
 		self:Hide()
@@ -205,75 +159,6 @@ function M:ExpBar_UpdateTooltip()
 			currentValue = mod(currentValue, threshold)
 			GameTooltip:AddDoubleLine(L["Paragon"]..paraCount, currentValue.." / "..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
 		end
-
-		if factionID == 2465 then -- 荒猎团
-			local repInfo = C_GossipInfo_GetFriendshipReputation(2463) -- 玛拉斯缪斯
-			local rep, name, reaction, threshold, nextThreshold = repInfo.standing, repInfo.name, repInfo.reaction, repInfo.reactionThreshold, repInfo.nextThreshold
-			if nextThreshold and rep > 0 then
-				local current = rep - threshold
-				local currentMax = nextThreshold - threshold
-				GameTooltip:AddLine(" ")
-				GameTooltip:AddLine(name, 0,.6,1)
-				GameTooltip:AddDoubleLine(reaction, current.." / "..currentMax.." ("..floor(current/currentMax*100).."%)", .6,.8,1, 1,1,1)
-			end
-		elseif factionID == 2574 then -- 梦境守望者
-			local currencyInfo = C_CurrencyInfo.GetCurrencyInfo(2649) -- 梦境注能
-			local q = currencyInfo.quantity
-			local m = currencyInfo.maxQuantity
-			local name = C_CurrencyInfo.GetCurrencyInfo(2777).name
-			GameTooltip:AddDoubleLine(name, q.." / "..m.." ("..floor(q/m*100).."%)", .6,.8,1, 1,1,1)
-		end
-	end
-
-	if C_Housing.GetTrackedHouseGuid() then
-		local current, maxBar, level = 0, 1, 1
-		if M.houseLevelFavor then
-			current = M.houseLevelFavor.houseFavor
-			level = M.houseLevelFavor.houseLevel
-			maxBar = C_Housing.GetHouseLevelFavorForLevel(level + 1)
-		end
-		if maxBar ~= 0 then
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(HOUSING_DASHBOARD_HOUSEINFO_TOOLTIP, 0,.6,1)
-			GameTooltip:AddDoubleLine(LEVEL.." "..level, current.." / "..maxBar, .6,.8,1, 1,1,1)
-		end
-	end
-
-	if IsWatchingHonorAsXP() then
-		local current, barMax, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(HONOR, 0,.6,1)
-		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.." / "..barMax, .6,.8,1, 1,1,1)
-	end
-
-	if IsAzeriteAvailable() then
-		local azeriteItemLocation = C_AzeriteItem_FindActiveAzeriteItem()
-		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
-		local xp, totalLevelXP = C_AzeriteItem_GetAzeriteItemXPInfo(azeriteItemLocation)
-		local currentLevel = C_AzeriteItem_GetPowerLevel(azeriteItemLocation)
-		azeriteItem:ContinueWithCancelOnItemLoad(function()
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(azeriteItem:GetItemName().." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 0,.6,1)
-			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(xp).." / "..BreakUpLargeNumbers(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", .6,.8,1, 1,1,1)
-		end)
-	end
-
-	if HasArtifactEquipped() then
-		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI_GetEquippedArtifactInfo()
-		local num, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-		GameTooltip:AddLine(" ")
-		if C_ArtifactUI_IsEquippedArtifactDisabled() then
-			GameTooltip:AddLine(name, 0,.6,1)
-			GameTooltip:AddLine(ARTIFACT_RETIRED, .6,.8,1, 1)
-		else
-			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 0,.6,1)
-			local numText = num > 0 and " ("..num..")" or ""
-			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(totalXP)..numText, .6,.8,1, 1,1,1)
-			if xpForNextPoint ~= 0 then
-				local perc = " ("..floor(xp/xpForNextPoint*100).."%)"
-				GameTooltip:AddDoubleLine(L["Next Trait"], BreakUpLargeNumbers(xp).." / "..BreakUpLargeNumbers(xpForNextPoint)..perc, .6,.8,1, 1,1,1)
-			end
-		end
 	end
 	GameTooltip:Show()
 end
@@ -285,12 +170,9 @@ function M:SetupScript(bar)
 		"UPDATE_EXHAUSTION",
 		"PLAYER_ENTERING_WORLD",
 		"UPDATE_FACTION",
-		"ARTIFACT_XP_UPDATE",
 		"PLAYER_EQUIPMENT_CHANGED",
 		"ENABLE_XP_GAIN",
 		"DISABLE_XP_GAIN",
-		"AZERITE_ITEM_EXPERIENCE_CHANGED",
-		"HONOR_XP_UPDATE",
 	}
 	for _, event in pairs(bar.eventList) do
 		bar:RegisterEvent(event)

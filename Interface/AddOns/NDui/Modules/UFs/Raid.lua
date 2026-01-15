@@ -3,14 +3,10 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
-local strmatch, format, wipe = strmatch, format, wipe
+local strmatch, format, wipe = string.match, string.format, table.wipe
 local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
-local GetSpellName = C_Spell.GetSpellName
+local UnitAura, GetSpellInfo = UnitAura, GetSpellInfo
 local InCombatLockdown = InCombatLockdown
-local GetTime, IsInRaid, IsInGroup = GetTime, IsInRaid, IsInGroup
-local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
-local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
-local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
 -- RaidFrame Elements
 function UF:CreateRaidIcons(self)
@@ -30,13 +26,12 @@ function UF:CreateRaidIcons(self)
 
 	local role = parent:CreateTexture(nil, "OVERLAY")
 	role:SetSize(12, 12)
-	role:SetPoint("TOPLEFT", 12, 8)
+	if self.GroupRoleIndicator then
+		role:SetPoint("RIGHT", self.GroupRoleIndicator, "LEFT")
+	else
+		role:SetPoint("TOPRIGHT", self, 5, 5)
+	end
 	self.RaidRoleIndicator = role
-
-	local summon = parent:CreateTexture(nil, "OVERLAY")
-	summon:SetSize(32, 32)
-	summon:SetPoint("CENTER", parent)
-	self.SummonIndicator = summon
 end
 
 function UF:UpdateTargetBorder()
@@ -64,7 +59,7 @@ function UF:UpdateThreatBorder(_, unit)
 	local status = UnitThreatSituation(unit)
 
 	if status and status > 1 then
-		local r, g, b = unpack(oUF.colors.threat[status])
+		local r, g, b = GetThreatStatusColor(status)
 		element:SetBackdropBorderColor(r, g, b)
 		element:Show()
 	else
@@ -140,10 +135,6 @@ local function setupMouseWheelCast(self)
 	end
 end
 
-local fixedSpells = {
-	[360823] = 365585, -- incorrect spellID for Evoker
-}
-
 local function setupClickSets(self)
 	if self.clickCastRegistered then return end
 
@@ -153,14 +144,8 @@ local function setupClickSets(self)
 		local keyIndex = keyList[fullkey]
 		if keyIndex then
 			if tonumber(value) then
-				value = fixedSpells[value] or value
-				--self:SetAttribute(format(keyIndex, "type"), "spell")
-				--self:SetAttribute(format(keyIndex, "spell"), value)
-				local spellName = GetSpellName(value)
-				if spellName then
-					self:SetAttribute(format(keyIndex, "type"), "macro")
-					self:SetAttribute(format(keyIndex, "macrotext"), "/cast [@mouseover]"..spellName)
-				end
+				self:SetAttribute(format(keyIndex, "type"), "spell")
+				self:SetAttribute(format(keyIndex, "spell"), value)
 			elseif value == "target" then
 				self:SetAttribute(format(keyIndex, "type"), "target")
 			elseif value == "focus" then
@@ -205,51 +190,4 @@ function UF:AddClickSetsListener()
 	if not C.db["UFs"]["RaidClickSets"] then return end
 
 	B:RegisterEvent("PLAYER_REGEN_ENABLED", UF.DelayClickSets)
-end
-
-local function UpdateAltPowerAnchor(element)
-	if C.db["UFs"]["PartyAltPower"] then
-		local self = element.__owner
-		local horizon = C.db["UFs"]["PartyDirec"] > 2
-		local relF = horizon and "TOP" or "LEFT"
-		local relT = horizon and "BOTTOM" or "RIGHT"
-		local xOffset = horizon and 0 or 5
-		local yOffset = horizon and -5 or 0
-		local otherSide = C.db["UFs"]["PWOnRight"]
-		if otherSide then
-			xOffset = horizon and 0 or -5
-			yOffset = horizon and 5 or 0
-		end
-
-		element:Show()
-		element:ClearAllPoints()
-		if otherSide then
-			element:SetPoint(relT, self, relF, xOffset, yOffset)
-		else
-			local parent = horizon and self.Power or self
-			element:SetPoint(relF, parent, relT, xOffset, yOffset)
-		end
-	else
-		element:Hide()
-	end
-end
-
-function UF:CreatePartyAltPower(self)
-	local altPower = B.CreateFS(self, 16, "")
-	self:Tag(altPower, "[altpower]")
-	altPower.__owner = self
-	UpdateAltPowerAnchor(altPower)
-
-	self.altPower = altPower
-	self.altPower.UpdateAnchor = UpdateAltPowerAnchor
-end
-
-function UF:UpdatePartyElements()
-	for _, frame in pairs(oUF.objects) do
-		if frame.raidType == "party" then
-			if frame.altPower then
-				frame.altPower:UpdateAnchor()
-			end
-		end
-	end
 end

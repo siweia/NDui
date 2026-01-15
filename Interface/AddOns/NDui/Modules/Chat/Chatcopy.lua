@@ -19,10 +19,7 @@ end
 
 local function replaceMessage(msg, r, g, b)
 	local hexRGB = B.HexRGB(r, g, b)
-	--msg = gsub(msg, "|T(.-):.-|t", "%1") -- accept texture path or id
-	--msg = gsub(msg, "|A(.-):.-|a", "%1") -- accept atlas path or id, needs review
-	msg = gsub(msg, "|T(.-):.-|t", "")
-	msg = gsub(msg, "|A(.-):.-|a", "")
+	msg = gsub(msg, "|T(.-):.-|t", "%1") -- accept texture path or id
 	return format("%s%s|r", hexRGB, msg)
 end
 
@@ -69,7 +66,7 @@ end
 function module:ChatCopy_CreateMenu()
 	menu = CreateFrame("Frame", nil, UIParent)
 	menu:SetSize(25, 100)
-	menu:SetPoint("TOPLEFT", _G.ChatFrame1, "TOPRIGHT", 15, 0)
+	menu:SetPoint("TOPRIGHT", _G.ChatFrame1, 25, 0)
 	menu:SetShown(C.db["Chat"]["ChatMenu"])
 
 	_G.ChatFrameMenuButton:ClearAllPoints()
@@ -78,9 +75,6 @@ function module:ChatCopy_CreateMenu()
 	_G.ChatFrameChannelButton:ClearAllPoints()
 	_G.ChatFrameChannelButton:SetPoint("TOP", _G.ChatFrameMenuButton, "BOTTOM", 0, -2)
 	_G.ChatFrameChannelButton:SetParent(menu)
-	_G.ChatFrameToggleVoiceDeafenButton:SetParent(menu)
-	_G.ChatFrameToggleVoiceMuteButton:SetParent(menu)
-	_G.QuickJoinToastButton:SetParent(menu)
 
 	_G.ChatAlertFrame:ClearAllPoints()
 	_G.ChatAlertFrame:SetPoint("BOTTOMLEFT", _G.ChatFrame1Tab, "TOPLEFT", 5, 25)
@@ -125,9 +119,9 @@ function module:ChatCopy_Create()
 		editBox:SetHitRectInsets(0, 0, offset, (editBox:GetHeight() - offset - self:GetHeight()))
 	end)
 
-	local copy = CreateFrame("Button", "NDuiChatCopyButton", UIParent)
-	copy:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, 15, -6)
-	copy:SetSize(20, 14)
+	local copy = CreateFrame("Button", nil, UIParent)
+	copy:SetPoint("TOPRIGHT", _G.ChatFrame1, 3, 0)
+	copy:SetSize(20, 20)
 	copy:SetAlpha(.5)
 	copy.Icon = copy:CreateTexture(nil, "ARTWORK")
 	copy.Icon:SetAllPoints()

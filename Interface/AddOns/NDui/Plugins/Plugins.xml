@@ -1,8 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Include file="TaintLess.xml"/>
 	<Script file="AlreadyKnown.lua"/>
 	<Script file="DragEmAll.lua"/>
-	<Script file="ExtraQuestButton.lua"/>
 	<Script file="QuickQuest.lua"/>
 	<Script file="yClassColors.lua"/>
 </Ui>

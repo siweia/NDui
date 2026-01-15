@@ -185,10 +185,10 @@ function oUF:HandleUnit(object, unit)
 		object:RegisterEvent('UNIT_TARGETABLE_CHANGED', object.UpdateAllElements)
 	elseif(unit:match('arena%d?$')) then
 		object:RegisterEvent('ARENA_OPPONENT_UPDATE', object.UpdateAllElements, true)
-		object:RegisterEvent('ARENA_PREP_OPPONENT_SPECIALIZATIONS', updateArenaPreparation, true)
-		object:SetAttribute('oUF-enableArenaPrep', true)
+		--object:RegisterEvent('ARENA_PREP_OPPONENT_SPECIALIZATIONS', updateArenaPreparation, true)
+		--object:SetAttribute('oUF-enableArenaPrep', true)
 		-- the event handler only fires for visible frames, so we have to hook it for arena prep
-		object:HookScript('OnEvent', updateArenaPreparation)
+		--object:HookScript('OnEvent', updateArenaPreparation)
 	end
 end
 
@@ -204,7 +204,7 @@ local function createOnUpdate(timer)
 			self.elapsed = (self.elapsed or 0) + elapsed
 			if(self.elapsed > timer) then
 				for _, object in next, objects do
-					if(object:IsVisible() and object.unit and unitExists(object.unit)) then
+					if(object.unit and unitExists(object.unit)) then
 						object:UpdateAllElements('OnUpdate')
 					end
 				end
@@ -226,12 +226,14 @@ function oUF:HandleEventlessUnit(object)
 	-- time from the layout code after oUF:Spawn(unit) returns the frame.
 	local timer = object.onUpdateFrequency or 0.5
 
-	-- Remove it, in case it's already registered with any timer
-	for _, objects in next, eventlessObjects do
-		for i, obj in next, objects do
-			if(obj == object) then
-				table.remove(objects, i)
-				break
+	-- Remove it, in case it's registered with another timer previously
+	for t, objects in next, eventlessObjects do
+		if(t ~= timer) then
+			for i, obj in next, objects do
+				if(obj == object) then
+					table.remove(objects, i)
+					break
+				end
 			end
 		end
 	end

@@ -5,7 +5,7 @@ local M = B:GetModule("Misc")
 local wipe, select, pairs, tonumber = wipe, select, pairs, tonumber
 local strsplit, strfind, tinsert = strsplit, strfind, tinsert
 local InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney, TakeInboxItem = InboxItemCanDelete, DeleteInboxItem, TakeInboxMoney, TakeInboxItem
-local GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem = GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem
+local GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo = GetInboxNumItems, GetInboxHeaderInfo, GetInboxItem, GetItemInfo
 local GetSendMailPrice, GetMoney = GetSendMailPrice, GetMoney
 local C_Timer_After = C_Timer.After
 local C_Mail_HasInboxMoney = C_Mail.HasInboxMoney
@@ -13,6 +13,7 @@ local C_Mail_IsCommandPending = C_Mail.IsCommandPending
 local ATTACHMENTS_MAX_RECEIVE, ERR_MAIL_DELETE_ITEM_ERROR = ATTACHMENTS_MAX_RECEIVE, ERR_MAIL_DELETE_ITEM_ERROR
 local NORMAL_STRING = GUILDCONTROL_OPTION16
 local OPENING_STRING = OPEN_ALL_MAIL_BUTTON_OPENING
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local mailIndex, timeToWait, totalCash, inboxItems = 0, .15, 0, {}
 local isGoldCollecting
@@ -37,7 +38,6 @@ function M:MailItem_AddDelete(i)
 end
 
 function M:InboxItem_OnEnter()
-	if not self.index then return end -- may receive fake mails from Narcissus
 	wipe(inboxItems)
 
 	local itemAttached = select(8, GetInboxHeaderInfo(self.index))
@@ -52,9 +52,9 @@ function M:InboxItem_OnEnter()
 		if itemAttached > 1 then
 			GameTooltip:AddLine(L["Attach List"])
 			for itemID, count in pairs(inboxItems) do
-				local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = C_Item.GetItemInfo(itemID)
+				local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID)
 				if itemName then
-					local r, g, b = C_Item.GetItemQualityColor(itemQuality)
+					local r, g, b = GetItemQualityColor(itemQuality)
 					GameTooltip:AddDoubleLine(" |T"..itemTexture..":12:12:0:0:50:50:4:46:4:46|t "..itemName, count, r, g, b)
 				end
 			end
@@ -92,7 +92,7 @@ function M:ContactButton_Create(parent, index)
 	button:RegisterForClicks("AnyUp")
 	button:SetScript("OnClick", M.ContactButton_OnClick)
 
-	button.delete = B.CreateButton(button, 20, 20, true, "Atlas:common-icon-redx")
+	button.delete = B.CreateButton(button, 20, 20, true, "Interface\\RAIDFRAME\\ReadyCheck-NotReady")
 	button.delete:SetPoint("LEFT", button, "RIGHT", 2, 0)
 	button.delete.__owner = button
 	button.delete:SetScript("OnClick", M.ContactButton_Delete)
@@ -180,8 +180,8 @@ function M:MailBox_ContactList()
 	bu:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 20, 0)
 
 	local list = CreateFrame("Frame", nil, bu)
-	list:SetSize(200, 422)
-	list:SetPoint("TOPLEFT", MailFrame, "TOPRIGHT", 3, -C.mult)
+	list:SetSize(200, 424)
+	list:SetPoint("TOPLEFT", MailFrame, "TOPRIGHT", 3, 0)
 	list:SetFrameStrata("Tooltip")
 	B.SetBD(list)
 	B.CreateFS(list, 14, L["ContactList"], "system", "TOP", 0, -5)
@@ -191,7 +191,7 @@ function M:MailBox_ContactList()
 	end)
 
 	local editbox = B.CreateEditBox(list, 120, 20)
-	editbox:SetPoint("TOPLEFT", 4, -25)
+	editbox:SetPoint("TOPLEFT", 5, -25)
 	B.AddTooltip(editbox, "ANCHOR_BOTTOMRIGHT", L["AddContactTip"], "info", true)
 	local swatch = B.CreateColorSwatch(list, "")
 	swatch:SetPoint("LEFT", editbox, "RIGHT", 5, 0)
@@ -210,8 +210,8 @@ function M:MailBox_ContactList()
 	end)
 
 	local scrollFrame = CreateFrame("ScrollFrame", "NDuiMailBoxScrollFrame", list, "HybridScrollFrameTemplate")
-	scrollFrame:SetSize(175, 368)
-	scrollFrame:SetPoint("BOTTOMLEFT", 4, 4)
+	scrollFrame:SetSize(175, 370)
+	scrollFrame:SetPoint("BOTTOMLEFT", 5, 5)
 	B.CreateBDFrame(scrollFrame, .25)
 	list.scrollFrame = scrollFrame
 
@@ -408,7 +408,7 @@ end
 
 function M:MailBox()
 	if not C.db["Misc"]["Mail"] then return end
-	if C_AddOns.IsAddOnLoaded("Postal") then return end
+	if IsAddOnLoaded("Postal") then return end
 
 	-- Delete buttons
 	for i = 1, 7 do
@@ -449,16 +449,16 @@ function OpenAllMail:AdvanceToNextItem()
 			end
 		end
 	end
-
+	
 	if ( not foundAttachment ) then
 		self.mailIndex = self.mailIndex + 1
 		self.attachmentIndex = ATTACHMENTS_MAX
 		if ( self.mailIndex > GetInboxNumItems() ) then
 			return false
 		end
-
+		
 		return self:AdvanceToNextItem()
 	end
-
+	
 	return true
 end

@@ -19,13 +19,14 @@
 	class-generation, helper-functions and the Blizzard-replacement.
 ]]
 local parent, ns = ...
-local global = C_AddOns.GetAddOnMetadata(parent, 'X-cargBags')
+local global = GetAddOnMetadata(parent, 'X-cargBags')
 
 --- @class table
 --  @name cargBags
 --  This class provides the underlying fundamental functions, such as
 --  class-generation, helper-functions and the Blizzard-replacement
 local cargBags = CreateFrame("Button")
+
 
 ns.cargBags = cargBags
 if(global) then
@@ -69,7 +70,7 @@ function cargBags:GetImplementation(name)
 	return self.classes.Implementation:Get(name)
 end
 
-local function toggleBag(forceopen)	cargBags.blizzard:Toggle(forceopen)	end
+local function toggleBag(forceopen)	cargBags.blizzard:Toggle(true)	end
 local function toggleNoForce() cargBags.blizzard:Toggle() end
 local function closeBag() cargBags.blizzard:Hide() end
 
@@ -86,12 +87,12 @@ function cargBags:ReplaceBlizzard(name)
 
 	OpenAllBags = toggleBag	-- Name is misleading, Blizz-function actually toggles bags
 	OpenBackpack = toggleBag -- Blizz does not provide toggling here
+	CloseAllBags = closeBag
+	CloseBackpack = closeBag
 	OpenBag = toggleBag		-- fixed the loot won alert frame
 
-	hooksecurefunc("CloseAllBags", closeBag)
-	hooksecurefunc("CloseBackpack", closeBag)
-
 	BankFrame:UnregisterAllEvents()
+	BankFrame:SetParent(NDui[1].HiddenFrame)
 end
 
 --- Flags the implementation to handle Blizzards Bag-Toggle-Functions
@@ -132,7 +133,7 @@ cargBags:SetScript("OnEvent", function(self, event)
 		self.atBank = true
 
 		if(impl:IsShown()) then
-		--	impl:OnEvent("BAG_UPDATE") -- No need to update twice here, needs review
+			impl:OnEvent("BAG_UPDATE")
 		else
 			impl:Show()
 		end

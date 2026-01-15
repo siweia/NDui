@@ -120,8 +120,8 @@ tinsert(C.defaultThemes, function()
 		local editbox = dialog.LayoutNameEditBox
 		if editbox then
 			B.ReskinEditBox(editbox)
-			editbox.__bg:SetPoint("TOPLEFT", -5, -5)
-			editbox.__bg:SetPoint("BOTTOMRIGHT", 5, 5)
+			editbox.bg:SetPoint("TOPLEFT", -5, -5)
+			editbox.bg:SetPoint("BOTTOMRIGHT", 5, 5)
 		end
 
 		local importBox = dialog.ImportBox
@@ -131,10 +131,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	if DB.isNewPatch then
-		ReskinLayoutDialog(EditModeLayoutDialog)
-	else
-		ReskinLayoutDialog(EditModeNewLayoutDialog)
-	end
+	ReskinLayoutDialog(EditModeNewLayoutDialog)
 	ReskinLayoutDialog(EditModeImportLayoutDialog)
 end)

@@ -3,11 +3,12 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 local module = B:GetModule("Maps")
 
-local _G = _G
 local select, pairs, unpack, next, tinsert = select, pairs, unpack, next, tinsert
 local strmatch, strfind, strupper = strmatch, strfind, strupper
 local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
+local GetInstanceInfo, GetDifficultyInfo = GetInstanceInfo, GetDifficultyInfo
 local C_Timer_After = C_Timer.After
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 function module:CreatePulse()
@@ -16,7 +17,6 @@ function module:CreatePulse()
 
 	if not C.db["Map"]["CombatPulse"] then return end
 
-	local MinimapMailFrame = MinimapCluster.IndicatorFrame.MailFrame
 	local anim = bg:CreateAnimationGroup()
 	anim:SetLooping("BOUNCE")
 	anim.fader = anim:CreateAnimation("Alpha")
@@ -30,7 +30,7 @@ function module:CreatePulse()
 			bg:SetBackdropBorderColor(1, 0, 0)
 			anim:Play()
 		elseif not InCombatLockdown() then
-			if C_Calendar.GetNumPendingInvites() > 0 or MinimapMailFrame:IsShown() then
+			if C_Calendar.GetNumPendingInvites() > 0 or MiniMapMailFrame:IsShown() then
 				bg:SetBackdropBorderColor(1, 1, 0)
 				anim:Play()
 			else
@@ -44,194 +44,71 @@ function module:CreatePulse()
 	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateMinimapAnim)
 	B:RegisterEvent("UPDATE_PENDING_MAIL", updateMinimapAnim)
 
-	MinimapMailFrame:HookScript("OnHide", function()
+	MiniMapMailFrame:HookScript("OnHide", function()
 		if InCombatLockdown() then return end
 		anim:Stop()
 		bg:SetBackdropBorderColor(0, 0, 0)
 	end)
 end
 
-local function ToggleLandingPage(_, ...)
-	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-	if not C_Garrison.HasGarrison(...) then
-		UIErrorsFrame:AddMessage(DB.InfoColor..CONTRIBUTION_TOOLTIP_UNLOCKED_WHEN_ACTIVE)
-		return
-	end
-	ShowGarrisonLandingPage(...)
-end
-
 function module:ReskinRegions()
-	-- Garrison
-	local garrMinimapButton = _G.ExpansionLandingPageMinimapButton
-	if garrMinimapButton then
-		local binSettled
-		local function updateMinimapButtons(self)
-			self:ClearAllPoints()
-			self:SetPoint("BOTTOMRIGHT", Minimap, 6, -6)
-			self:GetNormalTexture():SetTexture(DB.garrTex)
-			self:GetPushedTexture():SetTexture(DB.garrTex)
-			self:GetHighlightTexture():SetTexture(DB.garrTex)
-			self:SetSize(30, 30)
+	-- Tracking icon
+	MiniMapTracking:SetScale(.8)
+	MiniMapTracking:ClearAllPoints()
+	MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, 2, -4)
+	MiniMapTracking:SetFrameLevel(999)
+	MiniMapTrackingBackground:Hide()
+	MiniMapTrackingButtonBorder:Hide()
+	B.ReskinIcon(MiniMapTrackingIcon)
+	MiniMapTrackingIconOverlay:SetAlpha(0)
+	local hl = MiniMapTrackingButton:GetHighlightTexture()
+	hl:SetColorTexture(1, 1, 1, .25)
+	hl:SetAllPoints(MiniMapTrackingIcon)
 
-			if self:IsShown() and not binSettled then
-				if RecycleBinToggleButton then
-					RecycleBinToggleButton:SetPoint("BOTTOMRIGHT", -15, -6)
-				else
-					AddonCompartmentFrame:ClearAllPoints()
-					AddonCompartmentFrame:SetPoint("BOTTOMRIGHT", Minimap, -26, 2)
-				end
-				binSettled = true
-			end
-		end
-		updateMinimapButtons(garrMinimapButton)
-		garrMinimapButton:HookScript("OnShow", updateMinimapButtons)
-		hooksecurefunc(garrMinimapButton, "UpdateIcon", updateMinimapButtons)
+	-- Mail icon
+	MiniMapMailFrame:ClearAllPoints()
+	MiniMapMailFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -3, 3)
+	MiniMapMailIcon:SetTexture(DB.mailTex)
+	MiniMapMailIcon:SetSize(21, 21)
+	MiniMapMailIcon:SetVertexColor(1, 1, 0)
 
-		local menuList = {
-			{text =	_G.GARRISON_TYPE_9_0_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = Enum.GarrisonType.Type_9_0_Garrison, notCheckable = true},
-			{text =	_G.WAR_CAMPAIGN, func = ToggleLandingPage, arg1 = Enum.GarrisonType.Type_8_0_Garrison, notCheckable = true},
-			{text =	_G.ORDER_HALL_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = Enum.GarrisonType.Type_7_0_Garrison, notCheckable = true},
-			{text =	_G.GARRISON_LANDING_PAGE_TITLE, func = ToggleLandingPage, arg1 = Enum.GarrisonType.Type_6_0_Garrison, notCheckable = true},
-		}
-		garrMinimapButton:HookScript("OnMouseDown", function(self, btn)
-			if btn == "RightButton" then
-				if _G.GarrisonLandingPage and _G.GarrisonLandingPage:IsShown() then
-					HideUIPanel(_G.GarrisonLandingPage)
-				end
-				if _G.ExpansionLandingPage and _G.ExpansionLandingPage:IsShown() then
-					HideUIPanel(_G.ExpansionLandingPage)
-				end
-				EasyMenu(menuList, B.EasyMenu, self, -80, 0, "MENU", 1)
-			end
-		end)
-		garrMinimapButton:SetScript("OnEnter", function(self)
-			GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-			GameTooltip:SetText(self.title, 1, 1, 1)
-			GameTooltip:AddLine(self.description, nil, nil, nil, true)
-			GameTooltip:AddLine(L["SwitchGarrisonType"], nil, nil, nil, true)
-			GameTooltip:Show();
-		end)
-	end
-
-	-- QueueStatus Button
-	QueueStatusButton:SetParent(Minimap)
-	QueueStatusButton:ClearAllPoints()
-	QueueStatusButton:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
-	QueueStatusButton:SetFrameLevel(999)
-	QueueStatusButton:SetSize(33, 33)
-	QueueStatusButtonIcon:SetAlpha(0)
-	QueueStatusFrame:ClearAllPoints()
-	QueueStatusFrame:SetPoint("TOPRIGHT", QueueStatusButton, "TOPLEFT")
-
-	hooksecurefunc(QueueStatusButton, "SetPoint", function(button, _, _, _, x, y)
-		if not (x == -5 and y == -5) then
-			button:ClearAllPoints()
-			button:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
-		end
-	end)
+	-- Battlefield
+	MiniMapBattlefieldFrame:ClearAllPoints()
+	MiniMapBattlefieldFrame:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", -5, -5)
+	MiniMapBattlefieldFrame:SetFrameLevel(999)
+	MiniMapBattlefieldBorder:Hide()
+	MiniMapBattlefieldIcon:SetAlpha(0)
+	BattlegroundShine:SetTexture(nil)
 
 	local queueIcon = Minimap:CreateTexture(nil, "ARTWORK")
-	queueIcon:SetPoint("CENTER", QueueStatusButton)
-	queueIcon:SetSize(30, 30)
-	queueIcon:SetAtlas("Raid")
-
+	queueIcon:SetPoint("CENTER", MiniMapBattlefieldFrame)
+	queueIcon:SetSize(50, 50)
+	queueIcon:SetTexture(DB.eyeTex)
+	queueIcon:Hide()
 	local anim = queueIcon:CreateAnimationGroup()
 	anim:SetLooping("REPEAT")
 	anim.rota = anim:CreateAnimation("Rotation")
 	anim.rota:SetDuration(2)
 	anim.rota:SetDegrees(360)
-	hooksecurefunc(QueueStatusFrame, "Update", function()
-		queueIcon:SetShown(QueueStatusButton:IsShown())
+
+	hooksecurefunc("BattlefieldFrame_UpdateStatus", function()
+		queueIcon:SetShown(MiniMapBattlefieldFrame:IsShown())
+
+		anim:Play()
+		for i = 1, MAX_BATTLEFIELD_QUEUES do
+			local status = GetBattlefieldStatus(i)
+			if status == "confirm" then
+				anim:Stop()
+				break
+			end
+		end
 	end)
-	hooksecurefunc(QueueStatusButton.Eye, "PlayAnim", function() anim:Play() end)
-	-- default anger red eye
-	hooksecurefunc(QueueStatusButton.Eye, "StartPokeAnimationInitial", function() anim.rota:SetDuration(.5)	end)
-	hooksecurefunc(QueueStatusButton.Eye, "StartPokeAnimationEnd", function() anim.rota:SetDuration(2) end)
 
-	-- Difficulty Flags
-	local instDifficulty = MinimapCluster.InstanceDifficulty
-	if instDifficulty then
-		local function updateFlagAnchor(frame, _, _, _, _, _, force)
-			if force then return end
-			frame:ClearAllPoints()
-			frame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", 2, 2, true)
-		end
-		instDifficulty:SetParent(Minimap)
-		instDifficulty:SetScale(.7)
-		updateFlagAnchor(instDifficulty)
-		hooksecurefunc(instDifficulty, "SetPoint", updateFlagAnchor)
-
-		local function replaceFlag(self)
-			self:SetTexture(DB.flagTex)
-		end
-		local function reskinDifficulty(frame)
-			if not frame then return end
-			frame.Border:Hide()
-			replaceFlag(frame.Background)
-			hooksecurefunc(frame.Background, "SetAtlas", replaceFlag)
-		end
-		reskinDifficulty(instDifficulty.Default)
-		reskinDifficulty(instDifficulty.Guild)
-		reskinDifficulty(instDifficulty.ChallengeMode)
-	end
-
-	-- Mail and crafing icon
-	local function updateMapAnchor(frame, _, _, _, _, _, force)
-		if force then return end
-		frame:ClearAllPoints()
-		frame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 3, -3, true)
-	end
-	local indicatorFrame = MinimapCluster.IndicatorFrame
-	if indicatorFrame then
-		updateMapAnchor(indicatorFrame)
-		hooksecurefunc(indicatorFrame, "SetPoint", updateMapAnchor)
-		indicatorFrame:SetFrameLevel(11)
-	end
-
-	-- Invites Icon
-	GameTimeCalendarInvitesTexture:ClearAllPoints()
-	GameTimeCalendarInvitesTexture:SetParent(Minimap)
-	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
-
-	local Invt = CreateFrame("Button", nil, UIParent)
-	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
-	Invt:SetSize(250, 80)
-	Invt:Hide()
-	B.SetBD(Invt)
-	B.CreateFS(Invt, 16, DB.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
-
-	local lastInv = 0
-	local function updateInviteVisibility()
-		local thisTime = GetTime()
-		if thisTime - lastInv > 1 then
-			lastInv = thisTime
-			Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
-		end
-	end
-	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
-
-	Invt:SetScript("OnClick", function(_, btn)
-		Invt:Hide()
-		if btn == "LeftButton" and not InCombatLockdown() then -- fix by LibShowUIPanel
-		--if btn == "LeftButton" then
-			ToggleCalendar()
-		end
-		B:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
-		B:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
-	end)
-end
-
-function module:BlizzardACF()
-	local frame = AddonCompartmentFrame
-	if C.db["Map"]["ShowRecycleBin"] then
-		B.HideObject(frame)
-	else
-		frame:ClearAllPoints()
-		frame:SetPoint("BOTTOMRIGHT", Minimap, -26, 2)
-		frame:SetFrameLevel(999)
-		B.StripTextures(frame)
-		B.SetBD(frame)
+	-- LFG Icon
+	if MiniMapLFGFrame then
+		MiniMapLFGFrame:ClearAllPoints()
+		MiniMapLFGFrame:SetPoint("RIGHT", Minimap, 5, 0)
+		MiniMapLFGFrameBorder:Hide()
 	end
 end
 
@@ -245,8 +122,8 @@ function module:RecycleBin()
 		["MinimapBackdrop"] = true,
 		["TimeManagerClockButton"] = true,
 		["FeedbackUIButton"] = true,
+		["HelpOpenTicketButton"] = true,
 		["MiniMapBattlefieldFrame"] = true,
-		["QueueStatusButton"] = true,
 		["QueueStatusMinimapButton"] = true,
 		["GarrisonLandingPageMinimapButton"] = true,
 		["MinimapZoneTextButton"] = true,
@@ -260,7 +137,7 @@ function module:RecycleBin()
 
 	local bu = CreateFrame("Button", "RecycleBinToggleButton", Minimap)
 	bu:SetSize(30, 30)
-	bu:SetPoint("BOTTOMRIGHT", 4, -6)
+	bu:SetPoint("BOTTOMRIGHT", -15, -6)
 	bu:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
 	bu.Icon:SetAllPoints()
@@ -299,6 +176,8 @@ function module:RecycleBin()
 	local ignoredButtons = {
 		["GatherMatePin"] = true,
 		["HandyNotes.-Pin"] = true,
+		["Guidelime"] = true,
+		["QuestieFrame"] = true,
 		["TTMinimapButton"] = true,
 	}
 	B.SplitList(ignoredButtons, NDuiADB["IgnoredButtons"])
@@ -311,9 +190,7 @@ function module:RecycleBin()
 		end
 	end
 
-	local isGoodLookingIcon = {
-		["Narci_MinimapButton"] = true,
-	}
+	local isGoodLookingIcon = {}
 
 	local iconsPerRow = 10
 	local rowMult = iconsPerRow/2 - 1
@@ -474,7 +351,7 @@ function module:WhoPingsMyMap()
 	anim.fader:SetStartDelay(3)
 
 	B:RegisterEvent("MINIMAP_PING", function(_, unit)
-		if UnitIsUnit(unit, "player") then return end -- ignore player ping
+		if unit == "player" then return end -- ignore player ping
 
 		local class = select(2, UnitClass(unit))
 		local r, g, b = B.ClassColor(class)
@@ -508,31 +385,50 @@ function B:GetMinimapShape()
 end
 
 function module:ShowMinimapClock()
+	if C.db["Map"]["DisableMinimap"] then return end
+
+	if not TimeManagerClockButton.styled then
+		TimeManagerClockButton:DisableDrawLayer("BORDER")
+		TimeManagerClockTicker:SetFont(unpack(DB.Font))
+		TimeManagerClockTicker:SetTextColor(1, 1, 1)
+
+		TimeManagerClockButton.styled = true
+	end
+
 	if C.db["Map"]["Clock"] then
 		if not TimeManagerClockButton then LoadAddOn("Blizzard_TimeManager") end
-		if not TimeManagerClockButton.styled then
-			TimeManagerClockButton:DisableDrawLayer("BORDER")
-			TimeManagerClockButton:ClearAllPoints()
-			TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -2)
-			TimeManagerClockButton:SetFrameLevel(10)
-			TimeManagerClockTicker:SetFont(unpack(DB.Font))
-			TimeManagerClockTicker:SetTextColor(1, 1, 1)
-
-			TimeManagerClockButton.styled = true
-		end
+		TimeManagerClockButton:ClearAllPoints()
+		TimeManagerClockButton:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, -8)
 		TimeManagerClockButton:Show()
 	else
-		if TimeManagerClockButton then TimeManagerClockButton:Hide() end
+		if TimeManagerClockButton then
+			TimeManagerClockButton:ClearAllPoints()
+			TimeManagerClockButton:SetPoint("BOTTOM", B.HiddenFrame)
+			TimeManagerClockButton:Hide()
+		end
 	end
 end
 
+function module:ShowMinimapHelpInfo()
+	Minimap:HookScript("OnEnter", function()
+		if not NDuiADB["Help"]["MinimapInfo"] then
+			B:ShowHelpTip(MinimapCluster, L["MinimapHelp"], "LEFT", -20, -50, nil, "MinimapInfo")
+		end
+	end)
+end
+
 function module:ShowCalendar()
+	if C.db["Map"]["DisableMinimap"] then return end
+
 	if C.db["Map"]["Calendar"] then
 		if not GameTimeFrame.styled then
+			GameTimeFrame:SetNormalTexture(0)
+			GameTimeFrame:SetPushedTexture(0)
+			GameTimeFrame:SetHighlightTexture(0)
 			GameTimeFrame:SetSize(18, 18)
 			GameTimeFrame:SetParent(Minimap)
 			GameTimeFrame:ClearAllPoints()
-			GameTimeFrame:SetPoint("BOTTOMRIGHT", Minimap, 1, 18)
+			GameTimeFrame:SetPoint("BOTTOMRIGHT", Minimap, -2, 20)
 			GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
 
 			for i = 1, GameTimeFrame:GetNumRegions() do
@@ -566,7 +462,6 @@ function module:SoundVolume()
 
 	local f = CreateFrame("Frame", nil, Minimap)
 	f:SetAllPoints()
-	f:SetFrameLevel(999)
 	local text = B.CreateFS(f, 30)
 
 	local anim = f:CreateAnimationGroup()
@@ -605,54 +500,7 @@ function module:Minimap_OnMouseWheel(zoom)
 	end
 end
 
-function module:Minimap_OnMouseUp(btn)
-	if btn == "MiddleButton" then
-		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end -- fix by LibShowUIPanel
-		ToggleCalendar()
-	elseif btn == "RightButton" then
-		local button = MinimapCluster.Tracking.Button
-		if button then
-			button:OpenMenu()
-			if button.menu then
-				button.menu:ClearAllPoints()
-				button.menu:SetPoint("CENTER", self, -100, 100)
-			end
-		end
-	else
-		Minimap:OnClick()
-	end
-end
-
-function module:SetupHybridMinimap()
-	HybridMinimap.CircleMask:SetTexture("Interface\\BUTTONS\\WHITE8X8")
-end
-
-function module:HybridMinimapOnLoad(addon)
-	if addon == "Blizzard_HybridMinimap" then
-		module:SetupHybridMinimap()
-		B:UnregisterEvent(self, module.HybridMinimapOnLoad)
-	end
-end
-
-local minimapInfo = {
-	text = L["MinimapHelp"],
-	buttonStyle = HelpTip.ButtonStyle.GotIt,
-	targetPoint = HelpTip.Point.LeftEdgeCenter,
-	onAcknowledgeCallback = B.HelpInfoAcknowledge,
-	callbackArg = "MinimapInfo",
-	alignment = 3,
-}
-
-function module:ShowMinimapHelpInfo()
-	Minimap:HookScript("OnEnter", function()
-		if not NDuiADB["Help"]["MinimapInfo"] then
-			HelpTip:Show(MinimapCluster, minimapInfo)
-		end
-	end)
-end
-
 function module:SetupMinimap()
-	if C_AddOns.IsAddOnLoaded("SexyMap") then C.db["Map"]["DisableMinimap"] = true end
 	if C.db["Map"]["DisableMinimap"] then return end
 
 	-- Shape and Position
@@ -663,52 +511,63 @@ function module:SetupMinimap()
 	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
-	hooksecurefunc(Minimap, "SetPoint", function(frame, _, _, _, _, _, force)
-		if force then return end
-		frame:ClearAllPoints()
-		frame:SetPoint("TOPRIGHT", mover, "TOPRIGHT", 0, 0, true)
-	end)
-
 	Minimap.mover = mover
 
 	self:UpdateMinimapScale()
 	self:ShowMinimapClock()
 	self:ShowCalendar()
 
-	-- Minimap clicks
+	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
 	Minimap:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
-	Minimap:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
+
+	-- Click Func
+	local hasAlaCalendar = IsAddOnLoaded("alaCalendar")
+	Minimap:SetScript("OnMouseUp", function(self, btn)
+		if btn == "RightButton" then
+			toggleTrackMenu(self)
+		elseif btn == "MiddleButton" and hasAlaCalendar then
+			B:TogglePanel(ALA_CALENDAR)
+		else
+			Minimap_OnClick(self)
+		end
+	end)
 
 	-- Hide Blizz
-	MinimapCluster:EnableMouse(false)
-	MinimapCluster.BorderTop:Hide()
-	MinimapCluster.ZoneTextButton:Hide()
-	Minimap:SetArchBlobRingScalar(0)
-	Minimap:SetQuestBlobRingScalar(0)
-	B.HideObject(Minimap.ZoomIn)
-	B.HideObject(Minimap.ZoomOut)
-	B.HideObject(MinimapCompassTexture)
-	MinimapCluster:KillEditMode()
+	local frames = {
+		"MinimapBorderTop",
+		"MinimapNorthTag",
+		"MinimapBorder",
+		"MinimapZoneTextButton",
+		"MinimapZoomOut",
+		"MinimapZoomIn",
+		"MiniMapWorldMapButton",
+		"MiniMapMailBorder",
+		"MinimapToggleButton",
+		"GameTimeFrame",
+	}
 
-	_G.MinimapCluster.Tracking:SetAlpha(0)
-	_G.MinimapCluster.Tracking:SetScale(0.0001)
-
-	-- Housing overlay
-	if MinimapBackdrop.StaticOverlayTexture then
-		MinimapBackdrop.StaticOverlayTexture:SetInside(Minimap)
-		MinimapBackdrop.StaticOverlayTexture:SetTexCoord(.2, .8, .2, .8)
+	for _, v in pairs(frames) do
+		local frame = _G[v]
+		if frame then
+			B.HideObject(_G[v])
+		end
 	end
+	MinimapCluster:EnableMouse(false)
+	MinimapCluster:KillEditMode()
+	MinimapCluster:SetAllPoints(Minimap)
+	MinimapCluster.BorderTop:Hide()
 
 	-- Add Elements
 	self:CreatePulse()
-	self:RecycleBin()
-	self:BlizzardACF() -- blizz addons collector
 	self:ReskinRegions()
+	self:RecycleBin()
 	self:WhoPingsMyMap()
 	self:ShowMinimapHelpInfo()
 	self:SoundVolume()
 
-	-- HybridMinimap
-	B:RegisterEvent("ADDON_LOADED", module.HybridMinimapOnLoad)
+	if LibDBIcon10_TownsfolkTracker then
+		LibDBIcon10_TownsfolkTracker:DisableDrawLayer("OVERLAY")
+		LibDBIcon10_TownsfolkTracker:DisableDrawLayer("BACKGROUND")
+	end
 end

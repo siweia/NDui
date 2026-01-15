@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local _G = getfenv(0)
-local ipairs, tremove = ipairs, table.remove
+local ipairs = ipairs
 local UIParent = _G.UIParent
 local AlertFrame = _G.AlertFrame
 local GroupLootContainer = _G.GroupLootContainer
@@ -11,7 +11,7 @@ local GroupLootContainer = _G.GroupLootContainer
 local POSITION, ANCHOR_POINT, YOFFSET = "TOP", "BOTTOM", -10
 local parentFrame
 
-function M:AlertFrame_UpdateAnchor()
+function M:CalculateAlertAnchor()
 	local y = select(2, parentFrame:GetCenter())
 	local screenHeight = UIParent:GetTop()
 	if y > screenHeight/2 then
@@ -23,11 +23,23 @@ function M:AlertFrame_UpdateAnchor()
 		ANCHOR_POINT = "TOP"
 		YOFFSET = 10
 	end
+end
+
+function M:AlertFrame_UpdateAnchor()
+	M:CalculateAlertAnchor()
 
 	self:ClearAllPoints()
 	self:SetPoint(POSITION, parentFrame)
+end
+
+function M:GroupLootContainer_UpdateAnchor()
+	M:CalculateAlertAnchor()
+
 	GroupLootContainer:ClearAllPoints()
 	GroupLootContainer:SetPoint(POSITION, parentFrame)
+	if GroupLootContainer:IsShown() then
+		M.UpdatGroupLootContainer(GroupLootContainer)
+	end
 end
 
 function M:UpdatGroupLootContainer()
@@ -92,15 +104,6 @@ function M:AlertFrame_AdjustPosition()
 	end
 end
 
-local function NoTalkingHeads()
-	if not C.db["Misc"]["HideTalking"] then return end
-
-	_G.TalkingHeadFrame:UnregisterAllEvents() -- needs review
-	hooksecurefunc(_G.TalkingHeadFrame, "Show", function(self)
-		self:Hide()
-	end)
-end
-
 function M:AlertFrame_Setup()
 	parentFrame = CreateFrame("Frame", nil, UIParent)
 	parentFrame:SetSize(200, 30)
@@ -109,12 +112,8 @@ function M:AlertFrame_Setup()
 	GroupLootContainer:EnableMouse(false)
 	GroupLootContainer.ignoreFramePositionManager = true
 
-	for index, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
-		if alertFrameSubSystem.anchorFrame and alertFrameSubSystem.anchorFrame == _G.TalkingHeadFrame then
-			tremove(_G.AlertFrame.alertFrameSubSystems, index)
-		else
-			M.AlertFrame_AdjustPosition(alertFrameSubSystem)
-		end
+	for _, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
+		M.AlertFrame_AdjustPosition(alertFrameSubSystem)
 	end
 
 	hooksecurefunc(AlertFrame, "AddAlertFrameSubSystem", function(_, alertFrameSubSystem)
@@ -122,10 +121,9 @@ function M:AlertFrame_Setup()
 	end)
 
 	hooksecurefunc(AlertFrame, "UpdateAnchors", M.AlertFrame_UpdateAnchor)
-	hooksecurefunc("GroupLootContainer_Update", M.UpdatGroupLootContainer)
 
-	if TalkingHeadFrame then
-		NoTalkingHeads()
-	end
+	M:GroupLootContainer_UpdateAnchor()
+	hooksecurefunc("GroupLootFrame_OpenNewFrame", M.GroupLootContainer_UpdateAnchor)
+	hooksecurefunc("GroupLootContainer_Update", M.UpdatGroupLootContainer)
 end
 M:RegisterMisc("AlertFrame", M.AlertFrame_Setup)

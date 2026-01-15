@@ -58,7 +58,7 @@ local function doSearch(self, text)
 		apply(self, self.parent, text)
 	end
 
-	--self.parent.implementation:OnEvent("BAG_UPDATE") -- shouldn't have to update bags, needs review
+	self.parent.implementation:OnEvent("BAG_UPDATE")
 end
 
 local function target_openSearch(target)
@@ -80,10 +80,6 @@ end
 local function onEnter(search)
 	search:ClearFocus()
 	if(search.OnEnterPressed) then search:OnEnterPressed() end
-end
-
-local function onHide(self)
-	onEscape(self.Search)
 end
 
 cargBags:RegisterPlugin("SearchBar", function(self, target)
@@ -121,7 +117,6 @@ cargBags:RegisterPlugin("SearchBar", function(self, target)
 	search:SetScript("OnTextChanged", doSearch)
 	search:SetScript("OnEscapePressed", onEscape)
 	search:SetScript("OnEnterPressed", onEnter)
-	self:HookScript("OnHide", onHide)
 
 	if(target) then
 		search:SetAutoFocus(true)

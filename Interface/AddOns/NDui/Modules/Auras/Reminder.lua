@@ -2,64 +2,65 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
-local pairs, tinsert, next = pairs, table.insert, next
-local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
-local GetSpecialization = GetSpecialization
-local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
-local IsInInstance, IsPlayerSpell = IsInInstance, IsPlayerSpell
-local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
-local GetNumGroupMembers = GetNumGroupMembers
-
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = 36
 local frames, parentFrame = {}
+local InCombatLockdown, GetZonePVPInfo, UnitIsDeadOrGhost = InCombatLockdown, GetZonePVPInfo, UnitIsDeadOrGhost
+local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
+local pairs, tinsert, next = pairs, table.insert, next
+
+function A:Reminder_ConvertToName(cfg)
+	local cache = {}
+	for spellID in pairs(cfg.spells) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			cache[name] = true
+		end
+	end
+	for name in pairs(cache) do
+		cfg.spells[name] = true
+	end
+end
+
+function A:Reminder_CheckMeleeSpell()
+	for _, cfg in pairs(groups) do
+		local depends = cfg.depends
+		if depends then
+			for _, spellID in pairs(depends) do
+				if IsPlayerSpell(spellID) then
+					cfg.dependsKnown = true
+					break
+				end
+			end
+		end
+	end
+end
 
 function A:Reminder_Update(cfg)
 	local frame = cfg.frame
 	local depend = cfg.depend
-	local spec = cfg.spec
+	local depends = cfg.depends
 	local combat = cfg.combat
 	local instance = cfg.instance
 	local pvp = cfg.pvp
-	local itemID = cfg.itemID
-	local equip = cfg.equip
-	local inGroup = cfg.inGroup
-	local isPlayerSpell, isRightSpec, isEquipped, isGrouped, isInCombat, isInInst, isInPVP = true, true, true, true
+	local isPlayerSpell, isInCombat, isInInst, isInPVP = true
 	local inInst, instType = IsInInstance()
-	local weaponIndex = cfg.weaponIndex
-
-	if itemID then
-		if inGroup and GetNumGroupMembers() < 2 then isGrouped = false end
-		if equip and not IsEquippedItem(itemID) then isEquipped = false end
-		if C_Item.GetItemCount(itemID) == 0 or (not isEquipped) or (not isGrouped) or C_Item.GetItemCooldown(itemID) > 0 then -- check item cooldown
-			frame:Hide()
-			return
-		end
-	end
 
 	if depend and not IsPlayerSpell(depend) then isPlayerSpell = false end
-	if spec and spec ~= GetSpecialization() then isRightSpec = false end
+	if depends and not cfg.dependsKnown then isPlayerSpell = false end
 	if combat and InCombatLockdown() then isInCombat = true end
 	if instance and inInst and (instType == "scenario" or instType == "party" or instType == "raid") then isInInst = true end
 	if pvp and (instType == "arena" or instType == "pvp" or GetZonePVPInfo() == "combat") then isInPVP = true end
 	if not combat and not instance and not pvp then isInCombat, isInInst, isInPVP = true, true, true end
 
 	frame:Hide()
-	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle("player") and not UnitIsDeadOrGhost("player") then
-		if weaponIndex then
-			local hasMainHandEnchant, _, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
-			if (hasMainHandEnchant and weaponIndex == 1) or (hasOffHandEnchant and weaponIndex == 2) then
+	if isPlayerSpell and (isInCombat or isInInst or isInPVP) and not UnitIsDeadOrGhost("player") then
+		for i = 1, 32 do
+			local name, _, _, _, _, _, caster = UnitBuff("player", i)
+			if not name then break end
+			if name and (cfg.spells[name] or cfg.gemini and cfg.gemini[name] and caster == "player") then
 				frame:Hide()
 				return
-			end
-		else
-			for i = 1, 40 do
-				local auraData = C_UnitAuras.GetBuffDataByIndex("player", i, "HELPFUL")
-				if not auraData then break end
-				if auraData.spellId and cfg.spells[auraData.spellId] then
-					frame:Hide()
-					return
-				end
 			end
 		end
 		frame:Show()
@@ -71,14 +72,14 @@ function A:Reminder_Create(cfg)
 	frame:SetSize(iconSize, iconSize)
 	B.PixelIcon(frame)
 	B.CreateSD(frame)
-	local texture = cfg.texture
-	if not texture then
-		for spellID in pairs(cfg.spells) do
-			texture = C_Spell.GetSpellTexture(spellID)
+	if cfg.texture then
+		frame.Icon:SetTexture(cfg.texture)
+	else
+		for spell in pairs(cfg.spells) do
+			frame.Icon:SetTexture(GetSpellTexture(spell))
 			break
 		end
 	end
-	frame.Icon:SetTexture(texture)
 	frame.text = B.CreateFS(frame, 14, L["Lack"], false, "TOP", 1, 15)
 	frame:Hide()
 	cfg.frame = frame
@@ -100,28 +101,17 @@ end
 
 function A:Reminder_OnEvent()
 	for _, cfg in pairs(groups) do
-		if not cfg.frame then A:Reminder_Create(cfg) end
+		if not cfg.frame then
+			A:Reminder_Create(cfg)
+			A:Reminder_ConvertToName(cfg)
+		end
 		A:Reminder_Update(cfg)
 	end
 	A:Reminder_UpdateAnchor()
 end
 
-function A:Reminder_AddItemGroup()
-	for _, value in pairs(DB.ReminderBuffs["ITEMS"]) do
-		if not value.disable and C_Item.GetItemCount(value.itemID) > 0 then
-			if not value.texture then
-				value.texture = C_Item.GetItemIconByID(value.itemID)
-			end
-			if not groups then groups = {} end
-			tinsert(groups, value)
-		end
-	end
-end
-
 function A:InitReminder()
-	A:Reminder_AddItemGroup()
-
-	if not groups or not next(groups) then return end
+	if not groups then return end
 
 	if C.db["Auras"]["Reminder"] then
 		if not parentFrame then
@@ -131,26 +121,24 @@ function A:InitReminder()
 		end
 		parentFrame:Show()
 
+		A:Reminder_CheckMeleeSpell()
+		B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", A.Reminder_CheckMeleeSpell)
+
 		A:Reminder_OnEvent()
 		B:RegisterEvent("UNIT_AURA", A.Reminder_OnEvent, "player")
-		B:RegisterEvent("UNIT_EXITED_VEHICLE", A.Reminder_OnEvent)
-		B:RegisterEvent("UNIT_ENTERED_VEHICLE", A.Reminder_OnEvent)
 		B:RegisterEvent("PLAYER_REGEN_ENABLED", A.Reminder_OnEvent)
 		B:RegisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)
 		B:RegisterEvent("ZONE_CHANGED_NEW_AREA", A.Reminder_OnEvent)
 		B:RegisterEvent("PLAYER_ENTERING_WORLD", A.Reminder_OnEvent)
-		B:RegisterEvent("WEAPON_ENCHANT_CHANGED", A.Reminder_OnEvent)
 	else
 		if parentFrame then
 			parentFrame:Hide()
+			B:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED", A.Reminder_CheckMeleeSpell)
 			B:UnregisterEvent("UNIT_AURA", A.Reminder_OnEvent)
-			B:UnregisterEvent("UNIT_EXITED_VEHICLE", A.Reminder_OnEvent)
-			B:UnregisterEvent("UNIT_ENTERED_VEHICLE", A.Reminder_OnEvent)
 			B:UnregisterEvent("PLAYER_REGEN_ENABLED", A.Reminder_OnEvent)
 			B:UnregisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)
 			B:UnregisterEvent("ZONE_CHANGED_NEW_AREA", A.Reminder_OnEvent)
 			B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.Reminder_OnEvent)
-			B:UnregisterEvent("WEAPON_ENCHANT_CHANGED", A.Reminder_OnEvent)
 		end
 	end
 end

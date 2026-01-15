@@ -12,10 +12,6 @@ Portrait - A `PlayerModel` or a `Texture` used to represent the unit's portrait.
 A question mark model will be used if the widget is a PlayerModel and the client doesn't have the model information for
 the unit.
 
-## Options
-
-.showClass - Displays the unit's class in the portrait (boolean)
-
 ## Examples
 
     -- 3D Portrait
@@ -54,8 +50,7 @@ local function Update(self, event, unit)
 
 	local guid = UnitGUID(unit)
 	local isAvailable = UnitIsConnected(unit) and UnitIsVisible(unit)
-	local hasStateChanged = event ~= 'OnUpdate' or element.guid ~= guid or element.state ~= isAvailable
-	if(hasStateChanged) then
+	if(event ~= 'OnUpdate' or element.guid ~= guid or element.state ~= isAvailable) then
 		if(element:IsObjectType('PlayerModel')) then
 			if(not isAvailable) then
 				element:SetCamDistanceScale(0.25)
@@ -71,18 +66,7 @@ local function Update(self, event, unit)
 				element:SetUnit(unit)
 			end
 		else
-			local class, _
-			if(element.showClass) then
-				-- BUG: UnitClassBase can't be trusted
-				--      https://github.com/Stanzilla/WoWUIBugs/issues/621
-				_, class = UnitClass(unit)
-			end
-
-			if(class) then
-				element:SetAtlas('classicon-' .. class)
-			else
-				SetPortraitTexture(element, unit)
-			end
+			SetPortraitTexture(element, unit)
 		end
 
 		element.guid = guid
@@ -92,12 +76,11 @@ local function Update(self, event, unit)
 	--[[ Callback: Portrait:PostUpdate(unit)
 	Called after the element has been updated.
 
-	* self            - the Portrait element
-	* unit            - the unit for which the update has been triggered (string)
-	* hasStateChanged - indicates whether the state has changed since the last update (boolean)
+	* self - the Portrait element
+	* unit - the unit for which the update has been triggered (string)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(unit, hasStateChanged)
+		return element:PostUpdate(unit)
 	end
 end
 
@@ -130,9 +113,11 @@ local function Enable(self, unit)
 		-- The quest log uses PARTY_MEMBER_{ENABLE,DISABLE} to handle updating of
 		-- party members overlapping quests. This will probably be enough to handle
 		-- model updating.
-		if(unit == 'party' or unit == 'target') then
+		--
+		-- DISABLE isn't used as it fires when we most likely don't have the
+		-- information we want.
+		if(unit == 'party') then
 			self:RegisterEvent('PARTY_MEMBER_ENABLE', Path)
-			self:RegisterEvent('PARTY_MEMBER_DISABLE', Path)
 		end
 
 		element:Show()
@@ -150,7 +135,6 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_PORTRAIT_UPDATE', Path)
 		self:UnregisterEvent('PORTRAITS_UPDATED', Path)
 		self:UnregisterEvent('PARTY_MEMBER_ENABLE', Path)
-		self:UnregisterEvent('PARTY_MEMBER_DISABLE', Path)
 		self:UnregisterEvent('UNIT_CONNECTION', Path)
 	end
 end

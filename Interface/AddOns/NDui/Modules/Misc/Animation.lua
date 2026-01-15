@@ -2,7 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local soundID = SOUNDKIT.UI_LEGENDARY_LOOT_TOAST
+local soundID = SOUNDKIT.UI_IG_STORE_CONFIRM_PURCHASE_BUTTON
 local PlaySound = PlaySound
 
 local needAnimation

@@ -6,7 +6,7 @@ local TT = B:GetModule("Tooltip")
 local select, max, strfind, format, strsplit = select, math.max, string.find, string.format, string.split
 local GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown = GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown
 local UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi = UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi
-local GetInventoryItemTexture, GetInventoryItemLink, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetAverageItemLevel
+local GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel
 local HEIRLOOMS = _G.HEIRLOOMS
 
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
@@ -15,32 +15,7 @@ local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
 TT.TierSets = {
-	-- WARRIOR
-	[237608] = true, [237609] = true, [237610] = true, [237611] = true, [237613] = true,
-	-- PALADIN
-	[237617] = true, [237618] = true, [237619] = true, [237620] = true, [237622] = true,
-	-- HUNTER
-	[237644] = true, [237645] = true, [237646] = true, [237647] = true, [237649] = true,
-	-- ROGUE
-	[237662] = true, [237663] = true, [237664] = true, [237665] = true, [237667] = true,
-	-- PRIEST
-	[237707] = true, [237712] = true, [237708] = true, [237709] = true, [237710] = true,
-	-- DEATHKNIGHT
-	[237626] = true, [237627] = true, [237628] = true, [237629] = true, [237631] = true,
-	-- SHAMAN
-	[237635] = true, [237636] = true, [237637] = true, [237638] = true, [237640] = true,
-	-- MAGE
-	[237718] = true, [237716] = true, [237721] = true, [237719] = true, [237717] = true,
-	-- WARLOCK
-	[237698] = true, [237703] = true, [237699] = true, [237700] = true, [237701] = true,
-	-- MONK
-	[237671] = true, [237672] = true, [237673] = true, [237674] = true, [237676] = true,
-	-- DRUID
-	[237682] = true, [237680] = true, [237685] = true, [237683] = true, [237681] = true,
-	-- DEMONHUNTER
-	[237689] = true, [237690] = true, [237691] = true, [237692] = true, [237694] = true,
-	-- EVOKER
-	[237653] = true, [237654] = true, [237655] = true, [237656] = true, [237658] = true,
+	-- todo
 }
 
 local formatSets = {
@@ -124,11 +99,10 @@ function TT:GetUnitItemLevel(unit)
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
 	local class = select(2, UnitClass(unit))
-	local ilvl, boa, total, haveWeapon, twohand, sets = 0, 0, 0, 0, 0, 0
-	local delay, mainhand, offhand, hasArtifact
-	weapon[1], weapon[2] = 0, 0
+	local ilvl, boa, total, mainhand, offhand, ranged, sets = 0, 0, 0, 0, 0, 0, 0
+	local delay
 
-	for i = 1, 17 do
+	for i = 1, 18 do
 		if i ~= 4 then
 			local itemTexture = GetInventoryItemTexture(unit, i)
 
@@ -138,7 +112,7 @@ function TT:GetUnitItemLevel(unit)
 				if not itemLink then
 					delay = true
 				else
-					local _, _, quality, level, _, _, _, _, slot = C_Item.GetItemInfo(itemLink)
+					local _, _, quality, level, _, _, _, _, slot = GetItemInfo(itemLink)
 					if (not quality) or (not level) then
 						delay = true
 					else
@@ -152,37 +126,14 @@ function TT:GetUnitItemLevel(unit)
 						end
 
 						if unit ~= "player" then
-							level = B.GetItemLevel(itemLink) or level
 							if i < 16 then
 								total = total + level
-							elseif i > 15 and quality == Enum.ItemQuality.Artifact then
-								local relics = {select(4, strsplit(":", itemLink))}
-								for i = 1, 3 do
-									local relicID = relics[i] ~= "" and relics[i]
-									local relicLink = select(2, C_Item.GetItemGem(itemLink, i))
-									if relicID and not relicLink then
-										delay = true
-										break
-									end
-								end
-							end
-
-							if i == 16 then
-								if quality == Enum.ItemQuality.Artifact then hasArtifact = true end
-
-								weapon[1] = level
-								haveWeapon = haveWeapon + 1
-								if slot == "INVTYPE_2HWEAPON" or slot == "INVTYPE_RANGED" or (slot == "INVTYPE_RANGEDRIGHT" and class == "HUNTER") then
-									mainhand = true
-									twohand = twohand + 1
-								end
+							elseif i == 16 then
+								mainhand = level
 							elseif i == 17 then
-								weapon[2] = level
-								haveWeapon = haveWeapon + 1
-								if slot == "INVTYPE_2HWEAPON" then
-									offhand = true
-									twohand = twohand + 1
-								end
+								offhand = level
+							elseif i == 18 then
+								ranged = level
 							end
 						end
 					end
@@ -195,21 +146,16 @@ function TT:GetUnitItemLevel(unit)
 		if unit == "player" then
 			ilvl = select(2, GetAverageItemLevel())
 		else
-			if hasArtifact or twohand == 2 then
-				local higher = max(weapon[1], weapon[2])
-				total = total + higher*2
-			elseif twohand == 1 and haveWeapon == 1 then
-				total = total + weapon[1]*2 + weapon[2]*2
-			elseif twohand == 1 and haveWeapon == 2 then
-				if mainhand and weapon[1] >= weapon[2] then
-					total = total + weapon[1]*2
-				elseif offhand and weapon[2] >= weapon[1] then
-					total = total + weapon[2]*2
-				else
-					total = total + weapon[1] + weapon[2]
-				end
+			--[[
+				 Note: We have to unify iLvl with others who use MerInspect,
+				 although it seems incorrect for Hunter with two melee weapons.
+			]]
+			if mainhand > 0 and offhand > 0 then
+				total = total + mainhand + offhand
+			elseif offhand > 0 and ranged > 0 then
+				total = total + offhand + ranged
 			else
-				total = total + weapon[1] + weapon[2]
+				total = total + max(mainhand, offhand, ranged) * 2
 			end
 			ilvl = total / 16
 		end
@@ -249,7 +195,8 @@ function TT:InspectUnit(unit, forced)
 end
 
 function TT:InspectUnitItemLevel(unit)
-	if C.db["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
+	if not C.db["Tooltip"]["SpecLevelByShift"] then return end
+	if not IsShiftKeyDown() then return end
 
 	if not unit or not CanInspect(unit) then return end
 	currentUNIT, currentGUID = unit, UnitGUID(unit)

@@ -19,35 +19,48 @@ local function reskinMerchantItem(item)
 
 	icon:SetInside()
 	button.bg = B.ReskinIcon(icon)
-	B.ReskinIconBorder(button.IconBorder)
-	button.IconOverlay:SetInside()
-	button.IconOverlay2:SetInside()
+	button.IconBorder:SetAlpha(0)
 
-	name:SetFontObject(Number12Font)
+	name:SetFontObject(Game12Font)
 	name:SetPoint("LEFT", button, "RIGHT", 2, 9)
 	moneyFrame:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 3, 0)
 end
 
 local function reskinMerchantInteract(button)
-	button:GetRegions():Hide()
-	B.ReskinIcon(button.Icon)
 	button:SetPushedTexture(0)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	B.CreateBDFrame(button)
+end
+
+local function UpdateMerchantItemQuality(self, link)
+	local quality = link and select(3, GetItemInfo(link))
+	local textR, textG, textB = 1, 1, 1
+	local borderR, borderG, borderB = 0, 0, 0
+	if quality then
+		textR, textG, textB = GetItemQualityColor(quality)
+		local color = DB.QualityColors[quality]
+		borderR, borderG, borderB = color.r, color.g, color.b
+	else
+		MerchantFrame_RegisterForQualityUpdates()
+	end
+	self.Name:SetTextColor(textR, textG, textB)
+	if self.ItemButton.bg then
+		self.ItemButton.bg:SetBackdropBorderColor(borderR, borderG, borderB)
+	end
 end
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	B.ReskinPortraitFrame(MerchantFrame)
-	B.ReskinDropDown(MerchantFrame.FilterDropdown)
+--	B.ReskinDropDown(MerchantFrameLootFilter)
 	B.StripTextures(MerchantPrevPageButton)
 	B.ReskinArrow(MerchantPrevPageButton, "left")
 	B.StripTextures(MerchantNextPageButton)
 	B.ReskinArrow(MerchantNextPageButton, "right")
 	MerchantMoneyInset:Hide()
 	MerchantMoneyBg:Hide()
-	MerchantExtraCurrencyBg:SetAlpha(0)
-	MerchantExtraCurrencyInset:SetAlpha(0)
+	MerchantNameText:SetDrawLayer("ARTWORK")
+	--MerchantExtraCurrencyBg:SetAlpha(0)
+	--MerchantExtraCurrencyInset:SetAlpha(0)
 	BuybackBG:SetAlpha(0)
 
 	MerchantFrameTab1:ClearAllPoints()
@@ -70,29 +83,30 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
+	hooksecurefunc("MerchantFrameItem_UpdateQuality", UpdateMerchantItemQuality)
+
 	MerchantBuyBackItem:SetHeight(44)
 	reskinMerchantItem(MerchantBuyBackItem)
 
 	reskinMerchantInteract(MerchantGuildBankRepairButton)
+	MerchantGuildBankRepairButtonIcon:SetTexCoord(.595, .8075, .05, .52)
 
 	reskinMerchantInteract(MerchantRepairAllButton)
+	MerchantRepairAllIcon:SetTexCoord(.31375, .53, .06, .52)
 
 	reskinMerchantInteract(MerchantRepairItemButton)
-
-	reskinMerchantInteract(MerchantSellAllJunkButton)
+	local ic = MerchantRepairItemButton:GetRegions()
+	ic:SetTexture("Interface\\Icons\\INV_Hammer_20")
+	ic:SetTexCoord(unpack(DB.TexCoord))
 
 	hooksecurefunc("MerchantFrame_UpdateCurrencies", function()
 		for i = 1, MAX_MERCHANT_CURRENCIES do
 			local bu = _G["MerchantToken"..i]
 			if bu and not bu.styled then
 				local icon = _G["MerchantToken"..i.."Icon"]
-				if icon then
-					B.ReskinIcon(icon)
-				end
 				local count = _G["MerchantToken"..i.."Count"]
-				if count then
-					count:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0) -- needs reveiw
-				end
+				count:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0)
+				B.ReskinIcon(icon)
 
 				bu.styled = true
 			end
@@ -103,9 +117,9 @@ tinsert(C.defaultThemes, function()
 
 	local StackSplitFrame = StackSplitFrame
 	B.StripTextures(StackSplitFrame)
-	B.SetBD(StackSplitFrame)
-	B.Reskin(StackSplitFrame.OkayButton)
-	B.Reskin(StackSplitFrame.CancelButton)
-	B.ReskinArrow(StackSplitFrame.LeftButton, "left")
-	B.ReskinArrow(StackSplitFrame.RightButton, "right")
+	B.SetBD(StackSplitFrame, nil, 0, -10, 0, 10)
+	B.Reskin(StackSplitOkayButton)
+	B.Reskin(StackSplitCancelButton)
+	B.ReskinArrow(StackSplitLeftButton, "left")
+	B.ReskinArrow(StackSplitRightButton, "right")
 end)

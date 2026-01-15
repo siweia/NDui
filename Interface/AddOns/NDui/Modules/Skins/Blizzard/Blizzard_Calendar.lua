@@ -4,18 +4,12 @@ local B, C, L, DB = unpack(ns)
 local function ReskinEventList(frame)
 	B.StripTextures(frame)
 	B.CreateBDFrame(frame, .25)
-	if frame.ScrollBar then
-		B.ReskinTrimScroll(frame.ScrollBar)
-	end
 end
 
 local function ReskinCalendarPage(frame)
 	B.StripTextures(frame)
 	B.SetBD(frame)
 	B.StripTextures(frame.Header)
-	if frame.ScrollBar then
-		B.ReskinTrimScroll(frame.ScrollBar)
-	end
 end
 
 C.themes["Blizzard_Calendar"] = function()
@@ -64,7 +58,6 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarMonthBackground:SetAlpha(0)
 	CalendarYearBackground:SetAlpha(0)
 	CalendarFrameModalOverlay:SetAlpha(.25)
-	CalendarViewHolidayFrame.Texture:SetAlpha(0)
 	CalendarTexturePickerAcceptButtonBorder:Hide()
 	CalendarTexturePickerCancelButtonBorder:Hide()
 	B.StripTextures(CalendarClassTotalsButton)
@@ -130,6 +123,10 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarCreateEventInviteButton:SetPoint("TOPLEFT", CalendarCreateEventInviteEdit, "TOPRIGHT", 1, 1)
 	CalendarClassButton1:SetPoint("TOPLEFT", CalendarClassButtonContainer, "TOPLEFT", 5, 0)
 
+	B.ReskinDropDown(CalendarCreateEventFrame.HourDropdown)
+	B.ReskinDropDown(CalendarCreateEventFrame.MinuteDropdown)
+	B.ReskinDropDown(CalendarCreateEventFrame.AMPMDropdown)
+
 	local line = CalendarMassInviteFrame:CreateTexture(nil, "BACKGROUND")
 	line:SetSize(240, C.mult)
 	line:SetPoint("TOP", CalendarMassInviteFrame, "TOP", 0, -150)
@@ -177,11 +174,8 @@ C.themes["Blizzard_Calendar"] = function()
 
 	B.ReskinDropDown(CalendarCreateEventFrame.CommunityDropdown)
 	B.ReskinDropDown(CalendarCreateEventFrame.EventTypeDropdown)
-	B.ReskinDropDown(CalendarCreateEventFrame.HourDropdown)
-	B.ReskinDropDown(CalendarCreateEventFrame.MinuteDropdown)
-	B.ReskinDropDown(CalendarCreateEventFrame.AMPMDropdown)
-	B.ReskinDropDown(CalendarMassInviteFrame.CommunityDropdown)
 	B.ReskinDropDown(CalendarMassInviteFrame.RankDropdown)
+	B.ReskinDropDown(CalendarMassInviteFrame.CommunityDropdown)
 
 	B.ReskinInput(CalendarCreateEventTitleEdit)
 	B.ReskinInput(CalendarCreateEventInviteEdit)

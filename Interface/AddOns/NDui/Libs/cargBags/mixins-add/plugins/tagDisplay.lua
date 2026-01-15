@@ -40,10 +40,9 @@ CALLBACKS
 	:OnTagUpdate(event) - When the tag is updated
 ]]
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 
-local GetContainerNumFreeSlots = C_Container.GetContainerNumFreeSlots
+local GetContainerNumFreeSlots = C_Container and C_Container.GetContainerNumFreeSlots or GetContainerNumFreeSlots
 
 local tagPool, tagEvents, object = {}, {}
 local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](object, ...) or "" end
@@ -92,55 +91,50 @@ local function createIcon(icon, iconValues)
 	return ("|T%s:%s|t"):format(icon, iconValues)
 end
 
+
 -- Tags
-local function GetNumFreeSlots(name)
-	if name == "Bag" then
-		local totalFree, freeSlots, bagFamily = 0
-		for i = 0, 4 do -- reagent bank excluded
-			freeSlots, bagFamily = GetContainerNumFreeSlots(i)
-			if bagFamily == 0 then
-				totalFree = totalFree + freeSlots
+local function GetNumFreeSlots(self)
+	local bagType = self.Settings.BagType
+	if bagType == "Bag" then
+		local totalFree = 0
+		for i = 0, 4 do
+			if cargBags.BagGroups[i] == self.bagGroup then
+				totalFree = totalFree + GetContainerNumFreeSlots(i)
 			end
 		end
 		return totalFree
-	elseif name == "Bank" then
-		local numFreeSlots = 0
-		for bagID = 6, 11 do
-			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+	elseif bagType == "Bank" then
+		local totalFree = self.bagGroup == 0 and GetContainerNumFreeSlots(-1) or 0
+		for i = 5, 11 do
+			if cargBags.BagGroups[i] == self.bagGroup then
+				totalFree = totalFree + GetContainerNumFreeSlots(i)
+			end
 		end
-		return numFreeSlots
-	elseif name == "Reagent" then
-		return GetContainerNumFreeSlots(-3)
-	elseif name == "BagReagent" then
-		return GetContainerNumFreeSlots(5)
-	elseif name == "Account" then
-		local numFreeSlots = 0
-		for bagID = 12, 16 do
-			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
-		end
-		return numFreeSlots
+		return totalFree
 	end
 end
 
-tagPool["space"] = function(self)
-	local str = GetNumFreeSlots(self.__name)
-	return str
+tagPool["space"] = function(tag)
+	local self = tag.__owner
+	self.totalFree = GetNumFreeSlots(self)
+	return self.totalFree
 end
 
 tagPool["item"] = function(self, item)
-	local bags = C_Item.GetItemCount(item, nil)
-	local total = C_Item.GetItemCount(item, true)
+	local bags = GetItemCount(item, nil)
+	local total = GetItemCount(item, true)
 	local bank = total-bags
 
 	if(total > 0) then
-		return bags .. (bank and " ("..bank..")") .. createIcon(C_Item.GetItemIconByID(item), self.iconValues)
+		return bags .. (bank and " ("..bank..")") .. createIcon(GetItemIcon(item), self.iconValues)
 	end
 end
 
 tagPool["currency"] = function(self, id)
-	local currencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo(id)
-	if currencyInfo then
-		return currencyInfo.quantity..createIcon(currencyInfo.iconFileID, self.iconValues)
+	local _, count, icon = GetBackpackCurrencyInfo(id)
+
+	if(count) then
+		return count .. createIcon(icon, self.iconValues)
 	end
 end
 tagEvents["currency"] = { "CURRENCY_DISPLAY_UPDATE" }
@@ -157,41 +151,15 @@ tagPool["currencies"] = function(self)
 end
 tagEvents["currencies"] = tagEvents["currency"]
 
-local atlasCache = {}
-local function createAtlasCoin(coin)
-	local str = atlasCache[coin]
-	if not str then
-		local info = C_Texture.GetAtlasInfo("coin-"..coin)
-		if info then
-			str = B:GetTextureStrByAtlas(info, 16, 16)
-			atlasCache[coin] = str
-		end
-	end
-	return str
-end
-
-tagPool["money"] = function()
+tagPool["money"] = function(self)
 	local money = GetMoney() or 0
-	local str = ""
-	local gold, silver, copper = floor(money/1e4), floor(money/100) % 100, money % 100
+	local str
 
-	if gold > 0 then str = str..BreakUpLargeNumbers(gold)..createAtlasCoin("gold").." " end
-	if silver > 0 then str = str..silver..createAtlasCoin("silver").." " end
-	if copper > 0 then str = str..copper..createAtlasCoin("copper").." " end
+	local g,s,c = floor(money/1e4), floor(money/100) % 100, money % 100
 
+	if(g > 0) then str = (str and str.." " or "") .. g .. createIcon("Interface\\MoneyFrame\\UI-GoldIcon", self.iconValues) end
+	if(s > 0) then str = (str and str.." " or "") .. s .. createIcon("Interface\\MoneyFrame\\UI-SilverIcon", self.iconValues) end
+	if(c >= 0) then str = (str and str.." " or "") .. c .. createIcon("Interface\\MoneyFrame\\UI-CopperIcon", self.iconValues) end
 	return str
 end
 tagEvents["money"] = { "PLAYER_MONEY" }
-
-tagPool["accountmoney"] = function()
-	local money = C_Bank.FetchDepositedMoney(Enum.BankType.Account) or 0
-	local str = ""
-	local gold, silver, copper = floor(money/1e4), floor(money/100) % 100, money % 100
-
-	if gold > 0 then str = str..BreakUpLargeNumbers(gold)..createAtlasCoin("gold").." " end
-	if silver > 0 then str = str..silver..createAtlasCoin("silver").." " end
-	if copper >= 0 then str = str..copper..createAtlasCoin("copper").." " end
-
-	return str
-end
-tagEvents["accountmoney"] = { "PLAYER_MONEY", "ACCOUNT_MONEY" }

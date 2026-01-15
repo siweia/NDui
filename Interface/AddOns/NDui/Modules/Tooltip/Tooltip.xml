@@ -3,8 +3,6 @@
 	<Script file="TooltipIcons.lua"/>
 	<Script file="TooltipID.lua"/>
 	<Script file="ItemLevel.lua"/>
-	<Script file="PetInfo.lua"/>
 	<Script file="Hovertips.lua"/>
 	<Script file="Targeted.lua"/>
-	<Script file="AzeriteArmor.lua"/>
 </Ui>

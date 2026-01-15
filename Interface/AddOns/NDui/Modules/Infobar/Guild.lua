@@ -7,19 +7,18 @@ local info = module:RegisterInfobar("Guild", C.Infobar.GuildPos)
 
 info.guildTable = {}
 local r, g, b = DB.r, DB.g, DB.b
-local infoFrame, gName, gOnline, gRank, prevTime
+local infoFrame, gName, gOnline, gRank
 
 local wipe, sort, format, select = table.wipe, table.sort, format, select
 local SELECTED_DOCK_FRAME = SELECTED_DOCK_FRAME
 local LEVEL_ABBR, CLASS_ABBR, NAME, ZONE, RANK, REMOTE_CHAT = LEVEL_ABBR, CLASS_ABBR, NAME, ZONE, RANK, REMOTE_CHAT
-local IsAltKeyDown, IsShiftKeyDown, C_Timer_After, GetTime, Ambiguate, MouseIsOver = IsAltKeyDown, IsShiftKeyDown, C_Timer.After, GetTime, Ambiguate, MouseIsOver
+local IsAltKeyDown, IsShiftKeyDown, InviteToGroup, C_Timer_After, Ambiguate, MouseIsOver = IsAltKeyDown, IsShiftKeyDown, InviteToGroup, C_Timer.After, Ambiguate, MouseIsOver
 local MailFrame, MailFrameTab_OnClick, SendMailNameEditBox = MailFrame, MailFrameTab_OnClick, SendMailNameEditBox
 local ChatEdit_ChooseBoxForSend, ChatEdit_ActivateChat, ChatFrame_OpenChat, ChatFrame_GetMobileEmbeddedTexture = ChatEdit_ChooseBoxForSend, ChatEdit_ActivateChat, ChatFrame_OpenChat, ChatFrame_GetMobileEmbeddedTexture
 local GetNumGuildMembers, GetGuildInfo, GetGuildRosterInfo, IsInGuild = GetNumGuildMembers, GetGuildInfo, GetGuildRosterInfo, IsInGuild
 local GetQuestDifficultyColor, GetRealZoneText, UnitInRaid, UnitInParty = GetQuestDifficultyColor, GetRealZoneText, UnitInRaid, UnitInParty
 local HybridScrollFrame_GetOffset, HybridScrollFrame_Update = HybridScrollFrame_GetOffset, HybridScrollFrame_Update
 local C_GuildInfo_GuildRoster = C_GuildInfo.GuildRoster
-local InviteToGroup = C_PartyInfo.InviteUnit
 
 local function rosterButtonOnClick(self, btn)
 	local name = info.guildTable[self.index][3]
@@ -73,7 +72,7 @@ end
 
 function info:GuildPanel_UpdateButton(button)
 	local index = button.index
-	local level, class, name, zone, status, guid = unpack(info.guildTable[index])
+	local level, class, name, zone, status = unpack(info.guildTable[index])
 
 	local levelcolor = B.HexRGB(GetQuestDifficultyColor(level))
 	button.level:SetText(levelcolor..level)
@@ -81,14 +80,12 @@ function info:GuildPanel_UpdateButton(button)
 	B.ClassIconTexCoord(button.class, class)
 
 	local namecolor = B.HexRGB(B.ClassColor(class))
-	local isTimerunning = guid and C_ChatInfo.IsTimerunningPlayer(guid)
-	local playerName = isTimerunning and TimerunningUtil.AddSmallIcon(name) or name
-	button.name:SetText(namecolor..playerName..status)
+	button.name:SetText(namecolor..name..status)
 
 	local zonecolor = DB.GreyColor
 	if UnitInRaid(name) or UnitInParty(name) then
 		zonecolor = DB.InfoColor
-	elseif GetAreaText() == zone then
+	elseif GetRealZoneText() == zone then
 		zonecolor = "|cff4cff4c"
 	end
 	button.zone:SetText(zonecolor..zone)
@@ -115,7 +112,6 @@ function info:GuildPanel_Update()
 			button:Hide()
 		end
 	end
-
 	HybridScrollFrame_Update(scrollFrame, numMemberButtons*height, usedHeight)
 end
 
@@ -255,11 +251,7 @@ C_Timer_After(5, function()
 end)
 
 function info:GuildPanel_Refresh()
-	local thisTime = GetTime()
-	if not prevTime or (thisTime-prevTime > 5) then
-		C_GuildInfo_GuildRoster()
-		prevTime = thisTime
-	end
+	C_GuildInfo_GuildRoster()
 
 	wipe(info.guildTable)
 	local count = 0
@@ -271,7 +263,7 @@ function info:GuildPanel_Refresh()
 	gRank:SetText(DB.InfoColor..RANK..": "..(guildRank or ""))
 
 	for i = 1, total do
-		local name, _, _, level, _, zone, _, _, connected, status, class, _, _, mobile, _, _, guid = GetGuildRosterInfo(i)
+		local name, _, _, level, _, zone, _, _, connected, status, class, _, _, mobile = GetGuildRosterInfo(i)
 		if connected or mobile then
 			if mobile and not connected then
 				zone = REMOTE_CHAT
@@ -301,7 +293,6 @@ function info:GuildPanel_Refresh()
 			info.guildTable[count][3] = Ambiguate(name, "none")
 			info.guildTable[count][4] = zone
 			info.guildTable[count][5] = status
-			info.guildTable[count][6] = guid
 		end
 	end
 
@@ -321,9 +312,7 @@ info.onEvent = function(self, event, arg1)
 	end
 
 	if event == "GUILD_ROSTER_UPDATE" then
-		if arg1 then
-			C_GuildInfo_GuildRoster()
-		end
+		if arg1 then C_GuildInfo_GuildRoster() end
 	end
 
 	local _, numOnline, allOnline = GetNumGuildMembers()
@@ -361,6 +350,5 @@ info.onMouseUp = function()
 
 	if not IsInGuild() then return end
 	infoFrame:Hide()
-	if not CommunitiesFrame then LoadAddOn("Blizzard_Communities") end
-	if CommunitiesFrame then ToggleFrame(CommunitiesFrame) end
+	B:ToggleFriends(3)
 end

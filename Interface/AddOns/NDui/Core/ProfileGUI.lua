@@ -207,9 +207,9 @@ function G:CreateProfileBar(parent, index)
 	if index == 1 then
 		B.PixelIcon(icon, nil, true) -- character
 		SetPortraitTexture(icon.Icon, "player")
-		icon.Icon:SetTexCoord(.15, .85, .15, .85)
 	else
-		B.PixelIcon(icon, "Interface\\Icons\\RaceChange", true) -- share
+		B.PixelIcon(icon, 235423, true) -- share
+		icon.Icon:SetTexCoord(.6, .9, .1, .4)
 		icon.index = index
 		G:FindProfleUser(icon)
 		icon:SetScript("OnEnter", G.Icon_OnEnter)
@@ -238,7 +238,7 @@ function G:CreateProfileBar(parent, index)
 	reset:SetScript("OnClick", G.Reset_OnClick)
 	bar.reset = reset
 
-	local apply = G:CreateProfileIcon(bar, 2, "Atlas:common-icon-checkmark", L["SelectProfile"], L["SelectProfileTip"])
+	local apply = G:CreateProfileIcon(bar, 2, "Interface\\RAIDFRAME\\ReadyCheck-Ready", L["SelectProfile"], L["SelectProfileTip"])
 	apply:SetScript("OnClick", G.Apply_OnClick)
 	bar.apply = apply
 
@@ -370,8 +370,7 @@ local bloodlustFilter = {
 	[57723] = true,
 	[57724] = true,
 	[80354] = true,
-	[264689] = true,
-	[390435] = true, -- evoker
+	[264689] = true
 }
 
 local accountStrValues = {
@@ -405,16 +404,15 @@ function G:ExportGUIData()
 						for k, v in pairs(value) do
 							text = text..":"..k..":"..v
 						end
+					elseif key == "ExplosiveCache" then
+						text = text..";"..KEY..":"..key..":EMPTYTABLE"
 					elseif KEY == "AuraWatchList" then
 						if key == "Switcher" then
 							for k, v in pairs(value) do
 								text = text..";"..KEY..":"..key..":"..k..":"..tostring(v)
 							end
 						elseif key == "IgnoreSpells" then
-							text = text..";"..KEY..":"..key
-							for spellID in pairs(value) do
-								text = text..":"..tostring(spellID)
-							end
+							-- do nothing
 						else
 							for spellID, k in pairs(value) do
 								text = text..";"..KEY..":"..key..":"..spellID
@@ -536,7 +534,7 @@ local function IsOldProfileVersion(version)
 	major = tonumber(major)
 	minor = tonumber(minor)
 	patch = tonumber(patch)
-	return major < 7 and (minor < 23 or (minor == 23 and patch < 2))
+	return major < 3 and minor < 11
 end
 
 function G:ImportGUIData()
@@ -575,10 +573,7 @@ function G:ImportGUIData()
 				local index, state = select(3, strsplit(":", option))
 				C.db[key][value][tonumber(index)] = toBoolean(state)
 			elseif value == "IgnoreSpells" then
-				local spells = {select(3, strsplit(":", option))}
-				for _, spellID in next, spells do
-					C.db[key][value][tonumber(spellID)] = true
-				end
+				-- do nothing
 			else
 				local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
 				value = tonumber(value)
@@ -676,7 +671,7 @@ function G:ImportGUIData()
 				end
 			end
 		elseif tonumber(arg1) then
-			if value == "DBMCount" then
+			if value == "DBMCount" or value == "StatOrder" then
 				C.db[key][value] = arg1
 			elseif C.db[key] then
 				C.db[key][value] = tonumber(arg1)

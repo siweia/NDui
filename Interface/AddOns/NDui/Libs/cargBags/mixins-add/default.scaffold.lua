@@ -32,21 +32,11 @@ local function ItemButton_Scaffold(self)
 	self:SetSize(37, 37)
 
 	local name = self:GetName()
-	if not self.Icon then
-		self.Icon = _G[name.."IconTexture"]
-	end
-	if not self.Count then
-		self.Count = _G[name.."Count"]
-	end
-	if not self.Cooldown then
-		self.Cooldown = _G[name.."Cooldown"]
-	end
-	if not self.Quest then
-		self.Quest = _G[name.."IconQuestTexture"]
-	end
-	if not self.Border then
-		self.Border = _G[name.."NormalTexture"]
-	end
+	self.Icon = _G[name.."IconTexture"]
+	self.Count = _G[name.."Count"]
+	self.Cooldown = _G[name.."Cooldown"]
+	self.Quest = _G[name.."IconQuestTexture"]
+	self.Border = _G[name.."NormalTexture"]
 end
 
 --[[!
@@ -58,16 +48,16 @@ local function ItemButton_Update(self, item)
 	self.Icon:SetTexture(item.texture or self.bgTex)
 
 	if(item.count and item.count > 1) then
-		self.Count:SetText(item.count > 1e4 and "*" or item.count)
+		self.Count:SetText(item.count > 1e3 and "*" or item.count)
 		self.Count:Show()
 	else
 		self.Count:Hide()
 	end
 	self.count = item.count -- Thank you Blizz for not using local variables >.> (BankFrame.lua @ 234 )
 
-	self:ButtonUpdateCooldown(item)
-	self:ButtonUpdateLock(item)
-	self:ButtonUpdateQuest(item)
+	self:UpdateCooldown(item)
+	self:UpdateLock(item)
+	self:UpdateQuest(item)
 
 	if(self.OnUpdateButton) then self:OnUpdateButton(item) end
 end
@@ -123,12 +113,14 @@ cargBags:RegisterScaffold("Default", function(self)
 	self.glowCoords = { 14/64, 50/64, 14/64, 50/64 } --! @property glowCoords <table> Indexed table of texCoords for the glow texture
 	self.bgTex = nil --! @property bgTex <string> Texture used as a background if no item is in the slot
 
+	self.CreateFrame = ItemButton_CreateFrame
 	self.Scaffold = ItemButton_Scaffold
-	self.ButtonUpdate = ItemButton_Update
-	self.ButtonUpdateCooldown = ItemButton_UpdateCooldown
-	self.ButtonUpdateLock = ItemButton_UpdateLock
-	self.ButtonUpdateQuest = ItemButton_UpdateQuest
 
-	self.ButtonOnEnter = ItemButton_OnEnter
-	self.ButtonOnLeave = ItemButton_OnLeave
+	self.Update = ItemButton_Update
+	self.UpdateCooldown = ItemButton_UpdateCooldown
+	self.UpdateLock = ItemButton_UpdateLock
+	self.UpdateQuest = ItemButton_UpdateQuest
+
+	self.OnEnter = ItemButton_OnEnter
+	self.OnLeave = ItemButton_OnLeave
 end)

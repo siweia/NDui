@@ -3,9 +3,8 @@ local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	local frame = SettingsPanel
+	if not frame then return end
 
 	B.StripTextures(frame)
 	B.SetBD(frame)
@@ -60,6 +59,36 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(frame.Container.SettingsList.Header.DefaultsButton)
 	B.ReskinTrimScroll(frame.Container.SettingsList.ScrollBar)
 
+	local function ReskinDropDownArrow(button, direction)
+		button.NormalTexture:SetAlpha(0)
+		button.PushedTexture:SetAlpha(0)
+		button:GetHighlightTexture():SetAlpha(0)
+
+		local dis = button:GetDisabledTexture()
+		B.SetupArrow(dis, direction)
+		dis:SetVertexColor(0, 0, 0, .7)
+		dis:SetDrawLayer("OVERLAY")
+		dis:SetInside(button, 4, 4)
+
+		local tex = button:CreateTexture(nil, "ARTWORK")
+		tex:SetInside(button, 4, 4)
+		B.SetupArrow(tex, direction)
+		button.__texture = tex
+		button:HookScript("OnEnter", B.Texture_OnEnter)
+		button:HookScript("OnLeave", B.Texture_OnLeave)
+	end
+
+	local function ReskinOptionDropDown(option)
+		local button = option.Button
+		B.Reskin(button)
+		button.__bg:SetInside(button, 6, 6)
+		button.NormalTexture:SetAlpha(0)
+		button.HighlightTexture:SetAlpha(0)
+
+		ReskinDropDownArrow(option.DecrementButton, "left")
+		ReskinDropDownArrow(option.IncrementButton, "right")
+	end
+
 	local function ReskinDropdown(option)
 		B.Reskin(option.Dropdown)
 		B.Reskin(option.DecrementButton)
@@ -86,9 +115,7 @@ tinsert(C.defaultThemes, function()
 	end
 
 	local function forceSaturation(self)
-		if self.Checkbox then
-			self.Checkbox:DesaturateHierarchy(1)
-		end
+		self.Checkbox:DesaturateHierarchy(1)
 	end
 
 	local function ReskinControlsGroup(controls)
@@ -122,6 +149,12 @@ tinsert(C.defaultThemes, function()
 					B.ReskinCheck(child.Checkbox)
 					child.Checkbox.bg:SetInside(nil, 6, 6)
 					hooksecurefunc(child, "DesaturateHierarchy", forceSaturation)
+				end
+				if child.DropDown then
+					ReskinOptionDropDown(child.DropDown)
+				end
+				if child.ColorBlindFilterDropDown then
+					ReskinOptionDropDown(child.ColorBlindFilterDropDown)
 				end
 				if child.Control then
 					ReskinDropdown(child.Control)
@@ -163,6 +196,12 @@ tinsert(C.defaultThemes, function()
 				if child.Button1 and child.Button2 then
 					B.Reskin(child.Button1)
 					B.Reskin(child.Button2)
+				end
+				if child.NewButton then
+					B.Reskin(child.NewButton)
+				end
+				if child.DeleteButton then
+					B.Reskin(child.DeleteButton)
 				end
 				if child.Controls then
 					for i = 1, #child.Controls do

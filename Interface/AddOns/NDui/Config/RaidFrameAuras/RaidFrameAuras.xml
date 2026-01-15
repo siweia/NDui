@@ -1,36 +1,26 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="ClassSpells.lua"/>
+	<Script file="RaidDebuffs.lua"/>
 
-	<Script file="Cata\Party-Cata.lua"/>
-	<Script file="WoD\Party-WoD.lua"/>
+	<Script file="TBC\Party-TBC.lua"/>
+	<Script file="TBC\BlackTemple.lua"/>
+	<Script file="TBC\GruulsLair.lua"/>
+	<Script file="TBC\HyjalSummit.lua"/>
+	<Script file="TBC\Karazhan.lua"/>
+	<Script file="TBC\MagtheridonsLair.lua"/>
+	<Script file="TBC\SerpentshrineCavern.lua"/>
+	<Script file="TBC\SunwellPlateau.lua"/>
+	<Script file="TBC\TempestKeep.lua"/>
+	<Script file="TBC\ZulAman.lua"/>
 
-	<Script file="Legion\PartyDungeons.lua"/>
-	<Script file="Legion\BrokenIsles.lua"/>
-	<Script file="Legion\TheEmeraldNightmare.lua"/>
-	<Script file="Legion\TrialofValor.lua"/>
-	<Script file="Legion\TheNighthold.lua"/>
-	<Script file="Legion\TombofSargeras.lua"/>
-	<Script file="Legion\AntorusBurningThrone.lua"/>
-
-	<Script file="BfA\Party-BfA.lua"/>
-	<Script file="BfA\Uldir.lua"/>
-	<Script file="BfA\ZuldazarRaid.lua"/>
-	<Script file="BfA\CrucibleofStorms.lua"/>
-	<Script file="BfA\EternalPalace.lua"/>
-	<Script file="BfA\Nyalotha.lua"/>
-
-	<Script file="Shadowlands\CastleNathria.lua"/>
-	<Script file="Shadowlands\SanctumofDonimation.lua"/>
-	<Script file="Shadowlands\Sepulcher.lua"/>
-	<Script file="Shadowlands\Party-Shadowlands.lua"/>
-
-	<Script file="Dragonflight\Party-DF.lua"/>
-	<Script file="Dragonflight\VaultoftheIncarnates.lua"/>
-	<Script file="Dragonflight\Aberrus.lua"/>
-	<Script file="Dragonflight\Amirdrassil.lua"/>
-
-	<Script file="TWW\Party-TWW.lua"/>
-	<Script file="TWW\NerubarPalace.lua"/>
-	<Script file="TWW\Undermine.lua"/>
-	<Script file="TWW\Omega.lua"/>
+	<Script file="WLK\Party-WotLK.lua"/>
+	<Script file="WLK\EyeOfEternity.lua"/>
+	<Script file="WLK\ICC.lua"/>
+	<Script file="WLK\NAXX.lua"/>
+	<Script file="WLK\ObisidianSanctum.lua"/>
+	<Script file="WLK\Onyxia.lua"/>
+	<Script file="WLK\RubySanctum.lua"/>
+	<Script file="WLK\ToC.lua"/>
+	<Script file="WLK\ULD.lua"/>
+	<Script file="WLK\VoA.lua"/>
 </Ui>

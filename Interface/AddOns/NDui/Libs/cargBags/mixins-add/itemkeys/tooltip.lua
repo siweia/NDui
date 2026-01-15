@@ -34,20 +34,23 @@ local bindTypeToString = {
 	[ITEM_ACCOUNTBOUND] = "account",
 	[ITEM_BIND_TO_ACCOUNT] = "account",
 	[ITEM_BNETACCOUNTBOUND] = "account",
-	[ITEM_ACCOUNTBOUND_UNTIL_EQUIP] = "accountequip",
 }
 
 cargBags.itemKeys["bindOn"] = function(i)
 	if not i.link then return end
 
-	local data = C_TooltipInfo.GetBagItem(i.bagId, i.slotId)
-	if not data then return end
+	local tip = B.ScanTip
+	if not tip then return end
+
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+	tip:SetBagItem(i.bagId, i.slotId)
 
 	for j = 2, 5 do
-		local lineData = data.lines[j]
-		if not lineData then break end
-		local lineText = lineData.leftText
-		local bindOn = lineText and bindTypeToString[lineText]
+		local line = _G["NDui_ScanTooltipTextLeft"..j]
+		local lineText = line and line:GetText()
+		if not lineText then break end
+
+		local bindOn = bindTypeToString[lineText]
 		if bindOn then
 			i.bindOn = bindOn
 			return bindOn

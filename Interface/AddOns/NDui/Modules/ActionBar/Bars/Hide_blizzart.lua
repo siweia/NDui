@@ -11,14 +11,17 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar, PossessActionBar, PetActionBar,
+	MainMenuBar, OverrideActionBar, MultiBarLeft, MultiBarRight,
+	MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, StatusTrackingBarManager, BagsBar
 }
 
 local framesToDisable = {
-	MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, PossessActionBar, PetActionBar,
-	MicroButtonAndBagsBar, StatusTrackingBarManager, MainMenuBarVehicleLeaveButton,
+	MainMenuBar,
+	MicroButtonAndBagsBar, MainMenuBarArtFrame, StatusTrackingBarManager,
+	ActionBarDownButton, ActionBarUpButton,
 	OverrideActionBar,
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
+	VerticalMultiBarsContainer
 }
 
 local function DisableAllScripts(frame)
@@ -29,38 +32,18 @@ local function DisableAllScripts(frame)
 	end
 end
 
-local function buttonEventsRegisterFrame(self, added)
-	local frames = self.frames
-	for index = #frames, 1, -1 do
-		local frame = frames[index]
-		local wasAdded = frame == added
-		if not added or wasAdded then
-			if not strmatch(frame:GetName(), "ExtraActionButton%d") then
-				self.frames[index] = nil
-			end
-
-			if wasAdded then
-				break
-			end
-		end
-	end
-end
-
-local function DisableDefaultBarEvents() -- credit: Simpy
-	-- shut down some events for things we dont use
-	_G.ActionBarController:UnregisterAllEvents()
-	_G.ActionBarController:RegisterEvent("SETTINGS_LOADED") -- this is needed for page controller to spawn properly
-	_G.ActionBarController:RegisterEvent("UPDATE_EXTRA_ACTIONBAR") -- this is needed to let the ExtraActionBar show
-	_G.ActionBarActionEventsFrame:UnregisterAllEvents()
-	-- used for ExtraActionButton and TotemBar (on wrath)
-	_G.ActionBarButtonEventsFrame:UnregisterAllEvents()
-	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- needed to let the ExtraActionButton show and Totems to swap
-	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN") -- needed for cooldowns of them both
-	hooksecurefunc(_G.ActionBarButtonEventsFrame, "RegisterFrame", buttonEventsRegisterFrame)
-	buttonEventsRegisterFrame(_G.ActionBarButtonEventsFrame)
+local function updateTokenVisibility()
+	TokenFrame_LoadUI()
+	TokenFrame_Update()
+	BackpackTokenFrame_Update()
 end
 
 function Bar:HideBlizz()
+	MainMenuBar:SetMovable(true)
+	MainMenuBar:SetUserPlaced(true)
+	MainMenuBar.ignoreFramePositionManager = true
+	MainMenuBar:SetAttribute("ignoreFramePositionManager", true)
+
 	for _, frame in next, framesToHide do
 		frame:SetParent(B.HiddenFrame)
 	end
@@ -70,12 +53,8 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	DisableDefaultBarEvents()
-	-- Fix maw block anchor
-	MainMenuBarVehicleLeaveButton:RegisterEvent("PLAYER_ENTERING_WORLD")
-	-- Update token panel, some alts may hide token as default
-	SetCVar("showTokenFrame", 1)
-	-- Hide blizzard expbar
-	StatusTrackingBarManager:UnregisterAllEvents()
-	StatusTrackingBarManager:Hide()
+	-- Hide blizz options
+	SetCVar("multiBarRightVerticalLayout", 0)
+	-- Update token panel
+	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 end

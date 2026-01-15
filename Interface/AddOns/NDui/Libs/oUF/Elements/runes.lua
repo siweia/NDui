@@ -18,7 +18,7 @@ A default texture will be applied if the sub-widgets are StatusBars and don't ha
 ## Options
 
 .colorSpec - Use `self.colors.runes[specID]` to color the bar based on player's spec. `specID` is defined by the return
-             value of [C_SpecializationInfo.GetSpecialization](https://warcraft.wiki.gg/wiki/API_C_SpecializationInfo.GetSpecialization) (boolean)
+             value of [GetSpecialization](http://wowprogramming.com/docs/api/GetSpecialization.html) (boolean)
 .sortOrder - Sorting order. Sorts by the remaining cooldown time, 'asc' - from the least cooldown time remaining (fully
              charged) to the most (fully depleted), 'desc' - the opposite (string?)['asc', 'desc']
 
@@ -47,8 +47,7 @@ if(select(2, UnitClass('player')) ~= 'DEATHKNIGHT') then return end
 local _, ns = ...
 local oUF = ns.oUF
 
-local runemap = {1, 2, 3, 4, 5, 6}
-local hasSortOrder = false
+local runemap = { 1, 2, 5, 6, 3, 4 }
 
 local function onUpdate(self, elapsed)
 	local duration = self.duration + elapsed
@@ -56,52 +55,20 @@ local function onUpdate(self, elapsed)
 	self:SetValue(duration)
 end
 
-local function ascSort(runeAID, runeBID)
-	local runeAStart, _, runeARuneReady = GetRuneCooldown(runeAID)
-	local runeBStart, _, runeBRuneReady = GetRuneCooldown(runeBID)
-	if(runeARuneReady ~= runeBRuneReady) then
-		return runeARuneReady
-	elseif(runeAStart ~= runeBStart) then
-		return runeAStart < runeBStart
-	else
-		return runeAID < runeBID
-	end
-end
-
-local function descSort(runeAID, runeBID)
-	local runeAStart, _, runeARuneReady = GetRuneCooldown(runeAID)
-	local runeBStart, _, runeBRuneReady = GetRuneCooldown(runeBID)
-	if(runeARuneReady ~= runeBRuneReady) then
-		return runeBRuneReady
-	elseif(runeAStart ~= runeBStart) then
-		return runeAStart > runeBStart
-	else
-		return runeAID > runeBID
-	end
-end
-
-local function UpdateColor(self, event)
+local function UpdateColor(self, event, rid, alt)
 	local element = self.Runes
+	local rune = element[runemap[rid]]
+	local index = GetRuneType(rid) or alt
+	local colors = self.colors.runes[index or 1]
 
-	local spec = C_SpecializationInfo.GetSpecialization() or 0
+	local r, g, b = colors[1], colors[2], colors[3]
 
-	local color
-	if(spec > 0 and spec < 4 and element.colorSpec) then
-		color = self.colors.runes[spec]
-	else
-		color = self.colors.power.RUNES
-	end
+	rune:SetStatusBarColor(r, g, b)
 
-	local r, g, b = color[1], color[2], color[3]
-
-	for index = 1, #element do
-		element[index]:SetStatusBarColor(r, g, b)
-
-		local bg = element[index].bg
-		if(bg) then
-			local mu = bg.multiplier or 1
-			bg:SetVertexColor(r * mu, g * mu, b * mu)
-		end
+	local bg = rune.bg
+	if(bg) then
+		local mu = bg.multiplier or 1
+		bg:SetVertexColor(r * mu, g * mu, b * mu)
 	end
 
 	--[[ Callback: Runes:PostUpdateColor(r, g, b)
@@ -130,17 +97,6 @@ end
 
 local function Update(self, event)
 	local element = self.Runes
-
-	if(element.sortOrder == 'asc') then
-		table.sort(runemap, ascSort)
-		hasSortOrder = true
-	elseif(element.sortOrder == 'desc') then
-		table.sort(runemap, descSort)
-		hasSortOrder = true
-	elseif(hasSortOrder) then
-		table.sort(runemap)
-		hasSortOrder = false
-	end
 
 	local rune, start, duration, runeReady
 	for index, runeID in next, runemap do
@@ -190,12 +146,14 @@ end
 
 local function AllPath(...)
 	Path(...)
-	ColorPath(...)
 end
 
 local function ForceUpdate(element)
 	Path(element.__owner, 'ForceUpdate')
-	ColorPath(element.__owner, 'ForceUpdate')
+
+	for i = 1, #element do
+		ColorPath(element.__owner, nil, i, math.floor((i+1)/2))
+	end
 end
 
 local function Enable(self, unit)
@@ -206,12 +164,13 @@ local function Enable(self, unit)
 
 		for i = 1, #element do
 			local rune = element[i]
-			if(rune:IsObjectType('StatusBar') and not rune:GetStatusBarTexture()) then
+			if(rune:IsObjectType('StatusBar') and not (rune:GetStatusBarTexture() or rune:GetStatusBarAtlas())) then
 				rune:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 			end
+			ColorPath(self, nil, i, math.floor((i+1)/2))
 		end
 
-		self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', ColorPath)
+		self:RegisterEvent('RUNE_TYPE_UPDATE', ColorPath, true)
 		self:RegisterEvent('RUNE_POWER_UPDATE', Path, true)
 
 		return true
@@ -225,7 +184,7 @@ local function Disable(self)
 			element[i]:Hide()
 		end
 
-		self:UnregisterEvent('PLAYER_SPECIALIZATION_CHANGED', ColorPath)
+		self:UnregisterEvent('RUNE_TYPE_UPDATE', ColorPath)
 		self:UnregisterEvent('RUNE_POWER_UPDATE', Path)
 	end
 end

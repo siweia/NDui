@@ -38,6 +38,7 @@
 		All optional
 	-->
 	<Script file='mixins\api-common.lua' />
+	<Script file='mixins\locale.lua' />
 	<Script file='mixins\parseBags.lua' />
 	<Script file='mixins\textFilter.lua' />
 
@@ -60,7 +61,6 @@
 		All optional
 	-->
 	<Script file='mixins-add\plugins\bagBar.lua' />
-	<Script file='mixins-add\plugins\bagTabs.lua' />
 	<Script file='mixins-add\plugins\searchBar.lua' />
 	<Script file='mixins-add\plugins\tagDisplay.lua' />
 

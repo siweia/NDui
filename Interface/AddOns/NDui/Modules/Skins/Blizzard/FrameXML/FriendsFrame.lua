@@ -1,223 +1,268 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local atlasToTex = {
-	["friendslist-invitebutton-horde-normal"] = "Interface\\FriendsFrame\\PlusManz-Horde",
-	["friendslist-invitebutton-alliance-normal"] = "Interface\\FriendsFrame\\PlusManz-Alliance",
-	["friendslist-invitebutton-default-normal"] = "Interface\\FriendsFrame\\PlusManz-PlusManz",
-}
-local function replaceInviteTex(self, atlas)
-	local tex = atlasToTex[atlas]
-	if tex then
-		self.ownerIcon:SetTexture(tex)
-	end
-end
-
-local function reskinFriendButton(button)
-	if not button.styled then
-		local gameIcon = button.gameIcon
-		gameIcon:SetSize(22, 22)
-		button.background:Hide()
-		button:SetHighlightTexture(DB.bdTex)
-		button:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
-
-		local travelPass = button.travelPassButton
-		travelPass:SetSize(22, 22)
-		travelPass:SetPoint("TOPRIGHT", -3, -6)
-		B.CreateBDFrame(travelPass, 1)
-		travelPass.NormalTexture:SetAlpha(0)
-		travelPass.PushedTexture:SetAlpha(0)
-		travelPass.DisabledTexture:SetAlpha(0)
-		travelPass.HighlightTexture:SetColorTexture(1, 1, 1, .25)
-		travelPass.HighlightTexture:SetAllPoints()
-		gameIcon:SetPoint("TOPRIGHT", travelPass, "TOPLEFT", -4, 0)
-
-		local icon = travelPass:CreateTexture(nil, "ARTWORK")
-		icon:SetTexCoord(.1, .9, .1, .9)
-		icon:SetAllPoints()
-		button.newIcon = icon
-		travelPass.NormalTexture.ownerIcon = icon
-		hooksecurefunc(travelPass.NormalTexture, "SetAtlas", replaceInviteTex)
-
-		button.styled = true
-	end
-end
-
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
-	for i = 1, 4 do
+	for i = 1, 5 do
 		local tab = _G["FriendsFrameTab"..i]
 		if tab then
-			B.ReskinTab(tab)
-			B.ResetTabAnchor(tab)
-			if i ~= 1 then
-				tab:ClearAllPoints()
-				tab:SetPoint("TOPLEFT", _G["FriendsFrameTab"..(i-1)], "TOPRIGHT", -15, 0)
+			tab.bg = B.ReskinTab(tab)
+			local hl = _G["FriendsFrameTab"..i.."HighlightTexture"]
+			hl:SetPoint("TOPLEFT", tab.bg, C.mult, -C.mult)
+			hl:SetPoint("BOTTOMRIGHT", tab.bg, -C.mult, C.mult)
+			if i == 1 then
+				tab:SetPoint("BOTTOMLEFT", -2, -31)
 			end
 		end
 	end
 	FriendsFrameIcon:Hide()
+	B.StripTextures(FriendsFrameFriendsScrollFrame)
+	B.StripTextures(IgnoreListFrame)
 
-	B.StripTextures(FriendsFrame.IgnoreListWindow)
-	B.SetBD(FriendsFrame.IgnoreListWindow)
-	local closeButton = FriendsFrame.IgnoreListWindow.CloseButton or select(4, FriendsFrame.IgnoreListWindow:GetChildren())
-	if closeButton then
-		B.ReskinClose(closeButton)
+	for i = 1, FRIENDS_TO_DISPLAY do
+		local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
+		local ic = bu.gameIcon
+
+		bu.background:Hide()
+		bu:SetHighlightTexture(DB.bdTex)
+		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
+
+		local travelPass = bu.travelPassButton
+		travelPass:SetSize(22, 22)
+		travelPass:SetNormalTexture(0)
+		travelPass:SetPushedTexture(0)
+		travelPass:SetDisabledTexture(0)
+		travelPass:SetPoint("TOPRIGHT", -3, -6)
+		B.CreateBDFrame(travelPass, 1)
+		local nt = travelPass:CreateTexture(nil, "BACKGROUND")
+		nt:SetTexture("Interface\\FriendsFrame\\PlusManz-PlusManz")
+		nt:SetTexCoord(.1, .9, .1, .9)
+		nt:SetAllPoints()
+		local hl = travelPass:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetAllPoints()
 	end
-	B.ReskinTrimScroll(FriendsFrame.IgnoreListWindow.ScrollBar)
-	B.Reskin(FriendsFrame.IgnoreListWindow.UnignorePlayerButton)
 
-	local INVITE_RESTRICTION_NONE = 9
-	hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
-		if button.gameIcon then
-			reskinFriendButton(button)
+	local function UpdateScroll()
+		for i = 1, FRIENDS_TO_DISPLAY do
+			local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
+
+			if bu.gameIcon:IsShown() then
+				bu.gameIcon:SetPoint("TOPRIGHT", bu.travelPassButton, "TOPLEFT", -4, 0)
+			end
 		end
+	end
+	hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
+	hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", UpdateScroll)
 
-		if button.newIcon and button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
-			if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
-				button.newIcon:SetVertexColor(1, 1, 1)
+	local header = FriendsFrameFriendsScrollFrame.PendingInvitesHeaderButton
+	for i = 1, 11 do
+		select(i, header:GetRegions()):Hide()
+	end
+	local headerBg = B.CreateBDFrame(header, .25)
+	headerBg:SetPoint("TOPLEFT", 2, -2)
+	headerBg:SetPoint("BOTTOMRIGHT", -2, 2)
+
+	local function reskinInvites(self)
+		for invite in self:EnumerateActive() do
+			if not invite.styled then
+				B.Reskin(invite.AcceptButton)
+				B.Reskin(invite.DeclineButton)
+
+				invite.styled = true
+			end
+		end
+	end
+
+	hooksecurefunc(FriendsFrameFriendsScrollFrame.invitePool, "Acquire", reskinInvites)
+	hooksecurefunc("FriendsFrame_UpdateFriendButton", function(button)
+		if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
+			reskinInvites(FriendsFrameFriendsScrollFrame.invitePool)
+		elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
+			local nt = button.travelPassButton:GetNormalTexture()
+			if FriendsFrame_GetInviteRestriction(button.id) == 8 then
+				nt:SetVertexColor(1, 1, 1)
 			else
-				button.newIcon:SetVertexColor(.5, .5, .5)
+				nt:SetVertexColor(.3, .3, .3)
 			end
 		end
 	end)
 
-	hooksecurefunc("FriendsFrame_UpdateFriendInviteButton", function(button)
-		if not button.styled then
-			B.Reskin(button.AcceptButton)
-			B.Reskin(button.DeclineButton)
+	FriendsFrameStatusDropdown:ClearAllPoints()
+	FriendsFrameStatusDropdown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
 
-			button.styled = true
-		end
-	end)
-
-	hooksecurefunc("FriendsFrame_UpdateFriendInviteHeaderButton", function(button)
-		if not button.styled then
-			button:DisableDrawLayer("BACKGROUND")
-			local bg = B.CreateBDFrame(button, .25)
-			bg:SetInside(button, 2, 2)
-			local hl = button:GetHighlightTexture()
-			hl:SetColorTexture(.24, .56, 1, .2)
-			hl:SetInside(bg)
-
-			button.styled = true
-		end
-	end)
-
-	-- FriendsFrameBattlenetFrame
-
-	FriendsFrameBattlenetFrame:GetRegions():Hide()
-	local bg = B.CreateBDFrame(FriendsFrameBattlenetFrame, .25)
-	bg:SetPoint("TOPLEFT", 0, -2)
-	bg:SetPoint("BOTTOMRIGHT", -2, 2)
-	bg:SetBackdropColor(0, .6, 1, .25)
-
-	local menuButton = FriendsFrameBattlenetFrame.ContactsMenuButton
-	if menuButton then
-		B.ReskinArrow(menuButton, "down")
-		menuButton.Icon:Hide()
-		menuButton:SetSize(22, 22)
+	for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
+		button:SetPushedTexture(0)
+		button:GetRegions():SetTexCoord(.08, .92, .08, .92)
+		B.CreateBDFrame(button)
 	end
 
-	local broadcastFrame = FriendsFrameBattlenetFrame.BroadcastFrame
-	B.StripTextures(broadcastFrame)
-	B.SetBD(broadcastFrame, nil, 10, -10, -10, 10)
-	broadcastFrame.EditBox:DisableDrawLayer("BACKGROUND")
-	local bg = B.CreateBDFrame(broadcastFrame.EditBox, 0, true)
-	bg:SetPoint("TOPLEFT", -2, -2)
-	bg:SetPoint("BOTTOMRIGHT", 2, 2)
-	B.Reskin(broadcastFrame.UpdateButton)
-	B.Reskin(broadcastFrame.CancelButton)
-	broadcastFrame:ClearAllPoints()
-	broadcastFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 3, 0)
+	B.CreateBD(FriendsFrameBattlenetFrame.UnavailableInfoFrame)
+	FriendsFrameBattlenetFrame.UnavailableInfoFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 1, -18)
 
-	local unavailableFrame = FriendsFrameBattlenetFrame.UnavailableInfoFrame
-	B.StripTextures(unavailableFrame)
-	B.SetBD(unavailableFrame)
-	unavailableFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 3, -18)
+	FriendsFrameBattlenetFrame:GetRegions():Hide()
+	B.CreateBDFrame(FriendsFrameBattlenetFrame, .25)
+
+	FriendsFrameBattlenetFrame.Tag:SetParent(FriendsListFrame)
+	FriendsFrameBattlenetFrame.Tag:SetPoint("TOP", FriendsFrame, "TOP", 0, -8)
+
+	hooksecurefunc("FriendsFrame_CheckBattlenetStatus", function()
+		if BNFeaturesEnabled() then
+			local frame = FriendsFrameBattlenetFrame
+			frame.BroadcastButton:Hide()
+
+			if BNConnected() then
+				frame:Hide()
+				FriendsFrameBroadcastInput:Show()
+				FriendsFrameBroadcastInput_UpdateDisplay()
+			end
+		end
+	end)
+
+	hooksecurefunc("FriendsFrame_Update", function()
+		if FriendsFrame.selectedTab == 1 and FriendsTabHeader.selectedTab == 1 and FriendsFrameBattlenetFrame.Tag:IsShown() then
+			FriendsFrameTitleText:Hide()
+		else
+			FriendsFrameTitleText:Show()
+		end
+	end)
+
+	B.StripTextures(WhoFrameEditBox, 2)
+	local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
+	whoBg:SetPoint("TOPLEFT", WhoFrameEditBox, -3, -4)
+	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBox, -1, 4)
 
 	B.ReskinPortraitFrame(FriendsFrame)
 	B.Reskin(FriendsFrameAddFriendButton)
 	B.Reskin(FriendsFrameSendMessageButton)
-	B.ReskinTrimScroll(FriendsListFrame.ScrollBar)
-	B.ReskinTrimScroll(WhoFrame.ScrollBar)
-	B.ReskinTrimScroll(FriendsFriendsFrame.ScrollBar)
+	B.Reskin(FriendsFrameIgnorePlayerButton)
+	B.Reskin(FriendsFrameUnsquelchButton)
+	B.ReskinScroll(FriendsFrameFriendsScrollFrameScrollBar)
+	B.ReskinScroll(FriendsFrameIgnoreScrollFrameScrollBar)
+	B.ReskinScroll(FriendsFriendsScrollFrameScrollBar)
+	B.ReskinScroll(WhoListScrollFrameScrollBar)
 	B.ReskinDropDown(FriendsFrameStatusDropdown)
 	B.ReskinDropDown(WhoFrameDropdown)
 	B.ReskinDropDown(FriendsFriendsFrameDropdown)
-	FriendsFrameStatusDropdown:SetWidth(58)
 	B.Reskin(FriendsListFrameContinueButton)
+	B.StripTextures(FriendsFriendsList)
+	B.CreateBDFrame(FriendsFriendsList, .25)
+	B.StripTextures(AddFriendNoteFrame)
+	B.CreateBDFrame(AddFriendNoteFrame, .25)
 	B.ReskinInput(AddFriendNameEditBox)
+	B.ReskinInput(FriendsFrameBroadcastInput)
 	B.StripTextures(AddFriendFrame)
 	B.SetBD(AddFriendFrame)
 	B.StripTextures(FriendsFriendsFrame)
 	B.SetBD(FriendsFriendsFrame)
-	B.Reskin(FriendsFriendsFrame.SendRequestButton)
-	B.Reskin(FriendsFriendsFrame.CloseButton)
 	B.Reskin(WhoFrameWhoButton)
 	B.Reskin(WhoFrameAddFriendButton)
 	B.Reskin(WhoFrameGroupInviteButton)
 	B.Reskin(AddFriendEntryFrameAcceptButton)
 	B.Reskin(AddFriendEntryFrameCancelButton)
+	B.Reskin(FriendsFriendsSendRequestButton)
+	B.Reskin(FriendsFriendsCloseButton)
+	B.Reskin(AddFriendInfoFrameContinueButton)
+	B.StripTextures(WhoFrameListInset)
 
 	for i = 1, 4 do
 		B.StripTextures(_G["WhoFrameColumnHeader"..i])
 	end
 
-	B.StripTextures(WhoFrameListInset)
-	WhoFrameEditBox.Backdrop:Hide()
-	local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
-	whoBg:SetPoint("TOPLEFT", WhoFrameEditBox, -3, -2)
-	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBox, -1, 2)
+	for i = 1, 2 do
+		B.StripTextures(_G["FriendsTabHeaderTab"..i])
+	end
 
-	for i = 1, 3 do
-		local tab = select(i, FriendsTabHeader.TabSystem:GetChildren())
-		if tab then
-			B.ReskinTab(tab)
+	WhoFrameWhoButton:SetPoint("RIGHT", WhoFrameAddFriendButton, "LEFT", -1, 0)
+	WhoFrameAddFriendButton:SetPoint("RIGHT", WhoFrameGroupInviteButton, "LEFT", -1, 0)
+	FriendsFrameTitleText:SetPoint("TOP", FriendsFrame, "TOP", 0, -8)
+
+	-- GuildFrame
+
+	B.StripTextures(GuildFrame)
+	B.ReskinArrow(GuildFrameGuildListToggleButton, "right")
+	B.Reskin(GuildFrameGuildInformationButton)
+	B.Reskin(GuildFrameAddMemberButton)
+	B.Reskin(GuildFrameControlButton)
+	B.StripTextures(GuildFrameLFGFrame)
+	B.ReskinCheck(GuildFrameLFGButton)
+	B.ReskinScroll(GuildListScrollFrameScrollBar)
+	for i = 1, 4 do
+		local bg = B.ReskinTab(_G["GuildFrameColumnHeader"..i])
+		bg:SetPoint("TOPLEFT", 5, -2)
+		bg:SetPoint("BOTTOMRIGHT", 0, 0)
+		local bg = B.ReskinTab(_G["GuildFrameGuildStatusColumnHeader"..i])
+		bg:SetPoint("TOPLEFT", 5, -2)
+		bg:SetPoint("BOTTOMRIGHT", 0, 0)
+	end
+
+	B.StripTextures(GuildMemberDetailFrame)
+	B.SetBD(GuildMemberDetailFrame)
+	GuildMemberDetailFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 4, -15)
+	B.ReskinClose(GuildMemberDetailCloseButton)
+	B.StripTextures(GuildMemberNoteBackground)
+	B.CreateBDFrame(GuildMemberNoteBackground, .25)
+	B.StripTextures(GuildMemberOfficerNoteBackground)
+	B.CreateBDFrame(GuildMemberOfficerNoteBackground, .25)
+	B.ReskinArrow(GuildFramePromoteButton, "up")
+	B.ReskinArrow(GuildFrameDemoteButton, "down")
+	GuildFramePromoteButton:SetHitRectInsets(0, 0, 0, 0)
+	GuildFrameDemoteButton:SetHitRectInsets(0, 0, 0, 0)
+	GuildFrameDemoteButton:SetPoint("LEFT", GuildFramePromoteButton, "RIGHT", 4, 0)
+	B.Reskin(GuildMemberRemoveButton)
+	B.Reskin(GuildMemberGroupInviteButton)
+
+	B.StripTextures(GuildInfoFrame)
+	B.SetBD(GuildInfoFrame)
+	B.ReskinScroll(GuildInfoFrameScrollFrameScrollBar)
+	B.ReskinClose(GuildInfoCloseButton)
+	B.StripTextures(GuildInfoTextBackground)
+	B.CreateBDFrame(GuildInfoTextBackground, .25)
+	B.Reskin(GuildInfoSaveButton)
+	B.Reskin(GuildInfoCancelButton)
+	B.Reskin(GuildInfoGuildEventButton)
+
+	B.StripTextures(GuildEventLogFrame)
+	B.SetBD(GuildEventLogFrame)
+	B.ReskinClose(GuildEventLogCloseButton)
+	B.ReskinScroll(GuildEventLogScrollFrameScrollBar)
+	B.Reskin(GuildEventLogCancelButton)
+	B.StripTextures(GuildEventFrame)
+	B.CreateBDFrame(GuildEventFrame, .25)
+
+	B.StripTextures(GuildControlPopupFrame)
+	GuildControlPopupFrame:SetPoint("TOPLEFT", GuildFrame, "TOPRIGHT", 3, 0)
+	B.SetBD(GuildControlPopupFrame)
+	B.ReskinDropDown(GuildControlPopupFrameDropdown)
+	B.ReskinArrow(GuildControlPopupFrameAddRankButton, "right")
+	B.StripTextures(GuildControlPopupFrameEditBox)
+	local bg = B.CreateBDFrame(GuildControlPopupFrameEditBox, 0, true)
+	bg:SetPoint("TOPLEFT", -5, -5)
+	bg:SetPoint("BOTTOMRIGHT", 5, 5)
+	B.Reskin(GuildControlPopupAcceptButton)
+	B.Reskin(GuildControlPopupFrameCancelButton)
+
+	for i = 1, 16 do
+		local checkbox = _G["GuildControlPopupFrameCheckbox"..i]
+		if checkbox then
+			B.ReskinCheck(checkbox)
 		end
 	end
 
-	-- Recruite frame
+	local function SetGuildInput(frame)
+		B.ReskinInput(frame)
+		frame.bg:SetPoint("TOPLEFT", -2, -7)
+		frame.bg:SetPoint("BOTTOMRIGHT", 2, 7)
+	end
+	SetGuildInput(GuildControlWithdrawGoldEditBox)
+	SetGuildInput(GuildControlWithdrawItemsEditBox)
 
-	RecruitAFriendFrame.SplashFrame.Description:SetTextColor(1, 1, 1)
-	B.Reskin(RecruitAFriendFrame.SplashFrame.OKButton)
-	B.StripTextures(RecruitAFriendFrame.RewardClaiming)
-	B.Reskin(RecruitAFriendFrame.RewardClaiming.ClaimOrViewRewardButton)
-	B.Reskin(RecruitAFriendFrame.RecruitmentButton)
+	B.ReskinCheck(GuildControlTabPermissionsViewTab)
+	B.ReskinCheck(GuildControlTabPermissionsDepositItems)
+	B.ReskinCheck(GuildControlTabPermissionsUpdateText)
+	GuildControlPopupFrameTabPermissions:HideBackdrop()
 
-	local recruitList = RecruitAFriendFrame.RecruitList
-	B.StripTextures(recruitList.Header)
-	B.CreateBDFrame(recruitList.Header, .25)
-	recruitList.ScrollFrameInset:Hide()
-	B.ReskinTrimScroll(recruitList.ScrollBar)
-
-	local recruitmentFrame = RecruitAFriendRecruitmentFrame
-	B.StripTextures(recruitmentFrame)
-	B.ReskinClose(recruitmentFrame.CloseButton)
-	B.SetBD(recruitmentFrame)
-	B.StripTextures(recruitmentFrame.EditBox)
-	local bg = B.CreateBDFrame(recruitmentFrame.EditBox, .25)
-	bg:SetPoint("TOPLEFT", -3, -3)
-	bg:SetPoint("BOTTOMRIGHT", 0, 3)
-	B.Reskin(recruitmentFrame.GenerateOrCopyLinkButton)
-
-	local rewardsFrame = RecruitAFriendRewardsFrame
-	B.StripTextures(rewardsFrame)
-	B.ReskinClose(rewardsFrame.CloseButton)
-	B.SetBD(rewardsFrame)
-
-	rewardsFrame:HookScript("OnShow", function(self)
-		for i = 1, self:GetNumChildren() do
-			local child = select(i, self:GetChildren())
-			local button = child and child.Button
-			if button and not button.styled then
-				B.ReskinIcon(button.Icon)
-				button.IconBorder:Hide()
-				button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-
-				button.styled = true
-			end
-		end
-	end)
+	-- Font width fix
+	for i = 1, 13 do
+		_G["GuildFrameButton"..i.."Level"]:SetWidth(30)
+	end
 end)

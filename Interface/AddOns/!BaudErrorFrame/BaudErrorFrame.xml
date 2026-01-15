@@ -27,7 +27,7 @@
 			</OnClick>
 		</Scripts>
 	</Button>
-	<Button name="BaudErrorFrameMinimapButton" frameStrata="DIALOG" parent="UIParent" movable="true" hidden="true">
+	<Button name="BaudErrorFrameMinimapButton" frameStrata="DIALOG" parent="UIParent" movable="true" hidden="true" inherits="MiniMapButtonTemplate">
 		<Size>
 			<AbsDimension x="22" y="22"/>
 		</Size>

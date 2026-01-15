@@ -2,56 +2,28 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 C.themes["Blizzard_TrainerUI"] = function()
-	local r, g, b = DB.r, DB.g, DB.b
+	B.ReskinPortraitFrame(ClassTrainerFrame, 10, -5, -30, 70)
+	B.Reskin(ClassTrainerTrainButton)
+	B.Reskin(ClassTrainerCancelButton)
+	B.ReskinFilterButton(ClassTrainerFrame.FilterDropdown)
+	B.ReskinScroll(ClassTrainerListScrollFrameScrollBar)
+	B.ReskinScroll(ClassTrainerDetailScrollFrameScrollBar)
+	B.CreateBDFrame(ClassTrainerDetailScrollFrame, .25)
 
-	B.ReskinPortraitFrame(ClassTrainerFrame)
-	ClassTrainerStatusBarSkillRank:ClearAllPoints()
-	ClassTrainerStatusBarSkillRank:SetPoint("CENTER", ClassTrainerStatusBar, "CENTER", 0, 0)
+	B.ReskinCollapse(ClassTrainerCollapseAllButton)
+	ClassTrainerExpandButtonFrame:DisableDrawLayer("BACKGROUND")
 
-	local icbg = B.ReskinIcon(ClassTrainerFrameSkillStepButtonIcon)
-	local bg = B.CreateBDFrame(ClassTrainerFrameSkillStepButton, .25)
-	bg:SetPoint("TOPLEFT", icbg, "TOPRIGHT", 1, 0)
-	bg:SetPoint("BOTTOMRIGHT", icbg, "BOTTOMRIGHT", 270, 0)
+	for i = 1, 11 do
+		local bu = _G["ClassTrainerSkill"..i]
+		B.ReskinCollapse(bu)
+	end
 
-	ClassTrainerFrameSkillStepButton:SetNormalTexture(0)
-	ClassTrainerFrameSkillStepButton:SetHighlightTexture(0)
-	ClassTrainerFrameSkillStepButton.disabledBG:SetTexture(0)
-	ClassTrainerFrameSkillStepButton.selectedTex:SetInside(bg)
-	ClassTrainerFrameSkillStepButton.selectedTex:SetColorTexture(r, g, b, .25)
-
-	B.StripTextures(ClassTrainerStatusBar)
-	ClassTrainerStatusBar:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 64, -35)
-	ClassTrainerStatusBar:SetStatusBarTexture(DB.bdTex)
-	B.CreateBDFrame(ClassTrainerStatusBar, .25)
-
-	ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", CreateColor(.1, .3, .9, 1), CreateColor(.2, .4, 1, 1))
-	B.ReskinTrimScroll(ClassTrainerFrame.ScrollBar)
-
-	hooksecurefunc(ClassTrainerFrame.ScrollBox, "Update", function(self)
-		for i = 1, self.ScrollTarget:GetNumChildren() do
-			local button = select(i, self.ScrollTarget:GetChildren())
-			if not button.styled then
-				local icbg = B.ReskinIcon(button.icon)
-				local bg = B.CreateBDFrame(button, .25)
-				bg:SetPoint("TOPLEFT", icbg, "TOPRIGHT", 1, 0)
-				bg:SetPoint("BOTTOMRIGHT", icbg, "BOTTOMRIGHT", 253, 0)
-
-				button.name:SetParent(bg)
-				button.name:SetPoint("TOPLEFT", button.icon, "TOPRIGHT", 6, -2)
-				button.subText:SetParent(bg)
-				button.money:SetParent(bg)
-				button.money:SetPoint("TOPRIGHT", button, "TOPRIGHT", 5, -8)
-				button:SetNormalTexture(0)
-				button:SetHighlightTexture(0)
-				button.disabledBG:SetTexture(0)
-				button.selectedTex:SetInside(bg)
-				button.selectedTex:SetColorTexture(r, g, b, .25)
-
-				button.styled = true
-			end
+	hooksecurefunc("ClassTrainer_SetSelection", function()
+		local tex = ClassTrainerSkillIcon:GetNormalTexture()
+		if tex then
+			tex:SetTexCoord(.08, .92, .08, .92)
 		end
 	end)
-
-	B.Reskin(ClassTrainerTrainButton)
-	B.ReskinFilterButton(ClassTrainerFrame.FilterDropdown)
+	B.StripTextures(ClassTrainerSkillIcon)
+	B.CreateBDFrame(ClassTrainerSkillIcon)
 end

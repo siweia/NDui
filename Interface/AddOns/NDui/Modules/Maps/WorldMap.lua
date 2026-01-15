@@ -1,4 +1,4 @@
-local _, ns = ...
+﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:RegisterModule("Maps")
 
@@ -13,6 +13,7 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetWorldPosFromMapPos = C_Map.GetWorldPosFromMapPos
 local C_MapExplorationInfo_GetExploredMapTextures = C_MapExplorationInfo.GetExploredMapTextures
 local TexturePool_HideAndClearAnchors = TexturePool_HideAndClearAnchors
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
@@ -25,10 +26,9 @@ function module:GetPlayerMapPos(mapID)
 
 	local mapRect = mapRects[mapID]
 	if not mapRect then
-		local pos1 = select(2, C_Map_GetWorldPosFromMapPos(mapID, CreateVector2D(0, 0)))
-		local pos2 = select(2, C_Map_GetWorldPosFromMapPos(mapID, CreateVector2D(1, 1)))
-		if not pos1 or not pos2 then return end
-		mapRect = {pos1, pos2}
+		mapRect = {}
+		mapRect[1] = select(2, C_Map_GetWorldPosFromMapPos(mapID, CreateVector2D(0, 0)))
+		mapRect[2] = select(2, C_Map_GetWorldPosFromMapPos(mapID, CreateVector2D(1, 1)))
 		mapRect[2]:Subtract(mapRect[1])
 
 		mapRects[mapID] = mapRect
@@ -96,12 +96,11 @@ function module:SetupCoords()
 	playerCoords:SetJustifyH("LEFT")
 	cursorCoords = B.CreateFS(textParent, 13, "", false, "LEFT", 180, 0)
 	cursorCoords:SetJustifyH("LEFT")
-	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 
 	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", module.UpdateMapID)
 	hooksecurefunc(WorldMapFrame, "OnMapChanged", module.UpdateMapID)
 
-	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
+	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame)
 	CoordsUpdater:SetScript("OnUpdate", module.UpdateCoords)
 end
 
@@ -118,13 +117,46 @@ function module:UpdateMapAnchor()
 	B.RestoreMF(self)
 end
 
-function module:WorldMapScale()
-	B.CreateMF(WorldMapFrame, nil, true)
-	WorldMapFrame:HookScript("OnShow", self.UpdateMapAnchor)
-	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
+local function isMouseOverMap()
+	return not WorldMapFrame:IsMouseOver()
 end
 
-local shownMapCache, exploredCache, fileDataIDs, storedTex = {}, {}, {}, {}
+function module:MapFader()
+	if C.db["Map"]["MapFader"] then
+		PlayerMovementFrameFader.AddDeferredFrame(WorldMapFrame, .5, 1, .5, isMouseOverMap)
+	else
+		PlayerMovementFrameFader.RemoveFrame(WorldMapFrame)
+	end
+end
+
+function module:MapPartyDots()
+	local WorldMapUnitPin, WorldMapUnitPinSizes
+	--local partyTexture = "WhiteCircle-RaidBlips"
+	local partyTexture = "Interface\\OptionsFrame\\VoiceChat-Record"
+
+	local function setPinTexture(self)
+		self:SetPinTexture("raid", partyTexture)
+		self:SetPinTexture("party", partyTexture)
+	end
+
+	-- Set group icon textures
+	for pin in WorldMapFrame:EnumeratePinsByTemplate("GroupMembersPinTemplate") do
+		WorldMapUnitPin = pin
+		WorldMapUnitPinSizes = pin.dataProvider:GetUnitPinSizesTable()
+		setPinTexture(WorldMapUnitPin)
+		hooksecurefunc(WorldMapUnitPin, "UpdateAppearanceData", setPinTexture)
+		break
+	end
+
+	-- Set party icon size and enable class colors
+	WorldMapUnitPinSizes.player = 22
+	WorldMapUnitPinSizes.party = 12
+	WorldMapUnitPin:SetAppearanceField("party", "useClassColor", true)
+	WorldMapUnitPin:SetAppearanceField("raid", "useClassColor", true)
+	WorldMapUnitPin:SynchronizePinSizes()
+end
+
+local shownMapCache, exploredCache, fileDataIDs = {}, {}, {}
 
 local function GetStringFromInfo(info)
 	return format("W%dH%dX%dY%d", info.textureWidth, info.textureHeight, info.offsetX, info.offsetY)
@@ -146,10 +178,6 @@ end
 function module:MapData_RefreshOverlays(fullUpdate)
 	wipe(shownMapCache)
 	wipe(exploredCache)
-	for _, tex in pairs(storedTex) do
-		tex:SetVertexColor(1, 1, 1)
-	end
-	wipe(storedTex)
 
 	local mapID = WorldMapFrame.mapID
 	if not mapID then return end
@@ -200,7 +228,6 @@ function module:MapData_RefreshOverlays(fullUpdate)
 				end
 				for k = 1, numTexturesWide do
 					local texture = self.overlayTexturePool:Acquire()
-					tinsert(storedTex, texture)
 					if k < numTexturesWide then
 						texturePixelWidth = TILE_SIZE_WIDTH
 						textureFileWidth = TILE_SIZE_WIDTH
@@ -246,13 +273,14 @@ function module:MapData_ResetTexturePool(texture)
 end
 
 function module:RemoveMapFog()
-	local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame.TitleContainer, "OptionsBaseCheckButtonTemplate")
+	local bu = CreateFrame("CheckButton", nil, WorldMapFrame, "OptionsBaseCheckButtonTemplate")
 	bu:SetHitRectInsets(-5, -5, -5, -5)
-	bu:SetPoint("BOTTOMLEFT", WorldMapFrameHomeButton, "TOPLEFT", -4, 0)
+	bu:SetPoint("TOPLEFT", 20, 0)
 	bu:SetSize(26, 26)
 	B.ReskinCheck(bu)
 	bu:SetChecked(C.db["Map"]["MapReveal"])
 	bu.text = B.CreateFS(bu, 14, L["Map Reveal"], false, "LEFT", 25, 0)
+	bu:SetFrameLevel(3)
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate("MapExplorationPinTemplate") do
 		hooksecurefunc(pin, "RefreshOverlays", module.MapData_RefreshOverlays)
@@ -270,32 +298,61 @@ end
 
 function module:SetupWorldMap()
 	if C.db["Map"]["DisableMap"] then return end
-	if C_AddOns.IsAddOnLoaded("Mapster") then return end
+	if IsAddOnLoaded("Mapster") then return end
 
-	-- Remove from frame manager
-	WorldMapFrame:ClearAllPoints()
-	WorldMapFrame:SetPoint("CENTER") -- init anchor
+	-- Fix worldmap cursor when scaling
+	WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+		local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+		local scale = WorldMapFrame:GetScale()
+		return x / scale, y / scale
+	end
 
-	-- Hide stuff
+	-- Fix scroll zooming in classic
+	WorldMapFrame.ScrollContainer:HookScript("OnMouseWheel", function(self, delta)
+		local x, y = self:GetNormalizedCursorPosition()
+		local nextZoomOutScale, nextZoomInScale = self:GetCurrentZoomRange()
+		if delta == 1 then
+			if nextZoomInScale > self:GetCanvasScale() then
+				self:InstantPanAndZoom(nextZoomInScale, x, y)
+			end
+		else
+			if nextZoomOutScale < self:GetCanvasScale() then
+				self:InstantPanAndZoom(nextZoomOutScale, x, y)
+			end
+		end
+	end)
+
+	B.CreateMF(WorldMapFrame, nil, true)
+	B.CreateMF(WorldMapTitleButton, WorldMapFrame, true)
+	self.UpdateMapScale(WorldMapFrame)
+	WorldMapFrame:HookScript("OnShow", self.UpdateMapAnchor)
+	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", self.UpdateMapAnchor)
+
+	-- Default elements
 	WorldMapFrame.BlackoutFrame:SetAlpha(0)
 	WorldMapFrame.BlackoutFrame:EnableMouse(false)
-	--QuestMapFrame:SetScript("OnHide", nil) -- fix map toggle taint -- fix by LibShowUIPanel
-
-	self:WorldMapScale()
-	self:SetupCoords()
-	self:RemoveMapFog()
-end
-
-function module:MapFunc()
-	WorldMapFrame:SetAttribute("UIPanelLayout-area", nil)
+	WorldMapFrame:SetFrameStrata("MEDIUM")
+	WorldMapFrame.BorderFrame:SetFrameStrata("MEDIUM")
+	WorldMapFrame.BorderFrame:SetFrameLevel(1)
+	WorldMapFrame:SetAttribute("UIPanelLayout-area", "center")
 	WorldMapFrame:SetAttribute("UIPanelLayout-enabled", false)
 	WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
+	WorldMapFrame.HandleUserActionToggleSelf = function()
+		if WorldMapFrame:IsShown() then WorldMapFrame:Hide() else WorldMapFrame:Show() end
+	end
 	tinsert(UISpecialFrames, "WorldMapFrame")
-	B:UnregisterEvent("PLAYER_ENTERING_WORLD", self.MapFunc)
+	-- Fix issue when map open at default
+	if WorldMapFrame:IsShown() then
+		ToggleFrame(WorldMapFrame)
+	end
+
+	self:MapPartyDots()
+	self:SetupCoords()
+	self:MapFader()
+	self:RemoveMapFog()
 end
 
 function module:OnLogin()
 	self:SetupWorldMap()
 	self:SetupMinimap()
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", self.MapFunc)
 end

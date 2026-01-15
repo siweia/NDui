@@ -5,8 +5,6 @@ local G = B:GetModule("GUI")
 local r, g, b = DB.r, DB.g, DB.b
 local pairs, floor = pairs, math.floor
 local f
-local GetSpellName = C_Spell.GetSpellName
-local GetSpellTexture = C_Spell.GetSpellTexture
 
 -- Elements
 local function labelOnEnter(self)
@@ -72,7 +70,7 @@ local function createPage(name)
 	local p = CreateFrame("Frame", nil, f, "BackdropTemplate")
 	p:SetPoint("TOPLEFT", 160, -70)
 	p:SetSize(620, 380)
-	B.CreateBD(p, .25)
+	B.CreateBD(p, .2)
 	B.CreateFS(p, 15, name, false, "TOPLEFT", 5, 20)
 	p:Hide()
 	return p
@@ -202,8 +200,6 @@ local function CreatePanel()
 		[13] = INVTYPE_TRINKET.."1",
 		[14] = INVTYPE_TRINKET.."2",
 		[15] = INVTYPE_CLOAK,
-		[16] = INVTYPE_WEAPONMAINHAND,
-		[17] = INVTYPE_WEAPONOFFHAND,
 	}
 
 	local function iconOnEnter(self)
@@ -219,18 +215,18 @@ local function CreatePanel()
 
 	local function AddAura(parent, index, data)
 		local typeID, spellID, unitID, caster, stack, amount, timeless, combat, text, flash = unpack(data)
-		local name, texture = GetSpellName(spellID), GetSpellTexture(spellID)
+		local name, _, texture = GetSpellInfo(spellID)
 		if typeID == "SlotID" then
 			texture = GetInventoryItemTexture("player", spellID)
 			name = slotIndex[spellID]
 		elseif typeID == "TotemID" then
-			texture = "Interface\\ICONS\\Spell_Shaman_TotemRecall"
+			texture = "Interface\\ICONS\\Spell_Totem_WardOfDraining"
 			name = L["TotemSlot"]..spellID
 		end
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(270, 30)
-		B.CreateBD(bar, .25)
+		B.CreateBD(bar, .3)
 		barTable[index][spellID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -275,14 +271,14 @@ local function CreatePanel()
 
 	local function AddInternal(parent, index, data)
 		local intID, duration, trigger, unit, itemID = unpack(data)
-		local name, texture = GetSpellName(intID), GetSpellTexture(intID)
+		local name, _, texture = GetSpellInfo(intID)
 		if itemID then
-			name = C_Item.GetItemInfo(itemID)
+			name = GetItemInfo(itemID)
 		end
 
 		local bar = CreateFrame("Frame", nil, parent, "BackdropTemplate")
 		bar:SetSize(270, 30)
-		B.CreateBD(bar, .25)
+		B.CreateBD(bar, .3)
 		barTable[index][intID] = bar
 
 		local icon, close = G:CreateBarWidgets(bar, texture)
@@ -370,7 +366,7 @@ local function CreatePanel()
 		tabs[i] = CreateFrame("Button", "$parentTab"..i, f, "BackdropTemplate")
 		tabs[i]:SetPoint("TOPLEFT", 20, -40 - i*30)
 		tabs[i]:SetSize(130, 28)
-		B.CreateBD(tabs[i], .25)
+		B.CreateBD(tabs[i], .3)
 		local label = B.CreateFS(tabs[i], 15, group, "system", "LEFT", 10, 0)
 		if i == 10 then
 			label:SetTextColor(0, .8, .3)
@@ -393,7 +389,7 @@ local function CreatePanel()
 			Option[8] = G:CreateCheckBox(tabs[i].Page, L["Combat"], 200, -95, L["Combat Intro"])
 			Option[9] = G:CreateEditbox(tabs[i].Page, L["Text"], 340, -90, L["Text Intro"])
 			Option[10] = G:CreateCheckBox(tabs[i].Page, L["Flash"], 280, -95, L["Flash Intro"])
-			Option[11] = G:CreateDropdown(tabs[i].Page, L["Slot*"], 140, -30, {slotIndex[6], slotIndex[8], slotIndex[10], slotIndex[11], slotIndex[12], slotIndex[13], slotIndex[14], slotIndex[15], slotIndex[16], slotIndex[17]}, L["Slot Intro"])
+			Option[11] = G:CreateDropdown(tabs[i].Page, L["Slot*"], 140, -30, {slotIndex[6], slotIndex[8], slotIndex[10], slotIndex[11], slotIndex[12], slotIndex[13], slotIndex[14], slotIndex[15]}, L["Slot Intro"])
 			Option[12] = G:CreateDropdown(tabs[i].Page, L["Totem*"], 140, -30, {L["TotemSlot"].."1", L["TotemSlot"].."2", L["TotemSlot"].."3", L["TotemSlot"].."4"}, L["Totem Intro"])
 
 			for j = 2, 12 do Option[j]:Hide() end
@@ -440,7 +436,7 @@ local function CreatePanel()
 			end
 		end)
 
-		local slotTable = {6, 8, 10, 11, 12, 13, 14, 15, 16, 17}
+		local slotTable = {6, 8, 10, 11, 12, 13, 14, 15}
 		local add = B.CreateButton(tabs[i].Page, 60, 25, ADD)
 		add:SetPoint("TOPRIGHT", -30, -90)
 		add:SetScript("OnClick", function()
@@ -455,7 +451,7 @@ local function CreatePanel()
 
 				if not typeID then UIErrorsFrame:AddMessage(DB.InfoColor..L["Choose a Type"]) return end
 				if (typeID == "AuraID" and (not spellID or not unitID)) or (typeID == "SpellID" and not spellID) or (typeID == "SlotID" and not slotID) or (typeID == "TotemID" and not totemID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-				if (typeID == "AuraID" or typeID == "SpellID") and not GetSpellName(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+				if (typeID == "AuraID" or typeID == "SpellID") and not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 
 				local realID = spellID or slotID or totemID
 				if C.db["AuraWatchList"][i][realID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
@@ -466,7 +462,7 @@ local function CreatePanel()
 			elseif i == 10 then
 				local intID, duration, trigger, unit, itemID = tonumber(Option[13]:GetText()), tonumber(Option[14]:GetText()), Option[15].Text:GetText(), Option[16].Text:GetText(), tonumber(Option[17]:GetText())
 				if not intID or not duration or not trigger or not unit then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incomplete Input"]) return end
-				if intID and not GetSpellName(intID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
+				if intID and not GetSpellInfo(intID) then UIErrorsFrame:AddMessage(DB.InfoColor..L["Incorrect SpellID"]) return end
 				if C.db["InternalCD"][intID] then UIErrorsFrame:AddMessage(DB.InfoColor..L["Existing ID"]) return end
 
 				C.db["InternalCD"][intID] = {intID, duration, trigger, unit, itemID}

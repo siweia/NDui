@@ -2,30 +2,20 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["BlizzardSkins"] then return end
-
 	B.StripTextures(RaidInfoFrame)
 	B.SetBD(RaidInfoFrame)
 	B.ReskinCheck(RaidFrameAllAssistCheckButton)
-	B.StripTextures(RaidInfoFrame.Header)
 
 	RaidInfoFrame:SetPoint("TOPLEFT", RaidFrame, "TOPRIGHT", 1, -28)
-	RaidInfoDetailFooter:Hide()
-	RaidInfoDetailHeader:Hide()
 
 	B.Reskin(RaidFrameRaidInfoButton)
 	B.Reskin(RaidFrameConvertToRaidButton)
-	B.Reskin(RaidInfoExtendButton)
-	B.Reskin(RaidInfoCancelButton)
+	if RaidInfoExtendButton then
+		B.Reskin(RaidInfoExtendButton)
+		B.Reskin(RaidInfoCancelButton)
+	end
 	B.ReskinClose(RaidInfoCloseButton)
 	B.ReskinTrimScroll(RaidInfoFrame.ScrollBar)
 	B.ReskinClose(RaidParentFrameCloseButton)
-
 	B.ReskinPortraitFrame(RaidParentFrame)
-	RaidInfoInstanceLabel:DisableDrawLayer("BACKGROUND")
-	RaidInfoIDLabel:DisableDrawLayer("BACKGROUND")
-
-	B.ReskinSmallRole(RaidFrame.RoleCount.TankIcon, "TANK")
-	B.ReskinSmallRole(RaidFrame.RoleCount.HealerIcon, "HEALER")
-	B.ReskinSmallRole(RaidFrame.RoleCount.DamagerIcon, "DPS")
 end)

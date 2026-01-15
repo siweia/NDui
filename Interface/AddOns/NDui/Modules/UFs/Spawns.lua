@@ -33,15 +33,13 @@ local function CreatePlayerStyle(self)
 	UF:CreatePrediction(self)
 	UF:CreateFCT(self)
 	UF:CreateAddPower(self)
-	UF:CreateQuestSync(self)
 	UF:CreateClassPower(self)
-	UF:StaggerBar(self)
 	UF:CreateAuras(self)
 	UF:CreateSwing(self)
 
 	if C.db["UFs"]["Castbars"] then
 		UF:ReskinMirrorBars()
-		UF:ReskinTimerTrakcer(self)
+		--UF:ReskinTimerTrakcer(self)
 	end
 	if C.db["Map"]["DisableMinimap"] or not C.db["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
 end
@@ -79,7 +77,6 @@ local function CreateFocusStyle(self)
 	UF:CreateIcons(self)
 	UF:CreatePrediction(self)
 	UF:CreateAuras(self)
-	--UF:DemonicGatewayIcon(self)
 end
 
 local function CreateToTStyle(self)
@@ -92,6 +89,17 @@ local function CreateToTStyle(self)
 	UF:CreatePowerBar(self)
 	UF:CreateRaidMark(self)
 	UF:CreateAuras(self)
+end
+
+local function CreateToToT(self)
+	self.mystyle = "tot"
+	SetUnitFrameSize(self, "Pet")
+
+	UF:CreateHeader(self)
+	UF:CreateHealthBar(self)
+	UF:CreateHealthText(self)
+	UF:CreatePowerBar(self)
+	UF:CreateRaidMark(self)
 end
 
 local function CreateFocusTargetStyle(self)
@@ -120,7 +128,6 @@ end
 
 local function CreateBossStyle(self)
 	self.mystyle = "boss"
-	self.EnemyRange = UFRangeAlpha
 	SetUnitFrameSize(self, "Boss")
 
 	UF:CreateHeader(self)
@@ -130,11 +137,9 @@ local function CreateBossStyle(self)
 	UF:CreatePowerText(self)
 	UF:CreateCastBar(self)
 	UF:CreateRaidMark(self)
-	UF:CreateAltPower(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
 	UF:CreateClickSets(self)
-	UF:CreatePrivateAuras(self)
 end
 
 local function CreateArenaStyle(self)
@@ -150,7 +155,7 @@ local function CreateArenaStyle(self)
 	UF:CreateRaidMark(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
-	UF:CreatePVPClassify(self)
+--	UF:CreatePVPClassify(self)
 end
 
 local function CreateRaidStyle(self)
@@ -172,7 +177,6 @@ local function CreateRaidStyle(self)
 	if self.raidType ~= "simple" then
 		UF:CreateRaidAuras(self)
 	end
-	UF:CreatePrivateAuras(self)
 end
 
 local function CreateSimpleRaidStyle(self)
@@ -183,7 +187,6 @@ end
 local function CreatePartyStyle(self)
 	self.raidType = "party"
 	CreateRaidStyle(self)
-	UF:CreatePartyAltPower(self)
 end
 
 local function CreatePartyPetStyle(self)
@@ -382,10 +385,17 @@ function UF:OnLogin()
 		local focustarget = oUF:Spawn("focustarget", "oUF_FocusTarget")
 		B.Mover(focustarget, L["FotUF"], "FotUF", {"TOPLEFT", oUF_Focus, "TOPRIGHT", 5, 0})
 
+		if C.db["UFs"]["ToToT"] then
+			oUF:RegisterStyle("ToToT", CreateToToT)
+			oUF:SetActiveStyle("ToToT")
+			local targettargettarget = oUF:Spawn("targettargettarget", "oUF_ToToT")
+			B.Mover(targettargettarget, L["TototUF"], "TototUF", C.UFs.ToToTPos)
+		end
+
 		oUF:RegisterStyle("Boss", CreateBossStyle)
 		oUF:SetActiveStyle("Boss")
 		local boss = {}
-		for i = 1, 10 do -- MAX_BOSS_FRAMES, 10 in 11.0?
+		for i = 1, 5 do -- MAX_BOSS_FRAMES, 8 in 9.2?
 			boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
 			local moverWidth, moverHeight = boss[i]:GetWidth(), boss[i]:GetHeight()+8
 			local title = i > 5 and "Boss"..i or L["BossFrame"]..i
@@ -408,7 +418,6 @@ function UF:OnLogin()
 			end
 		end
 
-		UF:ToggleAddPower()
 		UF:ToggleSwingBars()
 		UF:ToggleUFClassPower()
 		UF:UpdateTextScale()
@@ -420,7 +429,7 @@ function UF:OnLogin()
 	end
 
 	if C.db["UFs"]["RaidFrame"] then
-		B:LockCVar("predictedHealth", "1")
+		SetCVar("predictedHealth", 1)
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
 		UF:UpdateRaidBuffsWhite()
@@ -428,9 +437,6 @@ function UF:OnLogin()
 		UF.headers = {}
 
 		-- Hide Default RaidFrame
-		if CompactPartyFrame then
-			CompactPartyFrame:UnregisterAllEvents()
-		end
 		if CompactRaidFrameManager_SetSetting then
 			CompactRaidFrameManager_SetSetting("IsShown", "0")
 			UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
@@ -588,8 +594,7 @@ function UF:OnLogin()
 
 			local groupByTypes = {
 				[1] = {"1,2,3,4,5,6,7,8", "GROUP", "INDEX"},
-				[2] = {"DEATHKNIGHT,WARRIOR,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,HUNTER,EVOKER,PRIEST,MAGE,WARLOCK", "CLASS", "NAME"},
-				[3] = {"TANK,HEALER,DAMAGER,NONE", "ASSIGNEDROLE", "NAME"},
+				[2] = {"DEATHKNIGHT,WARRIOR,ROGUE,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK", "CLASS", "NAME"},
 			}
 			function UF:UpdateSimpleModeHeader()
 				ResetHeaderPoints(group)
@@ -760,11 +765,17 @@ function UF:OnLogin()
 			UF:UpdateRaidTeamIndex()
 		end
 
+		UF:UpdateRaidHealthMethod()
+
 		if C.db["UFs"]["SpecRaidPos"] then
+			local changeSpells = {
+				[63644] = true, -- second spec
+				[63645] = true, -- main spec
+			}
 			local function UpdateSpecPos(event, ...)
 				local unit, _, spellID = ...
-				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "ON_LOGIN" then
-					local specIndex = GetSpecialization()
+				if (event == "UNIT_SPELLCAST_SUCCEEDED" and UnitIsUnit(unit, "player") and changeSpells[spellID]) or event == "ON_LOGIN" then
+					local specIndex = GetActiveTalentGroup()
 					if not specIndex then return end
 
 					if not C.db["Mover"]["RaidPos"..specIndex] then
@@ -785,11 +796,11 @@ function UF:OnLogin()
 				end
 			end
 			UpdateSpecPos("ON_LOGIN")
-			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos)
+			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos, "player")
 
 			if raidMover then
 				local function updateRaidMover()
-					local specIndex = GetSpecialization()
+					local specIndex = GetActiveTalentGroup()
 					if not specIndex then return end
 					C.db["Mover"]["RaidPos"..specIndex] = C.db["Mover"]["RaidFrame"]
 				end
@@ -798,7 +809,7 @@ function UF:OnLogin()
 			end
 			if partyMover then
 				local function updatePartyMover()
-					local specIndex = GetSpecialization()
+					local specIndex = GetActiveTalentGroup()
 					if not specIndex then return end
 					C.db["Mover"]["PartyPos"..specIndex] = C.db["Mover"]["PartyFrame"]
 				end

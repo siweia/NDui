@@ -26,9 +26,11 @@ local function reskinSellPanel(frame)
 	B.Reskin(frame.QuantityInput.MaxButton)
 	B.ReskinInput(frame.PriceInput.MoneyInputFrame.GoldBox)
 	B.ReskinInput(frame.PriceInput.MoneyInputFrame.SilverBox)
+	B.ReskinInput(frame.PriceInput.MoneyInputFrame.CopperBox)
 	if frame.SecondaryPriceInput then
 		B.ReskinInput(frame.SecondaryPriceInput.MoneyInputFrame.GoldBox)
 		B.ReskinInput(frame.SecondaryPriceInput.MoneyInputFrame.SilverBox)
+		B.ReskinInput(frame.SecondaryPriceInput.MoneyInputFrame.CopperBox)
 	end
 	B.ReskinDropDown(frame.Duration.Dropdown)
 	B.Reskin(frame.PostButton)
@@ -174,10 +176,6 @@ C.themes["Blizzard_AuctionHouseUI"] = function()
 	B.Reskin(itemBuyFrame.BuyoutFrame.BuyoutButton)
 	reskinItemDisplay(itemBuyFrame.ItemDisplay)
 	reskinItemList(itemBuyFrame.ItemList, true)
-	if BidAmountGold then
-		B.ReskinInput(BidAmountGold)
-		B.ReskinInput(BidAmountSilver)
-	end
 
 	local commBuyFrame = AuctionHouseFrame.CommoditiesBuyFrame
 	B.Reskin(commBuyFrame.BackButton)

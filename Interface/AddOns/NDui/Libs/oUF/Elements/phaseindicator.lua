@@ -7,27 +7,16 @@ Toggles the visibility of an indicator based on the unit's phasing relative to t
 
 PhaseIndicator - Any UI widget.
 
-## Sub-Widgets
-
-Icon - A `Texture` to represent the phased status.
-
 ## Notes
 
 A default texture will be applied if the widget is a Texture and doesn't have a texture or a color set.
-OnEnter and OnLeave script handlers will be set to display a Tooltip if the widget is mouse enabled and does not have
-OnEnter and/or OnLeave handlers.
 
 ## Examples
 
     -- Position and size
-    local PhaseIndicator = CreateFrame('Frame', nil, self)
+    local PhaseIndicator = self:CreateTexture(nil, 'OVERLAY')
     PhaseIndicator:SetSize(16, 16)
     PhaseIndicator:SetPoint('TOPLEFT', self)
-    PhaseIndicator:EnableMouse(true)
-
-    local Icon = PhaseIndicator:CreateTexture(nil, 'OVERLAY')
-    Icon:SetAllPoints()
-    PhaseIndicator.Icon = Icon
 
     -- Register it with oUF
     self.PhaseIndicator = PhaseIndicator
@@ -35,32 +24,6 @@ OnEnter and/or OnLeave handlers.
 
 local _, ns = ...
 local oUF = ns.oUF
-
---[[ Override: PhaseIndicator:UpdateTooltip()
-Used to populate the tooltip when the widget is hovered.
-
-* self - the PhaseIndicator widget
---]]
-local function UpdateTooltip(element)
-	local text = PartyUtil.GetPhasedReasonString(element.reason, element.__owner.unit)
-	if(text) then
-		GameTooltip:SetText(text, nil, nil, nil, nil, true)
-		GameTooltip:Show()
-	end
-end
-
-local function onEnter(element)
-	if(not element:IsVisible()) then return end
-
-	if(element.reason) then
-		GameTooltip:SetOwner(element, 'ANCHOR_BOTTOMRIGHT')
-		element:UpdateTooltip()
-	end
-end
-
-local function onLeave()
-	GameTooltip:Hide()
-end
 
 local function Update(self, event, unit)
 	if(self.unit ~= unit) then return end
@@ -76,28 +39,21 @@ local function Update(self, event, unit)
 		element:PreUpdate()
 	end
 
-	-- BUG: UnitPhaseReason returns wrong data for friendly NPCs in phased scenarios like WM or Chromie Time
-	-- https://github.com/Stanzilla/WoWUIBugs/issues/49
-	local phaseReason = UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitPhaseReason(unit) or nil
-	local worldtier = phaseReason == Enum.PhaseReason.TimerunningHwt -- phased in open world (hero / nonhero) but not phased in dungeons
-	local shouldShow = (worldtier and not IsInInstance()) or (not worldtier and reason)
-	if(shouldShow) then
+	local isInSamePhase = UnitInPhase(unit)
+	if(not isInSamePhase and UnitIsPlayer(unit) and UnitIsConnected(unit)) then
 		element:Show()
 	else
 		element:Hide()
 	end
 
-	element.reason = phaseReason
-
-	--[[ Callback: PhaseIndicator:PostUpdate(isInSamePhase, phaseReason)
+	--[[ Callback: PhaseIndicator:PostUpdate(isInSamePhase)
 	Called after the element has been updated.
 
 	* self          - the PhaseIndicator element
 	* isInSamePhase - indicates whether the unit is in the same phase as the player (boolean)
-	* phaseReason   - the reason why the unit is in a different phase (number?)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(not shouldShow, phaseReason)
+		return element:PostUpdate(isInSamePhase)
 	end
 end
 
@@ -124,21 +80,8 @@ local function Enable(self)
 
 		self:RegisterEvent('UNIT_PHASE', Path)
 
-		local icon = (element.Icon or element)
-		if(icon:IsObjectType('Texture') and not icon:GetTexture()) then
-			icon:SetTexture([[Interface\TargetingFrame\UI-PhasingIcon]])
-		end
-
-		if(element.IsMouseEnabled and element:IsMouseEnabled()) then
-			if(not element:GetScript('OnEnter')) then
-				element:SetScript('OnEnter', onEnter)
-			end
-
-			if(not element:GetScript('OnLeave')) then
-				element:SetScript('OnLeave', onLeave)
-			end
-
-			element.UpdateTooltip = element.UpdateTooltip or UpdateTooltip
+		if(element:IsObjectType('Texture') and not element:GetTexture()) then
+			element:SetTexture([[Interface\TargetingFrame\UI-PhasingIcon]])
 		end
 
 		return true

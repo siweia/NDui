@@ -5,14 +5,16 @@ if DB.Client ~= "zhCN" then return end
 local strsplit, pairs = string.split, pairs
 
 local hx = {
-	"移除对旧版本的兼容代码；",
-	"鼠标提示调整；",
-	"移除大厅职业图标功能；",
-	"部分模块预更新支持12.0；",
-	"背包过滤添加住宅装饰；",
-	"oUF更新；",
-	"声望追踪显示调整；",
-	"小地图针对房屋装修调整。",
+	"LAB及LCG更新；",
+	"移除LibShowUIPanel；",
+	"界面美化更新；",
+	"修正部分游戏自带的报错；",
+	"修正队长拾取的相关错误；",
+	"修正动作条678的按键绑定；",
+	"耐久度低于25%时，对话基维斯会自动交互；",
+	"部分窗口的移动控制调整；",
+	"移除部分失效的代码；",
+	"部分反馈的问题调整。",
 }
 
 local f
@@ -36,7 +38,7 @@ local function changelog()
 
 	local offset = 0
 	for n, t in pairs(hx) do
-		B.CreateFS(f, 14, n..". "..t, false, "TOPLEFT", 15, -(50 + offset))
+		B.CreateFS(f, 14, n..": "..t, false, "TOPLEFT", 15, -(50 + offset))
 		offset = offset + 24
 	end
 	f:SetSize(480, 60 + offset)

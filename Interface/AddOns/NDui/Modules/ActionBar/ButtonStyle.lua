@@ -68,14 +68,14 @@ function Bar:StyleActionButton(button)
 	local normal = button.NormalTexture
 	local normal2 = button:GetNormalTexture()
 	local slotbg = button.SlotBackground
-	local pushed = button.PushedTexture
-	local checked = button.CheckedTexture
-	local highlight = button.HighlightTexture
+	local pushed = button.PushedTexture or button:GetPushedTexture()
+	local checked = button.CheckedTexture or button:GetCheckedTexture()
+	local highlight = button.HighlightTexture or button:GetHighlightTexture()
 	local newActionTexture = button.NewActionTexture
 	local spellHighlight = button.SpellHighlightTexture
 	local iconMask = button.IconMask
 	local petShine = _G[buttonName.."Shine"]
-	local autoCastable = button.AutoCastable
+	local autoCastable = _G[buttonName.."AutoCastable"]
 
 	if normal then normal:SetAlpha(0) end
 	if normal2 then normal2:SetAlpha(0) end
@@ -140,19 +140,4 @@ function Bar:ReskinBars()
 	end
 	--leave vehicle
 	Bar:StyleActionButton(_G["NDui_LeaveVehicleButton"])
-	--extra action button
-	Bar:StyleActionButton(ExtraActionButton1)
-	--spell flyout
-	SpellFlyout.Background:SetAlpha(0)
-	local numFlyouts = 1
-	local function checkForFlyoutButtons()
-		local button = _G["SpellFlyoutPopupButton"..numFlyouts]
-		while button do
-			Bar:StyleActionButton(button)
-			numFlyouts = numFlyouts + 1
-			button = _G["SpellFlyoutPopupButton"..numFlyouts]
-		end
-	end
-	SpellFlyout:HookScript("OnShow", checkForFlyoutButtons)
-	SpellFlyout:HookScript("OnHide", checkForFlyoutButtons)
 end
