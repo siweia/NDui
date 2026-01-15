@@ -5,4 +5,4 @@
 ## Notes: Empty toc for Curseforge
 ## Version: 2.20.0
 ## X-Support: Anniversary
-## X-Website: https://github.com/siweia/NDui/tree/TBC
+## X-Website: https://github.com/siweia/NDui/tree/Anniversary
