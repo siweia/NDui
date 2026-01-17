@@ -500,6 +500,91 @@ function module:Minimap_OnMouseWheel(zoom)
 	end
 end
 
+function module:TrackMenu_OnClick(spellID)
+	CastSpellByID(spellID)
+end
+
+function module:TrackMenu_CheckStatus()
+	local texture = GetSpellTexture(self.arg1)
+	if texture == GetTrackingTexture() then
+		return true
+	end
+end
+
+function module:EasyTrackMenu()
+	local trackSpells = {
+		2383,	--Find Herbs
+		2580,	--Find Minerals
+		2481,	--Find Treasure
+		1494,	--Track Beasts
+		19883,	--Track Humanoids
+		19884,	--Track Undead
+		19885,	--Track Hidden
+		19880,	--Track Elementals
+		19878,	--Track Demons
+		19882,	--Track Giants
+		19879,	--Track Dragonkin
+		5225,	--Track Humanoids: Druid
+		5500,	--Sense Demons
+		5502,	--Sense Undead
+	}
+
+	local menuList = {
+		[1] = {text = L["TrackMenu"], isTitle = true, notCheckable = true},
+	}
+
+	local function updateMenuList()
+		for i = 2, #menuList do
+			if menuList[i] then wipe(menuList[i]) end
+		end
+
+		local index = 2
+		for _, spellID in pairs(trackSpells) do
+			if IsPlayerSpell(spellID) then
+				if not menuList[index] then menuList[index] = {} end
+				local spellName, _, texture = GetSpellInfo(spellID)
+				menuList[index].arg1 = spellID
+				menuList[index].text = spellName
+				menuList[index].func = module.TrackMenu_OnClick
+				menuList[index].checked = module.TrackMenu_CheckStatus
+				menuList[index].icon = texture
+				menuList[index].tCoordLeft = .08
+				menuList[index].tCoordRight = .92
+				menuList[index].tCoordTop = .08
+				menuList[index].tCoordBottom = .92
+
+				index = index + 1
+			end
+		end
+
+		return index
+	end
+
+	local function toggleTrackMenu(self)
+		if DropDownList1:IsShown() then
+			DropDownList1:Hide()
+		else
+			local index = updateMenuList()
+			if index > 2 then
+				local offset = self:GetWidth()*self:GetScale()*.5
+				EasyMenu(menuList, B.EasyMenu, self, -offset, offset, "MENU")
+			end
+		end
+	end
+
+	-- Click Func
+	local hasAlaCalendar = IsAddOnLoaded("alaCalendar")
+	Minimap:SetScript("OnMouseUp", function(self, btn)
+		if btn == "RightButton" then
+			toggleTrackMenu(self)
+		elseif btn == "MiddleButton" and hasAlaCalendar then
+			B:TogglePanel(ALA_CALENDAR)
+		else
+			Minimap_OnClick(self)
+		end
+	end)
+end
+
 function module:SetupMinimap()
 	if C.db["Map"]["DisableMinimap"] then return end
 
@@ -516,22 +601,11 @@ function module:SetupMinimap()
 	self:UpdateMinimapScale()
 	self:ShowMinimapClock()
 	self:ShowCalendar()
+	self:EasyTrackMenu()
 
 	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
 	Minimap:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
-
-	-- Click Func
-	local hasAlaCalendar = IsAddOnLoaded("alaCalendar")
-	Minimap:SetScript("OnMouseUp", function(self, btn)
-		if btn == "RightButton" then
-			toggleTrackMenu(self)
-		elseif btn == "MiddleButton" and hasAlaCalendar then
-			B:TogglePanel(ALA_CALENDAR)
-		else
-			Minimap_OnClick(self)
-		end
-	end)
 
 	-- Hide Blizz
 	local frames = {
