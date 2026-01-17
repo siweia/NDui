@@ -27,11 +27,21 @@ local function ResetButtonAnchor(button)
 	button:SetAllPoints()
 end
 
-function Bar:MicroButton_Create(parent, data)
+local function ShowNewHighlight(self)
+	self.newHL:Show()
+end
+
+local function HideNewHighlight(self)
+	self.newHL:Hide()
+end
+
+function Bar:MicroButton_Create(parent, data, exclude)
 	local texture, method, tooltip = unpack(data)
 
 	local bu = CreateFrame("Frame", nil, parent)
-	tinsert(buttonList, bu)
+	if not exclude then
+		tinsert(buttonList, bu)
+	end
 	bu:SetSize(22, 22)
 
 	local icon = bu:CreateTexture(nil, "ARTWORK")
@@ -54,9 +64,16 @@ function Bar:MicroButton_Create(parent, data)
 			B.AddTooltip(button, "ANCHOR_RIGHT", button.newbieText, "system")
 		end
 
-		local hl = button:GetHighlightTexture()
-		Bar:MicroButton_SetupTexture(hl, texture)
-		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
+		button:GetHighlightTexture():SetAlpha(0)
+		-- add a new highlight texture
+		local newHL = button:CreateTexture(nil, "ARTWORK")
+		newHL:SetBlendMode("ADD")
+		newHL:Hide()
+		Bar:MicroButton_SetupTexture(newHL, texture)
+		if not C.db["Skins"]["ClassLine"] then newHL:SetVertexColor(1, 1, 1) end
+		button.newHL = newHL
+		button:HookScript("OnEnter", ShowNewHighlight)
+		button:HookScript("OnLeave", HideNewHighlight)
 
 		local flash = button.Flash
 		Bar:MicroButton_SetupTexture(flash, texture)
@@ -118,7 +135,7 @@ function Bar:MicroMenu_Setup()
 		end
 	end
 
-	local maxButtons = 8 -- total buttons
+	local maxButtons = 9 -- total buttons
 	local column = min(maxButtons, perRow)
 	local rows = ceil(maxButtons/perRow)
 	local width = column*size + (column-1)*margin
@@ -140,12 +157,9 @@ function Bar:MicroMenu()
 		{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
 		{"spellbook", "SpellbookMicroButton", MicroButtonTooltipText(SPELLBOOK_ABILITIES_BUTTON, "TOGGLESPELLBOOK")},
 		{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
-		--{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
 		{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
 		{"guild", "SocialsMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
-		--{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
-		--{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
-		--{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
+		{"LFG", "WorldMapMicroButton", MicroButtonTooltipText(WORLDMAP_BUTTON, "TOGGLEWORLDMAP")},
 		{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
 		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
@@ -155,15 +169,18 @@ function Bar:MicroMenu()
 		Bar:MicroButton_Create(menubar, info)
 	end
 
+	Bar:MicroButton_Create(menubar, {"guild", "GuildMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")}, true)
+	GuildMicroButton:SetAllPoints(SocialsMicroButton)
+
 	-- Order Positions
 	Bar:MicroMenu_Setup()
 
 	-- Default elements
-	--B.HideObject(PVPMicroButtonTexture)
 	B.HideObject(MicroButtonPortrait)
 	B.HideOption(HelpMicroButton)
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)
+	B.HideObject(MainMenuMicroButton.PerformanceIndicator)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
 	MicroMenuContainer:KillEditMode()
 	MicroMenu.GetEdgeButton = B.Dummy

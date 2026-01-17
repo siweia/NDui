@@ -9,7 +9,7 @@ local guiTab, guiPage, f = {}, {}
 
 -- Default Settings
 G.DefaultSettings = {
-	Reset = false,
+	Reset2 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -100,7 +100,7 @@ G.DefaultSettings = {
 		BarStancePerRow = 10,
 		VehButtonSize = 34,
 		MBSize = 22,
-		MBPerRow = 12,
+		MBPerRow = 9,
 		MBSpacing = 5,
 	},
 	Bags = {
@@ -669,9 +669,9 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
 
-	if not C.db["Reset"] then
-		C.db["Actionbar"]["MBPerRow"] = 8
-		C.db["Reset"] = true
+	if not C.db["Reset2"] then
+		C.db["Actionbar"]["MBPerRow"] = 9
+		C.db["Reset2"] = true
 	end
 
 	B:SetupUIScale(true)
