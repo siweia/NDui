@@ -188,31 +188,24 @@ tinsert(C.defaultThemes, function()
 
 	local function UpdateFactionSkins()
 		for i = 1, GetNumFactions() do
-			local statusbar = _G["ReputationBar"..i.."ReputationBar"]
+			local statusbar = _G["ReputationBar"..i]
 			if statusbar then
+				B.StripTextures(statusbar)
 				statusbar:SetStatusBarTexture(DB.bdTex)
 
 				if not statusbar.reskinned then
 					B.CreateBDFrame(statusbar, .25)
 					statusbar.reskinned = true
 				end
-
-				_G["ReputationBar"..i.."Background"]:SetTexture(nil)
-				_G["ReputationBar"..i.."ReputationBarHighlight1"]:SetTexture(nil)
-				_G["ReputationBar"..i.."ReputationBarHighlight2"]:SetTexture(nil)
-				_G["ReputationBar"..i.."ReputationBarAtWarHighlight1"]:SetTexture(nil)
-				_G["ReputationBar"..i.."ReputationBarAtWarHighlight2"]:SetTexture(nil)
-				_G["ReputationBar"..i.."ReputationBarLeftTexture"]:SetTexture(nil)
-				_G["ReputationBar"..i.."ReputationBarRightTexture"]:SetTexture(nil)
 			end
 		end
 	end
 	ReputationFrame:HookScript("OnShow", UpdateFactionSkins)
 	ReputationFrame:HookScript("OnEvent", UpdateFactionSkins)
 
-	--for i = 1, NUM_FACTIONS_DISPLAYED do
-	--	B.ReskinCollapse(_G["ReputationBar"..i.."ExpandOrCollapseButton"])
-	--end
+	for i = 1, NUM_FACTIONS_DISPLAYED do
+		B.ReskinCollapse(_G["ReputationHeader"..i])
+	end
 
 	B.StripTextures(ReputationFrame)
 	B.StripTextures(ReputationDetailFrame)
