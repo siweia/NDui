@@ -55,7 +55,7 @@ function Bar:MicroButton_Create(parent, data, exclude)
 		hooksecurefunc(button, "SetParent", ResetButtonParent)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
-		button:UnregisterAllEvents()
+		--button:UnregisterAllEvents() -- needs to update guild button visibility
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
