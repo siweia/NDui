@@ -447,8 +447,8 @@ local function Disable(self)
 		element:SetScript('OnUpdate', nil)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
-			PetCastingBarFrame_OnLoad(PetCastingBarFrame)
+			PlayerCastingBarFrame:OnLoad()
+			PetCastingBarFrame:OnLoad()
 		end
 	end
 end
