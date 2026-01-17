@@ -27,11 +27,13 @@ local function ResetButtonAnchor(button)
 	button:SetAllPoints()
 end
 
-function Bar:MicroButton_Create(parent, data)
+function Bar:MicroButton_Create(parent, data, exclude)
 	local texture, method, tooltip = unpack(data)
 
 	local bu = CreateFrame("Frame", nil, parent)
-	tinsert(buttonList, bu)
+	if not exclude then
+		tinsert(buttonList, bu)
+	end
 	bu:SetSize(22, 22)
 
 	local icon = bu:CreateTexture(nil, "ARTWORK")
@@ -45,7 +47,7 @@ function Bar:MicroButton_Create(parent, data)
 		hooksecurefunc(button, "SetParent", ResetButtonParent)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
-		button:UnregisterAllEvents()
+		--button:UnregisterAllEvents() -- needs to update guild button visibility
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
@@ -153,6 +155,9 @@ function Bar:MicroMenu()
 	for _, info in pairs(buttonInfo) do
 		Bar:MicroButton_Create(menubar, info)
 	end
+
+	Bar:MicroButton_Create(menubar, {"guild", "GuildMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")}, true)
+	GuildMicroButton:SetAllPoints(SocialsMicroButton)
 
 	-- Order Positions
 	Bar:MicroMenu_Setup()
