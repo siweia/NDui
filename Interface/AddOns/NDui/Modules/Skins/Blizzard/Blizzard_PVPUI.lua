@@ -4,9 +4,15 @@ local B, C, L, DB = unpack(ns)
 local function ReskinPvPFrame(frame)
 	frame:DisableDrawLayer("BACKGROUND")
 	frame:DisableDrawLayer("BORDER")
-	B.ReskinRole(frame.TankIcon, "TANK")
-	B.ReskinRole(frame.HealerIcon, "HEALER")
-	B.ReskinRole(frame.DPSIcon, "DPS")
+	if DB.isNewPatch then
+		B.ReskinRole(frame.RoleList.TankIcon, "TANK")
+		B.ReskinRole(frame.RoleList.HealerIcon, "HEALER")
+		B.ReskinRole(frame.RoleList.DPSIcon, "DPS")
+	else
+		B.ReskinRole(frame.TankIcon, "TANK")
+		B.ReskinRole(frame.HealerIcon, "HEALER")
+		B.ReskinRole(frame.DPSIcon, "DPS")
+	end
 
 	local bar = frame.ConquestBar
 	B.StripTextures(bar)
@@ -45,6 +51,7 @@ C.themes["Blizzard_PVPUI"] = function()
 			local cu = bu.CurrencyDisplay
 	
 			bu.Ring:Hide()
+			if bu.CircleMask then bu.CircleMask:Hide() end
 			B.Reskin(bu, true)
 			bu.Background:SetInside(bu.__bg)
 			bu.Background:SetColorTexture(r, g, b, .25)
@@ -239,6 +246,34 @@ C.themes["Blizzard_PVPUI"] = function()
 			B.SetBD(popup)
 			B.Reskin(popup.AcceptButton)
 			B.Reskin(popup.DeclineButton)
+		end
+	end
+
+	-- TrainingGroundsFrame, isNewPatch
+	if TrainingGroundsFrame then
+		ReskinPvPFrame(TrainingGroundsFrame)
+		B.ReskinDropDown(TrainingGroundsFrameTypeDropdown)
+		B.Reskin(TrainingGroundsFrame.QueueButton)
+		B.StripTextures(TrainingGroundsFrame.Inset)
+		B.StripTextures(TrainingGroundsFrame.BonusTrainingGroundList)
+		TrainingGroundsFrame.BonusTrainingGroundList.ShadowOverlay:Hide()
+
+		local names = {"RandomTrainingGroundButton"}
+		for _, name in pairs(names) do
+			local bu = TrainingGroundsFrame.BonusTrainingGroundList[name]
+			if bu then
+				B.Reskin(bu, true)
+				local reward = bu.Reward
+				if reward then
+					reward.Border:Hide()
+					reward.CircleMask:Hide()
+					reward.Icon.bg = B.ReskinIcon(reward.Icon)
+				end
+
+				bu.SelectedTexture:SetDrawLayer("BACKGROUND")
+				bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+				bu.SelectedTexture:SetInside(bu.__bg)
+			end
 		end
 	end
 end

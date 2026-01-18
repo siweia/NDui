@@ -44,6 +44,7 @@ function UF:UpdatePlateCVars()
 end
 
 function UF:UpdateClickableSize()
+	if DB.isNewPatch then return end -- removed? needs review
 	if InCombatLockdown() then return end
 
 	local uiScale = NDuiADB["UIScale"]
@@ -55,6 +56,7 @@ function UF:UpdateClickableSize()
 end
 
 function UF:UpdatePlateClickThru()
+	if DB.isNewPatch then return end -- removed? needs review
 	if InCombatLockdown() then return end
 
 	C_NamePlate_SetNamePlateEnemyClickThrough(C.db["Nameplate"]["EnemyThru"])

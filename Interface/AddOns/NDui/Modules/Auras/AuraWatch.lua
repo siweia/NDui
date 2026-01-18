@@ -719,6 +719,7 @@ end
 function A.AuraWatch_OnEvent(event, ...)
 	if not C.db["AuraWatch"]["Enable"] then
 		B:UnregisterEvent("UNIT_AURA", A.AuraWatch_OnEvent)
+		B:UnregisterEvent("PLAYER_TARGET_CHANGED", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 		B:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)
@@ -729,8 +730,7 @@ function A.AuraWatch_OnEvent(event, ...)
 		InitSetup()
 		if not IntCD.MoveHandle then A:AuraWatch_SetupInt(2825, nil, 0, "player") end
 		B:UnregisterEvent(event, A.AuraWatch_OnEvent)
-	elseif event == "UNIT_AURA" then
-		if not UnitIDTable[...] then return end
+	elseif (event == "UNIT_AURA" and UnitIDTable[...]) or (event == "PLAYER_TARGET_CHANGED" and UnitIDTable["target"]) then
 		A:AuraWatch_PreCleanup()
 		A:AuraWatch_UpdateCD()
 		local inCombat = InCombatLockdown()
@@ -744,6 +744,7 @@ function A.AuraWatch_OnEvent(event, ...)
 	end
 end
 B:RegisterEvent("UNIT_AURA", A.AuraWatch_OnEvent)
+B:RegisterEvent("PLAYER_TARGET_CHANGED", A.AuraWatch_OnEvent)
 B:RegisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
 B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)

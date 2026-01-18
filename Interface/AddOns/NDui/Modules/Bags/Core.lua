@@ -890,19 +890,20 @@ function module:OnLogin()
 			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
 		end
 		AddNewContainer("Bag", 6, "BagReagent", filters.onlyBagReagent)
-		AddNewContainer("Bag", 19, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 20, "Junk", filters.bagsJunk)
 		AddNewContainer("Bag", 9, "EquipSet", filters.bagEquipSet)
 		AddNewContainer("Bag", 10, "BagAOE", filters.bagAOE)
 		AddNewContainer("Bag", 7, "AzeriteItem", filters.bagAzeriteItem)
-		AddNewContainer("Bag", 17, "BagLegacy", filters.bagLegacy)
-		AddNewContainer("Bag", 18, "BagLower", filters.bagLower)
+		AddNewContainer("Bag", 18, "BagLegacy", filters.bagLegacy)
+		AddNewContainer("Bag", 19, "BagLower", filters.bagLower)
 		AddNewContainer("Bag", 8, "Equipment", filters.bagEquipment)
 		AddNewContainer("Bag", 11, "BagCollection", filters.bagCollection)
-		AddNewContainer("Bag", 14, "BagStone", filters.bagStone)
-		AddNewContainer("Bag", 15, "Consumable", filters.bagConsumable)
-		AddNewContainer("Bag", 12, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 16, "BagQuest", filters.bagQuest)
-		AddNewContainer("Bag", 13, "BagAnima", filters.bagAnima)
+		AddNewContainer("Bag", 15, "BagStone", filters.bagStone)
+		AddNewContainer("Bag", 16, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 13, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 17, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 14, "BagAnima", filters.bagAnima)
+		AddNewContainer("Bag", 12, "BagDecor", filters.bagDecor)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
@@ -916,14 +917,15 @@ function module:OnLogin()
 		AddNewContainer("Bank", 9, "BankAOE", filters.bankAOE)
 		AddNewContainer("Bank", 6, "BankAzeriteItem", filters.bankAzeriteItem)
 		AddNewContainer("Bank", 10, "BankLegendary", filters.bankLegendary)
-		AddNewContainer("Bank", 16, "BankLegacy", filters.bankLegacy)
-		AddNewContainer("Bank", 17, "BankLower", filters.bankLower)
+		AddNewContainer("Bank", 17, "BankLegacy", filters.bankLegacy)
+		AddNewContainer("Bank", 18, "BankLower", filters.bankLower)
 		AddNewContainer("Bank", 7, "BankEquipment", filters.bankEquipment)
 		AddNewContainer("Bank", 11, "BankCollection", filters.bankCollection)
-		AddNewContainer("Bank", 14, "BankConsumable", filters.bankConsumable)
-		AddNewContainer("Bank", 12, "BankGoods", filters.bankGoods)
-		AddNewContainer("Bank", 15, "BankQuest", filters.bankQuest)
-		AddNewContainer("Bank", 13, "BankAnima", filters.bankAnima)
+		AddNewContainer("Bank", 15, "BankConsumable", filters.bankConsumable)
+		AddNewContainer("Bank", 13, "BankGoods", filters.bankGoods)
+		AddNewContainer("Bank", 16, "BankQuest", filters.bankQuest)
+		AddNewContainer("Bank", 14, "BankAnima", filters.bankAnima)
+		AddNewContainer("Bank", 12, "BankDecor", filters.bankDecor)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
@@ -1280,6 +1282,8 @@ function module:OnLogin()
 			label = L["LowerItem"]
 		elseif strmatch(name, "Legacy") then
 			label = L["LegacyItem"]
+		elseif strmatch(name, "Decor") then
+			label = AUCTION_CATEGORY_HOUSING
 		end
 		if label then
 			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)

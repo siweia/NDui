@@ -131,6 +131,10 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	ReskinLayoutDialog(EditModeNewLayoutDialog)
+	if DB.isNewPatch then
+		ReskinLayoutDialog(EditModeLayoutDialog)
+	else
+		ReskinLayoutDialog(EditModeNewLayoutDialog)
+	end
 	ReskinLayoutDialog(EditModeImportLayoutDialog)
 end)

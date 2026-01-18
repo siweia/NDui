@@ -564,6 +564,7 @@ L["FilterAnima"] = "Filtrer les objets d'anima"
 L["FilterStone"] = "Filtrer les pierres primordiales"
 L["FilterAOE"] = "Filter Warband BOE" -- need translation
 L["FilterLegacy"] = "Filter legacy items" -- need translation
+L["FilterDecor"] = "Filter Housing items" -- need translation
 L["Max Rank"] = "Rang max"
 L["SmoothAmount"] = "Fluidité de la fréquence"
 L["SmoothAmountTip"] = "|nConfigurer la fréquence de la barre de santé pour les cadres d'unité et les barres de nom.|nPlus le niveau est faible plus c'est fluide."

@@ -60,7 +60,11 @@ function M:ExpBar_Update()
 		local barMax = factionData.nextReactionThreshold
 		local value = factionData.currentStanding
 		local factionID = factionData.factionID
-		if factionID and C_Reputation_IsMajorFaction(factionID) then
+		if C_Reputation_IsFactionParagon(factionID) then
+			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+			currentValue = mod(currentValue, threshold)
+			barMin, barMax, value = 0, threshold, currentValue
+		elseif factionID and C_Reputation_IsMajorFaction(factionID) then
 			local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
 			local isMaxRenown = C_MajorFactions.HasMaximumRenown(factionID)
 			if isMaxRenown then
@@ -72,11 +76,7 @@ function M:ExpBar_Update()
 		else
 			local repInfo = C_GossipInfo_GetFriendshipReputation(factionID)
 			local friendID, friendRep, friendThreshold, nextFriendThreshold = repInfo.friendshipFactionID, repInfo.standing, repInfo.reactionThreshold, repInfo.nextThreshold
-			if C_Reputation_IsFactionParagon(factionID) then
-				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-				currentValue = mod(currentValue, threshold)
-				barMin, barMax, value = 0, threshold, currentValue
-			elseif friendID and friendID ~= 0 then
+			if friendID and friendID ~= 0 then
 				if nextFriendThreshold then
 					barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
 				else
@@ -92,6 +92,17 @@ function M:ExpBar_Update()
 		self:SetMinMaxValues(barMin, barMax)
 		self:SetValue(value)
 		self:Show()
+	elseif C_Housing and C_Housing.GetTrackedHouseGuid() then
+		local current, minBar, maxBar, level = 0, 0, 1, 1
+		if M.houseLevelFavor then
+			current = M.houseLevelFavor.houseFavor
+			level = M.houseLevelFavor.houseLevel
+			minBar = C_Housing.GetHouseLevelFavorForLevel(level)
+			maxBar = C_Housing.GetHouseLevelFavorForLevel(level + 1)
+			self:SetStatusBarColor(1, .8, 0)
+			self:SetBarValues(current, minBar, maxBar, level)
+			self:Show()
+		end
 	elseif IsWatchingHonorAsXP() then
 		local current, barMax = UnitHonor("player"), UnitHonorMax("player")
 		self:SetStatusBarColor(1, .24, 0)
@@ -214,6 +225,20 @@ function M:ExpBar_UpdateTooltip()
 		end
 	end
 
+	if C_Housing.GetTrackedHouseGuid() then
+		local current, maxBar, level = 0, 1, 1
+		if M.houseLevelFavor then
+			current = M.houseLevelFavor.houseFavor
+			level = M.houseLevelFavor.houseLevel
+			maxBar = C_Housing.GetHouseLevelFavorForLevel(level + 1)
+		end
+		if maxBar ~= 0 then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine(HOUSING_DASHBOARD_HOUSEINFO_TOOLTIP, 0,.6,1)
+			GameTooltip:AddDoubleLine(LEVEL.." "..level, current.." / "..maxBar, .6,.8,1, 1,1,1)
+		end
+	end
+
 	if IsWatchingHonorAsXP() then
 		local current, barMax, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
 		GameTooltip:AddLine(" ")
@@ -284,6 +309,21 @@ function M:SetupScript(bar)
 	hooksecurefunc(StatusTrackingBarManager, "UpdateBarsShown", function()
 		M.ExpBar_Update(bar)
 	end)
+
+	-- Housing, fixme: unable to toggle on without reload
+	M.houseLevelFavor = nil
+	B:RegisterEvent("TRACKED_HOUSE_CHANGED", function()
+		M.ExpBar_Update(bar)
+	end)
+	B:RegisterEvent("HOUSE_LEVEL_FAVOR_UPDATED", function(_, houseLevelFavor)
+		if houseLevelFavor.houseGUID == C_Housing.GetTrackedHouseGuid() then
+			M.houseLevelFavor = houseLevelFavor
+			M.ExpBar_Update(bar)
+		end
+	end)
+	if C_Housing.GetTrackedHouseGuid() then
+		C_Housing.GetCurrentHouseLevelFavor(C_Housing.GetTrackedHouseGuid())
+	end
 end
 
 function M:Expbar()

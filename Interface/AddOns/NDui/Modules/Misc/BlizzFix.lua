@@ -47,7 +47,9 @@ do
 		end
 	end
 
-	B:RegisterEvent("ADDON_LOADED", setupMisc)
+	if not DB.isNewPatch then
+		B:RegisterEvent("ADDON_LOADED", setupMisc)
+	end
 end
 
 -- Select target when click on raid units

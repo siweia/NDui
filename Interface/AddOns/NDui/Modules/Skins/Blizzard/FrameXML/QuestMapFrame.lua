@@ -55,13 +55,6 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(QuestScrollFrame.BorderFrame)
 	B.StripTextures(QuestMapFrame.DetailsFrame.BackFrame)
 
-	local campaignOverview = QuestMapFrame.CampaignOverview
-	if campaignOverview then -- isNewPath, removed?
-		campaignOverview.BG:SetAlpha(0)
-		ReskinQuestHeader(campaignOverview.Header)
-		B.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
-	end
-
 	QuestScrollFrame.Edge:Hide()
 	B.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
 	B.ReskinEditBox(QuestScrollFrame.SearchBox)

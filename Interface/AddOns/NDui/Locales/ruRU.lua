@@ -564,6 +564,7 @@ L["FilterAnima"] = "Фильтр анима вещей"
 L["FilterStone"] = "Фильтр изначальные камни"
 L["FilterAOE"] = "Фильтр вещей отряда"
 L["FilterLegacy"] = "Filter legacy items" -- need translation
+L["FilterDecor"] = "Filter Housing items" -- need translation
 L["Max Rank"] = "Макс.ранг"
 L["SmoothAmount"] = "Частота плавности"
 L["SmoothAmountTip"] = "|nНастраивает частоту плавности для полос здоровья.|nЧем меньше, тем плавнее."

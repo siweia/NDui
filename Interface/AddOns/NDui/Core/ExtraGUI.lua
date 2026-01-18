@@ -1500,19 +1500,20 @@ function G:SetupBagFilter(parent)
 	local filterOptions = {
 		[1] = "FilterJunk",
 		[2] = "FilterConsumable",
-		[3] = "FilterAzerite",
-		[4] = "FilterEquipment",
-		[5] = "FilterEquipSet",
-		[6] = "FilterLegendary",
-		[7] = "FilterCollection",
-		[8] = "FilterFavourite",
-		[9] = "FilterGoods",
-		[10] = "FilterQuest",
-		[11] = "FilterAnima",
-		[12] = "FilterStone",
-		[13] = "FilterAOE",
-		[14] = "FilterLower",
-		[15] = "FilterLegacy",
+		[3] = "FilterEquipment",
+		[4] = "FilterEquipSet",
+		[5] = "FilterLegendary",
+		[6] = "FilterCollection",
+		[7] = "FilterFavourite",
+		[8] = "FilterGoods",
+		[9] = "FilterQuest",
+		[10] = "FilterAOE",
+		[11] = "FilterLower",
+		[12] = "FilterLegacy",
+		[13] = "FilterDecor",
+		[14] = "FilterAzerite",
+		[15] = "FilterAnima",
+		[16] = "FilterStone",
 	}
 
 	local BAG = B:GetModule("Bags")
@@ -1522,7 +1523,7 @@ function G:SetupBagFilter(parent)
 
 	local offset = 10
 	for _, value in ipairs(filterOptions) do
-		createOptionCheck(scroll, -offset, L[value], "Bags", value, updateAllBags)
+		createOptionCheck(scroll.child, -offset, L[value], "Bags", value, updateAllBags)
 		offset = offset + 35
 	end
 end
@@ -1787,7 +1788,7 @@ function G:SetupMicroMenu(parent)
 	local parent, offset = scroll.child, -10
 	createOptionTitle(parent, L["Menubar"], offset)
 	createOptionSlider(parent, L["ButtonSize"], 20, 40, 22, offset-60, "MBSize", Bar.MicroMenu_Setup, "Actionbar")
-	createOptionSlider(parent, L["ButtonsPerRow"], 1, 12, 12, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
+	createOptionSlider(parent, L["ButtonsPerRow"], 1, 13, 12, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
 	createOptionSlider(parent, L["Spacing"], -10, 10, 5, offset-200, "MBSpacing", Bar.MicroMenu_Setup, "Actionbar")
 end
 

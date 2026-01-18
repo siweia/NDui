@@ -65,9 +65,9 @@ C.themes["Blizzard_Collections"] = function()
 	MountJournal.MountDisplay.NoMountsTex:SetAlpha(0)
 	MountJournal.MountDisplay.ShadowOverlay:Hide()
 	PetJournal.LeftInset:Hide()
-	PetJournal.RightInset:Hide()
+	PetJournal.RightInset:SetAlpha(0)
 	PetJournal.PetCardInset:Hide()
-	PetJournal.loadoutBorder:Hide()
+	PetJournal.loadoutBorder:SetAlpha(0)
 	PetJournalTutorialButton.Ring:Hide()
 
 	B.StripTextures(MountJournal.MountCount)
@@ -559,48 +559,50 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end)
 
-	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
-	B.StripTextures(SetsTransmogFrame)
-	B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
-	B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
+	if not DB.isNewPatch then
+		local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
+		B.StripTextures(SetsTransmogFrame)
+		B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
+		B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
 
-	-- [[ Wardrobe ]]
+		-- [[ Wardrobe ]]
 
-	local WardrobeFrame = WardrobeFrame
-	local WardrobeTransmogFrame = WardrobeTransmogFrame
+		local WardrobeFrame = WardrobeFrame
+		local WardrobeTransmogFrame = WardrobeTransmogFrame
 
-	B.StripTextures(WardrobeTransmogFrame)
-	B.ReskinPortraitFrame(WardrobeFrame)
-	B.Reskin(WardrobeTransmogFrame.ApplyButton)
+		B.StripTextures(WardrobeTransmogFrame)
+		B.ReskinPortraitFrame(WardrobeFrame)
+		B.Reskin(WardrobeTransmogFrame.ApplyButton)
 
-	local specButton = WardrobeTransmogFrame.SpecDropdown
-	if specButton then
-		B.StripTextures(specButton, 0)
-		B.ReskinArrow(specButton, "down")
-		specButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
-	end
-	B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
-	B.ReskinModelControl(WardrobeTransmogFrame.ModelScene)
-
-	local modelScene = WardrobeTransmogFrame.ModelScene
-	modelScene.ClearAllPendingButton:DisableDrawLayer("BACKGROUND")
-
-	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand"}
-	for i = 1, #slots do
-		local slot = modelScene[slots[i].."Button"]
-		if slot then
-			slot.Border:Hide()
-			B.ReskinIcon(slot.Icon)
-			slot:SetHighlightTexture(DB.bdTex)
-			local hl = slot:GetHighlightTexture()
-			hl:SetVertexColor(1, 1, 1, .25)
-			hl:SetAllPoints(slot.Icon)
+		local specButton = WardrobeTransmogFrame.SpecDropdown
+		if specButton then
+			B.StripTextures(specButton, 0)
+			B.ReskinArrow(specButton, "down")
+			specButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
 		end
-	end
+		B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+		B.ReskinModelControl(WardrobeTransmogFrame.ModelScene)
 
-	-- Outfit Frame
-	B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
-	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
+		local modelScene = WardrobeTransmogFrame.ModelScene
+		modelScene.ClearAllPendingButton:DisableDrawLayer("BACKGROUND")
+
+		local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand"}
+		for i = 1, #slots do
+			local slot = modelScene[slots[i].."Button"]
+			if slot then
+				slot.Border:Hide()
+				B.ReskinIcon(slot.Icon)
+				slot:SetHighlightTexture(DB.bdTex)
+				local hl = slot:GetHighlightTexture()
+				hl:SetVertexColor(1, 1, 1, .25)
+				hl:SetAllPoints(slot.Icon)
+			end
+		end
+
+		-- Outfit Frame
+		B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
+		B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
+	end
 
 	-- HPetBattleAny
 	local reskinHPet
