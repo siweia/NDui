@@ -658,7 +658,7 @@ do
 		local name = overrideName or generateName(nil, ...)
 		local header = Mixin(CreateFrame('Frame', name, PetBattleFrameHider, template), headerMixin)
 
-		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate, PingableUnitFrameTemplate')
+		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate, PingableUnitFrameTemplate, SecureHandlerShowHideTemplate, SecureHandlerMouseUpDownTemplate') -- NDui mod
 
 		if(...) then
 			if(type(...) == 'table') then
@@ -738,7 +738,7 @@ PingableUnitFrameTemplate is inherited for Ping support.
 
 * oUF-enableArenaPrep - can be used to toggle arena prep support. Defaults to true (boolean)
 --]]
-function oUF:Spawn(unit, overrideName)
+function oUF:Spawn(unit, overrideName, noHandle)
 	argcheck(unit, 2, 'string')
 	if(not style) then return nierror('Unable to create frame. No styles have been registered.') end
 
@@ -748,7 +748,7 @@ function oUF:Spawn(unit, overrideName)
 	local object = CreateFrame('Button', name, PetBattleFrameHider, 'SecureUnitButtonTemplate, PingableUnitFrameTemplate')
 	Private.UpdateUnits(object, unit)
 
-	self:DisableBlizzard(unit)
+	if not noHandle then self:DisableBlizzard(unit) end
 	walkObject(object, unit)
 
 	object:SetAttribute('unit', unit)
