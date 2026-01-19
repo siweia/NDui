@@ -23,16 +23,21 @@ At least one of the above widgets must be present for the element to work.
 .onlyShowPlayer           - Shows only auras created by player/vehicle (boolean)
 .showStealableBuffs       - Displays the stealable texture on buffs that can be stolen (boolean)
 .spacing                  - Spacing between each button. Defaults to 0 (number)
-.['spacing-x']            - Horizontal spacing between each button. Takes priority over `spacing` (number)
-.['spacing-y']            - Vertical spacing between each button. Takes priority over `spacing` (number)
-.['growth-x']             - Horizontal growth direction. Defaults to 'RIGHT' (string)
-.['growth-y']             - Vertical growth direction. Defaults to 'UP' (string)
+.spacingX                 - Horizontal spacing between each button. Takes priority over `spacing` (number)
+.spacingY                 - Vertical spacing between each button. Takes priority over `spacing` (number)
+.growthX                  - Horizontal growth direction. Defaults to 'RIGHT' (string)
+.growthY                  - Vertical growth direction. Defaults to 'UP' (string)
 .initialAnchor            - Anchor point for the aura buttons. Defaults to 'BOTTOMLEFT' (string)
 .filter                   - Custom filter list for auras to display. Defaults to 'HELPFUL' for buffs and 'HARMFUL' for
                             debuffs (string)
 .tooltipAnchor            - Anchor point for the tooltip. Defaults to 'ANCHOR_BOTTOMRIGHT', however, if a frame has
                             anchoring restrictions it will be set to 'ANCHOR_CURSOR' (string)
 .reanchorIfVisibleChanged - Reanchors aura buttons when the number of visible auras has changed (boolean)
+.showType                 - Show Overlay texture colored by oUF.colors.dispel (boolean)
+.showDebuffType           - Show Overlay texture colored by oUF.colors.dispel when it's a debuff. Exclusive with .showType (boolean)
+.showBuffType             - Show Overlay texture colored by oUF.colors.dispel when it's a buff. Exclusive with .showType (boolean)
+.minCount                 - Minimum number of aura applications for the Count text to be visible. Defaults to 2 (number)
+.maxCount                 - Maximum number of aura applications for the Count text, anything above renders "*". Defaults to 999 (number)
 
 ## Options Auras
 
@@ -54,10 +59,12 @@ At least one of the above widgets must be present for the element to work.
 
 ## Attributes
 
-button.caster         - the unit who cast the aura (string)
-button.filter         - the filter list used to determine the visibility of the aura (string)
-button.isHarmful      - indicates if the button holds a debuff (boolean)
+.dispelColorCurve - Curve object with points defined for each index in oUF.colors.dispel
+
+## Button Attributes
+
 button.auraInstanceID - unique ID for the current aura being tracked by the button (number)
+button.isHarmfulAura  - indicates if the button holds a debuff (boolean)
 
 ## Examples
 
@@ -76,11 +83,7 @@ local oUF = ns.oUF
 local function UpdateTooltip(self)
 	if(GameTooltip:IsForbidden()) then return end
 
-	if(self.isHarmful) then
-		GameTooltip:SetUnitDebuffByAuraInstanceID(self:GetParent().__owner.unit, self.auraInstanceID)
-	else
-		GameTooltip:SetUnitBuffByAuraInstanceID(self:GetParent().__owner.unit, self.auraInstanceID)
-	end
+	GameTooltip:SetUnitAuraByAuraInstanceID(self:GetParent().__owner.unit, self.auraInstanceID)
 end
 
 local function onEnter(self)
@@ -149,12 +152,12 @@ end
 local function SetPosition(element, from, to)
 	local width = element.width or element.size or 16
 	local height = element.height or element.size or 16
-	local sizex = width + (element['spacing-x'] or element.spacing or 0)
-	local sizey = height + (element['spacing-y'] or element.spacing or 0)
+	local sizeX = width + (element.spacingX or element.spacing or 0)
+	local sizeY = height + (element.spacingY or element.spacing or 0)
 	local anchor = element.initialAnchor or 'BOTTOMLEFT'
-	local growthx = (element['growth-x'] == 'LEFT' and -1) or 1
-	local growthy = (element['growth-y'] == 'DOWN' and -1) or 1
-	local cols = math.floor(element:GetWidth() / sizex + 0.5)
+	local growthX = (element.growthX == 'LEFT' and -1) or 1
+	local growthY = (element.growthY == 'DOWN' and -1) or 1
+	local cols = math.floor(element:GetWidth() / sizeX + 0.5)
 
 	for i = from, to do
 		local button = element[i]
@@ -164,12 +167,12 @@ local function SetPosition(element, from, to)
 		local row = math.floor((i - 1) / cols)
 
 		button:ClearAllPoints()
-		button:SetPoint(anchor, element, anchor, col * sizex * growthx, row * sizey * growthy)
+		button:SetPoint(anchor, element, anchor, col * sizeX * growthX, row * sizeY * growthY)
 	end
 end
 
 local function updateAura(element, unit, data, position)
-	if(not data.name) then return end
+	if(not data) then return end
 
 	local button = element[position]
 	if(not button) then
@@ -189,14 +192,13 @@ local function updateAura(element, unit, data, position)
 		element.createdButtons = element.createdButtons + 1
 	end
 
-	button.spellID = data.spellId -- NDui: need this for aura ignore list
 	-- for tooltips
 	button.auraInstanceID = data.auraInstanceID
-	button.isHarmful = data.isHarmful
 
 	if(button.Cooldown and not element.disableCooldown) then
-		if(data.duration > 0) then
-			button.Cooldown:SetCooldown(data.expirationTime - data.duration, data.duration, data.timeMod)
+		local duration = C_UnitAuras.GetAuraDuration(unit, data.auraInstanceID)
+		if duration then
+			button.Cooldown:SetCooldownFromDurationObject(duration)
 			button.Cooldown:Show()
 		else
 			button.Cooldown:Hide()
@@ -204,10 +206,9 @@ local function updateAura(element, unit, data, position)
 	end
 
 	if(button.Overlay) then
-		if((data.isHarmful and element.showDebuffType) or (not data.isHarmful and element.showBuffType) or element.showType) then
-			local color = element.__owner.colors.debuff[data.dispelName] or element.__owner.colors.debuff.none
-
-			button.Overlay:SetVertexColor(color[1], color[2], color[3])
+		if(element.showType or (data.isHarmfulAura and element.showDebuffType) or (not data.isHarmfulAura and element.showBuffType)) then
+			local color = C_UnitAuras.GetAuraDispelTypeColor(unit, data.auraInstanceID, element.dispelColorCurve)
+			button.Overlay:SetVertexColor(color:GetRGBA())
 			button.Overlay:Show()
 		else
 			button.Overlay:Hide()
@@ -215,15 +216,17 @@ local function updateAura(element, unit, data, position)
 	end
 
 	if(button.Stealable) then
-		if(not data.isHarmful and data.isStealable and element.showStealableBuffs and not UnitIsUnit('player', unit)) then
-			button.Stealable:Show()
+		if(element.showStealableBuffs and not UnitCanCooperate('player', unit)) then
+			button.Stealable:SetAlphaFromBoolean(data.isStealable, 1, 0)
 		else
-			button.Stealable:Hide()
+			button.Stealable:SetAlpha(0)
 		end
 	end
 
 	if(button.Icon) then button.Icon:SetTexture(data.icon) end
-	if(button.Count) then button.Count:SetText(data.applications > 1 and data.applications or '') end
+	if(button.Count) then
+		button.Count:SetText(C_UnitAuras.GetAuraApplicationDisplayCount(unit, data.auraInstanceID, element.minCount or 2, element.maxCount or 999))
+	end
 
 	local width = element.width or element.size or 16
 	local height = element.height or element.size or 16
@@ -246,7 +249,7 @@ local function updateAura(element, unit, data, position)
 end
 
 local function FilterAura(element, unit, data)
-	if((element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and data.name)) then
+	if((element.onlyShowPlayer and data.isPlayerAura) or not element.onlyShowPlayer) then
 		return true
 	end
 end
@@ -257,31 +260,28 @@ local function SortAuras(a, b)
 		return a.isPlayerAura
 	end
 
-	if(a.canApplyAura ~= b.canApplyAura) then
-		return a.canApplyAura
-	end
-
 	return a.auraInstanceID < b.auraInstanceID
 end
 
-local function processData(element, unit, data)
+local function processData(element, unit, data, filter)
 	if(not data) then return end
 
-	data.isPlayerAura = data.sourceUnit and (UnitIsUnit('player', data.sourceUnit) or UnitIsOwnerOrControllerOfUnit('player', data.sourceUnit))
+	data.isPlayerAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter .. '|PLAYER')
+	data.isHarmfulAura = filter == 'HARMFUL' -- "isHarmful" is a secret, use a different name
 
-	--[[ Callback: Auras:PostProcessAuraData(unit, data)
+	--[[ Callback: Auras:PostProcessAuraData(unit, data, filter)
 	Called after the aura data has been processed.
 
-	* self - the widget holding the aura buttons
-	* unit - the unit for which the update has been triggered (string)
-	* data - [AuraData](https://warcraft.wiki.gg/wiki/Struct_AuraData) object (table)
-
+	* self   - the widget holding the aura buttons
+	* unit   - the unit for which the update has been triggered (string)
+	* data   - [AuraData](https://warcraft.wiki.gg/wiki/Struct_AuraData) object (table)
+	* filter - the aura filter for this aura type
 	## Returns
 
 	* data - the processed aura data (table)
 	--]]
 	if(element.PostProcessAuraData) then
-		data = element:PostProcessAuraData(unit, data)
+		data = element:PostProcessAuraData(unit, data, filter)
 	end
 
 	return data
@@ -326,21 +326,22 @@ local function UpdateAuras(self, event, unit, updateInfo)
 
 			local slots = {C_UnitAuras.GetAuraSlots(unit, buffFilter)}
 			for i = 2, #slots do -- #1 return is continuationToken, we don't care about it
-				local data = processData(auras, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]))
+				local data = processData(auras, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]), buffFilter)
 				auras.allBuffs[data.auraInstanceID] = data
 
-				--[[ Override: Auras:FilterAura(unit, data)
+				--[[ Override: Auras:FilterAura(unit, data, filter)
 				Defines a custom filter that controls if the aura button should be shown.
 
-				* self - the widget holding the aura buttons
-				* unit - the unit for which the update has been triggered (string)
-				* data - [AuraData](https://warcraft.wiki.gg/wiki/Struct_AuraData) object (table)
+				* self   - the widget holding the aura buttons
+				* unit   - the unit for which the update has been triggered (string)
+				* data   - [AuraData](https://warcraft.wiki.gg/wiki/Struct_AuraData) object (table)
+				* filter - the aura filter for this aura type
 
 				## Returns
 
 				* show - indicates whether the aura button should be shown (boolean)
 				--]]
-				if((auras.FilterAura or FilterAura) (auras, unit, data)) then
+				if((auras.FilterAura or FilterAura) (auras, unit, data, buffFilter)) then
 					auras.activeBuffs[data.auraInstanceID] = true
 				end
 			end
@@ -351,29 +352,29 @@ local function UpdateAuras(self, event, unit, updateInfo)
 
 			slots = {C_UnitAuras.GetAuraSlots(unit, debuffFilter)}
 			for i = 2, #slots do
-				local data = processData(auras, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]))
+				local data = processData(auras, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]), debuffFilter)
 				auras.allDebuffs[data.auraInstanceID] = data
 
-				if((auras.FilterAura or FilterAura) (auras, unit, data)) then
+				if((auras.FilterAura or FilterAura) (auras, unit, data, debuffFilter)) then
 					auras.activeDebuffs[data.auraInstanceID] = true
 				end
 			end
 		else
 			if(updateInfo.addedAuras) then
 				for _, data in next, updateInfo.addedAuras do
-					if(data.isHelpful and not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, buffFilter)) then
-						data = processData(auras, unit, data)
+					if(not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, buffFilter)) then
+						data = processData(auras, unit, data, buffFilter)
 						auras.allBuffs[data.auraInstanceID] = data
 
-						if((auras.FilterAura or FilterAura) (auras, unit, data)) then
+						if((auras.FilterAura or FilterAura) (auras, unit, data, buffFilter)) then
 							auras.activeBuffs[data.auraInstanceID] = true
 							buffsChanged = true
 						end
-					elseif(data.isHarmful and not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, debuffFilter)) then
-						data = processData(auras, unit, data)
+					elseif(not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, debuffFilter)) then
+						data = processData(auras, unit, data, debuffFilter)
 						auras.allDebuffs[data.auraInstanceID] = data
 
-						if((auras.FilterAura or FilterAura) (auras, unit, data)) then
+						if((auras.FilterAura or FilterAura) (auras, unit, data, debuffFilter)) then
 							auras.activeDebuffs[data.auraInstanceID] = true
 							debuffsChanged = true
 						end
@@ -384,7 +385,7 @@ local function UpdateAuras(self, event, unit, updateInfo)
 			if(updateInfo.updatedAuraInstanceIDs) then
 				for _, auraInstanceID in next, updateInfo.updatedAuraInstanceIDs do
 					if(auras.allBuffs[auraInstanceID]) then
-						auras.allBuffs[auraInstanceID] = processData(auras, unit, C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID))
+						auras.allBuffs[auraInstanceID] = processData(auras, unit, C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID), buffFilter)
 
 						-- only update if it's actually active
 						if(auras.activeBuffs[auraInstanceID]) then
@@ -392,7 +393,7 @@ local function UpdateAuras(self, event, unit, updateInfo)
 							buffsChanged = true
 						end
 					elseif(auras.allDebuffs[auraInstanceID]) then
-						auras.allDebuffs[auraInstanceID] = processData(auras, unit, C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID))
+						auras.allDebuffs[auraInstanceID] = processData(auras, unit, C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID), debuffFilter)
 
 						if(auras.activeDebuffs[auraInstanceID]) then
 							auras.activeDebuffs[auraInstanceID] = true
@@ -593,22 +594,20 @@ local function UpdateAuras(self, event, unit, updateInfo)
 
 			local slots = {C_UnitAuras.GetAuraSlots(unit, buffFilter)}
 			for i = 2, #slots do
-				local data = processData(buffs, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]))
-				if data then -- needs review
-					buffs.all[data.auraInstanceID] = data
-	
-					if((buffs.FilterAura or FilterAura) (buffs, unit, data)) then
-						buffs.active[data.auraInstanceID] = true
-					end
+				local data = processData(buffs, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]), buffFilter)
+				buffs.all[data.auraInstanceID] = data
+
+				if((buffs.FilterAura or FilterAura) (buffs, unit, data, buffFilter)) then
+					buffs.active[data.auraInstanceID] = true
 				end
 			end
 		else
 			if(updateInfo.addedAuras) then
 				for _, data in next, updateInfo.addedAuras do
-					if(data.isHelpful and not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, buffFilter)) then
-						buffs.all[data.auraInstanceID] = processData(buffs, unit, data)
+					if(not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, buffFilter)) then
+						buffs.all[data.auraInstanceID] = processData(buffs, unit, data, buffFilter)
 
-						if((buffs.FilterAura or FilterAura) (buffs, unit, data)) then
+						if((buffs.FilterAura or FilterAura) (buffs, unit, data, buffFilter)) then
 							buffs.active[data.auraInstanceID] = true
 							buffsChanged = true
 						end
@@ -619,7 +618,7 @@ local function UpdateAuras(self, event, unit, updateInfo)
 			if(updateInfo.updatedAuraInstanceIDs) then
 				for _, auraInstanceID in next, updateInfo.updatedAuraInstanceIDs do
 					if(buffs.all[auraInstanceID]) then
-						buffs.all[auraInstanceID] = processData(buffs, unit, C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID))
+						buffs.all[auraInstanceID] = processData(buffs, unit, C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID), buffFilter)
 
 						if(buffs.active[auraInstanceID]) then
 							buffs.active[auraInstanceID] = true
@@ -704,20 +703,20 @@ local function UpdateAuras(self, event, unit, updateInfo)
 
 			local slots = {C_UnitAuras.GetAuraSlots(unit, debuffFilter)}
 			for i = 2, #slots do
-				local data = processData(debuffs, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]))
+				local data = processData(debuffs, unit, C_UnitAuras.GetAuraDataBySlot(unit, slots[i]), debuffFilter)
 				debuffs.all[data.auraInstanceID] = data
 
-				if((debuffs.FilterAura or FilterAura) (debuffs, unit, data)) then
+				if((debuffs.FilterAura or FilterAura) (debuffs, unit, data, debuffFilter)) then
 					debuffs.active[data.auraInstanceID] = true
 				end
 			end
 		else
 			if(updateInfo.addedAuras) then
 				for _, data in next, updateInfo.addedAuras do
-					if(data.isHarmful and not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, debuffFilter)) then
-						debuffs.all[data.auraInstanceID] = processData(debuffs, unit, data)
+					if(not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, debuffFilter)) then
+						debuffs.all[data.auraInstanceID] = processData(debuffs, unit, data, debuffFilter)
 
-						if((debuffs.FilterAura or FilterAura) (debuffs, unit, data)) then
+						if((debuffs.FilterAura or FilterAura) (debuffs, unit, data, debuffFilter)) then
 							debuffs.active[data.auraInstanceID] = true
 							debuffsChanged = true
 						end
@@ -728,7 +727,7 @@ local function UpdateAuras(self, event, unit, updateInfo)
 			if(updateInfo.updatedAuraInstanceIDs) then
 				for _, auraInstanceID in next, updateInfo.updatedAuraInstanceIDs do
 					if(debuffs.all[auraInstanceID]) then
-						debuffs.all[auraInstanceID] = processData(debuffs, unit, C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID))
+						debuffs.all[auraInstanceID] = processData(debuffs, unit, C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID), debuffFilter)
 
 						if(debuffs.active[auraInstanceID]) then
 							debuffs.active[auraInstanceID] = true
@@ -841,6 +840,14 @@ local function Enable(self)
 			auras.visibleButtons = 0
 			auras.tooltipAnchor = auras.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'
 
+			auras.dispelColorCurve = auras.dispelColorCurve or C_CurveUtil.CreateColorCurve()
+			auras.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
+			for _, dispelIndex in next, oUF.Enum.DispelType do
+				if(self.colors.dispel[dispelIndex]) then
+					auras.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+				end
+			end
+
 			auras:Show()
 		end
 
@@ -856,6 +863,14 @@ local function Enable(self)
 			buffs.visibleButtons = 0
 			buffs.tooltipAnchor = buffs.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'
 
+			buffs.dispelColorCurve = buffs.dispelColorCurve or C_CurveUtil.CreateColorCurve()
+			buffs.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
+			for _, dispelIndex in next, oUF.Enum.DispelType do
+				if(self.colors.dispel[dispelIndex]) then
+					buffs.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+				end
+			end
+
 			buffs:Show()
 		end
 
@@ -870,6 +885,14 @@ local function Enable(self)
 			debuffs.anchoredButtons = 0
 			debuffs.visibleButtons = 0
 			debuffs.tooltipAnchor = debuffs.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'
+
+			debuffs.dispelColorCurve = debuffs.dispelColorCurve or C_CurveUtil.CreateColorCurve()
+			debuffs.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
+			for _, dispelIndex in next, oUF.Enum.DispelType do
+				if(self.colors.dispel[dispelIndex]) then
+					debuffs.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+				end
+			end
 
 			debuffs:Show()
 		end

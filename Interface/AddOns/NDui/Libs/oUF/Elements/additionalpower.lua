@@ -8,10 +8,6 @@ Balance druids.
 
 AdditionalPower - A `StatusBar` that is used to display the player's additional power.
 
-## Sub-Widgets
-
-.bg - A `Texture` used as a background. Inherits the widget's color.
-
 ## Notes
 
 A default texture will be applied if the widget is a StatusBar and doesn't have a texture set.
@@ -20,20 +16,14 @@ A default texture will be applied if the widget is a StatusBar and doesn't have 
 
 .frequentUpdates - Indicates whether to use UNIT_POWER_FREQUENT instead UNIT_POWER_UPDATE to update the bar (boolean)
 .displayPairs    - Use to override display pairs. (table)
-.smoothGradient  - 9 color values to be used with the .colorSmooth option (table)
+.smoothing       - Which status bar smoothing method to use, defaults to `Enum.StatusBarInterpolation.Immediate` (number)
 
 The following options are listed by priority. The first check that returns true decides the color of the bar.
 
-.colorPower  - Use `self.colors.power[token]` to color the bar based on the player's additional power type
-               (boolean)
-.colorClass  - Use `self.colors.class[class]` to color the bar based on unit class. `class` is defined by the
-               second return of [UnitClass](https://warcraft.wiki.gg/wiki/API_UnitClass) (boolean)
-.colorSmooth - Use `self.colors.smooth` to color the bar with a smooth gradient based on the player's current
-               additional power percentage (boolean)
-
-## Sub-Widget Options
-
-.multiplier - Used to tint the background based on the widget's R, G and B values. Defaults to 1 (number)[0-1]
+.colorPower       - Use `self.colors.power[token]` to color the bar based on the player's additional power type
+                    (boolean)
+.colorPowerSmooth - Use color curve from `self.colors.power[token]` to color the bar with a smooth gradient based on the
+                    player's current power percentage. Requires `.colorPower` to be enabled (boolean)
 
 ## Examples
 
@@ -44,20 +34,14 @@ The following options are listed by priority. The first check that returns true 
     AdditionalPower:SetPoint('LEFT')
     AdditionalPower:SetPoint('RIGHT')
 
-    -- Add a background
-    local Background = AdditionalPower:CreateTexture(nil, 'BACKGROUND')
-    Background:SetAllPoints(AdditionalPower)
-    Background:SetTexture(1, 1, 1, .5)
-
     -- Register it with oUF
-    AdditionalPower.bg = Background
     self.AdditionalPower = AdditionalPower
 --]]
 
 local _, ns = ...
 local oUF = ns.oUF
 
-local _, playerClass = UnitClass('player')
+local playerClass = UnitClassBase('player')
 
 -- sourced from Blizzard_UnitFrame/AlternatePowerBar.lua
 local ALT_POWER_BAR_PAIR_DISPLAY_INFO = _G.ALT_POWER_BAR_PAIR_DISPLAY_INFO
@@ -69,39 +53,27 @@ local function UpdateColor(self, event, unit, powerType)
 	if(not (unit and UnitIsUnit(unit, 'player') and powerType == ADDITIONAL_POWER_BAR_NAME)) then return end
 	local element = self.AdditionalPower
 
-	local r, g, b, color
+	local color
 	if(element.colorPower) then
 		color = self.colors.power[ADDITIONAL_POWER_BAR_INDEX]
-	elseif(element.colorClass) then
-		color = self.colors.class[playerClass]
-	elseif(element.colorSmooth) then
-		r, g, b = self:ColorGradient(element.cur or 1, element.max or 1, unpack(element.smoothGradient or self.colors.smooth))
-	end
 
-	if(color) then
-		r, g, b = color[1], color[2], color[3]
-	end
-
-	if(b) then
-		element:SetStatusBarColor(r, g, b)
-
-		local bg = element.bg
-		if(bg) then
-			local mu = bg.multiplier or 1
-			bg:SetVertexColor(r * mu, g * mu, b * mu)
+		if(element.colorPowerSmooth and color and color:GetCurve()) then
+			color = UnitPowerPercent(unit, true, color:GetCurve())
 		end
 	end
 
-	--[[ Callback: AdditionalPower:PostUpdateColor(r, g, b)
+	if(color) then
+		element:GetStatusBarTexture():SetVertexColor(color:GetRGB())
+	end
+
+	--[[ Callback: AdditionalPower:PostUpdateColor(color)
 	Called after the element color has been updated.
 
-	* self - the AdditionalPower element
-	* r    - the red component of the used color (number)[0-1]
-	* g    - the green component of the used color (number)[0-1]
-	* b    - the blue component of the used color (number)[0-1]
+	* self  - the AdditionalPower element
+	* color - the used ColorMixin-based object (table?)
 	--]]
 	if(element.PostUpdateColor) then
-		element:PostUpdateColor(r, g, b)
+		element:PostUpdateColor(color)
 	end
 end
 
@@ -121,7 +93,7 @@ local function Update(self, event, unit, powerType)
 
 	local cur, max = UnitPower('player', ADDITIONAL_POWER_BAR_INDEX), UnitPowerMax('player', ADDITIONAL_POWER_BAR_INDEX)
 	element:SetMinMaxValues(0, max)
-	element:SetValue(cur)
+	element:SetValue(cur, element.smoothing)
 
 	element.cur = cur
 	element.max = max
@@ -269,6 +241,10 @@ local function Enable(self, unit)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 		element.SetFrequentUpdates = SetFrequentUpdates
+
+		if(not element.smoothing) then
+			element.smoothing = Enum.StatusBarInterpolation.Immediate
+		end
 
 		self:RegisterEvent('UNIT_DISPLAYPOWER', VisibilityPath)
 
