@@ -73,7 +73,9 @@ local function Hook_UpdateMerchantInfo()
 
 		local button = _G["MerchantItem"..i.."ItemButton"]
 		if button and button:IsShown() then
-			local _, _, _, _, numAvailable, isUsable = GetMerchantItemInfo(index)
+			local info = C_MerchantFrame.GetItemInfo(index)
+			local numAvailable = info and info.numAvailable
+			local isUsable = info and info.isUsable
 			if isUsable and IsAlreadyKnown(GetMerchantItemLink(index)) then
 				local r, g, b = COLOR.r, COLOR.g, COLOR.b
 				if numAvailable == 0 then
