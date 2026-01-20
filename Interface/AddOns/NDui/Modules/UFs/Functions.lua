@@ -13,18 +13,22 @@ local SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPrior
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
 -- Custom colors
-oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
-oUF.colors.debuff.none = {0, 0, 0}
+oUF.colors.health:SetCurve({
+	[ 0] = CreateColor(1, 0, 0),
+	[.5] = CreateColor(.85, .8, .45),
+	[ 1] = CreateColor(.1, .1, .1),
+})
+oUF.colors.dispel[oUF.Enum.DispelType.None] = oUF:CreateColor(0, 0, 0)
 
-local function ReplacePowerColor(name, index, color)
-	oUF.colors.power[name] = color
+local function ReplacePowerColor(name, index, r, g, b)
+	oUF.colors.power[name] = oUF:CreateColor(r, g, b)
 	oUF.colors.power[index] = oUF.colors.power[name]
 end
-ReplacePowerColor("MANA", 0, {0, .4, 1})
-ReplacePowerColor("SOUL_SHARDS", 7, {.58, .51, .79})
-ReplacePowerColor("HOLY_POWER", 9, {.88, .88, .06})
-ReplacePowerColor("CHI", 12, {0, 1, .59})
-ReplacePowerColor("ARCANE_CHARGES", 16, {.41, .8, .94})
+ReplacePowerColor("MANA", 0, 0, .4, 1)
+ReplacePowerColor("SOUL_SHARDS", 7, .58, .51, .79)
+ReplacePowerColor("HOLY_POWER", 9, .88, .88, .06)
+ReplacePowerColor("CHI", 12, 0, 1, .59)
+ReplacePowerColor("ARCANE_CHARGES", 16, .41, .8, .94)
 
 -- Various values
 local function retVal(self, val1, val2, val3, val4, val5)
@@ -123,7 +127,14 @@ function UF:UpdateHealthBarColor(self, force)
 	end
 end
 
-local endColor = CreateColor(0, 0, 0, .25)
+local bgCurve = C_CurveUtil.CreateColorCurve()
+bgCurve:SetType(Enum.LuaCurveType.Linear)
+bgCurve:AddPoint(0.0, CreateColor(1, 0, 0))
+bgCurve:AddPoint(0.5, CreateColor(1, .7, 0))
+bgCurve:AddPoint(1, CreateColor(.7, 1, 0))
+
+local endColor = oUF:CreateColor(0, 0, 0, .25)
+
 function UF.HealthPostUpdate(element, unit, cur, max)
 	local self = element.__owner
 	local mystyle = self.mystyle
@@ -138,18 +149,19 @@ function UF.HealthPostUpdate(element, unit, cur, max)
 		useGradientClass = C.db["UFs"]["HealthColor"] == 5
 	end
 	if useGradient then
-		element.bg:SetVertexColor(self:ColorGradient(cur or 1, max or 1, 1,0,0, 1,.7,0, .7,1,0))
+		local color = UnitHealthPercent(unit, true, bgCurve)
+		element.bg:SetVertexColor(color:GetRGB())
 	end
 	if useGradientClass then
 		local color
 		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
-			local _, class = UnitClass(unit)
+			local class = UnitClassBase(unit)
 			color = self.colors.class[class]
 		elseif UnitReaction(unit, "player") then
 			color = self.colors.reaction[UnitReaction(unit, "player")]
 		end
 		if color then
-			element:GetStatusBarTexture():SetGradient("HORIZONTAL", CreateColor(color[1], color[2], color[3], .75), endColor)
+			element:GetStatusBarTexture():SetGradient("HORIZONTAL", color, endColor)
 		end
 	end
 end
@@ -410,7 +422,8 @@ function UF:CreatePowerBar(self)
 	local bg = power:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
 	bg:SetTexture(DB.normTex)
-	bg.multiplier = .25
+	bg:SetVertexColor(0, 0, 0, .7)
+	--bg.multiplier = .25
 
 	self.Power = power
 	self.Power.bg = bg
@@ -785,14 +798,16 @@ function UF:CreateCastBar(self)
 
 	cb.Time = timer
 	cb.Text = name
-	cb.OnUpdate = UF.OnCastbarUpdate
-	cb.PostCastStart = UF.PostCastStart
-	cb.PostCastUpdate = UF.PostCastUpdate
-	cb.PostCastStop = UF.PostCastStop
-	cb.PostCastFail = UF.PostCastFailed
-	cb.PostCastInterruptible = UF.PostUpdateInterruptible
-	cb.CreatePip = UF.CreatePip
-	cb.PostUpdatePips = UF.PostUpdatePips
+	if not DB.isNewPatch then
+		cb.OnUpdate = UF.OnCastbarUpdate
+		cb.PostCastStart = UF.PostCastStart
+		cb.PostCastUpdate = UF.PostCastUpdate
+		cb.PostCastStop = UF.PostCastStop
+		cb.PostCastFail = UF.PostCastFailed
+		cb.PostCastInterruptible = UF.PostUpdateInterruptible
+		cb.CreatePip = UF.CreatePip
+		cb.PostUpdatePips = UF.PostUpdatePips
+	end
 
 	self.Castbar = cb
 end
@@ -1740,6 +1755,8 @@ function UF:ToggleSwingBars()
 end
 
 function UF:CreateSwing(self)
+	if DB.isNewPatch then return end
+
 	local width, height = C.db["UFs"]["SwingWidth"], C.db["UFs"]["SwingHeight"]
 
 	local bar = CreateFrame("Frame", nil, self)
@@ -1794,6 +1811,8 @@ function UF:UpdateScrollingFont()
 end
 
 function UF:CreateFCT(self)
+	if DB.isNewPatch then return end
+
 	if not C.db["UFs"]["CombatText"] then return end
 
 	local parentFrame = CreateFrame("Frame", nil, UIParent)

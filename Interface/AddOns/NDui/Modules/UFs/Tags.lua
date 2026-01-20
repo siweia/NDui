@@ -7,10 +7,11 @@ local select, format, strfind, GetCVarBool = select, format, strfind, GetCVarBoo
 local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate or 10
 local UnitIsDeadOrGhost, UnitIsConnected, UnitIsTapDenied, UnitIsPlayer = UnitIsDeadOrGhost, UnitIsConnected, UnitIsTapDenied, UnitIsPlayer
 local UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger = UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger
-local UnitClass, UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel = UnitClass, UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel
+local UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel = UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel
 local UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost, UnitName, UnitExists = UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost, UnitName, UnitExists
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
 local GetNumArenaOpponentSpecs, GetCreatureDifficultyColor = GetNumArenaOpponentSpecs, GetCreatureDifficultyColor
+local UnitClassBase = UnitClassBase
 
 -- Add scantip back, due to issue on ColorMixin
 local scanTip = CreateFrame("GameTooltip", "NDui_ScanTooltip", nil, "GameTooltipTemplate")
@@ -30,11 +31,11 @@ local function ColorPercent(value)
 end
 
 local function ValueAndPercent(cur, per)
-	if per < 100 then
-		return B.Numb(cur).." | "..ColorPercent(per)
-	else
-		return B.Numb(cur)
-	end
+--	if per < 100 then
+		return B.Numb(cur).." | "..per
+	--else
+	--	return B.Numb(cur)
+	--end
 end
 
 local function GetCurrentAndMax(cur, max)
@@ -51,21 +52,21 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 	end
 
 	if not arg1 then return end
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	local per = max == 0 and 0 or B:Round(cur/max * 100, 1)
+	local max = UnitHealthMax(unit)
+	local cur = format('%d', UnitHealth(unit))
+	local per = format('%d', UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
 
 	if arg1 == "currentpercent" then
-		return ValueAndPercent(cur, per)
+		return cur.." | "..per
 	elseif arg1 == "currentmax" then
-		return GetCurrentAndMax(cur, max)
+		return cur.." | "..max
 	elseif arg1 == "current" then
-		return B.Numb(cur)
+		return cur
 	elseif arg1 == "percent" then
-		return per < 100 and ColorPercent(per)
+		return per
 	elseif arg1 == "loss" then
-		local loss = max - cur
-		return loss ~= 0 and B.Numb(loss)
-	elseif arg1 == "losspercent" then
+		return C_StringUtil.TruncateWhenZero(UnitHealthMissing(unit))
+	elseif arg1 == "losspercent" then -- broken in 12.0
 		local loss = max - cur
 		return loss ~= 0 and B:Round(loss/max*100, 1)
 	elseif arg1 == "absorb" then
@@ -76,20 +77,20 @@ end
 oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED PARTY_MEMBER_ENABLE PARTY_MEMBER_DISABLE"
 
 oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
-	local cur, max = UnitPower(unit), UnitPowerMax(unit)
-	local per = max == 0 and 0 or B:Round(cur/max * 100)
+	local max = UnitPowerMax(unit)
+	local cur = format("%d", UnitPower(unit))
+	local per = format("%d", UnitPowerPercent(unit, nil, true, CurveConstants.ScaleTo100))
 
 	if arg1 == "currentpercent" then
-		return ValueAndPercent(cur, per)
+		return cur.." | "..per
 	elseif arg1 == "currentmax" then
-		return GetCurrentAndMax(cur, max)
+		return cur.." | "..max
 	elseif arg1 == "current" then
-		return B.Numb(cur)
+		return cur
 	elseif arg1 == "percent" then
-		return per < 100 and ColorPercent(per)
+		return per
 	elseif arg1 == "loss" then
-		local loss = max - cur
-		return loss ~= 0 and B.Numb(loss)
+		return C_StringUtil.TruncateWhenZero(UnitPowerMissing(unit))
 	elseif arg1 == "losspercent" then
 		local loss = max - cur
 		return loss ~= 0 and B:Round(loss/max*100, 1)
@@ -104,7 +105,8 @@ end
 oUF.Tags.Events["curAbsorb"] = "UNIT_ABSORB_AMOUNT_CHANGED UNIT_HEAL_ABSORB_AMOUNT_CHANGED"
 
 oUF.Tags.Methods["color"] = function(unit)
-	local class = select(2, UnitClass(unit))
+	if not unit then return end
+	local class = UnitClassBase(unit)
 	local reaction = UnitReaction(unit, "player")
 
 	if UnitIsTapDenied(unit) then
@@ -193,6 +195,12 @@ end
 oUF.Tags.Events["raidhp"] = oUF.Tags.Events["VariousHP"].." UNIT_ABSORB_AMOUNT_CHANGED UNIT_HEAL_ABSORB_AMOUNT_CHANGED"
 
 -- Nameplate tags
+local colorCurve = C_CurveUtil.CreateColorCurve()
+colorCurve:SetType(Enum.LuaCurveType.Step)
+colorCurve:AddPoint(0, CreateColor(.8, .8, 1))
+colorCurve:AddPoint(.5, CreateColor(1, 1, .1))
+colorCurve:AddPoint(.85, CreateColor(1, .1, .1))
+
 oUF.Tags.Methods["nppp"] = function(unit)
 	local per = oUF.Tags.Methods["perpp"](unit)
 	local color
@@ -283,7 +291,7 @@ oUF.Tags.Events["npctitle"] = "UNIT_NAME_UPDATE"
 oUF.Tags.Methods["tarname"] = function(unit)
 	local tarUnit = unit.."target"
 	if UnitExists(tarUnit) then
-		local tarClass = select(2, UnitClass(tarUnit))
+		local tarClass = UnitClassBase(tarUnit)
 		return B.HexRGB(oUF.colors.class[tarClass])..UnitName(tarUnit)
 	end
 end

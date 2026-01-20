@@ -254,7 +254,7 @@ local eventlessUnits = {
 }
 
 local function isEventlessUnit(unit)
-	return unit:match('%w+target') or eventlessUnits[unit]
+	return unit and unit:match('%w+target') or eventlessUnits[unit]
 end
 
 local function initObject(unit, style, styleFunc, header, ...)

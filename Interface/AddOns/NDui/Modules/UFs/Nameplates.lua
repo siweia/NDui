@@ -63,6 +63,10 @@ function UF:UpdatePlateClickThru()
 	C_NamePlate_SetNamePlateFriendlyClickThrough(C.db["Nameplate"]["FriendlyThru"])
 end
 
+function UF:UpdatePlateSize()
+	UF.NameplateDriver:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
+end
+
 function UF:SetupCVars()
 	UF:UpdatePlateCVars()
 	SetCVar("nameplateOverlapH", .8)
@@ -78,8 +82,8 @@ function UF:SetupCVars()
 
 	SetCVar("nameplateShowSelf", 0)
 	SetCVar("nameplateResourceOnTarget", 0)
-	UF:UpdateClickableSize()
-	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateOptions", UF.UpdateClickableSize)
+	UF:UpdatePlateSize()
+	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateSize", UF.UpdatePlateSize)
 	UF:UpdatePlateClickThru()
 	-- fix blizz friendly plate visibility
 	SetCVar("nameplatePlayerMaxDistance", 60)
@@ -181,6 +185,16 @@ function UF:CheckThreatStatus(unit)
 end
 
 -- Update unit color
+local executedCurve = C_CurveUtil.CreateColorCurve()
+executedCurve:SetType(Enum.LuaCurveType.Step)
+
+function UF:UpdateExcutedCurve()
+	local executeRatio = C.db["Nameplate"]["ExecuteRatio"]
+	executedCurve:ClearPoints()
+	executedCurve:AddPoint(executeRatio/100, CreateColor(1, 1, 1))
+	executedCurve:AddPoint(0, CreateColor(1, 0, 0))
+end
+
 function UF:UpdateColor(_, unit)
 	if not unit or self.unit ~= unit then return end
 
@@ -197,8 +211,7 @@ function UF:UpdateColor(_, unit)
 	local insecureColor = C.db["Nameplate"]["InsecureColor"]
 	local revertThreat = C.db["Nameplate"]["DPSRevertThreat"]
 	local offTankColor = C.db["Nameplate"]["OffTankColor"]
-	local executeRatio = C.db["Nameplate"]["ExecuteRatio"]
-	local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
+	local healthPerc = UnitHealthPercent(unit, true, executedCurve)
 	local targetColor = C.db["Nameplate"]["TargetColor"]
 	local focusColor = C.db["Nameplate"]["FocusColor"]
 	local dotColor = C.db["Nameplate"]["DotColor"]
@@ -266,11 +279,7 @@ function UF:UpdateColor(_, unit)
 		end
 	end
 
-	if executeRatio > 0 and healthPerc <= executeRatio then
-		self.nameText:SetTextColor(1, 0, 0)
-	else
-		self.nameText:SetTextColor(1, 1, 1)
-	end
+	self.nameText:SetTextColor(healthPerc:GetRGB())
 end
 
 function UF:UpdateThreatColor(_, unit)
@@ -671,6 +680,7 @@ function UF:UpdateSpellInterruptor(...)
 end
 
 function UF:SpellInterruptor(self)
+	if DB.isNewPatch then return end
 	if not self.Castbar then return end
 	self:RegisterCombatEvent("SPELL_INTERRUPT", UF.UpdateSpellInterruptor)
 end
@@ -727,7 +737,7 @@ function UF:CreatePlates()
 	self.powerText = B.CreateFS(self, 22)
 	self.powerText:ClearAllPoints()
 	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
-	self:Tag(self.powerText, "[nppp]")
+	self:Tag(self.powerText, "[perpp]")
 
 	local title = B.CreateFS(self, C.db["Nameplate"]["NameOnlyTitleSize"])
 	title:ClearAllPoints()
@@ -822,7 +832,7 @@ function UF:UpdateNameplateSize()
 		self:Tag(self.nameText, UF.PlateNameTags[nameType])
 		self.__tagIndex = nameType
 
-		self:SetSize(plateWidth, plateHeight)
+		UF.NameplateDriver:SetSize(plateWidth, plateHeight)
 		B.SetFontSize(self.tarName, nameTextSize+4)
 		self.Castbar.Icon:SetSize(iconSize, iconSize)
 		self.Castbar.glowFrame:SetSize(iconSize+8, iconSize+8)
@@ -1036,48 +1046,56 @@ function UF:RefreshPlateByEvents()
 	end
 end
 
-function UF:PostUpdatePlates(event, unit)
+local function onTargetChanged(self, event, unit)
 	if not self then return end
 
-	if event == "NAME_PLATE_UNIT_ADDED" then
-		self.unitName = UnitName(unit)
-		self.unitGUID = UnitGUID(unit)
-		self.isPlayer = UnitIsPlayer(unit)
-		self.npcID = B.GetNPCID(self.unitGUID)
-		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
+	UF.UpdateUnitPower(self)
+	UF.UpdateTargetChange(self)
+	UF.UpdateQuestUnit(self, event, unit)
+	UF.UpdateUnitClassify(self, unit)
+	UF.UpdateDungeonProgress(self, unit)
+	UF:UpdateTargetClassPower()
 
-		local blizzPlate = self:GetParent().UnitFrame
-		if blizzPlate then
-			self.widgetContainer = blizzPlate.WidgetContainer
-			if self.widgetContainer then
-				--self.widgetContainer:SetParent(self)
-				self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
-			end
+	self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
+end
 
-			self.softTargetFrame = blizzPlate.SoftTargetFrame
-			if self.softTargetFrame then
-				--self.softTargetFrame:SetParent(self)
-				self.softTargetFrame:SetScale(1/NDuiADB["UIScale"])
-			end
+function UF:OnNameplateAdded(event, unit)
+	if not self then return end
+
+	self.unitName = UnitName(unit)
+	self.unitGUID = UnitGUID(unit)
+	self.isPlayer = UnitIsPlayer(unit)
+	self.npcID = B.GetNPCID(self.unitGUID)
+	self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
+
+	local blizzPlate = self:GetParent().UnitFrame
+	if blizzPlate then
+		self.widgetContainer = blizzPlate.WidgetContainer
+		if self.widgetContainer then
+			--self.widgetContainer:SetParent(self)
+			self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
 		end
 
-		UF.RefreshPlateType(self, unit)
-	elseif event == "NAME_PLATE_UNIT_REMOVED" then
-		self.npcID = nil
-		self.tarBy:SetText("")
-		self.tarByTex:Hide()
+		self.softTargetFrame = blizzPlate.SoftTargetFrame
+		if self.softTargetFrame then
+			--self.softTargetFrame:SetParent(self)
+			self.softTargetFrame:SetScale(1/NDuiADB["UIScale"])
+		end
 	end
 
-	if event ~= "NAME_PLATE_UNIT_REMOVED" then
-		UF.UpdateUnitPower(self)
-		UF.UpdateTargetChange(self)
-		UF.UpdateQuestUnit(self, event, unit)
-		UF.UpdateUnitClassify(self, unit)
-		UF.UpdateDungeonProgress(self, unit)
-		UF:UpdateTargetClassPower()
+	UF.RefreshPlateType(self, unit)
+	onTargetChanged(self, event, unit)
+end
 
-		self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
-	end
+function UF:OnNameplateRemoved(event, unit)
+	if not self then return end
+	self.npcID = nil
+	self.tarBy:SetText("")
+	self.tarByTex:Hide()
+end
+
+function UF:OnTargetChanged(event, unit)
+	onTargetChanged(self, event, unit)
 end
 
 -- Player Nameplate
