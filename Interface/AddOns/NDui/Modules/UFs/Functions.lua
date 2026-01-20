@@ -1161,8 +1161,8 @@ function UF:UpdateAuraDirection(self, element)
 	local yOffset = C.db["UFs"][element.__value.."AuraOffset"]
 	local value = UF.AuraDirections[direc]
 	element.initialAnchor = value.initialAnchor
-	element["growth-x"] = value.growthX
-	element["growth-y"] = value.growthY
+	element["growthX"] = value.growthX
+	element["growthY"] = value.growthY
 	element:ClearAllPoints()
 	element:SetPoint(value.initialAnchor, self, value.relAnchor, value.x, value.y * yOffset)
 end
@@ -1180,7 +1180,7 @@ function UF:CreateAuras(self)
 	bu:SetFrameLevel(self:GetFrameLevel() + 2)
 	bu.gap = true
 	bu.initialAnchor = "TOPLEFT"
-	bu["growth-y"] = "DOWN"
+	bu["growthY"] = "DOWN"
 	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 	if auraUFs[mystyle] then
@@ -1190,7 +1190,7 @@ function UF:CreateAuras(self)
 		bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
-		bu["growth-y"] = "UP"
+		bu["growthY"] = "UP"
 		if C.db["Nameplate"]["TargetPower"] then
 			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
 		else
@@ -1221,8 +1221,8 @@ function UF:CreateBuffs(self)
 	local bu = CreateFrame("Frame", nil, self)
 	bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 	bu.initialAnchor = "BOTTOMLEFT"
-	bu["growth-x"] = "RIGHT"
-	bu["growth-y"] = "UP"
+	bu["growthX"] = "RIGHT"
+	bu["growthY"] = "UP"
 	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 
@@ -1243,8 +1243,8 @@ function UF:CreateDebuffs(self)
 	local bu = CreateFrame("Frame", nil, self)
 	bu.spacing = 3
 	bu.initialAnchor = "TOPRIGHT"
-	bu["growth-x"] = "LEFT"
-	bu["growth-y"] = "DOWN"
+	bu["growthX"] = "LEFT"
+	bu["growthY"] = "DOWN"
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 	bu.showDebuffType = true
 	bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
