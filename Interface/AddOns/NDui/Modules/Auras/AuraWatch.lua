@@ -745,11 +745,11 @@ function A.AuraWatch_OnEvent(event, ...)
 		A:AuraWatch_UpdateInt(event, ...)
 	end
 end
-B:RegisterEvent("UNIT_AURA", A.AuraWatch_OnEvent)
-B:RegisterEvent("PLAYER_TARGET_CHANGED", A.AuraWatch_OnEvent)
-B:RegisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
-B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 if not DB.isNewPatch then
+	B:RegisterEvent("UNIT_AURA", A.AuraWatch_OnEvent)
+	B:RegisterEvent("PLAYER_TARGET_CHANGED", A.AuraWatch_OnEvent)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", A.AuraWatch_OnEvent)
+	B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", A.AuraWatch_OnEvent)
 	B:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", A.AuraWatch_OnEvent)
 end
 
