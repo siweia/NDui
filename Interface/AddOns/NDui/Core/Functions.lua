@@ -12,6 +12,9 @@ local CreateColor = CreateColor
 do
 	-- Numberize
 	function B.Numb(n)
+		if DB.isNewPatch then
+			return n
+		end
 		if NDuiADB["NumberFormat"] == 1 then
 			if n >= 1e12 then
 				return format("%.2ft", n / 1e12)

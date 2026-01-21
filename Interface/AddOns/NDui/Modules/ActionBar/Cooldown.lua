@@ -209,6 +209,8 @@ function module:OnSetHideCountdownNumbers(hide)
 end
 
 function module:OnLogin()
+	if DB.isNewPatch then return end
+
 	if not C.db["Actionbar"]["Cooldown"] then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index

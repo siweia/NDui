@@ -79,6 +79,8 @@ local function bar_SetSmoothedMinMaxValues(self, min, max)
 end
 
 function B:SmoothBar(bar)
+	if DB.isNewPatch then return end
+
 	bar._min, bar._max = bar:GetMinMaxValues()
 	bar._value = bar:GetValue()
 

@@ -42,9 +42,10 @@ local Private = oUF.Private
 
 local unitExists = Private.unitExists
 
-local READY_CHECK_READY_TEXTURE = "UI-LFG-ReadyMark"
-local READY_CHECK_NOT_READY_TEXTURE = "UI-LFG-DeclineMark"
-local READY_CHECK_WAITING_TEXTURE = "UI-LFG-PendingMark"
+-- TODO: Replace with atlases in the next major
+local READY_CHECK_READY_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-Ready"
+local READY_CHECK_NOT_READY_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-NotReady"
+local READY_CHECK_WAITING_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-Waiting"
 
 local function OnFinished(self)
 	local element = self:GetParent()
@@ -76,11 +77,11 @@ local function Update(self, event)
 	local status = GetReadyCheckStatus(unit)
 	if(unitExists(unit) and status) then
 		if(status == 'ready') then
-			element:SetAtlas(element.readyTexture)
+			element:SetTexture(element.readyTexture)
 		elseif(status == 'notready') then
-			element:SetAtlas(element.notReadyTexture)
+			element:SetTexture(element.notReadyTexture)
 		else
-			element:SetAtlas(element.waitingTexture)
+			element:SetTexture(element.waitingTexture)
 		end
 
 		element.status = status

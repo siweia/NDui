@@ -312,6 +312,13 @@ UF.RaidDirections = {
 
 function UF:OnLogin()
 	if C.db["Nameplate"]["Enable"] then
+		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
+		oUF:SetActiveStyle("Nameplates")
+		UF.NameplateDriver = oUF:SpawnNamePlates("oUF_NPs")
+		UF.NameplateDriver:SetTargetCallback(UF.OnTargetChanged)
+		UF.NameplateDriver:SetAddedCallback(UF.OnNameplateAdded)
+		UF.NameplateDriver:SetRemovedCallback(UF.OnNameplateRemoved)
+
 		UF:SetupCVars()
 		UF:BlockAddons()
 		UF:CreateUnitTable()
@@ -321,10 +328,7 @@ function UF:OnLogin()
 		UF:RefreshPlateByEvents()
 		UF:RefreshMajorSpells()
 		UF:RefreshNameplateFilters()
-
-		oUF:RegisterStyle("Nameplates", UF.CreatePlates)
-		oUF:SetActiveStyle("Nameplates")
-		oUF:SpawnNamePlates("oUF_NPs", UF.PostUpdatePlates)
+		UF:UpdateExcutedCurve()
 	end
 
 	do -- a playerplate-like PlayerFrame
@@ -703,7 +707,7 @@ function UF:OnLogin()
 						group.index = i
 						group.groupType = "raid"
 						tinsert(UF.headers, group)
-						RegisterStateDriver(group, "visibility", "show")
+						--RegisterStateDriver(group, "visibility", "show") -- isNewPatch, needs review
 						RegisterStateDriver(group, "visibility", GetRaidVisibility())
 						CreateTeamIndex(group)
 

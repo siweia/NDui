@@ -2,7 +2,7 @@ local _, ns = ...
 local oUF = ns.oUF
 
 -- sourced from Blizzard_UnitFrame/TargetFrame.lua
-local MAX_BOSS_FRAMES = _G.MAX_BOSS_FRAMES or 5
+local MAX_BOSS_FRAMES = 8 -- blizzard can spawn more than the default 5 apparently
 
 -- sourced from Blizzard_FrameXMLBase/Shared/Constants.lua
 local MEMBERS_PER_RAID_GROUP = _G.MEMBERS_PER_RAID_GROUP or 5
@@ -17,9 +17,9 @@ local hiddenParent = CreateFrame('Frame', nil, UIParent)
 hiddenParent:SetAllPoints()
 hiddenParent:Hide()
 
-local function insecureHide(self)
-	self:Hide()
-end
+-- local function insecureHide(self)
+-- 	self:Hide()
+-- end
 
 local looseFrames = {}
 
@@ -43,7 +43,7 @@ local function resetParent(self, parent)
 	end
 end
 
-local function handleFrame(baseName, doNotReparent)
+local function handleFrame(baseName, doNotReparent, isNamePlate)
 	local frame
 	if(type(baseName) == 'string') then
 		frame = _G[baseName]
@@ -53,7 +53,12 @@ local function handleFrame(baseName, doNotReparent)
 
 	if(frame) then
 		frame:UnregisterAllEvents()
-		frame:Hide()
+		if(isNamePlate) then
+			-- TODO: remove this once we can adjust hitrects for nameplates
+			frame:SetAlpha(0)
+		else
+			frame:Hide()
+		end
 
 		if(not doNotReparent) then
 			frame:SetParent(hiddenParent)
@@ -65,7 +70,7 @@ local function handleFrame(baseName, doNotReparent)
 			end
 		end
 
-		local health = frame.healthBar or frame.healthbar or frame.HealthBar
+		local health = frame.healthBar or frame.healthbar or frame.HealthBar or (frame.HealthBarsContainer and frame.HealthBarsContainer.healthBar)
 		if(health) then
 			health:UnregisterAllEvents()
 		end
@@ -75,9 +80,9 @@ local function handleFrame(baseName, doNotReparent)
 			power:UnregisterAllEvents()
 		end
 
-		local spell = frame.castBar or frame.spellbar or frame.CastingBarFrame
-		if(spell) then
-			spell:UnregisterAllEvents()
+		local castbar = frame.castBar or frame.spellbar or frame.CastingBarFrame
+		if(castbar) then
+			castbar:UnregisterAllEvents()
 		end
 
 		local altpowerbar = frame.powerBarAlt or frame.PowerBarAlt
@@ -85,7 +90,7 @@ local function handleFrame(baseName, doNotReparent)
 			altpowerbar:UnregisterAllEvents()
 		end
 
-		local buffFrame = frame.BuffFrame
+		local buffFrame = frame.BuffFrame or frame.AurasFrame
 		if(buffFrame) then
 			buffFrame:UnregisterAllEvents()
 		end
@@ -180,15 +185,26 @@ function oUF:DisableBlizzard(unit)
 	end
 end
 
-function oUF:DisableNamePlate(frame)
+function oUF:DisableBlizzardNamePlate(frame)
 	if(not(frame and frame.UnitFrame)) then return end
 	if(frame.UnitFrame:IsForbidden()) then return end
 
 	if(not hookedNameplates[frame]) then
-		frame.UnitFrame:HookScript('OnShow', insecureHide)
+		-- BUG: the hit rect (for clicking) is tied to the original UnitFrame object on the
+		--      nameplate, so we can't hide it. instead we force it to be invisible, and adjust
+		--      the hit rect insets around it so it matches the nameplate object itself, but we
+		--      do that in SpawnNamePlates instead
+		-- TODO: remove this hack once we can adjust hitrects ourselves, coming in a later build
+		local locked = false
+		hooksecurefunc(frame.UnitFrame, 'SetAlpha', function(UnitFrame)
+			if(locked or UnitFrame:IsForbidden()) then return end
+			locked = true
+			UnitFrame:SetAlpha(0)
+			locked = false
+		end)
 
 		hookedNameplates[frame] = true
 	end
 
-	handleFrame(frame.UnitFrame, true)
+	handleFrame(frame.UnitFrame, true, true)
 end
