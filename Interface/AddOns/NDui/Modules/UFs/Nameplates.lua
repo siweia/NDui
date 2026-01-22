@@ -832,7 +832,9 @@ function UF:UpdateNameplateSize()
 		self:Tag(self.nameText, UF.PlateNameTags[nameType])
 		self.__tagIndex = nameType
 
-		UF.NameplateDriver:SetSize(plateWidth, plateHeight)
+		if not InCombatLockdown() then
+			UF.NameplateDriver:SetSize(plateWidth, plateHeight)
+		end
 		B.SetFontSize(self.tarName, nameTextSize+4)
 		self.Castbar.Icon:SetSize(iconSize, iconSize)
 		self.Castbar.glowFrame:SetSize(iconSize+8, iconSize+8)
@@ -1017,7 +1019,9 @@ function UF:OnUnitTargetChanged()
 			local memberTarget = member.."target"
 			if not UnitIsDeadOrGhost(member) and UnitExists(memberTarget) then
 				local unitGUID = UnitGUID(memberTarget)
-				targetedList[unitGUID] = (targetedList[unitGUID] or 0) + 1
+				if not issecretvalue(unitGUID) then
+					targetedList[unitGUID] = (targetedList[unitGUID] or 0) + 1
+				end
 			end
 		end
 	end
@@ -1062,8 +1066,10 @@ end
 function UF:OnNameplateAdded(event, unit)
 	if not self then return end
 
-	self.unitName = UnitName(unit)
-	self.unitGUID = UnitGUID(unit)
+	local name = UnitName(unit)
+	self.unitName = not issecretvalue(name) and name or nil
+	local guid = UnitGUID(unit)
+	self.unitGUID = not issecretvalue(guid) and guid or nil
 	self.isPlayer = UnitIsPlayer(unit)
 	self.npcID = B.GetNPCID(self.unitGUID)
 	self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
@@ -1172,7 +1178,7 @@ function UF:CreatePlayerPlate()
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
-	UF:AvadaKedavra(self)
+	--UF:AvadaKedavra(self)
 
 	local textFrame = CreateFrame("Frame", nil, self.Power)
 	textFrame:SetAllPoints()

@@ -84,8 +84,8 @@ function UF:DebuffsIndicator_UpdateButton(debuffIndex, aura)
 
 	if button.bg then
 		if aura.isDebuff then
-			local color = oUF.colors.debuff[aura.debuffType] or oUF.colors.debuff.none
-			button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
+			local color = oUF.colors.dispel[aura.debuffType] or oUF.colors.dispel[0]
+			button.bg:SetBackdropBorderColor(color:GetRGB())
 		else
 			button.bg:SetBackdropBorderColor(0, 0, 0)
 		end
@@ -108,9 +108,9 @@ end
 
 function UF.DebuffsIndicator_Filter(raidAuras, aura)
 	local spellID = aura.spellID
-	if UF.RaidDebuffsBlack[spellID] then
+	if not issecretvalue(spellID) and UF.RaidDebuffsBlack[spellID] then
 		return false
-	elseif aura.isBossAura or SpellIsPriorityAura(spellID) then
+	elseif aura.isBossAura or AuraUtil.IsRoleAura(aura) then
 		return true
 	else
 		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, raidAuras.isInCombat and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
