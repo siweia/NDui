@@ -15,7 +15,7 @@ local UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction = U
 local InCombatLockdown, IsShiftKeyDown = InCombatLockdown, IsShiftKeyDown
 local GetCreatureDifficultyColor, UnitCreatureType, UnitClassification = GetCreatureDifficultyColor, UnitCreatureType, UnitClassification
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
-local UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel
+local UnitIsPlayer, UnitName, UnitPVPName, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitRace, UnitLevel
 local GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild = GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild
 local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAuras, C_PetBattles.GetAuraInfo
 local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
@@ -34,7 +34,7 @@ local specPrefix = "|cffFFCC00"..SPECIALIZATION..": "..DB.InfoColor
 
 function TT:GetUnit()
 	local data = self:GetTooltipData()
-	local guid = data and data.guid
+	local guid = data and not issecretvalue(data.guid) and data.guid
 	local unit = guid and UnitTokenFromGUID(guid)
 	return unit, guid
 end
@@ -53,10 +53,12 @@ function TT:UpdateFactionLine(lineData)
 	if not self:IsTooltipType(Enum.TooltipDataType.Unit) then return end
 
 	local unit = TT.GetUnit(self)
-	local unitClass = unit and UnitIsPlayer(unit) and UnitClass(unit)
+	local unitClass = unit and UnitIsPlayer(unit) and UnitClassBase(unit)
 	local unitCreature = unit and UnitCreatureType(unit)
 
 	local linetext = lineData.leftText
+	if issecretvalue(linetext) then return end
+
 	if linetext == PVP then
 		return true
 	elseif FACTION_COLORS[linetext] then
@@ -270,7 +272,7 @@ function TT:OnTooltipSetUnit()
 			local standingText = not isPlayer and reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction].."|r " or ""
 
 			local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
-			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
+			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClassBase(unit) or "").."|r") or UnitCreatureType(unit) or ""
 
 			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, standingText..unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 		end
@@ -507,9 +509,9 @@ end
 function TT:OnLogin()
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
-	hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
+	--hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
 	TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
-	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
+	--TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)
