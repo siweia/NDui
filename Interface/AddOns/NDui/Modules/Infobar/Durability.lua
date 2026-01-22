@@ -91,7 +91,7 @@ local function colorsAndPercent(a, b, ...)
 	return relperc, select((segment * 3) + 1, ...)
 end
 
-local function RGBColorGradient(...)
+function module:RGBColorGradient(...)
 	local relperc, r1, g1, b1, r2, g2, b2 = colorsAndPercent(...)
 	if(relperc) then
 		return r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
@@ -101,7 +101,7 @@ local function RGBColorGradient(...)
 end
 
 local function getDurabilityColor(cur, max)
-	local r, g, b = RGBColorGradient(cur, max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	local r, g, b = module:RGBColorGradient(cur, max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 	return r, g, b
 end
 
