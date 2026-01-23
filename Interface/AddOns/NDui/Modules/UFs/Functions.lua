@@ -50,6 +50,12 @@ local function retVal(self, val1, val2, val3, val4, val5)
 end
 
 -- Elements
+UF.smoothbars = {}
+function UF:SmoothBar(bar)
+	bar.smoothing = NDuiADB["SmoothBars"] and Enum.StatusBarInterpolation.ExponentialEaseOut or Enum.StatusBarInterpolation.Immediate
+	UF.smoothbars[bar] = true
+end
+
 local function UF_OnEnter(self)
 	if not self.disableTooltip then
 		UnitFrame_OnEnter(self)
@@ -172,7 +178,7 @@ function UF:CreateHealthBar(self)
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetPoint("TOPLEFT", self)
 	health:SetPoint("TOPRIGHT", self)
-	health.smoothing = Enum.StatusBarInterpolation.ExponentialEaseOut
+	UF:SmoothBar(health)
 	local healthHeight
 	if mystyle == "PlayerPlate" then
 		healthHeight = C.db["Nameplate"]["PPHealthHeight"]
@@ -398,7 +404,7 @@ function UF:CreatePowerBar(self)
 	power:SetStatusBarTexture(DB.normTex)
 	power:SetPoint("BOTTOMLEFT", self)
 	power:SetPoint("BOTTOMRIGHT", self)
-	power.smoothing = Enum.StatusBarInterpolation.ExponentialEaseOut
+	UF:SmoothBar(power)
 	local powerHeight
 	if mystyle == "PlayerPlate" then
 		powerHeight = C.db["Nameplate"]["PPPowerHeight"]
@@ -1414,6 +1420,7 @@ function UF:StaggerBar(self)
 	stagger:SetStatusBarTexture(DB.normTex)
 	stagger:SetFrameLevel(self:GetFrameLevel() + 5)
 	B.SetBD(stagger, 0)
+	UF:SmoothBar(stagger)
 
 	local bg = stagger:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
@@ -1515,6 +1522,7 @@ function UF:CreateAltPower(self)
 	bar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
 	bar:SetHeight(2)
 	B.SetBD(bar, 0)
+	UF:SmoothBar(bar)
 
 	local text = B.CreateFS(bar, 14, "")
 	text:SetJustifyH("CENTER")
@@ -1637,6 +1645,7 @@ function UF:CreateAddPower(self)
 	bar:SetStatusBarTexture(DB.normTex)
 	B.SetBD(bar, 0)
 	bar.colorPower = true
+	UF:SmoothBar(bar)
 
 	local bg = bar:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()

@@ -627,6 +627,7 @@ G.AccountSettings = {
 	AvadaIndex = {},
 	AvadaProfile = {},
 	AddOnProfiler = false,
+	SmoothBars = true,
 }
 
 -- Initial settings
@@ -1127,6 +1128,15 @@ local function updateSkinAlpha()
 	end
 end
 
+local function toggleSmooth()
+	local UF = B:GetModule("UnitFrames")
+	if UF then
+		for bar in pairs(UF.smoothbars) do
+			UF:SmoothBar(bar)
+		end
+	end
+end
+
 StaticPopupDialogs["RESET_DETAILS"] = {
 	text = L["Reset Details check"],
 	button1 = YES,
@@ -1537,6 +1547,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 		{2, "ACCOUNT", "CustomTex", L["CustomTex"], nil, nil, nil, L["CustomTexTip"]},
+		{1, "ACCOUNT", "SmoothBars", L["SmoothBars"], true, nil, toggleSmooth, L["SmoothBarsTip"]},
 	},
 	[15] = {
 	},
