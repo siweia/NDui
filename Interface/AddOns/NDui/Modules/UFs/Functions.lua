@@ -10,6 +10,7 @@ local pairs, next, unpack = pairs, next, unpack
 local UnitGUID, IsItemInRange = UnitGUID, IsItemInRange
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
 local SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura = SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura
+local ADDITIONAL_POWER_BAR_INDEX = 0
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
 -- Custom colors
@@ -49,6 +50,12 @@ local function retVal(self, val1, val2, val3, val4, val5)
 end
 
 -- Elements
+UF.smoothbars = {}
+function UF:SmoothBar(bar)
+	bar.smoothing = NDuiADB["SmoothBars"] and Enum.StatusBarInterpolation.ExponentialEaseOut or Enum.StatusBarInterpolation.Immediate
+	UF.smoothbars[bar] = true
+end
+
 local function UF_OnEnter(self)
 	if not self.disableTooltip then
 		UnitFrame_OnEnter(self)
@@ -171,6 +178,7 @@ function UF:CreateHealthBar(self)
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetPoint("TOPLEFT", self)
 	health:SetPoint("TOPRIGHT", self)
+	UF:SmoothBar(health)
 	local healthHeight
 	if mystyle == "PlayerPlate" then
 		healthHeight = C.db["Nameplate"]["PPHealthHeight"]
@@ -199,7 +207,6 @@ function UF:CreateHealthBar(self)
 		self.backdrop.__shadow:SetFrameLevel(0)
 		self.backdrop.__shadow = nil
 	end
-	B:SmoothBar(health)
 
 	local bg = self:CreateTexture(nil, "BACKGROUND")
 	bg:SetPoint("TOPLEFT", health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -397,6 +404,7 @@ function UF:CreatePowerBar(self)
 	power:SetStatusBarTexture(DB.normTex)
 	power:SetPoint("BOTTOMLEFT", self)
 	power:SetPoint("BOTTOMRIGHT", self)
+	UF:SmoothBar(power)
 	local powerHeight
 	if mystyle == "PlayerPlate" then
 		powerHeight = C.db["Nameplate"]["PPPowerHeight"]
@@ -417,7 +425,6 @@ function UF:CreatePowerBar(self)
 	power.wasHidden = powerHeight == 0
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
 	power.backdrop = B.CreateBDFrame(power, 0)
-	B:SmoothBar(power)
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
@@ -782,7 +789,7 @@ function UF:CreateCastBar(self)
 		spellTarget:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
 		cb.spellTarget = spellTarget
 
-		self:RegisterEvent("UNIT_TARGET", updateSpellTarget)
+		--self:RegisterEvent("UNIT_TARGET", updateSpellTarget)
 	end
 
 	local stage = B.CreateFS(cb, 22)
@@ -965,17 +972,6 @@ function UF.PostUpdateButton(element, button, unit, data)
 
 	if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and (not button.isHarmful) then
 		button.Stealable:Show()
-	end
-
-	if element.disableCooldown then
-		if duration and duration > 0 then
-			button.expiration = expiration
-			button:SetScript("OnUpdate", B.CooldownOnUpdate)
-			button.timer:Show()
-		else
-			button:SetScript("OnUpdate", nil)
-			button.timer:Hide()
-		end
 	end
 
 	local newTexture = UF.ReplacedSpellIcons[button.spellID]
@@ -1187,7 +1183,7 @@ function UF:CreateAuras(self)
 		bu.__value = auraUFs[mystyle]
 		UF:ConfigureAuras(bu)
 		UF:UpdateAuraDirection(self, bu)
-		bu.FilterAura = UF.UnitCustomFilter
+	--	bu.FilterAura = UF.UnitCustomFilter
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growthY"] = "UP"
@@ -1204,8 +1200,8 @@ function UF:CreateAuras(self)
 		bu.gap = false
 		bu.disableMouse = true
 		bu.disableCooldown = true
-		bu.FilterAura = UF.CustomFilter
-		bu.PostUpdateInfo = UF.AurasPostUpdateInfo
+	--	bu.FilterAura = UF.CustomFilter
+	--	bu.PostUpdateInfo = UF.AurasPostUpdateInfo
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
@@ -1228,7 +1224,7 @@ function UF:CreateBuffs(self)
 
 	bu.__value = "Boss"
 	UF:ConfigureBuffAndDebuff(bu)
-	bu.FilterAura = UF.UnitCustomFilter
+--	bu.FilterAura = UF.UnitCustomFilter
 
 	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.showStealableBuffs = true
@@ -1250,7 +1246,7 @@ function UF:CreateDebuffs(self)
 	bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 	bu.__value = "Boss"
 	UF:ConfigureBuffAndDebuff(bu, true)
-	bu.FilterAura = UF.UnitCustomFilter
+--	bu.FilterAura = UF.UnitCustomFilter
 
 	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.PostCreateButton = UF.PostCreateButton
@@ -1274,13 +1270,12 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowe
 
 		element.thisColor = cur == max and 1 or 2
 		if not element.prevColor or element.prevColor ~= element.thisColor then
-			local r, g, b = 1, 0, 0
+			local color = oUF:CreateColor(1, 0, 0)
 			if element.thisColor == 2 then
-				local color = element.__owner.colors.power[powerType]
-				r, g, b = color[1], color[2], color[3]
+				color = element.__owner.colors.power[powerType]
 			end
 			for i = 1, #element do
-				element[i]:SetStatusBarColor(r, g, b)
+				element[i]:SetStatusBarColor(color:GetRGB())
 			end
 			element.prevColor = element.thisColor
 		end
@@ -1376,7 +1371,7 @@ function UF:CreateClassPower(self)
 		bars[i].bg = (isDK and bars[i] or bar):CreateTexture(nil, "BACKGROUND")
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(DB.normTex)
-		bars[i].bg.multiplier = .25
+		bars[i].bg:SetVertexColor(0, 0, 0, .7)
 
 		if isDK then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
@@ -1425,6 +1420,7 @@ function UF:StaggerBar(self)
 	stagger:SetStatusBarTexture(DB.normTex)
 	stagger:SetFrameLevel(self:GetFrameLevel() + 5)
 	B.SetBD(stagger, 0)
+	UF:SmoothBar(stagger)
 
 	local bg = stagger:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
@@ -1526,6 +1522,7 @@ function UF:CreateAltPower(self)
 	bar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
 	bar:SetHeight(2)
 	B.SetBD(bar, 0)
+	UF:SmoothBar(bar)
 
 	local text = B.CreateFS(bar, 14, "")
 	text:SetJustifyH("CENTER")
@@ -1553,33 +1550,6 @@ function UF:CreateExpRepBar(self)
 	B:GetModule("Misc"):SetupScript(bar)
 end
 
-function UF:PostUpdatePrediction(_, health, maxHealth, allIncomingHeal, allAbsorb)
-	if not C.db["UFs"]["OverAbsorb"] then
-		self.overAbsorbBar:Hide()
-		return
-	end
-
-	local hasOverAbsorb
-	local overAbsorbAmount = health + allIncomingHeal + allAbsorb - maxHealth
-	if overAbsorbAmount > 0 then
-		if overAbsorbAmount > maxHealth then
-			hasOverAbsorb = true
-			overAbsorbAmount = maxHealth
-		end
-		self.overAbsorbBar:SetMinMaxValues(0, maxHealth)
-		self.overAbsorbBar:SetValue(overAbsorbAmount)
-		self.overAbsorbBar:Show()
-	else
-		self.overAbsorbBar:Hide()
-	end
-
-	if hasOverAbsorb then
-		self.overAbsorb:Show()
-	else
-		self.overAbsorb:Hide()
-	end
-end
-
 function UF:CreatePrediction(self)
 	local frame = CreateFrame("Frame", nil, self)
 	frame:SetAllPoints(self.Health)
@@ -1595,18 +1565,10 @@ function UF:CreatePrediction(self)
 	myBar:SetStatusBarColor(0, 1, .5, .5)
 	myBar:Hide()
 
-	local otherBar = CreateFrame("StatusBar", nil, frame)
-	otherBar:SetPoint("TOP")
-	otherBar:SetPoint("BOTTOM")
-	otherBar:SetPoint("LEFT", myBar:GetStatusBarTexture(), "RIGHT")
-	otherBar:SetStatusBarTexture(DB.normTex)
-	otherBar:SetStatusBarColor(0, 1, 0, .5)
-	otherBar:Hide()
-
 	local absorbBar = CreateFrame("StatusBar", nil, frame)
 	absorbBar:SetPoint("TOP")
 	absorbBar:SetPoint("BOTTOM")
-	absorbBar:SetPoint("LEFT", otherBar:GetStatusBarTexture(), "RIGHT")
+	absorbBar:SetPoint("LEFT", myBar:GetStatusBarTexture(), "RIGHT")
 	absorbBar:SetStatusBarTexture(DB.bdTex)
 	absorbBar:SetStatusBarColor(.66, 1, 1)
 	absorbBar:SetFrameLevel(frameLevel)
@@ -1614,19 +1576,6 @@ function UF:CreatePrediction(self)
 	absorbBar:Hide()
 	local tex = absorbBar:CreateTexture(nil, "ARTWORK", nil, 1)
 	tex:SetAllPoints(absorbBar:GetStatusBarTexture())
-	tex:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
-	tex:SetHorizTile(true)
-	tex:SetVertTile(true)
-
-	local overAbsorbBar = CreateFrame("StatusBar", nil, frame)
-	overAbsorbBar:SetAllPoints()
-	overAbsorbBar:SetStatusBarTexture(DB.bdTex)
-	overAbsorbBar:SetStatusBarColor(.66, 1, 1)
-	overAbsorbBar:SetFrameLevel(frameLevel)
-	overAbsorbBar:SetAlpha(.35)
-	overAbsorbBar:Hide()
-	local tex = overAbsorbBar:CreateTexture(nil, "ARTWORK", nil, 1)
-	tex:SetAllPoints(overAbsorbBar:GetStatusBarTexture())
 	tex:SetTexture("Interface\\RaidFrame\\Shield-Overlay", true, true)
 	tex:SetHorizTile(true)
 	tex:SetVertTile(true)
@@ -1665,30 +1614,26 @@ function UF:CreatePrediction(self)
 
 	-- Register with oUF
 	self.HealthPrediction = {
-		myBar = myBar,
-		otherBar = otherBar,
-		absorbBar = absorbBar,
-		healAbsorbBar = healAbsorbBar,
-		overAbsorbBar = overAbsorbBar,
-		overAbsorb = overAbsorb,
-		overHealAbsorb = overHealAbsorb,
-		maxOverflow = 1,
-		PostUpdate = UF.PostUpdatePrediction,
+		healingAll = myBar,
+		damageAbsorb = absorbBar,
+		healAbsorb = healAbsorbBar,
+		overDamageAbsorbIndicator = overAbsorb,
+		overHealAbsorbIndicator = overHealAbsorb,
 	}
 	self.predicFrame = frame
 end
 
 function UF.PostUpdateAddPower(element, cur, max)
 	if element.Text and max > 0 then
-		local perc = cur/max * 100
+		--[[local perc = cur/max * 100
 		if perc > 95 then
 			perc = ""
 			element:SetAlpha(0)
 		else
 			perc = format("%d%%", perc)
 			element:SetAlpha(1)
-		end
-		element.Text:SetText(perc)
+		end]]
+		element.Text:SetText(cur)
 	end
 end
 
@@ -1700,12 +1645,12 @@ function UF:CreateAddPower(self)
 	bar:SetStatusBarTexture(DB.normTex)
 	B.SetBD(bar, 0)
 	bar.colorPower = true
-	B:SmoothBar(bar)
+	UF:SmoothBar(bar)
 
 	local bg = bar:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
 	bg:SetTexture(DB.normTex)
-	bg.multiplier = .25
+	bg:SetVertexColor(0, 0, 0, .7)
 	local text = B.CreateFS(bar, 12, "", false, "CENTER", 1, -3)
 
 	self.AdditionalPower = bar

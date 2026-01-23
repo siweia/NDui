@@ -4,6 +4,9 @@ local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
 local SpellIsPriorityAura, SpellGetVisibilityInfo = SpellIsPriorityAura, SpellGetVisibilityInfo
+local GetAuraApplicationDisplayCount = C_UnitAuras.GetAuraApplicationDisplayCount
+local GetAuraDuration = C_UnitAuras.GetAuraDuration
+local MIN_SPELL_COUNT, MAX_SPELL_COUNT = 2, 999
 
 UF.RaidDebuffsBlack = {}
 function UF:UpdateRaidDebuffsBlack()
@@ -74,8 +77,9 @@ function UF:DebuffsIndicator_UpdateButton(debuffIndex, aura)
 
 	button.unit, button.index, button.filter = aura.unit, aura.index, aura.filter
 	if button.cd then
-		if aura.duration and aura.duration > 0 then
-			button.cd:SetCooldown(aura.expiration - aura.duration, aura.duration)
+		local auraDuration = button.unit and GetAuraDuration(button.unit, aura.auraInstanceID)
+		if auraDuration then
+			button.cd:SetCooldownFromDurationObject(auraDuration)
 			button.cd:Show()
 		else
 			button.cd:Hide()
@@ -84,15 +88,23 @@ function UF:DebuffsIndicator_UpdateButton(debuffIndex, aura)
 
 	if button.bg then
 		if aura.isDebuff then
-			local color = oUF.colors.debuff[aura.debuffType] or oUF.colors.debuff.none
-			button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
+			local color = oUF.colors.dispel[aura.debuffType] or oUF.colors.dispel[0]
+			button.bg:SetBackdropBorderColor(color:GetRGB())
 		else
 			button.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end
 
 	if button.Icon then button.Icon:SetTexture(aura.texture) end
-	if button.count then button.count:SetText(aura.count > 1 and aura.count or "") end
+	if button.count then
+		local count = aura.applications
+		if issecretvalue(count) then
+			button.count:SetText(GetAuraApplicationDisplayCount(button.unit, aura.auraInstanceID, MIN_SPELL_COUNT, MAX_SPELL_COUNT))
+		else
+			local hideCount = not count or (count < MIN_SPELL_COUNT or count > MAX_SPELL_COUNT)
+			button.count:SetText(hideCount and "" or count)
+		end
+	end
 
 	button:Show()
 end
@@ -108,17 +120,12 @@ end
 
 function UF.DebuffsIndicator_Filter(raidAuras, aura)
 	local spellID = aura.spellID
-	if UF.RaidDebuffsBlack[spellID] then
+	if not issecretvalue(spellID) and UF.RaidDebuffsBlack[spellID] then
 		return false
-	elseif aura.isBossAura or SpellIsPriorityAura(spellID) then
+	elseif not issecretvalue(aura.isBossAura) and aura.isBossAura or AuraUtil.IsRoleAura(aura) then
 		return true
 	else
-		local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, raidAuras.isInCombat and "RAID_INCOMBAT" or "RAID_OUTOFCOMBAT")
-		if hasCustom then
-			return showForMySpec or (alwaysShowMine and aura.isPlayerAura)
-		else
-			return true
-		end
+		return AuraUtil.ShouldDisplayDebuff(aura.Caster, spellID)
 	end
 end
 

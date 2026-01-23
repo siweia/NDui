@@ -12,6 +12,7 @@ local UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost, UnitName, UnitExists = Unit
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
 local GetNumArenaOpponentSpecs, GetCreatureDifficultyColor = GetNumArenaOpponentSpecs, GetCreatureDifficultyColor
 local UnitClassBase = UnitClassBase
+local TruncateWhenZero = C_StringUtil.TruncateWhenZero
 
 -- Add scantip back, due to issue on ColorMixin
 local scanTip = CreateFrame("GameTooltip", "NDui_ScanTooltip", nil, "GameTooltipTemplate")
@@ -52,9 +53,9 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 	end
 
 	if not arg1 then return end
-	local max = UnitHealthMax(unit)
-	local cur = format('%d', UnitHealth(unit))
-	local per = format('%d', UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
+	local max = B.Numb(UnitHealthMax(unit))
+	local cur = B.Numb(UnitHealth(unit))
+	local per = format("%d", UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
 
 	if arg1 == "currentpercent" then
 		return cur.." | "..per
@@ -65,7 +66,7 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 	elseif arg1 == "percent" then
 		return per
 	elseif arg1 == "loss" then
-		return C_StringUtil.TruncateWhenZero(UnitHealthMissing(unit))
+		return TruncateWhenZero(UnitHealthMissing(unit))
 	elseif arg1 == "losspercent" then -- broken in 12.0
 		local loss = max - cur
 		return loss ~= 0 and B:Round(loss/max*100, 1)
@@ -77,8 +78,8 @@ end
 oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED PARTY_MEMBER_ENABLE PARTY_MEMBER_DISABLE"
 
 oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
-	local max = UnitPowerMax(unit)
-	local cur = format("%d", UnitPower(unit))
+	local max = B.Numb(UnitPowerMax(unit))
+	local cur = B.Numb(UnitPower(unit))
 	local per = format("%d", UnitPowerPercent(unit, nil, true, CurveConstants.ScaleTo100))
 
 	if arg1 == "currentpercent" then
@@ -90,7 +91,7 @@ oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
 	elseif arg1 == "percent" then
 		return per
 	elseif arg1 == "loss" then
-		return C_StringUtil.TruncateWhenZero(UnitPowerMissing(unit))
+		return TruncateWhenZero(UnitPowerMissing(unit))
 	elseif arg1 == "losspercent" then
 		local loss = max - cur
 		return loss ~= 0 and B:Round(loss/max*100, 1)
@@ -99,8 +100,8 @@ end
 oUF.Tags.Events["VariousMP"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
 
 oUF.Tags.Methods["curAbsorb"] = function(unit)
-	local value = UnitGetTotalAbsorbs(unit) or 0
-	return value > 0 and DB.InfoColor..B.Numb(value).."+|r"
+	local value = TruncateWhenZero(UnitGetTotalAbsorbs(unit))
+	return DB.InfoColor..value.."|r"
 end
 oUF.Tags.Events["curAbsorb"] = "UNIT_ABSORB_AMOUNT_CHANGED UNIT_HEAL_ABSORB_AMOUNT_CHANGED"
 
@@ -269,7 +270,7 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 
 		local textLine = _G[format("NDui_ScanTooltipTextLeft%d", GetCVarBool("colorblindmode") and 3 or 2)]
 		local title = textLine and textLine:GetText()
-		if title and not strfind(title, "^"..LEVEL) then
+		if title and not issecretvalue(title) and not strfind(title, "^"..LEVEL) then
 			return title
 		end
 --[[
@@ -299,8 +300,7 @@ oUF.Tags.Events["tarname"] = "UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT
 
 -- AltPower value tag
 oUF.Tags.Methods["altpower"] = function(unit)
-	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
-	return cur > 0 and cur
+	return TruncateWhenZero(UnitPower(unit, ALTERNATE_POWER_INDEX))
 end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE UNIT_MAXPOWER"
 

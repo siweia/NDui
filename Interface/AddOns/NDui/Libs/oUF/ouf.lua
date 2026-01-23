@@ -631,7 +631,7 @@ do
 		end
 	end
 
-	--[[ oUF:SpawnHeader(overrideName, template, visibility, ...)
+	--[[ oUF:SpawnHeader(overrideName, template, ...)
 	Used to create a group header and apply the currently active style to it.
 
 	* self         - the global oUF object

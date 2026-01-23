@@ -542,11 +542,11 @@ end
 local function bgUpdate(self, elapsed)
 	AnimateTexCoords(self.ants, 256, 256, 48, 48, 22, elapsed, self.throttle);
 	local cooldown = self:GetParent().cooldown;
-	if(cooldown and cooldown:IsShown() and cooldown:GetCooldownDuration() > 3000) then
-		self:SetAlpha(0.5);
-	else
-		self:SetAlpha(1.0);
-	end
+	--if(cooldown and cooldown:IsShown() and cooldown:GetCooldownDuration() > 3000) then
+	--	self:SetAlpha(0.5);
+	--else
+	--	self:SetAlpha(1.0);
+	--end
 end
 
 local function configureButtonGlow(f,alpha)

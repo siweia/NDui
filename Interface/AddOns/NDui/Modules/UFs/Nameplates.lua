@@ -64,6 +64,7 @@ function UF:UpdatePlateClickThru()
 end
 
 function UF:UpdatePlateSize()
+	if InCombatLockdown() then return end
 	UF.NameplateDriver:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 end
 
@@ -705,15 +706,13 @@ function UF:CreatePlates()
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 	self:SetPoint("CENTER")
-	self:SetScale(NDuiADB["UIScale"])
+	--self:SetScale(NDuiADB["UIScale"])
 
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
 	self.backdrop = B.SetBD(health)
 	self.backdrop.__shadow = nil
-	B:SmoothBar(health)
-
 	self.Health = health
 	self.Health.UpdateColor = UF.UpdateColor
 
@@ -832,7 +831,7 @@ function UF:UpdateNameplateSize()
 		self:Tag(self.nameText, UF.PlateNameTags[nameType])
 		self.__tagIndex = nameType
 
-		UF.NameplateDriver:SetSize(plateWidth, plateHeight)
+		UF:UpdatePlateSize()
 		B.SetFontSize(self.tarName, nameTextSize+4)
 		self.Castbar.Icon:SetSize(iconSize, iconSize)
 		self.Castbar.glowFrame:SetSize(iconSize+8, iconSize+8)
@@ -1017,7 +1016,9 @@ function UF:OnUnitTargetChanged()
 			local memberTarget = member.."target"
 			if not UnitIsDeadOrGhost(member) and UnitExists(memberTarget) then
 				local unitGUID = UnitGUID(memberTarget)
-				targetedList[unitGUID] = (targetedList[unitGUID] or 0) + 1
+				if not issecretvalue(unitGUID) then
+					targetedList[unitGUID] = (targetedList[unitGUID] or 0) + 1
+				end
 			end
 		end
 	end
@@ -1062,8 +1063,10 @@ end
 function UF:OnNameplateAdded(event, unit)
 	if not self then return end
 
-	self.unitName = UnitName(unit)
-	self.unitGUID = UnitGUID(unit)
+	local name = UnitName(unit)
+	self.unitName = not issecretvalue(name) and name or nil
+	local guid = UnitGUID(unit)
+	self.unitGUID = not issecretvalue(guid) and guid or nil
 	self.isPlayer = UnitIsPlayer(unit)
 	self.npcID = B.GetNPCID(self.unitGUID)
 	self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
@@ -1168,11 +1171,12 @@ function UF:CreatePlayerPlate()
 	self:SetSize(C.db["Nameplate"]["PPWidth"], healthHeight + powerHeight + C.mult)
 
 	UF:CreateHealthBar(self)
+	self.Health.bg:SetVertexColor(0, 0, 0, .7)
 	UF:CreatePowerBar(self)
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
-	UF:AvadaKedavra(self)
+	--UF:AvadaKedavra(self)
 
 	local textFrame = CreateFrame("Frame", nil, self.Power)
 	textFrame:SetAllPoints()

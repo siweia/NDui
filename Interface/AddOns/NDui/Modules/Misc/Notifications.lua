@@ -443,6 +443,7 @@ local spellList = {
 }
 
 function M:ItemAlert_Update(unit, castID, spellID)
+	if issecretvalue and issecretvalue(spellID) then return end
 	if C.db["Misc"]["LeaderOnly"] and not (UnitIsGroupAssistant("player") or UnitIsGroupLeader("player")) then return end -- only alert for leader, needs review
 
 	if groupUnits[unit] and spellList[spellID] and (spellList[spellID] ~= castID) then
@@ -471,10 +472,10 @@ end
 function M:ItemAlert_CheckGroup()
 	if IsInGroup() then
 		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.ItemAlert_Update)
-		B:RegisterEvent("CLEU", M.CheckBloodlustStatus)
+	--	B:RegisterEvent("CLEU", M.CheckBloodlustStatus)
 	else
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.ItemAlert_Update)
-		B:UnregisterEvent("CLEU", M.CheckBloodlustStatus)
+	--	B:UnregisterEvent("CLEU", M.CheckBloodlustStatus)
 	end
 end
 
@@ -490,7 +491,7 @@ function M:SpellItemAlert()
 		B:UnregisterEvent("GROUP_LEFT", M.ItemAlert_CheckGroup)
 		B:UnregisterEvent("GROUP_JOINED", M.ItemAlert_CheckGroup)
 		B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.ItemAlert_Update)
-		B:UnregisterEvent("CLEU", M.CheckBloodlustStatus)
+	--	B:UnregisterEvent("CLEU", M.CheckBloodlustStatus)
 	end
 end
 
@@ -526,7 +527,6 @@ function M:NVision_Create()
 		bar:SetMinMaxValues(0, v.maxValue)
 		bar:SetValue(0)
 		bar:SetReverseFill(v.reverse)
-		B:SmoothBar(bar)
 		B.CreateSB(bar, nil, unpack(v.color))
 		bar.text = B.CreateFS(bar, 16, "0/"..v.maxValue, nil, "CENTER", 0, 0)
 

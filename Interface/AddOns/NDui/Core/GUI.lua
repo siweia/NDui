@@ -615,7 +615,6 @@ G.AccountSettings = {
 	CornerSpells = {},
 	CustomTex = "",
 	MajorSpells = {},
-	SmoothAmount = .25,
 	AutoRecycle = true,
 	IgnoredButtons = "",
 	RaidBuffsWhite = {},
@@ -628,6 +627,7 @@ G.AccountSettings = {
 	AvadaIndex = {},
 	AvadaProfile = {},
 	AddOnProfiler = false,
+	SmoothBars = true,
 }
 
 -- Initial settings
@@ -1014,10 +1014,6 @@ local function toggleSwingBars()
 	B:GetModule("UnitFrames"):ToggleSwingBars()
 end
 
-local function updateSmoothingAmount()
-	B:SetSmoothingAmount(NDuiADB["SmoothAmount"])
-end
-
 local function updateAllHeaders()
 	B:GetModule("UnitFrames"):UpdateAllHeaders()
 end
@@ -1129,6 +1125,15 @@ end
 local function updateSkinAlpha()
 	for _, frame in pairs(C.frames) do
 		frame:SetBackdropColor(0, 0, 0, C.db["Skins"]["SkinAlpha"])
+	end
+end
+
+local function toggleSmooth()
+	local UF = B:GetModule("UnitFrames")
+	if UF then
+		for bar in pairs(UF.smoothbars) do
+			UF:SmoothBar(bar)
+		end
 	end
 end
 
@@ -1542,7 +1547,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 		{2, "ACCOUNT", "CustomTex", L["CustomTex"], nil, nil, nil, L["CustomTexTip"]},
-		{3, "ACCOUNT", "SmoothAmount", L["SmoothAmount"].."*", true, {.1, 1, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
+		{1, "ACCOUNT", "SmoothBars", L["SmoothBars"], true, nil, toggleSmooth, L["SmoothBarsTip"]},
 	},
 	[15] = {
 	},

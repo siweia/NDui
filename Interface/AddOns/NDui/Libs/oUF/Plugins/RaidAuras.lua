@@ -48,12 +48,10 @@ local function UpdateAuras(element, list, maxButtons, unit, filter)
 		aura.canApply = auraData.canApplyAura
 		aura.isBossAura = auraData.isBossAura
 		-- aura.casterIsPlayer = casterIsPlayer -- use .isPlayerAura instead
-		aura.isPlayerAura = aura.caster and (UnitIsUnit("player", aura.caster) or UnitIsOwnerOrControllerOfUnit("player", aura.caster))
+		aura.isPlayerAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, auraData.auraInstanceID, filter .. '|PLAYER')
 		aura.nameplateShowAll = auraData.nameplateShowAll
 		aura.timeMod = auraData.timeMod
-		aura.effect1 = auraData.points[1]
-		aura.effect2 = auraData.points[2]
-		aura.effect3 = auraData.points[3]
+		aura.auraInstanceID = auraData.auraInstanceID
 	end
 end
 
