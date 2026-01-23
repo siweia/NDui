@@ -86,7 +86,7 @@ function TT:GetLevelLine()
 end
 
 function TT:GetTarget(unit)
-	if issecretvalue(unit) then return end
+	if issecretvalue(UnitIsUnit(unit, "player")) then return "" end
 	if UnitIsUnit(unit, "player") then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
