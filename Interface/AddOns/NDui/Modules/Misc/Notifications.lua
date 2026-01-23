@@ -527,7 +527,6 @@ function M:NVision_Create()
 		bar:SetMinMaxValues(0, v.maxValue)
 		bar:SetValue(0)
 		bar:SetReverseFill(v.reverse)
-		B:SmoothBar(bar)
 		B.CreateSB(bar, nil, unpack(v.color))
 		bar.text = B.CreateFS(bar, 16, "0/"..v.maxValue, nil, "CENTER", 0, 0)
 

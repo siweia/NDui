@@ -615,7 +615,6 @@ G.AccountSettings = {
 	CornerSpells = {},
 	CustomTex = "",
 	MajorSpells = {},
-	SmoothAmount = .25,
 	AutoRecycle = true,
 	IgnoredButtons = "",
 	RaidBuffsWhite = {},
@@ -1012,10 +1011,6 @@ end
 
 local function toggleSwingBars()
 	B:GetModule("UnitFrames"):ToggleSwingBars()
-end
-
-local function updateSmoothingAmount()
-	B:SetSmoothingAmount(NDuiADB["SmoothAmount"])
 end
 
 local function updateAllHeaders()
@@ -1542,7 +1537,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "ACCOUNT", "TexStyle", L["Texture Style"], false, {}},
 		{4, "ACCOUNT", "NumberFormat", L["Numberize"], true, {L["Number Type1"], L["Number Type2"], L["Number Type3"]}},
 		{2, "ACCOUNT", "CustomTex", L["CustomTex"], nil, nil, nil, L["CustomTexTip"]},
-		{3, "ACCOUNT", "SmoothAmount", L["SmoothAmount"].."*", true, {.1, 1, .05}, updateSmoothingAmount, L["SmoothAmountTip"]},
 	},
 	[15] = {
 	},

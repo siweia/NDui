@@ -172,6 +172,7 @@ function UF:CreateHealthBar(self)
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetPoint("TOPLEFT", self)
 	health:SetPoint("TOPRIGHT", self)
+	health.smoothing = Enum.StatusBarInterpolation.ExponentialEaseOut
 	local healthHeight
 	if mystyle == "PlayerPlate" then
 		healthHeight = C.db["Nameplate"]["PPHealthHeight"]
@@ -200,7 +201,6 @@ function UF:CreateHealthBar(self)
 		self.backdrop.__shadow:SetFrameLevel(0)
 		self.backdrop.__shadow = nil
 	end
-	B:SmoothBar(health)
 
 	local bg = self:CreateTexture(nil, "BACKGROUND")
 	bg:SetPoint("TOPLEFT", health:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
@@ -398,6 +398,7 @@ function UF:CreatePowerBar(self)
 	power:SetStatusBarTexture(DB.normTex)
 	power:SetPoint("BOTTOMLEFT", self)
 	power:SetPoint("BOTTOMRIGHT", self)
+	power.smoothing = Enum.StatusBarInterpolation.ExponentialEaseOut
 	local powerHeight
 	if mystyle == "PlayerPlate" then
 		powerHeight = C.db["Nameplate"]["PPPowerHeight"]
@@ -418,7 +419,6 @@ function UF:CreatePowerBar(self)
 	power.wasHidden = powerHeight == 0
 	power:SetFrameLevel(self:GetFrameLevel() - 2)
 	power.backdrop = B.CreateBDFrame(power, 0)
-	B:SmoothBar(power)
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
@@ -1637,7 +1637,6 @@ function UF:CreateAddPower(self)
 	bar:SetStatusBarTexture(DB.normTex)
 	B.SetBD(bar, 0)
 	bar.colorPower = true
-	B:SmoothBar(bar)
 
 	local bg = bar:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()

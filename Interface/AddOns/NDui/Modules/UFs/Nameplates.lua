@@ -713,8 +713,6 @@ function UF:CreatePlates()
 	health:SetStatusBarTexture(DB.normTex)
 	self.backdrop = B.SetBD(health)
 	self.backdrop.__shadow = nil
-	B:SmoothBar(health)
-
 	self.Health = health
 	self.Health.UpdateColor = UF.UpdateColor
 
@@ -1173,6 +1171,7 @@ function UF:CreatePlayerPlate()
 	self:SetSize(C.db["Nameplate"]["PPWidth"], healthHeight + powerHeight + C.mult)
 
 	UF:CreateHealthBar(self)
+	self.Health.bg:SetVertexColor(0, 0, 0, .7)
 	UF:CreatePowerBar(self)
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
