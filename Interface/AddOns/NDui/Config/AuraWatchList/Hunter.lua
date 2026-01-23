@@ -18,10 +18,6 @@ local list = {
 		{AuraID = 164857, UnitID = "player"},	-- 生存专家
 		{AuraID = 186258, UnitID = "player"},	-- 猎豹守护
 		{AuraID = 246152, UnitID = "player"},	-- 倒刺射击
-		{AuraID = 246851, UnitID = "player"},	-- 倒刺射击
-		{AuraID = 246852, UnitID = "player"},	-- 倒刺射击
-		{AuraID = 246853, UnitID = "player"},	-- 倒刺射击
-		{AuraID = 246854, UnitID = "player"},	-- 倒刺射击
 		{AuraID = 203924, UnitID = "player"},	-- 守护屏障
 		{AuraID = 197161, UnitID = "player"},	-- 灵龟守护回血
 		{AuraID = 160007, UnitID = "player"},	-- 上升气流（双头龙）
