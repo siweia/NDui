@@ -10,6 +10,7 @@ local pairs, next, unpack = pairs, next, unpack
 local UnitGUID, IsItemInRange = UnitGUID, IsItemInRange
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
 local SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura = SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura
+local ADDITIONAL_POWER_BAR_INDEX = 0
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
 -- Custom colors
@@ -1263,13 +1264,12 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowe
 
 		element.thisColor = cur == max and 1 or 2
 		if not element.prevColor or element.prevColor ~= element.thisColor then
-			local r, g, b = 1, 0, 0
+			local color = oUF:CreateColor(1, 0, 0)
 			if element.thisColor == 2 then
-				local color = element.__owner.colors.power[powerType]
-				r, g, b = color[1], color[2], color[3]
+				color = element.__owner.colors.power[powerType]
 			end
 			for i = 1, #element do
-				element[i]:SetStatusBarColor(r, g, b)
+				element[i]:SetStatusBarColor(color:GetRGB())
 			end
 			element.prevColor = element.thisColor
 		end
@@ -1365,7 +1365,7 @@ function UF:CreateClassPower(self)
 		bars[i].bg = (isDK and bars[i] or bar):CreateTexture(nil, "BACKGROUND")
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(DB.normTex)
-		bars[i].bg.multiplier = .25
+		bars[i].bg:SetVertexColor(0, 0, 0, .7)
 
 		if isDK then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
@@ -1617,15 +1617,15 @@ end
 
 function UF.PostUpdateAddPower(element, cur, max)
 	if element.Text and max > 0 then
-		local perc = cur/max * 100
+		--[[local perc = cur/max * 100
 		if perc > 95 then
 			perc = ""
 			element:SetAlpha(0)
 		else
 			perc = format("%d%%", perc)
 			element:SetAlpha(1)
-		end
-		element.Text:SetText(perc)
+		end]]
+		element.Text:SetText(cur)
 	end
 end
 
@@ -1642,7 +1642,7 @@ function UF:CreateAddPower(self)
 	local bg = bar:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
 	bg:SetTexture(DB.normTex)
-	bg.multiplier = .25
+	bg:SetVertexColor(0, 0, 0, .7)
 	local text = B.CreateFS(bar, 12, "", false, "CENTER", 1, -3)
 
 	self.AdditionalPower = bar
