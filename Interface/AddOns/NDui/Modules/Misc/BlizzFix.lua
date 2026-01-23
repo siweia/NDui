@@ -147,3 +147,65 @@ do
 
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
+
+local coordStart = 0.0625;
+local coordEnd = 1 - coordStart;
+local textureUVs = {			-- keys have to match pieceNames in nineSliceSetup table
+	TopLeftCorner = { setWidth = true, setHeight = true, ULx = 0.5078125, ULy = coordStart, LLx = 0.5078125, LLy = coordEnd, URx = 0.6171875, URy = coordStart, LRx = 0.6171875, LRy = coordEnd },
+	TopRightCorner = { setWidth = true, setHeight = true, ULx = 0.6328125, ULy = coordStart, LLx = 0.6328125, LLy = coordEnd, URx = 0.7421875, URy = coordStart, LRx = 0.7421875, LRy = coordEnd },
+	BottomLeftCorner = { setWidth = true, setHeight = true, ULx = 0.7578125, ULy = coordStart, LLx = 0.7578125, LLy = coordEnd, URx = 0.8671875, URy = coordStart, LRx = 0.8671875, LRy = coordEnd },
+	BottomRightCorner = { setWidth = true, setHeight = true, ULx = 0.8828125, ULy = coordStart, LLx = 0.8828125, LLy = coordEnd, URx = 0.9921875, URy = coordStart, LRx = 0.9921875, LRy = coordEnd },
+	TopEdge = { setHeight = true, ULx = 0.2578125, ULy = "repeatX", LLx = 0.3671875, LLy = "repeatX", URx = 0.2578125, URy = coordStart, LRx = 0.3671875, LRy = coordStart },
+	BottomEdge = { setHeight = true, ULx = 0.3828125, ULy = "repeatX", LLx = 0.4921875, LLy = "repeatX", URx = 0.3828125, URy = coordStart, LRx = 0.4921875, LRy = coordStart },
+	LeftEdge = { setWidth = true, ULx = 0.0078125, ULy = coordStart, LLx = 0.0078125, LLy = "repeatY", URx = 0.1171875, URy = coordStart, LRx = 0.1171875, LRy = "repeatY" },
+	RightEdge = { setWidth = true, ULx = 0.1328125, ULy = coordStart, LLx = 0.1328125, LLy = "repeatY", URx = 0.2421875, URy = coordStart, LRx = 0.2421875, LRy = "repeatY" },
+	Center = { ULx = 0, ULy = 0, LLx = 0, LLy = "repeatY", URx = "repeatX", URy = 0, LRx = "repeatX", LRy = "repeatY" },
+};
+local function GetBackdropCoordValue(coord, pieceSetup, repeatX, repeatY)
+	local value = pieceSetup[coord];
+	if value == "repeatX" then
+		return repeatX;
+	elseif value == "repeatY" then
+		return repeatY;
+	else
+		return value;
+	end
+end
+local function SetupBackdropTextureCoordinates(region, pieceSetup, repeatX, repeatY)
+	region:SetTexCoord(	GetBackdropCoordValue("ULx", pieceSetup, repeatX, repeatY), GetBackdropCoordValue("ULy", pieceSetup, repeatX, repeatY),
+						GetBackdropCoordValue("LLx", pieceSetup, repeatX, repeatY), GetBackdropCoordValue("LLy", pieceSetup, repeatX, repeatY),
+						GetBackdropCoordValue("URx", pieceSetup, repeatX, repeatY), GetBackdropCoordValue("URy", pieceSetup, repeatX, repeatY),
+						GetBackdropCoordValue("LRx", pieceSetup, repeatX, repeatY), GetBackdropCoordValue("LRy", pieceSetup, repeatX, repeatY));
+end
+function BackdropTemplateMixin:SetupTextureCoordinates()
+	local width = self:GetWidth();
+	if issecretvalue(width) then return end -- needs review
+	local height = self:GetHeight();
+	local effectiveScale = self:GetEffectiveScale();
+	local edgeSize = self:GetEdgeSize();
+	local edgeRepeatX = max(0, (width / edgeSize) * effectiveScale - 2 - coordStart);
+	local edgeRepeatY = max(0, (height / edgeSize) * effectiveScale - 2 - coordStart);
+
+	for pieceName, pieceSetup in pairs(textureUVs) do
+		local region = self[pieceName];
+		if region then
+			if pieceName == "Center" then
+				local repeatX = 1;
+				local repeatY = 1;
+				if self.backdropInfo.tile then
+					local divisor = self.backdropInfo.tileSize;
+					if not divisor or divisor == 0 then
+						divisor = edgeSize;
+					end
+					if divisor ~= 0 then
+						repeatX = (width / divisor) * effectiveScale;
+						repeatY = (height / divisor) * effectiveScale;
+					end
+				end
+				SetupBackdropTextureCoordinates(region, pieceSetup, repeatX, repeatY);
+			else
+				SetupBackdropTextureCoordinates(region, pieceSetup, edgeRepeatX, edgeRepeatY);
+			end
+		end
+	end
+end
