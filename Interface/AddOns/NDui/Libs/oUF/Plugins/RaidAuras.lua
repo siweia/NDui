@@ -51,6 +51,7 @@ local function UpdateAuras(element, list, maxButtons, unit, filter)
 		aura.isPlayerAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, auraData.auraInstanceID, filter .. '|PLAYER')
 		aura.nameplateShowAll = auraData.nameplateShowAll
 		aura.timeMod = auraData.timeMod
+		aura.auraInstanceID = auraData.auraInstanceID
 	end
 end
 
