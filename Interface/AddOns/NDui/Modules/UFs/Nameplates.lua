@@ -186,7 +186,8 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = UF.CustomUnits[name] or UF.CustomUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
-	local isOffTank, status = UF:CheckThreatStatus(unit)
+	--local isOffTank, status = UF:CheckThreatStatus(unit)
+	local status = UnitThreatSituation("player", unit)
 	local customColor = C.db["Nameplate"]["CustomColor"]
 	local secureColor = C.db["Nameplate"]["SecureColor"]
 	local transColor = C.db["Nameplate"]["TransColor"]
@@ -692,6 +693,7 @@ function UF:CreatePlates()
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
+	UF:SmoothBar(health)
 	self.backdrop = B.SetBD(health)
 	self.backdrop.__shadow = nil
 	self.Health = health
