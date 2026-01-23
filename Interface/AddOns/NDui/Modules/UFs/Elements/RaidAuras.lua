@@ -7,7 +7,7 @@ local invalidPrio = -1
 
 function UF:CreateRaidAuras(self)
 	-- Indicators
-	UF:CreateAurasIndicator(self)
+	--UF:CreateAurasIndicator(self)
 	UF:CreateSpellsIndicator(self)
 	UF:CreateBuffsIndicator(self)
 	UF:CreateDebuffsIndicator(self)
@@ -34,7 +34,7 @@ function UF.RaidAurasPostUpdate(element, unit)
 	local numDebuffs = element.debuffList.num
 
 	element.isInCombat = UnitAffectingCombat("player")
-
+--[[
 	if C.db["UFs"]["DispellType"] ~= 3 or C.db["UFs"]["InstanceAuras"] then
 		UF.AurasIndicator_UpdatePriority(self, numDebuffs, unit)
 		UF.AurasIndicator_HideButtons(self)
@@ -50,7 +50,7 @@ function UF.RaidAurasPostUpdate(element, unit)
 			end
 		end
 	end
-
+]]
 	UF.SpellsIndicator_HideButtons(self)
 
 	for i = auraIndex+1, numDebuffs do
@@ -89,7 +89,7 @@ end
 function UF:RaidAuras_UpdateOptions()
 	for _, frame in pairs(oUF.objects) do
 		if frame.mystyle == "raid" then
-			UF.AurasIndicator_UpdateOptions(frame)
+			--UF.AurasIndicator_UpdateOptions(frame)
 			UF.SpellsIndicator_UpdateOptions(frame)
 			UF.DebuffsIndicator_UpdateOptions(frame)
 			UF.BuffsIndicator_UpdateOptions(frame)
