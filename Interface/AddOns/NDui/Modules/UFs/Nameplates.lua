@@ -64,6 +64,7 @@ function UF:UpdatePlateClickThru()
 end
 
 function UF:UpdatePlateSize()
+	if InCombatLockdown() then return end
 	UF.NameplateDriver:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 end
 
@@ -705,7 +706,7 @@ function UF:CreatePlates()
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 	self:SetPoint("CENTER")
-	self:SetScale(NDuiADB["UIScale"])
+	--self:SetScale(NDuiADB["UIScale"])
 
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
@@ -832,9 +833,7 @@ function UF:UpdateNameplateSize()
 		self:Tag(self.nameText, UF.PlateNameTags[nameType])
 		self.__tagIndex = nameType
 
-		if not InCombatLockdown() then
-			UF.NameplateDriver:SetSize(plateWidth, plateHeight)
-		end
+		UF:UpdatePlateSize()
 		B.SetFontSize(self.tarName, nameTextSize+4)
 		self.Castbar.Icon:SetSize(iconSize, iconSize)
 		self.Castbar.glowFrame:SetSize(iconSize+8, iconSize+8)
