@@ -2758,3 +2758,8 @@ end
 
 SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
 SLASH_NDUI_AVADACONFIG1 = "/aa"
+
+SlashCmdList["LEAVEGROUP"] = function ()
+	C_PartyInfo.LeaveParty()
+end
+SLASH_LEAVEGROUP1 = "/lg"
