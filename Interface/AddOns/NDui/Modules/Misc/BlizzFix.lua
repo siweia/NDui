@@ -148,6 +148,7 @@ do
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
+-- Fix blizzard ui error
 local coordStart = 0.0625;
 local coordEnd = 1 - coordStart;
 local textureUVs = {			-- keys have to match pieceNames in nineSliceSetup table
@@ -208,4 +209,34 @@ function BackdropTemplateMixin:SetupTextureCoordinates()
 			end
 		end
 	end
+end
+
+MoneyFrame_Update_OLD = MoneyFrame_Update
+
+local function GetMoneyFrame(frameOrName)
+	local argType = type(frameOrName)
+	if argType == "table" then
+		return frameOrName
+	elseif argType == "string" then
+		return _G[frameOrName]
+	end
+	return nil
+end
+
+function MoneyFrame_Update(frameName, money, forceShow)
+	local frame = GetMoneyFrame(frameName);
+	if issecretvalue(frame.GoldButton:GetWidth()) then return end
+	MoneyFrame_Update_OLD(frameName, money, forceShow)
+end
+
+SetTooltipMoney_OLD = SetTooltipMoney
+
+function SetTooltipMoney(frame, money, type, prefixText, suffixText)
+	if not frame.shownMoneyFrames then
+		frame.shownMoneyFrames = 0;
+	end
+	local moneyFrame = _G[frame:GetName().."MoneyFrame"..frame.shownMoneyFrames+1]
+	local moneyFrameWidth = moneyFrame and moneyFrame:GetWidth()
+	if issecretvalue(moneyFrameWidth) then return end
+	SetTooltipMoney_OLD(frame, money, type, prefixText, suffixText)
 end
