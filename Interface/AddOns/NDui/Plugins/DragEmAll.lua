@@ -16,6 +16,7 @@ local frames = {
 	["ChannelFrame"] = false,
 	["ChatConfigFrame"] = false,
 	["CommunitiesFrame"] = false, -- needs review
+	["CooldownViewerSettings"] = false,
 	["DressUpFrame"] = false,
 	["FriendsFrame"] = false,
 	["GossipFrame"] = false,
