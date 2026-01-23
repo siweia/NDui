@@ -53,7 +53,7 @@ function TT:UpdateFactionLine(lineData)
 	if not self:IsTooltipType(Enum.TooltipDataType.Unit) then return end
 
 	local unit = TT.GetUnit(self)
-	local unitClass = unit and UnitIsPlayer(unit) and UnitClassBase(unit)
+	local unitClass = unit and UnitIsPlayer(unit) and UnitClass(unit)
 	local unitCreature = unit and UnitCreatureType(unit)
 
 	local linetext = lineData.leftText
@@ -86,6 +86,7 @@ function TT:GetLevelLine()
 end
 
 function TT:GetTarget(unit)
+	if issecretvalue(unit) then return end
 	if UnitIsUnit(unit, "player") then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
@@ -272,7 +273,7 @@ function TT:OnTooltipSetUnit()
 			local standingText = not isPlayer and reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction].."|r " or ""
 
 			local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
-			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClassBase(unit) or "").."|r") or UnitCreatureType(unit) or ""
+			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
 
 			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, standingText..unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 		end
