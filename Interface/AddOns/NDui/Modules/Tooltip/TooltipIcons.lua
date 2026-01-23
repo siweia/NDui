@@ -9,7 +9,7 @@ local newString = "0:0:64:64:5:59:5:59"
 function TT:SetupTooltipIcon(icon)
 	local title = icon and _G[self:GetName().."TextLeft1"]
 	local titleText = title and title:GetText()
-	if titleText and not strfind(titleText, ":20:20:") then
+	if titleText and not issecretvalue(titleText) and not strfind(titleText, ":20:20:") then
 		title:SetFormattedText("|T%s:20:20:"..newString..":%d|t %s", icon, 20, titleText)
 	end
 

@@ -88,10 +88,10 @@ function TT:SetupTooltipID()
 	-- Spells
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
 		if self:IsForbidden() then return end
-		local auraData = C_UnitAuras.GetAuraDataByIndex(...)
-		if not auraData then return end
-		local caster = auraData.sourceUnit
-		local id = auraData.spellId
+		local data = C_UnitAuras.GetAuraDataByIndex(...)
+		if not data then return end
+
+		local id, caster = data.spellId, data.sourceUnit
 		if id then
 			TT.AddLineForID(self, id, types.spell)
 		end
@@ -120,6 +120,7 @@ function TT:SetupTooltipID()
 	end
 	hooksecurefunc(GameTooltip, "SetUnitBuffByAuraInstanceID", UpdateAuraTip)
 	hooksecurefunc(GameTooltip, "SetUnitDebuffByAuraInstanceID", UpdateAuraTip)
+	hooksecurefunc(GameTooltip, "SetUnitAuraByAuraInstanceID", UpdateAuraTip)
 
 	hooksecurefunc("SetItemRef", function(link)
 		local id = tonumber(strmatch(link, "spell:(%d+)"))
