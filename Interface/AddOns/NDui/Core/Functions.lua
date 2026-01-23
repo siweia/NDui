@@ -10,35 +10,29 @@ local CreateColor = CreateColor
 
 -- Math
 do
+	B.NUMBER_ABBR_OPTIONS = {
+		[1] = { config = CreateAbbreviateConfig({
+				{ breakpoint = 1e12, abbreviation = "t", significandDivisor = 1e10, fractionDivisor = 1e2, abbreviationIsGlobal = false },
+				{ breakpoint = 1e9, abbreviation = "b", significandDivisor = 1e7, fractionDivisor = 1e2, abbreviationIsGlobal = false },
+				{ breakpoint = 1e6, abbreviation = "m", significandDivisor = 1e4, fractionDivisor = 1e2, abbreviationIsGlobal = false },
+				{ breakpoint = 1e3, abbreviation = "k", significandDivisor = 1e2, fractionDivisor = 1e1, abbreviationIsGlobal = false },
+				{ breakpoint = 0, abbreviation = "", significandDivisor = 1, fractionDivisor = 1, abbreviationIsGlobal = false },
+		})},
+		[2] = { config = CreateAbbreviateConfig({
+				{ breakpoint = 1e12, abbreviation = L["NumberCap3"], significandDivisor = 1e10, fractionDivisor = 1e2, abbreviationIsGlobal = false },
+				{ breakpoint = 1e8, abbreviation = L["NumberCap2"], significandDivisor = 1e6, fractionDivisor = 1e2, abbreviationIsGlobal = false },
+				{ breakpoint = 1e4, abbreviation = L["NumberCap1"], significandDivisor = 1e3, fractionDivisor = 1e1, abbreviationIsGlobal = false },
+				{ breakpoint = 0, abbreviation = "", significandDivisor = 1, fractionDivisor = 1, abbreviationIsGlobal = false },
+		})},
+	}
+
 	-- Numberize
 	function B.Numb(n)
-		if DB.isNewPatch then
-			return n
-		end
-		if NDuiADB["NumberFormat"] == 1 then
-			if n >= 1e12 then
-				return format("%.2ft", n / 1e12)
-			elseif n >= 1e9 then
-				return format("%.2fb", n / 1e9)
-			elseif n >= 1e6 then
-				return format("%.2fm", n / 1e6)
-			elseif n >= 1e3 then
-				return format("%.1fk", n / 1e3)
-			else
-				return format("%.0f", n)
-			end
-		elseif NDuiADB["NumberFormat"] == 2 then
-			if n >= 1e12 then
-				return format("%.2f"..L["NumberCap3"], n / 1e12)
-			elseif n >= 1e8 then
-				return format("%.2f"..L["NumberCap2"], n / 1e8)
-			elseif n >= 1e4 then
-				return format("%.1f"..L["NumberCap1"], n / 1e4)
-			else
-				return format("%.0f", n)
-			end
+		local options = B.NUMBER_ABBR_OPTIONS[NDuiADB["NumberFormat"]]
+		if options then
+			return AbbreviateNumbers(n, options)
 		else
-			return format("%.0f", n)
+			return n
 		end
 	end
 

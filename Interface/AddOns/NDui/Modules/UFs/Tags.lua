@@ -53,8 +53,8 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 	end
 
 	if not arg1 then return end
-	local max = AbbreviateNumbers(UnitHealthMax(unit))
-	local cur = AbbreviateNumbers(UnitHealth(unit))
+	local max = B.Numb(UnitHealthMax(unit))
+	local cur = B.Numb(UnitHealth(unit))
 	local per = format("%d", UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
 
 	if arg1 == "currentpercent" then
@@ -78,8 +78,8 @@ end
 oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED PARTY_MEMBER_ENABLE PARTY_MEMBER_DISABLE"
 
 oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
-	local max = AbbreviateNumbers(UnitPowerMax(unit))
-	local cur = AbbreviateNumbers(UnitPower(unit))
+	local max = B.Numb(UnitPowerMax(unit))
+	local cur = B.Numb(UnitPower(unit))
 	local per = format("%d", UnitPowerPercent(unit, nil, true, CurveConstants.ScaleTo100))
 
 	if arg1 == "currentpercent" then
