@@ -122,7 +122,7 @@ function UF.DebuffsIndicator_Filter(raidAuras, aura)
 	local spellID = aura.spellID
 	if not issecretvalue(spellID) and UF.RaidDebuffsBlack[spellID] then
 		return false
-	elseif not issecretvalue(aura.isBossAura) and aura.isBossAura or AuraUtil.IsRoleAura(aura) then
+	elseif aura.isBosAsura or AuraUtil.IsRoleAura(aura) then
 		return true
 	else
 		return AuraUtil.ShouldDisplayDebuff(aura.Caster, spellID)
