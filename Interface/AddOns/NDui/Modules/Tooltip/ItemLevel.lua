@@ -13,6 +13,7 @@ local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
+local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
 
 TT.TierSets = {
 	-- WARRIOR
@@ -52,6 +53,7 @@ local formatSets = {
 }
 
 local function checkUnitGUID(unit)
+	if ShouldUnitIdentityBeSecret(unit) then return end
 	local guid = UnitGUID(unit)
 	return B:NotSecretValue(guid) and guid
 end
@@ -77,6 +79,7 @@ updater:Hide()
 local lastTime = 0
 function TT:GetInspectInfo(...)
 	if self == "UNIT_INVENTORY_CHANGED" then
+		if InCombatLockdown() then return end
 		local thisTime = GetTime()
 		if thisTime - lastTime > .1 then
 			lastTime = thisTime
