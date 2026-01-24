@@ -763,7 +763,7 @@ do
 		if(IsLoggedIn()) then
 			C_NamePlate.SetNamePlateSize(driver.plateWidth or 200, driver.plateHeight or 30)
 
-			local enemyInset = driver.friendlyNonInteractible and hitInset or -hitInset
+			local enemyInset = driver.enemyNonInteractible and hitInset or -hitInset
 			C_NamePlateManager.SetNamePlateHitTestInsets(Enum.NamePlateType.Enemy, enemyInset, enemyInset, enemyInset, enemyInset)
 
 			local friendlyInset = driver.friendlyNonInteractible and hitInset or -hitInset
