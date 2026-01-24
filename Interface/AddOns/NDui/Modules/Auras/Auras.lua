@@ -151,7 +151,7 @@ function A:UpdateAuras(button, index)
 	end
 
 	if filter == "HARMFUL" then
-		local color = oUF.colors.dispel[auraData.dispelName or 0]
+		local color = not issecretvalue(auraData.dispelName) and oUF.colors.dispel[auraData.dispelName] or oUF.colors.dispel[0]
 		button:SetBackdropBorderColor(color:GetRGB())
 	else
 		button:SetBackdropBorderColor(0, 0, 0)
