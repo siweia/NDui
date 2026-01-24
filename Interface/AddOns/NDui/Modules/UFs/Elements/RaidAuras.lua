@@ -55,7 +55,7 @@ function UF.RaidAurasPostUpdate(element, unit)
 
 	for i = auraIndex+1, numDebuffs do
 		local aura = element.debuffList[i]
-		local value = enableSpells and not issecretvalue(aura.spellID) and UF.CornerSpells[aura.spellID]
+		local value = enableSpells and B:NotSecretValue(aura.spellID) and UF.CornerSpells[aura.spellID]
 		if value and (value[3] or aura.isPlayerAura) then
 			local button = spells[value[1]]
 			if button then
@@ -71,7 +71,7 @@ function UF.RaidAurasPostUpdate(element, unit)
 
 	for i = 1, numBuffs do
 		local aura = element.buffList[i]
-		local value = enableSpells and not issecretvalue(aura.spellID) and UF.CornerSpells[aura.spellID]
+		local value = enableSpells and B:NotSecretValue(aura.spellID) and UF.CornerSpells[aura.spellID]
 		if value and (value[3] or aura.isPlayerAura) then
 			local button = spells[value[1]]
 			if button then

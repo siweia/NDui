@@ -98,7 +98,7 @@ function UF:DebuffsIndicator_UpdateButton(debuffIndex, aura)
 	if button.Icon then button.Icon:SetTexture(aura.texture) end
 	if button.count then
 		local count = aura.applications
-		if issecretvalue(count) then
+		if B:IsSecretValue(count) then
 			button.count:SetText(GetAuraApplicationDisplayCount(button.unit, aura.auraInstanceID, MIN_SPELL_COUNT, MAX_SPELL_COUNT))
 		else
 			local hideCount = not count or (count < MIN_SPELL_COUNT or count > MAX_SPELL_COUNT)
@@ -120,7 +120,7 @@ end
 
 function UF.DebuffsIndicator_Filter(raidAuras, aura)
 	local spellID = aura.spellID
-	if not issecretvalue(spellID) and UF.RaidDebuffsBlack[spellID] then
+	if B:NotSecretValue(spellID) and UF.RaidDebuffsBlack[spellID] then
 		return false
 	elseif aura.isBosAsura or AuraUtil.IsRoleAura(aura) then
 		return true

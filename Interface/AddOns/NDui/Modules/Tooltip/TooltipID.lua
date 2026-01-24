@@ -28,7 +28,7 @@ function TT:AddLineForID(id, linkType, noadd)
 		local line = _G[self:GetName().."TextLeft"..i]
 		if not line then break end
 		local text = line:GetText()
-		if text and not issecretvalue(text) and text == linkType then return end
+		if text and B:NotSecretValue(text) and text == linkType then return end
 	end
 
 	if self.__isHoverTip and linkType == types.spell and IsPlayerSpell(id) and C_MountJournal_GetMountFromSpell(id) then
@@ -95,7 +95,7 @@ function TT:SetupTooltipID()
 		if id then
 			TT.AddLineForID(self, id, types.spell)
 		end
-		if caster and not issecretvalue(caster) then
+		if caster and B:NotSecretValue(caster) then
 			local name = GetUnitName(caster, true)
 			local hexColor = B.HexRGB(B.UnitColor(caster))
 			self:AddDoubleLine(L["From"]..":", hexColor..name)
@@ -111,7 +111,7 @@ function TT:SetupTooltipID()
 		if id then
 			TT.AddLineForID(self, id, types.spell)
 		end
-		if caster and not issecretvalue(caster) then
+		if caster and B:NotSecretValue(caster) then
 			local name = GetUnitName(caster, true)
 			local hexColor = B.HexRGB(B.UnitColor(caster))
 			self:AddDoubleLine(L["From"]..":", hexColor..name)

@@ -21,6 +21,7 @@ local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAu
 local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
 local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
 local GameTooltip_ClearMoney, GameTooltip_ClearStatusBars, GameTooltip_ClearProgressBars, GameTooltip_ClearWidgetSet = GameTooltip_ClearMoney, GameTooltip_ClearStatusBars, GameTooltip_ClearProgressBars, GameTooltip_ClearWidgetSet
+local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -34,9 +35,14 @@ local specPrefix = "|cffFFCC00"..SPECIALIZATION..": "..DB.InfoColor
 
 function TT:GetUnit()
 	local data = self:GetTooltipData()
-	local guid = data and not issecretvalue(data.guid) and data.guid
+	local guid = data and B:NotSecretValue(data.guid) and data.guid
 	local unit = guid and UnitTokenFromGUID(guid)
 	return unit, guid
+end
+
+function TT:UnitExists(unit)
+	if ShouldUnitIdentityBeSecret and ShouldUnitIdentityBeSecret(unit) then return end
+	return unit and UnitExists(unit)
 end
 
 local FACTION_COLORS = {
@@ -57,7 +63,7 @@ function TT:UpdateFactionLine(lineData)
 	local unitCreature = unit and UnitCreatureType(unit)
 
 	local linetext = lineData.leftText
-	if issecretvalue(linetext) then return end
+	if B:IsSecretValue(linetext) then return end
 
 	if linetext == PVP then
 		return true
@@ -86,7 +92,7 @@ function TT:GetLevelLine()
 end
 
 function TT:GetTarget(unit)
-	if issecretvalue(UnitIsUnit(unit, "player")) then return "" end
+	if ShouldUnitIdentityBeSecret(unit) then return "" end
 	if UnitIsUnit(unit, "player") then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
@@ -177,7 +183,7 @@ function TT:OnTooltipSetUnit()
 	end
 
 	local unit, guid = TT.GetUnit(self)
-	if not unit or not UnitExists(unit) then return end
+	if not unit or not TT:UnitExists(unit) then return end
 
 	local isShiftKeyDown = IsShiftKeyDown()
 	local isPlayer = UnitIsPlayer(unit)
@@ -245,9 +251,9 @@ function TT:OnTooltipSetUnit()
 	local r, g, b = B.UnitColor(unit)
 	local hexColor = B.HexRGB(r, g, b)
 	local text = GameTooltipTextLeft1:GetText()
-	if text then
-		local ricon = GetRaidTargetIndex(unit)
-		if ricon and ricon > 8 then ricon = nil end
+	local ricon = GetRaidTargetIndex(unit)
+	if text and ricon and B:NotSecretValue(ricon) then
+		if icon > 8 then ricon = nil end
 		ricon = ricon and ICON_LIST[ricon].."18|t " or ""
 		GameTooltipTextLeft1:SetFormattedText(("%s%s%s"), ricon, hexColor, text)
 	end
@@ -279,7 +285,7 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	if UnitExists(unit.."target") then
+	if TT:UnitExists(unit.."target") then
 		local tarRicon = GetRaidTargetIndex(unit.."target")
 		if tarRicon and tarRicon > 8 then tarRicon = nil end
 		local tar = format("%s%s", (tarRicon and ICON_LIST[tarRicon].."10|t") or "", TT:GetTarget(unit.."target"))
@@ -484,14 +490,14 @@ function TT:FixRecipeItemNameWidth()
 	local name = self:GetName()
 	for i = 1, self:NumLines() do
 		local line = _G[name.."TextLeft"..i]
-		if line and not issecretvalue(line:GetWidth()) and line:GetHeight() > 40 then
+		if line and B:NotSecretValue(line:GetWidth()) and line:GetHeight() > 40 then
 			line:SetWidth(line:GetWidth() + 2)
 		end
 	end
 end
 
 function TT:ResetUnit(btn)
-	if btn == "LSHIFT" and UnitExists("mouseover") then
+	if btn == "LSHIFT" and TT:UnitExists("mouseover") then
 		GameTooltip:RefreshData()
 	end
 end
