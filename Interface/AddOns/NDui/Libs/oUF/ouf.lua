@@ -771,7 +771,13 @@ do
 
 			if(driver.cvars) then
 				for name, value in next, driver.cvars do
-					C_CVar.SetCVar(name, value)
+					if(type(value) == 'table') then
+						for bitmaskIndex, bitmaskValue in next, value do
+							C_CVar.SetCVarBitfield(name, bitmaskIndex, bitmaskValue)
+						end
+					else
+						C_CVar.SetCVar(name, value)
+					end
 				end
 			end
 		end
@@ -980,9 +986,9 @@ function oUF:AddElement(name, update, enable, disable)
 
 	if(elements[name]) then return nierror(string.format('Element [%s] is already registered.', name)) end
 	elements[name] = {
-		update = update;
-		enable = enable;
-		disable = disable;
+		update = update,
+		enable = enable,
+		disable = disable,
 	}
 end
 

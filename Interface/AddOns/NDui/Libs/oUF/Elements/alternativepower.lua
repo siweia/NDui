@@ -144,7 +144,9 @@ local function Path(self, ...)
 	* unit  - the unit accompanying the event (string)
 	* ...   - the arguments accompanying the event
 	--]]
-	(self.AlternativePower.Override or Update) (self, ...);
+	do
+		(self.AlternativePower.Override or Update) (self, ...)
+	end
 
 	--[[ Override: AlternativePower.UpdateColor(self, event, unit, ...)
 	Used to completely override the internal function for updating the widgets' colors.
