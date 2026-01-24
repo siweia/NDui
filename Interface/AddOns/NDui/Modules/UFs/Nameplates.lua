@@ -55,17 +55,11 @@ function UF:UpdateClickableSize()
 	C_NamePlate_SetNamePlateFriendlySize(helpWidth*uiScale, helpHeight*uiScale)
 end
 
-function UF:UpdatePlateClickThru()
-	if DB.isNewPatch then return end -- removed? needs review
-	if InCombatLockdown() then return end
-
-	C_NamePlate_SetNamePlateEnemyClickThrough(C.db["Nameplate"]["EnemyThru"])
-	C_NamePlate_SetNamePlateFriendlyClickThrough(C.db["Nameplate"]["FriendlyThru"])
-end
-
 function UF:UpdatePlateSize()
 	if InCombatLockdown() then return end
 	UF.NameplateDriver:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
+	UF.NameplateDriver.enemyNonInteractible = C.db["Nameplate"]["EnemyThru"]
+	UF.NameplateDriver.friendlyNonInteractible = C.db["Nameplate"]["FriendlyThru"]
 end
 
 function UF:SetupCVars()
@@ -85,7 +79,6 @@ function UF:SetupCVars()
 	SetCVar("nameplateResourceOnTarget", 0)
 	UF:UpdatePlateSize()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateSize", UF.UpdatePlateSize)
-	UF:UpdatePlateClickThru()
 	-- fix blizz friendly plate visibility
 	SetCVar("nameplatePlayerMaxDistance", 60)
 end

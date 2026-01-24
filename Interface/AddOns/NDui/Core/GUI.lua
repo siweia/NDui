@@ -941,7 +941,7 @@ local function refreshNameplates()
 end
 
 local function updateClickThru()
-	B:GetModule("UnitFrames"):UpdatePlateClickThru()
+	B:GetModule("UnitFrames"):UpdatePlateSize()
 end
 
 local function togglePlatePower()
