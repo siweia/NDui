@@ -1602,7 +1602,7 @@ function UF.PostUpdateAddPower(element, cur, max)
 			perc = format("%d%%", perc)
 			element:SetAlpha(1)
 		end]]
-		element.Text:SetText(cur)
+		element.Text:SetText(B.Numb(cur))
 	end
 end
 
