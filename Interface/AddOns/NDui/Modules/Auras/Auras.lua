@@ -241,6 +241,7 @@ function A:UpdateHeader(header)
 
 		B.SetFontSize(child.count, fontSize)
 		B.SetFontSize(child.timer, fontSize)
+		B.SetFontSize(child.CooldownText, fontSize)
 
 		--Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
 		if index > (cfg.maxWraps * cfg.wrapAfter) and child:IsShown() then
@@ -332,7 +333,7 @@ function A:CreateAuraIcon(button)
 	B.SetFontSize(button.count, fontSize)
 
 	button.timer = button:CreateFontString(nil, "ARTWORK")
-	button.timer:SetPoint("CENTER")
+	button.timer:SetPoint("TOP", button, "BOTTOM", 1, 2)
 	B.SetFontSize(button.timer, fontSize)
 
 	button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
@@ -340,10 +341,17 @@ function A:CreateAuraIcon(button)
 	button.highlight:SetInside()
 
 	local cd = CreateFrame("Cooldown", "$parentCooldown", button, "CooldownFrameTemplate")
+	cd:SetReverse(true)
 	cd:SetEdgeTexture(DB.bgTex)
 	cd:SetDrawSwipe(false)
 	cd:SetDrawBling(false)
 	button.Cooldown = cd
+
+	local text = cd:GetRegions()
+	B.SetFontSize(text, fontSize)
+	text:ClearAllPoints()
+	text:SetPoint("TOP", button, "BOTTOM", 1, 2)
+	button.CooldownText = text
 
 	B.CreateBD(button, .25)
 	B.CreateSD(button)
