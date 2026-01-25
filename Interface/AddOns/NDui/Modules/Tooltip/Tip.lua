@@ -261,7 +261,7 @@ function TT:OnTooltipSetUnit()
 			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, standingText..unitClassStr, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
 		end
 
-		local specLine = _G["GameTooltipTextLeft"..(index+1)]
+		local specLine = index and _G["GameTooltipTextLeft"..(index+1)]
 		local specText = specLine and specLine:GetText()
 		if specText and unitClass and strfind(specText, unitClass) then
 			specText = gsub(specText, "(.-)%S+$", replaceSpecInfo)
