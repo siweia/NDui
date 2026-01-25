@@ -51,6 +51,7 @@ function Bar:CreateStancebar()
 	StanceBar:SetParent(frame)
 	StanceBar:EnableMouse(false)
 	StanceBar:UnregisterAllEvents()
+	StanceBar:Hide()
 
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
