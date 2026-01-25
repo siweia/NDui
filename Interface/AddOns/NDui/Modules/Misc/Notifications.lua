@@ -707,6 +707,7 @@ function M:AnalyzeButtonCooldown()
 	if not self._state_action then return end -- no action for pet actionbar
 	if not C.db["Misc"]["SendActionCD"] then return end
 	if not IsInGroup() then return end
+	if InCombatLockdown() then return end
 
 	local thisTime = GetTime()
 	if thisTime - lastCDSend < 1.5 then return end
