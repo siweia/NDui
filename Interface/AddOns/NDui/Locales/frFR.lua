@@ -826,7 +826,6 @@ L["CVarOnlyNamesTip"] = "|nSi coché, n'afficher que les noms sur les plaques de
 L["CVarShowNPCs"] = "Le CVar montre toujours les PNJ"
 L["CVarShowNPCsTip"] = "|nSi coché, montre toujours les plaques de noms des PNJ. Ou ne l'affiche que lorsqu'elle est sélectionnée."
 L["Dispellable"] = "Montrer les auras dissipables"
-L["DispellableTip"] = "|nFiltre : n'affiche que les auras de magie et d'enragement que vous pouvez dissiper.|n|nToujours : affiche toujours les auras de magie et d'enragement, peu importe celles que vous pouvez dissiper."
 L["Filter"] = "Filtre"
 L["Always"] = "Toujours"
 L["ShowInterruptor"] = "Montrer l'interrupteur de la barre d'incantation"

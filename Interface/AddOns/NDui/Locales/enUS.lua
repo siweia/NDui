@@ -826,7 +826,6 @@ L["CVarOnlyNamesTip"] = "|nIf checked, only show names on blizzard nameplates.|n
 L["CVarShowNPCs"] = "CVar always show npc"
 L["CVarShowNPCsTip"] = "|nIf checked, always show npc nameplates. Or only shows when selected."
 L["Dispellable"] = "Show dispellable auras"
-L["DispellableTip"] = "|nFilter: only shows the magic and enrage auras that you can dispell.|n|nAlways: always shows the magic and enrage auras, no matter which you can dispell."
 L["Filter"] = "Filter"
 L["Always"] = "Always"
 L["ShowInterruptor"] = "Show castbar interruptor"

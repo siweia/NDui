@@ -911,13 +911,14 @@ function UF.PostCreateButton(element, button)
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
 
-	button.Overlay:SetTexture(nil)
+	button.Overlay:Hide()
+	button.Overlay = nil -- needs review
 	button.Stealable:SetAtlas("bags-newitem")
 	if AURA then
 		button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
 	end
 
-	if element.disableCooldown then
+	if element.__owner.mystyle == "nameplate" then
 		hooksecurefunc(button, "SetSize", UF.UpdateIconTexCoord)
 		button.timer = B.CreateFS(button, fontSize, "")
 		button.timer:ClearAllPoints()
@@ -984,7 +985,13 @@ function UF.PostUpdateGapButton(_, _, button)
 end
 
 function UF.CustomFilter(element, unit, data)
-	local style = element.__owner.mystyle
+	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then
+		return true
+	else
+		return element.onlyShowPlayer and data.isPlayerAura
+	end
+
+--[[	local style = element.__owner.mystyle
 	local name, debuffType, isStealable, spellID, nameplateShowAll = data.name, data.dispelName, data.isStealable, data.spellId, data.nameplateShowAll
 	local isSpellPublic = B:NotSecretValue(spellID)
 	if style == "nameplate" or style == "boss" or style == "arena" then
@@ -1002,7 +1009,7 @@ function UF.CustomFilter(element, unit, data)
 		end
 	else
 		return (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer)
-	end
+	end]]
 end
 
 function UF.UnitCustomFilter(element, _, data)
@@ -1017,7 +1024,7 @@ function UF.UnitCustomFilter(element, _, data)
 		if C.db["UFs"][value.."BuffType"] == 2 then
 			return true
 		elseif C.db["UFs"][value.."BuffType"] == 3 then
-			return data.isStealable
+			return type(data.dispelName) ~= "nil"
 		end
 	end
 end
@@ -1182,7 +1189,7 @@ function UF:CreateAuras(self)
 		bu.disableMouse = true
 	--	bu.disableCooldown = true
 		bu.onlyShowPlayer = true
-	--	bu.FilterAura = UF.CustomFilter
+		bu.FilterAura = UF.CustomFilter
 	--	bu.PostUpdateInfo = UF.AurasPostUpdateInfo
 	end
 

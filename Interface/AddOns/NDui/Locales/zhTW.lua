@@ -826,7 +826,6 @@ L["CVarOnlyNamesTip"] = "|n勾選後，對於暴雪自帶的名條將只保留�
 L["CVarShowNPCs"] = "總是顯示NPC名條"
 L["CVarShowNPCsTip"] = "|n勾選後，將總是顯示NPC名條。否則只在選中NPC時顯示。"
 L["Dispellable"] = "顯示可驅散法術"
-L["DispellableTip"] = "|n過濾：顯示並高亮你能驅散的魔法或激怒效果。|n|n總是：始終顯示目標身上所有魔法及激怒效果，無論你是否可以驅散。"
 L["Filter"] = "過濾"
 L["Always"] = "總是"
 L["ShowInterruptor"] = "施法條顯示打斷者"

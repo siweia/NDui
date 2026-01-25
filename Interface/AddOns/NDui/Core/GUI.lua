@@ -432,7 +432,6 @@ G.DefaultSettings = {
 		FriendPlate = false,
 		EnemyThru = false,
 		FriendlyThru = false,
-		DispellMode = 1,
 		UnitTargeted = true,
 		ColorByDot = false,
 		DotColor = {r=1, g=.5, b=.2},
@@ -441,6 +440,7 @@ G.DefaultSettings = {
 		RaidTargetY = 3,
 		PlateRange = 45,
 		AurasPerRow = 6,
+		ShowDispel = true,
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -1299,7 +1299,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
 		{1, "Nameplate", "PlateAuras", HeaderTag..L["PlateAuras"].."*", nil, setupNameplateFilter, refreshNameplates},
-		{4, "Nameplate", "DispellMode", L["Dispellable"].."*", nil, {L["Filter"], L["Always"], DISABLE}, refreshNameplates, L["DispellableTip"]},
+		{1, "Nameplate", "ShowDispel", L["Dispellable"].."*", nil, nil, refreshNameplates},
 		{4, "Nameplate", "AuraFilter", L["NameplateAuraFilter"].."*", true, {L["BlackNWhite"], L["PlayerOnly"], L["IncludeCrowdControl"]}, refreshNameplates},
 		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
 		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", true, nil, refreshNameplates, L["DebuffColorTip"]},
