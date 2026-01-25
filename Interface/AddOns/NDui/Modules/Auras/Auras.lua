@@ -52,6 +52,14 @@ function A:BuildBuffFrame()
 		},
 	}
 
+	A.DispelColorCurve = C_CurveUtil.CreateColorCurve()
+	A.DispelColorCurve:SetType(Enum.LuaCurveType.Step)
+	for _, dispelIndex in next, oUF.Enum.DispelType do
+		if(oUF.colors.dispel[dispelIndex]) then
+			A.DispelColorCurve:AddPoint(dispelIndex, oUF.colors.dispel[dispelIndex])
+		end
+	end
+
 	-- Movers
 	A.BuffFrame = A:CreateAuraHeader("HELPFUL")
 	A.BuffFrame.mover = B.Mover(A.BuffFrame, "Buffs", "BuffAnchor", C.Auras.BuffPos)
@@ -62,14 +70,6 @@ function A:BuildBuffFrame()
 	A.DebuffFrame.mover = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", A.BuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 	A.DebuffFrame:ClearAllPoints()
 	A.DebuffFrame:SetPoint("TOPRIGHT", A.DebuffFrame.mover)
-
-	A.DispelColorCurve = C_CurveUtil.CreateColorCurve()
-	A.DispelColorCurve:SetType(Enum.LuaCurveType.Step)
-	for _, dispelIndex in next, oUF.Enum.DispelType do
-		if(oUF.colors.dispel[dispelIndex]) then
-			A.DispelColorCurve:AddPoint(dispelIndex, oUF.colors.dispel[dispelIndex])
-		end
-	end
 end
 
 local day, hour, minute = 86400, 3600, 60
