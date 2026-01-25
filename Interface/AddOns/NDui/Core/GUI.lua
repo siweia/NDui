@@ -196,13 +196,6 @@ G.DefaultSettings = {
 		RaidPowerHeight = 2,
 		RaidHPMode = 1,
 		AuraClickThru = false,
-		CombatText = true,
-		HotsDots = true,
-		AutoAttack = true,
-		FCTOverHealing = false,
-		FCTFontSize = 18,
-		PetCombatText = true,
-		ScrollingCT = false,
 		RaidClickSets = false,
 		TeamIndex = false,
 		ClassPower = true,
@@ -877,6 +870,10 @@ local function updateEquipColor()
 	end
 end
 
+local function updateCooldown()
+	SetCVar("countdownForCooldowns", C.db["Actionbar"]["Cooldown"] and 1 or 0)
+end
+
 local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
@@ -1030,10 +1027,6 @@ end
 
 local function refreshPlateByEvents()
 	B:GetModule("UnitFrames"):RefreshPlateByEvents()
-end
-
-local function updateScrollingFont()
-	B:GetModule("UnitFrames"):UpdateScrollingFont()
 end
 
 local function updateRaidAurasOptions()
@@ -1190,10 +1183,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
-		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"]},
-		{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
-		{3, "Actionbar", "MmssTH", L["MmssThreshold"].."*", nil, {60, 600, 1}, nil, L["MmssThresholdTip"]},
-		{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
+		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"], nil, nil, updateCooldown},
+		--{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
+		--{3, "Actionbar", "MmssTH", L["MmssThreshold"].."*", nil, {60, 600, 1}, nil, L["MmssThresholdTip"]},
+		--{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
 		{},--blank
 		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
 		{1, "Actionbar", "ButtonLock", L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},
@@ -1203,8 +1196,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"].."*", true, nil, updateHotkeys},
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
-		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
 		{1, "Actionbar", "ShowGlow", L["ShowGlow"].."*", nil, nil, updateOverlays},
+		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
@@ -1242,14 +1235,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "LagString", L["Castbar LagString"].."*", true, nil, toggleCastBarLatency},
 		{1, "UFs", "SwingBar", L["UFs SwingBar"].."*", nil, setupSwingBars, toggleSwingBars},
 		{1, "UFs", "PetCB", L["PetCastbar"], true},
-		{},--blank
-		{1, "UFs", "CombatText", HeaderTag..L["UFs CombatText"]},
-		{1, "UFs", "ScrollingCT", L["ScrollingCT"].."*", true},
-		{1, "UFs", "AutoAttack", L["CombatText AutoAttack"].."*"},
-		{1, "UFs", "PetCombatText", L["CombatText ShowPets"].."*", true},
-		{1, "UFs", "HotsDots", L["CombatText HotsDots"].."*"},
-		{1, "UFs", "FCTOverHealing", L["CombatText OverHealing"].."*"},
-		{3, "UFs", "FCTFontSize", L["FCTFontSize"].."*", true, {12, 40, 1}, updateScrollingFont},
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
