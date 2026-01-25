@@ -746,7 +746,7 @@ end
 function M:AddAlerts()
 	M:SoloInfo()
 	M:RareAlert()
-	M:InterruptAlert()
+	--M:InterruptAlert()
 	M:VersionCheck()
 	M:SpellItemAlert()
 	M:NVision_Init()
