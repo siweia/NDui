@@ -706,6 +706,14 @@ function UF:ToggleCastBarLatency(frame)
 	end
 end
 
+function UF.UpdateNotInterruptBar(element)
+	if element.notInterruptBar then
+		element.notInterruptBar:SetAlphaFromBoolean(element.notInterruptible, 1, 0)
+	end
+end
+
+UF.notInterruptBars = {}
+
 function UF:CreateCastBar(self)
 	local mystyle = self.mystyle
 	if mystyle ~= "nameplate" and not C.db["UFs"]["Castbars"] then return end
@@ -794,6 +802,15 @@ function UF:CreateCastBar(self)
 		--self:RegisterEvent("UNIT_TARGET", updateSpellTarget)
 	end
 
+	local notInterruptBar = cb:CreateTexture(nil, "ARTWORK", nil, 2)
+	notInterruptBar:SetPoint("BOTTOMLEFT", cb)
+	notInterruptBar:SetPoint("TOPRIGHT", cb:GetStatusBarTexture(), "TOPRIGHT")
+	notInterruptBar:SetTexture(DB.normTex)
+	local color = C.db["UFs"]["NotInterruptColor"]
+	notInterruptBar:SetVertexColor(color.r, color.g, color.b)
+	cb.notInterruptBar = notInterruptBar
+	tinsert(UF.notInterruptBars, notInterruptBar)
+
 	local stage = B.CreateFS(cb, 22)
 	stage:ClearAllPoints()
 	stage:SetPoint("TOPLEFT", cb.Icon, -2, 2)
@@ -817,6 +834,10 @@ function UF:CreateCastBar(self)
 		cb.CreatePip = UF.CreatePip
 		cb.PostUpdatePips = UF.PostUpdatePips
 	end
+
+	cb.holdTime = 0.1
+	cb.PostCastStart = UF.UpdateNotInterruptBar
+	cb.PostCastInterruptible = UF.UpdateNotInterruptBar
 
 	self.Castbar = cb
 end
