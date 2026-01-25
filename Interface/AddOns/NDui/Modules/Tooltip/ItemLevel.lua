@@ -53,7 +53,6 @@ local formatSets = {
 }
 
 local function checkUnitGUID(unit)
-	if ShouldUnitIdentityBeSecret(unit) then return end
 	local guid = UnitGUID(unit)
 	return B:NotSecretValue(guid) and guid
 end
