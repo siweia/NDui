@@ -287,8 +287,8 @@ function M:ItemLevel_FlyoutSetup()
 	if tonumber(location) then
 		if location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then return end
 
-		local _, _, bags, voidStorage, slot, bag = EquipmentManager_UnpackLocation(location)
-		if voidStorage then return end
+		local locationData = EquipmentManager_GetLocationData(location)
+		local bags, slot, bag = locationData.isBags, locationData.slot, locationData.bag
 		local quality = select(13, EquipmentManager_GetItemInfoByLocation(location))
 		if bags then
 			M.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
