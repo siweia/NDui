@@ -33,8 +33,6 @@ local friendTable, bnetTable = {}, {}
 local activeZone, inactiveZone = "|cff4cff4c", DB.GreyColor
 local noteString = "|T"..DB.copyTex..":12|t %s"
 local broadcastString = "|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)"
-local onlineString = gsub(ERR_FRIEND_ONLINE_SS, ".+h", "")
-local offlineString = gsub(ERR_FRIEND_OFFLINE_S, "%%s", "")
 
 local menuList = {
 	[1] = {text = L["Join or Invite"], isTitle = true, notCheckable = true}
@@ -548,14 +546,9 @@ info.eventList = {
 	"BN_FRIEND_INFO_CHANGED",
 	"FRIENDLIST_UPDATE",
 	"PLAYER_ENTERING_WORLD",
-	"CHAT_MSG_SYSTEM",
 }
 
-info.onEvent = function(self, event, arg1)
-	if event == "CHAT_MSG_SYSTEM" then
-		if not strfind(arg1, onlineString) and not strfind(arg1, offlineString) then return end
-	end
-
+info.onEvent = function(self)
 	info:FriendsPanel_Refresh()
 	self.text:SetText(format("%s: "..DB.MyColor.."%d", FRIENDS, info.totalOnline))
 
