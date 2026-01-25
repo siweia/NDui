@@ -600,7 +600,7 @@ function module:SetupMinimap()
 
 	self:UpdateMinimapScale()
 	self:ShowMinimapClock()
-	self:ShowCalendar()
+	--self:ShowCalendar()
 	self:EasyTrackMenu()
 
 	-- Mousewheel Zoom
