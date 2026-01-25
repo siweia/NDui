@@ -690,13 +690,29 @@ local function updateSpellTarget(self, _, unit)
 	UF.PostCastUpdate(self.Castbar, unit)
 end
 
-function UF.UpdateNotInterruptBar(element)
-	if element.notInterruptBar then
-		element.notInterruptBar:SetAlphaFromBoolean(element.notInterruptible, 1, 0)
-	end
+function UF:UpdateCastBarColors()
+	local castingColor = C.db["UFs"]["CastingColor"]
+	local ownCastColor = C.db["UFs"]["OwnCastColor"]
+	local notInterruptColor = C.db["UFs"]["NotInterruptColor"]
+
+	UF.CastingColor = UF.CastingColor or CreateColor(0, 0, 0)
+	UF.OwnCastColor = UF.OwnCastColor or CreateColor(0, 0, 0)
+	UF.NotInterruptColor = UF.NotInterruptColor or CreateColor(0, 0, 0)
+
+	UF.CastingColor:SetRGB(castingColor.r, castingColor.g, castingColor.b)
+	UF.OwnCastColor:SetRGB(ownCastColor.r, ownCastColor.g, ownCastColor.b)
+	UF.NotInterruptColor:SetRGB(notInterruptColor.r, notInterruptColor.g, notInterruptColor.b)
 end
 
-UF.notInterruptBars = {}
+function UF:UpdateCastBarColor(unit)
+	if unit == "player" then
+		self:SetStatusBarColor(UF.OwnCastColor:GetRGB())
+	elseif not UnitIsUnit(unit, "player") then
+		self:GetStatusBarTexture():SetVertexColorFromBoolean(self.notInterruptible, UF.NotInterruptColor, UF.CastingColor)
+	else
+		self:SetStatusBarColor(UF.CastingColor:GetRGB())
+	end
+end
 
 function UF:CreateCastBar(self)
 	local mystyle = self.mystyle
@@ -778,15 +794,6 @@ function UF:CreateCastBar(self)
 		--self:RegisterEvent("UNIT_TARGET", updateSpellTarget)
 	end
 
-	local notInterruptBar = cb:CreateTexture(nil, "ARTWORK", nil, 2)
-	notInterruptBar:SetPoint("BOTTOMLEFT", cb)
-	notInterruptBar:SetPoint("TOPRIGHT", cb:GetStatusBarTexture(), "TOPRIGHT")
-	notInterruptBar:SetTexture(DB.normTex)
-	local color = C.db["UFs"]["NotInterruptColor"]
-	notInterruptBar:SetVertexColor(color.r, color.g, color.b)
-	cb.notInterruptBar = notInterruptBar
-	tinsert(UF.notInterruptBars, notInterruptBar)
-
 	local stage = B.CreateFS(cb, 22)
 	stage:ClearAllPoints()
 	stage:SetPoint("TOPLEFT", cb.Icon, -2, 2)
@@ -812,8 +819,8 @@ function UF:CreateCastBar(self)
 	end
 
 	cb.holdTime = 0.1
-	cb.PostCastStart = UF.UpdateNotInterruptBar
-	cb.PostCastInterruptible = UF.UpdateNotInterruptBar
+	cb.PostCastStart = UF.UpdateCastBarColor
+	cb.PostCastInterruptible = UF.UpdateCastBarColor
 
 	self.Castbar = cb
 end

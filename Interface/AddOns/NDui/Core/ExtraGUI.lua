@@ -1440,11 +1440,8 @@ function G:SetupCastbar(parent)
 		if focusCB then
 			focusCB.mover:Hide()
 		end
-		if UF.notInterruptBars then
-			local color = C.db["UFs"]["NotInterruptColor"]
-			for _, bar in pairs(UF.notInterruptBars) do
-				bar:SetVertexColor(color.r, color.g, color.b)
-			end
+		if UF.UpdateCastBarColors then
+			UF:UpdateCastBarColors()
 		end
 	end)
 end
