@@ -690,22 +690,6 @@ local function updateSpellTarget(self, _, unit)
 	UF.PostCastUpdate(self.Castbar, unit)
 end
 
-function UF:ToggleCastBarLatency(frame)
-	frame = frame or _G.oUF_Player
-	if not frame then return end
-
-	if C.db["UFs"]["LagString"] then
-		frame:RegisterEvent("GLOBAL_MOUSE_UP", UF.OnCastSent, true) -- Fix quests with WorldFrame interaction
-		frame:RegisterEvent("GLOBAL_MOUSE_DOWN", UF.OnCastSent, true)
-		frame:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", UF.OnCastSent, true)
-	else
-		frame:UnregisterEvent("GLOBAL_MOUSE_UP", UF.OnCastSent)
-		frame:UnregisterEvent("GLOBAL_MOUSE_DOWN", UF.OnCastSent)
-		frame:UnregisterEvent("CURRENT_SPELL_CAST_CHANGED", UF.OnCastSent)
-		if frame.Castbar then frame.Castbar.__sendTime = nil end
-	end
-end
-
 function UF.UpdateNotInterruptBar(element)
 	if element.notInterruptBar then
 		element.notInterruptBar:SetAlphaFromBoolean(element.notInterruptible, 1, 0)
@@ -767,14 +751,6 @@ function UF:CreateCastBar(self)
 		safeZone:SetPoint("BOTTOMRIGHT")
 		cb:SetFrameLevel(10)
 		cb.SafeZone = safeZone
-
-		local lagStr = B.CreateFS(cb, 10)
-		lagStr:ClearAllPoints()
-		lagStr:SetPoint("BOTTOM", cb, "TOP", 0, 2)
-		cb.LagString = lagStr
-
-		UF:ToggleCastBarLatency(self)
-
 	elseif mystyle == "nameplate" then
 		name:SetPoint("TOPLEFT", cb, "LEFT", 0, -1)
 		timer:SetPoint("TOPRIGHT", cb, "RIGHT", 0, -1)

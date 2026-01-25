@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
+if DB.isNewPatch then return end
+
 local unpack, min, format, strupper = unpack, min, format, strupper
 local GetTime, IsPlayerSpell, UnitName = GetTime, IsPlayerSpell, UnitName
 local UnitInVehicle, UnitIsUnit, UnitExists = UnitInVehicle, UnitIsUnit, UnitExists

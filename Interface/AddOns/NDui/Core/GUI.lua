@@ -199,7 +199,6 @@ G.DefaultSettings = {
 		CPHeight = 5,
 		CPxOffset = 12,
 		CPyOffset = -2,
-		LagString = true,
 		RuneTimer = true,
 		RaidBuffIndicator = true,
 		PartyFrame = true,
@@ -992,10 +991,6 @@ local function updateRaidTextScale()
 	B:GetModule("UnitFrames"):UpdateRaidTextScale()
 end
 
-local function toggleCastBarLatency()
-	B:GetModule("UnitFrames"):ToggleCastBarLatency()
-end
-
 local function updateAllHeaders()
 	B:GetModule("UnitFrames"):UpdateAllHeaders()
 end
@@ -1220,8 +1215,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "UFs", "HealthColor", L["HealthColor"].."*", true, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateUFTextScale},
 		{},--blank
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
-		{1, "UFs", "LagString", L["Castbar LagString"].."*", true, nil, toggleCastBarLatency},
-		{1, "UFs", "PetCB", L["PetCastbar"]},
+		{1, "UFs", "PetCB", L["PetCastbar"], true},
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
