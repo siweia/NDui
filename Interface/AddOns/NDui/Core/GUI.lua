@@ -383,7 +383,6 @@ G.DefaultSettings = {
 		Enable = true,
 		maxAuras = 5,
 		PlateAuras = true,
-		AuraSize = 28,
 		FontSize = 14,
 		SizeRatio = .5,
 		AuraFilter = 3,
@@ -441,6 +440,7 @@ G.DefaultSettings = {
 		RaidTargetX = 0,
 		RaidTargetY = 3,
 		PlateRange = 45,
+		AurasPerRow = 6,
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -1306,7 +1306,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "FontSize", L["AuraFontSize"].."*", nil, {10, 30, 1}, refreshNameplates},
 		{3, "Nameplate", "SizeRatio", L["SizeRatio"].."*", true, {.5, 1, .1}, refreshNameplates},
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {1, 20, 1}, refreshNameplates},
-		{3, "Nameplate", "AuraSize", L["Auras Size"].."*", true, {18, 60, 1}, refreshNameplates},
+		{3, "Nameplate", "AurasPerRow", L["IconsPerRow"].."*", true, {1, 20, 1}, refreshNameplates},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", L["ExecuteRatio"].."*", true, {0, 90, 1}, refreseExecuteRatio, L["ExecuteRatioTip"]},

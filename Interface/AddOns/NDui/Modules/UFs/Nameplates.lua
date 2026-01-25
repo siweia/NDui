@@ -758,7 +758,7 @@ function UF:UpdateNameplateAuras()
 		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
 	end
 	element.numTotal = C.db["Nameplate"]["maxAuras"]
-	element.size = C.db["Nameplate"]["AuraSize"]
+	element.maxCols = C.db["Nameplate"]["AurasPerRow"]
 	element.fontSize = C.db["Nameplate"]["FontSize"]
 	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 	element.showStealableBuffs = C.db["Nameplate"]["DispellMode"] == 1
