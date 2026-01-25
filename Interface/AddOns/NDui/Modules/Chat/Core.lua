@@ -15,7 +15,6 @@ local InviteToGroup = C_PartyInfo.InviteUnit
 local GeneralDockManager = GeneralDockManager
 local messageSoundID = SOUNDKIT.TELL_MESSAGE
 
-local maxLines = 2048
 local fontFile, fontOutline
 module.MuteCache = {}
 
@@ -113,9 +112,6 @@ function module:SkinChat()
 	end
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
-	if self:GetMaxLines() < maxLines then
-		self:SetMaxLines(maxLines)
-	end
 
 	self.__background = BlackBackground(self)
 	self.__gradient = GradientBackground(self)
@@ -296,6 +292,7 @@ end
 
 function module.OnChatWhisper(event, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
+	if B:IsSecretValue(author) then return end
 	for word in pairs(whisperList) do
 		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
 			if event == "CHAT_MSG_BN_WHISPER" then
@@ -375,6 +372,7 @@ local whisperEvents = {
 function module:PlayWhisperSound(event, _, author)
 	if not C.db["Chat"]["WhisperSound"] then return end
 
+	if B:IsSecretValue(author) then return end
 	if whisperEvents[event] then
 		local name = Ambiguate(author, "none")
 		local currentTime = GetTime()
@@ -478,10 +476,10 @@ function module:OnLogin()
 	-- Add Elements
 	module:ChatWhisperSticky()
 	module:ChatFilter()
-	module:ChannelRename()
+	--module:ChannelRename()
 	module:Chatbar()
 	module:ChatCopy()
-	module:UrlCopy()
+	--module:UrlCopy()
 	module:WhisperInvite()
 	--module:ToggleLanguageFilter()
 
