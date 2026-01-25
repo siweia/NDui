@@ -990,26 +990,6 @@ function UF.CustomFilter(element, unit, data)
 	else
 		return element.onlyShowPlayer and data.isPlayerAura
 	end
-
---[[	local style = element.__owner.mystyle
-	local name, debuffType, isStealable, spellID, nameplateShowAll = data.name, data.dispelName, data.isStealable, data.spellId, data.nameplateShowAll
-	local isSpellPublic = B:NotSecretValue(spellID)
-	if style == "nameplate" or style == "boss" or style == "arena" then
-		if element.__owner.plateType == "NameOnly" then
-			return isSpellPublic and UF.NameplateWhite[spellID]
-		elseif isSpellPublic and UF.NameplateBlack[spellID] then
-			return false
-		elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and (not data.isHarmful) then
-			return true
-		elseif isSpellPublic and UF.NameplateWhite[spellID] then
-			return true
-		else
-			local auraFilter = C.db["Nameplate"]["AuraFilter"]
-			return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and data.isPlayerAura)
-		end
-	else
-		return (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer)
-	end]]
 end
 
 function UF.UnitCustomFilter(element, _, data)
