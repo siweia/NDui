@@ -36,7 +36,6 @@ local function CreatePlayerStyle(self)
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
 	UF:CreateAuras(self)
-	UF:CreateSwing(self)
 
 	if C.db["UFs"]["Castbars"] then
 		UF:ReskinMirrorBars()
@@ -414,7 +413,6 @@ function UF:OnLogin()
 		end
 
 		UF:ToggleAddPower()
-		UF:ToggleSwingBars()
 		UF:ToggleUFClassPower()
 		UF:UpdateTextScale()
 		UF:ToggleAllAuras()

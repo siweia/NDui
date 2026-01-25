@@ -168,10 +168,6 @@ G.DefaultSettings = {
 		Arena = true,
 		Castbars = true,
 		AddPower = true,
-		SwingBar = false,
-		SwingWidth = 275,
-		SwingHeight = 3,
-		SwingTimer = false,
 		OffOnTop = false,
 		RaidFrame = true,
 		AutoRes = true,
@@ -748,10 +744,6 @@ local function setupUFAuras()
 	G:SetupUFAuras(guiPage[3])
 end
 
-local function setupSwingBars()
-	G:SetupSwingBars(guiPage[3])
-end
-
 local function setupRaidFrame()
 	G:SetupRaidFrame(guiPage[4])
 end
@@ -1004,10 +996,6 @@ local function toggleCastBarLatency()
 	B:GetModule("UnitFrames"):ToggleCastBarLatency()
 end
 
-local function toggleSwingBars()
-	B:GetModule("UnitFrames"):ToggleSwingBars()
-end
-
 local function updateAllHeaders()
 	B:GetModule("UnitFrames"):UpdateAllHeaders()
 end
@@ -1233,8 +1221,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "LagString", L["Castbar LagString"].."*", true, nil, toggleCastBarLatency},
-		{1, "UFs", "SwingBar", L["UFs SwingBar"].."*", nil, setupSwingBars, toggleSwingBars},
-		{1, "UFs", "PetCB", L["PetCastbar"], true},
+		{1, "UFs", "PetCB", L["PetCastbar"]},
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},
