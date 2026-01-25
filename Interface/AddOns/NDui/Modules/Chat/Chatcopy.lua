@@ -30,7 +30,7 @@ function module:GetChatLines()
 	local index = 1
 	for i = 1, self:GetNumMessages() do
 		local msg, r, g, b = self:GetMessageInfo(i)
-		if msg and not isMessageProtected(msg) then
+		if msg and B:NotSecretValue(msg) and not isMessageProtected(msg) then
 			r, g, b = r or 1, g or 1, b or 1
 			msg = replaceMessage(msg, r, g, b)
 			lines[index] = tostring(msg)
