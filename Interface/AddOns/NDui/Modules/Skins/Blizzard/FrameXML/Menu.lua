@@ -21,7 +21,8 @@ tinsert(C.defaultThemes, function()
 		end
 
 		if DB.isNewPatch then
-			menuFrame.bg:SetFrameLevel(menuFrame:GetFrameLevel() - 1)
+			local framelevel = menuFrame:GetFrameLevel() - 1
+			menuFrame.bg:SetFrameLevel(framelevel < 0 and 0 or framelevel)
 		end
 
 		if not menuFrame.ScrollBar.styled then

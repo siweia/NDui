@@ -24,12 +24,6 @@ do
 	local done
 	local function setupMisc(event, addon)
 		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
-			-- Fix undragable issue
-			local checkBox = WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox
-			checkBox.Label:ClearAllPoints()
-			checkBox.Label:SetPoint("LEFT", checkBox, "RIGHT", 2, 1)
-			checkBox.Label:SetWidth(152)
-
 			CollectionsJournal:HookScript("OnShow", function()
 				if not done then
 					if InCombatLockdown() then
@@ -47,9 +41,7 @@ do
 		end
 	end
 
-	if not DB.isNewPatch then
-		B:RegisterEvent("ADDON_LOADED", setupMisc)
-	end
+	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
 -- Select target when click on raid units
@@ -148,6 +140,7 @@ do
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
+-- Fix blizzard ui error
 local coordStart = 0.0625;
 local coordEnd = 1 - coordStart;
 local textureUVs = {			-- keys have to match pieceNames in nineSliceSetup table
@@ -179,7 +172,7 @@ local function SetupBackdropTextureCoordinates(region, pieceSetup, repeatX, repe
 end
 function BackdropTemplateMixin:SetupTextureCoordinates()
 	local width = self:GetWidth();
-	if issecretvalue(width) then return end -- needs review
+	if B:IsSecretValue(width) then return end -- needs review
 	local height = self:GetHeight();
 	local effectiveScale = self:GetEffectiveScale();
 	local edgeSize = self:GetEdgeSize();
@@ -208,4 +201,34 @@ function BackdropTemplateMixin:SetupTextureCoordinates()
 			end
 		end
 	end
+end
+
+MoneyFrame_Update_OLD = MoneyFrame_Update
+
+local function GetMoneyFrame(frameOrName)
+	local argType = type(frameOrName)
+	if argType == "table" then
+		return frameOrName
+	elseif argType == "string" then
+		return _G[frameOrName]
+	end
+	return nil
+end
+
+function MoneyFrame_Update(frameName, money, forceShow)
+	local frame = GetMoneyFrame(frameName);
+	if B:IsSecretValue(frame.GoldButton:GetWidth()) then return end
+	MoneyFrame_Update_OLD(frameName, money, forceShow)
+end
+
+SetTooltipMoney_OLD = SetTooltipMoney
+
+function SetTooltipMoney(frame, money, type, prefixText, suffixText)
+	if not frame.shownMoneyFrames then
+		frame.shownMoneyFrames = 0;
+	end
+	local moneyFrame = _G[frame:GetName().."MoneyFrame"..frame.shownMoneyFrames+1]
+	local moneyFrameWidth = moneyFrame and moneyFrame:GetWidth()
+	if B:IsSecretValue(moneyFrameWidth) then return end
+	SetTooltipMoney_OLD(frame, money, type, prefixText, suffixText)
 end

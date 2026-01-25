@@ -21,6 +21,7 @@ local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAu
 local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
 local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
 local GameTooltip_ClearMoney, GameTooltip_ClearStatusBars, GameTooltip_ClearProgressBars, GameTooltip_ClearWidgetSet = GameTooltip_ClearMoney, GameTooltip_ClearStatusBars, GameTooltip_ClearProgressBars, GameTooltip_ClearWidgetSet
+local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -34,9 +35,14 @@ local specPrefix = "|cffFFCC00"..SPECIALIZATION..": "..DB.InfoColor
 
 function TT:GetUnit()
 	local data = self:GetTooltipData()
-	local guid = data and not issecretvalue(data.guid) and data.guid
+	local guid = data and B:NotSecretValue(data.guid) and data.guid
 	local unit = guid and UnitTokenFromGUID(guid)
 	return unit, guid
+end
+
+function TT:UnitExists(unit)
+	if ShouldUnitIdentityBeSecret and ShouldUnitIdentityBeSecret(unit) then return end
+	return unit and UnitExists(unit)
 end
 
 local FACTION_COLORS = {
@@ -48,45 +54,19 @@ local function replaceSpecInfo(str)
 	return strfind(str, "%s") and specPrefix..str or str
 end
 
-function TT:UpdateFactionLine(lineData)
-	if self:IsForbidden() then return end
-	if not self:IsTooltipType(Enum.TooltipDataType.Unit) then return end
-
-	local unit = TT.GetUnit(self)
-	local unitClass = unit and UnitIsPlayer(unit) and UnitClass(unit)
-	local unitCreature = unit and UnitCreatureType(unit)
-
-	local linetext = lineData.leftText
-	if issecretvalue(linetext) then return end
-
-	if linetext == PVP then
-		return true
-	elseif FACTION_COLORS[linetext] then
-		if C.db["Tooltip"]["FactionIcon"] then
-			return true
-		else
-			lineData.leftText = format(FACTION_COLORS[linetext], linetext)
-		end
-	elseif unitClass and strfind(linetext, unitClass) then
-		lineData.leftText = gsub(linetext, "(.-)%S+$", replaceSpecInfo)
-	elseif unitCreature and linetext == unitCreature then
-		return true
-	end
-end
-
 function TT:GetLevelLine()
 	for i = 2, self:NumLines() do
 		local tiptext = _G["GameTooltipTextLeft"..i]
 		if not tiptext then break end
 		local linetext = tiptext:GetText()
 		if linetext and strfind(linetext, LEVEL) then
-			return tiptext
+			return tiptext, i
 		end
 	end
 end
 
 function TT:GetTarget(unit)
-	if issecretvalue(unit) then return end
+	if ShouldUnitIdentityBeSecret(unit) then return "" end
 	if UnitIsUnit(unit, "player") then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
@@ -177,7 +157,7 @@ function TT:OnTooltipSetUnit()
 	end
 
 	local unit, guid = TT.GetUnit(self)
-	if not unit or not UnitExists(unit) then return end
+	if not unit or not TT:UnitExists(unit) then return end
 
 	local isShiftKeyDown = IsShiftKeyDown()
 	local isPlayer = UnitIsPlayer(unit)
@@ -247,9 +227,11 @@ function TT:OnTooltipSetUnit()
 	local text = GameTooltipTextLeft1:GetText()
 	if text then
 		local ricon = GetRaidTargetIndex(unit)
-		if ricon and ricon > 8 then ricon = nil end
-		ricon = ricon and ICON_LIST[ricon].."18|t " or ""
-		GameTooltipTextLeft1:SetFormattedText(("%s%s%s"), ricon, hexColor, text)
+		if ricon and B:NotSecretValue(ricon) then
+			if ricon > 8 then ricon = nil end
+			ricon = ICON_LIST[ricon].."18|t "
+		end
+		GameTooltipTextLeft1:SetFormattedText(("%s%s%s"), ricon or "", hexColor, text)
 	end
 
 	local alive = not UnitIsDeadOrGhost(unit)
@@ -267,19 +249,27 @@ function TT:OnTooltipSetUnit()
 		local diff = GetCreatureDifficultyColor(level)
 		local classify = UnitClassification(unit)
 		local textLevel = format("%s%s%s|r", B.HexRGB(diff), boss or format("%d", level), classification[classify] or "")
-		local tiptextLevel = TT.GetLevelLine(self)
+		local tiptextLevel, index = TT.GetLevelLine(self)
+		local unitClass = isPlayer and UnitClass(unit)
 		if tiptextLevel then
 			local reaction = UnitReaction(unit, "player")
 			local standingText = not isPlayer and reaction and hexColor.._G["FACTION_STANDING_LABEL"..reaction].."|r " or ""
 
 			local pvpFlag = isPlayer and UnitIsPVP(unit) and format(" |cffff0000%s|r", PVP) or ""
-			local unitClass = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(UnitClass(unit) or "").."|r") or UnitCreatureType(unit) or ""
+			local unitClassStr = isPlayer and format("%s %s", UnitRace(unit) or "", hexColor..(unitClass or "").."|r") or UnitCreatureType(unit) or ""
 
-			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, standingText..unitClass, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
+			tiptextLevel:SetFormattedText(("%s%s %s %s"), textLevel, pvpFlag, standingText..unitClassStr, (not alive and "|cffCCCCCC"..DEAD.."|r" or ""))
+		end
+
+		local specLine = _G["GameTooltipTextLeft"..(index+1)]
+		local specText = specLine and specLine:GetText()
+		if specText and unitClass and strfind(specText, unitClass) then
+			specText = gsub(specText, "(.-)%S+$", replaceSpecInfo)
+			specLine:SetText(specText)
 		end
 	end
 
-	if UnitExists(unit.."target") then
+	if TT:UnitExists(unit.."target") then
 		local tarRicon = GetRaidTargetIndex(unit.."target")
 		if tarRicon and tarRicon > 8 then tarRicon = nil end
 		local tar = format("%s%s", (tarRicon and ICON_LIST[tarRicon].."10|t") or "", TT:GetTarget(unit.."target"))
@@ -484,14 +474,14 @@ function TT:FixRecipeItemNameWidth()
 	local name = self:GetName()
 	for i = 1, self:NumLines() do
 		local line = _G[name.."TextLeft"..i]
-		if line and line:GetHeight() > 40 then
+		if line and B:NotSecretValue(line:GetWidth()) and line:GetHeight() > 40 then
 			line:SetWidth(line:GetWidth() + 2)
 		end
 	end
 end
 
 function TT:ResetUnit(btn)
-	if btn == "LSHIFT" and UnitExists("mouseover") then
+	if btn == "LSHIFT" and TT:UnitExists("mouseover") then
 		GameTooltip:RefreshData()
 	end
 end
@@ -511,8 +501,7 @@ function TT:OnLogin()
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
 	--hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
-	TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
-	--TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
 	hooksecurefunc("GameTooltip_ShowProgressBar", TT.GameTooltip_ShowProgressBar)

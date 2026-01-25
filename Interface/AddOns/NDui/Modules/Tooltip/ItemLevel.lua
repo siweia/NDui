@@ -13,6 +13,7 @@ local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
+local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
 
 TT.TierSets = {
 	-- WARRIOR
@@ -51,6 +52,12 @@ local formatSets = {
 	[5] = " |cffc745f9(5/5)", -- purple
 }
 
+local function checkUnitGUID(unit)
+	if ShouldUnitIdentityBeSecret(unit) then return end
+	local guid = UnitGUID(unit)
+	return B:NotSecretValue(guid) and guid
+end
+
 function TT:InspectOnUpdate(elapsed)
 	self.elapsed = (self.elapsed or frequency) + elapsed
 	if self.elapsed > frequency then
@@ -58,7 +65,7 @@ function TT:InspectOnUpdate(elapsed)
 		self:Hide()
 		ClearInspectPlayer()
 
-		if currentUNIT and UnitGUID(currentUNIT) == currentGUID then
+		if currentUNIT and checkUnitGUID(currentUNIT) == currentGUID then
 			B:RegisterEvent("INSPECT_READY", TT.GetInspectInfo)
 			NotifyInspect(currentUNIT)
 		end
@@ -72,12 +79,13 @@ updater:Hide()
 local lastTime = 0
 function TT:GetInspectInfo(...)
 	if self == "UNIT_INVENTORY_CHANGED" then
+		if InCombatLockdown() then return end
 		local thisTime = GetTime()
 		if thisTime - lastTime > .1 then
 			lastTime = thisTime
 
 			local unit = ...
-			if UnitGUID(unit) == currentGUID then
+			if checkUnitGUID(unit) == currentGUID then
 				TT:InspectUnit(unit, true)
 			end
 		end
@@ -101,7 +109,7 @@ B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 
 function TT:SetupItemLevel(level)
 	local _, unit = GameTooltip:GetUnit()
-	if not unit or UnitGUID(unit) ~= currentGUID then return end
+	if not unit or checkUnitGUID(unit) ~= currentGUID then return end
 
 	local levelLine
 	for i = 2, GameTooltip:NumLines() do
@@ -121,7 +129,7 @@ function TT:SetupItemLevel(level)
 end
 
 function TT:GetUnitItemLevel(unit)
-	if not unit or UnitGUID(unit) ~= currentGUID then return end
+	if not unit or checkUnitGUID(unit) ~= currentGUID then return end
 
 	local class = select(2, UnitClass(unit))
 	local ilvl, boa, total, haveWeapon, twohand, sets = 0, 0, 0, 0, 0, 0
@@ -231,7 +239,7 @@ function TT:InspectUnit(unit, forced)
 		level = self:GetUnitItemLevel("player")
 		self:SetupItemLevel(level)
 	else
-		if not unit or UnitGUID(unit) ~= currentGUID then return end
+		if not unit or checkUnitGUID(unit) ~= currentGUID then return end
 		if not UnitIsPlayer(unit) then return end
 
 		local currentDB = cache[currentGUID]
@@ -252,7 +260,7 @@ function TT:InspectUnitItemLevel(unit)
 	if C.db["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
 
 	if not unit or not CanInspect(unit) then return end
-	currentUNIT, currentGUID = unit, UnitGUID(unit)
+	currentUNIT, currentGUID = unit, checkUnitGUID(unit)
 	if not cache[currentGUID] then cache[currentGUID] = {} end
 
 	TT:InspectUnit(unit)

@@ -7,6 +7,26 @@ local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber,
 local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, floor, rad = math.min, math.max, math.floor, math.rad
 local CreateColor = CreateColor
+local issecretvalue, issecrettable = issecretvalue, issecrettable
+
+-- Secret
+do
+	function B:IsSecretValue(value)
+		return issecretvalue and issecretvalue(value)
+	end
+
+	function B:NotSecretValue(value)
+		return not issecretvalue or not issecretvalue(value)
+	end
+
+	function B:IsSecretTable(object)
+		return issecrettable and issecrettable(object)
+	end
+
+	function B:NotSecretTable(object)
+		return not issecrettable or not issecrettable(object)
+	end
+end
 
 -- Math
 do
@@ -16,13 +36,11 @@ do
 				{ breakpoint = 1e9, abbreviation = "b", significandDivisor = 1e7, fractionDivisor = 1e2, abbreviationIsGlobal = false },
 				{ breakpoint = 1e6, abbreviation = "m", significandDivisor = 1e4, fractionDivisor = 1e2, abbreviationIsGlobal = false },
 				{ breakpoint = 1e3, abbreviation = "k", significandDivisor = 1e2, fractionDivisor = 1e1, abbreviationIsGlobal = false },
-				{ breakpoint = 0, abbreviation = "", significandDivisor = 1, fractionDivisor = 1, abbreviationIsGlobal = false },
 		})},
 		[2] = { config = CreateAbbreviateConfig({
 				{ breakpoint = 1e12, abbreviation = L["NumberCap3"], significandDivisor = 1e10, fractionDivisor = 1e2, abbreviationIsGlobal = false },
 				{ breakpoint = 1e8, abbreviation = L["NumberCap2"], significandDivisor = 1e6, fractionDivisor = 1e2, abbreviationIsGlobal = false },
 				{ breakpoint = 1e4, abbreviation = L["NumberCap1"], significandDivisor = 1e3, fractionDivisor = 1e1, abbreviationIsGlobal = false },
-				{ breakpoint = 0, abbreviation = "", significandDivisor = 1, fractionDivisor = 1, abbreviationIsGlobal = false },
 		})},
 	}
 

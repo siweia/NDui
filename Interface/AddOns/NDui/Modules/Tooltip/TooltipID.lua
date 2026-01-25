@@ -28,7 +28,7 @@ function TT:AddLineForID(id, linkType, noadd)
 		local line = _G[self:GetName().."TextLeft"..i]
 		if not line then break end
 		local text = line:GetText()
-		if text and not issecretvalue(text) and text == linkType then return end
+		if text and B:NotSecretValue(text) and text == linkType then return end
 	end
 
 	if self.__isHoverTip and linkType == types.spell and IsPlayerSpell(id) and C_MountJournal_GetMountFromSpell(id) then
@@ -88,14 +88,14 @@ function TT:SetupTooltipID()
 	-- Spells
 	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
 		if self:IsForbidden() then return end
-		local auraData = C_UnitAuras.GetAuraDataByIndex(...)
-		if not auraData then return end
-		local caster = auraData.sourceUnit
-		local id = auraData.spellId
+		local data = C_UnitAuras.GetAuraDataByIndex(...)
+		if not data then return end
+
+		local id, caster = data.spellId, data.sourceUnit
 		if id then
 			TT.AddLineForID(self, id, types.spell)
 		end
-		if caster and not issecretvalue(caster) then
+		if caster and B:NotSecretValue(caster) then
 			local name = GetUnitName(caster, true)
 			local hexColor = B.HexRGB(B.UnitColor(caster))
 			self:AddDoubleLine(L["From"]..":", hexColor..name)
@@ -111,7 +111,7 @@ function TT:SetupTooltipID()
 		if id then
 			TT.AddLineForID(self, id, types.spell)
 		end
-		if caster and not issecretvalue(caster) then
+		if caster and B:NotSecretValue(caster) then
 			local name = GetUnitName(caster, true)
 			local hexColor = B.HexRGB(B.UnitColor(caster))
 			self:AddDoubleLine(L["From"]..":", hexColor..name)
@@ -120,6 +120,7 @@ function TT:SetupTooltipID()
 	end
 	hooksecurefunc(GameTooltip, "SetUnitBuffByAuraInstanceID", UpdateAuraTip)
 	hooksecurefunc(GameTooltip, "SetUnitDebuffByAuraInstanceID", UpdateAuraTip)
+	hooksecurefunc(GameTooltip, "SetUnitAuraByAuraInstanceID", UpdateAuraTip)
 
 	hooksecurefunc("SetItemRef", function(link)
 		local id = tonumber(strmatch(link, "spell:(%d+)"))

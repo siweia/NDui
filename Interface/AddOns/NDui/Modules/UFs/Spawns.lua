@@ -324,7 +324,6 @@ function UF:OnLogin()
 		UF.NameplateDriver:SetRemovedCallback(UF.OnNameplateRemoved)
 
 		UF:SetupCVars()
-		UF:BlockAddons()
 		UF:CreateUnitTable()
 		UF:CreatePowerUnitTable()
 		UF:UpdateGroupRoles()

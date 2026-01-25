@@ -143,7 +143,7 @@ function A:UpdateAuras(button, index)
 	end
 
 	local count = auraData.applications
-	if issecretvalue(count) then
+	if B:IsSecretValue(count) then
 		button.count:SetText(GetAuraApplicationDisplayCount(unit, auraData.auraInstanceID, MIN_SPELL_COUNT, MAX_SPELL_COUNT))
 	else
 		local hideCount = not count or (count < MIN_SPELL_COUNT or count > MAX_SPELL_COUNT)
@@ -151,7 +151,7 @@ function A:UpdateAuras(button, index)
 	end
 
 	if filter == "HARMFUL" then
-		local color = oUF.colors.dispel[auraData.dispelName or 0]
+		local color = B:NotSecretValue(auraData.dispelName) and oUF.colors.dispel[auraData.dispelName] or oUF.colors.dispel[0]
 		button:SetBackdropBorderColor(color:GetRGB())
 	else
 		button:SetBackdropBorderColor(0, 0, 0)
@@ -324,7 +324,7 @@ function A:CreateAuraIcon(button)
 	B.SetFontSize(button.count, fontSize)
 
 	button.timer = button:CreateFontString(nil, "ARTWORK")
-	button.timer:SetPoint("TOP", button, "BOTTOM", 1, 2)
+	button.timer:SetPoint("CENTER")
 	B.SetFontSize(button.timer, fontSize)
 
 	button.highlight = button:CreateTexture(nil, "HIGHLIGHT")

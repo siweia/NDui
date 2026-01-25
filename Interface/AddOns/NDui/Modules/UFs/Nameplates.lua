@@ -55,17 +55,11 @@ function UF:UpdateClickableSize()
 	C_NamePlate_SetNamePlateFriendlySize(helpWidth*uiScale, helpHeight*uiScale)
 end
 
-function UF:UpdatePlateClickThru()
-	if DB.isNewPatch then return end -- removed? needs review
-	if InCombatLockdown() then return end
-
-	C_NamePlate_SetNamePlateEnemyClickThrough(C.db["Nameplate"]["EnemyThru"])
-	C_NamePlate_SetNamePlateFriendlyClickThrough(C.db["Nameplate"]["FriendlyThru"])
-end
-
 function UF:UpdatePlateSize()
 	if InCombatLockdown() then return end
 	UF.NameplateDriver:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
+	UF.NameplateDriver.enemyNonInteractible = C.db["Nameplate"]["EnemyThru"]
+	UF.NameplateDriver.friendlyNonInteractible = C.db["Nameplate"]["FriendlyThru"]
 end
 
 function UF:SetupCVars()
@@ -85,28 +79,8 @@ function UF:SetupCVars()
 	SetCVar("nameplateResourceOnTarget", 0)
 	UF:UpdatePlateSize()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateSize", UF.UpdatePlateSize)
-	UF:UpdatePlateClickThru()
 	-- fix blizz friendly plate visibility
 	SetCVar("nameplatePlayerMaxDistance", 60)
-end
-
-function UF:BlockAddons()
-	if not C.db["Nameplate"]["BlockDBM"] then return end
-	if not DBM or not DBM.Nameplate then return end
-
-	if DBM.Options then
-		DBM.Options.DontShowNameplateIcons = true
-		DBM.Options.DontShowNameplateIconsCD = true
-		DBM.Options.DontShowNameplateIconsCast = true
-	end
-
-	local function showAurasForDBM(_, _, _, spellID)
-		if not tonumber(spellID) then return end
-		if not C.WhiteList[spellID] then
-			C.WhiteList[spellID] = true
-		end
-	end
-	hooksecurefunc(DBM.Nameplate, "Show", showAurasForDBM)
 end
 
 -- Elements
@@ -205,7 +179,8 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = UF.CustomUnits[name] or UF.CustomUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
-	local isOffTank, status = UF:CheckThreatStatus(unit)
+	--local isOffTank, status = UF:CheckThreatStatus(unit)
+	local status = UnitThreatSituation("player", unit)
 	local customColor = C.db["Nameplate"]["CustomColor"]
 	local secureColor = C.db["Nameplate"]["SecureColor"]
 	local transColor = C.db["Nameplate"]["TransColor"]
@@ -711,6 +686,7 @@ function UF:CreatePlates()
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
+	UF:SmoothBar(health)
 	self.backdrop = B.SetBD(health)
 	self.backdrop.__shadow = nil
 	self.Health = health
@@ -1016,7 +992,7 @@ function UF:OnUnitTargetChanged()
 			local memberTarget = member.."target"
 			if not UnitIsDeadOrGhost(member) and UnitExists(memberTarget) then
 				local unitGUID = UnitGUID(memberTarget)
-				if not issecretvalue(unitGUID) then
+				if B:NotSecretValue(unitGUID) then
 					targetedList[unitGUID] = (targetedList[unitGUID] or 0) + 1
 				end
 			end
@@ -1064,9 +1040,9 @@ function UF:OnNameplateAdded(event, unit)
 	if not self then return end
 
 	local name = UnitName(unit)
-	self.unitName = not issecretvalue(name) and name or nil
+	self.unitName = B:NotSecretValue(name) and name or nil
 	local guid = UnitGUID(unit)
-	self.unitGUID = not issecretvalue(guid) and guid or nil
+	self.unitGUID = B:NotSecretValue(guid) and guid or nil
 	self.isPlayer = UnitIsPlayer(unit)
 	self.npcID = B.GetNPCID(self.unitGUID)
 	self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)

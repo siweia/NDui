@@ -396,7 +396,6 @@ local list = {
 		{AuraID = 204018, UnitID = "target", Flash = true},	-- 破咒祝福
 		{AuraID = 205191, UnitID = "target"},	-- 以眼还眼 惩戒
 		{AuraID = 104773, UnitID = "target"},	-- 不灭决心
-		{AuraID = 199754, UnitID = "target"},	-- 还击
 		{AuraID = 120954, UnitID = "target"},	-- 壮胆酒
 		{AuraID = 122278, UnitID = "target"},	-- 躯不坏
 		{AuraID = 122783, UnitID = "target"},	-- 散魔功

@@ -443,7 +443,7 @@ local spellList = {
 }
 
 function M:ItemAlert_Update(unit, castID, spellID)
-	if issecretvalue and issecretvalue(spellID) then return end
+	if B:IsSecretValue(spellID) then return end
 	if C.db["Misc"]["LeaderOnly"] and not (UnitIsGroupAssistant("player") or UnitIsGroupLeader("player")) then return end -- only alert for leader, needs review
 
 	if groupUnits[unit] and spellList[spellID] and (spellList[spellID] ~= castID) then

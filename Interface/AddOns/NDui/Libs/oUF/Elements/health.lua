@@ -65,6 +65,7 @@ The following options are listed by priority. The first check that returns true 
 
     -- Alternatively, if .TempLoss is being used
     local TempLoss = CreateFrame('StatusBar', nil, self)
+    TempLoss:SetStatusBarTexture('UI-HUD-UnitFrame-Target-PortraitOn-Bar-TempHPLoss')
     TempLoss:SetReverseFill(true)
     TempLoss:SetHeight(20)
     TempLoss:SetPoint('TOP')
@@ -201,7 +202,9 @@ local function Path(self, ...)
 	* event - the event triggering the update (string)
 	* unit  - the unit accompanying the event (string)
 	--]]
-	(self.Health.Override or Update) (self, ...);
+	do
+		(self.Health.Override or Update) (self, ...)
+	end
 
 	ColorPath(self, ...)
 end

@@ -270,7 +270,7 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 
 		local textLine = _G[format("NDui_ScanTooltipTextLeft%d", GetCVarBool("colorblindmode") and 3 or 2)]
 		local title = textLine and textLine:GetText()
-		if title and not issecretvalue(title) and not strfind(title, "^"..LEVEL) then
+		if title and B:NotSecretValue(title) and not strfind(title, "^"..LEVEL) then
 			return title
 		end
 --[[
