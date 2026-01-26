@@ -12,7 +12,7 @@ local scripts = {
 
 local framesToHide = {
 	MainMenuBar, OverrideActionBar, MultiBarLeft, MultiBarRight,
-	MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, StatusTrackingBarManager, BagsBar, PetActionBar, PossessActionBar
+	MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, StatusTrackingBarManager, BagsBar, PossessActionBar
 }
 
 local framesToDisable = {
@@ -21,7 +21,7 @@ local framesToDisable = {
 	ActionBarDownButton, ActionBarUpButton,
 	OverrideActionBar,
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
-	VerticalMultiBarsContainer, PetActionBar, PossessActionBar
+	VerticalMultiBarsContainer, PossessActionBar
 }
 
 local function DisableAllScripts(frame)
