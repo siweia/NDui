@@ -39,7 +39,7 @@ tinsert(C.defaultThemes, function()
 	local function updateCollapse(texture, atlas)
 		if oldAtlas[atlas] == 1 then
 			texture:SetAtlas("Soulbinds_Collection_CategoryHeader_Expand")
-		else
+		elseif oldAtlas[atlas] == 2 then
 			texture:SetAtlas("Soulbinds_Collection_CategoryHeader_Collapse")
 		end
 	end
