@@ -329,7 +329,6 @@ G.DefaultSettings = {
 		Sticky = false,
 		Lock = true,
 		Invite = true,
-		Freedom = true,
 		Keyword = "raid",
 		Oldname = false,
 		GuildInvite = true,
@@ -898,10 +897,6 @@ local function toggleChatBackground()
 	B:GetModule("Chat"):ToggleChatBackground()
 end
 
-local function toggleLanguageFilter()
-	B:GetModule("Chat"):ToggleLanguageFilter()
-end
-
 local function toggleEditBoxAnchor()
 	B:GetModule("Chat"):ToggleEditBoxAnchor()
 end
@@ -1379,7 +1374,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Chat", "Chatbar", L["ShowChatbar"]},
 		{1, "Chat", "WhisperColor", L["Differ WhisperColor"].."*", true},
 		{1, "Chat", "ChatItemLevel", L["ShowChatItemLevel"]},
-		{1, "Chat", "Freedom", L["Language Filter"].."*", true, nil, toggleLanguageFilter},
 		{1, "Chat", "WhisperSound", L["WhisperSound"].."*", nil, nil, nil, L["WhisperSoundTip"]},
 		{1, "Chat", "BottomBox", L["BottomBox"].."*", true, nil, toggleEditBoxAnchor},
 		{1, "Chat", "SysFont", L["SysFont"], nil, nil, nil, L["SysFontTip"]},

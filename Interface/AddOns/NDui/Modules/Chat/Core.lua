@@ -6,7 +6,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 local _G = _G
 local pairs, ipairs, strsub, strlower = pairs, ipairs, string.sub, string.lower
 local IsInGroup, IsInRaid, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsInGuild, IsShiftKeyDown, IsControlKeyDown
-local ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime
+local ChatEdit_UpdateHeader, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, SetCVar, Ambiguate, GetTime
 local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant
 local CanCooperateWithGameAccount, BNInviteFriend, PlaySound = CanCooperateWithGameAccount, BNInviteFriend, PlaySound
 local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
@@ -385,46 +385,6 @@ function module:PlayWhisperSound(event, _, author)
 	end
 end
 
--- ProfanityFilter
-local sideEffectFixed
-local function FixLanguageFilterSideEffects()
-	if sideEffectFixed then return end
-	sideEffectFixed = true
-
-	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
-	function C_BattleNet.GetFriendGameAccountInfo(...)
-		local gameAccountInfo = OLD_GetFriendGameAccountInfo(...)
-		if gameAccountInfo then
-			gameAccountInfo.isInCurrentRegion = true
-		end
-		return gameAccountInfo
-	end
-
-	local OLD_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
-	function C_BattleNet.GetFriendAccountInfo(...)
-		local accountInfo = OLD_GetFriendAccountInfo(...)
-		if accountInfo and accountInfo.gameAccountInfo then
-			accountInfo.gameAccountInfo.isInCurrentRegion = true
-		end
-		return accountInfo
-	end
-end
-
-function module:ToggleLanguageFilter()
-	if C.db["Chat"]["Freedom"] then
-		if GetCVar("portal") == "CN" then
-			ConsoleExec("portal TW")
-			FixLanguageFilterSideEffects()
-		end
-		SetCVar("profanityFilter", 0)
-	else
-		if sideEffectFixed then
-			ConsoleExec("portal CN")
-		end
-		SetCVar("profanityFilter", 1)
-	end
-end
-
 function module:HandleMinimizedFrame()
 	local minFrame = self.minFrame
 	if minFrame and not minFrame.styled then
@@ -481,7 +441,6 @@ function module:OnLogin()
 	module:ChatCopy()
 	--module:UrlCopy()
 	module:WhisperInvite()
-	--module:ToggleLanguageFilter()
 
 	-- Lock chatframe
 	if C.db["Chat"]["Lock"] then
