@@ -22,6 +22,7 @@ local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonSco
 local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
 local GameTooltip_ClearMoney, GameTooltip_ClearStatusBars, GameTooltip_ClearProgressBars, GameTooltip_ClearWidgetSet = GameTooltip_ClearMoney, GameTooltip_ClearStatusBars, GameTooltip_ClearProgressBars, GameTooltip_ClearWidgetSet
 local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
+local GetDisplayedItem = TooltipUtil and TooltipUtil.GetDisplayedItem
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -116,6 +117,7 @@ function TT:OnTooltipCleared()
 	if self.StatusBar then
 		self.StatusBar:ClearWatch()
 	end
+	if self.bg then B.SetBorderColor(self.bg) end
 end
 
 function TT.GetDungeonScore(score)
@@ -395,7 +397,7 @@ function TT:ReskinTooltip()
 		if self.background then self.background:Hide() end
 		self.bg = B.SetBD(self, .7)
 		self.bg:SetInside(self)
-		self.bg:SetFrameLevel(self:GetFrameLevel())
+		--self.bg:SetFrameLevel(self:GetFrameLevel())
 		B.SetBorderColor(self.bg)
 
 		if self.StatusBar then
@@ -414,22 +416,6 @@ function TT:ReskinTooltip()
 		end
 
 		self.tipStyled = true
-	end
-
-	B.SetBorderColor(self.bg)
-
-	if not C.db["Tooltip"]["ItemQuality"] then return end
-
-	local data = self.GetTooltipData and self:GetTooltipData()
-	if data then
-		local link = data.guid and C_Item.GetItemLinkByGUID(data.guid) or data.hyperlink
-		if link then
-			local quality = select(3, C_Item.GetItemInfo(link))
-			local color = DB.QualityColors[quality or 1]
-			if color then
-				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-			end
-		end
 	end
 end
 
@@ -469,14 +455,29 @@ function TT:SetupTooltipFonts()
 end
 
 function TT:FixRecipeItemNameWidth()
-	if not self.GetName then return end
-
-	local name = self:GetName()
-	for i = 1, self:NumLines() do
-		local line = _G[name.."TextLeft"..i]
-		if line and B:NotSecretValue(line:GetWidth()) and line:GetHeight() > 40 then
-			line:SetWidth(line:GetWidth() + 2)
+	if self.GetName then
+		local name = self:GetName()
+		for i = 1, self:NumLines() do
+			local line = _G[name.."TextLeft"..i]
+			if line and B:NotSecretValue(line:GetWidth()) and line:GetHeight() > 40 then
+				line:SetWidth(line:GetWidth() + 2)
+			end
 		end
+	end
+
+	if not self.bg then return end
+
+	if C.db["Tooltip"]["ItemQuality"] then
+		local name, link = GetDisplayedItem(self)
+		if link then
+			local quality = C_Item.GetItemQualityByID(link)
+			local color = DB.QualityColors[quality or 1]
+			if color then
+				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+			end
+		end
+	else
+		B.SetBorderColor(self.bg)
 	end
 end
 
