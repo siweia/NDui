@@ -3,8 +3,8 @@
 ## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Simpy, Tuller, zork.
 ## Author: Siweia
 ## Notes: More than a UI.
-## Version: 8.14.5
-## X-Support: TWW
+## Version: 8.14.6
+## X-Support: Midnight
 ## X-Website: https://github.com/siweia/NDui
 ## X-Curse-Project-ID: 324377
 ## X-WoWI-ID: 24846
