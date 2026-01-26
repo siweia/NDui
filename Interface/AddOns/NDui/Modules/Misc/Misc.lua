@@ -186,8 +186,6 @@ function M:VehicleSeatMover()
 			self:SetPoint("TOPLEFT", frame)
 		end
 	end)
-
-	VehicleSeatIndicator:KillEditMode()
 end
 
 -- Reanchor UIWidgets

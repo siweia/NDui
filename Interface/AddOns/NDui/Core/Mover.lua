@@ -385,7 +385,7 @@ function M:OnLogin()
 		M.UpdateTrimFrame(updater.__owner)
 	end)
 
-	M:DisableBlizzardMover()
+	--M:DisableBlizzardMover()
 end
 
 -- Disable blizzard edit mode
