@@ -91,9 +91,9 @@ function Bar:CreateStancebar()
 	Bar.movers[11] = frame.mover
 
 	-- StanceBar
-	StanceBar:SetParent(frame)
-	StanceBar:EnableMouse(false)
-	StanceBar:UnregisterAllEvents()
+	--StanceBar:SetParent(frame)
+	--StanceBar:EnableMouse(false)
+	--StanceBar:UnregisterAllEvents()
 
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
