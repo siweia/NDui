@@ -17,6 +17,7 @@
 	<Script file="Blizzard_Collections.lua"/>
 	<Script file="Blizzard_Communities.lua"/>
 	<Script file="Blizzard_Contribution.lua"/>
+	<Script file="Blizzard_CooldownViewer.lua"/>
 	<Script file="Blizzard_Covenant.lua"/>
 	<Script file="Blizzard_DeathRecap.lua"/>
 	<Script file="Blizzard_DebugTools.lua"/>

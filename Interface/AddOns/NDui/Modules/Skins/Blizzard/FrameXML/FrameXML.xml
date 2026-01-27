@@ -8,7 +8,6 @@
 	<Script file="ChatFrame.lua"/>
 	<Script file="ColorPickerFrame.lua"/>
 	<Script file="CompactRaidFrames.lua"/>
-	<Script file="CooldownViewerSettings.lua"/>
 	<Script file="DressUpFrames.lua"/>
 	<Script file="EditModeManager.lua"/>
 	<Script file="EquipmentFlyout.lua"/>
