@@ -67,12 +67,12 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 		return per
 	elseif arg1 == "loss" then
 		return TruncateWhenZero(UnitHealthMissing(unit))
-	elseif arg1 == "losspercent" then -- broken in 12.0
-		local loss = max - cur
-		return loss ~= 0 and B:Round(loss/max*100, 1)
-	elseif arg1 == "absorb" then
-		local absorb = UnitGetTotalAbsorbs(unit) or 0
-		return (absorb > 0 and DB.InfoColor or "")..B.Numb(cur+absorb)
+	--elseif arg1 == "losspercent" then -- broken in 12.0
+	--	local loss = max - cur
+	--	return loss ~= 0 and B:Round(loss/max*100, 1)
+	--elseif arg1 == "absorb" then
+	--	local absorb = UnitGetTotalAbsorbs(unit) or 0
+	--	return (absorb > 0 and DB.InfoColor or "")..B.Numb(cur+absorb)
 	end
 end
 oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED PARTY_MEMBER_ENABLE PARTY_MEMBER_DISABLE"
@@ -92,9 +92,9 @@ oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
 		return per
 	elseif arg1 == "loss" then
 		return TruncateWhenZero(UnitPowerMissing(unit))
-	elseif arg1 == "losspercent" then
-		local loss = max - cur
-		return loss ~= 0 and B:Round(loss/max*100, 1)
+	--elseif arg1 == "losspercent" then
+	--	local loss = max - cur
+	--	return loss ~= 0 and B:Round(loss/max*100, 1)
 	end
 end
 oUF.Tags.Events["VariousMP"] = "UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER"
@@ -186,8 +186,8 @@ local healthModeType = {
 	[2] = "percent",
 	[3] = "current",
 	[4] = "loss",
-	[5] = "losspercent",
-	[6] = "absorb",
+	--[5] = "losspercent",
+	--[6] = "absorb",
 }
 oUF.Tags.Methods["raidhp"] = function(unit)
 	local healthType = healthModeType[C.db["UFs"]["RaidHPMode"]]

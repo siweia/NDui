@@ -231,7 +231,7 @@ UF.VariousTagIndex = {
 	[4] = "current",
 	[5] = "percent",
 	[6] = "loss",
-	[7] = "losspercent",
+	--[7] = "losspercent",
 }
 
 function UF:UpdateFrameHealthTag()
