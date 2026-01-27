@@ -6,7 +6,7 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
 local MAJOR_VERSION = "LibCustomGlow-1.0-NDui"
-local MINOR_VERSION = 23
+local MINOR_VERSION = 24
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
@@ -547,7 +547,8 @@ end
 local function bgUpdate(self, elapsed)
 	AnimateTexCoords(self.ants, 256, 256, 48, 48, 22, elapsed, self.throttle);
 	local cooldown = self:GetParent().cooldown;
-	if(cooldown and cooldown:IsShown() and issecretvalue(cooldown:GetCooldownDuration() == false) and cooldown:GetCooldownDuration() > 3000) then
+	local duration = cooldown and cooldown:IsShown() and cooldown:GetCooldownDuration()
+	if((not issecretvalue or not issecretvalue(duration)) and duration and duration > 3000) then
 		self:SetAlpha(0.5);
 	else
 		self:SetAlpha(1.0);
