@@ -229,8 +229,7 @@ function TT:OnTooltipSetUnit()
 	local text = GameTooltipTextLeft1:GetText()
 	if text then
 		local ricon = GetRaidTargetIndex(unit)
-		if ricon and B:NotSecretValue(ricon) then
-			if ricon > 8 then ricon = nil end
+		if ricon and B:NotSecretValue(ricon) and ricon <= 8 then
 			ricon = ICON_LIST[ricon].."18|t "
 		end
 		GameTooltipTextLeft1:SetFormattedText(("%s%s%s"), ricon or "", hexColor, text)
@@ -272,10 +271,11 @@ function TT:OnTooltipSetUnit()
 	end
 
 	if TT:UnitExists(unit.."target") then
-		local tarRicon = GetRaidTargetIndex(unit.."target")
-		if tarRicon and tarRicon > 8 then tarRicon = nil end
-		local tar = format("%s%s", (tarRicon and ICON_LIST[tarRicon].."10|t") or "", TT:GetTarget(unit.."target"))
-		self:AddLine(TARGET..": "..tar)
+		local targetIcon = GetRaidTargetIndex(unit.."target")
+		if targetIcon and B:NotSecretValue(targetIcon) and targetIcon <= 8 then
+			targetIcon = ICON_LIST[targetIcon].."10|t"
+		end
+		self:AddLine(TARGET..": "..format("%s%s", targetIcon or "", TT:GetTarget(unit.."target")))
 	end
 
 	if not isPlayer and isShiftKeyDown then
