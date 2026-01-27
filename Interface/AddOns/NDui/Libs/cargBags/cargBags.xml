@@ -52,7 +52,6 @@
 		All optional
 	-->
 	<Script file='mixins-add\itemkeys\basic.lua' />
-	<Script file='mixins-add\itemkeys\equipSets.lua' />
 	<Script file='mixins-add\itemkeys\tooltip.lua' />
 
 	<!--
