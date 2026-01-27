@@ -1904,17 +1904,11 @@ do
 		if frame.SetBackdrop then frame:SetBackdrop(nil) end
 	end
 
-	local function KillEditMode(object)
-		object.HighlightSystem = B.Dummy
-		object.ClearHighlight = B.Dummy
-	end
-
 	local function addapi(object)
 		local mt = getmetatable(object).__index
 		if not object.SetInside then mt.SetInside = SetInside end
 		if not object.SetOutside then mt.SetOutside = SetOutside end
 		if not object.HideBackdrop then mt.HideBackdrop = HideBackdrop end
-		if not object.KillEditMode then mt.KillEditMode = KillEditMode end
 		if not object.DisabledPixelSnap then
 			if mt.SetTexture then hooksecurefunc(mt, "SetTexture", DisablePixelSnap) end
 			if mt.SetTexCoord then hooksecurefunc(mt, "SetTexCoord", DisablePixelSnap) end
