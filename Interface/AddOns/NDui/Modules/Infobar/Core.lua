@@ -203,4 +203,6 @@ function INFO:OnLogin()
 	if GetCVarBool("scriptProfile") then
 		StaticPopup_Show("CPUUSAGE_WARNING")
 	end
+
+	SetCVar("timeMgrUseMilitaryTime", NDuiADB["MilitaryTime"] and "1" or "0")
 end
