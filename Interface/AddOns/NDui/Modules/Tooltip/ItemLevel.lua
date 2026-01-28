@@ -114,7 +114,7 @@ function TT:SetupItemLevel(level)
 	for i = 2, GameTooltip:NumLines() do
 		local line = _G["GameTooltipTextLeft"..i]
 		local text = line:GetText()
-		if text and strfind(text, levelPrefix) then
+		if text and B:NotSecretValue(text) and strfind(text, levelPrefix) then
 			levelLine = line
 		end
 	end
