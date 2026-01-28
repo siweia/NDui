@@ -108,6 +108,7 @@ do
 
 	-- GUID to npcID
 	function B.GetNPCID(guid)
+		if B:IsSecretValue(guid) then return end
 		local id = tonumber(strmatch((guid or ""), "%-(%d-)%-%x-$"))
 		return id
 	end
