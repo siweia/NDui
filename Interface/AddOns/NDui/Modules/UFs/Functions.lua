@@ -714,6 +714,10 @@ function UF:UpdateCastBarColor(unit)
 	end
 end
 
+function UF:Castbar_FailedColor()
+	self:SetStatusBarColor(1, .1, 0)
+end
+
 function UF:CreateCastBar(self)
 	local mystyle = self.mystyle
 	if mystyle ~= "nameplate" and not C.db["UFs"]["Castbars"] then return end
@@ -780,7 +784,6 @@ function UF:CreateCastBar(self)
 		local iconSize = self:GetHeight()*2 + 5
 		cb.Icon:SetSize(iconSize, iconSize)
 		cb.Icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
-		cb.timeToHold = .5
 
 		cb.glowFrame = B.CreateGlowFrame(cb, iconSize)
 		cb.glowFrame:SetPoint("CENTER", cb.Icon)
@@ -818,9 +821,12 @@ function UF:CreateCastBar(self)
 		cb.PostUpdatePips = UF.PostUpdatePips
 	end
 
-	cb.holdTime = 0.1
+	cb.timeToHold = .25
 	cb.PostCastStart = UF.UpdateCastBarColor
 	cb.PostCastInterruptible = UF.UpdateCastBarColor
+	cb.PostCastStop = UF.Castbar_FailedColor
+	cb.PostCastFail = UF.Castbar_FailedColor
+	cb.PostCastInterrupted = UF.Castbar_FailedColor
 
 	self.Castbar = cb
 end
