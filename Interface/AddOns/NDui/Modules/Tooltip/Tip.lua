@@ -369,7 +369,7 @@ local anchorIndex = {
 local mover
 function TT:GameTooltip_SetDefaultAnchor(parent)
 	if self:IsForbidden() then return end
-	if not parent then return end
+	if not parent or parent:IsForbidden() then return end
 
 	local mode = C.db["Tooltip"]["CursorMode"]
 	self:SetOwner(parent, cursorIndex[mode])
