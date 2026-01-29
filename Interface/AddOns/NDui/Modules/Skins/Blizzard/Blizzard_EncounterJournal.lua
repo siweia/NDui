@@ -72,9 +72,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	EncounterJournalInstanceSelectBG:SetAlpha(0)
 	B.ReskinDropDown(EncounterJournal.instanceSelect.ExpansionDropdown)
 	B.ReskinTrimScroll(EncounterJournal.instanceSelect.ScrollBar)
-	if DB.isNewPatch then
-		EncounterJournal.instanceSelect.evergreenBg:SetAlpha(0)
-	end
+	EncounterJournal.instanceSelect.evergreenBg:SetAlpha(0)
 
 	hooksecurefunc(EncounterJournal.instanceSelect.ScrollBox, "Update", function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do

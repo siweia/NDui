@@ -4,15 +4,9 @@ local B, C, L, DB = unpack(ns)
 local function ReskinPvPFrame(frame)
 	frame:DisableDrawLayer("BACKGROUND")
 	frame:DisableDrawLayer("BORDER")
-	if DB.isNewPatch then
-		B.ReskinRole(frame.RoleList.TankIcon, "TANK")
-		B.ReskinRole(frame.RoleList.HealerIcon, "HEALER")
-		B.ReskinRole(frame.RoleList.DPSIcon, "DPS")
-	else
-		B.ReskinRole(frame.TankIcon, "TANK")
-		B.ReskinRole(frame.HealerIcon, "HEALER")
-		B.ReskinRole(frame.DPSIcon, "DPS")
-	end
+	B.ReskinRole(frame.RoleList.TankIcon, "TANK")
+	B.ReskinRole(frame.RoleList.HealerIcon, "HEALER")
+	B.ReskinRole(frame.RoleList.DPSIcon, "DPS")
 
 	local bar = frame.ConquestBar
 	B.StripTextures(bar)
