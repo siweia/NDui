@@ -1237,16 +1237,16 @@ end
 -- Class Powers
 function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowerPoints)
 	if not cur or cur == 0 then
-		for i = 1, 7 do
+		for i = 1, 10 do
 			element[i].bg:Hide()
 		end
 
-		element.prevColor = nil
+	--	element.prevColor = nil
 	else
 		for i = 1, max do
 			element[i].bg:Show()
 		end
-
+--[[
 		element.thisColor = cur == max and 1 or 2
 		if not element.prevColor or element.prevColor ~= element.thisColor then
 			local color = oUF:CreateColor(1, 0, 0)
@@ -1257,19 +1257,19 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowe
 				element[i]:SetStatusBarColor(color:GetRGB())
 			end
 			element.prevColor = element.thisColor
-		end
+		end]]
 	end
 
 	if diff then
 		for i = 1, max do
 			element[i]:SetWidth((element.__owner.ClassPowerBar:GetWidth() - (max-1)*C.margin)/max)
 		end
-		for i = max + 1, 7 do
+		for i = max + 1, 10 do
 			element[i].bg:Hide()
 		end
 	end
 
-	for i = 1, 7 do
+	for i = 1, 10 do
 		local bar = element[i]
 		if not bar.chargeStar then break end
 
@@ -1320,7 +1320,7 @@ function UF:CreateClassPower(self)
 	end
 
 	local isDK = DB.MyClass == "DEATHKNIGHT"
-	local maxBar = isDK and 6 or 7
+	local maxBar = isDK and 6 or 10
 	local bar = CreateFrame("Frame", "$parentClassPowerBar", self.Health)
 	bar:SetSize(barWidth, barHeight)
 	bar:SetPoint(unpack(barPoint))
@@ -1351,6 +1351,7 @@ function UF:CreateClassPower(self)
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(DB.normTex)
 		bars[i].bg:SetVertexColor(0, 0, 0, .7)
+		bars[i].bg:Hide()
 
 		if isDK then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
