@@ -53,6 +53,7 @@ local formatSets = {
 }
 
 local function checkUnitGUID(unit)
+	if ShouldUnitIdentityBeSecret(unit) then return end
 	local guid = UnitGUID(unit)
 	return B:NotSecretValue(guid) and guid
 end
@@ -90,7 +91,7 @@ function TT:GetInspectInfo(...)
 		end
 	elseif self == "INSPECT_READY" then
 		local guid = ...
-		if guid == currentGUID then
+		if B:NotSecretValue(guid) and guid == currentGUID then
 			local level = TT:GetUnitItemLevel(currentUNIT)
 			cache[guid].level = level
 			cache[guid].getTime = GetTime()
