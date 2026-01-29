@@ -258,17 +258,13 @@ function UF:UpdateAllHeaders()
 
 	for _, header in pairs(UF.headers) do
 		if header.groupType == "party" then
-			--RegisterStateDriver(header, "visibility", GetPartyVisibility())
 			header:SetVisibility(GetPartyVisibility())
 		elseif header.groupType == "pet" then
-			--RegisterStateDriver(header, "visibility", GetPartyPetVisibility())
 			header:SetVisibility(GetPartyPetVisibility())
 		elseif header.groupType == "raid" then
 			if header.__disabled then
-				--RegisterStateDriver(header, "visibility", "hide")
 				header:SetVisibility("custom hide")
 			else
-				--RegisterStateDriver(header, "visibility", GetRaidVisibility())
 				header:SetVisibility(GetRaidVisibility())
 			end
 		end
@@ -476,7 +472,6 @@ function UF:OnLogin()
 					party = CreatePartyHeader("oUF_Party", partyWidth, partyFrameHeight)
 					party.groupType = "party"
 					tinsert(UF.headers, party)
-					--RegisterStateDriver(party, "visibility", GetPartyVisibility())
 					party:SetVisibility(GetPartyVisibility())
 					partyMover = B.Mover(party, L["PartyFrame"], "PartyFrame", {"LEFT", UIParent, 350, 0})
 				end
@@ -529,7 +524,6 @@ function UF:OnLogin()
 						partyPet = CreatePetGroup("oUF_PartyPet", petWidth, petFrameHeight)
 						partyPet.groupType = "pet"
 						tinsert(UF.headers, partyPet)
-						--RegisterStateDriver(partyPet, "visibility", GetPartyPetVisibility())
 						partypet:SetVisibility(GetPartyPetVisibility())
 						petMover = B.Mover(partyPet, L["PartyPetFrame"], "PartyPet", {"TOPLEFT", partyMover, "BOTTOMLEFT", 0, -5})
 					end
@@ -586,7 +580,6 @@ function UF:OnLogin()
 			local group = CreateGroup("oUF_Raid")
 			group.groupType = "raid"
 			tinsert(UF.headers, group)
-			--RegisterStateDriver(group, "visibility", GetRaidVisibility())
 			group:SetVisibility(GetRaidVisibility())
 			raidMover = B.Mover(group, L["RaidFrame"], "RaidFrame", {"TOPLEFT", UIParent, 35, -50})
 			group:ClearAllPoints()
@@ -709,8 +702,6 @@ function UF:OnLogin()
 						group.index = i
 						group.groupType = "raid"
 						tinsert(UF.headers, group)
-						--RegisterStateDriver(group, "visibility", "show") -- isNewPatch, needs review
-						--RegisterStateDriver(group, "visibility", GetRaidVisibility())
 						group:SetVisibility("custom show")
 						group:SetVisibility(GetRaidVisibility())
 						CreateTeamIndex(group)
