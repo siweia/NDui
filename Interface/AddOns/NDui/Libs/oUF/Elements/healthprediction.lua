@@ -46,6 +46,7 @@ This example does not contain all widgets or options, just a selection.
     healingAll:SetPoint('BOTTOM')
     healingAll:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
     healingAll:SetWidth(200)
+    healingAll:SetStatusBarTexture('Interface\\TargetingFrame\\UI-StatusBar')
 
     local damageAbsorb = CreateFrame('StatusBar', nil, self.Health)
     damageAbsorb:SetPoint('TOP')
