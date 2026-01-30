@@ -13,6 +13,7 @@ local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIs
 local GetNumArenaOpponentSpecs, GetCreatureDifficultyColor = GetNumArenaOpponentSpecs, GetCreatureDifficultyColor
 local UnitClassBase = UnitClassBase
 local TruncateWhenZero = C_StringUtil.TruncateWhenZero
+local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
 
 -- Add scantip back, due to issue on ColorMixin
 local scanTip = CreateFrame("GameTooltip", "NDui_ScanTooltip", nil, "GameTooltipTemplate")
@@ -123,6 +124,7 @@ end
 oUF.Tags.Events["color"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
 
 oUF.Tags.Methods["afkdnd"] = function(unit)
+	if ShouldUnitIdentityBeSecret(unit) then return end
 	if UnitIsAFK(unit) then
 		return "|cffCFCFCF <"..AFK..">|r"
 	elseif UnitIsDND(unit) then
