@@ -175,9 +175,13 @@ function M:ExtendInstance()
 end
 
 -- Reanchor Vehicle
+local mover = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
+mover:SetSize(125, 125)
+mover:SetPoint("BOTTOMRIGHT")
+
 function M:VehicleSeatMover()
-	local frame = CreateFrame("Frame", "NDuiVehicleSeatMover", UIParent)
-	frame:SetSize(125, 125)
+	local frame = _G["NDuiVehicleSeatMover"]
+	if not frame then return end
 	B.Mover(frame, L["VehicleSeat"], "VehicleSeat", {"BOTTOMRIGHT", UIParent, -400, 30})
 
 	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(self, _, parent)
