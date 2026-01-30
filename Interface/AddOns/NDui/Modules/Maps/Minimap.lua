@@ -553,7 +553,7 @@ function module:ShowCalendar()
 end
 
 local function GetVolumeColor(cur)
-	local r, g, b = oUF:RGBColorGradient(cur, 100, 1, 1, 1, 1, .8, 0, 1, 0, 0)
+	local r, g, b = B:RGBColorGradient(cur, 100, 1, 1, 1, 1, .8, 0, 1, 0, 0)
 	return r, g, b
 end
 
