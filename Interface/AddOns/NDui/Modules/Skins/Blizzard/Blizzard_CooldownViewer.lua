@@ -58,6 +58,7 @@ end
 
 local conflictAddOns = {
 	["BetterCooldownManager"] = true,
+	["CooldownManagerCentered"] = true,
 	["NephUI Cooldown Manager"] = true,
 }
 

@@ -143,7 +143,9 @@ tinsert(C.defaultThemes, function()
 						child.__texture = bg:CreateTexture(nil, "OVERLAY")
 						child.__texture:SetPoint("RIGHT", -10, 0)
 						UpdateHeaderExpand(child, false)
-						hooksecurefunc(child, "EvaluateVisibility", UpdateHeaderExpand)
+						if child.EvaluateVisibility then -- some silly addons override this function
+							hooksecurefunc(child, "EvaluateVisibility", UpdateHeaderExpand)
+						end
 					end
 				end
 				if child.ToggleTest then
