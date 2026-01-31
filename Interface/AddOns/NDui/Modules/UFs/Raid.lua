@@ -136,7 +136,7 @@ local function setupMouseWheelCast(self)
 		self:SetAttribute("clickcast_onleave", onLeaveString)
 		self:SetAttribute("_onshow", onLeaveString)
 		self:SetAttribute("_onhide", onLeaveString)
-		self:SetAttribute("_onmousedown", onMouseString)
+	--	self:SetAttribute("_onmousedown", onMouseString)
 	end
 end
 
