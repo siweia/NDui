@@ -686,8 +686,29 @@ local function createBarMover(bar, text, value, anchor)
 	bar.mover = mover
 end
 
-local function updateSpellTarget(self, _, unit)
-	UF.PostCastUpdate(self.Castbar, unit)
+function UF:UpdateCastbarGlow(unit)
+	if self.bagGlow then
+		local isImportant = C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(self.spellID)
+		self.bagGlow:SetAlphaFromBoolean(isImportant, 1, 0)
+	end
+end
+
+local redColor, whiteColor = CreateColor(1, 0, 0), CreateColor(1, 1, 1)
+function UF:UpdateSpellTarget(unit)
+	if not C.db["Nameplate"]["CastTarget"] then return end
+	if self.spellTarget then
+		local color = C_CurveUtil.EvaluateColorFromBoolean(UnitIsSpellTarget(unit, "player"), redColor, whiteColor)
+		self.Text:SetTextColor(color:GetRGB())
+
+		local name = UnitSpellTargetName(unit)
+		local class = UnitSpellTargetClass(unit)
+		self.spellTarget:SetText(name or "")
+		if class then
+			self.spellTarget:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
+		else
+			self.spellTarget:SetTextColor(1, 1, 1)
+		end
+	end
 end
 
 function UF:UpdateCastBarColors()
@@ -712,6 +733,8 @@ function UF:UpdateCastBarColor(unit)
 	else
 		self:SetStatusBarColor(UF.CastingColor:GetRGB())
 	end
+	UF.UpdateSpellTarget(self, unit)
+	UF.UpdateCastbarGlow(self, unit)
 end
 
 function UF:Castbar_FailedColor()
@@ -794,7 +817,11 @@ function UF:CreateCastBar(self)
 		spellTarget:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
 		cb.spellTarget = spellTarget
 
-		--self:RegisterEvent("UNIT_TARGET", updateSpellTarget)
+		local bagGlow = cb:CreateTexture(nil, "ARTWORK", nil, 2)
+		bagGlow:SetAllPoints()
+		bagGlow:SetTexture(DB.barArrow)
+		bagGlow:SetAlpha(0)
+		cb.bagGlow = bagGlow
 	end
 
 	local stage = B.CreateFS(cb, 22)
