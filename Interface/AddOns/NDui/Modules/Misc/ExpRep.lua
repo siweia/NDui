@@ -60,8 +60,8 @@ function M:ExpBar_Update()
 		local barMax = factionData.nextReactionThreshold
 		local value = factionData.currentStanding
 		local factionID = factionData.factionID
-		if C_Reputation_IsFactionParagon(factionID) then
-			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+		local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
+		if C_Reputation_IsFactionParagon(factionID) and currentValue and currentValue > 0 then
 			currentValue = mod(currentValue, threshold)
 			barMin, barMax, value = 0, threshold, currentValue
 		elseif factionID and C_Reputation_IsMajorFaction(factionID) then
@@ -201,9 +201,11 @@ function M:ExpBar_UpdateTooltip()
 
 		if C_Reputation_IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-			local paraCount = floor(currentValue/threshold)
-			currentValue = mod(currentValue, threshold)
-			GameTooltip:AddDoubleLine(L["Paragon"]..paraCount, currentValue.." / "..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
+			if currentValue > 0 then
+				local paraCount = floor(currentValue/threshold)
+				currentValue = mod(currentValue, threshold)
+				GameTooltip:AddDoubleLine(L["Paragon"]..paraCount, currentValue.." / "..threshold.." ("..floor(currentValue/threshold*100).."%)", .6,.8,1, 1,1,1)
+			end
 		end
 
 		if factionID == 2465 then -- 荒猎团
