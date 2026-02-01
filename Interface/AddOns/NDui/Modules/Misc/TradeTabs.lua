@@ -78,7 +78,7 @@ function M:TradeTabs_Update()
 			tab:SetChecked(false)
 			tab.cover:Hide()
 		end
---[[
+
 		local start, duration
 		if itemID then
 			start, duration = C_Item.GetItemCooldown(itemID)
@@ -87,9 +87,9 @@ function M:TradeTabs_Update()
 			start = cooldownInfo and cooldownInfo.startTime
 			duration = cooldownInfo and cooldownInfo.duration
 		end
-		if start and duration and duration > 1.5 then
+		if start then
 			tab.CD:SetCooldown(start, duration)
-		end]]
+		end
 	end
 end
 
