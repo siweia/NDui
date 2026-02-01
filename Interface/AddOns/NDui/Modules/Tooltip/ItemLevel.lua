@@ -13,7 +13,6 @@ local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
-local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
 
 TT.TierSets = {
 	-- WARRIOR
@@ -53,7 +52,6 @@ local formatSets = {
 }
 
 local function checkUnitGUID(unit)
-	if ShouldUnitIdentityBeSecret(unit) then return end
 	local guid = UnitGUID(unit)
 	return B:NotSecretValue(guid) and guid
 end
@@ -108,8 +106,7 @@ end
 B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 
 function TT:SetupItemLevel(level)
-	local _, unit = GameTooltip:GetUnit()
-	if not unit or checkUnitGUID(unit) ~= currentGUID then return end
+	if not TT:UnitExists("mouseover") or UnitGUID("mouseover") ~= currentGUID then return end
 
 	local levelLine
 	for i = 2, GameTooltip:NumLines() do
