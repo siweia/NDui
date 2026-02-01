@@ -98,27 +98,49 @@ C.themes["Blizzard_CooldownViewer"] = function()
 
 	local function reskinCooldownItem(self)
 		for itemFrame in self.itemFramePool:EnumerateActive() do
-			if not itemFrame.styled then
-				local icon, mask, overlay = itemFrame:GetRegions()
-				mask:Hide()
-				overlay:Hide()
-				B.ReskinIcon(icon)
-				icon:SetInside(itemFrame)
+			if itemFrame.Bar then
+				if not itemFrame.styled then
+					local iconFrame = itemFrame.Icon
+					if iconFrame then
+						local icon, mask, overlay = iconFrame:GetRegions()
+						mask:Hide()
+						overlay:Hide()
+						B.ReskinIcon(icon, true)
+						icon:SetInside(iconFrame, 5, 5)
+					end
 
-				local cooldown = itemFrame.Cooldown
-				if cooldown then
-					cooldown:SetInside(itemFrame)
-					cooldown:SetDrawEdge(false)
-					cooldown:SetDrawSwipe(true)
-					cooldown:SetSwipeTexture(DB.flatTex)
+					local barFrame = itemFrame.Bar
+					if barFrame then
+						B.StripTextures(barFrame)
+						barFrame.BarBG:SetAlpha(0)
+						barFrame:SetStatusBarTexture(DB.normTex)
+						B.SetBD(barFrame)
+					end
+					itemFrame.styled = true
 				end
+			elseif itemFrame.Icon then
+				if not itemFrame.styled then
+					local icon, mask, overlay = itemFrame:GetRegions()
+					mask:Hide()
+					overlay:Hide()
+					B.ReskinIcon(icon, true)
+					icon:SetInside(itemFrame, 2, 2)
 
-				itemFrame.styled = true
+					local cooldown = itemFrame.Cooldown
+					if cooldown then
+						cooldown:SetInside(itemFrame)
+						cooldown:SetDrawEdge(false)
+						cooldown:SetDrawSwipe(true)
+						cooldown:SetSwipeTexture(DB.flatTex)
+					end
+
+					itemFrame.styled = true
+				end
 			end
 		end
 	end
 	hooksecurefunc(UtilityCooldownViewer, "RefreshLayout", reskinCooldownItem)
 	hooksecurefunc(EssentialCooldownViewer, "RefreshLayout", reskinCooldownItem)
-	--hooksecurefunc(BuffBarCooldownViewer, "RefreshLayout", reskinCooldownItem)
-	--hooksecurefunc(BuffIconCooldownViewer, "RefreshLayout", reskinCooldownItem)
+	hooksecurefunc(BuffIconCooldownViewer, "RefreshLayout", reskinCooldownItem)
+	hooksecurefunc(BuffBarCooldownViewer, "RefreshLayout", reskinCooldownItem)
 end
