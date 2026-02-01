@@ -545,7 +545,6 @@ G.DefaultSettings = {
 		MarkerSize = 28,
 		BlockInvite = false,
 		BlockRequest = false,
-		NzothVision = true,
 		SendActionCD = true,
 		MDGuildBest = true,
 		FasterSkip = false,
@@ -1357,8 +1356,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "SpellItemAlert", L["SpellItemAlert"].."*", nil, nil, updateSpellItemAlert, L["SpellItemAlertTip"]},
 		{1, "Misc", "LeaderOnly", IsNew..L["LeaderOnly"].."*", true, nil, nil, L["LeaderOnlyTip"]},
 		{},--blank
-		{1, "Misc", "NzothVision", L["NzothVision"]},
-		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", true, nil, updateSoloInfo},
+		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
 		{},--blank
 		{1, "Misc", "RareAlerter", HeaderTag..L["Rare Alert"].."*", nil, nil, updateRareAlert},
 		{1, "Misc", "RarePrint", L["Alert In Chat"].."*"},
