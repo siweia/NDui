@@ -947,6 +947,8 @@ function UF.PostCreateButton(element, button)
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
 	button.Count = B.CreateFS(parentFrame, fontSize, "", false, "BOTTOMRIGHT", 6, -3)
 	button.Cooldown:SetReverse(true)
+	button.CooldownText = button.Cooldown:GetRegions()
+	button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
 	local needShadow = true
 	if element.__owner.mystyle == "raid" and not C.db["UFs"]["RaidBuffIndicator"] then
 		needShadow = false
