@@ -338,7 +338,8 @@ local function Update(self, event, unit, powerType)
 	* ...           - the indices of currently charged power points, if any
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(cur, max, hasMaxChanged, powerType, unpack(chargedPoints or {}))
+		--return element:PostUpdate(cur, max, hasMaxChanged, powerType, unpack(chargedPoints or {}))
+		return element:PostUpdate(cur, max, hasMaxChanged, powerType, chargedPoints) -- NDui mod
 	end
 end
 
