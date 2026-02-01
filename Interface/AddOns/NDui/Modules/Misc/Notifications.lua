@@ -293,7 +293,7 @@ local tn = tonumber
 local function HandleVersonTag(version)
 	local major, minor = strsplit(".", version)
 	major, minor = tn(major), tn(minor)
-	if B:CV(major) then
+	if major >= 9 then
 		major, minor = 0, 0
 		if DB.isDeveloper and author then
 			print("Moron: "..author)
