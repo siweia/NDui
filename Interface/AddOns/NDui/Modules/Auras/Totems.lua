@@ -48,14 +48,13 @@ function A:TotemBar_Init()
 end
 
 function A:TotemBar_Update()
-
 	local activeTotems = 0
 	for button in _G.TotemFrame.totemPool:EnumerateActive() do
 		activeTotems = activeTotems + 1
 
-		local haveTotem, _, start, dur, icon = GetTotemInfo(button.slot)
+		local _, _, start, dur, icon = GetTotemInfo(button.slot)
 		local totem = totems[activeTotems]
-		if haveTotem and dur > 0 then
+		if start then
 			totem.Icon:SetTexture(icon)
 			totem.CD:SetCooldown(start, dur)
 			totem.CD:Show()
@@ -82,7 +81,6 @@ function A:TotemBar_Update()
 end
 
 function A:Totems()
-	if DB.isNewPatch then return end
 	if not C.db["Auras"]["Totems"] then return end
 
 	A:TotemBar_Init()
