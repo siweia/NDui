@@ -1142,11 +1142,11 @@ function UF:ToggleUFAuras(frame, enable)
 	if enable then
 		if not frame:IsElementEnabled("Auras") then
 			frame:EnableElement("Auras")
+			frame.Auras:ForceUpdate()
 		end
 	else
 		if frame:IsElementEnabled("Auras") then
 			frame:DisableElement("Auras")
-			frame.Auras:ForceUpdate()
 		end
 	end
 end
