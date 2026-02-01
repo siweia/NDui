@@ -7,9 +7,6 @@ local floor, strmatch, tonumber, pairs, unpack, rad = floor, string.match, tonum
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
 local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
 local UnitClassification, UnitExists, InCombatLockdown, UnitCanAttack = UnitClassification, UnitExists, InCombatLockdown, UnitCanAttack
-local C_Scenario_GetInfo, C_Scenario_GetStepInfo = C_Scenario.GetInfo, C_Scenario.GetStepInfo
-local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
-local UnitGUID, GetPlayerInfoByGUID, Ambiguate = UnitGUID, GetPlayerInfoByGUID, Ambiguate
 local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
 local IsInRaid, IsInGroup, UnitName, UnitHealth, UnitHealthMax = IsInRaid, IsInGroup, UnitName, UnitHealth, UnitHealthMax
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
@@ -505,46 +502,6 @@ function UF:AddQuestIcon(self)
 	self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
 end
 
--- Dungeon progress, MDT required
-function UF:AddDungeonProgress(self)
-	if not C.db["Nameplate"]["AKSProgress"] then return end
-
-	self.progressText = B.CreateFS(self, 16, "")
-	self.progressText:SetTextColor(.6, .8, 1)
-	self.progressText:ClearAllPoints()
-	self.progressText:SetPoint("BOTTOMLEFT", self, "TOPRIGHT", 5, 5)
-end
-
-local cache = {}
-function UF:UpdateDungeonProgress(unit)
-	if not self.progressText or not MDT then return end
-	if unit ~= self.unit then return end
-	self.progressText:SetText("")
-
-	local name, _, _, _, _, _, _, _, _, scenarioType = C_Scenario_GetInfo()
-	if scenarioType == LE_SCENARIO_TYPE_CHALLENGE_MODE then
-		local value = MDT:GetEnemyForces(self.npcID)
-		if value and value > 0 then
-			local total = cache[name]
-			if not total then
-				local numCriteria = select(3, C_Scenario_GetStepInfo())
-				for criteriaIndex = 1, numCriteria do
-					local criteriaInfo = C_ScenarioInfo.GetCriteriaInfo(criteriaIndex)
-					if criteriaInfo and criteriaInfo.isWeightedProgress then
-						cache[name] = criteriaInfo.totalQuantity
-						total = cache[name]
-						break
-					end
-				end
-			end
-
-			if total then
-				self.progressText:SetText(format("+%.2f", value/total*100))
-			end
-		end
-	end
-end
-
 -- Unit classification
 local NPClassifies = {
 	rare = {1, 1, 1, true},
@@ -640,27 +597,6 @@ function UF:MouseoverIndicator(self)
 	self.HighlightUpdater = updater
 end
 
--- Interrupt info on castbars
-function UF:UpdateSpellInterruptor(...)
-	if not C.db["Nameplate"]["Interruptor"] then return end
-
-	local _, _, sourceGUID, sourceName, _, _, destGUID = ...
-	if destGUID == self.unitGUID and sourceGUID and sourceName and sourceName ~= "" then
-		local _, class = GetPlayerInfoByGUID(sourceGUID)
-		local r, g, b = B.ClassColor(class)
-		local color = B.HexRGB(r, g, b)
-		local sourceName = Ambiguate(sourceName, "short")
-		self.Castbar.Text:SetText(INTERRUPTED.." > "..color..sourceName)
-		self.Castbar.Time:SetText("")
-	end
-end
-
-function UF:SpellInterruptor(self)
-	if DB.isNewPatch then return end
-	if not self.Castbar then return end
-	self:RegisterCombatEvent("SPELL_INTERRUPT", UF.UpdateSpellInterruptor)
-end
-
 function UF:ShowUnitTargeted(self)
 	local tex = self:CreateTexture()
 	tex:SetSize(20, 20)
@@ -725,8 +661,6 @@ function UF:CreatePlates()
 	UF:AddTargetIndicator(self)
 	UF:AddCreatureIcon(self)
 	UF:AddQuestIcon(self)
-	UF:AddDungeonProgress(self)
-	UF:SpellInterruptor(self)
 	UF:ShowUnitTargeted(self)
 
 	self:RegisterEvent("PLAYER_FOCUS_CHANGED", UF.UpdateFocusColor, true)
@@ -1030,7 +964,6 @@ local function onTargetChanged(self, event, unit)
 	UF.UpdateTargetChange(self)
 	UF.UpdateQuestUnit(self, event, unit)
 	UF.UpdateUnitClassify(self, unit)
-	UF.UpdateDungeonProgress(self, unit)
 	UF:UpdateTargetClassPower()
 
 	self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])

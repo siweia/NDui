@@ -693,7 +693,7 @@ function UF:UpdateCastbarGlow(unit)
 	end
 end
 
-local redColor, whiteColor = CreateColor(1, 0, 0), CreateColor(1, 1, 1)
+local redColor, whiteColor = CreateColor(1, 0, 1), CreateColor(1, 1, 1)
 function UF:UpdateSpellTarget(unit)
 	if not C.db["Nameplate"]["CastTarget"] then return end
 	if self.spellTarget then
@@ -737,8 +737,17 @@ function UF:UpdateCastBarColor(unit)
 	UF.UpdateCastbarGlow(self, unit)
 end
 
-function UF:Castbar_FailedColor()
+function UF:Castbar_FailedColor(unit, interruptedBy)
 	self:SetStatusBarColor(1, .1, 0)
+
+	if C.db["Nameplate"]["Interruptor"] and self.spellTarget and interruptedBy ~= nil then
+		local sourceName = UnitNameFromGUID(interruptedBy)
+		local _, class = GetPlayerInfoByGUID(interruptedBy)
+		class = class or "PRIEST"
+		self.Text:SetText(INTERRUPTED.." > "..sourceName)
+		self.Text:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
+		self.Time:SetText("")
+	end
 end
 
 function UF:CreateCastBar(self)
@@ -848,7 +857,7 @@ function UF:CreateCastBar(self)
 		cb.PostUpdatePips = UF.PostUpdatePips
 	end
 
-	cb.timeToHold = .25
+	cb.timeToHold = .5
 	cb.PostCastStart = UF.UpdateCastBarColor
 	cb.PostCastInterruptible = UF.UpdateCastBarColor
 	cb.PostCastStop = UF.Castbar_FailedColor
