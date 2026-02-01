@@ -915,3 +915,4 @@ L["AccountDepositTip"] = "|n左键双击存放所有战团绑定物品，右键�
 L["LegacyItem"] = "旧资料片装备"
 L["SmoothBars"] = "平滑血条动画"
 L["SmoothBarsTip"] = "|n启用后，头像、姓名板、团队框体的状态条变化将更加平滑自然。"
+L["PlayerPlate HealthBar"] = "玩家姓名板血量条"

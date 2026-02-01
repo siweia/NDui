@@ -385,6 +385,7 @@ G.DefaultSettings = {
 		ShowPlayerPlate = false,
 		PPWidth = 175,
 		PPBarHeight = 5,
+		PPHealthBar = true,
 		PPHealthHeight = 5,
 		PPPowerHeight = 5,
 		PPPowerText = false,
@@ -928,6 +929,10 @@ local function togglePlatePower()
 	B:GetModule("UnitFrames"):TogglePlatePower()
 end
 
+local function togglePlateHealth()
+	B:GetModule("UnitFrames"):TogglePlateHealth()
+end
+
 local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
@@ -1308,7 +1313,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"].."*", nil, nil, togglePlayerPlate},
 		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
-		{1, "Avada", "Enable", IsNew..HeaderTag..L["Enable ClassAuras"].."*", nil, toggleAvadaGUI, toggleAvada},
+		--{1, "Avada", "Enable", IsNew..HeaderTag..L["Enable ClassAuras"].."*", nil, toggleAvadaGUI, toggleAvada},
+		{1, "Nameplate", "PPHealthBar", L["PlayerPlate HealthBar"].."*", nil, nil, togglePlateHealth},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},

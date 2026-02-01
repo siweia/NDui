@@ -333,6 +333,7 @@ function UF:OnLogin()
 		local plate = oUF:Spawn("player", "oUF_PlayerPlate", true)
 		plate.mover = B.Mover(plate, L["PlayerPlate"], "PlayerPlate", C.UFs.PlayerPlate)
 		UF:TogglePlayerPlate()
+		UF:TogglePlateHealth(self)
 	end
 
 	do	-- fake nameplate for target class power

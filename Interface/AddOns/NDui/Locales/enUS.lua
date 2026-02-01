@@ -915,3 +915,4 @@ L["AccountDepositTip"] = "|nDuoble click the left button to deposit warband item
 L["LegacyItem"] = "Legacy items"
 L["SmoothBars"] = "Smooth bar animation"
 L["SmoothBarsTip"] = "|nIf enabled, health and power bars would have smooth animation effect."
+L["PlayerPlate HealthBar"] = "PlayerPlate HealthBar"

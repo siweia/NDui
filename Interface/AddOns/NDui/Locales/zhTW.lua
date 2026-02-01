@@ -915,3 +915,4 @@ L["AccountDepositTip"] = "|n左鍵雙擊存放所有戰團綁定物品，右鍵�
 L["LegacyItem"] = "舊資料片裝備"
 L["SmoothBars"] = "平滑血條動畫"
 L["SmoothBarsTip"] = "|n勾選後，血條、名條、團隊框架的變化將更加平滑自然。"
+L["PlayerPlate HealthBar"] = "玩家名條血條"
