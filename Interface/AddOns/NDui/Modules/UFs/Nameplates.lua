@@ -1021,6 +1021,7 @@ function UF:PlateVisibility(event)
 		end
 		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power.bg, .3, self.Power.bg:GetAlpha(), .7)
+		UIFrameFadeIn(self.ClassPowerBar, .3, self.ClassPowerBar:GetAlpha(), 1)
 	else
 		if self:IsElementEnabled("Health") then
 			UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), alpha)
@@ -1029,6 +1030,7 @@ function UF:PlateVisibility(event)
 		end
 		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), alpha)
 		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), alpha)
+		UIFrameFadeOut(self.ClassPowerBar, 2, self.ClassPowerBar:GetAlpha(), alpha)
 	end
 end
 
@@ -1117,10 +1119,16 @@ function UF:TogglePlateHealth()
 		if not plate:IsElementEnabled("Health") then
 			plate:EnableElement("Health")
 			plate.Health:ForceUpdate()
+			if plate.ClassPowerBar then
+				plate.ClassPowerBar:SetPoint("BOTTOMLEFT", plate, "TOPLEFT", 0, C.margin)
+			end
 		end
 	else
 		if plate:IsElementEnabled("Health") then
 			plate:DisableElement("Health")
+			if plate.ClassPowerBar then
+				plate.ClassPowerBar:SetPoint("BOTTOMLEFT", plate.Power, "TOPLEFT", 0, C.margin)
+			end
 		end
 	end
 end

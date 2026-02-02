@@ -1350,7 +1350,7 @@ function UF:CreateClassPower(self)
 
 	local isDK = DB.MyClass == "DEATHKNIGHT"
 	local maxBar = isDK and 6 or 10
-	local bar = CreateFrame("Frame", "$parentClassPowerBar", self.Health)
+	local bar = CreateFrame("Frame", "$parentClassPowerBar", self)
 	bar:SetSize(barWidth, barHeight)
 	bar:SetPoint(unpack(barPoint))
 
@@ -1369,17 +1369,15 @@ function UF:CreateClassPower(self)
 		bars[i]:SetWidth((barWidth - (maxBar-1)*C.margin) / maxBar)
 		bars[i]:SetStatusBarTexture(DB.normTex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
-		B.SetBD(bars[i], 0)
 		if i == 1 then
 			bars[i]:SetPoint("BOTTOMLEFT")
 		else
 			bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", C.margin, 0)
 		end
 
-		bars[i].bg = (isDK and bars[i] or bar):CreateTexture(nil, "BACKGROUND")
+		bars[i].bg = CreateFrame("Frame", nil, (isDK and bars[i] or bar))
 		bars[i].bg:SetAllPoints(bars[i])
-		bars[i].bg:SetTexture(DB.normTex)
-		bars[i].bg:SetVertexColor(0, 0, 0, .7)
+		B.SetBD(bars[i].bg, .7)
 		bars[i].bg:Hide()
 
 		if not isDK then
