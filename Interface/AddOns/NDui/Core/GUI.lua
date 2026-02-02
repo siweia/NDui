@@ -150,6 +150,7 @@ G.DefaultSettings = {
 		DebuffsPerRow = 16,
 		PrivateSize = 30,
 		ReversePrivate = false,
+		CDAnimation = false,
 	},
 	AuraWatch = {
 		Enable = true,
@@ -1328,6 +1329,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[7] = {
 		{1, "Auras", "BuffFrame", HeaderTag..L["BuffFrame"], nil, setupBuffFrame, nil, L["BuffFrameTip"]},
 		{1, "Auras", "HideBlizBuff", L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
+		{1, "Auras", "CDAnimation", L["CDAnimation"]},
 		{},--blank
 		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
@@ -1338,8 +1340,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Auras", "Totems", HeaderTag..L["Enable Totembar"]},
 		{1, "Auras", "VerticalTotems", L["VerticalTotems"].."*", nil, nil, refreshTotemBar},
 		{3, "Auras", "TotemSize", L["TotemSize"].."*", true, {24, 60, 1}, refreshTotemBar},
-		{},--blank
-		{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
+		--{},--blank
+		--{1, "Auras", "Reminder", L["Enable Reminder"].."*", nil, nil, updateReminder, L["ReminderTip"]},
 	},
 	[8] = {
 		{1, "Misc", "RaidTool", HeaderTag..L["Raid Manger"]},

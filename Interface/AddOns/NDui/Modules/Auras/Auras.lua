@@ -343,7 +343,7 @@ function A:CreateAuraIcon(button)
 	local cd = CreateFrame("Cooldown", "$parentCooldown", button, "CooldownFrameTemplate")
 	cd:SetReverse(true)
 	cd:SetEdgeTexture(DB.bgTex)
-	cd:SetDrawSwipe(false)
+	cd:SetDrawSwipe(C.db["Auras"]["CDAnimation"])
 	cd:SetDrawBling(false)
 	button.Cooldown = cd
 
