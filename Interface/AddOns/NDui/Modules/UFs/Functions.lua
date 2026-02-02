@@ -686,70 +686,6 @@ local function createBarMover(bar, text, value, anchor)
 	bar.mover = mover
 end
 
-function UF:UpdateCastbarGlow(unit)
-	if self.bagGlow then
-		local isImportant = C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(self.spellID)
-		self.bagGlow:SetAlphaFromBoolean(isImportant, 1, 0)
-	end
-end
-
-local redColor, whiteColor = CreateColor(1, 0, 1), CreateColor(1, 1, 1)
-function UF:UpdateSpellTarget(unit)
-	if not C.db["Nameplate"]["CastTarget"] then return end
-	if self.spellTarget then
-		local color = C_CurveUtil.EvaluateColorFromBoolean(UnitIsSpellTarget(unit, "player"), redColor, whiteColor)
-		self.Text:SetTextColor(color:GetRGB())
-
-		local name = UnitSpellTargetName(unit)
-		local class = UnitSpellTargetClass(unit)
-		self.spellTarget:SetText(name or "")
-		if class then
-			self.spellTarget:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
-		else
-			self.spellTarget:SetTextColor(1, 1, 1)
-		end
-	end
-end
-
-function UF:UpdateCastBarColors()
-	local castingColor = C.db["UFs"]["CastingColor"]
-	local ownCastColor = C.db["UFs"]["OwnCastColor"]
-	local notInterruptColor = C.db["UFs"]["NotInterruptColor"]
-
-	UF.CastingColor = UF.CastingColor or CreateColor(0, 0, 0)
-	UF.OwnCastColor = UF.OwnCastColor or CreateColor(0, 0, 0)
-	UF.NotInterruptColor = UF.NotInterruptColor or CreateColor(0, 0, 0)
-
-	UF.CastingColor:SetRGB(castingColor.r, castingColor.g, castingColor.b)
-	UF.OwnCastColor:SetRGB(ownCastColor.r, ownCastColor.g, ownCastColor.b)
-	UF.NotInterruptColor:SetRGB(notInterruptColor.r, notInterruptColor.g, notInterruptColor.b)
-end
-
-function UF:UpdateCastBarColor(unit)
-	if unit == "player" then
-		self:SetStatusBarColor(UF.OwnCastColor:GetRGB())
-	elseif not UnitIsUnit(unit, "player") then
-		self:GetStatusBarTexture():SetVertexColorFromBoolean(self.notInterruptible, UF.NotInterruptColor, UF.CastingColor)
-	else
-		self:SetStatusBarColor(UF.CastingColor:GetRGB())
-	end
-	UF.UpdateSpellTarget(self, unit)
-	UF.UpdateCastbarGlow(self, unit)
-end
-
-function UF:Castbar_FailedColor(unit, interruptedBy)
-	self:SetStatusBarColor(1, .1, 0)
-
-	if C.db["Nameplate"]["Interruptor"] and self.spellTarget and interruptedBy ~= nil then
-		local sourceName = UnitNameFromGUID(interruptedBy)
-		local _, class = GetPlayerInfoByGUID(interruptedBy)
-		class = class or "PRIEST"
-		self.Text:SetText(INTERRUPTED.." > "..sourceName)
-		self.Text:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
-		self.Time:SetText("")
-	end
-end
-
 function UF:CreateCastBar(self)
 	local mystyle = self.mystyle
 	if mystyle ~= "nameplate" and not C.db["UFs"]["Castbars"] then return end
@@ -817,52 +753,29 @@ function UF:CreateCastBar(self)
 		cb.Icon:SetSize(iconSize, iconSize)
 		cb.Icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -5, 0)
 
-		cb.glowFrame = B.CreateGlowFrame(cb, iconSize)
-		cb.glowFrame:SetPoint("CENTER", cb.Icon)
-
 		local spellTarget = B.CreateFS(cb, C.db["Nameplate"]["NameTextSize"]+3)
 		spellTarget:ClearAllPoints()
 		spellTarget:SetJustifyH("LEFT")
 		spellTarget:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
 		cb.spellTarget = spellTarget
 
-		local bagGlow = cb:CreateTexture(nil, "ARTWORK", nil, 2)
-		bagGlow:SetAllPoints()
-		bagGlow:SetTexture(DB.barArrow)
-		bagGlow:SetAlpha(0)
-		cb.bagGlow = bagGlow
-	end
-
-	local stage = B.CreateFS(cb, 22)
-	stage:ClearAllPoints()
-	stage:SetPoint("TOPLEFT", cb.Icon, -2, 2)
-	cb.stageString = stage
-
-	if mystyle == "nameplate" or mystyle == "boss" or mystyle == "arena" then
-		cb.decimal = "%.1f"
-	else
-		cb.decimal = "%.2f"
+		local barGlow = cb:CreateTexture(nil, "ARTWORK", nil, 2)
+		barGlow:SetAllPoints()
+		barGlow:SetTexture(DB.barArrow)
+		barGlow:SetAlpha(0)
+		cb.barGlow = barGlow
 	end
 
 	cb.Time = timer
 	cb.Text = name
-	if not DB.isNewPatch then
-		cb.OnUpdate = UF.OnCastbarUpdate
-		cb.PostCastStart = UF.PostCastStart
-		cb.PostCastUpdate = UF.PostCastUpdate
-		cb.PostCastStop = UF.PostCastStop
-		cb.PostCastFail = UF.PostCastFailed
-		cb.PostCastInterruptible = UF.PostUpdateInterruptible
-		cb.CreatePip = UF.CreatePip
-		cb.PostUpdatePips = UF.PostUpdatePips
-	end
-
 	cb.timeToHold = .5
 	cb.PostCastStart = UF.UpdateCastBarColor
 	cb.PostCastInterruptible = UF.UpdateCastBarColor
 	cb.PostCastStop = UF.Castbar_FailedColor
 	cb.PostCastFail = UF.Castbar_FailedColor
 	cb.PostCastInterrupted = UF.Castbar_FailedColor
+	cb.CreatePip = UF.CreatePip
+	cb.PostUpdatePips = UF.PostUpdatePips
 
 	self.Castbar = cb
 end
