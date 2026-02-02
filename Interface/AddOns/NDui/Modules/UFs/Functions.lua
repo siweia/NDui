@@ -1278,24 +1278,15 @@ function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowe
 		for i = 1, 10 do
 			element[i].bg:Hide()
 		end
-
-	--	element.prevColor = nil
 	else
 		for i = 1, max do
 			element[i].bg:Show()
 		end
---[[
-		element.thisColor = cur == max and 1 or 2
-		if not element.prevColor or element.prevColor ~= element.thisColor then
-			local color = oUF:CreateColor(1, 0, 0)
-			if element.thisColor == 2 then
-				color = element.__owner.colors.power[powerType]
-			end
-			for i = 1, #element do
-				element[i]:SetStatusBarColor(color:GetRGB())
-			end
-			element.prevColor = element.thisColor
-		end]]
+	end
+
+	local isMax = cur == max
+	for i = 1, #element do
+		element[i].cover:SetShown(isMax)
 	end
 
 	if diff then
@@ -1390,6 +1381,13 @@ function UF:CreateClassPower(self)
 		bars[i].bg:SetTexture(DB.normTex)
 		bars[i].bg:SetVertexColor(0, 0, 0, .7)
 		bars[i].bg:Hide()
+
+		if not isDK then
+			bars[i].cover = bars[i]:CreateTexture(nil, "ARTWORK", nil, 5)
+			bars[i].cover:SetAllPoints(bars[i])
+			bars[i].cover:SetAtlas("ui-castingbar-interrupted")
+			bars[i].cover:Hide()
+		end
 
 		if isDK then
 			bars[i].timer = B.CreateFS(bars[i], 13, "")
