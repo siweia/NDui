@@ -105,10 +105,10 @@ function module:ReskinRegions()
 	end)
 
 	-- LFG Icon
-	if MiniMapLFGFrame then
-		MiniMapLFGFrame:ClearAllPoints()
-		MiniMapLFGFrame:SetPoint("RIGHT", Minimap, 5, 0)
-		MiniMapLFGFrameBorder:Hide()
+	if LFGMinimapFrame then
+		LFGMinimapFrame:ClearAllPoints()
+		LFGMinimapFrame:SetPoint("RIGHT", Minimap, 5, 0)
+		LFGMinimapFrameBorder:Hide()
 	end
 end
 
