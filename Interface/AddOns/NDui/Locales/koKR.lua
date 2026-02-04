@@ -832,7 +832,6 @@ L["ClearClass"] = "차츰 변하는 직업컬러"
 L["PetCastbar"] = "팻 캐스트바"
 L["OffTankThreat"] = "부탱 어그로 사용"
 L["OffTankThreatTip"] = "|n공대원의 열할에 따라 현재 어그로가 기타 탱커에게 있을 시 컬러를 지정 |n|n주의, 공대원들이 정확한 역할을 선택해야함."
-L["HealPrediction"] = "Hot 예측힐량 표시"
 L["DemonPage"] = "흑마: 악마형상 시 액션바 변화"
 L["DispellTypeTip"] = "|n항상: 타겟에 걸려있는 저주, 마법, 질병과 독효과를 표시합니다.|n|n필터링: 나의 Debuff만 표시합니다. 내가 해제가능한 스킬의 아이콘테두리는 컬러로 표시됩니다."
 L["AutoBuffsTip"] = "|nIf checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3." -- need translation
