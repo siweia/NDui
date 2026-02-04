@@ -15,11 +15,15 @@ local function ReskinMeterWindow(frame)
 	if not frame or frame.styled then return end
 
 	frame.Header:SetTexture()
-	frame.Background:SetTexture()
-	B.SetBD(frame.Bckground)
+	if frame.Background then
+		frame.Background:SetTexture()
+		B.SetBD(frame.Background)
+	end
 	B.ReskinDropDown(frame.DamageMeterTypeDropdown)
 	B.Reskin(frame.SessionDropdown)
-	frame.SessionDropdown:SetSize(42, 22)
+	frame.SessionDropdown:SetSize(60, 22)
+	frame.SessionDropdown:SetPoint("RIGHT", frame.SettingsDropdown, "LEFT", -8, 0)
+	frame.SessionDropdown.Text:SetAlpha(0)
 
 	UpdateButtonState(frame.SettingsDropdown)
 	hooksecurefunc(frame.SettingsDropdown, "OnButtonStateChanged", UpdateButtonState)
@@ -32,7 +36,7 @@ local function ReskinMeterWindow(frame)
 end
 
 C.themes["Blizzard_DamageMeter"] = function()
-	hooksecurefunc(DamageMeter, "SetupSessionWindow", function(self, windowData, windowIndex)
+	hooksecurefunc(DamageMeter, "SetupSessionWindow", function(_, windowData)
 		ReskinMeterWindow(windowData.sessionWindow)
 	end)
 
