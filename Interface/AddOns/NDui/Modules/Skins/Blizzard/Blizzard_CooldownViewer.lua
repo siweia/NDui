@@ -62,6 +62,31 @@ local conflictAddOns = {
 	["NephUI Cooldown Manager"] = true,
 }
 
+-- Dispel type border colors
+local dispelIndex = {
+	[0] = CreateColor(0, 0, 0),
+	[1] = DEBUFF_TYPE_MAGIC_COLOR,
+	[2] = DEBUFF_TYPE_CURSE_COLOR,
+	[3] = DEBUFF_TYPE_DISEASE_COLOR,
+	[4] = DEBUFF_TYPE_POISON_COLOR,
+	[5] = DEBUFF_TYPE_BLEED_COLOR,
+	[6] = CreateColor(243, 95, 245),
+};
+local borderCurve = C_CurveUtil.CreateColorCurve()
+borderCurve:SetType(Enum.LuaCurveType.Step)
+for index, color in next, dispelIndex do
+	borderCurve:AddPoint(index, color)
+end
+local function updateBorderColor(self, data)
+	if not data then return end
+	local color = C_UnitAuras.GetAuraDispelTypeColor(self.__owner.auraDataUnit, data.auraInstanceID, borderCurve)
+	if color then
+		self.__owner.Icon.bg:SetBackdropBorderColor(color:GetRGB())
+	else
+		self.__owner.Icon.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
 C.themes["Blizzard_CooldownViewer"] = function()
 	local frame = CooldownViewerSettings
 	if frame then
@@ -123,7 +148,7 @@ C.themes["Blizzard_CooldownViewer"] = function()
 					local icon, mask, overlay = itemFrame:GetRegions()
 					mask:Hide()
 					overlay:Hide()
-					B.ReskinIcon(icon, true)
+					icon.bg = B.ReskinIcon(icon, true)
 					icon:SetInside(itemFrame, 2, 2)
 
 					local cooldown = itemFrame.Cooldown
@@ -132,6 +157,13 @@ C.themes["Blizzard_CooldownViewer"] = function()
 						cooldown:SetDrawEdge(false)
 						cooldown:SetDrawSwipe(true)
 						cooldown:SetSwipeTexture(DB.flatTex)
+					end
+
+					local debuffBorder = itemFrame.DebuffBorder
+					if debuffBorder then
+						debuffBorder:SetAlpha(0) -- hide the original border, and update ours
+						debuffBorder.__owner = itemFrame
+						hooksecurefunc(debuffBorder, "UpdateFromAuraData", updateBorderColor)
 					end
 
 					itemFrame.styled = true
