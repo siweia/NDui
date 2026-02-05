@@ -407,12 +407,8 @@ do
 		end
 	end)
 
-	hooksecurefunc("UnitPowerBarAlt_SetUp", function(self)
-		local statusFrame = self.statusFrame
-		if statusFrame.enabled then
-			statusFrame:Show()
-			statusFrame.Hide = statusFrame.Show
-		end
+	hooksecurefunc(PlayerPowerBarAlt.statusFrame, "Hide", function(self)
+		self:Show()
 	end)
 
 	local altPowerInfo = {
