@@ -1582,10 +1582,10 @@ function G:SetupNameplateSize(parent)
 
 	local optionValues = {
 		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize","HealthTextSize", "HealthTextOffset", "PlateCBHeight", "CBTextSize", "PlateCBOffset", "HarmWidth", "HarmHeight", "NameTextOffset"},
-		["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize","FriendHealthSize", "FriendHealthOffset", "FriendPlateCBHeight", "FriendCBTextSize", "FriendPlateCBOffset", "HelpWidth", "HelpHeight", "FriendNameOffset"},
+		--["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize","FriendHealthSize", "FriendHealthOffset", "FriendPlateCBHeight", "FriendCBTextSize", "FriendPlateCBOffset", "HelpWidth", "HelpHeight", "FriendNameOffset"},
 	}
 	local function createOptionGroup(parent, offset, value, func, isEnemy)
-		createOptionTitle(parent, "", offset)
+		--createOptionTitle(parent, "", offset)
 		createOptionSlider(parent, L["Width"], 50, 500, 190, offset-60, optionValues[value][1], func, "Nameplate")
 		createOptionSlider(parent, L["Height"], 5, 50, 8, offset-130, optionValues[value][2], func, "Nameplate")
 		createOptionSlider(parent, L["InteractWidth"], 50, 500, 190, offset-200, optionValues[value][9], func, "Nameplate")
@@ -1604,7 +1604,7 @@ function G:SetupNameplateSize(parent)
 	end
 
 	local UF = B:GetModule("UnitFrames")
-	local options = {
+--[[	local options = {
 		[1] = L["HostileNameplate"],
 		[2] = L["FriendlyNameplate"],
 	}
@@ -1628,8 +1628,10 @@ function G:SetupNameplateSize(parent)
 
 		dd.panels[i] = panel
 		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
-	end
-	toggleOptionsPanel(dd.options[1])
+	end]]
+	--toggleOptionsPanel(dd.options[1])
+
+	createOptionGroup(scroll.child, 30, "enemy", UF.RefreshAllPlates, true)
 end
 
 function G:SetupNameOnlySize(parent)

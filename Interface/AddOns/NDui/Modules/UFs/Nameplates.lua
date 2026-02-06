@@ -14,10 +14,6 @@ local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local GetTime = GetTime
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local INTERRUPTED, THREAT_TOOLTIP = INTERRUPTED, THREAT_TOOLTIP
-local C_NamePlate_SetNamePlateEnemySize = C_NamePlate.SetNamePlateEnemySize
-local C_NamePlate_SetNamePlateFriendlySize = C_NamePlate.SetNamePlateFriendlySize
-local C_NamePlate_SetNamePlateEnemyClickThrough = C_NamePlate.SetNamePlateEnemyClickThrough
-local C_NamePlate_SetNamePlateFriendlyClickThrough = C_NamePlate.SetNamePlateFriendlyClickThrough
 local GetSpellName = C_Spell.GetSpellName
 
 -- Init
@@ -40,21 +36,9 @@ function UF:UpdatePlateCVars()
 	SetCVar("nameplateMaxDistance", C.db["Nameplate"]["PlateRange"])
 end
 
-function UF:UpdateClickableSize()
-	if DB.isNewPatch then return end -- removed? needs review
-	if InCombatLockdown() then return end
-
-	local uiScale = NDuiADB["UIScale"]
-	local harmWidth, harmHeight = C.db["Nameplate"]["HarmWidth"], C.db["Nameplate"]["HarmHeight"]
-	local helpWidth, helpHeight = C.db["Nameplate"]["HelpWidth"], C.db["Nameplate"]["HelpHeight"]
-
-	C_NamePlate_SetNamePlateEnemySize(harmWidth*uiScale, harmHeight*uiScale)
-	C_NamePlate_SetNamePlateFriendlySize(helpWidth*uiScale, helpHeight*uiScale)
-end
-
 function UF:UpdatePlateSize()
 	if InCombatLockdown() then return end
-	UF.NameplateDriver:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
+	UF.NameplateDriver:SetSize(C.db["Nameplate"]["HarmWidth"], C.db["Nameplate"]["HarmHeight"])
 	UF.NameplateDriver.enemyNonInteractible = C.db["Nameplate"]["EnemyThru"]
 	UF.NameplateDriver.friendlyNonInteractible = C.db["Nameplate"]["FriendlyThru"]
 end
@@ -616,6 +600,7 @@ local platesList = {}
 function UF:CreatePlates()
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
+	self:ClearAllPoints()
 	self:SetPoint("CENTER")
 	--self:SetScale(NDuiADB["UIScale"])
 
@@ -741,7 +726,7 @@ function UF:UpdateNameplateSize()
 		self:Tag(self.nameText, UF.PlateNameTags[nameType])
 		self.__tagIndex = nameType
 
-		UF:UpdatePlateSize()
+		self:SetSize(plateWidth, plateHeight)
 		B.SetFontSize(self.tarName, nameTextSize+4)
 		self.Castbar.Icon:SetSize(iconSize, iconSize)
 		self.Castbar:SetHeight(plateCBHeight)
@@ -769,7 +754,7 @@ function UF:RefreshNameplats()
 		UF.UpdateTargetIndicator(nameplate)
 		UF.UpdateTargetChange(nameplate)
 	end
-	UF:UpdateClickableSize()
+	UF:UpdatePlateSize()
 end
 
 function UF:RefreshAllPlates()
