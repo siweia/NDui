@@ -275,18 +275,6 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 		if title and B:NotSecretValue(title) and not strfind(title, "^"..LEVEL) then
 			return title
 		end
---[[
-		local data = C_TooltipInfo.GetUnit(unit) -- FIXME: ColorMixin error
-		if not data then return "" end
-
-		local lineData = data.lines[GetCVarBool("colorblindmode") and 3 or 2]
-		if lineData then
-			local title = lineData.leftText
-			if title and not strfind(title, "^"..LEVEL) then
-				return title
-			end
-		end
-]]
 	end
 end
 oUF.Tags.Events["npctitle"] = "UNIT_NAME_UPDATE"

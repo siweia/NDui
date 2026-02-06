@@ -243,7 +243,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		end
 	end
 
-	-- TrainingGroundsFrame, isNewPatch
+	-- TrainingGroundsFrame
 	if TrainingGroundsFrame then
 		ReskinPvPFrame(TrainingGroundsFrame)
 		B.ReskinDropDown(TrainingGroundsFrameTypeDropdown)
