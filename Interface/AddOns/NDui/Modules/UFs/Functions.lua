@@ -759,6 +759,15 @@ function UF:CreateCastBar(self)
 		spellTarget:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
 		cb.spellTarget = spellTarget
 
+		local isYou = B.CreateFS(cb, C.db["Nameplate"]["NameTextSize"]+3)
+		isYou:ClearAllPoints()
+		isYou:SetJustifyH("LEFT")
+		isYou:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
+		isYou:SetTextColor(1, 0, 0)
+		isYou:SetText("<< "..YOU.." >>")
+		isYou:SetAlpha(0)
+		cb.isYou = isYou
+
 		local barGlow = cb:CreateTexture(nil, "ARTWORK", nil, 2)
 		barGlow:SetAllPoints()
 		barGlow:SetTexture(DB.barArrow)

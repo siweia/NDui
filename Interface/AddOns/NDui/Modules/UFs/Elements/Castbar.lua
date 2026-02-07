@@ -9,21 +9,25 @@ function UF:UpdateCastbarGlow(unit)
 	end
 end
 
-local redColor, whiteColor = CreateColor(1, 0, 1), CreateColor(1, 1, 1)
 function UF:UpdateSpellTarget(unit)
 	if not C.db["Nameplate"]["CastTarget"] then return end
 	if self.spellTarget then
-		local color = C_CurveUtil.EvaluateColorFromBoolean(UnitIsSpellTarget(unit, "player"), redColor, whiteColor)
-		self.Text:SetTextColor(color:GetRGB())
-
-		local name = UnitSpellTargetName(unit)
-		local class = UnitSpellTargetClass(unit)
-		self.spellTarget:SetText(name or "")
-		if class then
-			self.spellTarget:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
-		else
-			self.spellTarget:SetTextColor(1, 1, 1)
+		local isTargetingYou = UnitIsSpellTarget(unit, "player")
+		if self.isYou then
+			self.isYou:SetAlphaFromBoolean(isTargetingYou, 1, 0)
 		end
+
+		if not isTargetingYou then
+			local name = UnitSpellTargetName(unit)
+			local class = UnitSpellTargetClass(unit)
+			self.spellTarget:SetText(name or "")
+			if class then
+				self.spellTarget:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
+			else
+				self.spellTarget:SetTextColor(1, 1, 1)
+			end
+		end
+		self.spellTarget:SetAlphaFromBoolean(isTargetingYou, 0, 1)
 	end
 end
 
