@@ -764,7 +764,7 @@ function UF:CreateCastBar(self)
 		isYou:SetJustifyH("LEFT")
 		isYou:SetPoint("TOPLEFT", name, "BOTTOMLEFT", 0, -2)
 		isYou:SetTextColor(1, 0, 0)
-		isYou:SetText("<< "..YOU.." >>")
+		isYou:SetText(">>"..YOU.."<<")
 		isYou:SetAlpha(0)
 		cb.isYou = isYou
 

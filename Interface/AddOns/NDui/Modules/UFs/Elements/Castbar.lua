@@ -16,18 +16,16 @@ function UF:UpdateSpellTarget(unit)
 		if self.isYou then
 			self.isYou:SetAlphaFromBoolean(isTargetingYou, 1, 0)
 		end
-
-		if not isTargetingYou then
-			local name = UnitSpellTargetName(unit)
-			local class = UnitSpellTargetClass(unit)
-			self.spellTarget:SetText(name or "")
-			if class then
-				self.spellTarget:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
-			else
-				self.spellTarget:SetTextColor(1, 1, 1)
-			end
-		end
 		self.spellTarget:SetAlphaFromBoolean(isTargetingYou, 0, 1)
+
+		local name = UnitSpellTargetName(unit)
+		local class = UnitSpellTargetClass(unit)
+		self.spellTarget:SetText(name or "")
+		if class then
+			self.spellTarget:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
+		else
+			self.spellTarget:SetTextColor(1, 1, 1)
+		end
 	end
 end
 
