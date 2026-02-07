@@ -348,6 +348,14 @@ function Bar:UpdateOverlays()
 	end
 end
 
+function Bar:UpdateCooldownText(button)
+	for _, button in pairs(Bar.buttons) do
+		if button.cooldownText then
+			button.cooldownText:SetFont(DB.Font[1], C.db["Actionbar"]["CDFontSize"], DB.Font[3])
+		end
+	end
+end
+
 function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
@@ -366,6 +374,7 @@ function Bar:OnLogin()
 	Bar:UpdateVisibility()
 	Bar:UpdateAllSize()
 	Bar:HideBlizz()
+	Bar:UpdateCooldownText()
 
 	if C_PetBattles.IsInBattle() then
 		Bar:ClearBindings()

@@ -35,6 +35,7 @@ G.DefaultSettings = {
 		ShowGlow = true,
 		KeyDown = true,
 		ButtonLock = true,
+		CDFontSize = 16,
 
 		Bar1 = true,
 		Bar1Flyout = 1,
@@ -862,6 +863,10 @@ local function updateCooldown()
 	SetCVar("countdownForCooldowns", C.db["Actionbar"]["Cooldown"] and 1 or 0)
 end
 
+local function updateCDText()
+	B:GetModule("Actionbar"):UpdateCooldownText()
+end
+
 local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
@@ -1167,7 +1172,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
-		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"], nil, nil, updateCooldown},
+		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"].."*", nil, nil, updateCooldown},
+		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
+		{3, "Actionbar", "CDFontSize", L["CDFontSize"].."*", true, {5, 30, 1}, updateCDText},
 		--{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
 		--{3, "Actionbar", "MmssTH", L["MmssThreshold"].."*", nil, {60, 600, 1}, nil, L["MmssThresholdTip"]},
 		--{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
@@ -1179,7 +1186,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "Grid", L["Actionbar Grid"].."*", nil, nil, updateHotkeys},
 		{1, "Actionbar", "Classcolor", L["ClassColor BG"].."*", true, nil, updateHotkeys},
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
-		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
 		{1, "Actionbar", "ShowGlow", L["ShowGlow"].."*", nil, nil, updateOverlays},
 		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
 	},
