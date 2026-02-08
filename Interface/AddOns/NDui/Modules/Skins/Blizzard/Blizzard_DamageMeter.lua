@@ -11,13 +11,26 @@ local function UpdateButtonState(button)
 	end
 end
 
+local function updateBGAlpha(self, alpha)
+	self.bg:SetAlpha(alpha)
+end
+
 local function ReskinMeterWindow(frame)
 	if not frame or frame.styled then return end
 
 	frame.Header:SetTexture()
-	if frame.Background then
-		frame.Background:SetTexture()
-		B.SetBD(frame.Background)
+	local bg = B.SetBD(frame.Header)
+	bg:SetPoint("TOPLEFT", frame.Header, 17, -2)
+	bg:SetPoint("BOTTOMRIGHT", frame.Header, -17, 2)
+
+	local background = frame.Background
+	if background then
+		background:SetTexture()
+		background.bg = B.SetBD(background, 1)
+		background.bg:SetPoint("TOPLEFT", bg, "BOTTOMLEFT", 0, -2)
+		background.bg:SetPoint("BOTTOMRIGHT", background, -7, 0)
+		updateBGAlpha(background, background:GetAlpha())
+		hooksecurefunc(background, "SetAlpha", updateBGAlpha)
 	end
 	B.ReskinDropDown(frame.DamageMeterTypeDropdown)
 	B.Reskin(frame.SessionDropdown)
@@ -30,7 +43,7 @@ local function ReskinMeterWindow(frame)
 
 	B.ReskinTrimScroll(frame.SourceWindow.ScrollBar)
 	frame.SourceWindow.Background:SetTexture()
-	B.SetBD(frame.SourceWindow.Background)
+	B.SetBD(frame.SourceWindow.Background):SetInside(nil, 2, 2)
 
 	frame.styled = true
 end
