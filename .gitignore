@@ -1,8 +1,8 @@
 # 排除所有其他插件，只保留 NDui
-!BugGrabber/
-!Pig/
-!Pig_RurutiaAudio/
-!Pig_Tardis/
+\!BugGrabber/
+\!Pig/
+\!Pig_RurutiaAudio/
+\!Pig_Tardis/
 ACP/
 AtlasLootMY/
 AtlasLootMY_*/
