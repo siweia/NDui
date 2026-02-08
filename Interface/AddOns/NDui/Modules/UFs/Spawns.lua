@@ -525,7 +525,7 @@ function UF:OnLogin()
 						partyPet = CreatePetGroup("oUF_PartyPet", petWidth, petFrameHeight)
 						partyPet.groupType = "pet"
 						tinsert(UF.headers, partyPet)
-						partypet:SetVisibility(GetPartyPetVisibility())
+						partyPet:SetVisibility(GetPartyPetVisibility())
 						petMover = B.Mover(partyPet, L["PartyPetFrame"], "PartyPet", {"TOPLEFT", partyMover, "BOTTOMLEFT", 0, -5})
 					end
 					ResetHeaderPoints(partyPet)
