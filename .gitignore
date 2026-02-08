@@ -1,31 +1,14 @@
-# 排除所有其他插件，只保留 NDui
-\!BugGrabber/
-\!Pig/
-\!Pig_RurutiaAudio/
-\!Pig_Tardis/
-ACP/
-AtlasLootMY/
-AtlasLootMY_*/
-AtlasMY_*/
-BagSync/
-BiaoGe/
-BugSack/
-CYZ/
-DBM-*/
-EasyAuction/
-GTFO/
-Myslot/
-NDui_Plus/
-PallyPower/
-Postal/
-Questie/
-Recount/
-TitanBistooltip/
-WeakAuras/
-WeakAurasArchive/
-WeakAurasModelPaths/
-WeakAurasOptions/
-WeakAurasTemplates/
+# 排除所有插件
+*
+
+# 只保留 NDui 相关插件
+!NDui/
+!NDui/**
+
+# 保留 Git 配置文件
+!.gitignore
+!.pkgmeta
+!README.md
 
 # macOS
 .DS_Store
