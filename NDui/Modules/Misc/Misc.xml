@@ -1,0 +1,14 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Misc.lua"/>
+	<Script file="AlertFrames.lua"/>
+	<Script file="Animation.lua"/>
+	<Script file="CharacterStatPanel.lua"/>
+	<Script file="ExpRep.lua"/>
+	<Script file="Focuser.lua"/>
+	<Script file="ItemLevel.lua"/>
+	<Script file="Mail.lua"/>
+	<Script file="Notifications.lua"/>
+	<Script file="QuestNotification.lua"/>
+	<Script file="RaidTool.lua"/>
+	<Script file="TradeTabs.lua"/>
+</Ui>

@@ -1,0 +1,25 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Blizzard_AchievementUI.lua"/>
+	<Script file="Blizzard_AuctionHouseUI.lua"/>
+	<Script file="Blizzard_AuctionUI.lua"/>
+	<Script file="Blizzard_BarbershopUI.lua"/>
+	<Script file="Blizzard_BattlefieldMap.lua"/>
+	<Script file="Blizzard_BindingUI.lua"/>
+	<Script file="Blizzard_Calendar.lua"/>
+	<Script file="Blizzard_Collections.lua"/>
+	<Script file="Blizzard_Communities.lua"/>
+	<Script file="Blizzard_DebugTools.lua"/>
+	<Script file="Blizzard_EventTrace.lua"/>
+	<Script file="Blizzard_FlightMap.lua"/>
+	<Script file="Blizzard_GMChatUI.lua"/>
+	<Script file="Blizzard_GuildBankUI.lua"/>
+	<Script file="Blizzard_InspectUI.lua"/>
+	<Script file="Blizzard_ItemSocketingUI.lua"/>
+	<Script file="Blizzard_MacroUI.lua"/>
+	<Script file="Blizzard_RaidUI.lua"/>
+	<Script file="Blizzard_TalentUI.lua"/>
+	<Script file="Blizzard_TimeManager.lua"/>
+	<Script file="Blizzard_TradeSkillUI.lua"/>
+	<Script file="Blizzard_TrainerUI.lua"/>
+	<Script file="Blizzard_Tutorial.lua"/>
+</Ui>

@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Skins.lua"/>
+
+	<Include file="Blizzard\Blizzard.xml"/>
+	<Include file="Blizzard\FrameXML\FrameXML.xml"/>
+
+	<Script file="AddOns\Bigwigs.lua"/>
+	<Script file="AddOns\DBM.lua"/>
+	<Script file="AddOns\Skada.lua"/>
+	<Script file="AddOns\TMW.lua"/>
+	<Script file="AddOns\WeakAuras.lua"/>
+	<Script file="AddOns\Details.lua"/>
+	<Script file="AddOns\ObjectiveTracker.lua"/>
+	<Script file="AddOns\TradeSkillFrame.lua"/>
+
+	<Script file="AddOns\Others.lua"/>
+</Ui>

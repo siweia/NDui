@@ -1,0 +1,34 @@
+# 排除所有其他插件，只保留 NDui
+!BugGrabber/
+!Pig/
+!Pig_RurutiaAudio/
+!Pig_Tardis/
+ACP/
+AtlasLootMY/
+AtlasLootMY_*/
+AtlasMY_*/
+BagSync/
+BiaoGe/
+BugSack/
+CYZ/
+DBM-*/
+EasyAuction/
+GTFO/
+Myslot/
+NDui_Plus/
+PallyPower/
+Postal/
+Questie/
+Recount/
+TitanBistooltip/
+WeakAuras/
+WeakAurasArchive/
+WeakAurasModelPaths/
+WeakAurasOptions/
+WeakAurasTemplates/
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/

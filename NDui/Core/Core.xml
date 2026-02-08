@@ -1,0 +1,13 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Database.lua"/>
+	<Script file="Functions.lua"/>
+	<Script file="Smooth.lua"/>
+	<Script file="Mover.lua"/>
+	<Script file="DevTools.lua"/>
+	<Script file="GUI.lua"/>
+	<Script file="ProfileGUI.lua"/>
+	<Script file="ExtraGUI.lua"/>
+	<Script file="AWConfig.lua"/>
+	<Script file="Tutorial.lua"/>
+	<Script file="Changelog.lua"/>
+</Ui>
