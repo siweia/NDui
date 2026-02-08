@@ -457,6 +457,7 @@ function module:RecycleBin()
 end
 
 function module:WhoPingsMyMap()
+	if DB.isNewPatch then return end -- 12.0.1 no more ping info
 	if not C.db["Map"]["WhoPings"] then return end
 
 	local f = CreateFrame("Frame", nil, Minimap)
