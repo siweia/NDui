@@ -1,0 +1,26 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="ClassSpells.lua"/>
+	<Script file="RaidDebuffs.lua"/>
+
+	<Script file="TBC\Party-TBC.lua"/>
+	<Script file="TBC\BlackTemple.lua"/>
+	<Script file="TBC\GruulsLair.lua"/>
+	<Script file="TBC\HyjalSummit.lua"/>
+	<Script file="TBC\Karazhan.lua"/>
+	<Script file="TBC\MagtheridonsLair.lua"/>
+	<Script file="TBC\SerpentshrineCavern.lua"/>
+	<Script file="TBC\SunwellPlateau.lua"/>
+	<Script file="TBC\TempestKeep.lua"/>
+	<Script file="TBC\ZulAman.lua"/>
+
+	<Script file="WLK\Party-WotLK.lua"/>
+	<Script file="WLK\EyeOfEternity.lua"/>
+	<Script file="WLK\ICC.lua"/>
+	<Script file="WLK\NAXX.lua"/>
+	<Script file="WLK\ObisidianSanctum.lua"/>
+	<Script file="WLK\Onyxia.lua"/>
+	<Script file="WLK\RubySanctum.lua"/>
+	<Script file="WLK\ToC.lua"/>
+	<Script file="WLK\ULD.lua"/>
+	<Script file="WLK\VoA.lua"/>
+</Ui>

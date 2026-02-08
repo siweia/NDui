@@ -1,0 +1,11 @@
+package-as: NDui
+
+move-folders:
+    NDui/Interface/AddOns/NDui: NDui
+
+ignore:
+  - .github/*
+  - Interface/AddOns/!BaudErrorFrame
+  - Interface/TargetingFrame
+  - Interface/Tooltips
+  - README.md

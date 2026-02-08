@@ -1,0 +1,12 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="ActionBar\ActionBar.xml"/>
+	<Include file="Bags\Bags.xml"/>
+	<Include file="Auras\Auras.xml"/>
+	<Include file="Chat\Chat.xml"/>
+	<Include file="Tooltip\Tooltip.xml"/>
+	<Include file="Skins\Skins.xml"/>
+	<Include file="Maps\Maps.xml"/>
+	<Include file="UFs\UFs.xml"/>
+	<Include file="Misc\Misc.xml"/>
+	<Include file="Infobar\Infobar.xml"/>
+</Ui>

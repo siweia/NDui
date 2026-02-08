@@ -1,0 +1,8 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Core.lua"/>
+	<Script file="ChannelRename.lua"/>
+	<Script file="Chatcopy.lua"/>
+	<Script file="Chatbar.lua"/>
+	<Script file="Urlcopy.lua"/>
+	<Script file="Filter.lua"/>
+</Ui>
