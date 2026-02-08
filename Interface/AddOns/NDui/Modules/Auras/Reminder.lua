@@ -119,8 +119,6 @@ function A:Reminder_AddItemGroup()
 end
 
 function A:InitReminder()
-	if DB.isNewPatch then return end
-
 	A:Reminder_AddItemGroup()
 
 	if not groups or not next(groups) then return end

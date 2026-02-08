@@ -522,8 +522,6 @@ function M:RaidTool_CreateMenu(parent)
 end
 
 function M:RaidTool_EasyMarker()
-	if DB.isNewPatch then return end -- broken in 12.0, needs review
-
 	-- TODO: replace with the newest dropdown template
 	local menuList = {}
 
@@ -546,7 +544,7 @@ function M:RaidTool_EasyMarker()
 		UnitPopupRaidTarget1ButtonMixin,
 		UnitPopupRaidTargetNoneButtonMixin
 	}
-	local coords = { -- secret in 12.0, isNewPatch, needs review
+	local coords = { -- secret in 12.0, needs review
 		[1] = {.75, 1, .25, .5},
 		[2] = {.5, .75, .25, .5},
 		[3] = {.25, .5, .25, .5},
@@ -696,7 +694,7 @@ function M:RaidTool_Init()
 	M:RaidTool_CreateMenu(frame)
 	M:RaidTool_CountDown(frame)
 
-	M:RaidTool_EasyMarker()
+	--M:RaidTool_EasyMarker() -- broken in 12.0
 	M:RaidTool_WorldMarker()
 	M:RaidTool_Misc()
 end
