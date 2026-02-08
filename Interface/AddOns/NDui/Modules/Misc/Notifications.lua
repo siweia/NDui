@@ -293,7 +293,7 @@ local tn = tonumber
 local function HandleVersonTag(version)
 	local major, minor = strsplit(".", version)
 	major, minor = tn(major), tn(minor)
-	if B:CV(major) then
+	if major >= 9 then
 		major, minor = 0, 0
 		if DB.isDeveloper and author then
 			print("Moron: "..author)
@@ -495,109 +495,6 @@ function M:SpellItemAlert()
 	end
 end
 
--- 大幻象水晶及箱子计数
-function M:NVision_Create()
-	if M.VisionFrame then M.VisionFrame:Show() return end
-
-	local frame = CreateFrame("Frame", nil, UIParent)
-	frame:SetSize(24, 24)
-	frame.bars = {}
-
-	local mover = B.Mover(frame, L["NzothVision"], "NzothVision", {"TOP", PlayerPowerBarAlt, "BOTTOM"}, 216, 24)
-	frame:ClearAllPoints()
-	frame:SetPoint("CENTER", mover)
-
-	local barData = {
-		[1] = {
-			anchorF = "RIGHT", anchorT = "LEFT", offset = -3,
-			texture = 134110,
-			color = {1, .8, 0}, reverse = false, maxValue = 10,
-		},
-		[2] = {
-			anchorF = "LEFT", anchorT = "RIGHT", offset = 3,
-			texture = 2000861,
-			color = {.8, 0, 1}, reverse = true, maxValue = 12,
-		}
-	}
-
-	for i, v in ipairs(barData) do
-		local bar = CreateFrame("StatusBar", nil, frame)
-		bar:SetSize(80, 20)
-		bar:SetPoint(v.anchorF, frame, "CENTER", v.offset, 0)
-		bar:SetMinMaxValues(0, v.maxValue)
-		bar:SetValue(0)
-		bar:SetReverseFill(v.reverse)
-		B.CreateSB(bar, nil, unpack(v.color))
-		bar.text = B.CreateFS(bar, 16, "0/"..v.maxValue, nil, "CENTER", 0, 0)
-
-		local icon = CreateFrame("Frame", nil, bar)
-		icon:SetSize(22, 22)
-		icon:SetPoint(v.anchorF, bar, v.anchorT, v.offset, 0)
-		B.PixelIcon(icon, v.texture)
-		B.CreateSD(icon)
-
-		bar.count = 0
-		bar.__max = v.maxValue
-		frame.bars[i] = bar
-	end
-
-	M.VisionFrame = frame
-end
-
-function M:NVision_Update(index, reset)
-	local frame = M.VisionFrame
-	local bar = frame.bars[index]
-	if reset then bar.count = 0 end
-	bar:SetValue(bar.count)
-	bar.text:SetText(bar.count.."/"..bar.__max)
-end
-
-local castSpellIndex = {[143394] = 1, [306608] = 2}
-function M:NVision_OnEvent(unit, _, spellID)
-	local index = castSpellIndex[spellID]
-	if index and (index == 1 or unit == "player") then
-		local frame = M.VisionFrame
-		local bar = frame.bars[index]
-		bar.count = bar.count + 1
-		M:NVision_Update(index)
-	end
-end
-
-function M:NVision_Check()
-	local diffID = select(3, GetInstanceInfo())
-	if diffID == 152 then
-		M:NVision_Create()
-		B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.NVision_OnEvent, "player")
-
-		if not RaidBossEmoteFrame.__isOff then
-			RaidBossEmoteFrame:UnregisterAllEvents()
-			RaidBossEmoteFrame.__isOff = true
-		end
-	else
-		if M.VisionFrame then
-			M:NVision_Update(1, true)
-			M:NVision_Update(2, true)
-			M.VisionFrame:Hide()
-			B:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED", M.NVision_OnEvent)
-		end
-
-		if RaidBossEmoteFrame.__isOff then
-			if not C.db["Misc"]["HideBossEmote"] then
-				RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
-				RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_WHISPER")
-				RaidBossEmoteFrame:RegisterEvent("CLEAR_BOSS_EMOTES")
-			end
-			RaidBossEmoteFrame.__isOff = nil
-		end
-	end
-end
-
-function M:NVision_Init()
-	if not C.db["Misc"]["NzothVision"] then return end
-	M:NVision_Check()
-	B:RegisterEvent("UPDATE_INSTANCE_INFO", M.NVision_Check)
-end
-
 -- Incompatible check
 local IncompatibleAddOns = {
 	["BigFoot"] = true,
@@ -707,6 +604,7 @@ function M:AnalyzeButtonCooldown()
 	if not self._state_action then return end -- no action for pet actionbar
 	if not C.db["Misc"]["SendActionCD"] then return end
 	if not IsInGroup() then return end
+	if InCombatLockdown() then return end
 
 	local thisTime = GetTime()
 	if thisTime - lastCDSend < 1.5 then return end
@@ -745,10 +643,9 @@ end
 function M:AddAlerts()
 	M:SoloInfo()
 	M:RareAlert()
-	M:InterruptAlert()
+	--M:InterruptAlert()
 	M:VersionCheck()
 	M:SpellItemAlert()
-	M:NVision_Init()
 	M:CheckIncompatible()
 	M:SendCDStatus()
 end

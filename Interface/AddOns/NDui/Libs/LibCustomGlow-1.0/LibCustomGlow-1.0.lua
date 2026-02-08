@@ -6,7 +6,7 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
 local MAJOR_VERSION = "LibCustomGlow-1.0-NDui"
-local MINOR_VERSION = 21
+local MINOR_VERSION = 24
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
@@ -152,7 +152,12 @@ local function addFrameAndTex(r,color,name,key,N,xOffset,yOffset,texture,texCoor
 				f.textures[i]:SetBlendMode("ADD")
 			end
 		end
-		f.textures[i]:SetVertexColor(color[1],color[2],color[3],color[4])
+		-- Handle both array format {r,g,b,a} and Color objects (for WoW 12.0 secret values)
+		if type(color) == "table" and color.GetRGBA then
+			f.textures[i]:SetVertexColor(color:GetRGBA())
+		else
+			f.textures[i]:SetVertexColor(color[1],color[2],color[3],color[4])
+		end
 		f.textures[i]:Show()
 	end
 	while #f.textures>N do
@@ -542,11 +547,12 @@ end
 local function bgUpdate(self, elapsed)
 	AnimateTexCoords(self.ants, 256, 256, 48, 48, 22, elapsed, self.throttle);
 	local cooldown = self:GetParent().cooldown;
-	--if(cooldown and cooldown:IsShown() and cooldown:GetCooldownDuration() > 3000) then
-	--	self:SetAlpha(0.5);
-	--else
-	--	self:SetAlpha(1.0);
-	--end
+	local duration = cooldown and cooldown:IsShown() and cooldown:GetCooldownDuration()
+	if((not issecretvalue or not issecretvalue(duration)) and duration and duration > 3000) then
+		self:SetAlpha(0.5);
+	else
+		self:SetAlpha(1.0);
+	end
 end
 
 local function configureButtonGlow(f,alpha)
@@ -685,7 +691,12 @@ function lib.ButtonGlow_Start(r,color,frequency,frameLevel)
 		else
 			for texture in pairs(ButtonGlowTextures) do
 				f[texture]:SetDesaturated(1)
-				f[texture]:SetVertexColor(color[1],color[2],color[3])
+				if type(color) == "table" and color.GetRGBA then
+					local r, g, b = color:GetRGBA()
+					f[texture]:SetVertexColor(r, g, b)
+				else
+					f[texture]:SetVertexColor(color[1],color[2],color[3])
+				end
 				local alpha = math.min(f[texture]:GetAlpha()/noZero(f.color and f.color[4] or 1)*color[4], 1)
 				f[texture]:SetAlpha(alpha)
 				updateAlphaAnim(f,color and color[4] or 1)
@@ -717,7 +728,12 @@ function lib.ButtonGlow_Start(r,color,frequency,frameLevel)
 			f.color = color
 			for texture in pairs(ButtonGlowTextures) do
 				f[texture]:SetDesaturated(1)
-				f[texture]:SetVertexColor(color[1],color[2],color[3])
+				if type(color) == "table" and color.GetRGBA then
+					local r, g, b = color:GetRGBA()
+					f[texture]:SetVertexColor(r, g, b)
+				else
+					f[texture]:SetVertexColor(color[1],color[2],color[3])
+				end
 			end
 		end
 		f.throttle = throttle
@@ -725,11 +741,8 @@ function lib.ButtonGlow_Start(r,color,frequency,frameLevel)
 
 		f.animIn:Play()
 
-		if Masque and Masque.UpdateSpellAlert and (not r.overlay or not issecurevariable(r, "overlay")) then
-			local old_overlay = r.overlay
-			r.overlay = f
-			Masque:UpdateSpellAlert(r)
-			r.overlay = old_overlay
+		if Masque and Masque.UpdateSpellAlert then
+			Masque:UpdateSpellAlert(r, f)
 		end
 	end
 end

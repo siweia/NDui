@@ -20,10 +20,8 @@ tinsert(C.defaultThemes, function()
 			backdrops[menuFrame] = menuFrame.bg
 		end
 
-		if DB.isNewPatch then
-			local framelevel = menuFrame:GetFrameLevel() - 1
-			menuFrame.bg:SetFrameLevel(framelevel < 0 and 0 or framelevel)
-		end
+		local framelevel = menuFrame:GetFrameLevel() - 1
+		menuFrame.bg:SetFrameLevel(framelevel < 0 and 0 or framelevel)
 
 		if not menuFrame.ScrollBar.styled then
 			B.ReskinTrimScroll(menuFrame.ScrollBar)

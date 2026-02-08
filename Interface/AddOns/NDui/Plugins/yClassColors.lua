@@ -41,7 +41,7 @@ local repColor = {
 }
 
 local function smoothColor(cur, max, color)
-	local r, g, b = oUF:RGBColorGradient(cur, max, unpack(color))
+	local r, g, b = B:RGBColorGradient(cur, max, unpack(color))
 	return B.HexRGB(r, g, b)
 end
 

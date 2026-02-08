@@ -45,7 +45,7 @@ end
 
 local usageColor = {0, 1, 0, 1, 1, 0, 1, 0, 0}
 local function smoothColor(cur, max)
-	local r, g, b = module:RGBColorGradient(cur, max, unpack(usageColor))
+	local r, g, b = B:RGBColorGradient(cur, max, unpack(usageColor))
 	return r, g, b
 end
 

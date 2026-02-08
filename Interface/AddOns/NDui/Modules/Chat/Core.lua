@@ -6,7 +6,7 @@ local cr, cg, cb = DB.r, DB.g, DB.b
 local _G = _G
 local pairs, ipairs, strsub, strlower = pairs, ipairs, string.sub, string.lower
 local IsInGroup, IsInRaid, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsInGuild, IsShiftKeyDown, IsControlKeyDown
-local ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, GetCVar, SetCVar, Ambiguate, GetTime
+local ChatEdit_UpdateHeader, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, SetCVar, Ambiguate, GetTime
 local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant
 local CanCooperateWithGameAccount, BNInviteFriend, PlaySound = CanCooperateWithGameAccount, BNInviteFriend, PlaySound
 local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
@@ -15,7 +15,6 @@ local InviteToGroup = C_PartyInfo.InviteUnit
 local GeneralDockManager = GeneralDockManager
 local messageSoundID = SOUNDKIT.TELL_MESSAGE
 
-local maxLines = 2048
 local fontFile, fontOutline
 module.MuteCache = {}
 
@@ -113,9 +112,6 @@ function module:SkinChat()
 	end
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
-	if self:GetMaxLines() < maxLines then
-		self:SetMaxLines(maxLines)
-	end
 
 	self.__background = BlackBackground(self)
 	self.__gradient = GradientBackground(self)
@@ -296,6 +292,7 @@ end
 
 function module.OnChatWhisper(event, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
+	if B:IsSecretValue(author) then return end
 	for word in pairs(whisperList) do
 		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
 			if event == "CHAT_MSG_BN_WHISPER" then
@@ -375,6 +372,7 @@ local whisperEvents = {
 function module:PlayWhisperSound(event, _, author)
 	if not C.db["Chat"]["WhisperSound"] then return end
 
+	if B:IsSecretValue(author) then return end
 	if whisperEvents[event] then
 		local name = Ambiguate(author, "none")
 		local currentTime = GetTime()
@@ -384,46 +382,6 @@ function module:PlayWhisperSound(event, _, author)
 			PlaySound(messageSoundID, "master")
 		end
 		self.soundTimer = currentTime + 5
-	end
-end
-
--- ProfanityFilter
-local sideEffectFixed
-local function FixLanguageFilterSideEffects()
-	if sideEffectFixed then return end
-	sideEffectFixed = true
-
-	local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
-	function C_BattleNet.GetFriendGameAccountInfo(...)
-		local gameAccountInfo = OLD_GetFriendGameAccountInfo(...)
-		if gameAccountInfo then
-			gameAccountInfo.isInCurrentRegion = true
-		end
-		return gameAccountInfo
-	end
-
-	local OLD_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
-	function C_BattleNet.GetFriendAccountInfo(...)
-		local accountInfo = OLD_GetFriendAccountInfo(...)
-		if accountInfo and accountInfo.gameAccountInfo then
-			accountInfo.gameAccountInfo.isInCurrentRegion = true
-		end
-		return accountInfo
-	end
-end
-
-function module:ToggleLanguageFilter()
-	if C.db["Chat"]["Freedom"] then
-		if GetCVar("portal") == "CN" then
-			ConsoleExec("portal TW")
-			FixLanguageFilterSideEffects()
-		end
-		SetCVar("profanityFilter", 0)
-	else
-		if sideEffectFixed then
-			ConsoleExec("portal CN")
-		end
-		SetCVar("profanityFilter", 1)
 	end
 end
 
@@ -478,12 +436,11 @@ function module:OnLogin()
 	-- Add Elements
 	module:ChatWhisperSticky()
 	module:ChatFilter()
-	module:ChannelRename()
+	--module:ChannelRename()
 	module:Chatbar()
 	module:ChatCopy()
-	module:UrlCopy()
+	--module:UrlCopy()
 	module:WhisperInvite()
-	--module:ToggleLanguageFilter()
 
 	-- Lock chatframe
 	if C.db["Chat"]["Lock"] then

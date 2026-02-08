@@ -20,7 +20,6 @@ function Bar:CreateExtrabar()
 	ExtraAbilityContainer:SetScript("OnUpdate", nil)
 	ExtraAbilityContainer.OnUpdate = nil -- remove BaseLayoutMixin.OnUpdate
 	ExtraAbilityContainer.IsLayoutFrame = nil -- dont let it get readded
-	ExtraAbilityContainer:KillEditMode()
 
 	ExtraActionBarFrame:EnableMouse(false)
 	ExtraActionBarFrame:ClearAllPoints()

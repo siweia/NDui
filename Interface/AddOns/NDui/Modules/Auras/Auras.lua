@@ -52,6 +52,14 @@ function A:BuildBuffFrame()
 		},
 	}
 
+	A.DispelColorCurve = C_CurveUtil.CreateColorCurve()
+	A.DispelColorCurve:SetType(Enum.LuaCurveType.Step)
+	for _, dispelIndex in next, oUF.Enum.DispelType do
+		if(oUF.colors.dispel[dispelIndex]) then
+			A.DispelColorCurve:AddPoint(dispelIndex, oUF.colors.dispel[dispelIndex])
+		end
+	end
+
 	-- Movers
 	A.BuffFrame = A:CreateAuraHeader("HELPFUL")
 	A.BuffFrame.mover = B.Mover(A.BuffFrame, "Buffs", "BuffAnchor", C.Auras.BuffPos)
@@ -151,7 +159,7 @@ function A:UpdateAuras(button, index)
 	end
 
 	if filter == "HARMFUL" then
-		local color = B:NotSecretValue(auraData.dispelName) and oUF.colors.dispel[auraData.dispelName] or oUF.colors.dispel[0]
+		local color = C_UnitAuras.GetAuraDispelTypeColor(unit, auraData.auraInstanceID, A.DispelColorCurve)
 		button:SetBackdropBorderColor(color:GetRGB())
 	else
 		button:SetBackdropBorderColor(0, 0, 0)
@@ -233,6 +241,7 @@ function A:UpdateHeader(header)
 
 		B.SetFontSize(child.count, fontSize)
 		B.SetFontSize(child.timer, fontSize)
+		B.SetFontSize(child.CooldownText, fontSize)
 
 		--Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
 		if index > (cfg.maxWraps * cfg.wrapAfter) and child:IsShown() then
@@ -324,7 +333,7 @@ function A:CreateAuraIcon(button)
 	B.SetFontSize(button.count, fontSize)
 
 	button.timer = button:CreateFontString(nil, "ARTWORK")
-	button.timer:SetPoint("CENTER")
+	button.timer:SetPoint("TOP", button, "BOTTOM", 1, 2)
 	B.SetFontSize(button.timer, fontSize)
 
 	button.highlight = button:CreateTexture(nil, "HIGHLIGHT")
@@ -332,10 +341,17 @@ function A:CreateAuraIcon(button)
 	button.highlight:SetInside()
 
 	local cd = CreateFrame("Cooldown", "$parentCooldown", button, "CooldownFrameTemplate")
+	cd:SetReverse(true)
 	cd:SetEdgeTexture(DB.bgTex)
-	cd:SetDrawSwipe(false)
+	cd:SetDrawSwipe(C.db["Auras"]["CDAnimation"])
 	cd:SetDrawBling(false)
 	button.Cooldown = cd
+
+	local text = cd:GetRegions()
+	B.SetFontSize(text, fontSize)
+	text:ClearAllPoints()
+	text:SetPoint("TOP", button, "BOTTOM", 1, 2)
+	button.CooldownText = text
 
 	B.CreateBD(button, .25)
 	B.CreateSD(button)

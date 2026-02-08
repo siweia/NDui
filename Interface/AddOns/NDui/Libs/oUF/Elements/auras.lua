@@ -841,11 +841,13 @@ local function Enable(self)
 			auras.visibleButtons = 0
 			auras.tooltipAnchor = auras.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'
 
-			auras.dispelColorCurve = auras.dispelColorCurve or C_CurveUtil.CreateColorCurve()
-			auras.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
-			for _, dispelIndex in next, oUF.Enum.DispelType do
-				if(self.colors.dispel[dispelIndex]) then
-					auras.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+			if(not auras.dispelColorCurve) then
+				auras.dispelColorCurve = C_CurveUtil.CreateColorCurve()
+				auras.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
+				for _, dispelIndex in next, oUF.Enum.DispelType do
+					if(self.colors.dispel[dispelIndex]) then
+						auras.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+					end
 				end
 			end
 
@@ -864,11 +866,13 @@ local function Enable(self)
 			buffs.visibleButtons = 0
 			buffs.tooltipAnchor = buffs.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'
 
-			buffs.dispelColorCurve = buffs.dispelColorCurve or C_CurveUtil.CreateColorCurve()
-			buffs.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
-			for _, dispelIndex in next, oUF.Enum.DispelType do
-				if(self.colors.dispel[dispelIndex]) then
-					buffs.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+			if(not buffs.dispelColorCurve) then
+				buffs.dispelColorCurve = C_CurveUtil.CreateColorCurve()
+				buffs.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
+				for _, dispelIndex in next, oUF.Enum.DispelType do
+					if(self.colors.dispel[dispelIndex]) then
+						buffs.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+					end
 				end
 			end
 
@@ -887,11 +891,13 @@ local function Enable(self)
 			debuffs.visibleButtons = 0
 			debuffs.tooltipAnchor = debuffs.tooltipAnchor or 'ANCHOR_BOTTOMRIGHT'
 
-			debuffs.dispelColorCurve = debuffs.dispelColorCurve or C_CurveUtil.CreateColorCurve()
-			debuffs.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
-			for _, dispelIndex in next, oUF.Enum.DispelType do
-				if(self.colors.dispel[dispelIndex]) then
-					debuffs.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+			if(not debuffs.dispelColorCurve) then
+				debuffs.dispelColorCurve = C_CurveUtil.CreateColorCurve()
+				debuffs.dispelColorCurve:SetType(Enum.LuaCurveType.Step)
+				for _, dispelIndex in next, oUF.Enum.DispelType do
+					if(self.colors.dispel[dispelIndex]) then
+						debuffs.dispelColorCurve:AddPoint(dispelIndex, self.colors.dispel[dispelIndex])
+					end
 				end
 			end
 

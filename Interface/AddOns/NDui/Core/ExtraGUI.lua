@@ -1440,52 +1440,9 @@ function G:SetupCastbar(parent)
 		if focusCB then
 			focusCB.mover:Hide()
 		end
-	end)
-end
-
-function G:SetupSwingBars(parent)
-	local guiName = "NDuiGUI_SwingSetup"
-	toggleExtraGUI(guiName)
-	if extraGUIs[guiName] then return end
-
-	local panel = createExtraGUI(parent, guiName, L["UFs SwingBar"].."*")
-	local scroll = G:CreateScroll(panel, 260, 540)
-
-	local parent, offset = scroll.child, -10
-	local frame = _G.oUF_Player
-
-	local function configureSwingBars()
-		if not frame then return end
-
-		local width, height = C.db["UFs"]["SwingWidth"], C.db["UFs"]["SwingHeight"]
-		local swing = frame.Swing
-		swing:SetSize(width, height)
-		swing.Offhand:SetHeight(height)
-		swing.mover:SetSize(width, height)
-		swing.mover:Show()
-
-		swing.Text:SetShown(C.db["UFs"]["SwingTimer"])
-		swing.TextMH:SetShown(C.db["UFs"]["SwingTimer"])
-		swing.TextOH:SetShown(C.db["UFs"]["SwingTimer"])
-
-		swing.Offhand:ClearAllPoints()
-		if C.db["UFs"]["OffOnTop"] then
-			swing.Offhand:SetPoint("BOTTOMLEFT", swing, "TOPLEFT", 0, 3)
-			swing.Offhand:SetPoint("BOTTOMRIGHT", swing, "TOPRIGHT", 0, 3)
-		else
-			swing.Offhand:SetPoint("TOPLEFT", swing, "BOTTOMLEFT", 0, -3)
-			swing.Offhand:SetPoint("TOPRIGHT", swing, "BOTTOMRIGHT", 0, -3)
+		if UF.UpdateCastBarColors then
+			UF:UpdateCastBarColors()
 		end
-	end
-
-	createOptionCheck(parent, offset, L["UFs SwingTimer"], "UFs", "SwingTimer", configureSwingBars, L["SwingTimer Tip"])
-	createOptionCheck(parent, offset-35, L["OffhandOnTop"], "UFs", "OffOnTop", configureSwingBars)
-	createOptionSlider(parent, L["Width"], 50, 1000, 275, offset-105, "SwingWidth", configureSwingBars)
-	createOptionSlider(parent, L["Height"], 1, 50, 3, offset-175, "SwingHeight", configureSwingBars)
-
-	panel:HookScript("OnHide", function()
-		local mover = frame and frame.Swing and frame.Swing.mover
-		if mover then mover:Hide() end
 	end)
 end
 
@@ -1625,10 +1582,10 @@ function G:SetupNameplateSize(parent)
 
 	local optionValues = {
 		["enemy"] = {"PlateWidth", "PlateHeight", "NameTextSize","HealthTextSize", "HealthTextOffset", "PlateCBHeight", "CBTextSize", "PlateCBOffset", "HarmWidth", "HarmHeight", "NameTextOffset"},
-		["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize","FriendHealthSize", "FriendHealthOffset", "FriendPlateCBHeight", "FriendCBTextSize", "FriendPlateCBOffset", "HelpWidth", "HelpHeight", "FriendNameOffset"},
+		--["friend"] = {"FriendPlateWidth", "FriendPlateHeight", "FriendNameSize","FriendHealthSize", "FriendHealthOffset", "FriendPlateCBHeight", "FriendCBTextSize", "FriendPlateCBOffset", "HelpWidth", "HelpHeight", "FriendNameOffset"},
 	}
 	local function createOptionGroup(parent, offset, value, func, isEnemy)
-		createOptionTitle(parent, "", offset)
+		--createOptionTitle(parent, "", offset)
 		createOptionSlider(parent, L["Width"], 50, 500, 190, offset-60, optionValues[value][1], func, "Nameplate")
 		createOptionSlider(parent, L["Height"], 5, 50, 8, offset-130, optionValues[value][2], func, "Nameplate")
 		createOptionSlider(parent, L["InteractWidth"], 50, 500, 190, offset-200, optionValues[value][9], func, "Nameplate")
@@ -1647,7 +1604,7 @@ function G:SetupNameplateSize(parent)
 	end
 
 	local UF = B:GetModule("UnitFrames")
-	local options = {
+--[[	local options = {
 		[1] = L["HostileNameplate"],
 		[2] = L["FriendlyNameplate"],
 	}
@@ -1671,8 +1628,10 @@ function G:SetupNameplateSize(parent)
 
 		dd.panels[i] = panel
 		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
-	end
-	toggleOptionsPanel(dd.options[1])
+	end]]
+	--toggleOptionsPanel(dd.options[1])
+
+	createOptionGroup(scroll.child, 30, "enemy", UF.RefreshAllPlates, true)
 end
 
 function G:SetupNameOnlySize(parent)
@@ -1975,13 +1934,13 @@ function G:SetupActionbarStyle(parent)
 		button1 = OKAY,
 		button2 = CANCEL,
 		OnShow = function(self)
-			self.button1:Disable()
+			self.ButtonContainer.Button1:Disable()
 		end,
 		OnAccept = function(self)
 			Bar:ImportActionbarStyle(self.EditBox:GetText())
 		end,
 		EditBoxOnTextChanged = function(self)
-			local button1 = self:GetParent().button1
+			local button1 = self:GetParent().ButtonContainer.Button1
 			local text = self:GetText()
 			local found = text and strfind(text, "^NAB:")
 			if found then

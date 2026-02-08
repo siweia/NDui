@@ -209,10 +209,10 @@ function module:OnSetHideCountdownNumbers(hide)
 end
 
 function module:OnLogin()
-	if DB.isNewPatch then return end
+	SetCVar("countdownForCooldowns", C.db["Actionbar"]["Cooldown"] and 1 or 0)
 
 	if not C.db["Actionbar"]["Cooldown"] then return end
-
+	if DB.isNewPatch then return end
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, "SetCooldown", module.StartTimer)
 	hooksecurefunc(cooldownIndex, "SetHideCountdownNumbers", module.OnSetHideCountdownNumbers)

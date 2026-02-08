@@ -57,7 +57,7 @@ function M:RaidTool_Header()
 		end
 	end)
 	frame:SetScript("OnDoubleClick", function(_, btn)
-		if btn == "RightButton" and (IsPartyLFG() and IsLFGComplete() or not IsInInstance()) then
+		if btn == "RightButton" and (IsShiftKeyDown() or (IsPartyLFG() and IsLFGComplete() or not IsInInstance())) then
 			LeaveParty()
 		end
 	end)
@@ -627,14 +627,15 @@ function M:RaidTool_WorldMarker()
 		button:SetSize(28, 28)
 		B.PixelIcon(button, iconTexture[i], true)
 		button.Icon:SetTexture(iconTexture[i])
+		button:RegisterForClicks("AnyUp", "AnyDown")
 
 		if i ~= 9 then
-			button:RegisterForClicks("AnyUp", "AnyDown")
 			button:SetAttribute("type", "macro")
 			button:SetAttribute("macrotext1", format("/wm %d", i))
 			button:SetAttribute("macrotext2", format("/cwm %d", i))
 		else
-			button:SetScript("OnClick", ClearRaidMarker)
+			button:SetAttribute("type2", "worldmarker")
+			button:SetAttribute("action2", "clear")
 		end
 		frame.buttons[i] = button
 	end
