@@ -602,11 +602,23 @@ local function CreateConfigFrame()
 	-- 更新下拉菜单选项
 	local function UpdateChatFrameDropdown()
 		local options = {}
+		
+		-- 获取所有停靠的聊天窗口（有标签页的窗口）
+		local dockedFrames = {}
+		if GeneralDockManager then
+			for _, chatFrame in ipairs(GeneralDockManager.DOCKED_CHAT_FRAMES) do
+				if chatFrame then
+					local id = chatFrame:GetID()
+					dockedFrames[id] = true
+				end
+			end
+		end
+		
+		-- 遍历所有聊天窗口
 		for i = 1, NUM_CHAT_WINDOWS do
-			local name, _, _, _, _, _, shown = GetChatWindowInfo(i)
-			-- 只添加有名称且未被禁用的窗口
-			-- shown 参数表示窗口是否被启用（0=禁用，1=启用）
-			if name and name ~= "" and shown ~= 0 then
+			local name = GetChatWindowInfo(i)
+			-- 只添加停靠的窗口（有标签页的窗口）
+			if name and name ~= "" and dockedFrames[i] then
 				tinsert(options, {
 					text = name,
 					value = i,
@@ -620,8 +632,16 @@ local function CreateConfigFrame()
 		local currentFrame = NDuiADB["KeywordMonitor"]["OutputChatFrame"]
 		local currentName = GetChatWindowInfo(currentFrame)
 		
-		-- 检查当前选择的窗口是否有效
-		if currentName and currentName ~= "" then
+		-- 检查当前选择的窗口是否在列表中
+		local found = false
+		for _, option in ipairs(options) do
+			if option.value == currentFrame then
+				found = true
+				break
+			end
+		end
+		
+		if found and currentName and currentName ~= "" then
 			chatFrameDropdown.Text:SetText(currentName)
 		elseif #options > 0 then
 			-- 如果当前窗口无效，选择第一个有效窗口
