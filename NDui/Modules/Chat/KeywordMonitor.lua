@@ -45,7 +45,7 @@ local function EnsureConfig()
 	local cfg = NDuiADB["KeywordMonitor"]
 	if cfg["Enabled"] == nil then cfg["Enabled"] = false end
 	if cfg["Keywords"] == nil then cfg["Keywords"] = "" end
-	if cfg["AudioEnabled"] == nil then cfg["AudioEnabled"] = false end
+	if cfg["AudioEnabled"] == nil then cfg["AudioEnabled"] = true end
 	if cfg["OutputMode"] == nil then cfg["OutputMode"] = 2 end
 	if cfg["OutputChatFrame"] == nil then cfg["OutputChatFrame"] = 1 end
 	if cfg["FlashOnMatch"] == nil then cfg["FlashOnMatch"] = true end
@@ -245,36 +245,40 @@ local function CreateKeywordFrame()
 	if keywordFrame then return keywordFrame end
 	EnsureConfig()
 	
-	local frame = CreateFrame("ScrollingMessageFrame", "NDui_KeywordMonitor", UIParent, "ChatFrameTemplate")
+	local frame = CreateFrame("ScrollingMessageFrame", "NDui_KeywordMonitor", UIParent)
 	frame:SetSize(ChatFrame1:GetWidth(), NDuiADB["KeywordMonitor"]["KeywordFrameHeight"])
-	frame:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 60)
-	frame:SetFrameStrata("LOW")
+	frame:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, 30)
+	frame:SetFrameStrata("MEDIUM")
 	frame:SetFading(false)
 	frame:SetMaxLines(100)
 	frame:SetHyperlinksEnabled(true)
 	frame:EnableMouse(true)
 	frame:EnableMouseWheel(true)
-	frame:UnregisterAllEvents()
 	
 	-- 设置字体
-	local _, fontSize = ChatFrame1:GetFont()
-	FCF_SetChatWindowFontSize(nil, frame, fontSize)
+	local fontPath, fontSize = ChatFrame1:GetFont()
+	frame:SetFont(fontPath, fontSize, "OUTLINE")
+	frame:SetShadowColor(0, 0, 0, 0)
+	frame:SetJustifyH("LEFT")
 	
-	-- 背景
-	frame.Background = frame:CreateTexture(nil, "BACKGROUND")
-	frame.Background:SetTexture("Interface/ChatFrame/ChatFrameBackground")
-	frame.Background:SetPoint("TOPLEFT", frame, "TOPLEFT", -2, 2)
-	frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", 15, -2)
-	frame.Background:SetVertexColor(unpack(NDuiADB["KeywordMonitor"]["BgColor"]))
+	-- 使用 NDui 的背景样式
+	B.SetBD(frame)
 	
 	-- 滚动到底部按钮
-	local scrollBtn = CreateFrame("Button", nil, frame, "TruncatedButtonTemplate")
-	scrollBtn:SetSize(24, 24)
-	scrollBtn:SetPoint("BOTTOMRIGHT", frame.Background, "BOTTOMRIGHT", -1, 6)
-	scrollBtn:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollEnd-Up")
-	scrollBtn:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollEnd-Down")
-	scrollBtn:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollEnd-Up")
+	local scrollBtn = CreateFrame("Button", nil, frame)
+	scrollBtn:SetSize(20, 20)
+	scrollBtn:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -5, 5)
+	scrollBtn:SetAlpha(0.5)
+	
+	-- 使用 NDui 的图标样式
+	local icon = scrollBtn:CreateTexture(nil, "ARTWORK")
+	icon:SetAllPoints()
+	icon:SetTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollEnd-Up")
+	scrollBtn.icon = icon
+	
 	scrollBtn:Hide()
+	scrollBtn:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
+	scrollBtn:SetScript("OnLeave", function(self) self:SetAlpha(0.5) end)
 	scrollBtn:SetScript("OnClick", function()
 		PlaySound(SOUNDKIT.IG_CHAT_BOTTOM)
 		frame:ScrollToBottom()
@@ -388,9 +392,8 @@ local function ShowKeywordMessage(self, event, msg, author, ...)
 	end
 	
 	-- 播放声音
-	if NDuiADB["KeywordMonitor"]["AudioEnabled"] and (time - lastSoundTime) > 30 and not InCombatLockdown() then
-		PlaySound(SOUNDKIT.TELL_MESSAGE, "Master")
-		lastSoundTime = time
+	if NDuiADB["KeywordMonitor"]["AudioEnabled"] then
+		PlaySoundFile("Interface\\AddOns\\NDui\\Audio\\FollowMsg_1.ogg", "Master")
 	end
 	
 	return false
@@ -421,29 +424,30 @@ function module:ToggleKeywordMonitor(enable)
 			-- 独立窗口模式
 			if not keywordFrame then
 				CreateKeywordFrame()
-				print("|cffFFFF00[NDui关键词]|r 创建独立窗口")
 			end
 			
 			if keywordFrame then
 				if NDuiADB["KeywordMonitor"]["CombatHide"] then
 					if not InCombatLockdown() then
 						keywordFrame:Show()
-						print("|cffFFFF00[NDui关键词]|r 显示独立窗口（非战斗）")
-					else
-						print("|cffFFFF00[NDui关键词]|r 战斗中，隐藏独立窗口")
 					end
 				else
 					keywordFrame:Show()
-					print("|cffFFFF00[NDui关键词]|r 显示独立窗口")
 				end
-			else
-				print("|cffFF0000[NDui关键词]|r 错误：独立窗口创建失败")
+			end
+		else
+			-- 系统聊天窗口模式：销毁独立窗口
+			if keywordFrame then
+				keywordFrame:Hide()
+				keywordFrame:SetParent(nil)
+				keywordFrame = nil
 			end
 		end
 		
 		-- 注册过滤器
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", ShowKeywordMessage)
 	else
+		-- 关闭监控时隐藏独立窗口
 		if keywordFrame then
 			keywordFrame:Hide()
 		end
