@@ -1,6 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="AlreadyKnown.lua"/>
-	<Script file="DragEmAll.lua"/>
-	<Script file="QuickQuest.lua"/>
-	<Script file="yClassColors.lua"/>
-</Ui>
