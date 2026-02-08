@@ -1236,8 +1236,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "UFs", "BuffClickThru", L["BuffClickThru"].."*", true, nil, updateRaidAurasOptions, L["ClickThroughTip"]},
 		--{3, "UFs", "RaidDebuffSize", L["RaidDebuffSize"].."*", nil, {5, 30, 1}, updateRaidAurasOptions},
 		--{3, "UFs", "RaidBuffSize", L["RaidBuffSize"].."*", true, {5, 30, 1}, updateRaidAurasOptions},
-		{3, "UFs", "PrivateSize", "PrivateAuras", nil, {5, 30, 1}},
-		{},--blank
+		--{},--blank
 		--{1, "UFs", "RaidBuffIndicator", HeaderTag..L["RaidBuffIndicator"].."*", nil, setupSpellsIndicator, updateRaidAurasOptions, L["RaidBuffIndicatorTip"]},
 		--{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"].."*", nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}, updateRaidAurasOptions},
 		--{3, "UFs", "BuffIndicatorScale", L["BuffIndicatorScale"].."*", true, {.8, 2, .1}, updateRaidAurasOptions},
@@ -1248,7 +1247,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, updateRaidAurasOptions},
 		--{},--blank
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
-		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
+		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"]},
+		{3, "UFs", "PrivateSize", "PrivateAuras", true, {5, 30, 1}},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], --[=[L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]]=]}, updateRaidTextScale, L["100PercentTip"]},
@@ -1332,12 +1332,12 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Auras", "HideBlizBuff", L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
 		{1, "Auras", "CDAnimation", L["CDAnimation"]},
 		{},--blank
-		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
+		--[[{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
 		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], nil, {.8, 2, .1}},
 		{3, "AuraWatch", "MinCD", L["AuraWatch MinCD"].."*", true, {1, 60, 1}, nil, L["MinCDTip"]},
-		{},--blank
+		{},--blank]]
 		{1, "Auras", "Totems", HeaderTag..L["Enable Totembar"]},
 		{1, "Auras", "VerticalTotems", L["VerticalTotems"].."*", nil, nil, refreshTotemBar},
 		{3, "Auras", "TotemSize", L["TotemSize"].."*", true, {24, 60, 1}, refreshTotemBar},
