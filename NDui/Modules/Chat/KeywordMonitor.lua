@@ -424,6 +424,26 @@ local function ShowKeywordMessage(self, event, msg, author, ...)
 	local time = GetServerTime()
 	local timeStr = date("%H:%M", time)
 	
+	-- 获取频道信息（使用第1个额外参数，即 select(1, ...)）
+	-- CHAT_MSG_CHANNEL 的参数：msg, author, language, channelString, ...
+	-- 其中 channelString 是第3个参数（在 ... 中是第1个）
+	local language = select(1, ...)        -- 语言
+	local channelString = select(2, ...)   -- 频道字符串（如 "1. 综合"）
+	local channelName = ""
+	
+	if channelString and channelString ~= "" then
+		-- 从 "1. 综合" 中提取 "综合"
+		local channelText = channelString:match("^%d+%. (.+)$")
+		if channelText then
+			channelName = string.format("[%s]", channelText)
+		else
+			-- 如果没有匹配到，直接使用原字符串
+			channelName = string.format("[%s]", channelString)
+		end
+	else
+		channelName = "[频道]"
+	end
+	
 	-- 获取职业颜色的玩家名
 	local coloredName = GetColoredName(event, msg, author, ...)
 	local playerLink = GetPlayerLink(author, "["..coloredName.."]")
@@ -448,14 +468,14 @@ local function ShowKeywordMessage(self, event, msg, author, ...)
 	-- 高亮关键词
 	outMsg = HighlightKeyword(outMsg, keyword)
 	
-	-- 构建输出消息
+	-- 构建输出消息（添加频道信息）
 	local output
 	if NDuiADB["KeywordMonitor"]["OutputMode"] == 1 then
-		-- 系统模式：添加 [关注] 标记
-		output = string.format("|cff808080%s|r [|cff00FF00关注|r] %s: %s", timeStr, playerLink, outMsg)
+		-- 系统模式：添加 [关注] 标记和频道信息
+		output = string.format("|cff808080%s|r |cffFFD700%s|r [|cff00FF00关注|r] %s: %s", timeStr, channelName, playerLink, outMsg)
 	else
-		-- 独立窗口模式
-		output = string.format("|cff808080%s|r %s: %s", timeStr, playerLink, outMsg)
+		-- 独立窗口模式：添加频道信息
+		output = string.format("|cff808080%s|r |cffFFD700%s|r %s: %s", timeStr, channelName, playerLink, outMsg)
 	end
 	
 	-- 根据输出模式显示（使用职业颜色）
