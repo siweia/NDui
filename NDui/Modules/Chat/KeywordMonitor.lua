@@ -145,25 +145,71 @@ end
 local function HighlightKeyword(msg, matchedKeyword)
 	if not matchedKeyword or not msg then return msg end
 	
-	-- 获取关键词字符串
-	local keyword = type(matchedKeyword) == "table" and matchedKeyword[1] or matchedKeyword
-	if not keyword or keyword == "" then return msg end
+	-- 获取需要高亮的关键词列表
+	local keywordsToHighlight = {}
 	
-	-- 简单实现：查找关键词并高亮（不区分大小写）
-	-- 注意：这个实现会忽略链接和颜色代码内的匹配
-	local upperMsg = upper(msg)
-	local upperKeyword = upper(keyword)
+	if type(matchedKeyword) == "string" then
+		-- 单个关键词
+		tinsert(keywordsToHighlight, matchedKeyword)
+	elseif type(matchedKeyword) == "table" then
+		-- 组合关键词，只高亮包含的关键词（不高亮排除的）
+		for _, kw in ipairs(matchedKeyword) do
+			if sub(kw, 1, 1) ~= "&" then
+				tinsert(keywordsToHighlight, kw)
+			end
+		end
+	end
 	
-	-- 查找关键词位置
-	local startPos = find(upperMsg, upperKeyword, 1, true)
-	if not startPos then return msg end
+	if #keywordsToHighlight == 0 then return msg end
 	
-	-- 提取原始大小写的关键词
-	local endPos = startPos + #keyword - 1
-	local originalKeyword = sub(msg, startPos, endPos)
+	-- 对每个关键词进行高亮
+	local result = msg
+	local upperResult = upper(result)
 	
-	-- 用绿色高亮替换
-	local result = sub(msg, 1, startPos - 1) .. "|cff00FF00" .. originalKeyword .. "|r" .. sub(msg, endPos + 1)
+	-- 收集所有需要高亮的位置（避免重叠）
+	local highlights = {}
+	
+	for _, keyword in ipairs(keywordsToHighlight) do
+		local upperKeyword = upper(keyword)
+		local searchPos = 1
+		
+		-- 查找所有出现的位置
+		while true do
+			local startPos = find(upperResult, upperKeyword, searchPos, true)
+			if not startPos then break end
+			
+			local endPos = startPos + #keyword - 1
+			
+			-- 检查是否与已有高亮重叠
+			local overlap = false
+			for _, hl in ipairs(highlights) do
+				if not (endPos < hl.startPos or startPos > hl.endPos) then
+					overlap = true
+					break
+				end
+			end
+			
+			if not overlap then
+				tinsert(highlights, {
+					startPos = startPos,
+					endPos = endPos,
+					keyword = keyword
+				})
+			end
+			
+			searchPos = startPos + 1
+		end
+	end
+	
+	-- 按位置排序（从后往前，避免位置偏移）
+	table.sort(highlights, function(a, b) return a.startPos > b.startPos end)
+	
+	-- 应用高亮
+	for _, hl in ipairs(highlights) do
+		local originalKeyword = sub(result, hl.startPos, hl.endPos)
+		local highlighted = "|cff00FF00" .. originalKeyword .. "|r"
+		result = sub(result, 1, hl.startPos - 1) .. highlighted .. sub(result, hl.endPos + 1)
+	end
 	
 	return result
 end
@@ -203,7 +249,8 @@ local function MatchKeywords(text)
 			end
 			
 			if allMatch then
-				return true, keyword[1]
+				-- 返回整个关键词表，而不是只返回第一个
+				return true, keyword
 			end
 		end
 	end
@@ -216,19 +263,57 @@ function module:UpdateKeywordList(keywordStr)
 	keywords = {}
 	if not keywordStr or keywordStr == "" then return end
 	
+	-- 统一替换中文逗号和加号
 	keywordStr = gsub(keywordStr, "，", ",")
+	keywordStr = gsub(keywordStr, "＋", "+")
+	
 	local list = SplitString(keywordStr, ",")
 	
 	for _, word in ipairs(list) do
-		if match(word, "&") or match(word, "#") then
+		-- 支持 #、+ 和 & 三种组合符号
+		if match(word, "&") or match(word, "#") or match(word, "+") then
 			-- 组合关键词
 			local subList = {}
-			for subWord in gmatch(word, "[^&#]+") do
-				subWord = gsub(subWord, "^%s*(.-)%s*$", "%1")
-				if subWord ~= "" then
-					tinsert(subList, upper(subWord))
+			
+			-- 手动解析，逐字符处理
+			local currentWord = ""
+			local isExclude = false
+			
+			for i = 1, #word do
+				local char = sub(word, i, i)
+				
+				if char == "+" or char == "#" then
+					-- 遇到 + 或 #，保存当前词（包含关键词）
+					currentWord = gsub(currentWord, "^%s*(.-)%s*$", "%1")
+					if currentWord ~= "" then
+						tinsert(subList, upper(currentWord))
+					end
+					currentWord = ""
+					isExclude = false
+				elseif char == "&" then
+					-- 遇到 &，保存当前词（包含关键词），下一个词是排除
+					currentWord = gsub(currentWord, "^%s*(.-)%s*$", "%1")
+					if currentWord ~= "" then
+						tinsert(subList, upper(currentWord))
+					end
+					currentWord = ""
+					isExclude = true
+				else
+					-- 普通字符，累加到当前词
+					currentWord = currentWord .. char
 				end
 			end
+			
+			-- 处理最后一个词
+			currentWord = gsub(currentWord, "^%s*(.-)%s*$", "%1")
+			if currentWord ~= "" then
+				if isExclude then
+					tinsert(subList, "&" .. upper(currentWord))
+				else
+					tinsert(subList, upper(currentWord))
+				end
+			end
+			
 			if #subList > 0 then
 				tinsert(keywords, subList)
 			end
@@ -477,7 +562,7 @@ local function CreateConfigFrame()
 	EnsureConfig()
 	
 	local frame = CreateFrame("Frame", "NDui_KeywordConfig", UIParent, "BackdropTemplate")
-	frame:SetSize(500, 450)
+	frame:SetSize(500, 480)
 	frame:SetPoint("CENTER")
 	frame:SetFrameStrata("DIALOG")
 	B.SetBD(frame)
@@ -523,14 +608,30 @@ local function CreateConfigFrame()
 		end)
 	end)
 	
-	-- 说明文字
-	local helpText = B.CreateFS(frame, 11, "关注关键字  用 , 分隔\nAA : 提取包含AA的内容\nAA#BB : 提取同时包含AA和BB的内容\nAA&CC : 提取包含AA但不包含CC的内容", false, "LEFT")
-	helpText:SetPoint("TOPLEFT", 20, -130)
-	helpText:SetTextColor(0, 1, 0)
+	-- 说明文字（分多行显示，更清晰）
+	local helpText1 = B.CreateFS(frame, 12, "关键词规则（用逗号分隔）：", false, "LEFT")
+	helpText1:SetPoint("TOPLEFT", 20, -130)
+	helpText1:SetTextColor(1, 0.8, 0)
+	
+	local helpText2 = B.CreateFS(frame, 11, "• 单个关键词：MC  →  匹配包含 MC 的消息", false, "LEFT")
+	helpText2:SetPoint("TOPLEFT", 30, -150)
+	helpText2:SetTextColor(0.7, 0.7, 0.7)
+	
+	local helpText3 = B.CreateFS(frame, 11, "• 同时包含（AND）：MC+FS 或 MC#FS  →  必须同时包含 MC 和 FS", false, "LEFT")
+	helpText3:SetPoint("TOPLEFT", 30, -165)
+	helpText3:SetTextColor(0, 1, 0)
+	
+	local helpText4 = B.CreateFS(frame, 11, "• 排除关键词：MC&ZS  →  包含 MC 但不包含 ZS", false, "LEFT")
+	helpText4:SetPoint("TOPLEFT", 30, -180)
+	helpText4:SetTextColor(0.7, 0.7, 0.7)
+	
+	local helpExample = B.CreateFS(frame, 11, "示例：MC+FS 可匹配 \"MC 24=1FS\" 但不匹配 \"MC 25=1\"", false, "LEFT")
+	helpExample:SetPoint("TOPLEFT", 30, -200)
+	helpExample:SetTextColor(0.5, 0.8, 1)
 	
 	-- 提示音设置
 	local audioCheck = B.CreateCheckBox(frame)
-	audioCheck:SetPoint("TOPLEFT", 20, -190)
+	audioCheck:SetPoint("TOPLEFT", 20, -230)
 	audioCheck:SetChecked(NDuiADB["KeywordMonitor"]["AudioEnabled"])
 	local audioLabel = B.CreateFS(frame, 13, "提示音", false, "LEFT")
 	audioLabel:SetPoint("LEFT", audioCheck, "RIGHT", 5, 0)
@@ -546,7 +647,7 @@ local function CreateConfigFrame()
 	
 	-- 继承过滤设置
 	local inheritCheck = B.CreateCheckBox(frame)
-	inheritCheck:SetPoint("TOPLEFT", 20, -225)
+	inheritCheck:SetPoint("TOPLEFT", 20, -260)
 	inheritCheck:SetChecked(NDuiADB["KeywordMonitor"]["InheritFilter"])
 	local inheritLabel = B.CreateFS(frame, 13, "继承过滤设置再提取", false, "LEFT")
 	inheritLabel:SetPoint("LEFT", inheritCheck, "RIGHT", 5, 0)
@@ -558,11 +659,11 @@ local function CreateConfigFrame()
 	
 	-- 输出方式
 	local outputLabel = B.CreateFS(frame, 14, "输出方式:", false, "LEFT")
-	outputLabel:SetPoint("TOPLEFT", 20, -260)
+	outputLabel:SetPoint("TOPLEFT", 20, -290)
 	
 	-- 系统聊天窗口
 	local systemRadio = B.CreateCheckBox(frame)
-	systemRadio:SetPoint("TOPLEFT", 40, -285)
+	systemRadio:SetPoint("TOPLEFT", 40, -315)
 	systemRadio:SetChecked(NDuiADB["KeywordMonitor"]["OutputMode"] == 1)
 	local systemLabel = B.CreateFS(frame, 13, "系统聊天窗口", false, "LEFT")
 	systemLabel:SetPoint("LEFT", systemRadio, "RIGHT", 5, 0)
@@ -576,7 +677,7 @@ local function CreateConfigFrame()
 	
 	-- 输出到聊天窗口选择（下拉菜单）
 	local chatFrameLabel = B.CreateFS(frame, 13, "输出到聊天窗口", false, "LEFT")
-	chatFrameLabel:SetPoint("TOPLEFT", 60, -315)
+	chatFrameLabel:SetPoint("TOPLEFT", 60, -345)
 	
 	-- 创建下拉菜单
 	local chatFrameDropdown = CreateFrame("Frame", nil, frame, "BackdropTemplate")
@@ -741,7 +842,7 @@ local function CreateConfigFrame()
 	
 	-- 提取成功窗口标签闪动
 	local flashCheck = B.CreateCheckBox(frame)
-	flashCheck:SetPoint("TOPLEFT", 60, -345)
+	flashCheck:SetPoint("TOPLEFT", 60, -375)
 	flashCheck:SetChecked(NDuiADB["KeywordMonitor"]["FlashOnMatch"])
 	local flashLabel = B.CreateFS(frame, 13, "提取成功窗口标签闪动", false, "LEFT")
 	flashLabel:SetPoint("LEFT", flashCheck, "RIGHT", 5, 0)
@@ -753,7 +854,7 @@ local function CreateConfigFrame()
 	
 	-- 战斗中隐藏独立窗口
 	local combatHideCheck = B.CreateCheckBox(frame)
-	combatHideCheck:SetPoint("TOPLEFT", 60, -375)
+	combatHideCheck:SetPoint("TOPLEFT", 60, -405)
 	combatHideCheck:SetChecked(NDuiADB["KeywordMonitor"]["CombatHide"])
 	local combatHideLabel = B.CreateFS(frame, 13, "战斗中隐藏独立窗口", false, "LEFT")
 	combatHideLabel:SetPoint("LEFT", combatHideCheck, "RIGHT", 5, 0)
@@ -772,7 +873,11 @@ local function CreateConfigFrame()
 		if isEnabled then
 			keywordBox:Show()
 			keywordLabel:Show()
-			helpText:Show()
+			helpText1:Show()
+			helpText2:Show()
+			helpText3:Show()
+			helpText4:Show()
+			helpExample:Show()
 			audioCheck:Show()
 			audioLabel:Show()
 			audioText:Show()
@@ -802,7 +907,11 @@ local function CreateConfigFrame()
 		else
 			keywordBox:Hide()
 			keywordLabel:Hide()
-			helpText:Hide()
+			helpText1:Hide()
+			helpText2:Hide()
+			helpText3:Hide()
+			helpText4:Hide()
+			helpExample:Hide()
 			audioCheck:Hide()
 			audioLabel:Hide()
 			audioText:Hide()
@@ -998,6 +1107,28 @@ function module:InitKeywordMonitor()
 			else
 				print("|cff00FF00[NDui]|r 用法: /keyword set 关键词1,关键词2")
 			end
+		elseif cmd == "debug" or cmd == "调试" then
+			-- 显示当前解析的关键词列表
+			print("|cff00FF00[NDui 关键词调试]|r")
+			if #keywords == 0 then
+				print("  当前没有设置关键词")
+			else
+				for i, kw in ipairs(keywords) do
+					if type(kw) == "string" then
+						print(string.format("  [%d] 单个: %s", i, kw))
+					elseif type(kw) == "table" then
+						local parts = {}
+						for _, subKw in ipairs(kw) do
+							if sub(subKw, 1, 1) == "&" then
+								tinsert(parts, "|cffFF0000排除:" .. sub(subKw, 2) .. "|r")
+							else
+								tinsert(parts, "|cff00FF00包含:" .. subKw .. "|r")
+							end
+						end
+						print(string.format("  [%d] 组合: %s", i, table.concat(parts, " ")))
+					end
+				end
+			end
 		elseif cmd == "config" or cmd == "配置" or cmd == "" then
 			if not configFrame then
 				CreateConfigFrame()
@@ -1012,6 +1143,7 @@ function module:InitKeywordMonitor()
 			print("  /keyword on - 开启监控")
 			print("  /keyword off - 关闭监控")
 			print("  /keyword set 关键词1,关键词2 - 设置关键词")
+			print("  /keyword debug - 显示当前关键词解析结果")
 			print("  /keyword config - 打开配置界面")
 		end
 	end
