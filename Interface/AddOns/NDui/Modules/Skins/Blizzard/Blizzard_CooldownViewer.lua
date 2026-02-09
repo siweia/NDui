@@ -69,8 +69,8 @@ local dispelIndex = {
 	[2] = DEBUFF_TYPE_CURSE_COLOR,
 	[3] = DEBUFF_TYPE_DISEASE_COLOR,
 	[4] = DEBUFF_TYPE_POISON_COLOR,
-	[5] = DEBUFF_TYPE_BLEED_COLOR,
-	[6] = CreateColor(243, 95, 245),
+	[9] = CreateColor(243, 95, 245),
+	[11] = DEBUFF_TYPE_BLEED_COLOR,
 };
 local borderCurve = C_CurveUtil.CreateColorCurve()
 borderCurve:SetType(Enum.LuaCurveType.Step)
