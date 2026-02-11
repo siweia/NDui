@@ -482,6 +482,8 @@ G.DefaultSettings = {
 		GreyBD = false,
 		FontScale = 1,
 		QuestTracker = true,
+		CooldownMgr = true,
+		DamageMeter = true,
 	},
 	Tooltip = {
 		HideInCombat = 1,
@@ -1149,7 +1151,7 @@ end
 
 G.TabList = {
 	L["Actionbar"],
-	IsNew..L["Bags"],
+	L["Bags"],
 	L["Unitframes"],
 	L["RaidFrame"],
 	L["Nameplate"],
@@ -1158,7 +1160,7 @@ G.TabList = {
 	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
-	L["Skins"],
+	IsNew..L["Skins"],
 	L["Tooltip"],
 	L["Misc"],
 	L["UI Settings"],
@@ -1316,7 +1318,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
 		--{1, "Avada", "Enable", IsNew..HeaderTag..L["Enable ClassAuras"].."*", nil, toggleAvadaGUI, toggleAvada},
-		{1, "Nameplate", "PPHealthBar", L["PlayerPlate HealthBar"].."*", nil, nil, togglePlateHealth},
+		{1, "Nameplate", "PPHealthBar", IsNew..L["PlayerPlate HealthBar"].."*", nil, nil, togglePlateHealth},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
@@ -1430,6 +1432,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "FontOutline", L["FontOutline"], true},
 		{1, "Skins", "BgTex", L["BgTex"]},
 		{1, "Skins", "GreyBD", L["GreyBackdrop"], true, nil, nil, L["GreyBackdropTip"]},
+		{1, "Skins", "CooldownMgr", IsNew..ENABLE_COOLDOWN_VIEWER},
+		{1, "Skins", "DamageMeter", IsNew..ENABLE_DAMAGE_METER, true},
 		{3, "Skins", "SkinAlpha", L["SkinAlpha"].."*", nil, {0, 1, .05}, updateSkinAlpha},
 		{3, "Skins", "FontScale", L["GlobalFontScale"], true, {.5, 1.5, .05}},
 		{},--blank

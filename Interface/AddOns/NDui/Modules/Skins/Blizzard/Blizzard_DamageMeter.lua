@@ -49,6 +49,8 @@ local function ReskinMeterWindow(frame)
 end
 
 C.themes["Blizzard_DamageMeter"] = function()
+	if not C.db["Skins"]["DamageMeter"] then return end
+
 	hooksecurefunc(DamageMeter, "SetupSessionWindow", function(_, windowData)
 		ReskinMeterWindow(windowData.sessionWindow)
 	end)

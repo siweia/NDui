@@ -56,12 +56,6 @@ local function updateButtons(frame)
 	end
 end
 
-local conflictAddOns = {
-	["BetterCooldownManager"] = true,
-	["CooldownManagerCentered"] = true,
-	["NephUI Cooldown Manager"] = true,
-}
-
 -- Dispel type border colors
 local dispelIndex = {
 	[0] = CreateColor(0, 0, 0),
@@ -120,14 +114,7 @@ C.themes["Blizzard_CooldownViewer"] = function()
 		end)
 	end
 
-	local hasConflict = false
-	for addonName in pairs(conflictAddOns) do
-		if C_AddOns.IsAddOnLoaded(addonName) then
-			hasConflict = true
-			break
-		end
-	end
-	if hasConflict then return end
+	if not C.db["Skins"]["CooldownMgr"] then return end
 
 	local function reskinCooldownItem(self)
 		for itemFrame in self.itemFramePool:EnumerateActive() do
