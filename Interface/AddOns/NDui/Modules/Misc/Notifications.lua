@@ -6,7 +6,7 @@ local format, gsub, strsplit, strfind = string.format, string.gsub, string.split
 local pairs, wipe, select = pairs, wipe, select
 local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsInRaid, IsInGroup, IsInInstance, IsInGuild
-local UnitInRaid, UnitInParty, SendChatMessage = UnitInRaid, UnitInParty, SendChatMessage
+local UnitInRaid, UnitInParty = UnitInRaid, UnitInParty
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
 local GetSpellLink = C_Spell.GetSpellLink
 local GetSpellName = C_Spell.GetSpellName
@@ -24,6 +24,7 @@ local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneI
 local function IsRandomGroup()
 	return IsPartyLFG() or C_PartyInfo.IsPartyWalkIn()
 end
+
 --[[
 	SoloInfo是一个告知你当前副本难度的小工具，防止我有时候单刷时进错难度了。
 	instList左侧是副本ID，你可以使用"/getid"命令来获取当前副本的ID；右侧的是副本难度，常用的一般是：2为5H，4为25普通，6为25H。
@@ -254,7 +255,7 @@ function M:InterruptAlert_Update(...)
 			end
 
 			if sourceSpellID and destSpellID then
-				SendChatMessage(format(infoText, sourceName..GetSpellLink(sourceSpellID), destName..GetSpellLink(destSpellID)), M:GetMsgChannel())
+				B:SendChatMessage(format(infoText, sourceName..GetSpellLink(sourceSpellID), destName..GetSpellLink(destSpellID)), M:GetMsgChannel())
 			end
 		end
 	end
@@ -447,7 +448,7 @@ function M:ItemAlert_Update(unit, castID, spellID)
 	if C.db["Misc"]["LeaderOnly"] and not (UnitIsGroupAssistant("player") or UnitIsGroupLeader("player")) then return end -- only alert for leader, needs review
 
 	if groupUnits[unit] and spellList[spellID] and (spellList[spellID] ~= castID) then
-		SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellName(spellID)), M:GetMsgChannel())
+		B:SendChatMessage(format(L["SpellItemAlertStr"], UnitName(unit), GetSpellLink(spellID) or GetSpellName(spellID)), M:GetMsgChannel())
 		spellList[spellID] = castID
 	end
 end
@@ -465,7 +466,7 @@ function M:CheckBloodlustStatus(...)
 
 	local _, eventType, _, sourceGUID, _, _, _, _, _, _, _, spellID = ...
 	if eventType == "SPELL_AURA_REMOVED" and bloodLustDebuffs[spellID] and sourceGUID == myGUID then
-		SendChatMessage(format(L["BloodlustStr"], GetSpellLink(spellID), M.factionSpell), M:GetMsgChannel())
+		B:SendChatMessage(format(L["BloodlustStr"], GetSpellLink(spellID), M.factionSpell), M:GetMsgChannel())
 	end
 end
 
@@ -572,9 +573,9 @@ function M:SendCurrentSpell(thisTime, spellID)
 	if charges and maxCharges then
 		if charges ~= maxCharges then
 			local remain = chargeStart + chargeDuration - thisTime
-			SendChatMessage(format(L["ChargesRemaining"], spellLink, charges, maxCharges, GetRemainTime(remain)), M:GetMsgChannel())
+			B:SendChatMessage(format(L["ChargesRemaining"], spellLink, charges, maxCharges, GetRemainTime(remain)), M:GetMsgChannel())
 		else
-			SendChatMessage(format(L["ChargesCompleted"], spellLink, charges, maxCharges), M:GetMsgChannel())
+			B:SendChatMessage(format(L["ChargesCompleted"], spellLink, charges, maxCharges), M:GetMsgChannel())
 		end
 	else
 		local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
@@ -583,9 +584,9 @@ function M:SendCurrentSpell(thisTime, spellID)
 
 		if start and duration > 0 then
 			local remain = start + duration - thisTime
-			SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())
+			B:SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())
 		else
-			SendChatMessage(format(L["CooldownCompleted"], spellLink), M:GetMsgChannel())
+			B:SendChatMessage(format(L["CooldownCompleted"], spellLink), M:GetMsgChannel())
 		end
 	end
 end
@@ -594,9 +595,9 @@ function M:SendCurrentItem(thisTime, itemID, itemLink, itemCount)
 	local start, duration = C_Item.GetItemCooldown(itemID)
 	if start and duration > 0 then
 		local remain = start + duration - thisTime
-		SendChatMessage(format(L["CooldownRemaining"], itemLink.." x"..itemCount, GetRemainTime(remain)), M:GetMsgChannel())
+		B:SendChatMessage(format(L["CooldownRemaining"], itemLink.." x"..itemCount, GetRemainTime(remain)), M:GetMsgChannel())
 	else
-		SendChatMessage(format(L["CooldownCompleted"], itemLink.." x"..itemCount), M:GetMsgChannel())
+		B:SendChatMessage(format(L["CooldownCompleted"], itemLink.." x"..itemCount), M:GetMsgChannel())
 	end
 end
 
