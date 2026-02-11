@@ -65,6 +65,8 @@ function UF:Castbar_FailedColor(unit, interruptedBy)
 		self.Text:SetText(INTERRUPTED.." > "..sourceName)
 		self.Text:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
 		self.Time:SetText("")
+	else
+		self.Text:SetTextColor(1, 1, 1)
 	end
 end
 
