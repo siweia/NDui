@@ -316,6 +316,13 @@ G.DefaultSettings = {
 		BossBuffPerRow = 6,
 		BossDebuffPerRow = 6,
 
+		RaidNumBuff = 6,
+		RaidNumDebuff = 6,
+		RaidBuffType = 2,
+		RaidDebuffType = 2,
+		RaidBuffPerRow = 2,
+		RaidDebuffPerRow = 2,
+
 		PlayerAuraDirec = 3,
 		PlayerAuraOffset = 10,
 		TargetAuraDirec = 1,
@@ -1024,6 +1031,10 @@ local function refreseExecuteRatio()
 	B:GetModule("UnitFrames"):UpdateExcutedCurve()
 end
 
+local function updateUFAuras()
+	B:GetModule("UnitFrames"):UpdateUFAuras()
+end
+
 local function updateMinimapScale()
 	B:GetModule("Maps"):UpdateMinimapScale()
 end
@@ -1251,6 +1262,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"]},
 		{3, "UFs", "PrivateSize", "PrivateAuras", true, {5, 30, 1}},
+		{4, "UFs", "RaidBuffType", "RaidBuffType".."*", nil, {DISABLE, "Blizzard", "Defensive"}, updateUFAuras},
+		{4, "UFs", "RaidDebuffType", "RaidDebuffType".."*", true, {DISABLE, "Blizzard", "Dispellable"}, updateUFAuras},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], --[=[L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]]=]}, updateRaidTextScale, L["100PercentTip"]},

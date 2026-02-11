@@ -170,6 +170,8 @@ local function CreateRaidStyle(self)
 	--	UF:CreateRaidAuras(self)
 	--end
 	UF:CreatePrivateAuras(self)
+	UF:CreateBuffs(self)
+	UF:CreateDebuffs(self)
 end
 
 local function CreateSimpleRaidStyle(self)
@@ -415,7 +417,7 @@ function UF:OnLogin()
 		UF:ToggleAllAuras()
 		UF:TogglePortraits()
 		UF:CheckPowerBars()
-		UF:UpdateRaidInfo() -- RaidAuras
+		--UF:UpdateRaidInfo() -- RaidAuras
 		UF:UpdateCastBarColors()
 	end
 
