@@ -5,7 +5,8 @@ if not C.Infobar.Spec then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Spec", C.Infobar.SpecPos)
 local format, strsub = string.format, strsub
-local TALENT, SHOW_SPEC_LEVEL, FEATURE_BECOMES_AVAILABLE_AT_LEVEL, NONE = TALENT, SHOW_SPEC_LEVEL, FEATURE_BECOMES_AVAILABLE_AT_LEVEL, NONE
+local SHOW_SPEC_LEVEL = SHOW_SPEC_LEVEL or 10
+local TALENT, FEATURE_BECOMES_AVAILABLE_AT_LEVEL, NONE = TALENT, FEATURE_BECOMES_AVAILABLE_AT_LEVEL, NONE
 local UnitLevel, ToggleTalentFrame, UnitCharacterPoints = UnitLevel, ToggleTalentFrame, UnitCharacterPoints
 local talentString = "%s (%s)"
 local unspendPoints = gsub(CHARACTER_POINTS1_COLON, HEADER_COLON, "")
