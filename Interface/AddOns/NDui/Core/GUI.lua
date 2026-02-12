@@ -320,8 +320,8 @@ G.DefaultSettings = {
 		RaidNumDebuff = 6,
 		RaidBuffType = 2,
 		RaidDebuffType = 2,
-		RaidBuffPerRow = 10,
-		RaidDebuffPerRow = 10,
+		RaidBuffPerRow = 7,
+		RaidDebuffPerRow = 7,
 
 		PlayerAuraDirec = 3,
 		PlayerAuraOffset = 10,
@@ -708,8 +708,8 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	InitialSettings(G.DefaultSettings, C.db, true)
 
 	if not C.db["Reset3"] then
-		C.db["UFs"]["RaidBuffPerRow"] = 3
-		C.db["UFs"]["RaidDebuffPerRow"] = 3
+		C.db["UFs"]["RaidBuffPerRow"] = 7
+		C.db["UFs"]["RaidDebuffPerRow"] = 7
 		C.db["UFs"]["Portrait"] = false
 		C.db["Reset3"] = true
 	end
@@ -1166,7 +1166,7 @@ G.TabList = {
 	L["Actionbar"],
 	L["Bags"],
 	L["Unitframes"],
-	L["RaidFrame"],
+	IsNew..L["RaidFrame"],
 	L["Nameplate"],
 	IsNew..L["PlayerPlate"],
 	L["Auras"],
@@ -1263,11 +1263,13 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{},--blank
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"]},
-		{3, "UFs", "PrivateSize", "PrivateAuras", true, {5, 30, 1}},
-		{4, "UFs", "RaidBuffType", "RaidBuffType".."*", nil, {DISABLE, "Blizzard", "Defensive"}, updateUFAuras},
-		{4, "UFs", "RaidDebuffType", "RaidDebuffType".."*", true, {DISABLE, "Blizzard", "Dispellable"}, updateUFAuras},
-		{3, "UFs", "RaidBuffPerRow", "RaidBuffPerRow".."*", nil, {1, 20, 1}, updateUFAuras},
-		{3, "UFs", "RaidDebuffPerRow", "RaidDebuffPerRow".."*", true, {1, 20, 1}, updateUFAuras},
+		{3, "UFs", "PrivateSize", L["PrivateAuras"], true, {5, 30, 1}},
+		{4, "UFs", "RaidBuffType", L["RaidBuffType"].."*", nil, {DISABLE, "Blizzard", "Defensive"}, updateUFAuras},
+		{4, "UFs", "RaidDebuffType", L["RaidDebuffType"].."*", true, {DISABLE, "Blizzard", "Dispellable"}, updateUFAuras},
+		{3, "UFs", "RaidBuffPerRow", L["RaidBuffPerRow"].."*", nil, {1, 20, 1}, updateUFAuras},
+		{3, "UFs", "RaidDebuffPerRow", L["RaidDebuffPerRow"].."*", true, {1, 20, 1}, updateUFAuras},
+		{3, "UFs", "RaidNumBuff", L["MaxBuffs"].."*", nil, {1, 20, 1}, updateUFAuras},
+		{3, "UFs", "RaidNumDebuff", L["MaxDebuffs"].."*", true, {1, 20, 1}, updateUFAuras},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], --[=[L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]]=]}, updateRaidTextScale, L["100PercentTip"]},
