@@ -9,7 +9,7 @@ local guiTab, guiPage, f = {}, {}
 
 -- Default Settings
 G.DefaultSettings = {
-	Reset2 = false,
+	Reset3 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -320,8 +320,8 @@ G.DefaultSettings = {
 		RaidNumDebuff = 6,
 		RaidBuffType = 2,
 		RaidDebuffType = 2,
-		RaidBuffPerRow = 2,
-		RaidDebuffPerRow = 2,
+		RaidBuffPerRow = 3,
+		RaidDebuffPerRow = 3,
 
 		PlayerAuraDirec = 3,
 		PlayerAuraOffset = 10,
@@ -707,9 +707,10 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
 
-	if not C.db["Reset2"] then
-		C.db["Actionbar"]["MBPerRow"] = 13
-		C.db["Reset2"] = true
+	if not C.db["Reset3"] then
+		C.db["UFs"]["RaidBuffPerRow"] = 3
+		C.db["UFs"]["RaidDebuffPerRow"] = 3
+		C.db["Reset3"] = true
 	end
 
 	B:SetupUIScale(true)
@@ -1264,6 +1265,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "UFs", "PrivateSize", "PrivateAuras", true, {5, 30, 1}},
 		{4, "UFs", "RaidBuffType", "RaidBuffType".."*", nil, {DISABLE, "Blizzard", "Defensive"}, updateUFAuras},
 		{4, "UFs", "RaidDebuffType", "RaidDebuffType".."*", true, {DISABLE, "Blizzard", "Dispellable"}, updateUFAuras},
+		{3, "UFs", "RaidBuffPerRow", "RaidBuffPerRow".."*", nil, {1, 6, 1}, updateUFAuras},
+		{3, "UFs", "RaidDebuffPerRow", "RaidDebuffPerRow".."*", true, {1, 6, 1}, updateUFAuras},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], --[=[L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]]=]}, updateRaidTextScale, L["100PercentTip"]},

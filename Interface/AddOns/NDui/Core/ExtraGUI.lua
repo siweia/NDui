@@ -1199,6 +1199,7 @@ function G:SetupRaidFrame(parent)
 			if frame.mystyle == "raid" and not frame.raidType then
 				SetUnitFrameSize(frame, "Raid")
 				UF.UpdateRaidNameAnchor(frame, frame.nameText)
+				UF:RefreshBuffAndDebuff(frame)
 			end
 		end
 		if UF.CreateAndUpdateRaidHeader then
@@ -1280,6 +1281,7 @@ function G:SetupPartyFrame(parent)
 			if frame.raidType == "party" then
 				SetUnitFrameSize(frame, "Party")
 				UF.UpdateRaidNameAnchor(frame, frame.nameText)
+				UF:RefreshBuffAndDebuff(frame)
 			end
 		end
 		if UF.CreateAndUpdatePartyHeader then
