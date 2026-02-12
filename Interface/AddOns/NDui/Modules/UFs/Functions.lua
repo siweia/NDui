@@ -1359,7 +1359,8 @@ function UF:CreateClassPower(self)
 		if not isDK then
 			bars[i].cover = bars[i]:CreateTexture(nil, "ARTWORK", nil, 5)
 			bars[i].cover:SetAllPoints(bars[i])
-			bars[i].cover:SetAtlas("ui-castingbar-interrupted")
+			bars[i].cover:SetTexture(DB.normTex)
+			bars[i].cover:SetVertexColor(1, 0, 0)
 			bars[i].cover:Hide()
 		end
 
