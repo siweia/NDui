@@ -710,6 +710,7 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	if not C.db["Reset3"] then
 		C.db["UFs"]["RaidBuffPerRow"] = 3
 		C.db["UFs"]["RaidDebuffPerRow"] = 3
+		C.db["UFs"]["Portrait"] = false
 		C.db["Reset3"] = true
 	end
 
