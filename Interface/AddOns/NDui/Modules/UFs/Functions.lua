@@ -871,11 +871,10 @@ function UF.PostCreateButton(element, button)
 	button.Cooldown:SetReverse(true)
 	button.CooldownText = button.Cooldown:GetRegions()
 	button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
-	local needShadow = true
-	if element.__owner.mystyle == "raid" and not C.db["UFs"]["RaidBuffIndicator"] then
-		needShadow = false
-	end
-	button.iconbg = B.ReskinIcon(button.Icon, needShadow)
+
+	local isRaid = element.__owner.mystyle == "raid"
+	button.Cooldown:SetHideCountdownNumbers(isRaid)
+	button.iconbg = B.ReskinIcon(button.Icon, not isRaid)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
