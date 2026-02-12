@@ -146,6 +146,11 @@ local function ShouldHideInCombat()
 	end
 end
 
+local function CheckUnitStatus(func, unit, text)
+	local status = func(unit)
+	return B:NotSecretValue(status) and status and text
+end
+
 function TT:OnTooltipSetUnit()
 	if self:IsForbidden() or self ~= GameTooltip then return end
 
@@ -178,7 +183,7 @@ function TT:OnTooltipSetUnit()
 			end
 		end
 
-		local status = (UnitIsAFK(unit) and AFK) or (UnitIsDND(unit) and DND) or (not UnitIsConnected(unit) and PLAYER_OFFLINE)
+		local status = CheckUnitStatus(UnitIsAFK, unit, AFK) or CheckUnitStatus(UnitIsDND, unit, DND) or (not UnitIsConnected(unit) and PLAYER_OFFLINE)
 		if status then
 			status = format(" |cffffcc00[%s]|r", status)
 		end

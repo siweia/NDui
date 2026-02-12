@@ -13,40 +13,9 @@ local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIs
 local GetNumArenaOpponentSpecs, GetCreatureDifficultyColor = GetNumArenaOpponentSpecs, GetCreatureDifficultyColor
 local UnitClassBase = UnitClassBase
 local TruncateWhenZero = C_StringUtil.TruncateWhenZero
-local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
 
 -- Add scantip back, due to issue on ColorMixin
 local scanTip = CreateFrame("GameTooltip", "NDui_ScanTooltip", nil, "GameTooltipTemplate")
-
-local function ColorPercent(value)
-	local r, g, b
-	if value < 20 then
-		r, g, b = 1, .1, .1
-	elseif value < 35 then
-		r, g, b = 1, .5, 0
-	elseif value < 80 then
-		r, g, b = 1, .9, .3
-	else
-		r, g, b = 1, 1, 1
-	end
-	return B.HexRGB(r, g, b)..value
-end
-
-local function ValueAndPercent(cur, per)
---	if per < 100 then
-		return B.Numb(cur).." | "..per
-	--else
-	--	return B.Numb(cur)
-	--end
-end
-
-local function GetCurrentAndMax(cur, max)
-	if cur == max then
-		return B.Numb(max)
-	else
-		return B.Numb(cur).." | "..B.Numb(max)
-	end
-end
 
 oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 	if UnitIsDeadOrGhost(unit) or not UnitIsConnected(unit) then
@@ -123,11 +92,15 @@ oUF.Tags.Methods["color"] = function(unit)
 end
 oUF.Tags.Events["color"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED"
 
+local function CheckUnitStatus(func, unit)
+	local status = func(unit)
+	return B:NotSecretValue(status) and status
+end
+
 oUF.Tags.Methods["afkdnd"] = function(unit)
-	if ShouldUnitIdentityBeSecret(unit) then return end
-	if UnitIsAFK(unit) then
+	if CheckUnitStatus(UnitIsAFK, unit) then
 		return "|cffCFCFCF <"..AFK..">|r"
-	elseif UnitIsDND(unit) then
+	elseif CheckUnitStatus(UnitIsDND, unit) then
 		return "|cffCFCFCF <"..DND..">|r"
 	else
 		return ""
