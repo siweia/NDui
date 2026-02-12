@@ -1008,15 +1008,10 @@ end
 
 function UF:UpdateAuraContainer(parent, element, maxAuras)
 	local width = parent:GetWidth()
-	local height = parent.Health:GetHeight() - 4
 	local iconsPerRow = element.maxCols
 	local maxLines = iconsPerRow and B:Round(maxAuras/iconsPerRow) or 2
-	element.size = iconsPerRow and auraIconSize(element.isVerticle and height or width, iconsPerRow, element.spacing) or element.size
-	if element.isVerticle then
-		element:SetSize((element.size + element.spacing) * maxLines, width)
-	else
-		element:SetSize(width, (element.size + element.spacing) * maxLines)
-	end
+	element.size = iconsPerRow and auraIconSize(width, iconsPerRow, element.spacing) or element.size
+	element:SetSize(width, (element.size + element.spacing) * maxLines)
 
 	local fontSize = element.fontSize or element.size*.6
 	for i = 1, #element do
@@ -1187,32 +1182,9 @@ function UF:CreateAuras(self)
 	self.Auras = bu
 end
 
-function UF.RaidAuras_SetPosition(element, from, to)
-	local width = element.size or 16
-	local height = element.size or 16
-	local sizeX = width + element.spacing
-	local sizeY = height + element.spacing
-	local anchor = element.initialAnchor
-	local growthX = (element.growthX == "LEFT" and -1) or 1
-	local growthY = (element.growthY == "DOWN" and -1) or 1
-	local cols = element.maxCols
-
-	for i = from, to do
-		local button = element[i]
-		if(not button) then break end
-
-		local row = (i - 1) % cols
-		local col = math.floor((i - 1) / cols)
-
-		button:ClearAllPoints()
-		button:SetPoint(anchor, element, anchor, col * sizeX * growthX, row * sizeY * growthY)
-	end
-end
-
 function UF:CreateBuffs(self)
 	local mystyle = self.mystyle
 	local bu = CreateFrame("Frame", nil, self)
-	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 	if mystyle == "raid" then
 		bu.initialAnchor = "TOPLEFT"
@@ -1220,9 +1192,7 @@ function UF:CreateBuffs(self)
 		bu["growthY"] = "DOWN"
 		bu.__value = "Raid"
 		bu:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
-		bu.isVerticle = true
 		bu.disableMouse = true
-		bu.SetPosition = UF.RaidAuras_SetPosition
 		bu.spacing = 2
 		bu.FilterAura = UF.RaidCustomFilter
 	else
@@ -1231,6 +1201,7 @@ function UF:CreateBuffs(self)
 		bu["growthY"] = "UP"
 		bu.__value = "Boss"
 		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+		bu.spacing = 3
 		bu.FilterAura = UF.UnitCustomFilter
 	end
 
@@ -1247,18 +1218,16 @@ end
 function UF:CreateDebuffs(self)
 	local mystyle = self.mystyle
 	local bu = CreateFrame("Frame", nil, self)
-	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 	bu.showDebuffType = true
 	if mystyle == "raid" then
-		bu.initialAnchor = "TOPRIGHT"
+		bu.initialAnchor = "BOTTOMRIGHT"
 		bu["growthX"] = "LEFT"
-		bu["growthY"] = "DOWN"
+		bu["growthY"] = "UP"
 		bu.__value = "Raid"
-		bu:SetPoint("TOPRIGHT", self, "TOPRIGHT", -2, -2)
-		bu.isVerticle = true
+		bu:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
 		bu.disableMouse = true
-		bu.SetPosition = UF.RaidAuras_SetPosition
+		bu.spacing = 2
 		bu.FilterAura = UF.RaidCustomFilter
 	else
 		bu.initialAnchor = "TOPRIGHT"
@@ -1266,6 +1235,7 @@ function UF:CreateDebuffs(self)
 		bu["growthY"] = "DOWN"
 		bu.__value = "Boss"
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
+		bu.spacing = 3
 		bu.FilterAura = UF.UnitCustomFilter
 	end
 
