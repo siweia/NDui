@@ -105,11 +105,6 @@ local function handleFrame(baseName, doNotReparent, isNamePlate)
 			totFrame:UnregisterAllEvents()
 		end
 
-		local classPowerBar = frame.classPowerBar
-		if(classPowerBar) then
-			classPowerBar:UnregisterAllEvents()
-		end
-
 		local ccRemoverFrame = frame.CcRemoverFrame
 		if(ccRemoverFrame) then
 			ccRemoverFrame:UnregisterAllEvents()

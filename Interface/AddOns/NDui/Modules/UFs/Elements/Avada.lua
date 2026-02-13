@@ -282,8 +282,6 @@ function UF:Avada_OnAura(unit)
 end
 
 function UF:Avada_Toggle(frame)
-	if DB.isNewPatch then return end
-
 	frame = frame or oUF_PlayerPlate
 	if not frame then return end
 

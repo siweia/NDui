@@ -504,4 +504,4 @@ SlashCmdList["NDUI_AWCONFIG"] = function()
 	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 	CreatePanel()
 end
-SLASH_NDUI_AWCONFIG1 = "/ww"
+--SLASH_NDUI_AWCONFIG1 = "/ww"

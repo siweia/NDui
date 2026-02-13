@@ -457,6 +457,7 @@ function module:RecycleBin()
 end
 
 function module:WhoPingsMyMap()
+	if DB.isNewPatch then return end -- 12.0.1 no more ping info
 	if not C.db["Map"]["WhoPings"] then return end
 
 	local f = CreateFrame("Frame", nil, Minimap)
@@ -618,8 +619,6 @@ function module:Minimap_OnMouseUp(btn)
 				button.menu:SetPoint("CENTER", self, -100, 100)
 			end
 		end
-	else
-		Minimap:OnClick()
 	end
 end
 
@@ -676,9 +675,12 @@ function module:SetupMinimap()
 	self:ShowCalendar()
 
 	-- Minimap clicks
-	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
-	Minimap:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
+	local clicker = CreateFrame("Frame", "NDui_MinimapClicker", Minimap)
+	clicker:SetPassThroughButtons("LeftButton")
+	clicker:SetPropagateMouseMotion(true)
+	clicker:SetAllPoints()
+	clicker:SetScript("OnMouseWheel", module.Minimap_OnMouseWheel)
+	clicker:SetScript("OnMouseUp", module.Minimap_OnMouseUp)
 
 	-- Hide Blizz
 	MinimapCluster:EnableMouse(false)

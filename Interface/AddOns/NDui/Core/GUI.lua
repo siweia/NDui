@@ -9,7 +9,7 @@ local guiTab, guiPage, f = {}, {}
 
 -- Default Settings
 G.DefaultSettings = {
-	Reset2 = false,
+	Reset3 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -316,6 +316,13 @@ G.DefaultSettings = {
 		BossBuffPerRow = 6,
 		BossDebuffPerRow = 6,
 
+		RaidNumBuff = 6,
+		RaidNumDebuff = 6,
+		RaidBuffType = 2,
+		RaidDebuffType = 2,
+		RaidBuffPerRow = 7,
+		RaidDebuffPerRow = 7,
+
 		PlayerAuraDirec = 3,
 		PlayerAuraOffset = 10,
 		TargetAuraDirec = 1,
@@ -482,6 +489,8 @@ G.DefaultSettings = {
 		GreyBD = false,
 		FontScale = 1,
 		QuestTracker = true,
+		CooldownMgr = true,
+		DamageMeter = true,
 	},
 	Tooltip = {
 		HideInCombat = 1,
@@ -698,9 +707,11 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
 
-	if not C.db["Reset2"] then
-		C.db["Actionbar"]["MBPerRow"] = 13
-		C.db["Reset2"] = true
+	if not C.db["Reset3"] then
+		C.db["UFs"]["RaidBuffPerRow"] = 7
+		C.db["UFs"]["RaidDebuffPerRow"] = 7
+		C.db["UFs"]["Portrait"] = false
+		C.db["Reset3"] = true
 	end
 
 	B:SetupUIScale(true)
@@ -1022,6 +1033,10 @@ local function refreseExecuteRatio()
 	B:GetModule("UnitFrames"):UpdateExcutedCurve()
 end
 
+local function updateUFAuras()
+	B:GetModule("UnitFrames"):UpdateUFAuras()
+end
+
 local function updateMinimapScale()
 	B:GetModule("Maps"):UpdateMinimapScale()
 end
@@ -1149,19 +1164,19 @@ end
 
 G.TabList = {
 	L["Actionbar"],
-	IsNew..L["Bags"],
+	L["Bags"],
 	L["Unitframes"],
-	L["RaidFrame"],
+	IsNew..L["RaidFrame"],
 	L["Nameplate"],
 	IsNew..L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
-	L["Skins"],
+	IsNew..L["Skins"],
 	L["Tooltip"],
 	L["Misc"],
-	L["UI Settings"],
+	IsNew..L["UI Settings"],
 	L["Profile"],
 }
 
@@ -1192,7 +1207,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
 		{},--blank
-		{1, "Bags", "ItemFilter", IsNew..L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
+		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
 		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", true, nil, updateBagStatus},
 		{1, "Bags", "SpecialBagsColor", L["SpecialBagsColor"].."*", nil, nil, updateBagStatus, L["SpecialBagsColorTip"]},
 		{1, "Bags", "ShowNewItem", L["Bags ShowNewItem"], true},
@@ -1236,8 +1251,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "UFs", "BuffClickThru", L["BuffClickThru"].."*", true, nil, updateRaidAurasOptions, L["ClickThroughTip"]},
 		--{3, "UFs", "RaidDebuffSize", L["RaidDebuffSize"].."*", nil, {5, 30, 1}, updateRaidAurasOptions},
 		--{3, "UFs", "RaidBuffSize", L["RaidBuffSize"].."*", true, {5, 30, 1}, updateRaidAurasOptions},
-		{3, "UFs", "PrivateSize", "PrivateAuras", nil, {5, 30, 1}},
-		{},--blank
+		--{},--blank
 		--{1, "UFs", "RaidBuffIndicator", HeaderTag..L["RaidBuffIndicator"].."*", nil, setupSpellsIndicator, updateRaidAurasOptions, L["RaidBuffIndicatorTip"]},
 		--{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"].."*", nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}, updateRaidAurasOptions},
 		--{3, "UFs", "BuffIndicatorScale", L["BuffIndicatorScale"].."*", true, {.8, 2, .1}, updateRaidAurasOptions},
@@ -1248,7 +1262,14 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, updateRaidAurasOptions},
 		--{},--blank
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
-		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
+		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"]},
+		{3, "UFs", "PrivateSize", L["PrivateAuras"], true, {5, 30, 1}},
+		{4, "UFs", "RaidBuffType", L["RaidBuffType"].."*", nil, {DISABLE, "Blizzard", "Defensive"}, updateUFAuras},
+		{4, "UFs", "RaidDebuffType", L["RaidDebuffType"].."*", true, {DISABLE, "Blizzard", "Dispellable"}, updateUFAuras},
+		{3, "UFs", "RaidBuffPerRow", L["RaidBuffPerRow"].."*", nil, {1, 20, 1}, updateUFAuras},
+		{3, "UFs", "RaidDebuffPerRow", L["RaidDebuffPerRow"].."*", true, {1, 20, 1}, updateUFAuras},
+		{3, "UFs", "RaidNumBuff", L["MaxBuffs"].."*", nil, {1, 20, 1}, updateUFAuras},
+		{3, "UFs", "RaidNumDebuff", L["MaxDebuffs"].."*", true, {1, 20, 1}, updateUFAuras},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], --[=[L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]]=]}, updateRaidTextScale, L["100PercentTip"]},
@@ -1316,7 +1337,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
 		--{1, "Avada", "Enable", IsNew..HeaderTag..L["Enable ClassAuras"].."*", nil, toggleAvadaGUI, toggleAvada},
-		{1, "Nameplate", "PPHealthBar", L["PlayerPlate HealthBar"].."*", nil, nil, togglePlateHealth},
+		{1, "Nameplate", "PPHealthBar", IsNew..L["PlayerPlate HealthBar"].."*", nil, nil, togglePlateHealth},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
@@ -1332,12 +1353,12 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Auras", "HideBlizBuff", L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
 		{1, "Auras", "CDAnimation", L["CDAnimation"]},
 		{},--blank
-		{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
+		--[[{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
 		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
 		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], nil, {.8, 2, .1}},
 		{3, "AuraWatch", "MinCD", L["AuraWatch MinCD"].."*", true, {1, 60, 1}, nil, L["MinCDTip"]},
-		{},--blank
+		{},--blank]]
 		{1, "Auras", "Totems", HeaderTag..L["Enable Totembar"]},
 		{1, "Auras", "VerticalTotems", L["VerticalTotems"].."*", nil, nil, refreshTotemBar},
 		{3, "Auras", "TotemSize", L["TotemSize"].."*", true, {24, 60, 1}, refreshTotemBar},
@@ -1430,6 +1451,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "FontOutline", L["FontOutline"], true},
 		{1, "Skins", "BgTex", L["BgTex"]},
 		{1, "Skins", "GreyBD", L["GreyBackdrop"], true, nil, nil, L["GreyBackdropTip"]},
+		{1, "Skins", "CooldownMgr", IsNew..ENABLE_COOLDOWN_VIEWER},
+		{1, "Skins", "DamageMeter", IsNew..ENABLE_DAMAGE_METER, true},
 		{3, "Skins", "SkinAlpha", L["SkinAlpha"].."*", nil, {0, 1, .05}, updateSkinAlpha},
 		{3, "Skins", "FontScale", L["GlobalFontScale"], true, {.5, 1.5, .05}},
 		{},--blank
@@ -1463,7 +1486,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "LFDRole", L["Group Roles"].."*"},
 		{1, "Tooltip", "MythicScore", L["MDScore"].."*", true, nil, nil, L["MDScoreTip"]},
 		{1, "Tooltip", "ItemQuality", L["ShowItemQuality"].."*"},
-		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"]},
+		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"], true},
 		{},--blank
 		{1, "Tooltip", "AzeriteArmor", HeaderTag..L["Show AzeriteArmor"]},
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},

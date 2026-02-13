@@ -841,6 +841,8 @@ function UF:RefreshPlateType(unit)
 end
 
 function UF:OnUnitFactionChanged(unit)
+	if strfind(unit, "^[ab]%w+") then return end -- bossN and arenaN are not allowed here
+
 	local nameplate = C_NamePlate_GetNamePlateForUnit(unit)
 	local unitFrame = nameplate and nameplate.unitFrame
 	if unitFrame and unitFrame.unitName then

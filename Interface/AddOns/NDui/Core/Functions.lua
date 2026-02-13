@@ -26,6 +26,11 @@ do
 	function B:NotSecretTable(object)
 		return not issecrettable or not issecrettable(object)
 	end
+
+	function B:SendChatMessage(...)
+		if C_ChatInfo.InChatMessagingLockdown() then return end
+		return C_ChatInfo.SendChatMessage(...)
+	end
 end
 
 -- Math

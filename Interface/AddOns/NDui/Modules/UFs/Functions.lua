@@ -871,11 +871,10 @@ function UF.PostCreateButton(element, button)
 	button.Cooldown:SetReverse(true)
 	button.CooldownText = button.Cooldown:GetRegions()
 	button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
-	local needShadow = true
-	if element.__owner.mystyle == "raid" and not C.db["UFs"]["RaidBuffIndicator"] then
-		needShadow = false
-	end
-	button.iconbg = B.ReskinIcon(button.Icon, needShadow)
+
+	local isRaid = element.__owner.mystyle == "raid"
+	button.Cooldown:SetHideCountdownNumbers(isRaid)
+	button.iconbg = B.ReskinIcon(button.Icon, not isRaid)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
@@ -979,6 +978,30 @@ function UF.UnitCustomFilter(element, _, data)
 	end
 end
 
+function UF.PostProcessAuraData(element, unit, data, filter)
+	data.isRaidInCombatAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_IN_COMBAT")
+	data.isPlayerDispellable = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_PLAYER_DISPELLABLE")
+	data.isDefensiveAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|EXTERNAL_DEFENSIVE")
+	return data
+end
+
+function UF.RaidCustomFilter(element, unit, data)
+	local value = element.__value
+	if data.isHarmfulAura then
+		if C.db["UFs"][value.."DebuffType"] == 2 then
+			return data.isRaidInCombatAura
+		elseif C.db["UFs"][value.."DebuffType"] == 3 then
+			return data.isPlayerDispellable
+		end
+	else
+		if C.db["UFs"][value.."BuffType"] == 2 then
+			return data.isRaidInCombatAura
+		elseif C.db["UFs"][value.."BuffType"] == 3 then
+			return data.isDefensiveAura
+		end
+	end
+end
+
 local function auraIconSize(w, n, s)
 	return (w-(n-1)*s)/n
 end
@@ -988,8 +1011,7 @@ function UF:UpdateAuraContainer(parent, element, maxAuras)
 	local iconsPerRow = element.maxCols
 	local maxLines = iconsPerRow and B:Round(maxAuras/iconsPerRow) or 2
 	element.size = iconsPerRow and auraIconSize(width, iconsPerRow, element.spacing) or element.size
-	element:SetWidth(width)
-	element:SetHeight((element.size + element.spacing) * maxLines)
+	element:SetSize(width, (element.size + element.spacing) * maxLines)
 
 	local fontSize = element.fontSize or element.size*.6
 	for i = 1, #element do
@@ -1024,10 +1046,11 @@ end
 function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	local value = element.__value
 	local vType = isDebuff and "Debuff" or "Buff"
+	local isRaid = value == "Raid"
 	element.num = C.db["UFs"][value..vType.."Type"] ~= 1 and C.db["UFs"][value.."Num"..vType] or 0
 	element.maxCols = C.db["UFs"][value..vType.."PerRow"]
-	element.showDebuffType = C.db["UFs"]["DebuffColor"]
-	element.desaturateDebuff = C.db["UFs"]["Desaturate"]
+	element.showDebuffType = isRaid or C.db["UFs"]["DebuffColor"]
+	element.desaturateDebuff = not isRaid and C.db["UFs"]["Desaturate"]
 end
 
 function UF:RefreshBuffAndDebuff(frame)
@@ -1058,6 +1081,12 @@ function UF:UpdateUFAuras()
 	for i = 1, 5 do
 		UF:RefreshBuffAndDebuff(_G["oUF_Boss"..i])
 		UF:RefreshBuffAndDebuff(_G["oUF_Arena"..i])
+	end
+
+	for _, frame in pairs(oUF.objects) do
+		if frame.mystyle == "raid" then
+			UF:RefreshBuffAndDebuff(frame)
+		end
 	end
 end
 
@@ -1148,27 +1177,40 @@ function UF:CreateAuras(self)
 	bu.PostCreateButton = UF.PostCreateButton
 	bu.PostUpdateButton = UF.PostUpdateButton
 	bu.PostUpdateGapButton = UF.PostUpdateGapButton
+	bu.PostProcessAuraData = UF.PostProcessAuraData
 
 	self.Auras = bu
 end
 
 function UF:CreateBuffs(self)
+	local mystyle = self.mystyle
 	local bu = CreateFrame("Frame", nil, self)
-	bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
-	bu.initialAnchor = "BOTTOMLEFT"
-	bu["growthX"] = "RIGHT"
-	bu["growthY"] = "UP"
-	bu.spacing = 3
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
+	if mystyle == "raid" then
+		bu.initialAnchor = "TOPLEFT"
+		bu["growthX"] = "RIGHT"
+		bu["growthY"] = "DOWN"
+		bu.__value = "Raid"
+		bu:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+		bu.disableMouse = true
+		bu.spacing = 2
+		bu.FilterAura = UF.RaidCustomFilter
+	else
+		bu.initialAnchor = "BOTTOMLEFT"
+		bu["growthX"] = "RIGHT"
+		bu["growthY"] = "UP"
+		bu.__value = "Boss"
+		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+		bu.spacing = 3
+		bu.FilterAura = UF.UnitCustomFilter
+	end
 
-	bu.__value = "Boss"
 	UF:ConfigureBuffAndDebuff(bu)
-	bu.FilterAura = UF.UnitCustomFilter
-
 	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.showStealableBuffs = true
 	bu.PostCreateButton = UF.PostCreateButton
 	bu.PostUpdateButton = UF.PostUpdateButton
+	bu.PostProcessAuraData = UF.PostProcessAuraData
 
 	self.Buffs = bu
 end
@@ -1176,20 +1218,32 @@ end
 function UF:CreateDebuffs(self)
 	local mystyle = self.mystyle
 	local bu = CreateFrame("Frame", nil, self)
-	bu.spacing = 3
-	bu.initialAnchor = "TOPRIGHT"
-	bu["growthX"] = "LEFT"
-	bu["growthY"] = "DOWN"
 	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
 	bu.showDebuffType = true
-	bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
-	bu.__value = "Boss"
-	UF:ConfigureBuffAndDebuff(bu, true)
-	bu.FilterAura = UF.UnitCustomFilter
+	if mystyle == "raid" then
+		bu.initialAnchor = "BOTTOMRIGHT"
+		bu["growthX"] = "LEFT"
+		bu["growthY"] = "UP"
+		bu.__value = "Raid"
+		bu:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
+		bu.disableMouse = true
+		bu.spacing = 2
+		bu.FilterAura = UF.RaidCustomFilter
+	else
+		bu.initialAnchor = "TOPRIGHT"
+		bu["growthX"] = "LEFT"
+		bu["growthY"] = "DOWN"
+		bu.__value = "Boss"
+		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
+		bu.spacing = 3
+		bu.FilterAura = UF.UnitCustomFilter
+	end
 
+	UF:ConfigureBuffAndDebuff(bu, true)
 	UF:UpdateAuraContainer(self, bu, bu.num)
 	bu.PostCreateButton = UF.PostCreateButton
 	bu.PostUpdateButton = UF.PostUpdateButton
+	bu.PostProcessAuraData = UF.PostProcessAuraData
 
 	self.Debuffs = bu
 end
@@ -1305,7 +1359,8 @@ function UF:CreateClassPower(self)
 		if not isDK then
 			bars[i].cover = bars[i]:CreateTexture(nil, "ARTWORK", nil, 5)
 			bars[i].cover:SetAllPoints(bars[i])
-			bars[i].cover:SetAtlas("ui-castingbar-interrupted")
+			bars[i].cover:SetTexture(DB.normTex)
+			bars[i].cover:SetVertexColor(1, 0, 0)
 			bars[i].cover:Hide()
 		end
 

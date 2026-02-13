@@ -70,7 +70,7 @@ local function checkTimeWalker(event)
 
 	for i = 1, numEvents do
 		local info = C_Calendar_GetDayEvent(0, today, i)
-		if info and strfind(info.title, PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= "END" then
+		if info and B:NotSecretValue(info.title) and strfind(info.title, PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= "END" then
 			isTimeWalker = true
 			walkerTexture = info.iconTexture
 			break

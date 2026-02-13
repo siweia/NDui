@@ -553,6 +553,22 @@ local function ForceUpdate(element)
 	return Update(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
+local eventMethods = {
+	UNIT_SPELLCAST_START = CastStart,
+	UNIT_SPELLCAST_CHANNEL_START = CastStart,
+	UNIT_SPELLCAST_EMPOWER_START = CastStart,
+	UNIT_SPELLCAST_STOP = CastStop,
+	UNIT_SPELLCAST_CHANNEL_STOP = CastStop,
+	UNIT_SPELLCAST_EMPOWER_STOP = CastStop,
+	UNIT_SPELLCAST_DELAYED = CastUpdate,
+	UNIT_SPELLCAST_CHANNEL_UPDATE = CastUpdate,
+	UNIT_SPELLCAST_EMPOWER_UPDATE = CastUpdate,
+	UNIT_SPELLCAST_FAILED = CastFail,
+	UNIT_SPELLCAST_INTERRUPTED = CastFail,
+	UNIT_SPELLCAST_INTERRUPTIBLE = CastInterruptible,
+	UNIT_SPELLCAST_NOT_INTERRUPTIBLE = CastInterruptible,
+}
+
 local function Enable(self, unit)
 	local element = self.Castbar
 	if(element and unit and not unit:match('%wtarget$')) then
@@ -563,19 +579,9 @@ local function Enable(self, unit)
 			element.smoothing = Enum.StatusBarInterpolation.Immediate
 		end
 
-		self:RegisterEvent('UNIT_SPELLCAST_START', CastStart)
-		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
-		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
-		self:RegisterEvent('UNIT_SPELLCAST_STOP', CastStop)
-		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', CastStop)
-		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
-		self:RegisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
-		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', CastUpdate)
-		self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
-		self:RegisterEvent('UNIT_SPELLCAST_FAILED', CastFail)
-		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED', CastFail)
-		self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', CastInterruptible)
-		self:RegisterEvent('UNIT_SPELLCAST_NOT_INTERRUPTIBLE', CastInterruptible)
+		for event, method in next, eventMethods do
+			self:RegisterEvent(event, method)
+		end
 
 		element.holdTime = 0
 		element.Pips = element.Pips or {}
@@ -583,9 +589,10 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			PlayerCastingBarFrame:SetUnit(nil)
-			PetCastingBarFrame:SetUnit(nil)
-			PetCastingBarFrame:UnregisterEvent('UNIT_PET')
+			PlayerCastingBarFrame:UnregisterAllEvents()
+			PlayerCastingBarFrame:Hide()
+			PetCastingBarFrame:UnregisterAllEvents()
+			PetCastingBarFrame:Hide()
 		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
@@ -618,25 +625,21 @@ local function Disable(self)
 	if(element) then
 		element:Hide()
 
-		self:UnregisterEvent('UNIT_SPELLCAST_START', CastStart)
-		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
-		self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
-		self:UnregisterEvent('UNIT_SPELLCAST_STOP', CastStop)
-		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', CastStop)
-		self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
-		self:UnregisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
-		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', CastUpdate)
-		self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
-		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', CastFail)
-		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTED', CastFail)
-		self:UnregisterEvent('UNIT_SPELLCAST_INTERRUPTIBLE', CastInterruptible)
-		self:UnregisterEvent('UNIT_SPELLCAST_NOT_INTERRUPTIBLE', CastInterruptible)
+		for event, method in next, eventMethods do
+			self:UnregisterEvent(event, method)
+		end
 
 		element:SetScript('OnUpdate', nil)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			PlayerCastingBarFrame:OnLoad()
-			PetCastingBarFrame:OnLoad()
+			for event in next, eventMethods do
+				PlayerCastingBarFrame:RegisterUnitEvent(event, 'player')
+				PetCastingBarFrame:RegisterUnitEvent(event, 'pet')
+			end
+
+			PlayerCastingBarFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
+			PetCastingBarFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
+			PetCastingBarFrame:RegisterEvent('UNIT_PET')
 		end
 	end
 end
