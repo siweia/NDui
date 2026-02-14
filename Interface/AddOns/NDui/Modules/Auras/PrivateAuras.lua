@@ -13,7 +13,7 @@ local tempDuration = {
 	relativeTo = UIParent,
 	relativePoint = "BOTTOM",
 	offsetX = 1,
-	offsetY = 2,
+	offsetY = 1,
 }
 
 local tempAnchor = {
@@ -21,7 +21,7 @@ local tempAnchor = {
 	auraIndex = 1,
 	parent = UIParent,
 	showCountdownFrame = false,
-	showCountdownNumbers = true,
+	showCountdownNumbers = false,
 	durationAnchor = tempDuration,
 
 	iconInfo = {
@@ -51,6 +51,7 @@ function PA:CreateAnchor(aura, parent, unit, index, db)
 	tempAnchor.unitToken = unit
 	tempAnchor.auraIndex = index
 	tempAnchor.parent = aura
+	tempAnchor.showCountdownFrame = C.db["Auras"]["CDAnimation"]
 	tempAnchor.durationAnchor.relativeTo = aura
 	tempAnchor.iconInfo.iconWidth = iconSize
 	tempAnchor.iconInfo.iconHeight = iconSize
@@ -123,7 +124,7 @@ function PA:OnLogin()
 
 	PA.Auras = CreateFrame("Frame", "NDui_PrivateAuras", UIParent)
 	PA.Auras:SetSize(30, 30)
-	PA.Auras.mover = B.Mover(PA.Auras, "PrivateAuras", "PrivateAuras", {"TOPRIGHT", A.DebuffFrame.mover, "BOTTOMRIGHT", 0, -12})
+	PA.Auras.mover = B.Mover(PA.Auras, L["PrivateAuras"], "PrivateAuras", {"TOPRIGHT", A.DebuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 
 	PA:Update()
 end

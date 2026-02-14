@@ -2055,7 +2055,7 @@ function G:SetupBuffFrame(parent)
 
 	createOptionGroup(parent, "Buffs*", offset, "Buff", updateBuffFrame)
 	createOptionGroup(parent, "Debuffs*", offset-260, "Debuff", updateDebuffFrame)
-	createOptionGroup(parent, "PrivateAuras", offset-520, "Private", updatePrivateAuras)
+	createOptionGroup(parent, L["PrivateAuras"], offset-520, "Private", updatePrivateAuras)
 end
 
 function G:NameplateColorDots(parent)
@@ -2726,3 +2726,28 @@ end
 
 SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
 SLASH_NDUI_AVADACONFIG1 = "/aa"
+
+function G:SetupPrivateAuras(parent)
+	local guiName = "NDuiGUI_PrivateAurasSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["PrivateAuras"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+	local UF = B:GetModule("UnitFrames")
+	if not UF then return end
+
+	local function updatePrivateAuras()
+		for _, frame in pairs(ns.oUF.objects) do
+			if frame.PrivateAuras then
+				UF:UpdatePrivateAuras(frame.PrivateAuras, true)
+			end
+		end
+	end
+
+	createOptionCheck(parent, offset, L["CDAnimation"], "UFs", "CDAnimation", updatePrivateAuras)
+	createOptionCheck(parent, offset-30, L["CDText"], "UFs", "CDText", updatePrivateAuras)
+	createOptionSlider(parent, L["Auras Size"], 10, 50, 22, offset-110, "PrivateSize", updatePrivateAuras, "UFs")
+end
