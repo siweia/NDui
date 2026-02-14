@@ -11,7 +11,7 @@ local UnitGUID, IsItemInRange = UnitGUID, IsItemInRange
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
 local SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura = SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura
 local ADDITIONAL_POWER_BAR_INDEX = 0
-local x1, x2, y1, y2 = unpack(DB.TexCoord)
+local FALLBACK_COLOR = {r=0, g=0, b=0}
 
 -- Custom colors
 oUF.colors.health:SetCurve({
@@ -727,7 +727,7 @@ function UF:CreateCastBar(self)
 		cb.Icon = cb:CreateTexture(nil, "ARTWORK")
 		cb.Icon:SetSize(cb:GetHeight(), cb:GetHeight())
 		cb.Icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -3, 0)
-		cb.Icon:SetTexCoord(x1, x2, y1, y2)
+		cb.Icon:SetTexCoord(unpack(DB.TexCoord))
 		B.SetBD(cb.Icon)
 	end
 
@@ -928,8 +928,8 @@ function UF.PostUpdateButton(element, button, unit, data)
 	end
 
 	if data.isHarmfulAura and element.showDebuffType then
-		local color = C_UnitAuras.GetAuraDispelTypeColor(unit, data.auraInstanceID, element.dispelColorCurve)
-		button.iconbg:SetBackdropBorderColor(color:GetRGB())
+		local color = C_UnitAuras.GetAuraDispelTypeColor(unit, data.auraInstanceID, element.dispelColorCurve) or FALLBACK_COLOR
+		button.iconbg:SetBackdropBorderColor(color.r, color.g, color.b)
 	else
 		button.iconbg:SetBackdropBorderColor(0, 0, 0)
 	end
