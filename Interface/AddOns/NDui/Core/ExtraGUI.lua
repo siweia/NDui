@@ -2037,18 +2037,25 @@ function G:SetupBuffFrame(parent)
 		A.DebuffFrame.mover:SetSize(A.DebuffFrame:GetSize())
 	end
 
+	local function updatePrivateAuras()
+		local PA = B:GetModule("PrivateAuras")
+		if PA then
+			PA:Update()
+		end
+	end
+
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
 		createOptionCheck(parent, offset-35, L["ReverseGrow"], "Auras", "Reverse"..value, func)
 		createOptionSlider(parent, L["Auras Size"], 24, 50, defaultSize, offset-100, value.."Size", func, "Auras")
-		if func then -- no func for private auras
+		if value ~= "Private" then -- no func for private auras
 			createOptionSlider(parent, L["IconsPerRow"], 10, 40, defaultPerRow, offset-170, value.."sPerRow", func, "Auras")
 		end
 	end
 
 	createOptionGroup(parent, "Buffs*", offset, "Buff", updateBuffFrame)
 	createOptionGroup(parent, "Debuffs*", offset-260, "Debuff", updateDebuffFrame)
-	createOptionGroup(parent, "PrivateAuras", offset-520, "Private")
+	createOptionGroup(parent, "PrivateAuras", offset-520, "Private", updatePrivateAuras)
 end
 
 function G:NameplateColorDots(parent)
