@@ -9,7 +9,7 @@ PhaseIndicator - Any UI widget.
 
 ## Sub-Widgets
 
-Icon - A `Texture` to represent the phased status.
+.Icon - A `Texture` to represent the phased status.
 
 ## Notes
 
@@ -126,7 +126,7 @@ local function Enable(self)
 
 		local icon = (element.Icon or element)
 		if(icon:IsObjectType('Texture') and not icon:GetTexture()) then
-			icon:SetTexture([[Interface\TargetingFrame\UI-PhasingIcon]])
+			icon:SetAtlas('RaidFrame-Icon-Phasing')
 		end
 
 		if(element.IsMouseEnabled and element:IsMouseEnabled()) then

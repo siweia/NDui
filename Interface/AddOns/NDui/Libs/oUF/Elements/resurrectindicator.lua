@@ -81,7 +81,7 @@ local function Enable(self)
 		self:RegisterEvent('INCOMING_RESURRECT_CHANGED', Path)
 
 		if(element:IsObjectType('Texture') and not element:GetTexture()) then
-			element:SetTexture([[Interface\RaidFrame\Raid-Icon-Rez]])
+			element:SetAtlas('RaidFrame-Icon-Rez')
 		end
 
 		return true
