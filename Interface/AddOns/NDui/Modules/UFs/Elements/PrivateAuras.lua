@@ -2,23 +2,30 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
-local PA = B:GetModule("PrivateAuras")
 
-function UF:CreatePrivateAuras(frame)
-	frame.PrivateAuras = CreateFrame("Frame", frame:GetName().."PrivateAuras", frame)
-	hooksecurefunc(frame, "UpdateAllElements", UF.UpdatePrivateAuras)
+function UF:CreatePrivateAuras(self)
+	if not C.db["UFs"]["PrivateAuras"] then return end
+
+	local element = CreateFrame("Frame", nil, UIParent)
+	element:SetPoint("BOTTOMLEFT", self.Health, 2, 2)
+	element:SetSize(100, 30)
+
+	UF:UpdatePrivateAuras(element, false)
+	self.PrivateAuras = element
 end
 
-function UF.UpdatePrivateAuras(frame)
-	if frame.PrivateAuras then
-		PA:RemoveAuras(frame.PrivateAuras)
+function UF:UpdatePrivateAuras(element, force)
+	local db = C.db["UFs"]
+	element.size = db.PrivateSize
+	element.spacing = 3
+	element.borderScale = element.size / 16
+	element.initialAnchor = "BOTTOMLEFT"
+	element.growthX = "RIGHT"
+	element.growthY = "UP"
+	element.disableCooldown = not db.CDAnimation
+	element.disableCooldownText = not db.CDText
 
-		local db = C.db["UFs"]
-		if db then
-			PA:SetupPrivateAuras(db, frame.PrivateAuras, frame.unit)
-			frame.PrivateAuras:ClearAllPoints()
-			frame.PrivateAuras:SetPoint("TOP", frame, "TOP", 0, 0)
-			frame.PrivateAuras:SetSize(db.PrivateSize, db.PrivateSize)
-		end
+	if force and element.ForceUpdate then
+		element:ForceUpdate()
 	end
 end
