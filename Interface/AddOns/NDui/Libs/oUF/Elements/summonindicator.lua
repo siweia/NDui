@@ -48,11 +48,11 @@ local function Update(self, event, unit)
 	local status = C_IncomingSummon.IncomingSummonStatus(unit)
 	if(status ~= SUMMON_STATUS_NONE) then
 		if(status == SUMMON_STATUS_PENDING) then
-			element:SetAtlas('Raid-Icon-SummonPending')
+			element:SetAtlas('RaidFrame-Icon-SummonPending')
 		elseif(status == SUMMON_STATUS_ACCEPTED) then
-			element:SetAtlas('Raid-Icon-SummonAccepted')
+			element:SetAtlas('RaidFrame-Icon-SummonAccepted')
 		elseif(status == SUMMON_STATUS_DECLINED) then
-			element:SetAtlas('Raid-Icon-SummonDeclined')
+			element:SetAtlas('RaidFrame-Icon-SummonDeclined')
 		end
 
 		element:Show()
