@@ -919,3 +919,5 @@ L["RaidBuffType"] = "Buff filters" -- need translation
 L["RaidDebuffType"] = "Debuff filters" -- need translation
 L["RaidBuffPerRow"] = "Buffs per row" -- need translation
 L["RaidDebuffPerRow"] = "Debuffs per row" -- need translation
+L["DamageMeter"] = "Reskin DamageMeter" -- need translation
+L["CooldownMgr"] = "Reskin CooldownMgr" -- need translation
