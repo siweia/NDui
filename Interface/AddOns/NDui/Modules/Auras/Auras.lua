@@ -11,6 +11,7 @@ local GetAuraApplicationDisplayCount = C_UnitAuras.GetAuraApplicationDisplayCoun
 local GetAuraDataByIndex = C_UnitAuras.GetAuraDataByIndex
 local GetAuraDuration = C_UnitAuras.GetAuraDuration
 local MIN_SPELL_COUNT, MAX_SPELL_COUNT = 2, 999
+local FALLBACK_COLOR = {r=0, g=0, b=0}
 
 function A:OnLogin()
 	A:HideBlizBuff()
@@ -159,8 +160,8 @@ function A:UpdateAuras(button, index)
 	end
 
 	if filter == "HARMFUL" then
-		local color = C_UnitAuras.GetAuraDispelTypeColor(unit, auraData.auraInstanceID, A.DispelColorCurve)
-		button:SetBackdropBorderColor(color:GetRGB())
+		local color = C_UnitAuras.GetAuraDispelTypeColor(unit, auraData.auraInstanceID, A.DispelColorCurve) or FALLBACK_COLOR
+		button:SetBackdropBorderColor(color.r, color.g, color.b)
 	else
 		button:SetBackdropBorderColor(0, 0, 0)
 	end

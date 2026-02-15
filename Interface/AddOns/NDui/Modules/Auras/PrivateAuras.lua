@@ -3,29 +3,31 @@ local B, C, L, DB = unpack(ns)
 local PA = B:RegisterModule("PrivateAuras")
 local A = B:GetModule("Auras")
 
-local MAX_PRIVATE_AURAS = 2
+local MAX_PRIVATE_AURAS = 5
 local AddPrivateAuraAnchor = C_UnitAuras.AddPrivateAuraAnchor
 local RemovePrivateAuraAnchor = C_UnitAuras.RemovePrivateAuraAnchor
 local SetPrivateWarningTextAnchor = C_UnitAuras.SetPrivateWarningTextAnchor
 
 local tempDuration = {
-	point = "BOTTOM",
+	point = "TOP",
 	relativeTo = UIParent,
 	relativePoint = "BOTTOM",
-	offsetX = 0,
-	offsetY = 0,
+	offsetX = 1,
+	offsetY = 1,
 }
 
 local tempAnchor = {
 	unitToken = "player",
 	auraIndex = 1,
 	parent = UIParent,
-	showCountdownFrame = true,
-	showCountdownNumbers = true,
+	showCountdownFrame = false,
+	showCountdownNumbers = false,
+	durationAnchor = tempDuration,
 
 	iconInfo = {
-		iconWidth = 30,
-		iconHeight = 30,
+		borderScale = 1,
+		iconWidth = 16,
+		iconHeight = 16,
 		iconAnchor = {
 			point = "CENTER",
 			relativeTo = UIParent,
@@ -34,8 +36,6 @@ local tempAnchor = {
 			offsetY = 0,
 		},
 	},
-
-	durationAnchor = tempDuration,
 }
 
 function PA:CreateAnchor(aura, parent, unit, index, db)
@@ -47,13 +47,15 @@ function PA:CreateAnchor(aura, parent, unit, index, db)
 	end
 
 	local iconSize = db.PrivateSize
-	if not iconSize then iconSize = 30 end
+	if not iconSize then iconSize = 16 end
 	tempAnchor.unitToken = unit
 	tempAnchor.auraIndex = index
 	tempAnchor.parent = aura
+	tempAnchor.showCountdownFrame = C.db["Auras"]["CDAnimation"]
 	tempAnchor.durationAnchor.relativeTo = aura
 	tempAnchor.iconInfo.iconWidth = iconSize
 	tempAnchor.iconInfo.iconHeight = iconSize
+	tempAnchor.iconInfo.borderScale = iconSize / 16
 	tempAnchor.iconInfo.iconAnchor.relativeTo = aura
 
 	return AddPrivateAuraAnchor(tempAnchor)
@@ -89,7 +91,7 @@ function PA:CreateAura(parent, unit, index, db)
 	if index == 1 then
 		aura:SetPoint("CENTER", parent, 0, 0)
 	else
-		aura:SetPoint(rel1, prevButton, rel2, margin, 0)
+		aura:SetPoint(rel1, parent.auraIcons[index-1], rel2, margin, 0)
 	end
 	aura:SetSize(db.PrivateSize, db.PrivateSize)
 
@@ -122,7 +124,7 @@ function PA:OnLogin()
 
 	PA.Auras = CreateFrame("Frame", "NDui_PrivateAuras", UIParent)
 	PA.Auras:SetSize(30, 30)
-	PA.Auras.mover = B.Mover(PA.Auras, "PrivateAuras", "PrivateAuras", {"TOPRIGHT", A.DebuffFrame.mover, "BOTTOMRIGHT", 0, -12})
+	PA.Auras.mover = B.Mover(PA.Auras, L["PrivateAuras"], "PrivateAuras", {"TOPRIGHT", A.DebuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 
 	PA:Update()
 end

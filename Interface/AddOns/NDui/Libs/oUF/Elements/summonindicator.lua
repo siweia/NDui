@@ -11,6 +11,10 @@ SummonIndicator - A `Texture` used to display if the unit has an incoming summon
 
 This element updates by changing the texture.
 
+## Options
+
+.useAtlasSize - Makes the element use preprogrammed atlas' size instead of its set dimensions (boolean)
+
 ## Examples
 
     -- Position and size
@@ -48,11 +52,11 @@ local function Update(self, event, unit)
 	local status = C_IncomingSummon.IncomingSummonStatus(unit)
 	if(status ~= SUMMON_STATUS_NONE) then
 		if(status == SUMMON_STATUS_PENDING) then
-			element:SetAtlas('Raid-Icon-SummonPending')
+			element:SetAtlas('RaidFrame-Icon-SummonPending', element.useAtlasSize)
 		elseif(status == SUMMON_STATUS_ACCEPTED) then
-			element:SetAtlas('Raid-Icon-SummonAccepted')
+			element:SetAtlas('RaidFrame-Icon-SummonAccepted', element.useAtlasSize)
 		elseif(status == SUMMON_STATUS_DECLINED) then
-			element:SetAtlas('Raid-Icon-SummonDeclined')
+			element:SetAtlas('RaidFrame-Icon-SummonDeclined', element.useAtlasSize)
 		end
 
 		element:Show()

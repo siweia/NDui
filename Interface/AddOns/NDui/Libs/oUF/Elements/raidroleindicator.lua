@@ -11,6 +11,10 @@ RaidRoleIndicator - A `Texture` representing the unit's raid assignment.
 
 This element updates by changing the texture.
 
+## Options
+
+.useAtlasSize - Makes the element use preprogrammed atlas' size instead of its set dimensions (boolean)
+
 ## Examples
 
     -- Position and size
@@ -24,9 +28,6 @@ This element updates by changing the texture.
 
 local _, ns = ...
 local oUF = ns.oUF
-
-local MAINTANK_ICON = [[Interface\GROUPFRAME\UI-GROUP-MAINTANKICON]]
-local MAINASSIST_ICON = [[Interface\GROUPFRAME\UI-GROUP-MAINASSISTICON]]
 
 local function Update(self, event)
 	local element = self.RaidRoleIndicator
@@ -45,11 +46,11 @@ local function Update(self, event)
 	if(UnitInRaid(unit) and not UnitHasVehicleUI(unit)) then
 		if(GetPartyAssignment('MAINTANK', unit)) then
 			isShown = true
-			element:SetTexture(MAINTANK_ICON)
+			element:SetAtlas('RaidFrame-Icon-MainTank', element.useAtlasSize)
 			role = 'MAINTANK'
 		elseif(GetPartyAssignment('MAINASSIST', unit)) then
 			isShown = true
-			element:SetTexture(MAINASSIST_ICON)
+			element:SetAtlas('RaidFrame-Icon-MainAssist', element.useAtlasSize)
 			role = 'MAINASSIST'
 		end
 	end

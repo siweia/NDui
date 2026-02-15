@@ -310,16 +310,23 @@ function M:RaidTool_BuffChecker(parent)
 		numPlayer = 0
 
 		local maxgroup = M:GetRaidMaxGroup()
+		local inRaid = IsInRaid()
 		for i = 1, GetNumGroupMembers() do
 			local name, _, subgroup, _, _, _, _, online, isDead = GetRaidRosterInfo(i)
 			if name and online and subgroup <= maxgroup and not isDead then
 				numPlayer = numPlayer + 1
+
+				local unit = "raid"..i
+				if not inRaid and i <= 5 then
+					unit = i == 1 and "player" or "party"..(i-1)
+				end
+
 				for j = 1, numGroups do
 					local HasBuff
 					local buffTable = DB.BuffList[j]
 					for k = 1, #buffTable do
 						local buffName = C_Spell.GetSpellName(buffTable[k])
-						if buffName and C_UnitAuras.GetAuraDataBySpellName(name, buffName) then
+						if buffName and C_UnitAuras.GetAuraDataBySpellName(unit, buffName) then
 							HasBuff = true
 							break
 						end

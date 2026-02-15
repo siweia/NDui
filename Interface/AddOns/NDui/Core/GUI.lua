@@ -240,7 +240,6 @@ G.DefaultSettings = {
 		PlayerAbsorb = false,
 		AutoBuffs = false,
 		ShowRoleMode = 1,
-		PrivateSize = 22,
 		ReversePrivate = false,
 
 		PlayerWidth = 245,
@@ -333,6 +332,11 @@ G.DefaultSettings = {
 		PetAuraOffset = 10,
 		FocusAuraDirec = 1,
 		FocusAuraOffset = 10,
+
+		PrivateAuras = true,
+		PrivateSize = 22,
+		CDAnimation = true,
+		CDText = true,
 	},
 	Chat = {
 		Sticky = false,
@@ -820,6 +824,10 @@ local function setupBuffFrame()
 	G:SetupBuffFrame(guiPage[7])
 end
 
+local function setupPrivateAuras()
+	G:SetupPrivateAuras(guiPage[4])
+end
+
 local function setupAuraWatch()
 	f:Hide()
 	SlashCmdList["NDUI_AWCONFIG"]()
@@ -1159,6 +1167,7 @@ G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["Sho
 local function AddNewTag(parent, anchor)
 	local tag = CreateFrame("Frame", nil, parent, "NewFeatureLabelTemplate")
 	tag:SetPoint("LEFT", anchor or parent, -25, 10)
+	tag:SetAlpha(.5)
 	tag:Show()
 end
 
@@ -1245,6 +1254,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
+		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, setupPrivateAuras},
+		{},--blank
 		--{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},
 		--{1, "UFs", "ShowRaidBuff", L["ShowRaidBuff"].."*", true, setupBuffsIndicator, updateRaidAurasOptions, L["ShowRaidBuffTip"]},
 		--{1, "UFs", "DebuffClickThru", L["DebuffClickThru"].."*", nil, nil, updateRaidAurasOptions, L["ClickThroughTip"]},
@@ -1262,8 +1273,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, updateRaidAurasOptions},
 		--{},--blank
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
-		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"]},
-		{3, "UFs", "PrivateSize", L["PrivateAuras"], true, {5, 30, 1}},
+		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		{4, "UFs", "RaidBuffType", L["RaidBuffType"].."*", nil, {DISABLE, "Blizzard", "Defensive"}, updateUFAuras},
 		{4, "UFs", "RaidDebuffType", L["RaidDebuffType"].."*", true, {DISABLE, "Blizzard", "Dispellable"}, updateUFAuras},
 		{3, "UFs", "RaidBuffPerRow", L["RaidBuffPerRow"].."*", nil, {1, 20, 1}, updateUFAuras},
@@ -1289,8 +1299,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "NameType", L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
-		{1, "Nameplate", "PlateAuras", HeaderTag..L["PlateAuras"].."*", nil, setupNameplateFilter, refreshNameplates},
-		{1, "Nameplate", "ShowDispel", L["Dispellable"].."*", true, nil, refreshNameplates},
+		--{1, "Nameplate", "PlateAuras", HeaderTag..L["PlateAuras"].."*", nil, setupNameplateFilter, refreshNameplates},
+		{1, "Nameplate", "ShowDispel", L["Dispellable"].."*", nil, nil, refreshNameplates},
 		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
 		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", true, nil, refreshNameplates, L["DebuffColorTip"]},
 		{3, "Nameplate", "FontSize", L["AuraFontSize"].."*", nil, {10, 30, 1}, refreshNameplates},
@@ -1350,8 +1360,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[7] = {
 		{1, "Auras", "BuffFrame", HeaderTag..L["BuffFrame"], nil, setupBuffFrame, nil, L["BuffFrameTip"]},
-		{1, "Auras", "HideBlizBuff", L["HideBlizUI"], true, nil, nil, L["HideBlizBuffTip"]},
-		{1, "Auras", "CDAnimation", L["CDAnimation"]},
+		{1, "Auras", "HideBlizBuff", L["HideBlizUI"], nil, nil, nil, L["HideBlizBuffTip"]},
+		{1, "Auras", "CDAnimation", L["CDAnimation"], true},
 		{},--blank
 		--[[{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
 		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
@@ -1451,8 +1461,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "FontOutline", L["FontOutline"], true},
 		{1, "Skins", "BgTex", L["BgTex"]},
 		{1, "Skins", "GreyBD", L["GreyBackdrop"], true, nil, nil, L["GreyBackdropTip"]},
-		{1, "Skins", "CooldownMgr", IsNew..ENABLE_COOLDOWN_VIEWER},
-		{1, "Skins", "DamageMeter", IsNew..ENABLE_DAMAGE_METER, true},
+		{1, "Skins", "DamageMeter", IsNew..L["DamageMeter"]},
+		{1, "Skins", "CooldownMgr", IsNew..L["CooldownMgr"], true},
 		{3, "Skins", "SkinAlpha", L["SkinAlpha"].."*", nil, {0, 1, .05}, updateSkinAlpha},
 		{3, "Skins", "FontScale", L["GlobalFontScale"], true, {.5, 1.5, .05}},
 		{},--blank

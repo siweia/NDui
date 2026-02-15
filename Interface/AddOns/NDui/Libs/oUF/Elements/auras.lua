@@ -209,6 +209,11 @@ local function updateAura(element, unit, data, position)
 	if(button.Overlay) then
 		if(element.showType or (data.isHarmfulAura and element.showDebuffType) or (not data.isHarmfulAura and element.showBuffType)) then
 			local color = C_UnitAuras.GetAuraDispelTypeColor(unit, data.auraInstanceID, element.dispelColorCurve)
+			if color == nil then
+				-- BUG: this shouldn't happen but color can be nil, so default to None color
+				color = element.dispelColorCurve:Evaluate(0)
+			end
+
 			button.Overlay:SetVertexColor(color:GetRGBA())
 			button.Overlay:Show()
 		else
