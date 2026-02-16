@@ -1,7 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function UpdateButtonState(button)
+local function updateButtonState(button)
 	button.Icon:SetTexture("Interface\\WorldMap\\GEAR_64GREY")
 	button.Icon:SetInside(nil, 2, 2)
 	if button:IsOver() then
@@ -17,6 +17,8 @@ end
 
 local function updateBar(frame)
 	local bar = frame.StatusBar
+	if not bar then return end
+
 	if not bar.styled then
 		B.CreateBDFrame(bar, .25)
 		bar:GetStatusBarTexture():ClearTextureSlice()
@@ -36,12 +38,13 @@ end
 local function ReskinMeterWindow(frame)
 	if not frame or frame.styled then return end
 
+	frame:SetClampedToScreen(false)
 	frame.Header:SetTexture()
 	local bg = B.SetBD(frame.Header)
 	bg:SetPoint("TOPLEFT", frame.Header, 17, -2)
 	bg:SetPoint("BOTTOMRIGHT", frame.Header, -17, 2)
-	B.ReskinTrimScroll(frame.ScrollBar)
 
+	B.ReskinTrimScroll(frame.ScrollBar)
 	frame.ScrollBox:ForEachFrame(updateBar)
 	hooksecurefunc(frame.ScrollBox, "Update", updateBox)
 
@@ -60,8 +63,8 @@ local function ReskinMeterWindow(frame)
 	frame.SessionDropdown:SetPoint("RIGHT", frame.SettingsDropdown, "LEFT", -8, 0)
 	frame.SessionDropdown.Text:SetAlpha(0)
 
-	UpdateButtonState(frame.SettingsDropdown)
-	hooksecurefunc(frame.SettingsDropdown, "OnButtonStateChanged", UpdateButtonState)
+	updateButtonState(frame.SettingsDropdown)
+	hooksecurefunc(frame.SettingsDropdown, "OnButtonStateChanged", updateButtonState)
 
 	B.ReskinTrimScroll(frame.SourceWindow.ScrollBar)
 	frame.SourceWindow.Background:SetTexture()
@@ -75,14 +78,18 @@ end
 C.themes["Blizzard_DamageMeter"] = function()
 	if not C.db["Skins"]["DamageMeter"] then return end
 
-	hooksecurefunc(DamageMeter, "SetupSessionWindow", function(_, windowData)
-		ReskinMeterWindow(windowData.sessionWindow)
-	end)
+	C_Timer.After(1, function() -- delay to prevent taint
+		hooksecurefunc(DamageMeter, "SetupSessionWindow", function(_, windowData)
+			ReskinMeterWindow(windowData.sessionWindow)
+		end)
 
-	for i = 1, 3 do
-		local frame = _G["DamageMeterSessionWindow"..i]
-		if frame then
-			ReskinMeterWindow(frame)
+		for i = 1, 3 do
+			local frame = _G["DamageMeterSessionWindow"..i]
+			if frame then
+				ReskinMeterWindow(frame)
+			end
 		end
-	end
+
+		DamageMeter:SetClampedToScreen(false)
+	end)
 end
