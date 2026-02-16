@@ -241,6 +241,7 @@ G.DefaultSettings = {
 		AutoBuffs = false,
 		ShowRoleMode = 1,
 		ReversePrivate = false,
+		CDFontSize = 12,
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -314,7 +315,9 @@ G.DefaultSettings = {
 		BossDebuffType = 3,
 		BossBuffPerRow = 6,
 		BossDebuffPerRow = 6,
-
+		RaidAuras = true,
+		RaidCDText = false,
+		RaidCDSize = 12,
 		RaidNumBuff = 6,
 		RaidNumDebuff = 6,
 		RaidBuffType = 2,
@@ -832,6 +835,10 @@ local function setupPrivateAuras()
 	G:SetupPrivateAuras(guiPage[4])
 end
 
+local function setupRaidAuras()
+	G:SetupRaidAuras(guiPage[4])
+end
+
 local function setupAuraWatch()
 	f:Hide()
 	SlashCmdList["NDUI_AWCONFIG"]()
@@ -1049,10 +1056,6 @@ local function refreseExecuteRatio()
 	B:GetModule("UnitFrames"):UpdateExcutedCurve()
 end
 
-local function updateUFAuras()
-	B:GetModule("UnitFrames"):UpdateUFAuras()
-end
-
 local function updateMinimapScale()
 	B:GetModule("Maps"):UpdateMinimapScale()
 end
@@ -1263,7 +1266,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
 		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, setupPrivateAuras},
-		{},--blank
+		{1, "UFs", "RaidAuras", IsNew..HeaderTag..L["RaidAuras"], true, setupRaidAuras},
+		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
+		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		--{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},
 		--{1, "UFs", "ShowRaidBuff", L["ShowRaidBuff"].."*", true, setupBuffsIndicator, updateRaidAurasOptions, L["ShowRaidBuffTip"]},
 		--{1, "UFs", "DebuffClickThru", L["DebuffClickThru"].."*", nil, nil, updateRaidAurasOptions, L["ClickThroughTip"]},
@@ -1280,14 +1285,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{4, "UFs", "DispellType", L["Dispellable"].."*", nil, {L["Always"], L["Filter"], DISABLE}, updateRaidAurasOptions, L["DispellTypeTip"]},
 		--{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, updateRaidAurasOptions},
 		--{},--blank
-		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
-		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
-		{4, "UFs", "RaidBuffType", L["RaidBuffType"].."*", nil, {DISABLE, "Blizzard", "Defensive"}, updateUFAuras},
-		{4, "UFs", "RaidDebuffType", L["RaidDebuffType"].."*", true, {DISABLE, "Blizzard", "Dispellable"}, updateUFAuras},
-		{3, "UFs", "RaidBuffPerRow", L["RaidBuffPerRow"].."*", nil, {1, 20, 1}, updateUFAuras},
-		{3, "UFs", "RaidDebuffPerRow", L["RaidDebuffPerRow"].."*", true, {1, 20, 1}, updateUFAuras},
-		{3, "UFs", "RaidNumBuff", L["MaxBuffs"].."*", nil, {1, 20, 1}, updateUFAuras},
-		{3, "UFs", "RaidNumDebuff", L["MaxDebuffs"].."*", true, {1, 20, 1}, updateUFAuras},
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], --[=[L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]]=]}, updateRaidTextScale, L["100PercentTip"]},

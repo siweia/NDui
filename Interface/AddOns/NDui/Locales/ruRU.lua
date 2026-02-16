@@ -930,3 +930,4 @@ L["AttachedPointTip"] = "Select the attached anchor to target window." -- need t
 L["Window1"] = "Window1" -- need translation
 L["Window2"] = "Window2" -- need translation
 L["Window3"] = "Window3" -- need translation
+L["RaidAuras"] = "RaidFrame Auras" -- need translation

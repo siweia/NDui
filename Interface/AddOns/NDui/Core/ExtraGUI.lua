@@ -1842,6 +1842,7 @@ function G:SetupUFAuras(parent)
 	createOptionTitle(parent, GENERAL, offset)
 	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", UF.UpdateUFAuras, L["DesaturateIconTip"])
 	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", UF.UpdateUFAuras, L["DebuffColorTip"])
+	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-130, "CDFontSize", UF.UpdateUFAuras)
 
 	local options = {
 		[1] = L["PlayerUF"],
@@ -1860,7 +1861,7 @@ function G:SetupUFAuras(parent)
 		[6] = "Boss",
 	}
 
-	local dd = G:CreateDropdown(scroll.child, "", 40, -135, options, nil, 180, 28)
+	local dd = G:CreateDropdown(scroll.child, "", 40, -200, options, nil, 180, 28)
 	dd:SetFrameLevel(20)
 	dd.Text:SetText(options[1])
 	dd:SetBackdropBorderColor(1, .8, 0, .5)
@@ -1871,7 +1872,7 @@ function G:SetupUFAuras(parent)
 		panel:SetSize(260, 1)
 		panel:SetPoint("TOP", 0, -30)
 		panel:Hide()
-		createOptionGroup(panel, -130, data[i], UF.UpdateUFAuras, i == 6)
+		createOptionGroup(panel, -195, data[i], UF.UpdateUFAuras, i == 6)
 
 		dd.panels[i] = panel
 		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
@@ -2774,4 +2775,36 @@ function G:SetupDamageMeters(parent)
 	createOptionTitle(parent, L["Window3"], offset-180)
 	createOptionDropdown(parent, L["AttachedTo"], offset-240, {DISABLE, L["Window1"], L["Window2"]}, L["AttachedToTip"], "Misc", "W3Target", 1, updateAttached)
 	createOptionDropdown(parent, L["AttachedPoint"], offset-300, {L["TOP"], L["BOTTOM"], L["LEFT"], L["RIGHT"]}, L["AttachedPointTip"], "Misc", "W3Point", 1, updateAttached)
+end
+
+function G:SetupRaidAuras(parent)
+	local guiName = "NDuiGUI_RaidAurasSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["RaidAuras"])
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+	local UF = B:GetModule("UnitFrames")
+
+	local function updateRaidAuras()
+		if UF then
+			UF:UpdateUFAuras()
+		end
+	end
+
+	createOptionTitle(parent, GENERAL, offset)
+	createOptionCheck(parent, offset-35, L["CDText"], "UFs", "RaidCDText", updateRaidAuras)
+	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-90, "RaidCDSize", updateRaidAuras)
+
+	createOptionTitle(parent, "Buffs", offset-160)
+	createOptionDropdown(parent, L["RaidBuffType"], offset-210, {DISABLE, "Blizzard", "Defensive"}, nil, "UFs", "RaidBuffType", 2, updateRaidAuras)
+	createOptionSlider(parent, L["RaidBuffPerRow"], 1, 20, 7, offset-280, "RaidBuffPerRow", updateRaidAuras, "UFs")
+	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-360, "RaidNumBuff", updateRaidAuras, "UFs")
+
+	createOptionTitle(parent, "Debuffs", offset-420)
+	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, {DISABLE, "Blizzard", "Dispellable"}, nil, "UFs", "RaidDebuffType", 2, updateRaidAuras)
+	createOptionSlider(parent, L["RaidDebuffPerRow"], 1, 20, 7, offset-540, "RaidDebuffPerRow", updateRaidAuras, "UFs")
+	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-600, "RaidNumDebuff", updateRaidAuras, "UFs")
 end

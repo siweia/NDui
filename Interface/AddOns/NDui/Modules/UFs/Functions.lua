@@ -433,7 +433,6 @@ function UF:CreatePowerBar(self)
 	bg:SetAllPoints()
 	bg:SetTexture(DB.normTex)
 	bg:SetVertexColor(0, 0, 0, .7)
-	--bg.multiplier = .25
 
 	self.Power = power
 	self.Power.bg = bg
@@ -863,7 +862,7 @@ function UF:UpdateIconTexCoord(width, height)
 end
 
 function UF.PostCreateButton(element, button)
-	local fontSize = element.fontSize or element.size*.6
+	local fontSize = element.fontSize or element.size*.4
 	local parentFrame = CreateFrame("Frame", nil, button)
 	parentFrame:SetAllPoints()
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
@@ -873,7 +872,7 @@ function UF.PostCreateButton(element, button)
 	button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
 
 	local isRaid = element.__owner.mystyle == "raid"
-	button.Cooldown:SetHideCountdownNumbers(isRaid)
+	button.Cooldown:SetHideCountdownNumbers(isRaid and not C.db["UFs"]["RaidCDText"])
 	button.iconbg = B.ReskinIcon(button.Icon, not isRaid)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
@@ -904,11 +903,6 @@ local filteredStyle = {
 	["arena"] = true,
 }
 
-local dispellType = {
-	["Magic"] = true,
-	[""] = true,
-}
-
 function UF.PostUpdateButton(element, button, unit, data)
 	local duration, expiration, debuffType = data.duration, data.expirationTime, data.dispelName
 
@@ -932,18 +926,6 @@ function UF.PostUpdateButton(element, button, unit, data)
 		button.iconbg:SetBackdropBorderColor(color.r, color.g, color.b)
 	else
 		button.iconbg:SetBackdropBorderColor(0, 0, 0)
-	end
-end
-
-function UF.AurasPostUpdateInfo(element)
-	element.hasTheDot = nil
-	if C.db["Nameplate"]["ColorByDot"] then
-		for _, data in next, element.allDebuffs do
-			if data.isPlayerAura and C.db["Nameplate"]["DotSpells"][data.spellId] then
-				element.hasTheDot = true
-				break
-			end
-		end
 	end
 end
 
@@ -1013,12 +995,15 @@ function UF:UpdateAuraContainer(parent, element, maxAuras)
 	element.size = iconsPerRow and auraIconSize(width, iconsPerRow, element.spacing) or element.size
 	element:SetSize(width, (element.size + element.spacing) * maxLines)
 
-	local fontSize = element.fontSize or element.size*.6
+	local fontSize = element.fontSize or element.size*.4
+	local cooldownNumber = parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"] or false
 	for i = 1, #element do
 		local button = element[i]
 		if button then
 			if button.timer then B.SetFontSize(button.timer, fontSize) end
 			if button.Count then B.SetFontSize(button.Count, fontSize) end
+			button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
+			button.Cooldown:SetHideCountdownNumbers(cooldownNumber)
 		end
 	end
 end
@@ -1030,6 +1015,7 @@ function UF:ConfigureAuras(element)
 	element.maxCols = C.db["UFs"][value.."AurasPerRow"]
 	element.showDebuffType = C.db["UFs"]["DebuffColor"]
 	element.desaturateDebuff = C.db["UFs"]["Desaturate"]
+	element.fontSize = C.db["UFs"]["CDFontSize"]
 end
 
 function UF:RefreshUFAuras(frame)
@@ -1051,6 +1037,7 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	element.maxCols = C.db["UFs"][value..vType.."PerRow"]
 	element.showDebuffType = isRaid or C.db["UFs"]["DebuffColor"]
 	element.desaturateDebuff = not isRaid and C.db["UFs"]["Desaturate"]
+	element.fontSize = C.db["UFs"]["RaidCDSize"]
 end
 
 function UF:RefreshBuffAndDebuff(frame)
@@ -1169,7 +1156,6 @@ function UF:CreateAuras(self)
 	--	bu.disableCooldown = true
 		bu.onlyShowPlayer = true
 		bu.FilterAura = UF.CustomFilter
-	--	bu.PostUpdateInfo = UF.AurasPostUpdateInfo
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
