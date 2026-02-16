@@ -2751,3 +2751,27 @@ function G:SetupPrivateAuras(parent)
 	createOptionCheck(parent, offset-30, L["CDText"], "UFs", "CDText", updatePrivateAuras)
 	createOptionSlider(parent, L["Auras Size"], 10, 50, 22, offset-110, "PrivateSize", updatePrivateAuras, "UFs")
 end
+
+function G:SetupDamageMeters(parent)
+	local guiName = "NDuiGUI_DamageMetersSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, DAMAGE_METER_LABEL)
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+	local MISC = B:GetModule("Misc")
+	local function updateAttached()
+		if MISC then
+			MISC:AttachedMeters_Start()
+		end
+	end
+
+	createOptionTitle(parent, L["Window2"], offset)
+	createOptionDropdown(parent, L["AttachedTo"], offset-60, {DISABLE, L["Window1"], L["Window3"]}, L["AttachedToTip"], "Misc", "W2Target", 1, updateAttached)
+	createOptionDropdown(parent, L["AttachedPoint"], offset-120, {L["TOP"], L["BOTTOM"], L["LEFT"], L["RIGHT"]}, L["AttachedPointTip"], "Misc", "W2Point", 1, updateAttached)
+	createOptionTitle(parent, L["Window3"], offset-180)
+	createOptionDropdown(parent, L["AttachedTo"], offset-240, {DISABLE, L["Window1"], L["Window2"]}, L["AttachedToTip"], "Misc", "W3Target", 1, updateAttached)
+	createOptionDropdown(parent, L["AttachedPoint"], offset-300, {L["TOP"], L["BOTTOM"], L["LEFT"], L["RIGHT"]}, L["AttachedPointTip"], "Misc", "W3Point", 1, updateAttached)
+end
