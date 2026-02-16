@@ -71,6 +71,7 @@ function M:AttachedMeters_Setup()
 				else
 					frame:SetWidth(tarOption.width)
 				end
+				frame.ResizeButton:StopMovingOrSizing() -- help to remember size and anchor
 				frame:ClearAllPoints()
 				local anchorInfo = pointData[option.attachedPoint]
 				frame:SetPoint(anchorInfo.relFrom, option.attachedTarget, anchorInfo.relTo, anchorInfo.xOffset, anchorInfo.yOffset)
@@ -83,12 +84,16 @@ end
 function M:AttachedMeters_Start()
 	M:AttachedMeters_UpdateConfig()
 	M:AttachedMeters_Setup()
+end
+
+local function LoadScript()
+	C_Timer.After(2, M.AttachedMeters_Start)
 	hooksecurefunc(DamageMeter, "OnEditModeExit", M.AttachedMeters_Start)
 end
 
 local function JustWait(event, addon)
 	if addon == "Blizzard_DamageMeter" then
-		M:AttachedMeters_Start()
+		LoadScript()
 		B:UnregisterEvent(event, JustWait)
 	end
 end
@@ -97,7 +102,7 @@ function M:AttachedMeters()
 	if not C.db["Skins"]["DamageMeter"] then return end
 
 	if C_AddOns.IsAddOnLoaded("Blizzard_DamageMeter") then
-		M:AttachedMeters_Start()
+		LoadScript()
 	else
 		B:RegisterEvent("ADDON_LOADED", JustWait)
 	end
