@@ -705,6 +705,9 @@ function M:QuickMenuButton()
 		if menuFrame then
 			frame:SetParent(menuFrame)
 			frame:SetPoint("TOPLEFT", menuFrame, 0, 5)
+			for i = 1, 4 do
+				frame.buttons[i]:Hide()
+			end
 		end
 	end)
 
