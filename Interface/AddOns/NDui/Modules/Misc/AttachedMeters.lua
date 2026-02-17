@@ -75,7 +75,7 @@ function M:AttachedMeters_Setup()
 				frame:ClearAllPoints()
 				local anchorInfo = pointData[option.attachedPoint]
 				frame:SetPoint(anchorInfo.relFrom, option.attachedTarget, anchorInfo.relTo, anchorInfo.xOffset, anchorInfo.yOffset)
-				frame:SetLocked(true)
+			--	frame:SetLocked(true) -- this taint the duratioSeconds
 			end
 		end
 	end
