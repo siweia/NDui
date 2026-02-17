@@ -975,10 +975,12 @@ end
 function UF.RaidFrame_FilterAura(element, unit, data)
 	local value = element.__value
 	if data.isHarmfulAura then
-		if C.db["UFs"][value.."DebuffType"] == 2 then -- not in combat: show all; in combat: blizzard filter
-			return not InCombatLockdown() or data.isRaidInCombatAura
+		if C.db["UFs"][value.."DebuffType"] == 2 then -- in combat: blizzard filter
+			return data.isRaidInCombatAura
 		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show displayable debuff
 			return data.isPlayerDispellable
+		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- show all
+			return true
 		end
 	else
 		if C.db["UFs"][value.."BuffType"] == 2 then -- show blizzard filter

@@ -932,3 +932,5 @@ L["Window2"] = "Window2" -- need translation
 L["Window3"] = "Window3" -- need translation
 L["RaidAuras"] = "RaidFrame Auras" -- need translation
 L["ShowCancelable"] = "Show cancelable auras" -- need translation
+L["Blizzard"] = "Blizzard filter" -- need translation
+L["Defensive"] = "Defensive auras" -- need translation
