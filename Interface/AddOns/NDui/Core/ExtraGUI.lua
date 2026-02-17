@@ -1811,8 +1811,8 @@ function G:SetupUFAuras(parent)
 		["Pet"] = {1, 1, 5, 6, 6},
 		["Boss"] = {2, 3, 6, 6, 6},
 	}
-	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"]}
-	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"]}
+	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"], L["ShowCancelable"]}
+	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"], L["ShowDispell"]}
 	local growthOptions = {}
 	for i = 1, 4 do
 		growthOptions[i] = UF.AuraDirections[i].name

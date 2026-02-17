@@ -935,51 +935,56 @@ function UF.PostUpdateGapButton(_, _, button)
 	end
 end
 
-function UF.CustomFilter(element, unit, data)
-	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then
+function UF.Nameplate_FilterAura(element, unit, data)
+	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then -- only highlight you can dispel
 		return true
 	else
 		return element.onlyShowPlayer and data.isPlayerAura
 	end
 end
 
-function UF.UnitCustomFilter(element, _, data)
+function UF.UnitFrame_FilterAura(element, _, data)
 	local value = element.__value
 	if data.isHarmfulAura then
-		if C.db["UFs"][value.."DebuffType"] == 2 then
+		if C.db["UFs"][value.."DebuffType"] == 2 then -- show all
 			return true
-		elseif C.db["UFs"][value.."DebuffType"] == 3 then
+		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show player only
 			return data.isPlayerAura
+		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- show dispellable debuff
+			return data.isPlayerDispellable
 		end
 	else
-		if C.db["UFs"][value.."BuffType"] == 2 then
+		if C.db["UFs"][value.."BuffType"] == 2 then -- show all
 			return true
-		elseif C.db["UFs"][value.."BuffType"] == 3 then
+		elseif C.db["UFs"][value.."BuffType"] == 3 then -- show stealable buff
 			return type(data.dispelName) ~= "nil"
+		elseif C.db["UFs"][value.."BuffType"] == 4 then -- include dispel buffs, right click cancelable buffs
+			return data.isPlayerCancelable
 		end
 	end
 end
 
 function UF.PostProcessAuraData(element, unit, data, filter)
-	data.isRaidInCombatAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_IN_COMBAT")
-	data.isPlayerDispellable = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_PLAYER_DISPELLABLE")
-	data.isDefensiveAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|EXTERNAL_DEFENSIVE")
+	data.isRaidInCombatAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_IN_COMBAT") -- blizzard filter
+	data.isBigDefensiveAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|BIG_DEFENSIVE") -- defensive buffs
+	data.isPlayerCancelable = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|CANCELABLE") -- dispel buffs and cancelable buffs
+	data.isPlayerDispellable = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_PLAYER_DISPELLABLE") -- dispel debuffs
 	return data
 end
 
-function UF.RaidCustomFilter(element, unit, data)
+function UF.RaidFrame_FilterAura(element, unit, data)
 	local value = element.__value
 	if data.isHarmfulAura then
-		if C.db["UFs"][value.."DebuffType"] == 2 then
-			return data.isRaidInCombatAura
-		elseif C.db["UFs"][value.."DebuffType"] == 3 then
+		if C.db["UFs"][value.."DebuffType"] == 2 then -- not in combat: show all; in combat: blizzard filter
+			return not InCombatLockdown() or data.isRaidInCombatAura
+		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show displayable debuff
 			return data.isPlayerDispellable
 		end
 	else
-		if C.db["UFs"][value.."BuffType"] == 2 then
+		if C.db["UFs"][value.."BuffType"] == 2 then -- show blizzard filter
 			return data.isRaidInCombatAura
-		elseif C.db["UFs"][value.."BuffType"] == 3 then
-			return data.isDefensiveAura
+		elseif C.db["UFs"][value.."BuffType"] == 3 then -- show defensive buffs
+			return data.isBigDefensiveAura
 		end
 	end
 end
@@ -1137,7 +1142,7 @@ function UF:CreateAuras(self)
 		bu.__value = auraUFs[mystyle]
 		UF:ConfigureAuras(bu)
 		UF:UpdateAuraDirection(self, bu)
-		bu.FilterAura = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitFrame_FilterAura
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growthY"] = "UP"
@@ -1155,7 +1160,7 @@ function UF:CreateAuras(self)
 		bu.disableMouse = true
 	--	bu.disableCooldown = true
 		bu.onlyShowPlayer = true
-		bu.FilterAura = UF.CustomFilter
+		bu.FilterAura = UF.Nameplate_FilterAura
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
@@ -1180,7 +1185,7 @@ function UF:CreateBuffs(self)
 		bu:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
 		bu.disableMouse = true
 		bu.spacing = 2
-		bu.FilterAura = UF.RaidCustomFilter
+		bu.FilterAura = UF.RaidFrame_FilterAura
 	else
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growthX"] = "RIGHT"
@@ -1188,7 +1193,7 @@ function UF:CreateBuffs(self)
 		bu.__value = "Boss"
 		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		bu.spacing = 3
-		bu.FilterAura = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitFrame_FilterAura
 	end
 
 	UF:ConfigureBuffAndDebuff(bu)
@@ -1214,7 +1219,7 @@ function UF:CreateDebuffs(self)
 		bu:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
 		bu.disableMouse = true
 		bu.spacing = 2
-		bu.FilterAura = UF.RaidCustomFilter
+		bu.FilterAura = UF.RaidFrame_FilterAura
 	else
 		bu.initialAnchor = "TOPRIGHT"
 		bu["growthX"] = "LEFT"
@@ -1222,7 +1227,7 @@ function UF:CreateDebuffs(self)
 		bu.__value = "Boss"
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 		bu.spacing = 3
-		bu.FilterAura = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitFrame_FilterAura
 	end
 
 	UF:ConfigureBuffAndDebuff(bu, true)
