@@ -202,3 +202,8 @@ function BackdropTemplateMixin:SetupTextureCoordinates()
 		end
 	end
 end
+
+-- fix money tooltip
+function SetTooltipMoney(frame, money, _, prefixText, suffixText)
+	frame:AddLine((prefixText or "").." "..GetCoinTextureString(money).." "..(suffixText or ""), 1,1,1)
+end
