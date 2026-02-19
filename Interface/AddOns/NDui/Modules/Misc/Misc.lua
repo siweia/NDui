@@ -300,6 +300,8 @@ function M:TradeTargetInfo()
 
 		local guid = UnitGUID("NPC")
 		if not guid then return end
+		if B:IsSecretValue(guid) then return end
+
 		local text = "|cffff0000"..L["Stranger"]
 		if C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
 			text = "|cffffff00"..FRIEND
