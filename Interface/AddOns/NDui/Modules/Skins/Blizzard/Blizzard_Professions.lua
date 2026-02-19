@@ -5,7 +5,7 @@ local flyoutFrame
 
 local function reskinFlyoutButton(button)
 	if not button.styled then
-		button.bg = B.ReskinIcon(button.icon)
+		button.bg = B.ReskinIcon(button.Icon)
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
