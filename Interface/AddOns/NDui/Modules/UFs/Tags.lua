@@ -11,7 +11,6 @@ local UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel = UnitReac
 local UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost, UnitName, UnitExists = UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost, UnitName, UnitExists
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
 local GetNumArenaOpponentSpecs, GetCreatureDifficultyColor = GetNumArenaOpponentSpecs, GetCreatureDifficultyColor
-local UnitClassBase = UnitClassBase
 local TruncateWhenZero = C_StringUtil.TruncateWhenZero
 
 -- Add scantip back, due to issue on ColorMixin
@@ -77,7 +76,7 @@ oUF.Tags.Events["curAbsorb"] = "UNIT_ABSORB_AMOUNT_CHANGED UNIT_HEAL_ABSORB_AMOU
 
 oUF.Tags.Methods["color"] = function(unit)
 	if not unit then return end
-	local class = UnitClassBase(unit)
+	local _, class = UnitClass(unit)
 	local reaction = UnitReaction(unit, "player")
 
 	if UnitIsTapDenied(unit) then
@@ -255,7 +254,7 @@ oUF.Tags.Events["npctitle"] = "UNIT_NAME_UPDATE"
 oUF.Tags.Methods["tarname"] = function(unit)
 	local tarUnit = unit.."target"
 	if UnitExists(tarUnit) then
-		local tarClass = UnitClassBase(tarUnit)
+		local _, tarClass = UnitClass(tarUnit)
 		return B.HexRGB(oUF.colors.class[tarClass])..UnitName(tarUnit)
 	end
 end

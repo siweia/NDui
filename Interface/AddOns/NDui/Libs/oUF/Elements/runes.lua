@@ -84,7 +84,7 @@ local function UpdateColor(self, event)
 
 	if(color) then
 		for index = 1, #element do
-			element[index]:GetStatusBarTexture():SetVertexColor(color:GetRGB())
+			element[index]:SetStatusBarColor(color:GetRGB())
 		end
 	end
 

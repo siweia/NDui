@@ -165,7 +165,7 @@ function UF.HealthPostUpdate(element, unit, cur, max)
 	if useGradientClass then
 		local color
 		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
-			local class = UnitClassBase(unit)
+			local _, class = UnitClass(unit)
 			color = self.colors.class[class]
 		elseif UnitReaction(unit, "player") then
 			color = self.colors.reaction[UnitReaction(unit, "player")]
@@ -433,7 +433,6 @@ function UF:CreatePowerBar(self)
 	bg:SetAllPoints()
 	bg:SetTexture(DB.normTex)
 	bg:SetVertexColor(0, 0, 0, .7)
-	--bg.multiplier = .25
 
 	self.Power = power
 	self.Power.bg = bg
@@ -863,7 +862,7 @@ function UF:UpdateIconTexCoord(width, height)
 end
 
 function UF.PostCreateButton(element, button)
-	local fontSize = element.fontSize or element.size*.6
+	local fontSize = element.fontSize or element.size*.4
 	local parentFrame = CreateFrame("Frame", nil, button)
 	parentFrame:SetAllPoints()
 	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
@@ -873,7 +872,7 @@ function UF.PostCreateButton(element, button)
 	button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
 
 	local isRaid = element.__owner.mystyle == "raid"
-	button.Cooldown:SetHideCountdownNumbers(isRaid)
+	button.Cooldown:SetHideCountdownNumbers(isRaid and not C.db["UFs"]["RaidCDText"])
 	button.iconbg = B.ReskinIcon(button.Icon, not isRaid)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
@@ -883,9 +882,9 @@ function UF.PostCreateButton(element, button)
 	button.Overlay:Hide()
 	button.Overlay = nil -- needs review
 	button.Stealable:SetAtlas("bags-newitem")
-	if AURA then
-		button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
-	end
+	--if AURA then
+	--	button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
+	--end
 
 	if element.__owner.mystyle == "nameplate" then
 		hooksecurefunc(button, "SetSize", UF.UpdateIconTexCoord)
@@ -902,11 +901,6 @@ local filteredStyle = {
 	["nameplate"] = true,
 	["boss"] = true,
 	["arena"] = true,
-}
-
-local dispellType = {
-	["Magic"] = true,
-	[""] = true,
 }
 
 function UF.PostUpdateButton(element, button, unit, data)
@@ -935,69 +929,76 @@ function UF.PostUpdateButton(element, button, unit, data)
 	end
 end
 
-function UF.AurasPostUpdateInfo(element)
-	element.hasTheDot = nil
-	if C.db["Nameplate"]["ColorByDot"] then
-		for _, data in next, element.allDebuffs do
-			if data.isPlayerAura and C.db["Nameplate"]["DotSpells"][data.spellId] then
-				element.hasTheDot = true
-				break
-			end
-		end
-	end
-end
-
 function UF.PostUpdateGapButton(_, _, button)
 	if button.iconbg and button.iconbg:IsShown() then
 		button.iconbg:Hide()
 	end
 end
 
-function UF.CustomFilter(element, unit, data)
-	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then
+function UF.Nameplate_FilterAura(element, unit, data)
+	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then -- only highlight you can dispel
 		return true
 	else
-		return element.onlyShowPlayer and data.isPlayerAura
+		return (element.onlyShowPlayer and data.isPlayerAura) or (data.isHarmfulAura and data.isCrowdControlAura)
 	end
 end
 
-function UF.UnitCustomFilter(element, _, data)
+function UF.UnitFrame_FilterAura(element, _, data)
 	local value = element.__value
 	if data.isHarmfulAura then
-		if C.db["UFs"][value.."DebuffType"] == 2 then
+		if C.db["UFs"][value.."DebuffType"] == 2 then -- show all
 			return true
-		elseif C.db["UFs"][value.."DebuffType"] == 3 then
+		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show player only
 			return data.isPlayerAura
-		end
-	else
-		if C.db["UFs"][value.."BuffType"] == 2 then
-			return true
-		elseif C.db["UFs"][value.."BuffType"] == 3 then
-			return type(data.dispelName) ~= "nil"
-		end
-	end
-end
-
-function UF.PostProcessAuraData(element, unit, data, filter)
-	data.isRaidInCombatAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_IN_COMBAT")
-	data.isPlayerDispellable = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_PLAYER_DISPELLABLE")
-	data.isDefensiveAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|EXTERNAL_DEFENSIVE")
-	return data
-end
-
-function UF.RaidCustomFilter(element, unit, data)
-	local value = element.__value
-	if data.isHarmfulAura then
-		if C.db["UFs"][value.."DebuffType"] == 2 then
-			return data.isRaidInCombatAura
-		elseif C.db["UFs"][value.."DebuffType"] == 3 then
+		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- show dispellable debuff
 			return data.isPlayerDispellable
 		end
 	else
-		if C.db["UFs"][value.."BuffType"] == 2 then
+		if C.db["UFs"][value.."BuffType"] == 2 then -- show all
+			return true
+		elseif C.db["UFs"][value.."BuffType"] == 3 then -- show stealable buff
+			return type(data.dispelName) ~= "nil"
+		elseif C.db["UFs"][value.."BuffType"] == 4 then -- include dispel buffs, right click cancelable buffs
+			return data.isPlayerCancelable
+		end
+	end
+end
+
+local function IsAuraPassed(unit, data, filter, suffix)
+	return not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|"..suffix)
+end
+
+function UF.PostProcessAuraData(element, unit, data, filter)
+	data.isImportantAura = IsAuraPassed(unit, data, filter, "IMPORTANT") -- important auras
+	data.isCrowdControlAura = IsAuraPassed(unit, data, filter, "CROWD_CONTROL") -- crowd control auras
+	data.isRaidInCombatAura = IsAuraPassed(unit, data, filter, "RAID_IN_COMBAT") -- blizzard filter
+	data.isRaidInCombatAura = IsAuraPassed(unit, data, filter, "RAID_IN_COMBAT") -- blizzard filter
+	data.isBigDefensiveAura = IsAuraPassed(unit, data, filter, "BIG_DEFENSIVE") -- defensive buffs by you
+	data.isExtDefensiveAura = IsAuraPassed(unit, data, filter, "EXTERNAL_DEFENSIVE") -- defensive buffs by  others
+	data.isPlayerCancelable = IsAuraPassed(unit, data, filter, "CANCELABLE") -- dispel buffs and cancelable buffs
+	data.isPlayerDispellable = IsAuraPassed(unit, data, filter, "RAID_PLAYER_DISPELLABLE") -- dispel debuffs
+	return data
+end
+
+function UF.RaidFrame_FilterAura(element, unit, data)
+	local value = element.__value
+	if data.isHarmfulAura then
+		if C.db["UFs"][value.."DebuffType"] == 2 then -- in combat: blizzard filter
 			return data.isRaidInCombatAura
-		elseif C.db["UFs"][value.."BuffType"] == 3 then
-			return data.isDefensiveAura
+		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show displayable debuff
+			return data.isPlayerDispellable
+		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- mix filters
+			return data.isRaidInCombatAura or data.isPlayerDispellable
+		elseif C.db["UFs"][value.."DebuffType"] == 5 then -- show all
+			return true
+		end
+	else
+		if C.db["UFs"][value.."BuffType"] == 2 then -- show blizzard filter
+			return data.isPlayerAura and data.isRaidInCombatAura
+		elseif C.db["UFs"][value.."BuffType"] == 3 then -- show defensive buffs
+			return data.isBigDefensiveAura or data.isExtDefensiveAura
+		elseif C.db["UFs"][value.."BuffType"] == 4 then -- max filters
+			return data.isPlayerAura and data.isRaidInCombatAura or data.isBigDefensiveAura or data.isExtDefensiveAura
 		end
 	end
 end
@@ -1013,12 +1014,15 @@ function UF:UpdateAuraContainer(parent, element, maxAuras)
 	element.size = iconsPerRow and auraIconSize(width, iconsPerRow, element.spacing) or element.size
 	element:SetSize(width, (element.size + element.spacing) * maxLines)
 
-	local fontSize = element.fontSize or element.size*.6
+	local fontSize = element.fontSize or element.size*.4
+	local cooldownNumber = parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"] or false
 	for i = 1, #element do
 		local button = element[i]
 		if button then
 			if button.timer then B.SetFontSize(button.timer, fontSize) end
 			if button.Count then B.SetFontSize(button.Count, fontSize) end
+			button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
+			button.Cooldown:SetHideCountdownNumbers(cooldownNumber)
 		end
 	end
 end
@@ -1030,6 +1034,7 @@ function UF:ConfigureAuras(element)
 	element.maxCols = C.db["UFs"][value.."AurasPerRow"]
 	element.showDebuffType = C.db["UFs"]["DebuffColor"]
 	element.desaturateDebuff = C.db["UFs"]["Desaturate"]
+	element.fontSize = C.db["UFs"]["CDFontSize"]
 end
 
 function UF:RefreshUFAuras(frame)
@@ -1051,6 +1056,7 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	element.maxCols = C.db["UFs"][value..vType.."PerRow"]
 	element.showDebuffType = isRaid or C.db["UFs"]["DebuffColor"]
 	element.desaturateDebuff = not isRaid and C.db["UFs"]["Desaturate"]
+	element.fontSize = C.db["UFs"]["RaidCDSize"]
 end
 
 function UF:RefreshBuffAndDebuff(frame)
@@ -1150,7 +1156,7 @@ function UF:CreateAuras(self)
 		bu.__value = auraUFs[mystyle]
 		UF:ConfigureAuras(bu)
 		UF:UpdateAuraDirection(self, bu)
-		bu.FilterAura = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitFrame_FilterAura
 	elseif mystyle == "nameplate" then
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growthY"] = "UP"
@@ -1168,8 +1174,7 @@ function UF:CreateAuras(self)
 		bu.disableMouse = true
 	--	bu.disableCooldown = true
 		bu.onlyShowPlayer = true
-		bu.FilterAura = UF.CustomFilter
-	--	bu.PostUpdateInfo = UF.AurasPostUpdateInfo
+		bu.FilterAura = UF.Nameplate_FilterAura
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
@@ -1194,7 +1199,7 @@ function UF:CreateBuffs(self)
 		bu:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
 		bu.disableMouse = true
 		bu.spacing = 2
-		bu.FilterAura = UF.RaidCustomFilter
+		bu.FilterAura = UF.RaidFrame_FilterAura
 	else
 		bu.initialAnchor = "BOTTOMLEFT"
 		bu["growthX"] = "RIGHT"
@@ -1202,7 +1207,7 @@ function UF:CreateBuffs(self)
 		bu.__value = "Boss"
 		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		bu.spacing = 3
-		bu.FilterAura = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitFrame_FilterAura
 	end
 
 	UF:ConfigureBuffAndDebuff(bu)
@@ -1228,7 +1233,7 @@ function UF:CreateDebuffs(self)
 		bu:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
 		bu.disableMouse = true
 		bu.spacing = 2
-		bu.FilterAura = UF.RaidCustomFilter
+		bu.FilterAura = UF.RaidFrame_FilterAura
 	else
 		bu.initialAnchor = "TOPRIGHT"
 		bu["growthX"] = "LEFT"
@@ -1236,7 +1241,7 @@ function UF:CreateDebuffs(self)
 		bu.__value = "Boss"
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 		bu.spacing = 3
-		bu.FilterAura = UF.UnitCustomFilter
+		bu.FilterAura = UF.UnitFrame_FilterAura
 	end
 
 	UF:ConfigureBuffAndDebuff(bu, true)

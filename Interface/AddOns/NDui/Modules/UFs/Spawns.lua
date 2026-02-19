@@ -169,8 +169,10 @@ local function CreateRaidStyle(self)
 	--	UF:CreateRaidAuras(self)
 	--end
 	UF:CreatePrivateAuras(self)
-	UF:CreateBuffs(self)
-	UF:CreateDebuffs(self)
+	if C.db["UFs"]["RaidAuras"] then
+		UF:CreateBuffs(self)
+		UF:CreateDebuffs(self)
+	end
 end
 
 local function CreateSimpleRaidStyle(self)

@@ -48,7 +48,7 @@ end
 
 local function updateCommunitiesSelection(texture, show)
 	local button = texture:GetParent()
-	if show then
+	if B:NotSecretValue(show) and show then
 		if texture:GetTexCoord() == 0 then
 			button.bg:SetBackdropColor(0, 1, 0, .25)
 		else
@@ -204,7 +204,8 @@ C.themes["Blizzard_Communities"] = function()
 			end
 
 			child.CircleMask:Hide()
-			child.__iconBorder:SetShown(child.IconRing:IsShown())
+			local borderShown = child.IconRing:IsShown()
+			child.__iconBorder:SetShown(B:NotSecretValue(borderShown) and borderShown)
 		end
 	end)
 

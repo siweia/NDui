@@ -71,7 +71,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	PVPQueueFrame.CategoryButton3.Icon:SetTexture("Interface\\Icons\\ability_warrior_offensivestance")
 
 	hooksecurefunc("PVPQueueFrame_SelectButton", function(index)
-		for i = 1, 3 do
+		for i = 1, 4 do
 			local bu = PVPQueueFrame["CategoryButton"..i]
 			if i == index then
 				bu.Background:Show()

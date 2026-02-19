@@ -273,7 +273,7 @@ local function processData(element, unit, data, filter)
 	if(not data) then return end
 
 	data.isPlayerAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter .. '|PLAYER')
-	data.isHarmfulAura = filter == 'HARMFUL' -- "isHarmful" is a secret, use a different name
+	data.isHarmfulAura = filter:find('HARMFUL') and true -- "isHarmful" is a secret, use a different name
 
 	--[[ Callback: Auras:PostProcessAuraData(unit, data, filter)
 	Called after the aura data has been processed.

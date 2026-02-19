@@ -10,12 +10,22 @@ C.themes["Blizzard_DeathRecap"] = function()
 	DeathRecapFrame.Divider:Hide()
 
 	B.SetBD(DeathRecapFrame)
-	B.Reskin(select(8, DeathRecapFrame:GetChildren())) -- bottom close button has no parentKey
+	B.Reskin(DeathRecapFrame.CloseButton) -- bottom close button has no parentKey
 	B.ReskinClose(DeathRecapFrame.CloseXButton)
 
-	for i = 1, NUM_DEATH_RECAP_EVENTS do
-		local recap = DeathRecapFrame["Recap"..i].SpellInfo
+	local function updateEntry(button)
+		local recap = button.SpellInfo
+		if not recap or recap.styled then return end
+
+		if recap.Icon then
+			B.ReskinIcon(recap.Icon)
+		end
 		recap.IconBorder:Hide()
-		B.ReskinIcon(recap.Icon)
+		recap.styled = true
 	end
+
+	B.ReskinTrimScroll(DeathRecapFrame.ScrollBar)
+	hooksecurefunc(DeathRecapFrame.ScrollBox, "Update", function(self)
+		self:ForEachFrame(updateEntry)
+	end)
 end
