@@ -165,7 +165,7 @@ function UF.HealthPostUpdate(element, unit, cur, max)
 	if useGradientClass then
 		local color
 		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
-			local class = UnitClassBase(unit)
+			local _, class = UnitClass(unit)
 			color = self.colors.class[class]
 		elseif UnitReaction(unit, "player") then
 			color = self.colors.reaction[UnitReaction(unit, "player")]
@@ -882,9 +882,9 @@ function UF.PostCreateButton(element, button)
 	button.Overlay:Hide()
 	button.Overlay = nil -- needs review
 	button.Stealable:SetAtlas("bags-newitem")
-	if AURA then
-		button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
-	end
+	--if AURA then
+	--	button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
+	--end
 
 	if element.__owner.mystyle == "nameplate" then
 		hooksecurefunc(button, "SetSize", UF.UpdateIconTexCoord)
