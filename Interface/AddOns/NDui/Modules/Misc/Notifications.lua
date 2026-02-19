@@ -289,11 +289,10 @@ end
 	NDui版本过期提示
 ]]
 local lastVCTime, isVCInit = 0
-local tn = tonumber
 
 local function HandleVersonTag(version)
 	local major, minor = strsplit(".", version)
-	major, minor = tn(major), tn(minor)
+	major, minor = tonumber(major), tonumber(minor)
 	if major >= 9 then
 		major, minor = 0, 0
 		if DB.isDeveloper and author then
@@ -645,7 +644,7 @@ function M:AddAlerts()
 	M:SoloInfo()
 	M:RareAlert()
 	--M:InterruptAlert()
-	M:VersionCheck()
+	C_Timer.After(0, M.VersionCheck) -- add delay to avoid taint
 	M:SpellItemAlert()
 	M:CheckIncompatible()
 	M:SendCDStatus()
