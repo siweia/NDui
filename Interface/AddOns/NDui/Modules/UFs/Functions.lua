@@ -964,11 +964,19 @@ function UF.UnitFrame_FilterAura(element, _, data)
 	end
 end
 
+local function IsAuraPassed(unit, data, filter, suffix)
+	return not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|"..suffix)
+end
+
 function UF.PostProcessAuraData(element, unit, data, filter)
-	data.isRaidInCombatAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_IN_COMBAT") -- blizzard filter
-	data.isBigDefensiveAura = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|BIG_DEFENSIVE") -- defensive buffs
-	data.isPlayerCancelable = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|CANCELABLE") -- dispel buffs and cancelable buffs
-	data.isPlayerDispellable = not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|RAID_PLAYER_DISPELLABLE") -- dispel debuffs
+	data.isImportantAura = IsAuraPassed(unit, data, filter, "IMPORTANT") -- important auras
+	data.isCrowdControlAura = IsAuraPassed(unit, data, filter, "CROWD_CONTROL") -- crowd control auras
+	data.isRaidInCombatAura = IsAuraPassed(unit, data, filter, "RAID_IN_COMBAT") -- blizzard filter
+	data.isRaidInCombatAura = IsAuraPassed(unit, data, filter, "RAID_IN_COMBAT") -- blizzard filter
+	data.isBigDefensiveAura = IsAuraPassed(unit, data, filter, "BIG_DEFENSIVE") -- defensive buffs by you
+	data.isExtDefensiveAura = IsAuraPassed(unit, data, filter, "EXTERNAL_DEFENSIVE") -- defensive buffs by  others
+	data.isPlayerCancelable = IsAuraPassed(unit, data, filter, "CANCELABLE") -- dispel buffs and cancelable buffs
+	data.isPlayerDispellable = IsAuraPassed(unit, data, filter, "RAID_PLAYER_DISPELLABLE") -- dispel debuffs
 	return data
 end
 
@@ -979,14 +987,18 @@ function UF.RaidFrame_FilterAura(element, unit, data)
 			return data.isRaidInCombatAura
 		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show displayable debuff
 			return data.isPlayerDispellable
-		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- show all
+		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- mix filters
+			return data.isRaidInCombatAura or data.isPlayerDispellable
+		elseif C.db["UFs"][value.."DebuffType"] == 5 then -- show all
 			return true
 		end
 	else
 		if C.db["UFs"][value.."BuffType"] == 2 then -- show blizzard filter
-			return data.isRaidInCombatAura
+			return data.isPlayerAura and data.isRaidInCombatAura
 		elseif C.db["UFs"][value.."BuffType"] == 3 then -- show defensive buffs
-			return data.isBigDefensiveAura
+			return data.isBigDefensiveAura or data.isExtDefensiveAura
+		elseif C.db["UFs"][value.."BuffType"] == 4 then -- max filters
+			return data.isPlayerAura and data.isRaidInCombatAura or data.isBigDefensiveAura or data.isExtDefensiveAura
 		end
 	end
 end
