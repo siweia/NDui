@@ -113,7 +113,7 @@ function M:ContactList_Refresh()
 	wipe(contactListByRealm)
 
 	for fullname, color in pairs(NDuiADB["ContactList"]) do
-		local name, realm = strsplit("-", fullname)
+		local name, realm = strmatch(fullname, "^(.-)%-(.*)$")
 		if realm then
 			if not contactListByRealm[realm] then contactListByRealm[realm] = {} end
 			contactListByRealm[realm][name] = color
