@@ -47,6 +47,7 @@ function Bar:CreateAspectButton(spellID, index)
 	button.CD:SetDrawEdge(false)
 	button.spellID = spellID
 	button:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
+	button:RegisterForClicks("AnyDown", "AnyUp")
 	button:SetScript("OnEvent", Bar.UpdateAspectCooldown)
 
 	button.cover = button:CreateTexture(nil, "ARTWORK", nil, 5)
