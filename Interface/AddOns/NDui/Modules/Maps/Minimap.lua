@@ -51,6 +51,12 @@ function module:CreatePulse()
 	end)
 end
 
+local function UpdateLFGIcon()
+	LFGMinimapFrame:ClearAllPoints()
+	LFGMinimapFrame:SetPoint("RIGHT", Minimap, 5, 0)
+	LFGMinimapFrameBorder:Hide()
+end
+
 function module:ReskinRegions()
 	-- Tracking icon
 	MiniMapTracking:SetScale(.8)
@@ -106,9 +112,9 @@ function module:ReskinRegions()
 
 	-- LFG Icon
 	if LFGMinimapFrame then
-		LFGMinimapFrame:ClearAllPoints()
-		LFGMinimapFrame:SetPoint("RIGHT", Minimap, 5, 0)
-		LFGMinimapFrameBorder:Hide()
+		UpdateLFGIcon()
+	else
+		EventUtil.ContinueOnAddOnLoaded("Blizzard_GroupFinder_VanillaStyle", UpdateLFGIcon)
 	end
 end
 
