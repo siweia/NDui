@@ -498,6 +498,7 @@ G.DefaultSettings = {
 		QuestTracker = true,
 		CooldownMgr = true,
 		DamageMeter = true,
+		CentralCDM = false,
 	},
 	Tooltip = {
 		HideInCombat = 1,
@@ -874,6 +875,10 @@ end
 
 local function setupDamageMeters()
 	G:SetupDamageMeters(guiPage[11])
+end
+
+local function setupCooldownViewer()
+	G:SetupCooldownViewer(guiPage[11])
 end
 
 local function updateHotkeys()
@@ -1467,7 +1472,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "BgTex", L["BgTex"]},
 		{1, "Skins", "GreyBD", L["GreyBackdrop"], true, nil, nil, L["GreyBackdropTip"]},
 		{1, "Skins", "DamageMeter", IsNew..L["DamageMeter"], nil, setupDamageMeters},
-		{1, "Skins", "CooldownMgr", IsNew..L["CooldownMgr"], true},
+		{1, "Skins", "CooldownMgr", IsNew..L["CooldownMgr"], true, setupCooldownViewer},
 		{3, "Skins", "SkinAlpha", L["SkinAlpha"].."*", nil, {0, 1, .05}, updateSkinAlpha},
 		{3, "Skins", "FontScale", L["GlobalFontScale"], true, {.5, 1.5, .05}},
 		{},--blank
