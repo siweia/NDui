@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
+local G = B:GetModule("GUI")
 
 local wipe, select, pairs, tonumber = wipe, select, pairs, tonumber
 local strsplit, strfind, tinsert = strsplit, strfind, tinsert
@@ -66,9 +67,15 @@ local contactList = {}
 local contactListByRealm = {}
 
 function M:ContactButton_OnClick()
+	local replaceFrame = _G["NDui_ContactReplaceFrame"]
 	local text = self.name:GetText() or ""
-	SendMailNameEditBox:SetText(text)
-	SendMailNameEditBox:SetCursorPosition(0)
+	if replaceFrame:IsShown() then
+		replaceFrame.oldRealm:SetText(strmatch(text, "^.-%-(.*)$"))
+		replaceFrame.newRealm:SetText(strmatch(text, "%-(.-%-%s)") or "")
+	else
+		SendMailNameEditBox:SetText(text)
+		SendMailNameEditBox:SetCursorPosition(0)
+	end
 end
 
 function M:ContactButton_Delete()
@@ -174,6 +181,44 @@ function M:ContactList_OnMouseWheel(delta)
 	M:ContactList_Update()
 end
 
+function M:ContactList_ReplaceRealm(parent)
+	local frame = CreateFrame("Frame", "NDui_ContactReplaceFrame", parent)
+	frame:SetSize(200, 160)
+	frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", 3, 0)
+	B.SetBD(frame)
+	frame:Hide()
+
+	frame.oldRealm = G:CreateEditbox(frame, L["OldRealmName"], 10, -30, nil, 180, 25)
+	frame.newRealm = G:CreateEditbox(frame, L["NewRealmName"], 10, -90, nil, 180, 25)
+
+	frame.replace = B.CreateButton(frame, 80, 25, REPLACE, 14)
+	frame.replace:SetPoint("TOP", frame.newRealm, "BOTTOM", 0, -15)
+	frame.replace:SetScript("OnClick", function()
+		local oldRealm = frame.oldRealm:GetText()
+		local newRealm = frame.newRealm:GetText()
+		if oldRealm == "" or newRealm == "" then return end
+
+		for fullname, color in pairs(NDuiADB["ContactList"]) do
+			local name, realm = strmatch(fullname, "^(.-)%-(.*)$")
+			if realm == oldRealm then
+				NDuiADB["ContactList"][name.."-"..newRealm] = color
+				NDuiADB["ContactList"][fullname] = nil
+			end
+		end
+		M:ContactList_Refresh()
+	end)
+end
+
+function M:ContactList_IconButton(parent, texture, title)
+	local button = CreateFrame("Button", nil, parent)
+	button:SetSize(22, 22)
+	B.PixelIcon(button, texture, true)
+	button.title = title
+	B.AddTooltip(button, "ANCHOR_RIGHT", nil, "info")
+
+	return button
+end
+
 function M:MailBox_ContactList()
 	local bu = B.CreateGear(SendMailFrame)
 	bu:SetPoint("LEFT", SendMailNameEditBox, "RIGHT", 20, 0)
@@ -193,9 +238,10 @@ function M:MailBox_ContactList()
 	editbox:SetPoint("TOPLEFT", 5, -25)
 	B.AddTooltip(editbox, "ANCHOR_BOTTOMRIGHT", L["AddContactTip"], "info", true)
 	local swatch = B.CreateColorSwatch(list, "")
-	swatch:SetPoint("LEFT", editbox, "RIGHT", 5, 0)
-	local add = B.CreateButton(list, 42, 22, ADD, 14)
-	add:SetPoint("LEFT", swatch, "RIGHT", 5, 0)
+	swatch:SetPoint("LEFT", editbox, "RIGHT", 3, 0)
+
+	local add = M:ContactList_IconButton(list, "Atlas:bags-icon-addslots", ADD)
+	add:SetPoint("LEFT", swatch, "RIGHT", 3, 0)
 	add:SetScript("OnClick", function()
 		local text = editbox:GetText()
 		if text == "" or tonumber(text) then return end -- incorrect input
@@ -206,6 +252,12 @@ function M:MailBox_ContactList()
 		NDuiADB["ContactList"][text] = r..":"..g..":"..b
 		M:ContactList_Refresh()
 		editbox:SetText("")
+	end)
+
+	local replace = M:ContactList_IconButton(list, "Atlas:transmog-icon-revert", REPLACE)
+	replace:SetPoint("LEFT", add, "RIGHT", 3, 0)
+	replace:SetScript("OnClick", function()
+		B:TogglePanel(_G["NDui_ContactReplaceFrame"])
 	end)
 
 	local scrollFrame = CreateFrame("ScrollFrame", "NDuiMailBoxScrollFrame", list, "HybridScrollFrameTemplate")
@@ -238,6 +290,7 @@ function M:MailBox_ContactList()
 	scrollBar:SetValue(0)
 
 	M:ContactList_Refresh()
+	M:ContactList_ReplaceRealm(list)
 end
 
 function M:MailBox_CollectGold()
