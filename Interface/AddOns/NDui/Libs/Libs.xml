@@ -5,6 +5,7 @@
 	<Script file="LibActionButton-1.0\LibActionButton-1.0.lua"/>
 	<Script file="LibBase64\LibBase64.lua"/>
 
+	<Include file="LibHealComm-4.0\LibHealComm-4.0.xml"/>
 	<Include file="cargBags\cargBags.xml"/>
 	<Include file="oUF\oUF.xml"/>
 </Ui>
