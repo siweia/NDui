@@ -56,6 +56,33 @@ local function replaceSpecInfo(str)
 	return strfind(str, "%s") and specPrefix..str or str
 end
 
+function TT:UpdateFactionLine(lineData)
+	if self:IsForbidden() then return end
+	if not self:IsTooltipType(Enum.TooltipDataType.Unit) then return end
+
+	local unit = TT.GetUnit(self)
+	if not unit then return end
+	local unitClass = unit and UnitIsPlayer(unit) and UnitClass(unit)
+	local unitCreature = unit and UnitCreatureType(unit)
+
+	local linetext = lineData.leftText
+	if B:IsSecretValue(linetext) then return end
+
+	if linetext == PVP then
+		return true
+	elseif FACTION_COLORS[linetext] then
+		if C.db["Tooltip"]["FactionIcon"] then
+			return true
+		else
+			lineData.leftText = format(FACTION_COLORS[linetext], linetext)
+		end
+	elseif unitClass and strfind(linetext, unitClass) then
+		lineData.leftText = gsub(linetext, "(.-)%S+$", replaceSpecInfo)
+	elseif unitCreature and linetext == unitCreature then
+		return true
+	end
+end
+
 function TT:GetLevelLine()
 	for i = 2, self:NumLines() do
 		local tiptext = _G["GameTooltipTextLeft"..i]
@@ -511,6 +538,7 @@ function TT:OnLogin()
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.UpdateStatusBarColor)
 	hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
+	TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
