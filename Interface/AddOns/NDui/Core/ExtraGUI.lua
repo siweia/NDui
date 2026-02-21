@@ -2820,5 +2820,6 @@ function G:SetupCooldownViewer(parent)
 	local offset = -10
 	local MISC = B:GetModule("Misc")
 
-	createOptionCheck(parent, offset, L["CentralizedBuffIcon"], "Misc", "CentralCDM")
+	createOptionCheck(parent, offset, L["CentralizedBuffIcon"], "Misc", "CentralBuffView")
+	createOptionCheck(parent, offset, L["CentralizedUtility"], "Misc", "CentralUtilView")
 end

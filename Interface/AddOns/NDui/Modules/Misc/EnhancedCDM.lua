@@ -2,6 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
+-- Centralized BuffIconCooldownViewer
 local activeButtons = {}
 local lastVisible = 0
 
@@ -10,7 +11,7 @@ local function GetButtonSpacing(frame)
 end
 
 function M:CDM_RefreshBuffsAnchor()
-	if not C.db["Misc"]["CentralCDM"] then return end
+	if not C.db["Misc"]["CentralBuffView"] then return end
 
 	local cooldownViewer = BuffIconCooldownViewer
 	if not cooldownViewer.hideWhenInactive then return end
@@ -63,8 +64,56 @@ local function Handle_BuffIconCooldownViewer()
 	hooksecurefunc(BuffIconCooldownViewer, "RefreshLayout", hookButtons)
 end
 
+-- Centralized UtilityCooldownViewer
+local buttonList = {}
+function M:CDM_RefreshGrid()
+	if not C.db["Misc"]["CentralUtilView"] then return end
+
+	wipe(buttonList)
+	local iconsPerRow = self.stride
+	local isHorizontal = self.isHorizontal
+
+	for itemFrame in self.itemFramePool:EnumerateActive() do
+		if itemFrame:IsShown() then
+			buttonList[itemFrame.layoutIndex] = itemFrame
+		end
+	end
+	local numButtons = #buttonList
+	if numButtons == 0 then return end
+
+	local spacing = GetButtonSpacing(self)
+	local leftover = numButtons % iconsPerRow
+	if leftover == 0 then leftover = iconsPerRow end
+	local frameSize = isHorizontal and self:GetWidth() or self:GetHeight()
+	local buttonSize = isHorizontal and buttonList[1]:GetWidth() or buttonList[1]:GetHeight()
+	local leftoverSize = buttonSize * leftover + (spacing * (leftover - 1))
+	local centerOffset = (frameSize - leftoverSize) / 2
+
+	for i = 1, numButtons do
+		local button = buttonList[i]
+		local row = floor((i - 1) / iconsPerRow)
+		local col = (i - 1) % iconsPerRow
+		local xOffset
+		if i > numButtons - leftover and leftover < iconsPerRow then -- 最后一行，需要居中
+			xOffset = centerOffset + col * (buttonSize + spacing)
+		else
+			xOffset = col * (buttonSize + spacing)
+		end
+		local yOffset = -row * (buttonSize + spacing)
+
+		button:ClearAllPoints()
+		button:SetPoint("TOPLEFT", self, "TOPLEFT", isHorizontal and xOffset or (yOffset * -1), isHorizontal and yOffset or (xOffset * -1))
+	end
+end
+
+local function Handle_UtilityCooldownViewer()
+	if not UtilityCooldownViewer then return end
+	hooksecurefunc(UtilityCooldownViewer, "RefreshLayout", M.CDM_RefreshGrid)
+end
+
 local function LoadScript()
 	Handle_BuffIconCooldownViewer()
+	Handle_UtilityCooldownViewer()
 end
 
 local function JustWait(event, addon)

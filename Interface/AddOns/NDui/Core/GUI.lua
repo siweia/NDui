@@ -498,7 +498,8 @@ G.DefaultSettings = {
 		QuestTracker = true,
 		CooldownMgr = true,
 		DamageMeter = true,
-		CentralCDM = false,
+		CentralBuffView = false,
+		CentralUtilView = false,
 	},
 	Tooltip = {
 		HideInCombat = 1,
