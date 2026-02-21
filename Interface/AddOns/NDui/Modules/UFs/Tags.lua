@@ -236,6 +236,7 @@ oUF.Tags.Methods["npctitle"] = function(unit)
 	if isPlayer and C.db["Nameplate"]["NameOnlyGuild"] then
 		local guildName = GetGuildInfo(unit)
 		if guildName then
+			if strlen(guildName) > 31 then guildName = "..." end
 			return "<"..guildName..">"
 		end
 	elseif not isPlayer and C.db["Nameplate"]["NameOnlyTitle"] then

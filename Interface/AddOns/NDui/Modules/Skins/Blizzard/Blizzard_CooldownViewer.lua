@@ -72,8 +72,7 @@ for index, color in next, dispelIndex do
 	borderCurve:AddPoint(index, color)
 end
 local function updateBorderColor(self, data)
-	if not data then return end
-	local color = C_UnitAuras.GetAuraDispelTypeColor(self.__owner.auraDataUnit, data.auraInstanceID, borderCurve)
+	local color = data and C_UnitAuras.GetAuraDispelTypeColor(self.__owner.auraDataUnit, data.auraInstanceID, borderCurve)
 	if color then
 		self.__owner.Icon.bg:SetBackdropBorderColor(color:GetRGB())
 	else
@@ -152,7 +151,7 @@ C.themes["Blizzard_CooldownViewer"] = function()
 
 					local cooldown = itemFrame.Cooldown
 					if cooldown then
-						cooldown:SetInside(itemFrame)
+						cooldown:SetInside(icon.bg)
 						cooldown:SetDrawEdge(false)
 						cooldown:SetDrawSwipe(true)
 						cooldown:SetSwipeTexture(DB.flatTex)

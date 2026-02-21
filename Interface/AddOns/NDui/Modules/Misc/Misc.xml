@@ -4,6 +4,7 @@
 	<Script file="AlertFrames.lua"/>
 	<Script file="Animation.lua"/>
 	<Script file="AttachedMeters.lua"/>
+	<Script file="EnhancedCDM.lua"/>
 	<Script file="ExpRep.lua"/>
 	<Script file="Focuser.lua"/>
 	<Script file="IgnoreNote.lua"/>

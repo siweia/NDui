@@ -935,3 +935,5 @@ L["ShowCancelable"] = "Show cancelable auras" -- need translation
 L["Blizzard"] = "Blizzard filter" -- need translation
 L["Defensive"] = "Defensive auras" -- need translation
 L["CombinedFilters"] = "Combined filters" -- need translation
+L["CentralizedBuffIcon"] = "Centralized buff icons" -- need translation
+L["CentralizedUtility"] = "Centralized utility cooldown" -- need translation

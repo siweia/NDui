@@ -498,6 +498,8 @@ G.DefaultSettings = {
 		QuestTracker = true,
 		CooldownMgr = true,
 		DamageMeter = true,
+		CentralBuffView = false,
+		CentralUtilView = false,
 	},
 	Tooltip = {
 		HideInCombat = 1,
@@ -874,6 +876,10 @@ end
 
 local function setupDamageMeters()
 	G:SetupDamageMeters(guiPage[11])
+end
+
+local function setupCooldownViewer()
+	G:SetupCooldownViewer(guiPage[11])
 end
 
 local function updateHotkeys()
@@ -1304,8 +1310,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "NameType", L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
-		--{1, "Nameplate", "PlateAuras", HeaderTag..L["PlateAuras"].."*", nil, setupNameplateFilter, refreshNameplates},
-		{1, "Nameplate", "ShowDispel", L["Dispellable"].."*", nil, nil, refreshNameplates},
+		{1, "Nameplate", "PlateAuras", L["PlateAuras"].."*", nil, nil, refreshNameplates},
+		{1, "Nameplate", "ShowDispel", L["Dispellable"].."*", true, nil, refreshNameplates},
 		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
 		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", true, nil, refreshNameplates, L["DebuffColorTip"]},
 		{3, "Nameplate", "FontSize", L["AuraFontSize"].."*", nil, {10, 30, 1}, refreshNameplates},
@@ -1467,7 +1473,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "BgTex", L["BgTex"]},
 		{1, "Skins", "GreyBD", L["GreyBackdrop"], true, nil, nil, L["GreyBackdropTip"]},
 		{1, "Skins", "DamageMeter", IsNew..L["DamageMeter"], nil, setupDamageMeters},
-		{1, "Skins", "CooldownMgr", IsNew..L["CooldownMgr"], true},
+		{1, "Skins", "CooldownMgr", IsNew..L["CooldownMgr"], true, setupCooldownViewer},
 		{3, "Skins", "SkinAlpha", L["SkinAlpha"].."*", nil, {0, 1, .05}, updateSkinAlpha},
 		{3, "Skins", "FontScale", L["GlobalFontScale"], true, {.5, 1.5, .05}},
 		{},--blank

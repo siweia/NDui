@@ -2725,8 +2725,8 @@ function G:SetupAvada()
 	panel:HookScript("OnShow", refreshAllFrames)
 end
 
-SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
-SLASH_NDUI_AVADACONFIG1 = "/aa"
+--SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
+--SLASH_NDUI_AVADACONFIG1 = "/aa"
 
 function G:SetupPrivateAuras(parent)
 	local guiName = "NDuiGUI_PrivateAurasSetup"
@@ -2807,4 +2807,19 @@ function G:SetupRaidAuras(parent)
 	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, {DISABLE, L["Blizzard"], L["ShowDispell"], L["CombinedFilters"], L["ShowAll"]}, nil, "UFs", "RaidDebuffType", 2, updateRaidAuras)
 	createOptionSlider(parent, L["RaidDebuffPerRow"], 1, 20, 7, offset-540, "RaidDebuffPerRow", updateRaidAuras, "UFs")
 	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-600, "RaidNumDebuff", updateRaidAuras, "UFs")
+end
+
+function G:SetupCooldownViewer(parent)
+	local guiName = "NDuiGUI_CooldownViewerSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, COOLDOWN_VIEWER_LABEL)
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+	local MISC = B:GetModule("Misc")
+
+	createOptionCheck(parent, offset, L["CentralizedBuffIcon"], "Misc", "CentralBuffView")
+	createOptionCheck(parent, offset-30, L["CentralizedUtility"], "Misc", "CentralUtilView")
 end
