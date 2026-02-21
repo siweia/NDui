@@ -115,7 +115,7 @@ local function UpdateHealthColorByIndex(health, index)
 		health:SetStatusBarColor(.1, .1, .1)
 		health.bg:SetVertexColor(.6, .6, .6)
 	elseif index == 2 or index == 3 then
-		health.bg:SetVertexColor(0, 0, 0, .6)
+		health.bg:SetVertexColor(0, 0, 0, .7)
 	elseif index == 4 then
 		health:SetStatusBarColor(0, 0, 0, 0)
 	end
@@ -216,7 +216,6 @@ function UF:CreateHealthBar(self)
 	bg:SetPoint("BOTTOMRIGHT", health)
 	bg:SetTexture(DB.bdTex)
 	bg:SetVertexColor(.6, .6, .6)
-	bg.multiplier = .25
 
 	self.Health = health
 	self.Health.bg = bg
@@ -1410,7 +1409,7 @@ function UF:StaggerBar(self)
 		barPoint = {"BOTTOMLEFT", self, "TOPLEFT", 0, C.margin}
 	end
 
-	local stagger = CreateFrame("StatusBar", nil, self.Health)
+	local stagger = CreateFrame("StatusBar", nil, self)
 	stagger:SetSize(barWidth, barHeight)
 	stagger:SetPoint(unpack(barPoint))
 	stagger:SetStatusBarTexture(DB.normTex)
@@ -1421,14 +1420,13 @@ function UF:StaggerBar(self)
 	local bg = stagger:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints()
 	bg:SetTexture(DB.normTex)
-	bg.multiplier = .25
+	bg:SetVertexColor(0, 0, 0, .7)
 
 	local text = B.CreateFS(stagger, 13)
 	text:SetPoint("CENTER", stagger, "TOP")
 	self:Tag(text, "[monkstagger]")
 
 	self.Stagger = stagger
-	self.Stagger.bg = bg
 end
 
 function UF:ToggleUFClassPower()
