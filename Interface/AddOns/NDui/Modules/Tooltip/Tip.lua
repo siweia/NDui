@@ -37,7 +37,8 @@ local specPrefix = "|cffFFCC00"..SPECIALIZATION..": "..DB.InfoColor
 function TT:GetUnit()
 	local data = self:GetTooltipData()
 	local guid = data and B:NotSecretValue(data.guid) and data.guid
-	local unit = guid and UnitTokenFromGUID(guid)
+	local mouseover = UnitExists("mouseover") and "mouseover"
+	local unit = guid and UnitTokenFromGUID(guid) or mouseover
 	return unit, guid
 end
 
@@ -60,15 +61,16 @@ function TT:GetLevelLine()
 		local tiptext = _G["GameTooltipTextLeft"..i]
 		if not tiptext then break end
 		local linetext = tiptext:GetText()
-		if linetext and strfind(linetext, LEVEL) then
+		if linetext and B:NotSecretValue(linetext) and strfind(linetext, LEVEL) then
 			return tiptext, i
 		end
 	end
 end
 
 function TT:GetTarget(unit)
-	if ShouldUnitIdentityBeSecret(unit) then return "" end
-	if UnitIsUnit(unit, "player") then
+	if B:IsSecretValue(unit) then return end
+	local isYou = UnitIsUnit(unit, "player")
+	if B:NotSecretValue(isYou) and isYou then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
 		return B.HexRGB(B.UnitColor(unit))..UnitName(unit).."|r"
@@ -160,7 +162,7 @@ function TT:OnTooltipSetUnit()
 	end
 
 	local unit, guid = TT.GetUnit(self)
-	if not unit or not TT:UnitExists(unit) then return end
+	if not unit then return end
 
 	local isShiftKeyDown = IsShiftKeyDown()
 	local isPlayer = UnitIsPlayer(unit)
@@ -230,12 +232,12 @@ function TT:OnTooltipSetUnit()
 	local text = GameTooltipTextLeft1:GetText()
 	if text then
 		local ricon = GetRaidTargetIndex(unit)
+		local rionStr = ""
 		if ricon and B:NotSecretValue(ricon) and ricon <= 8 then
-			ricon = ICON_LIST[ricon].."18|t "
+			rionStr = ICON_LIST[ricon].."18|t "
 		end
-		GameTooltipTextLeft1:SetFormattedText(("%s%s%s"), ricon or "", hexColor, text)
+		GameTooltipTextLeft1:SetFormattedText(("%s%s%s"), rionStr, hexColor, text)
 	end
-	self.StatusBar:SetStatusBarColor(r, g, b)
 
 	local alive = not UnitIsDeadOrGhost(unit)
 	local level
@@ -272,12 +274,13 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	if TT:UnitExists(unit.."target") then
+	if UnitExists(unit.."target") then
 		local targetIcon = GetRaidTargetIndex(unit.."target")
+		local targetIconStr
 		if targetIcon and B:NotSecretValue(targetIcon) and targetIcon <= 8 then
-			targetIcon = ICON_LIST[targetIcon].."10|t"
+			targetIconStr = ICON_LIST[targetIcon].."10|t"
 		end
-		self:AddLine(TARGET..": "..format("%s%s", targetIcon or "", TT:GetTarget(unit.."target")))
+		self:AddLine(TARGET..": "..format("%s%s", targetIconStr or "", TT:GetTarget(unit.."target")))
 	end
 
 	if not isPlayer and isShiftKeyDown then
@@ -297,6 +300,15 @@ function TT:OnTooltipSetUnit()
 	local ignoreNote = unitFullName and NDuiADB["IgnoreNotes"][unitFullName]
 	if ignoreNote then
 		self:AddLine(format(ignoreString, ignoreNote), 1,1,1, 1)
+	end
+end
+
+function TT:UpdateStatusBarColor()
+	local unit = TT.GetUnit(self)
+	if not unit or B:IsSecretValue(unit) then
+		self.StatusBar:SetStatusBarColor(0, 1, 0)
+	else
+		self.StatusBar:SetStatusBarColor(B.UnitColor(unit))
 	end
 end
 
@@ -494,9 +506,11 @@ function TT:FixStoneSoupError()
 end
 
 function TT:OnLogin()
+	GameTooltipStatusBar.lockColor = true
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
-	--hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
+	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.UpdateStatusBarColor)
+	hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 
 	hooksecurefunc("GameTooltip_ShowStatusBar", TT.GameTooltip_ShowStatusBar)
