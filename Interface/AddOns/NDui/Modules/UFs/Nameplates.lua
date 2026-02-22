@@ -933,6 +933,9 @@ function UF:PlateVisibility(event)
 		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power.bg, .3, self.Power.bg:GetAlpha(), .7)
 		UIFrameFadeIn(self.ClassPowerBar, .3, self.ClassPowerBar:GetAlpha(), 1)
+		if self.Stagger then
+			UIFrameFadeIn(self.Stagger, .3, self.Stagger:GetAlpha(), 1)
+		end
 	else
 		if self:IsElementEnabled("Health") then
 			UIFrameFadeOut(self.Health, 2, self.Health:GetAlpha(), alpha)
@@ -942,6 +945,9 @@ function UF:PlateVisibility(event)
 		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), alpha)
 		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), alpha)
 		UIFrameFadeOut(self.ClassPowerBar, 2, self.ClassPowerBar:GetAlpha(), alpha)
+		if self.Stagger then
+			UIFrameFadeOut(self.Stagger, 2, self.Stagger:GetAlpha(), alpha)
+		end
 	end
 end
 
@@ -1033,12 +1039,18 @@ function UF:TogglePlateHealth()
 			if plate.ClassPowerBar then
 				plate.ClassPowerBar:SetPoint("BOTTOMLEFT", plate, "TOPLEFT", 0, C.margin)
 			end
+			if plate.Stagger then
+				plate.Stagger:SetPoint("BOTTOMLEFT", plate, "TOPLEFT", 0, C.margin)
+			end
 		end
 	else
 		if plate:IsElementEnabled("Health") then
 			plate:DisableElement("Health")
 			if plate.ClassPowerBar then
 				plate.ClassPowerBar:SetPoint("BOTTOMLEFT", plate.Power, "TOPLEFT", 0, C.margin)
+			end
+			if plate.Stagger then
+				plate.Stagger:SetPoint("BOTTOMLEFT", plate.Power, "TOPLEFT", 0, C.margin)
 			end
 		end
 	end
