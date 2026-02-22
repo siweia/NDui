@@ -332,7 +332,8 @@ end
 
 function TT:UpdateStatusBarColor()
 	local unit = TT.GetUnit(self)
-	if not unit or B:IsSecretValue(unit) then
+	if not unit then return end -- needs review
+	if B:IsSecretValue(unit) then
 		self.StatusBar:SetStatusBarColor(0, 1, 0)
 	else
 		self.StatusBar:SetStatusBarColor(B.UnitColor(unit))
@@ -533,7 +534,7 @@ function TT:FixStoneSoupError()
 end
 
 function TT:OnLogin()
-	GameTooltipStatusBar.lockColor = true
+	GameTooltipStatusBar:SetScript("OnValueChanged", nil)
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.UpdateStatusBarColor)
