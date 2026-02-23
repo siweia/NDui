@@ -342,6 +342,7 @@ G.DefaultSettings = {
 		CDText = true,
 	},
 	Chat = {
+		Disable = false,
 		Sticky = false,
 		Lock = true,
 		Invite = true,
@@ -1413,7 +1414,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{2, "ACCOUNT", "IgnoredRares", IsNew..L["IgnoredRares"].."*", true, nil, updateIgnoredRares, L["IgnoredRaresTip"]},
 	},
 	[9] = {
-		{1, "Chat", "Lock", HeaderTag..L["Lock Chat"]},
+		{1, "Chat", "Disable", "|cffff0000"..L["Disable Chat"]},
+		{1, "Chat", "Lock", HeaderTag..L["Lock Chat"], true},
 		{3, "Chat", "ChatWidth", L["LockChatWidth"].."*", nil, {200, 600, 1}, updateChatSize},
 		{3, "Chat", "ChatHeight", L["LockChatHeight"].."*", true, {100, 500, 1}, updateChatSize},
 		{},--blank
