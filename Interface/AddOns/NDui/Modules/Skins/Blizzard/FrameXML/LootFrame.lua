@@ -87,10 +87,10 @@ tinsert(C.defaultThemes, function()
 	B.ReskinIcon(promptFrame.Icon)
 	promptFrame.Timer.Bar:SetTexture(DB.normTex)
 	B.CreateBDFrame(promptFrame.Timer, .25)
-
-	local from, to = "|T.+|t", "|T%%s:14:14:0:0:64:64:5:59:5:59|t"
-	BONUS_ROLL_COST = BONUS_ROLL_COST:gsub(from, to)
-	BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
+--	This might taint the loot frame
+--	local from, to = "|T.+|t", "|T%%s:14:14:0:0:64:64:5:59:5:59|t"
+--	BONUS_ROLL_COST = BONUS_ROLL_COST:gsub(from, to)
+--	BONUS_ROLL_CURRENT_COUNT = BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 
 	-- Loot Roll Frame
 	local NUM_GROUP_LOOT_FRAMES = 4

@@ -364,9 +364,6 @@ function M:RaidTool_BuffChecker(parent)
 	end)
 	frame:HookScript("OnLeave", B.HideTooltip)
 
-	local reset = true
-	B:RegisterEvent("PLAYER_REGEN_ENABLED", function() reset = true end)
-
 	frame:HookScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" then
 			scanBuff()
@@ -701,8 +698,11 @@ function M:RaidTool_Init()
 	M:RaidTool_CreateMenu(frame)
 	M:RaidTool_CountDown(frame)
 
-	--M:RaidTool_EasyMarker() -- broken in 12.0
+	M:RaidTool_EasyMarker() -- broken in 12.0
 	M:RaidTool_WorldMarker()
 	M:RaidTool_Misc()
+	hooksecurefunc(PlayerInteractionFrameManagerMixin, "ShowFrame", function()
+		print(1)
+	end)
 end
 M:RegisterMisc("RaidTool", M.RaidTool_Init)

@@ -17,14 +17,6 @@ local function setHighlight(self)
 	end
 end
 
-local function QuestInfo_GetQuestID()
-	if QuestInfoFrame.questLog then
-		return C_QuestLog.GetSelectedQuest()
-	else
-		return GetQuestID()
-	end
-end
-
 local defaultColor = GetMaterialTextColors("Default")
 local completedColor = QUEST_OBJECTIVE_COMPLETED_FONT_COLOR:GetRGB()
 

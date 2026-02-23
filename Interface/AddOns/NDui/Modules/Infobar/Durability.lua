@@ -1,12 +1,11 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF
 if not C.Infobar.Durability then return end
 
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Dura", C.Infobar.DurabilityPos)
 
-local format, sort, floor, select = string.format, table.sort, math.floor, select
+local format, sort, floor = string.format, table.sort, math.floor
 local GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture = GetInventoryItemLink, GetInventoryItemDurability, GetInventoryItemTexture
 local GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair = GetMoney, GetRepairAllCost, RepairAllItems, CanMerchantRepair
 local GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney = GetAverageItemLevel, IsInGuild, CanGuildBankRepair, GetGuildBankWithdrawMoney

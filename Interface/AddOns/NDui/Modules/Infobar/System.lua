@@ -1,6 +1,5 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF
 if not C.Infobar.System then return end
 
 local module = B:GetModule("Infobar")

@@ -667,7 +667,7 @@ local function InitialSettings(source, target, fullClean)
 	for i, j in pairs(target) do
 		if source[i] == nil then target[i] = nil end
 		if fullClean and type(j) == "table" and not ignoredTable[i] then
-			for k, v in pairs(j) do
+			for k in pairs(j) do
 				if source[i] and source[i][k] == nil then
 					target[i][k] = nil
 				end
@@ -1344,7 +1344,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "SecureColor", L["Secure Color"].."*"},
 		{5, "Nameplate", "TransColor", L["Trans Color"].."*", 1},
 		{5, "Nameplate", "InsecureColor", L["Insecure Color"].."*", 2},
-		{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
+		--{5, "Nameplate", "OffTankColor", L["OffTank Color"].."*", 3},
 		{},--blank
 		{1, "Nameplate", "CVarOnlyNames", L["CVarOnlyNames"], nil, nil, updatePlateCVars, L["CVarOnlyNamesTip"]},
 		{1, "Nameplate", "CVarShowNPCs", L["CVarShowNPCs"].."*", true, nil, updatePlateCVars, L["CVarShowNPCsTip"]},

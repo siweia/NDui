@@ -1,6 +1,5 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local TT = B:GetModule("Tooltip")
 
 C.themes["Blizzard_BarbershopUI"] = function()
 	local frame = BarberShopFrame

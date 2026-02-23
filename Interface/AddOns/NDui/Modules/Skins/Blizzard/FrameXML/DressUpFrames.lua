@@ -13,8 +13,6 @@ end
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
-	local r, g, b = DB.r, DB.g, DB.b
-
 	-- Dressup Frame
 
 	B.ReskinPortraitFrame(DressUpFrame)

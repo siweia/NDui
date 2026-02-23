@@ -317,7 +317,6 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	i.bagId = bagID
 	i.slotId = slotID
 
-	local texture, count, locked, quality, itemLink, noValue, itemID
 	local info = C_Container.GetContainerItemInfo(bagID, slotID)
 	if info then
 		i.texture, i.count, i.locked, i.quality, i.link, i.id, i.hasPrice = info.iconFileID, info.stackCount, info.isLocked, (info.quality or 1), info.hyperlink, info.itemID, (not info.hasNoValue)

@@ -205,7 +205,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 
 	local active = C_GossipInfo_GetNumActiveQuests()
 	if active > 0 then
-		for index, questInfo in ipairs(C_GossipInfo_GetActiveQuests()) do
+		for _, questInfo in ipairs(C_GossipInfo_GetActiveQuests()) do
 			local questID = questInfo.questID
 			local isWorldQuest = questID and C_QuestLog_IsWorldQuest(questID)
 			if questInfo.isComplete and not isWorldQuest then
@@ -216,7 +216,7 @@ QuickQuest:Register("GOSSIP_SHOW", function()
 
 	local available = C_GossipInfo_GetNumAvailableQuests()
 	if available > 0 then
-		for index, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
+		for _, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
 			local trivial = questInfo.isTrivial
 			local questID = questInfo.questID
 			if not IsAccountCompleted(questID) and (not trivial or C_Minimap.IsTrackingHiddenQuests() or (trivial and npcID == 64337)) then

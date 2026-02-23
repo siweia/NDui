@@ -5,17 +5,16 @@ local M = B:GetModule("Misc")
 --[[
 	一个工具条用来替代系统的经验条、声望条、神器经验等等
 ]]
-local format, pairs, select = string.format, pairs, select
+local format, pairs = string.format, pairs
 local min, mod, floor = math.min, mod, math.floor
 local MAX_REPUTATION_REACTION = MAX_REPUTATION_REACTION
 local FACTION_BAR_COLORS = FACTION_BAR_COLORS
-local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
 local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
 local HONOR, LEVEL, TUTORIAL_TITLE26, SPELLBOOK_AVAILABLE_AT = HONOR, LEVEL, TUTORIAL_TITLE26, SPELLBOOK_AVAILABLE_AT
 local ARTIFACT_POWER, ARTIFACT_RETIRED = ARTIFACT_POWER, ARTIFACT_RETIRED
 
 local UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, IsXPUserDisabled = UnitLevel, UnitXP, UnitXPMax, GetXPExhaustion, IsXPUserDisabled
-local BreakUpLargeNumbers, GetNumFactions, GetFactionInfo = BreakUpLargeNumbers, GetNumFactions, GetFactionInfo
+local BreakUpLargeNumbers = BreakUpLargeNumbers
 local HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP = HasArtifactEquipped, ArtifactBarGetNumArtifactTraitsPurchasableFromXP
 local IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel = IsWatchingHonorAsXP, UnitHonor, UnitHonorMax, UnitHonorLevel
 local IsPlayerAtEffectiveMaxLevel = IsPlayerAtEffectiveMaxLevel

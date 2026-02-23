@@ -1,7 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local MAX_CONTAINER_ITEMS = 36
 local backpackTexture = "Interface\\Icons\\inv_misc_bag_08"
 
 local function handleMoneyFrame(frame)
@@ -88,12 +87,6 @@ local function updateContainer(frame)
 			local icon = GetInventoryItemTexture("player", invID)
 			frame.bagIcon:SetTexture(icon or backpackTexture)
 		end
-	end
-end
-
-local function emptySlotBG(button)
-	if button.ItemSlotBackground then
-		button.ItemSlotBackground:Hide()
 	end
 end
 

@@ -3,14 +3,10 @@ local B, C, L, DB = unpack(ns)
 local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
-local strmatch, format, wipe = strmatch, format, wipe
-local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
+local strmatch, format = strmatch, format
+local pairs, next, tonumber, gsub = pairs, next, tonumber, gsub
 local GetSpellName = C_Spell.GetSpellName
 local InCombatLockdown = InCombatLockdown
-local GetTime, IsInRaid, IsInGroup = GetTime, IsInRaid, IsInGroup
-local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
-local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
-local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
 -- RaidFrame Elements
 function UF:CreateRaidIcons(self)
@@ -120,7 +116,7 @@ local onLeaveString = onEnterString
 for keyIndex, keyString in pairs(wheelGroupIndex) do
 	onEnterString = format("%sself:SetBindingClick(0, \"%s\", self:GetName(), \"Button%d\");", onEnterString, keyString, keyIndex)
 end
-local onMouseString = "if not self:IsUnderMouse(false) then self:ClearBindings(); end"
+--local onMouseString = "if not self:IsUnderMouse(false) then self:ClearBindings(); end"
 
 local function setupMouseWheelCast(self)
 	local found

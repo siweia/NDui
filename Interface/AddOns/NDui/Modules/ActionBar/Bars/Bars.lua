@@ -5,7 +5,6 @@ local LAB = LibStub("LibActionButton-1.0-NDui")
 
 local _G = _G
 local tinsert, next = tinsert, next
-local GetActionTexture = GetActionTexture
 local margin, padding = C.Bars.margin, C.Bars.padding
 
 function Bar:UpdateAllSize()
@@ -348,7 +347,7 @@ function Bar:UpdateOverlays()
 	end
 end
 
-function Bar:UpdateCooldownText(button)
+function Bar:UpdateCooldownText()
 	for _, button in pairs(Bar.buttons) do
 		if button.cooldownText then
 			button.cooldownText:SetFont(DB.Font[1], C.db["Actionbar"]["CDFontSize"], DB.Font[3])

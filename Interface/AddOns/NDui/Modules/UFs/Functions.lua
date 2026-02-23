@@ -3,14 +3,9 @@ local B, C, L, DB = unpack(ns)
 
 local oUF = ns.oUF
 local UF = B:RegisterModule("UnitFrames")
-local AURA = B:GetModule("Auras")
 
-local format, floor = string.format, math.floor
 local pairs, next, unpack = pairs, next, unpack
-local UnitGUID, IsItemInRange = UnitGUID, IsItemInRange
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
-local SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura = SpellGetVisibilityInfo, UnitAffectingCombat, SpellIsSelfBuff, SpellIsPriorityAura
-local ADDITIONAL_POWER_BAR_INDEX = 0
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 local FALLBACK_COLOR = {r=0, g=0, b=0}
 
@@ -145,7 +140,7 @@ bgCurve:AddPoint(1, CreateColor(.7, 1, 0))
 
 local endColor = oUF:CreateColor(0, 0, 0, .25)
 
-function UF.HealthPostUpdate(element, unit, cur, max)
+function UF.HealthPostUpdate(element, unit)
 	local self = element.__owner
 	local mystyle = self.mystyle
 	local useGradient, useGradientClass
@@ -881,9 +876,6 @@ function UF.PostCreateButton(element, button)
 	button.Overlay:Hide()
 	button.Overlay = nil -- needs review
 	button.Stealable:SetAtlas("bags-newitem")
-	--if AURA then
-	--	button:HookScript("OnMouseDown", AURA.RemoveSpellFromIgnoreList)
-	--end
 
 	if element.__owner.mystyle == "nameplate" then
 		hooksecurefunc(button, "SetSize", UF.UpdateIconTexCoord)
@@ -903,9 +895,7 @@ local filteredStyle = {
 }
 
 function UF.PostUpdateButton(element, button, unit, data)
-	local duration, expiration, debuffType = data.duration, data.expirationTime, data.dispelName
-
-	if duration then button.iconbg:Show() end
+	if data.duration then button.iconbg:Show() end
 
 	local style = element.__owner.mystyle
 	if style == "nameplate" then
@@ -967,7 +957,7 @@ local function IsAuraPassed(unit, data, filter, suffix)
 	return not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|"..suffix)
 end
 
-function UF.PostProcessAuraData(element, unit, data, filter)
+function UF:PostProcessAuraData(unit, data, filter)
 	data.isImportantAura = IsAuraPassed(unit, data, filter, "IMPORTANT") -- important auras
 	data.isCrowdControlAura = IsAuraPassed(unit, data, filter, "CROWD_CONTROL") -- crowd control auras
 	data.isRaidInCombatAura = IsAuraPassed(unit, data, filter, "RAID_IN_COMBAT") -- blizzard filter
@@ -979,7 +969,7 @@ function UF.PostProcessAuraData(element, unit, data, filter)
 	return data
 end
 
-function UF.RaidFrame_FilterAura(element, unit, data)
+function UF.RaidFrame_FilterAura(element, _, data)
 	local value = element.__value
 	if data.isHarmfulAura then
 		if C.db["UFs"][value.."DebuffType"] == 2 then -- in combat: blizzard filter
@@ -1253,7 +1243,7 @@ function UF:CreateDebuffs(self)
 end
 
 -- Class Powers
-function UF.PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowerPoints)
+function UF.PostUpdateClassPower(element, cur, max, diff, _, chargedPowerPoints)
 	if not cur or cur == 0 then
 		for i = 1, 10 do
 			element[i].bg:Hide()

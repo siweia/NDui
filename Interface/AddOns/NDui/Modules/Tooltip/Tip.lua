@@ -340,7 +340,7 @@ function TT:UpdateStatusBarColor()
 	end
 end
 
-function TT:RefreshStatusBar(value)
+function TT:RefreshStatusBar()
 	if not self.text then
 		self.text = B.CreateFS(self, 12, "")
 	end
@@ -503,7 +503,7 @@ function TT:FixRecipeItemNameWidth()
 	if not self.bg then return end
 
 	if C.db["Tooltip"]["ItemQuality"] then
-		local name, link = GetDisplayedItem(self)
+		local _, link = GetDisplayedItem(self)
 		if link then
 			local quality = C_Item.GetItemQualityByID(link)
 			local color = DB.QualityColors[quality or 1]

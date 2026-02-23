@@ -242,6 +242,7 @@ function UF:Avada_OnEvent(event, unit)
 		for i = 1, maxButtons do
 			local data = auraData[i]
 			if data and data.unit == "target" then
+				local filter = data.type == "buff" and "HELPFUL" or data.type == "debuff" and "HARMFUL"
 				UF:Avada_UpdateAura(avadaButtons[data.index], data.unit, data.spellID, filter)
 			end
 		end

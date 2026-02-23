@@ -1,6 +1,5 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local r, g, b = DB.r, DB.g, DB.b
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
@@ -125,7 +124,7 @@ tinsert(C.defaultThemes, function()
 		if not frame.swatchTable then return end
 
 		local nameString = frame:GetName().."Swatch"
-		local baseName, colorSwatch
+		local baseName
 		for index in ipairs(frame.swatchTable) do
 			baseName = nameString..index
 			local bu = _G[baseName]

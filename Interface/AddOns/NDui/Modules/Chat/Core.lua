@@ -462,7 +462,7 @@ function module:OnLogin()
 			FCF_SetChatWindowFontSize(nil, FCF_GetChatFrameByID(CURRENT_CHAT_FRAME_ID), height)
 		end
 
-		Menu.ModifyMenu("MENU_FCF_TAB", function(self, rootDescription, data)
+		Menu.ModifyMenu("MENU_FCF_TAB", function(self, rootDescription)
 			local fontSizeSubmenu = rootDescription:CreateButton(DB.InfoColor..L["MoreFontSize"])
 			for i = 10, 30 do
 				fontSizeSubmenu:CreateRadio((format(FONT_SIZE_TEMPLATE, i)), IsSelected, SetSelected, i)

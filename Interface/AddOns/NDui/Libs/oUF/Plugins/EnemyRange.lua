@@ -32,7 +32,6 @@ local _FRAMES = {}
 local OnRangeFrame
 
 local next = next
-local UnitInRange, UnitIsConnected = UnitInRange, UnitIsConnected
 local InCombatLockdown, CheckInteractDistance, UnitCanAttack = InCombatLockdown, CheckInteractDistance, UnitCanAttack
 local IsSpellInRange = C_Spell.IsSpellInRange
 local myClass = select(2, UnitClass('player'))
@@ -110,9 +109,10 @@ end
 local function Update(self, event)
 	local element = self.EnemyRange
 	local unit = self.unit
+	local inRange
 
 	if unit and UnitCanAttack("player", unit) then
-		local inRange = CheckUnitRange(unit)
+		inRange = CheckUnitRange(unit)
 		if inRange then
 			self:SetAlpha(element.insideAlpha)
 		else

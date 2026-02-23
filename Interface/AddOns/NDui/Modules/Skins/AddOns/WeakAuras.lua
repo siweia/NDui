@@ -2,7 +2,6 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
-local pairs = pairs
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
 local function UpdateIconBgAlpha(icon, _, _, _, alpha)

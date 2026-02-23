@@ -6,7 +6,6 @@ local A = B:GetModule("Auras")
 local MAX_PRIVATE_AURAS = 5
 local AddPrivateAuraAnchor = C_UnitAuras.AddPrivateAuraAnchor
 local RemovePrivateAuraAnchor = C_UnitAuras.RemovePrivateAuraAnchor
-local SetPrivateWarningTextAnchor = C_UnitAuras.SetPrivateWarningTextAnchor
 
 local tempDuration = {
 	point = "TOP",

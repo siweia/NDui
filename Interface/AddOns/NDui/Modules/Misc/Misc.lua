@@ -4,7 +4,7 @@ local M = B:RegisterModule("Misc")
 
 local _G = getfenv(0)
 local select, unpack, tonumber, gsub = select, unpack, tonumber, gsub
-local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
+local IsModifiedClick, IsAltKeyDown = IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
 local GetNumArtifactsByRace = GetNumArtifactsByRace
 local GetArtifactInfoByRace = GetArtifactInfoByRace
@@ -24,7 +24,6 @@ local GetSavedInstanceInfo = GetSavedInstanceInfo
 local SetSavedInstanceExtend = SetSavedInstanceExtend
 local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
 local IsGuildMember, C_BattleNet_GetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, C_BattleNet.GetGameAccountInfoByGUID, C_FriendList.IsFriend
-local C_Map_GetMapInfo, C_Map_GetBestMapForUnit = C_Map.GetMapInfo, C_Map.GetBestMapForUnit
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿
