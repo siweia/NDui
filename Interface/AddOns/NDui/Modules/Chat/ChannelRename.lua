@@ -27,7 +27,7 @@ local function GetCurrentTime()
 	return locTime, realmTime
 end
 
-function module:UpdateChannelNames(text, ...)
+function module:UpdateChannelNames(event, text, ...)
 	if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
 
 	local r, g, b = ...
@@ -57,9 +57,9 @@ function module:UpdateChannelNames(text, ...)
 	if C.db["Chat"]["Oldname"] then
 		text = gsub(text, "|h%[(%d+)%. 大脚世界频道%]|h", "|h%[%1%. 世界%]|h")
 		text = gsub(text, "|h%[(%d+)%. 大腳世界頻道%]|h", "|h%[%1%. 世界%]|h")
-		return self.oldAddMsg(self, text, r, g, b)
+		return self:AddMessage(self, text, r, g, b)
 	else
-		return self.oldAddMsg(self, gsub(text, "|h%[(%d+)%..-%]|h", "|h[%1]|h"), r, g, b)
+		return self:AddMessage(self, gsub(text, "|h%[(%d+)%..-%]|h", "|h[%1]|h"), r, g, b)
 	end
 end
 
@@ -67,8 +67,9 @@ function module:ChannelRename()
 	for i = 1, NUM_CHAT_WINDOWS do
 		if i ~= 2 then
 			local chatFrame = _G["ChatFrame"..i]
-			chatFrame.oldAddMsg = chatFrame.AddMessage
-			chatFrame.AddMessage = module.UpdateChannelNames
+			--chatFrame.oldAddMsg = chatFrame.AddMessage
+			--chatFrame.AddMessage = module.UpdateChannelNames
+			hooksecurefunc(chatFrame, "MessageEventHandler", module.UpdateChannelNames)
 		end
 	end
 
