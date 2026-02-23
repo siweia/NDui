@@ -498,8 +498,6 @@ G.DefaultSettings = {
 		QuestTracker = true,
 		CooldownMgr = true,
 		DamageMeter = true,
-		CentralBuffView = false,
-		CentralUtilView = false,
 	},
 	Tooltip = {
 		HideInCombat = 1,
@@ -579,6 +577,8 @@ G.DefaultSettings = {
 		W2Point = 1,
 		W3Target = 1,
 		W3Point = 1,
+		CentralBuffView = false,
+		CentralUtilView = false,
 	},
 	Tutorial = {
 		Complete = false,
