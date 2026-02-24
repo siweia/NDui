@@ -120,27 +120,12 @@ local function AbbrChannelName(prefix, linkType, channel, channelID, channelName
 	return prefix.."["..abbr.."]|h"
 end
 
---local WHISPER_FROM = format(CHAT_WHISPER_GET, "(|Hplayer:.-)%[(.-)%]")
---local WHISPER_TELL = format(CHAT_BN_WHISPER_INFORM_GET, "(|Hplayer:.-)%[(.-)%]")
-
-local WHISPER_FROM = gsub(CHAT_WHISPER_GET, "%%s", "")
-WHISPER_FROM = gsub(WHISPER_FROM, HEADER_COLON, "")
-local WHISPER_TELL = gsub(CHAT_WHISPER_INFORM_GET, "%%s", "")
-WHISPER_TELL = gsub(WHISPER_TELL, HEADER_COLON, "")
-
-
-
 function module:UpdateChannelNames(text, r, g, b, ...)
 	if not text or B:IsSecretValue(text) then
 		return self:oldAddMsg(text, r, g, b, ...)
 	end
 
 	if strfind(text, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then return end
-
-	-- Diff whisper color
-	if C.db["Chat"]["WhisperColor"] and strfind(text, L["Tell"].." |H[BN]*player.+%]") then
-		r, g, b = r*.7, g*.7, b*.7
-	end
 
 	-- Timestamp
 	if NDuiADB["TimestampFormat"] > 1 then
@@ -155,29 +140,13 @@ function module:UpdateChannelNames(text, r, g, b, ...)
 		text = timeStamp..text
 	end
 
---[[	text = gsub(text, "|H(%w+):(.-)|h", function(...)
-		print(...)
-	end)]]
-	text = gsub(text, "(%s.-)(|Hplayer:.-%])", function(whisper, link)
-		if strfind(whisper, WHISPER_TELL) then
-			return L["Tell"]..link
-		elseif strfind(WHISPER_TELL, whisper) then
-			return L["Tell"]..link
-		end
-	end)
 	text = gsub(text, "(|Hplayer:([^|:]+))", AddAuthorLogo)
 	text = gsub(text, "(|Hplayer.-):%s", "%1 ") -- 干掉半角冒号
 	if isCNClient then
 		text = gsub(text, "(|Hplayer.-)"..HEADER_COLON, "%1") -- 干掉全角冒号
 	end
-	text = gsub(text, "(|Hplayer:.-)%[(.-)%]", "%1%2") -- 干掉名字方括号
+	--text = gsub(text, "(|Hplayer:.-)%[(.-)%]", "%1%2") -- 干掉名字方括号
 	text = gsub(text, matchPattern, AbbrChannelName)
-	--[[text = gsub(text, "(|Hplayer:.-%])(.-%s)", function(link, whisper)
-		if strfind(whisper, WHISPER_FROM) then
-			return L["From"]..link
-		end
-	end)]]
---	text = gsub(text, WHISPER_TELL, function() print(2) end)
 
 	return self:oldAddMsg(text, r, g, b, ...)
 end
