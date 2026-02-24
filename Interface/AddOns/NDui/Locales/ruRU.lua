@@ -943,3 +943,6 @@ L["InstAbbr"] = "I"
 L["InstLeaderAbbr"] = "IL" 
 L["GuildAbbr"] = "G"
 L["OfficerAbbr"] = "O"
+L["ChannelAbbr"] = "Channel Abbr" -- need translation
+L["LetterMode"] = "Letter Mode" -- need translation
+L["LocaleMode"] = "Locale Mode" -- need translation
