@@ -438,7 +438,7 @@ function module:OnLogin()
 	-- Add Elements
 	module:ChatWhisperSticky()
 	module:ChatFilter()
-	--module:ChannelRename()
+	module:ChannelRename()
 	module:Chatbar()
 	module:ChatCopy()
 	--module:UrlCopy()
