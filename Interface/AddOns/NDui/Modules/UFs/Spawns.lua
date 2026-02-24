@@ -318,7 +318,6 @@ UF.RaidDirections = {
 function UF:OnLogin()
 	if C.db["Nameplate"]["Enable"] then
 		UF:SetupCVars()
-		UF:BlockAddons()
 		UF:CreateUnitTable()
 		UF:CreatePowerUnitTable()
 		UF:UpdateGroupRoles()
