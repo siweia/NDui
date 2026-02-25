@@ -1486,19 +1486,6 @@ function UF:UpdateUFClassPower()
 	end
 end
 
-function UF.PostUpdateAltPower(element, _, cur, _, max)
-	if cur and max then
-		local perc = floor((cur/max)*100)
-		if perc < 35 then
-			element:SetStatusBarColor(0, 1, 0)
-		elseif perc < 70 then
-			element:SetStatusBarColor(1, 1, 0)
-		else
-			element:SetStatusBarColor(1, 0, 0)
-		end
-	end
-end
-
 function UF:CreateAltPower(self)
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetStatusBarTexture(DB.normTex)
@@ -1513,7 +1500,7 @@ function UF:CreateAltPower(self)
 	self:Tag(text, "[altpower]")
 
 	self.AlternativePower = bar
-	self.AlternativePower.PostUpdate = UF.PostUpdateAltPower
+	self.AlternativePower.colorPowerSmooth = true
 end
 
 function UF:CreateExpRepBar(self)
