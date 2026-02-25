@@ -30,9 +30,11 @@ end
 
 function UF:UpdatePlateSize()
 	if InCombatLockdown() then return end
-	UF.NameplateDriver:SetSize(C.db["Nameplate"]["HarmWidth"], C.db["Nameplate"]["HarmHeight"])
-	UF.NameplateDriver.enemyNonInteractible = C.db["Nameplate"]["EnemyThru"]
-	UF.NameplateDriver.friendlyNonInteractible = C.db["Nameplate"]["FriendlyThru"]
+	if UF.NameplateDriver then
+		UF.NameplateDriver:SetSize(C.db["Nameplate"]["HarmWidth"], C.db["Nameplate"]["HarmHeight"])
+		UF.NameplateDriver.enemyNonInteractible = C.db["Nameplate"]["EnemyThru"]
+		UF.NameplateDriver.friendlyNonInteractible = C.db["Nameplate"]["FriendlyThru"]
+	end
 end
 
 function UF:SetupCVars()
@@ -420,7 +422,7 @@ function UF:UpdateQuestUnit(_, unit)
 			local lineData = data.lines[i]
 			if lineData.type == 8 then
 				local text = lineData.leftText -- progress string
-				if text then
+				if text and B:NotSecretValue(text) then
 					local current, goal = strmatch(text, "(%d+)/(%d+)")
 					local progress = strmatch(text, "(%d+)%%")
 					if current and goal then
