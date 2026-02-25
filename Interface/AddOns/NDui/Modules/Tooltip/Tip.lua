@@ -517,7 +517,8 @@ function TT:FixRecipeItemNameWidth()
 end
 
 function TT:ResetUnit(btn)
-	if btn == "LSHIFT" and TT:UnitExists("mouseover") then
+	if GameTooltip:IsForbidden() then return end
+	if GameTooltip:IsShown() and btn == "LSHIFT" and TT:UnitExists("mouseover") then
 		GameTooltip:RefreshData()
 	end
 end
