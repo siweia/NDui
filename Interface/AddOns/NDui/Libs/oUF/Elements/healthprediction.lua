@@ -3,6 +3,8 @@
 
 Handles the visibility and updating of incoming heals and heal/damage absorbs.
 
+**WARNING**: this element is deprecated, please use sub-widgets of Health element instead.
+
 ## Widget
 
 HealthPrediction - A `table` containing references to sub-widgets and options.
