@@ -93,10 +93,15 @@ function TT:SetupTooltipID()
 		if id then
 			TT.AddLineForID(self, id, types.spell)
 		end
-		if caster and B:NotSecretValue(caster) then
-			local name = GetUnitName(caster, true)
-			local hexColor = B.HexRGB(B.UnitColor(caster))
-			self:AddDoubleLine(L["From"]..":", hexColor..name)
+		if caster then
+			if B:IsSecretValue(caster) then
+				local name = UnitName(caster)
+				self:AddDoubleLine(L["From"]..":", name)
+			else
+				local name = GetUnitName(caster, true)
+				local hexColor = B.HexRGB(B.UnitColor(caster))
+				self:AddDoubleLine(L["From"]..":", hexColor..name)
+			end
 			self:Show()
 		end
 	end)
