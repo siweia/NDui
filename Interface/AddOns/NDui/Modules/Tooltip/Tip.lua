@@ -345,7 +345,7 @@ function TT:RefreshStatusBar()
 		self.text = B.CreateFS(self, 12, "")
 	end
 	local unit = TT.GetUnit(self:GetParent())
-	if unit and UnitIsPlayer(unit) then
+	if unit then
 		self.text:SetFormattedText("%d", UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
 	else
 		self.text:SetText("")
@@ -539,7 +539,7 @@ function TT:OnLogin()
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.UpdateStatusBarColor)
-	hooksecurefunc(GameTooltip.StatusBar, "SetValue", TT.RefreshStatusBar)
+	hooksecurefunc(GameTooltip.StatusBar, "UpdateUnitHealth", TT.RefreshStatusBar)
 	TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TT.UpdateFactionLine)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TT.FixRecipeItemNameWidth)
 
