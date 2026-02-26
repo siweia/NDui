@@ -1,35 +1,39 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function reskinTab(tab)
+	if not tab then return end
+	B.StripTextures(tab, 0)
+	B.ReskinTab(tab)
+	tab.bg:SetInside()
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if not CompactRaidFrameManager then return end
 
-	local toggleButton = CompactRaidFrameManagerToggleButton
-	if not toggleButton then return end
+	local buttonForward = CompactRaidFrameManagerToggleButtonForward
+	local buttonBack = CompactRaidFrameManagerToggleButtonBack
 
-	toggleButton:SetSize(16, 16)
-
-	local nt = toggleButton:GetNormalTexture()
-
-	local function updateArrow()
-		if CompactRaidFrameManager.collapsed then
-			B.SetupArrow(nt, "right")
-		else
-			B.SetupArrow(nt, "left")
-		end
-		nt:SetTexCoord(0, 1, 0, 1)
-	end
-
-	updateArrow()
-	hooksecurefunc("CompactRaidFrameManager_Collapse", updateArrow)
-	hooksecurefunc("CompactRaidFrameManager_Expand", updateArrow)
+	buttonForward:GetNormalTexture():SetAlpha(0)
+	B.ReskinArrow(buttonForward, "right")
+	buttonBack:GetNormalTexture():SetAlpha(0)
+	B.ReskinArrow(buttonBack, "left")
 
 	B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameModeControlDropdown)
 	B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameRestrictPingsDropdown)
+	B.Reskin(CompactRaidFrameManagerLeavePartyButton)
+	B.Reskin(CompactRaidFrameManagerLeaveInstanceGroupButton)
+	CompactRaidFrameManagerDisplayFrameRaidMarkers.BG:SetAlpha(0)
 
-	for _, button in pairs({CompactRaidFrameManager.displayFrame.BottomButtons:GetChildren()}) do
-		if button:IsObjectType("Button") then
+	reskinTab(CompactRaidFrameManagerDisplayFrameRaidMarkersRaidMarkerUnitTab)
+	reskinTab(CompactRaidFrameManagerDisplayFrameRaidMarkersRaidMarkerGroundTab)
+
+	for _, button in pairs({CompactRaidFrameManagerDisplayFrameRaidMarkers:GetChildren()}) do
+		if button:IsObjectType("Button") and button:GetHeight() > 20 then
 			B.Reskin(button)
+			button.__bg:SetInside(button, 2, 2)
+			if button.backgroundTexture then button.backgroundTexture:SetAlpha(0) end
 		end
 	end
 
