@@ -4,7 +4,7 @@ local S = B:GetModule("Skins")
 local TT = B:GetModule("Tooltip")
 
 local cr, cg, cb = DB.r, DB.g, DB.b
-local select, pairs, ipairs, next, unpack = select, pairs, ipairs, next, unpack
+local select, pairs, unpack = select, pairs, unpack
 
 function S:RematchFilter()
 	B.StripTextures(self)
@@ -107,14 +107,6 @@ function S:RematchInset()
 	local bg = B.CreateBDFrame(self, .25)
 	bg:SetPoint("TOPLEFT", 3, 0)
 	bg:SetPoint("BOTTOMRIGHT", -3, 0)
-end
-
-local function buttonOnEnter(self)
-	self.bg:SetBackdropColor(cr, cg, cb, .25)
-end
-
-local function buttonOnLeave(self)
-	self.bg:SetBackdropColor(0, 0, 0, .25)
 end
 
 function S:RematchLockButton(button)
@@ -475,7 +467,6 @@ function S:ReskinRematch()
 		self.styled = true
 	end)
 
-	local loadoutBG
 	hooksecurefunc(Rematch.loadoutPanel, "Update", function(self)
 		if not self then return end
 

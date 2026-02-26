@@ -4,7 +4,7 @@ local Private = oUF.Private
 
 local argcheck = Private.argcheck
 local validateEvent = Private.validateEvent
-local validateUnit = Private.validateUnit
+local validateEventUnit = Private.validateEventUnit
 local isUnitEvent = Private.isUnitEvent
 local frame_metatable = Private.frame_metatable
 
@@ -36,7 +36,7 @@ function Private.UpdateUnits(frame, unit, realUnit)
 	if(frame.unit ~= unit or frame.realUnit ~= realUnit) then
 		-- don't let invalid units in, otherwise unit events will end up being
 		-- registered as unitless
-		if(frame.unitEvents and validateUnit(unit)) then
+		if(frame.unitEvents and validateEventUnit(unit)) then
 			local resetRealUnit = false
 
 			for event in next, frame.unitEvents do
@@ -138,7 +138,7 @@ function frame_metatable.__index:RegisterEvent(event, func, unitless)
 			-- UpdateUnits will take care of unit event registration for header
 			-- units in case we don't have a valid unit yet
 			local unit1, unit2 = self.unit
-			if(unit1 and validateUnit(unit1)) then
+			if(unit1 and validateEventUnit(unit1)) then
 				if(secondaryUnits[event]) then
 					unit2 = secondaryUnits[event][unit1]
 				end

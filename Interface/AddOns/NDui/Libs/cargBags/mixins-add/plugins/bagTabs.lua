@@ -9,8 +9,6 @@ local Implementation = cargBags.classes.Implementation
 
 local BANK_TAB1 = Enum.BagIndex.CharacterBankTab_1 or 6
 local ACCOUNT_TAB1 = Enum.BagIndex.AccountBankTab_1 or 12
-local ACCOUNT_BANK_TYPE = Enum.BankType.Account or 2
-local tabButtons = {}
 
 function Implementation:GetBagTabClass()
 	return self:GetClass("BagTab", true, "BagTab")

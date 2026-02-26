@@ -38,7 +38,7 @@ C.themes["Blizzard_Transmog"] = function()
 		B.ReskinCheck(TabContent.SituationsFrame.EnabledToggle.Checkbox)
 		B.Reskin(TabContent.SituationsFrame.ApplyButton)
 
-		hooksecurefunc(TabContent.SituationsFrame, "Init", function(pool)
+		hooksecurefunc(TabContent.SituationsFrame, "Init", function()
 			for frame in TabContent.SituationsFrame.SituationFramePool:EnumerateActive() do
 				if not frame.styled then
 					if frame.Dropdown then

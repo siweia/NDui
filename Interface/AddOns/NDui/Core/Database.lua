@@ -13,7 +13,7 @@ DB.isNewPatch = select(4, GetBuildInfo()) >= 120001 -- 12.0.1
 
 -- Deprecated
 do
-	local function EasyMenu_Initialize( frame, level, menuList )
+	local function EasyMenu_Initialize( _, level, menuList )
 		for index = 1, #menuList do
 			local value = menuList[index]
 			if (value.text) then

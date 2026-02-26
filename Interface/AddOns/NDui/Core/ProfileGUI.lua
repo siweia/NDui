@@ -543,7 +543,7 @@ function G:ImportGUIData()
 	local profile = G.ProfileDataFrame.editBox:GetText()
 	if B:IsBase64(profile) then profile = B:Decode(profile) end
 	local options = {strsplit(";", profile)}
-	local title, version, _, class = strsplit(":", options[1])
+	local title, version = strsplit(":", options[1])
 	if title ~= "NDuiSettings" or IsOldProfileVersion(version) then
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Import data error"])
 		return

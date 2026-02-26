@@ -1,6 +1,5 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local r, g, b = DB.r, DB.g, DB.b
 
 local function ReskinChatScroll(self)
 	B.ReskinTrimScroll(self.ScrollBar)

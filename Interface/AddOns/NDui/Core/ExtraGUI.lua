@@ -2641,7 +2641,7 @@ function G:SetupAvada()
 		end
 	end
 
-	local function createOptionGroup(parent, i)
+	local function createOptionGroup(parent)
 		parent.options = {}
 
 		local unitOption = G:CreateDropdown(parent, L["Unit*"], 1, 1, unitOptions, L["AvadaUnitOptionTip"], 88, 28)
@@ -2705,7 +2705,7 @@ function G:SetupAvada()
 		bu:SetScript("OnLeave", B.HideTooltip)
 		bu:SetScript("OnMouseDown", receiveCursor)
 		bu:SetScript("OnReceiveDrag", receiveCursor)
-		createOptionGroup(bu, i)
+		createOptionGroup(bu)
 		frame.buttons[i] = bu
 	end
 
@@ -2818,7 +2818,6 @@ function G:SetupCooldownViewer(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 	local parent = scroll.child
 	local offset = -10
-	local MISC = B:GetModule("Misc")
 
 	createOptionCheck(parent, offset, L["CentralizedBuffIcon"], "Misc", "CentralBuffView")
 	createOptionCheck(parent, offset-30, L["CentralizedUtility"], "Misc", "CentralUtilView")

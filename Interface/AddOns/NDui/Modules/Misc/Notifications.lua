@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local format, gsub, strsplit, strfind = string.format, string.gsub, string.split, string.find
-local pairs, wipe, select = pairs, wipe, select
+local pairs, wipe = pairs, wipe
 local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsInRaid, IsInGroup, IsInInstance, IsInGuild
 local UnitInRaid, UnitInParty = UnitInRaid, UnitInParty
@@ -19,7 +19,6 @@ local C_VignetteInfo_GetVignettePosition = C_VignetteInfo.GetVignettePosition
 local C_Texture_GetAtlasInfo = C_Texture.GetAtlasInfo
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
-local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
 
 local function IsRandomGroup()
 	return IsPartyLFG() or C_PartyInfo.IsPartyWalkIn()
@@ -295,15 +294,12 @@ local function HandleVersonTag(version)
 	major, minor = tonumber(major), tonumber(minor)
 	if major >= 9 then
 		major, minor = 0, 0
-		if DB.isDeveloper and author then
-			print("Moron: "..author)
-		end
 	end
 	return major, minor
 end
 
-function M:VersionCheck_Compare(new, old, author)
-	local new1, new2 = HandleVersonTag(new, author)
+function M:VersionCheck_Compare(new, old)
+	local new1, new2 = HandleVersonTag(new)
 	local old1, old2 = HandleVersonTag(old)
 	if new1 > old1 or (new1 == old1 and new2 > old2) then
 		return "IsNew"

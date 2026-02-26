@@ -1,6 +1,5 @@
 ﻿local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF
 local module = B:GetModule("Maps")
 
 local _G = _G

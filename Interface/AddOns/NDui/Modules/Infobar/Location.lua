@@ -7,9 +7,9 @@ local info = module:RegisterInfobar("Zone", C.Infobar.LocationPos)
 local mapModule = B:GetModule("Maps")
 
 local format, unpack = string.format, unpack
-local WorldMapFrame, SELECTED_DOCK_FRAME, ChatFrame_OpenChat = WorldMapFrame, SELECTED_DOCK_FRAME, ChatFrame_OpenChat
+local WorldMapFrame = WorldMapFrame
 local GetZonePVPInfo = C_PvP and C_PvP.GetZonePVPInfo or GetZonePVPInfo
-local GetSubZoneText, GetZoneText, IsInInstance = GetSubZoneText, GetZoneText, IsInInstance
+local IsInInstance = IsInInstance
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 
 local zoneInfo = {

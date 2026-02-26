@@ -364,9 +364,6 @@ function M:RaidTool_BuffChecker(parent)
 	end)
 	frame:HookScript("OnLeave", B.HideTooltip)
 
-	local reset = true
-	B:RegisterEvent("PLAYER_REGEN_ENABLED", function() reset = true end)
-
 	frame:HookScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" then
 			scanBuff()
@@ -528,85 +525,6 @@ function M:RaidTool_CreateMenu(parent)
 	parent.buttons = bu
 end
 
-function M:RaidTool_EasyMarker()
-	-- TODO: replace with the newest dropdown template
-	local menuList = {}
-
-	local function GetMenuTitle(text, ...)
-		return (... and B.HexRGB(...) or "")..text
-	end
-
-	local function SetRaidTargetByIndex(_, arg1)
-		SetRaidTarget("target", arg1)
-	end
-
-	local mixins = {
-		UnitPopupRaidTarget8ButtonMixin,
-		UnitPopupRaidTarget7ButtonMixin,
-		UnitPopupRaidTarget6ButtonMixin,
-		UnitPopupRaidTarget5ButtonMixin,
-		UnitPopupRaidTarget4ButtonMixin,
-		UnitPopupRaidTarget3ButtonMixin,
-		UnitPopupRaidTarget2ButtonMixin,
-		UnitPopupRaidTarget1ButtonMixin,
-		UnitPopupRaidTargetNoneButtonMixin
-	}
-	local coords = { -- secret in 12.0, needs review
-		[1] = {.75, 1, .25, .5},
-		[2] = {.5, .75, .25, .5},
-		[3] = {.25, .5, .25, .5},
-		[4] = {0, .25, .25, .5},
-		[5] = {.75, 1, 0, .25},
-		[6] = {.5, .75, 0, .25},
-		[7] = {.25, .5, 0, .25},
-		[8] = {0, .25, 0, .25},
-		[9] = {0, 1, 0, 1},
-	}
-	for index, mixin in pairs(mixins) do
-		local t1, t2, t3, t4 = unpack(coords[index])
-		menuList[index] = {
-			text = GetMenuTitle(mixin:GetText(), mixin:GetColor()),
-			icon = mixin:GetIcon(),
-			tCoordLeft = t1,
-			tCoordRight = t2,
-			tCoordTop = t3,
-			tCoordBottom = t4,
-			arg1 = 9 - index,
-			func = SetRaidTargetByIndex,
-		}
-	end
-
-	local function GetModifiedState()
-		local index = C.db["Misc"]["EasyMarkKey"]
-		if index == 1 then
-			return IsControlKeyDown()
-		elseif index == 2 then
-			return IsAltKeyDown()
-		elseif index == 3 then
-			return IsShiftKeyDown()
-		elseif index == 4 then
-			return false
-		end
-	end
-
-	WorldFrame:HookScript("OnMouseDown", function(_, btn)
-		if btn == "LeftButton" and GetModifiedState() and UnitExists("mouseover") then
-			if not IsInGroup() or (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
-				local index = GetRaidTargetIndex("mouseover")
-				for i = 1, 8 do
-					local menu = menuList[i]
-					if menu.arg1 == index then
-						menu.checked = true
-					else
-						menu.checked = false
-					end
-				end
-				EasyMenu(menuList, B.EasyMenu, "cursor", 0, 0, "MENU", 1)
-			end
-		end
-	end)
-end
-
 function M:RaidTool_WorldMarker()
 	local iconTexture = {
 		"Interface\\TargetingFrame\\UI-RaidTargetingIcon_6",
@@ -701,7 +619,6 @@ function M:RaidTool_Init()
 	M:RaidTool_CreateMenu(frame)
 	M:RaidTool_CountDown(frame)
 
-	--M:RaidTool_EasyMarker() -- broken in 12.0
 	M:RaidTool_WorldMarker()
 	M:RaidTool_Misc()
 end

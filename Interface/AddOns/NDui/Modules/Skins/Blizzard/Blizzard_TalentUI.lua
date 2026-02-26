@@ -45,7 +45,7 @@ C.themes["Blizzard_TalentUI"] = function()
 
 		for i = 1, 4 do
 			local bu = frame["specButton"..i]
-			local _, _, _, icon, role = GetSpecializationInfo(i, false, frame.isPet)
+			local _, _, _, icon = GetSpecializationInfo(i, false, frame.isPet)
 			B.StripTextures(bu)
 			B.Reskin(bu, true)
 
@@ -69,7 +69,7 @@ C.themes["Blizzard_TalentUI"] = function()
 		local shownSpec = spec or playerTalentSpec or 1
 		local numSpecs = GetNumSpecializations(nil, self.isPet)
 		local sex = self.isPet and UnitSex("pet") or UnitSex("player")
-		local id, _, _, icon, role = GetSpecializationInfo(shownSpec, nil, self.isPet, nil, sex)
+		local id, _, _, icon = GetSpecializationInfo(shownSpec, nil, self.isPet, nil, sex)
 		if not id then return end
 
 		local scrollChild = self.spellsScroll.child

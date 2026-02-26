@@ -239,7 +239,6 @@ function module:UpdateTabChannelSwitch()
 		end
 	end
 end
-hooksecurefunc("ChatEdit_CustomTabPressed", module.UpdateTabChannelSwitch)
 
 -- Quick Scroll
 local chatScrollInfo = {
@@ -403,6 +402,8 @@ function module:HandleMinimizedFrame()
 end
 
 function module:OnLogin()
+	if C.db["Chat"]["Disable"] then return end
+
 	fontFile = not C.db["Chat"]["SysFont"] and DB.Font[1]
 	fontOutline = C.db["Skins"]["FontOutline"] and "OUTLINE" or ""
 
@@ -425,6 +426,7 @@ function module:OnLogin()
 	hooksecurefunc("FloatingChatFrameManager_OnEvent", module.UpdateTabEventColors)
 	hooksecurefunc(ChatFrameUtil, "ProcessMessageEventFilters", module.PlayWhisperSound)
 	hooksecurefunc("FCF_MinimizeFrame", module.HandleMinimizedFrame)
+	hooksecurefunc("ChatEdit_CustomTabPressed", module.UpdateTabChannelSwitch)
 
 	-- Default
 	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
@@ -436,7 +438,7 @@ function module:OnLogin()
 	-- Add Elements
 	module:ChatWhisperSticky()
 	module:ChatFilter()
-	--module:ChannelRename()
+	module:ChannelRename()
 	module:Chatbar()
 	module:ChatCopy()
 	--module:UrlCopy()
@@ -462,7 +464,7 @@ function module:OnLogin()
 			FCF_SetChatWindowFontSize(nil, FCF_GetChatFrameByID(CURRENT_CHAT_FRAME_ID), height)
 		end
 
-		Menu.ModifyMenu("MENU_FCF_TAB", function(self, rootDescription, data)
+		Menu.ModifyMenu("MENU_FCF_TAB", function(self, rootDescription)
 			local fontSizeSubmenu = rootDescription:CreateButton(DB.InfoColor..L["MoreFontSize"])
 			for i = 10, 30 do
 				fontSizeSubmenu:CreateRadio((format(FONT_SIZE_TEMPLATE, i)), IsSelected, SetSelected, i)

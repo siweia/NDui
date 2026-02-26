@@ -7,7 +7,7 @@ local ipairs, strmatch, unpack, ceil = ipairs, string.match, unpack, math.ceil
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
-local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
+local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetContainerItemID = C_Container.GetContainerItemID
 local GetContainerNumSlots = C_Container.GetContainerNumSlots
 local SortBags = C_Container.SortBags
@@ -275,10 +275,10 @@ function module:CreateCloseButton(f)
 	return bu
 end
 
-function module:CreateAccountBankButton(f)
+function module:CreateAccountBankButton()
 	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\Factionchange")
 	bu:RegisterForClicks("AnyUp")
-	bu:SetScript("OnClick", function(_, btn)
+	bu:SetScript("OnClick", function()
 		if not C_Bank.CanViewBank(ACCOUNT_BANK_TYPE) then return end
 
 		if BankFrame.BankPanel:ShouldShowLockPrompt() then
@@ -328,7 +328,7 @@ function module:CreateAccountMoney()
 	return frame
 end
 
-function module:CreateBankButton(f)
+function module:CreateBankButton()
 	local bu = B.CreateButton(self, 22, 22, true, "Atlas:Banker")
 	bu:SetScript("OnClick", function()
 		if not C_Bank.CanViewBank(CHAR_BANK_TYPE) then return end
@@ -1306,12 +1306,12 @@ function module:OnLogin()
 			module.CreateBagTab(self, settings, 6, "Bank")
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[4] = module.CreateBankDeposit(self)
-			buttons[5] = module.CreateAccountBankButton(self, f)
+			buttons[5] = module.CreateAccountBankButton(self)
 		elseif name == "Account" then
 			module.CreateBagTab(self, settings, 5, "Account")
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[4] = module.CreateAccountBankDeposit(self)
-			buttons[5] = module.CreateBankButton(self, f)
+			buttons[5] = module.CreateBankButton(self)
 			buttons[6] = module.CreateAccountMoney(self)
 		end
 

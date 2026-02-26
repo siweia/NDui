@@ -2,12 +2,11 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
-local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
+local pairs, unpack, tinsert = pairs, unpack, tinsert
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
-local IsPlayerSpell, UseItemByName = IsPlayerSpell, UseItemByName
+local IsPlayerSpell = IsPlayerSpell
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
 local PlayerHasToy, C_ToyBox_GetToyInfo = PlayerHasToy, C_ToyBox.GetToyInfo
-local C_TradeSkillUI_GetRecipeInfo, C_TradeSkillUI_GetTradeSkillLine = C_TradeSkillUI.GetRecipeInfo, C_TradeSkillUI.GetTradeSkillLine
 local C_TradeSkillUI_GetOnlyShowSkillUpRecipes, C_TradeSkillUI_SetOnlyShowSkillUpRecipes = C_TradeSkillUI.GetOnlyShowSkillUpRecipes, C_TradeSkillUI.SetOnlyShowSkillUpRecipes
 local C_TradeSkillUI_GetOnlyShowMakeableRecipes, C_TradeSkillUI_SetOnlyShowMakeableRecipes = C_TradeSkillUI.GetOnlyShowMakeableRecipes, C_TradeSkillUI.SetOnlyShowMakeableRecipes
 

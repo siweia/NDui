@@ -1,11 +1,10 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF
 ----------------------------
 -- yClassColors, by yleaf
 -- NDui MOD
 ----------------------------
-local format, ipairs, tinsert = string.format, ipairs, table.insert
+local format, ipairs = string.format, ipairs
 local C_FriendList_GetWhoInfo = C_FriendList.GetWhoInfo
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
@@ -103,6 +102,8 @@ local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%%d", "%%s")
 FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%$d", "%$s")
 
 hooksecurefunc(FriendsListFrame.ScrollBox, "Update", function(self)
+	local playerArea = GetAreaText()
+
 	for i = 1, self.ScrollTarget:GetNumChildren() do
 		local button = select(i, self.ScrollTarget:GetChildren())
 		local nameText, infoText
@@ -122,7 +123,6 @@ hooksecurefunc(FriendsListFrame.ScrollBox, "Update", function(self)
 					local gameAccountInfo = accountInfo.gameAccountInfo
 					if gameAccountInfo.isOnline and gameAccountInfo.clientProgram == BNET_CLIENT_WOW then
 						local charName = gameAccountInfo.characterName
-						local faction = gameAccountInfo.factionName
 						local class = gameAccountInfo.className or UNKNOWN
 						local zoneName = gameAccountInfo.areaName or UNKNOWN
 						if accountName and charName and class then

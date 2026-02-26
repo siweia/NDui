@@ -10,13 +10,6 @@ local options = {
 	[3] = {},
 }
 
-local attachedIndex = {
-	[1] = "TOP",
-	[2] = "BOTTOM",
-	[3] = "LEFT",
-	[4] = "RIGHT",
-}
-
 local pointData = {
 	[1] = {relFrom = "BOTTOM", relTo = "TOP", xOffset = 0, yOffset = 0},
 	[2] = {relFrom = "TOP", relTo = "BOTTOM", xOffset = 0, yOffset = 0},

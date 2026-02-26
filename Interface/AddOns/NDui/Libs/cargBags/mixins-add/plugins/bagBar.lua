@@ -187,10 +187,6 @@ local function updater(self)
 end
 
 local function onLock(self, _, bagID, slotID)
-	if(bagID == -1 and slotID > NUM_BANKGENERIC_SLOTS) then
-		bagID, slotID = ContainerIDToInventoryID(slotID - NUM_BANKGENERIC_SLOTS + maxBagSlots)
-	end
-
 	if(slotID) then return end
 
 	for _, button in pairs(self.buttons) do

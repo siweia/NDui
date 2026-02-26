@@ -3,17 +3,16 @@ local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
 local _G = getfenv(0)
-local floor, strmatch, tonumber, pairs, unpack, rad = floor, string.match, tonumber, pairs, unpack, math.rad
+local floor, strmatch, pairs, unpack, rad = floor, string.match, pairs, unpack, math.rad
 local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
 local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
 local UnitClassification, UnitExists, InCombatLockdown, UnitCanAttack = UnitClassification, UnitExists, InCombatLockdown, UnitCanAttack
 local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
-local IsInRaid, IsInGroup, UnitName, UnitHealth, UnitHealthMax = IsInRaid, IsInGroup, UnitName, UnitHealth, UnitHealthMax
+local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
 local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local GetTime = GetTime
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
-local INTERRUPTED, THREAT_TOOLTIP = INTERRUPTED, THREAT_TOOLTIP
 local GetSpellName = C_Spell.GetSpellName
 
 -- Init
@@ -31,9 +30,11 @@ end
 
 function UF:UpdatePlateSize()
 	if InCombatLockdown() then return end
-	UF.NameplateDriver:SetSize(C.db["Nameplate"]["HarmWidth"], C.db["Nameplate"]["HarmHeight"])
-	UF.NameplateDriver.enemyNonInteractible = C.db["Nameplate"]["EnemyThru"]
-	UF.NameplateDriver.friendlyNonInteractible = C.db["Nameplate"]["FriendlyThru"]
+	if UF.NameplateDriver then
+		UF.NameplateDriver:SetSize(C.db["Nameplate"]["HarmWidth"], C.db["Nameplate"]["HarmHeight"])
+		UF.NameplateDriver.enemyNonInteractible = C.db["Nameplate"]["EnemyThru"]
+		UF.NameplateDriver.friendlyNonInteractible = C.db["Nameplate"]["FriendlyThru"]
+	end
 end
 
 function UF:SetupCVars()
@@ -160,7 +161,7 @@ function UF:UpdateColor(_, unit)
 	local transColor = C.db["Nameplate"]["TransColor"]
 	local insecureColor = C.db["Nameplate"]["InsecureColor"]
 	local revertThreat = C.db["Nameplate"]["DPSRevertThreat"]
-	local offTankColor = C.db["Nameplate"]["OffTankColor"]
+	--local offTankColor = C.db["Nameplate"]["OffTankColor"]
 	local healthPerc = UnitHealthPercent(unit, true, executedCurve)
 	local targetColor = C.db["Nameplate"]["TargetColor"]
 	local focusColor = C.db["Nameplate"]["FocusColor"]
@@ -195,11 +196,11 @@ function UF:UpdateColor(_, unit)
 					if DB.Role ~= "Tank" and revertThreat then
 						r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
 					else
-						if isOffTank then
-							r, g, b = offTankColor.r, offTankColor.g, offTankColor.b
-						else
+						--if isOffTank then
+						--	r, g, b = offTankColor.r, offTankColor.g, offTankColor.b
+						--else
 							r, g, b = secureColor.r, secureColor.g, secureColor.b
-						end
+						--end
 					end
 				elseif status == 2 or status == 1 then
 					r, g, b = transColor.r, transColor.g, transColor.b
@@ -403,13 +404,6 @@ function UF:QuestIconCheck()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", CheckInstanceStatus)
 end
 
-local function isQuestTitle(textLine)
-	local r, g, b = textLine:GetTextColor()
-	if r > .99 and g > .8 and b == 0 then
-		return true
-	end
-end
-
 function UF:UpdateQuestUnit(_, unit)
 	if not C.db["Nameplate"]["QuestIndicator"] then return end
 	if isInInstance then
@@ -419,7 +413,7 @@ function UF:UpdateQuestUnit(_, unit)
 	end
 
 	unit = unit or self.unit
-	local startLooking, isLootQuest, questProgress -- FIXME: isLootQuest in old expansion
+	local questProgress
 	local prevDiff = 0
 
 	local data = C_TooltipInfo.GetUnit(unit)
@@ -428,7 +422,7 @@ function UF:UpdateQuestUnit(_, unit)
 			local lineData = data.lines[i]
 			if lineData.type == 8 then
 				local text = lineData.leftText -- progress string
-				if text then
+				if text and B:NotSecretValue(text) then
 					local current, goal = strmatch(text, "(%d+)/(%d+)")
 					local progress = strmatch(text, "(%d+)%%")
 					if current and goal then
@@ -453,12 +447,7 @@ function UF:UpdateQuestUnit(_, unit)
 		self.questIcon:Show()
 	else
 		self.questCount:SetText("")
-		if isLootQuest then
-			self.questIcon:SetAtlas(DB.questTex)
-			self.questIcon:Show()
-		else
-			self.questIcon:Hide()
-		end
+		self.questIcon:Hide()
 	end
 end
 
@@ -912,7 +901,7 @@ function UF:OnNameplateAdded(event, unit)
 	onTargetChanged(self, event, unit)
 end
 
-function UF:OnNameplateRemoved(event, unit)
+function UF:OnNameplateRemoved()
 	if not self then return end
 	self.npcID = nil
 end

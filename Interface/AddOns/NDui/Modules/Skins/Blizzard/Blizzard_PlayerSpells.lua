@@ -1,44 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function handleSpellButton(self)
-	local slot, slotType = SpellBook_GetSpellBookSlot(self)
-	local isPassive = C_Spell.IsSpellPassive(slot, SpellBookFrame.bookType)
-	local name = self:GetName()
-	local highlightTexture = _G[name.."Highlight"]
-	if isPassive then
-		highlightTexture:SetColorTexture(1, 1, 1, 0)
-	else
-		highlightTexture:SetColorTexture(1, 1, 1, .25)
-	end
-
-	local subSpellString = _G[name.."SubSpellName"]
-	local isOffSpec = self.offSpecID ~= 0 and SpellBookFrame.bookType == BOOKTYPE_SPELL
-	subSpellString:SetTextColor(1, 1, 1)
-
-	if slotType == "FUTURESPELL" then
-		local level = GetSpellAvailableLevel(slot, SpellBookFrame.bookType)
-		if level and level > UnitLevel("player") then
-			self.SpellName:SetTextColor(.7, .7, .7)
-			subSpellString:SetTextColor(.7, .7, .7)
-		end
-	else
-		if slotType == "SPELL" and isOffSpec then
-			subSpellString:SetTextColor(.7, .7, .7)
-		end
-	end
-	self.RequiredLevelString:SetTextColor(.7, .7, .7)
-
-	local ic = _G[name.."IconTexture"]
-	if ic.bg then
-		ic.bg:SetShown(ic:IsShown())
-	end
-
-	if self.ClickBindingIconCover and self.ClickBindingIconCover:IsShown() then
-		self.SpellName:SetTextColor(.7, .7, .7)
-	end
-end
-
 local function reskinTalentFrameDialog(dialog)
 	B.StripTextures(dialog)
 	B.SetBD(dialog)
