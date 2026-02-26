@@ -7,7 +7,6 @@ The element works by changing the texture's vertex color.
 ## Widget
 
 ThreatIndicator - A `Texture` used to display the current threat level.
-The element works by changing the texture's vertex color.
 
 ## Notes
 

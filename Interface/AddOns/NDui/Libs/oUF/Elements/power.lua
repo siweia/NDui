@@ -7,6 +7,10 @@ Handles the updating of a status bar that displays the unit's power.
 
 Power - A `StatusBar` used to represent the unit's power.
 
+## Sub-Widgets
+
+.CostPrediction - A `StatusBar` used to represent the power cost of spells on top of the Power element.
+
 ## Notes
 
 A default texture will be applied if the widget is a StatusBar and doesn't have a texture or a color set.
@@ -57,6 +61,14 @@ The following options are listed by priority. The first check that returns true 
     Power:SetPoint('BOTTOM')
     Power:SetPoint('LEFT')
     Power:SetPoint('RIGHT')
+
+    -- Optionally add CostPrediction sub-widget
+    local CostPrediction = CreateFrame('StatusBar', nil, Power)
+    CostPrediction:SetReverseFill(true)
+    CostPrediction:SetPoint('TOP')
+    CostPrediction:SetPoint('BOTTOM')
+    CostPrediction:SetPoint('RIGHT', Power:GetStatusBarTexture())
+    Power.CostPrediction = CostPrediction
 
     -- Options
     Power.frequentUpdates = true
@@ -236,6 +248,90 @@ local function Update(self, event, unit)
 	end
 end
 
+local function UpdatePrediction(self, event, unit)
+	if(self.unit ~= unit) then return end
+
+	local element = self.Power
+
+	--[[ Callback: Power:PreUpdatePrediction(unit)
+	Called before the element has been updated.
+
+	* self - the Power element
+	* unit - the unit for which the update has been triggered (string)
+	--]]
+	if(element.PreUpdatePrediction) then
+		element:PreUpdatePrediction(unit)
+	end
+
+	local _, _, _, startTime, endTime, _, _, _, spellID = UnitCastingInfo(unit)
+	local cost = 0
+
+	local powerType = UnitPowerType(unit)
+	if(element.displayAltPower) then
+		powerType = element:GetDisplayPower(unit)
+	end
+
+	if(event == 'UNIT_SPELLCAST_START' and startTime ~= endTime) then
+		local costTable = C_Spell.GetSpellPowerCost(spellID)
+		if(not costTable) then return end
+
+		-- hasRequiredAura is always false if there's only 1 subtable
+		local checkRequiredAura = #costTable > 1
+
+		for _, costInfo in next, costTable do
+			if(not checkRequiredAura or costInfo.hasRequiredAura) then
+				if(costInfo.type == powerType) then
+					cost = costInfo.cost
+					element.cost = cost
+
+					break
+				end
+			end
+		end
+	elseif(spellID) then
+		-- if we try to cast a spell while casting another one we need to avoid
+		-- resetting the element
+		cost = element.cost or 0
+	else
+		element.cost = cost
+	end
+
+	element.CostPrediction:SetMinMaxValues(0, UnitPowerMax(unit, powerType))
+	element.CostPrediction:SetValue(cost)
+	element.CostPrediction:Show()
+
+	--[[ Callback: Power:PostUpdatePrediction(unit, cost)
+	Called after the element has been updated.
+
+	* self - the Power element
+	* unit - the unit for which the update has been triggered (string)
+	* cost - the power type cost of the cast ability (number)
+	--]]
+	if(element.PostUpdatePrediction) then
+		return element:PostUpdatePrediction(unit, cost)
+	end
+end
+
+local function UpdatePredictionSize(self, event, unit)
+	local element = self.Power
+	if(element.CostPrediction and element.__size) then
+		element.CostPrediction[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.CostPrediction, element.__size)
+	end
+end
+
+local function shouldUpdatePredictionSize(self)
+	local element = self.Power
+
+	local isHoriz = element:GetOrientation() == 'HORIZONTAL'
+	local newSize = element[isHoriz and 'GetWidth' or 'GetHeight'](element)
+	if(isHoriz ~= element.__isHoriz or newSize ~= element.__size) then
+		element.__isHoriz = isHoriz
+		element.__size = newSize
+
+		return true
+	end
+end
+
 local function Path(self, ...)
 	--[[ Override: Power.Override(self, event, unit, ...)
 	Used to completely override the internal update function.
@@ -252,8 +348,38 @@ local function Path(self, ...)
 	ColorPath(self, ...)
 end
 
+local function PredictionPath(self, ...)
+	--[[ Override: Power.UpdatePredictionSize(self, event, unit, ...)
+	Used to completely override the internal function for updating the cost prediction sub-widget's size.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	if(shouldUpdatePredictionSize(self)) then
+		(self.Power.UpdatePredictionSize or UpdatePredictionSize) (self, ...)
+	end
+
+	--[[ Override: Power.OverridePrediction(self, event, unit, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	do
+		(self.Power.OverridePrediction or UpdatePrediction) (self, ...)
+	end
+end
+
 local function ForceUpdate(element)
 	Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+
+	if(element.CostPrediction) then
+		PredictionPath(element.__owner, 'ForceUpdate', element.__owner.unit)
+	end
 end
 
 --[[ Power:SetColorDisconnected(state, isForced)
@@ -370,7 +496,7 @@ local function SetFrequentUpdates(element, state, isForced)
 	end
 end
 
-local function Enable(self)
+local function Enable(self, unit)
 	local element = self.Power
 	if(element) then
 		element.__owner = self
@@ -425,6 +551,21 @@ local function Enable(self)
 			element.GetDisplayPower = GetDisplayPower
 		end
 
+		if(element.CostPrediction) then
+			element.CostPrediction:Hide()
+
+			if(UnitIsUnit(unit, 'player')) then
+				if(element.CostPrediction:IsObjectType('StatusBar') and not element.CostPrediction:GetStatusBarTexture()) then
+					element.CostPrediction:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+				end
+
+				self:RegisterEvent('UNIT_SPELLCAST_START', PredictionPath)
+				self:RegisterEvent('UNIT_SPELLCAST_STOP', PredictionPath)
+				self:RegisterEvent('UNIT_SPELLCAST_FAILED', PredictionPath)
+				self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', PredictionPath)
+			end
+		end
+
 		element:Show()
 
 		return true
@@ -446,6 +587,15 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_FACTION', ColorPath)
 		self:UnregisterEvent('UNIT_FLAGS', ColorPath)
 		self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+
+		if(element.CostPrediction) then
+			element.CostPrediction:Hide()
+
+			self:UnregisterEvent('UNIT_SPELLCAST_START', PredictionPath)
+			self:UnregisterEvent('UNIT_SPELLCAST_STOP', PredictionPath)
+			self:UnregisterEvent('UNIT_SPELLCAST_FAILED', PredictionPath)
+			self:UnregisterEvent('UNIT_SPELLCAST_SUCCEEDED', PredictionPath)
+		end
 	end
 end
 

@@ -8,6 +8,10 @@ Balance druids.
 
 AdditionalPower - A `StatusBar` that is used to display the player's additional power.
 
+## Sub-Widgets
+
+.CostPrediction - A `StatusBar` used to represent the power cost of spells on top of the AdditionalPower element.
+
 ## Notes
 
 A default texture will be applied if the widget is a StatusBar and doesn't have a texture set.
@@ -33,6 +37,14 @@ The following options are listed by priority. The first check that returns true 
     AdditionalPower:SetPoint('TOP')
     AdditionalPower:SetPoint('LEFT')
     AdditionalPower:SetPoint('RIGHT')
+
+    -- Optionally add CostPrediction sub-widget
+    local CostPrediction = CreateFrame('StatusBar', nil, AdditionalPower)
+    CostPrediction:SetReverseFill(true)
+    CostPrediction:SetPoint('TOP')
+    CostPrediction:SetPoint('BOTTOM')
+    CostPrediction:SetPoint('RIGHT', AdditionalPower:GetStatusBarTexture())
+    AdditionalPower.CostPrediction = CostPrediction
 
     -- Register it with oUF
     self.AdditionalPower = AdditionalPower
@@ -110,6 +122,85 @@ local function Update(self, event, unit, powerType)
 	end
 end
 
+local function UpdatePrediction(self, event, unit)
+	if(self.unit ~= unit) then return end
+
+	local element = self.AdditionalPower
+
+	--[[ Callback: AdditionalPower:PreUpdatePrediction(unit)
+	Called before the element has been updated.
+
+	* self - the AdditionalPower element
+	* unit - the unit for which the update has been triggered (string)
+	--]]
+	if(element.PreUpdatePrediction) then
+		element:PreUpdatePrediction(unit)
+	end
+
+	local _, _, _, startTime, endTime, _, _, _, spellID = UnitCastingInfo(unit)
+	local cost = 0
+
+	if(event == 'UNIT_SPELLCAST_START' and startTime ~= endTime) then
+		local costTable = C_Spell.GetSpellPowerCost(spellID)
+		if(not costTable) then return end
+
+		-- hasRequiredAura is always false if there's only 1 subtable
+		local checkRequiredAura = #costTable > 1
+
+		for _, costInfo in next, costTable do
+			if(not checkRequiredAura or costInfo.hasRequiredAura) then
+				if(costInfo.type == ADDITIONAL_POWER_BAR_INDEX) then
+					cost = costInfo.cost
+					element.cost = cost
+
+					break
+				end
+			end
+		end
+	elseif(spellID) then
+		-- if we try to cast a spell while casting another one we need to avoid
+		-- resetting the element
+		cost = element.cost or 0
+	else
+		element.cost = cost
+	end
+
+	element.CostPrediction:SetMinMaxValues(0, UnitPowerMax(unit, ADDITIONAL_POWER_BAR_INDEX))
+	element.CostPrediction:SetValue(cost)
+	element.CostPrediction:Show()
+
+	--[[ Callback: AdditionalPower:PostUpdatePrediction(unit, cost)
+	Called after the element has been updated.
+
+	* self - the AdditionalPower element
+	* unit - the unit for which the update has been triggered (string)
+	* cost - the power type cost of the cast ability (number)
+	--]]
+	if(element.PostUpdatePrediction) then
+		return element:PostUpdatePrediction(unit, cost)
+	end
+end
+
+local function UpdatePredictionSize(self, event, unit)
+	local element = self.AdditionalPower
+	if(element.CostPrediction and element.__size) then
+		element.CostPrediction[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.CostPrediction, element.__size)
+	end
+end
+
+local function shouldUpdatePredictionSize(self)
+	local element = self.AdditionalPower
+
+	local isHoriz = element:GetOrientation() == 'HORIZONTAL'
+	local newSize = element[isHoriz and 'GetWidth' or 'GetHeight'](element)
+	if(isHoriz ~= element.__isHoriz or newSize ~= element.__size) then
+		element.__isHoriz = isHoriz
+		element.__size = newSize
+
+		return true
+	end
+end
+
 local function Path(self, ...)
 	--[[ Override: AdditionalPower.Override(self, event, unit, ...)
 	Used to completely override the element's update process.
@@ -134,6 +225,32 @@ local function Path(self, ...)
 	(self.AdditionalPower.UpdateColor or UpdateColor) (self, ...)
 end
 
+local function PredictionPath(self, ...)
+	--[[ Override: AdditionalPower.UpdatePredictionSize(self, event, unit, ...)
+	Used to completely override the internal function for updating the cost prediction sub-widget's size.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	if(shouldUpdatePredictionSize(self)) then
+		(self.AdditionalPower.UpdatePredictionSize or UpdatePredictionSize) (self, ...)
+	end
+
+	--[[ Override: AdditionalPower.OverridePrediction(self, event, unit, ...)
+	Used to completely override the internal update function.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	do
+		(self.AdditionalPower.OverridePrediction or UpdatePrediction) (self, ...)
+	end
+end
+
 local function ElementEnable(self)
 	local element = self.AdditionalPower
 
@@ -147,6 +264,13 @@ local function ElementEnable(self)
 
 	element:Show()
 
+	if(element.CostPrediction) then
+		self:RegisterEvent('UNIT_SPELLCAST_START', PredictionPath)
+		self:RegisterEvent('UNIT_SPELLCAST_STOP', PredictionPath)
+		self:RegisterEvent('UNIT_SPELLCAST_FAILED', PredictionPath)
+		self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', PredictionPath)
+	end
+
 	element.__isEnabled = true
 	Path(self, 'ElementEnable', 'player', ADDITIONAL_POWER_BAR_NAME)
 end
@@ -159,6 +283,15 @@ local function ElementDisable(self)
 	self:UnregisterEvent('UNIT_POWER_UPDATE', Path)
 
 	element:Hide()
+
+	if(element.CostPrediction) then
+		element.CostPrediction:Hide()
+
+		self:UnregisterEvent('UNIT_SPELLCAST_START', PredictionPath)
+		self:UnregisterEvent('UNIT_SPELLCAST_STOP', PredictionPath)
+		self:UnregisterEvent('UNIT_SPELLCAST_FAILED', PredictionPath)
+		self:UnregisterEvent('UNIT_SPELLCAST_SUCCEEDED', PredictionPath)
+	end
 
 	element.__isEnabled = false
 	Path(self, 'ElementDisable', 'player', ADDITIONAL_POWER_BAR_NAME)
@@ -215,6 +348,10 @@ end
 
 local function ForceUpdate(element)
 	VisibilityPath(element.__owner, 'ForceUpdate', element.__owner.unit)
+
+	if(element.__isEnabled and element.CostPrediction) then
+		PredictionPath(element.__owner, 'ForceUpdate', element.__owner.unit)
+	end
 end
 
 --[[ Power:SetFrequentUpdates(state, isForced)
@@ -256,6 +393,14 @@ local function Enable(self, unit)
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		end
+
+		if(element.CostPrediction) then
+			element.CostPrediction:Hide()
+
+			if(element.CostPrediction:IsObjectType('StatusBar') and not element.CostPrediction:GetStatusBarTexture()) then
+				element.CostPrediction:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+			end
 		end
 
 		return true
