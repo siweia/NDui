@@ -141,9 +141,9 @@ function module:UpdateChannelNames(text, r, g, b, ...)
 	end
 
 	text = gsub(text, "(|Hplayer:([^|:]+))", AddAuthorLogo)
-	--text = gsub(text, "(|Hplayer.-):%s", "%1 ") -- 干掉半角冒号
+	text = gsub(text, "(|Hplayer.-):%s", "%1 ") -- 干掉半角冒号
 	if isCNClient then
-		text = gsub(text, "(|Hplayer.-)"..HEADER_COLON, "%1:") -- 干掉全角冒号
+		text = gsub(text, "(|Hplayer.-%])(.-)"..HEADER_COLON, "%1") -- 干掉全角冒号及说/大喊
 	end
 	--text = gsub(text, "(|Hplayer:.-)%[(.-)%]", "%1%2") -- 干掉名字方括号
 	text = gsub(text, matchPattern, AbbrChannelName)
