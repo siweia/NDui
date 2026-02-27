@@ -65,7 +65,7 @@ local function Update(self, event, unit, isFullUpdate, updatedAuras)
 		end
 
 		UpdateAuras(element, element.buffList, maxBuffs, unit, "HELPFUL")
-		UpdateAuras(element, element.debuffList, maxDebufs, unit, "HARMFUL")
+		--UpdateAuras(element, element.debuffList, maxDebufs, unit, "HARMFUL")
 
 		if element.PostUpdate then
 			element:PostUpdate(unit, isFullUpdate, updatedAuras)
