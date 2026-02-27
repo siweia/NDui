@@ -72,6 +72,11 @@ local function ReskinMeterWindow(frame)
 	frame.SourceWindow.ScrollBox:ForEachFrame(updateBar)
 	hooksecurefunc(frame.SourceWindow.ScrollBox, "Update", updateBox)
 
+	local localEntry = frame.LocalPlayerEntry
+	if localEntry then
+		updateBar(localEntry)
+	end
+
 	frame.styled = true
 end
 
