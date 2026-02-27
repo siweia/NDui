@@ -4,14 +4,14 @@ local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
 
 local counterOffsets = {
-	["TOPLEFT"] = {{6, 1}, {"LEFT", "RIGHT", -2, 0}},
-	["TOPRIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}},
-	["BOTTOMLEFT"] = {{6, 1},{"LEFT", "RIGHT", -2, 0}},
-	["BOTTOMRIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}},
-	["LEFT"] = {{6, 1}, {"LEFT", "RIGHT", -2, 0}},
-	["RIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}},
-	["TOP"] = {{0, 0}, {"RIGHT", "LEFT", 2, 0}},
-	["BOTTOM"] = {{0, 0}, {"RIGHT", "LEFT", 2, 0}},
+	["TOPLEFT"] = {{6, 1}, {"LEFT", "RIGHT", -2, 0}, {2, -2}},
+	["TOPRIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}, {-2, -2}},
+	["BOTTOMLEFT"] = {{6, 1},{"LEFT", "RIGHT", -2, 0}, {2, 2}},
+	["BOTTOMRIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}, {-2, 2}},
+	["LEFT"] = {{6, 1}, {"LEFT", "RIGHT", -2, 0}, {2, 0}},
+	["RIGHT"] = {{-6, 1}, {"RIGHT", "LEFT", 2, 0}, {-2, 0}},
+	["TOP"] = {{0, 0}, {"RIGHT", "LEFT", 2, 0}, {0, -2}},
+	["BOTTOM"] = {{0, 0}, {"RIGHT", "LEFT", 2, 0}, {0, 2}},
 }
 
 function UF:SpellsIndicator_OnUpdate(elapsed)
@@ -48,7 +48,8 @@ function UF:CreateSpellsIndicator(self)
 		local button = CreateFrame("Frame", nil, self.Health)
 		button:SetFrameLevel(self:GetFrameLevel()+10)
 		button:SetSize(spellSize, spellSize)
-		button:SetPoint(anchor)
+		local x, y = unpack(counterOffsets[anchor][3])
+		button:SetPoint(anchor, x, y)
 		button:Hide()
 
 		button.icon = button:CreateTexture(nil, "BORDER")
@@ -141,3 +142,81 @@ function UF:SpellsIndicator_UpdateOptions()
 		UF:RefreshBuffIndicator(button)
 	end
 end
+
+-- None secret spells in 12.0.1
+UF.NonSecretSpells = {
+	EVOKER = {
+		[355941] = true, -- 梦境吐息
+		[363502] = true, -- 梦境飞行
+		[364343] = true, -- 回响
+		[366155] = true, -- 逆转
+		[367364] = true, -- 回响逆转
+		[373267] = true, -- 生命绑定
+		[376788] = true, -- 回响梦境吐息
+		[360827] = true, -- 爆裂龙鳞
+		[395152] = true, -- 黑檀之力
+		[410089] = true, -- 先见
+		[410263] = true, -- 狱火之祝
+		[410686] = true, -- 共生之花
+		[413984] = true, -- 流沙
+		[369459] = true, -- 魔法之源
+	},
+	DRUID = {
+		[774] = true, -- 回春术
+		[8936] = true, -- 愈合
+		[33763] = true, -- 生命绽放
+		[48438] = true, -- 野性成长
+		[155777] = true, -- 萌芽
+		[1126] = true, -- 野性印记
+		[474754] = true, -- 共生关系
+	},
+	PRIEST = {
+		[17] = true, -- 真言术:盾
+		[194384] = true, -- 救赎
+		[1253593] = true, -- 虚空之盾
+		[139] = true, -- 恢复
+		[41635] = true, -- 愈合祷言
+		[77489] = true, -- 圣光回响
+		[21562] = true, -- 真言术:韧
+	},
+	MONK = {
+		[115175] = true, -- 抚慰之雾
+		[119611] = true, -- 复苏之雾
+		[124682] = true, -- 氤氲之雾
+		[450769] = true, -- 和谐之姿
+	},
+	SHAMAN = {
+		[974] = true, -- 大地之盾
+		[383648] = true, -- 大地之盾
+		[61295] = true, -- 激流
+
+		[462854] = true, -- 天怒
+		--[319773] = true, -- 风怒武器
+		--[319778] = true, -- 火舌武器
+		--[382021] = true, -- 大地生命武器
+		--[382022] = true, -- 大地生命武器
+		--[457496] = true, -- 唤潮者护卫
+		--[457481] = true, -- 唤潮者护卫
+		--[462757] = true, -- 雷击结界
+		--[462742] = true, -- 雷击结界
+	},
+	PALADIN = {
+		[53563] = true, -- 圣光道标
+		[156322] = true, -- 永恒之火
+		[156910] = true, -- 信仰道标
+		[1244893] = true, -- 救赎者道标
+
+		[433568] = true, -- 圣化仪式
+		[433583] = true, -- 祈告仪式
+	},
+	MAGE = {
+		[1459] = true, -- 奥术智力
+		[205473] = true, -- 法师:冰刺
+	},
+	HUNTER = {
+		[260286] = true, -- 猎人:矛尖
+	},
+	WARRIOR = {
+		[6673] = true, -- 战斗怒吼
+	},
+}

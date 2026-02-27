@@ -56,7 +56,7 @@ function A:Reminder_Update(cfg)
 			for i = 1, 40 do
 				local auraData = C_UnitAuras.GetBuffDataByIndex("player", i, "HELPFUL")
 				if not auraData then break end
-				if auraData.spellId and cfg.spells[auraData.spellId] then
+				if B:NotSecretValue(auraData.spellId) and auraData.spellId and cfg.spells[auraData.spellId] then
 					frame:Hide()
 					return
 				end

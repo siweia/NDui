@@ -181,22 +181,6 @@ DB.ReminderBuffs = {
 			instance = true,
 			disable = true, -- 禁用直到出了新符文
 		},
-		{	itemID = 194307, -- 巢穴守护者的诺言
-			spells = {
-				[394457] = true,
-			},
-			equip = true,
-			instance = true,
-			inGroup = true,
-		},
-		{	itemID = 190958, -- 究极秘术
-			spells = {
-				[368512] = true,
-			},
-			equip = true,
-			instance = true,
-			inGroup = true,
-		},
 		--[=[
 		{	itemID = 178742, -- 瓶装毒素饰品
 			spells = {
@@ -209,15 +193,6 @@ DB.ReminderBuffs = {
 		]=]
 	},
 	MAGE = {
-		{	spells = {	-- 奥术魔宠
-				[210126] = true,
-			},
-			depend = 205022,
-			spec = 1,
-			combat = true,
-			instance = true,
-			pvp = true,
-		},
 		{	spells = {	-- 奥术智慧
 				[1459] = true,
 			},
@@ -243,20 +218,9 @@ DB.ReminderBuffs = {
 	},
 	SHAMAN = {
 		{	spells = {
-				[192106] = true,	-- 闪电之盾
-				[974] = true,		-- 大地之盾
-				[383648] = true,	-- 大地之盾
-				[52127] = true,		-- 水之护盾
+				[319773] = true,		-- 风怒武器
 			},
-			depend = 192106,
-			combat = true,
-			instance = true,
-			pvp = true,
-		},
-		{	spells = {
-				[33757] = true,		-- 风怒武器
-			},
-			depend = 33757,
+			depend = 319773,
 			combat = true,
 			instance = true,
 			pvp = true,
@@ -264,9 +228,9 @@ DB.ReminderBuffs = {
 			spec = 2,
 		},
 		{	spells = {
-				[318038] = true,	-- 火舌武器
+				[319778] = true,	-- 火舌武器
 			},
-			depend = 318038,
+			depend = 319778,
 			combat = true,
 			instance = true,
 			pvp = true,
@@ -303,10 +267,10 @@ DB.ReminderBuffs = {
 		},
 	},
 	EVOKER = {
-		{	spells = {	-- 青铜龙的祝福
-				[381748] = true,
+		{	spells = {	-- 魔法之源
+				[369459] = true,
 			},
-			depend = 364342,
+			depend = 369459,
 			instance = true,
 		},
 	},

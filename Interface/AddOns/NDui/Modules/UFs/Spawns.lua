@@ -165,9 +165,9 @@ local function CreateRaidStyle(self)
 	UF:CreatePrediction(self)
 	UF:CreateClickSets(self)
 	UF:CreateThreatBorder(self)
-	--if self.raidType ~= "simple" then
-	--	UF:CreateRaidAuras(self)
-	--end
+	if self.raidType ~= "simple" then
+		UF:CreateRaidAuras(self)
+	end
 	UF:CreatePrivateAuras(self)
 	if C.db["UFs"]["RaidAuras"] then
 		UF:CreateBuffs(self)
@@ -348,6 +348,7 @@ function UF:OnLogin()
 
 	-- Default Clicksets for RaidFrame
 	UF:DefaultClickSets()
+	UF:UpdateCastBarColors()
 
 	if C.db["UFs"]["Enable"] then
 		-- Register
@@ -419,7 +420,6 @@ function UF:OnLogin()
 		UF:TogglePortraits()
 		UF:CheckPowerBars()
 		--UF:UpdateRaidInfo() -- RaidAuras
-		UF:UpdateCastBarColors()
 	end
 
 	if C.db["UFs"]["RaidFrame"] then
