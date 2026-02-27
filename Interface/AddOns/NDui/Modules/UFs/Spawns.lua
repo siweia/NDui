@@ -42,6 +42,7 @@ local function CreatePlayerStyle(self)
 		--UF:ReskinTimerTrakcer(self)
 	end
 	if C.db["Map"]["DisableMinimap"] or not C.db["Misc"]["ExpRep"] then UF:CreateExpRepBar(self) end
+	UF:CreateEnergyTick(self)
 end
 
 local function CreateTargetStyle(self)

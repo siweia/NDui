@@ -6,6 +6,7 @@
 	<Script file="Spawns.lua"/>
 
 	<Script file="Elements\Castbar.lua"/>
+	<Script file="Elements\EnergyTick.lua"/>
 	<Script file="Elements\RaidAuras.lua"/>
 	<Script file="Elements\AurasIndicator.lua"/>
 	<Script file="Elements\SpellsIndicator.lua"/>

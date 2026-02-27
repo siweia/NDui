@@ -36,6 +36,7 @@
 	<Script file='Plugins\FloatingCombatFeedback.lua' />
 	<Script file='Plugins\Swing.lua' />
 	<Script file='Plugins\RaidAuras.lua' />
+	<Script file='Plugins\EnergyTick.lua' />
 
 	<Script file="finalize.lua"/>
 </Ui>
