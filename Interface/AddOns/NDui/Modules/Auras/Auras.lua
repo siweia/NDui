@@ -17,7 +17,7 @@ function A:OnLogin()
 	A:HideBlizBuff()
 	A:BuildBuffFrame()
 	A:Totems()
-	--A:InitReminder() -- disabled in 12.0
+	A:InitReminder()
 end
 
 function A:HideBlizBuff()
