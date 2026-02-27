@@ -62,11 +62,9 @@ function UF:Castbar_FailedColor(unit, interruptedBy)
 		local sourceName = UnitNameFromGUID(interruptedBy)
 		local _, class = GetPlayerInfoByGUID(interruptedBy)
 		class = class or "PRIEST"
-		self.Text:SetText(INTERRUPTED.." > "..sourceName)
-		self.Text:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
+		local classColor = C_ClassColor.GetClassColor(class)
+		self.Text:SetText(INTERRUPTED.." > "..classColor:WrapTextInColorCode(sourceName))
 		self.Time:SetText("")
-	else
-		self.Text:SetTextColor(1, 1, 1)
 	end
 end
 
