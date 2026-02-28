@@ -109,7 +109,7 @@ local factionStr = {
 function M:ShowLeaderOverallScore()
 	local resultID = self.resultID
 	local searchResultInfo = resultID and C_LFGList_GetSearchResultInfo(resultID)
-	if searchResultInfo then
+	if searchResultInfo and B:NotSecretValue(searchResultInfo.activityIDs) then
 		local activityInfo = C_LFGList_GetActivityInfoTable(searchResultInfo.activityIDs[1], nil, searchResultInfo.isWarMode)
 		if activityInfo then
 			local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore
