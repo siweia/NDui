@@ -1,8 +1,8 @@
 local _, ns = ...
 local oUF = ns.oUF
 
--- sourced from Blizzard_UnitFrame/TargetFrame.lua
-local MAX_BOSS_FRAMES = 8 -- blizzard can spawn more than the default 5 apparently
+-- sourced from Blizzard_UnitFrame/Mainline/TargetFrame.lua
+local MAX_BOSS_FRAMES = _G.MAX_BOSS_FRAMES or 5
 
 -- sourced from Blizzard_FrameXMLBase/Shared/Constants.lua
 local MEMBERS_PER_RAID_GROUP = _G.MEMBERS_PER_RAID_GROUP or 5

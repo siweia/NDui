@@ -142,7 +142,7 @@ local function Enable(self, unit)
 		element.ForceUpdate = ForceUpdate
 
 		local AnimationGroup = element:CreateAnimationGroup()
-		AnimationGroup:HookScript('OnFinished', OnFinished)
+		AnimationGroup:SetScript('OnFinished', OnFinished)
 		element.Animation = AnimationGroup
 
 		local Animation = AnimationGroup:CreateAnimation('Alpha')
