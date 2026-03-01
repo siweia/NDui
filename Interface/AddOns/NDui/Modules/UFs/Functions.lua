@@ -1348,7 +1348,7 @@ function UF:CreateClassPower(self)
 		bars[i].bg = CreateFrame("Frame", nil, (isDK and bars[i] or bar))
 		bars[i].bg:SetAllPoints(bars[i])
 		B.SetBD(bars[i].bg, .7)
-		bars[i].bg:Hide()
+		bars[i].bg:SetShown(isDK)
 
 		if not isDK then
 			bars[i].cover = bars[i]:CreateTexture(nil, "ARTWORK", nil, 5)
