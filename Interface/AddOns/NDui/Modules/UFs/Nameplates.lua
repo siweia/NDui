@@ -731,7 +731,7 @@ function UF:RefreshAllPlates()
 end
 
 local DisabledElements = {
-	"Health", "Castbar", "HealthPrediction", "PvPClassificationIndicator", "ThreatIndicator"
+	"Health", "Castbar", "HealthPrediction", "PvPClassificationIndicator", "ThreatIndicator", "Auras"
 }
 
 local SoftTargetBlockElements = {
@@ -809,7 +809,7 @@ function UF:UpdatePlateByType()
 
 	UF.UpdateNameplateSize(self)
 	UF.UpdateTargetIndicator(self)
-	UF.ToggleNameplateAuras(self)
+	--UF.ToggleNameplateAuras(self)
 end
 
 function UF:RefreshPlateType(unit)
