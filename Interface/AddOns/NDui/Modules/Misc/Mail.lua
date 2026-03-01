@@ -67,6 +67,7 @@ local contactListByRealm = {}
 
 function M:ContactButton_OnClick()
 	local text = self.name:GetText() or ""
+	text = Ambiguate(text, "none")
 	SendMailNameEditBox:SetText(text)
 	SendMailNameEditBox:SetCursorPosition(0)
 end
