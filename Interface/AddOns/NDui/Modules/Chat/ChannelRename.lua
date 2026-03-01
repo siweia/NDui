@@ -146,8 +146,8 @@ local cnColonChannels = {
 	CHANNEL = true,
 }
 
-local cnPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%])(.-)"..colon.."%s"
-local enPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%])(.-):%s"
+local cnPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%].-)"..colon.."%s"
+local enPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%].-):%s"
 
 local function KillColon(link, tag)
 	if channels[tag] then
@@ -182,10 +182,10 @@ function module:UpdateChannelNames(text, r, g, b, ...)
 	end
 
 	text = gsub(text, "(|Hplayer:([^|:]+))", AddAuthorLogo)
-	--if isCN then
-	--	text = gsub(text, cnPattern, KillCNColon) -- 干掉全角冒号及说/大喊
-	--end
-	--text = gsub(text, enPattern, KillColon) -- 干掉半角冒号及说/大喊
+	if isCN then
+		text = gsub(text, cnPattern, KillCNColon) -- 干掉全角冒号
+	end
+	text = gsub(text, enPattern, KillColon) -- 干掉半角冒号
 	--text = gsub(text, "(|Hplayer:.-)%[(.-)%]", "%1%2") -- 干掉名字方括号
 	text = gsub(text, matchPattern, AbbrChannelName)
 
