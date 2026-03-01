@@ -346,7 +346,7 @@ function TT:RefreshStatusBar()
 	end
 	local unit = TT.GetUnit(self:GetParent())
 	if unit then
-		self.text:SetFormattedText("%d", UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
+		self.text:SetText(B.Numb(UnitHealth(unit)))
 	else
 		self.text:SetText("")
 	end
