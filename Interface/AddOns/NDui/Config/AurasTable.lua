@@ -35,6 +35,8 @@ local function newAuraFormat(value)
 end
 
 function module:AddNewAuraWatch(class, list)
+	if true then return end -- disable in midnight
+
 	for _, k in pairs(list) do
 		for _, v in pairs(k) do
 			local spellID = v.AuraID or v.SpellID
@@ -170,14 +172,14 @@ local function cleanupNameplateUnits(VALUE)
 end
 
 function module:CheckNameplateFilters()
-	CheckNameplateFilter(C.WhiteList, "NameplateWhite")
-	CheckNameplateFilter(C.BlackList, "NameplateBlack")
+--	CheckNameplateFilter(C.WhiteList, "NameplateWhite")
+--	CheckNameplateFilter(C.BlackList, "NameplateBlack")
 	cleanupNameplateUnits("CustomUnits")
-	cleanupNameplateUnits("PowerUnits")
+--	cleanupNameplateUnits("PowerUnits")
 end
 
 function module:OnLogin()
-	for instName, value in pairs(RaidDebuffs) do
+	--[=[for instName, value in pairs(RaidDebuffs) do
 		for spell, priority in pairs(value) do
 			if NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell] and NDuiADB["RaidDebuffs"][instName][spell] == priority then
 				NDuiADB["RaidDebuffs"][instName][spell] = nil
@@ -188,14 +190,14 @@ function module:OnLogin()
 		if not next(value) then
 			NDuiADB["RaidDebuffs"][instName] = nil
 		end
-	end
+	end]=]
 
-	RaidDebuffs[0] = {} -- OTHER spells
-	module:AddDeprecatedGroup()
-	C.AuraWatchList = AuraWatchList
-	C.RaidDebuffs = RaidDebuffs
+	--RaidDebuffs[0] = {} -- OTHER spells
+	--module:AddDeprecatedGroup()
+	--C.AuraWatchList = AuraWatchList
+	--C.RaidDebuffs = RaidDebuffs
 
 	module:CheckCornerSpells()
-	module:CheckMajorSpells()
+	--module:CheckMajorSpells()
 	module:CheckNameplateFilters()
 end
