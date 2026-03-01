@@ -73,6 +73,7 @@ function M:ContactButton_OnClick()
 		replaceFrame.oldRealm:SetText(strmatch(text, "^.-%-(.*)$"))
 		replaceFrame.newRealm:SetText(strmatch(text, "%-(.-%-%s)") or "")
 	else
+		text = Ambiguate(text, "none")
 		SendMailNameEditBox:SetText(text)
 		SendMailNameEditBox:SetCursorPosition(0)
 	end
