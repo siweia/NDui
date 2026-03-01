@@ -6,8 +6,10 @@ local gsub, strfind, strmatch = string.gsub, string.find, string.match
 local BetterDate, time, date, GetCVarBool = BetterDate, time, date, GetCVarBool
 local INTERFACE_ACTION_BLOCKED = INTERFACE_ACTION_BLOCKED
 local C_DateAndTime_GetCurrentCalendarTime = C_DateAndTime.GetCurrentCalendarTime
-local isCNClient = strlen(HEADER_COLON) > 1
+local colon = HEADER_COLON
+local isCN = strlen(colon) > 1
 
+-- Timestamp
 local timestampFormat = {
 	[2] = "[%I:%M %p] ",
 	[3] = "[%I:%M:%S %p] ",
@@ -28,12 +30,14 @@ local function GetCurrentTime()
 	return locTime, realmTime
 end
 
+-- Author Logo
 local function AddAuthorLogo(link, unitName)
-    if unitName and DB.Devs[unitName] then
-        return "|T"..DB.chatLogo..":12:24|t"..link
-    end
+	if unitName and DB.Devs[unitName] then
+		return "|T"..DB.chatLogo..":12:24|t"..link
+	end
 end
 
+-- Channel name abbr
 local LEADERSHIP = {
 	PartyLeader = strmatch(CHAT_PARTY_LEADER_GET, "|h%[(.-)%]|h"),
 	PartyGuide = strmatch(CHAT_PARTY_GUIDE_GET, "|h%[(.-)%]|h"),
@@ -120,6 +124,43 @@ local function AbbrChannelName(prefix, linkType, channel, channelID, channelName
 	return prefix.."["..abbr.."]|h"
 end
 
+-- Kill colon before message
+local channels = {
+	SAY = not isCN,
+	YELL = not isCN,
+	WHISPER = not isCN,
+	GUILD = not isCN,
+	OFFICER = not isCN,
+	CHANNEL = not isCN,
+	PARTY = true,
+	RAID = true,
+	INSTANCE_CHAT = true,
+}
+
+local cnColonChannels = {
+	SAY = true,
+	YELL = true,
+	WHISPER = true,
+	GUILD = true,
+	OFFICER = true,
+	CHANNEL = true,
+}
+
+local cnPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%])(.-)"..colon.."%s"
+local enPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%])(.-):%s"
+
+local function KillColon(link, tag)
+	if channels[tag] then
+		return link.." "
+	end
+end
+
+local function KillCNColon(link, tag)
+	if cnColonChannels[tag] then
+		return link.." "
+	end
+end
+
 function module:UpdateChannelNames(text, r, g, b, ...)
 	if not text or B:IsSecretValue(text) then
 		return self:oldAddMsg(text, r, g, b, ...)
@@ -141,10 +182,10 @@ function module:UpdateChannelNames(text, r, g, b, ...)
 	end
 
 	text = gsub(text, "(|Hplayer:([^|:]+))", AddAuthorLogo)
-	--text = gsub(text, "(|Hplayer.-):%s", "%1 ") -- 干掉半角冒号
-	if isCNClient then
-	--	text = gsub(text, "(|Hplayer.-%])(.-)"..HEADER_COLON, "%1") -- 干掉全角冒号及说/大喊
+	if isCN then
+		text = gsub(text, cnPattern, KillCNColon) -- 干掉全角冒号及说/大喊
 	end
+	text = gsub(text, enPattern, KillColon) -- 干掉半角冒号及说/大喊
 	--text = gsub(text, "(|Hplayer:.-)%[(.-)%]", "%1%2") -- 干掉名字方括号
 	text = gsub(text, matchPattern, AbbrChannelName)
 
