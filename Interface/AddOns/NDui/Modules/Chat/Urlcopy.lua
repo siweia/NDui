@@ -22,6 +22,10 @@ local function highlightURL(_, url)
 end
 
 function module:SearchForURL(text, ...)
+	if not text or B:IsSecretValue(text) then
+		return self:addMsg(text, ...)
+	end
+
 	foundurl = false
 
 	if strfind(text, "%pTInterface%p+") or strfind(text, "%pTINTERFACE%p+") then
@@ -53,10 +57,10 @@ function module:SearchForURL(text, ...)
 		text = gsub(text, "(%s?)([_%w-%.~-]+@[_%w-]+%.[_%w-%.]+)(%s?)", highlightURL)
 	end
 
-	self.am(self, text, ...)
+	self:addMsg(text, ...)
 end
 
-function module:HyperlinkShowHook(link, _, button)
+function module:Hyperlink_Show(link, button)
 	local type, value = strmatch(link, "(%a+):(.+)")
 	local hide
 	if button == "LeftButton" and IsModifierKeyDown() then
@@ -98,19 +102,19 @@ function module:HyperlinkShowHook(link, _, button)
 			end
 		end
 	elseif type == "url" then
-		local eb = LAST_ACTIVE_CHAT_EDIT_BOX or _G[self:GetName().."EditBox"]
-		if eb then
-			eb:Show()
-			eb:SetText(value)
-			eb:SetFocus()
-			eb:HighlightText()
+		local editBox = ChatEdit_ChooseBoxForSend()
+		if editBox then
+			editBox:Show()
+			editBox:SetText(value)
+			editBox:SetFocus()
+			editBox:HighlightText()
 		end
 	end
 
 	if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
 end
 
-function module.SetItemRefHook(link, _, button)
+function module:ItemRef_CopyName(link, button)
 	if strsub(link, 1, 6) == "player" and button == "LeftButton" and IsModifiedClick("CHATLINK") then
 		if not StaticPopup_Visible("ADD_IGNORE") and not StaticPopup_Visible("ADD_FRIEND") and not StaticPopup_Visible("ADD_GUILDMEMBER") and not StaticPopup_Visible("ADD_RAIDMEMBER") and not StaticPopup_Visible("CHANNEL_INVITE") and not ChatEdit_GetActiveWindow() then
 			local namelink, fullname
@@ -139,11 +143,17 @@ function module.SetItemRefHook(link, _, button)
 	end
 end
 
+function module.SetItemRefHook(link, _, button)
+	if B:IsSecretValue(link) then return end
+	module:ItemRef_CopyName(link, button)
+	module:Hyperlink_Show(link, button)
+end
+
 function module:UrlCopy()
 	for i = 1, NUM_CHAT_WINDOWS do
 		if i ~= 2 then
 			local chatFrame = _G["ChatFrame"..i]
-			chatFrame.am = chatFrame.AddMessage
+			chatFrame.addMsg = chatFrame.AddMessage
 			chatFrame.AddMessage = self.SearchForURL
 		end
 	end
@@ -155,8 +165,5 @@ function module:UrlCopy()
 		return orig(self, link, ...)
 	end
 
-	if ChatFrame_OnHyperlinkShow then
-		hooksecurefunc("ChatFrame_OnHyperlinkShow", self.HyperlinkShowHook)
-	end
 	hooksecurefunc("SetItemRef", self.SetItemRefHook)
 end
