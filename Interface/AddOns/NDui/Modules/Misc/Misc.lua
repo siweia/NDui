@@ -618,9 +618,17 @@ function M:BaudErrorFrameHelpTip()
 end
 
 -- Buttons to enhance popup menu
+function M:MenuFrame_Hide()
+	local menuFrame = M.MenuButtonFrame and M.MenuButtonFrame:GetParent()
+	if menuFrame and menuFrame.Hide then
+		menuFrame:Hide()
+	end
+end
+
 function M:MenuButton_AddFriend()
 	if not M.MenuButtonName then return end
 	C_FriendList.AddFriend(M.MenuButtonName)
+	M:MenuFrame_Hide()
 end
 
 function M:MenuButton_CopyName()
@@ -630,16 +638,19 @@ function M:MenuButton_CopyName()
 	ChatEdit_ActivateChat(editBox)
 	editBox:Insert(M.MenuButtonName)
 	if not hasText then editBox:HighlightText() end
+	M:MenuFrame_Hide()
 end
 
 function M:MenuButton_GuildInvite()
 	if not M.MenuButtonName then return end
 	GuildInvite(M.MenuButtonName)
+	M:MenuFrame_Hide()
 end
 
 function M:MenuButton_Whisper()
 	if not M.MenuButtonName then return end
 	ChatFrame_SendTell(M.MenuButtonName)
+	M:MenuFrame_Hide()
 end
 
 function M:QuickMenuButton()
@@ -667,6 +678,7 @@ function M:QuickMenuButton()
 		B.AddTooltip(button, "ANCHOR_TOP", menuList[i].text)
 		frame.buttons[i] = button
 	end
+	M.MenuButtonFrame = frame
 
 	local visibleState = { -- friend, guild, copy, whisper
 		["SELF"] = {false, false, true, true},
