@@ -426,11 +426,11 @@ function UF:OnLogin()
 		UF:UpdateScrollingFont()
 		UF:TogglePortraits()
 		UF:CheckPowerBars()
-		UF:UpdateRaidInfo() -- RaidAuras
 	end
 
 	if C.db["UFs"]["RaidFrame"] then
 		SetCVar("predictedHealth", 1)
+		UF:UpdateRaidInfo() -- RaidAuras
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
 		UF:UpdateRaidBuffsWhite()
