@@ -78,7 +78,7 @@ function TT:UpdateFactionLine(lineData)
 		end
 	elseif unitClass and strfind(linetext, unitClass) then
 		lineData.leftText = gsub(linetext, "(.-)%S+$", replaceSpecInfo)
-	elseif unitCreature and linetext == unitCreature then
+	elseif unitCreature and B:NotSecretValue(unitCreature) and linetext == unitCreature then
 		return true
 	end
 end
