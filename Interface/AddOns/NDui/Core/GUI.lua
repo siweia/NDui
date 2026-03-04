@@ -608,7 +608,6 @@ G.AccountSettings = {
 	ClickSets = {},
 	TexStyle = 2,
 	KeystoneInfo = {},
-	AutoBubbles = false,
 	DisableInfobars = false,
 	ContactList = {},
 	CustomJunkList = {},
@@ -1518,7 +1517,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
-		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
 		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
 		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},

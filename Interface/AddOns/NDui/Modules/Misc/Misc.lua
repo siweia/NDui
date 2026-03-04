@@ -68,19 +68,6 @@ function M:OnLogin()
 	M:ToggleAddOnProfiler()
 	M:HideBlizzHelpTip()
 
-	-- Auto chatBubbles
-	if NDuiADB["AutoBubbles"] then
-		local function updateBubble()
-			local name, instType = GetInstanceInfo()
-			if name and instType == "raid" then
-				SetCVar("chatBubbles", 1)
-			else
-				SetCVar("chatBubbles", 0)
-			end
-		end
-		B:RegisterEvent("PLAYER_ENTERING_WORLD", updateBubble)
-	end
-
 	-- Readycheck sound on master channel
 	B:RegisterEvent("READY_CHECK", function()
 		PlaySound(SOUNDKIT.READY_CHECK, "master")
