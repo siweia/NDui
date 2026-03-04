@@ -525,7 +525,6 @@ G.DefaultSettings = {
 		GemNEnchant = true,
 		AzeriteTraits = true,
 		MissingStats = true,
-		SoloInfo = true,
 		RareAlerter = true,
 		RarePrint = true,
 		Focuser = true,
@@ -1085,10 +1084,6 @@ local function updateIgnoredRares()
 	B:GetModule("Misc"):RareAlert_UpdateIgnored()
 end
 
-local function updateSoloInfo()
-	B:GetModule("Misc"):SoloInfo()
-end
-
 local function updateSpellItemAlert()
 	B:GetModule("Misc"):SpellItemAlert()
 end
@@ -1404,8 +1399,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "InstAlertOnly", L["InstAlertOnly"].."*", true, nil, updateInterruptAlert, L["InstAlertOnlyTip"]},
 		{1, "Misc", "SpellItemAlert", L["SpellItemAlert"].."*", nil, nil, updateSpellItemAlert, L["SpellItemAlertTip"]},
 		{1, "Misc", "LeaderOnly", IsNew..L["LeaderOnly"].."*", true, nil, nil, L["LeaderOnlyTip"]},
-		{},--blank
-		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
 		{},--blank
 		{1, "Misc", "RareAlerter", HeaderTag..L["Rare Alert"].."*", nil, nil, updateRareAlert},
 		{1, "Misc", "RarePrint", L["Alert In Chat"].."*"},
