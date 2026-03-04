@@ -98,7 +98,7 @@ local PARTY_GUIDE = strmatch(CHAT_PARTY_GUIDE_GET, "|h%[(.-)%]|h")
 local RAID_LEADER = strmatch(CHAT_RAID_LEADER_GET, "|h%[(.-)%]|h")
 local INSTANCE_LEADER = strmatch(CHAT_INSTANCE_CHAT_LEADER_GET, "|h%[(.-)%]|h")
 
-local matchPattern = "(|H(%w+):?(%w+):?(%d*)|h)%[(.-)%]|h"
+local matchPattern = "(|H(%w+):?([^:]+):?(%d*)|h)%[(.-)%]|h"
 
 local function AbbrChannelName(prefix, linkType, channel, channelID, channelName)
 	if C.db["Chat"]["ChannelAbbr"] == 1 then return end
@@ -134,7 +134,7 @@ local channels = {
 	CHANNEL = not isCN,
 	PARTY = true,
 	RAID = true,
-	INSTANCE_CHAT = true,
+	INSTANCE_CHAT = not isCN,
 }
 
 local cnColonChannels = {
@@ -144,6 +144,7 @@ local cnColonChannels = {
 	GUILD = true,
 	OFFICER = true,
 	CHANNEL = true,
+	INSTANCE_CHAT = true,
 }
 
 local cnPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%].-)"..colon.."%s"
