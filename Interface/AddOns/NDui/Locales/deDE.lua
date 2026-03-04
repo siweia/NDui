@@ -943,3 +943,4 @@ L["OfficerAbbr"] = "O"
 L["ChannelAbbr"] = "Kanal Abk."
 L["LetterMode"] = "Buchstabenmodus"
 L["LocaleMode"] = "Gebietsmodus"
+L["CombatAnimation"] = "Combat Animation" -- need translation

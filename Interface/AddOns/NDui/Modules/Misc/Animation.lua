@@ -112,6 +112,8 @@ M:RegisterMisc("LoginAnimation", M.LoginAnimation)
 
 -- 战斗状态提示
 function M:CombatAnimation()
+	if not C.db["Misc"]["CombatAnimation"] then return end
+
 	local ENTERING_COMBAT = _G.ENTERING_COMBAT
 	local LEAVING_COMBAT = _G.LEAVING_COMBAT
 

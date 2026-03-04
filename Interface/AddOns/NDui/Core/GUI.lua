@@ -578,6 +578,7 @@ G.DefaultSettings = {
 		W3Point = 1,
 		CentralBuffView = false,
 		CentralUtilView = false,
+		CombatAnimation = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -1195,7 +1196,7 @@ G.TabList = {
 	L["Maps"],
 	IsNew..L["Skins"],
 	L["Tooltip"],
-	L["Misc"],
+	IsNew..L["Misc"],
 	IsNew..L["UI Settings"],
 	L["Profile"],
 }
@@ -1510,9 +1511,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
+		{1, "Misc", "InstantDelete", L["InstantDelete"].."*", true},
 		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
 		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
-		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
+		{1, "Misc", "CombatAnimation", IsNew..L["CombatAnimation"], nil, nil, toggleBossBanner},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "FasterSkip", L["FasterMovieSkip"].."*", true, nil, nil, L["FasterMovieSkipTip"]},

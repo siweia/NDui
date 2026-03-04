@@ -943,3 +943,4 @@ L["OfficerAbbr"] = "O"
 L["ChannelAbbr"] = "Channel Abbr" -- need translation
 L["LetterMode"] = "Letter Mode" -- need translation
 L["LocaleMode"] = "Locale Mode" -- need translation
+L["CombatAnimation"] = "Combat Animation" -- need translation
