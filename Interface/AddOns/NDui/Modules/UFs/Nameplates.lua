@@ -840,13 +840,12 @@ function UF:OnUnitFactionChanged(unit)
 	end
 end
 
-function UF:OnUnitSoftTargetChanged(previousTarget, currentTarget)
+function UF:OnUnitSoftTargetChanged()
 	if not GetCVarBool("SoftTargetIconGameObject") then return end
 
 	for _, nameplate in pairs(C_NamePlate.GetNamePlates()) do
 		local unitFrame = nameplate and nameplate.unitFrame
-		local guid = unitFrame and unitFrame.unitGUID
-		if guid and (guid == previousTarget or guid == currentTarget) then
+		if unitFrame then
 			unitFrame.previousType = nil
 			UF.RefreshPlateType(unitFrame, unitFrame.unit)
 			UF.UpdateTargetChange(unitFrame)
@@ -856,7 +855,7 @@ end
 
 function UF:RefreshPlateByEvents()
 	B:RegisterEvent("UNIT_FACTION", UF.OnUnitFactionChanged)
-	--B:RegisterEvent("PLAYER_SOFT_INTERACT_CHANGED", UF.OnUnitSoftTargetChanged)
+	B:RegisterEvent("PLAYER_SOFT_INTERACT_CHANGED", UF.OnUnitSoftTargetChanged)
 end
 
 local function onTargetChanged(self, event, unit)
