@@ -122,6 +122,7 @@ function M:CombatAnimation()
 		bounce1 = 30,     -- 第一次回弹高度
 		bounce2 = 12,     -- 第二次回弹高度
 		targetY = 150,    -- 目标中心点 Y 坐标
+		fontSize = 32,
 	}
 	local initialOffset = cfg.targetY - cfg.dropDist
 
@@ -130,7 +131,7 @@ function M:CombatAnimation()
 	alertFrame:SetPoint("CENTER", 0, cfg.targetY)
 	alertFrame:Hide()
 
-	local text = B.CreateFS(alertFrame, 36, "")
+	local text = B.CreateFS(alertFrame, cfg.fontSize, "")
 	text:ClearAllPoints()
 	text:SetPoint("CENTER")
 
@@ -168,7 +169,7 @@ function M:CombatAnimation()
 	fadeOut:SetStartDelay(0.6)
 	fadeOut:SetOrder(6)
 	local slide = anim:CreateAnimation("Translation")
-	slide:SetOffset(0, 5)
+	slide:SetOffset(0, 50)
 	slide:SetDuration(0.8)
 	slide:SetStartDelay(0.6)
 	slide:SetOrder(6)
