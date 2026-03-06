@@ -722,6 +722,8 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		C.db["UFs"]["Portrait"] = false
 		C.db["UFs"]["MBPerRow"] = 13
 		C.db["UFs"]["GatherEmpty"] = true
+		C.db["UFs"]["RaidBuffType"] = 1
+		C.db["UFs"]["RaidDebuffType"] = 4
 		C.db["Reset4"] = true
 	end
 
