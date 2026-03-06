@@ -9,11 +9,20 @@ Health - A `StatusBar` used to represent the unit's health.
 
 ## Sub-Widgets
 
-.TempLoss - A `StatusBar` used to represent temporary max health reduction.
+.TempLoss                  - A `StatusBar` used to represent temporary max health reduction.
+.HealingAll                - A `StatusBar` used to represent incoming heals from all sources.
+.HealingPlayer             - A `StatusBar` used to represent incoming heals from the player.
+.HealingOther              - A `StatusBar` used to represent incoming heals from others.
+.OverHealIndicator         - A `Texture` used to indicate that the incoming healing is greater than the configured limits.
+.DamageAbsorb              - A `StatusBar` used to represent damage absorbs.
+.OverDamageAbsorbIndicator - A `Texture` used to signify that the amount of damage absorb is greater than the configured limits.
+.HealAbsorb                - A `StatusBar` used to represent heal absorbs.
+.OverHealAbsorbIndicator   - A `Texture` used to signify that the amount of heal absorb is greater than the configured limits.
 
 ## Notes
 
 A default texture will be applied if the widget is a StatusBar and doesn't have a texture set.
+A default texture will be applied to the Texture widgets if they don't have a texture or a color set.
 
 ## Options
 
@@ -21,8 +30,15 @@ A default texture will be applied if the widget is a StatusBar and doesn't have 
                                     combat with the player (boolean)
 .smoothing                        - Which status bar smoothing method to use, defaults to
                                     `Enum.StatusBarInterpolation.Immediate` (number)
+.maximumHealthClampMode           - Defines how maximum health should clamp. See [Enum.UnitMaximumHealthMode](https://warcraft.wiki.gg/wiki/Enum.UnitMaximumHealthMode).
+.damageAbsorbClampMode            - Defines how damage absorbs should clamp. See [Enum.UnitDamageAbsorbClampMode](https://warcraft.wiki.gg/wiki/Enum.UnitDamageAbsorbClampMode).
+.healAbsorbClampMode              - Defines how healing absorbs should clamp. See [Enum.UnitHealAbsorbClampMode](https://warcraft.wiki.gg/wiki/Enum.UnitHealAbsorbClampMode).
+.healAbsorbMode                   - Defines how healing absorbs should be treated. See [Enum.UnitHealAbsorbMode](https://warcraft.wiki.gg/wiki/Enum.UnitHealAbsorbMode).
+.incomingHealClampMode            - Defines how incoming healing should clamp. See [Enum.UnitIncomingHealClampMode](https://warcraft.wiki.gg/wiki/Enum.UnitIncomingHealClampMode).
+.incomingHealOverflow             - The maximum amount of overflow past the end of the health bar. Set this to 1 to disable the overflow.
+                                    Defaults to 1.05 (number)
 
-The following options are listed by priority. The first check that returns true decides the color of the bar.
+The following options are listed by priority. The first check that returns true decides the color of the health bar.
 
 .colorDisconnected - Use `self.colors.disconnected` to color the bar if the unit is offline (boolean)
 .colorTapping      - Use `self.colors.tapping` to color the bar if the unit isn't tapped by the player (boolean)
@@ -43,6 +59,10 @@ The following options are listed by priority. The first check that returns true 
                      unit's current health percentage (boolean)
 .colorHealth       - Use `self.colors.health` to color the bar. This flag is used to reset the bar color back to default
                      if none of the above conditions are met (boolean)
+
+## Attributes
+
+.values - A [unit health prediction calculator](https://warcraft.wiki.gg/wiki/API_CreateUnitHealPredictionCalculator) used to calculate the values used in this element.
 
 ## Examples
 
@@ -76,6 +96,44 @@ The following options are listed by priority. The first check that returns true 
     Health:SetPoint('LEFT')
     Health:SetPoint('TOPRIGHT', TempLoss:GetStatusBarTexture(), 'TOPLEFT')
     Health:SetPoint('BOTTOMRIGHT', TempLoss:GetStatusBarTexture(), 'BOTTOMLEFT')
+
+	-- Optionally with healing prediction and absorbtion sub-widgets
+    local HealingAll = CreateFrame('StatusBar', nil, self.Health)
+    HealingAll:SetPoint('TOP')
+    HealingAll:SetPoint('BOTTOM')
+    HealingAll:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
+    HealingAll:SetWidth(200)
+    HealingAll:SetStatusBarTexture('Interface\\TargetingFrame\\UI-StatusBar')
+    self.Health.HealingAll = HealingAll
+
+    local DamageAbsorb = CreateFrame('StatusBar', nil, self.Health)
+    DamageAbsorb:SetPoint('TOP')
+    DamageAbsorb:SetPoint('BOTTOM')
+    DamageAbsorb:SetPoint('LEFT', HealingAll:GetStatusBarTexture(), 'RIGHT')
+    DamageAbsorb:SetWidth(200)
+    self.Health.DamageAbsorb = DamageAbsorb
+
+    local HealAbsorb = CreateFrame('StatusBar', nil, self.Health)
+    HealAbsorb:SetPoint('TOP')
+    HealAbsorb:SetPoint('BOTTOM')
+    HealAbsorb:SetPoint('RIGHT', self.Health:GetStatusBarTexture())
+    HealAbsorb:SetWidth(200)
+    HealAbsorb:SetReverseFill(true)
+    self.Health.HealAbsorb = HealAbsorb
+
+    local OverDamageAbsorbIndicator = self.Health:CreateTexture(nil, "OVERLAY")
+    OverDamageAbsorbIndicator:SetPoint('TOP')
+    OverDamageAbsorbIndicator:SetPoint('BOTTOM')
+    OverDamageAbsorbIndicator:SetPoint('LEFT', self.Health, 'RIGHT')
+    OverDamageAbsorbIndicator:SetWidth(10)
+    self.Health.OverDamageAbsorbIndicator = OverDamageAbsorbIndicator
+
+    local OverHealAbsorbIndicator = self.Health:CreateTexture(nil, "OVERLAY")
+    OverHealAbsorbIndicator:SetPoint('TOP')
+    OverHealAbsorbIndicator:SetPoint('BOTTOM')
+    OverHealAbsorbIndicator:SetPoint('RIGHT', self.Health, 'LEFT')
+    OverHealAbsorbIndicator:SetWidth(10)
+    self.Health.OverHealAbsorbIndicator = OverHealAbsorbIndicator
 
     -- Options
     Health.colorTapping = true
@@ -116,7 +174,7 @@ local function UpdateColor(self, event, unit)
 	elseif(element.colorReaction and UnitReaction(unit, 'player')) then
 		color = self.colors.reaction[UnitReaction(unit, 'player')]
 	elseif(element.colorSmooth and self.colors.health:GetCurve()) then
-		color = UnitHealthPercent(unit, true, self.colors.health:GetCurve())
+		color = element.values:EvaluateCurrentHealthPercent(self.colors.health:GetCurve())
 	elseif(element.colorHealth) then
 		color = self.colors.health
 	end
@@ -162,17 +220,61 @@ local function Update(self, event, unit)
 		element:PreUpdate(unit)
 	end
 
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
+	UnitGetDetailedHealPrediction(unit, 'player', element.values)
+
+	local max = element.values:GetMaximumHealth()
 	element:SetMinMaxValues(0, max)
 
+	local cur = element.values:GetCurrentHealth()
 	if(UnitIsConnected(unit)) then
 		element:SetValue(cur, element.smoothing)
 	else
 		element:SetValue(max, element.smoothing)
 	end
 
-	element.cur = cur
-	element.max = max
+	element.cur = cur -- DEPRECATED: use element.values
+	element.max = max -- DEPRECATED: use element.values
+
+	if(element.HealingAll or element.HealingPlayer or element.HealingOther or element.OverHealIndicator) then
+		local allHeal, playerHeal, otherHeal, healClamped = element.values:GetIncomingHeals()
+		if(element.HealingAll) then
+			element.HealingAll:SetMinMaxValues(0, max)
+			element.HealingAll:SetValue(allHeal)
+		end
+		if(element.HealingPlayer) then
+			element.HealingPlayer:SetMinMaxValues(0, max)
+			element.HealingPlayer:SetValue(playerHeal)
+		end
+		if(element.HealingOther) then
+			element.HealingOther:SetMinMaxValues(0, max)
+			element.HealingOther:SetValue(otherHeal)
+		end
+		if(element.OverHealIndicator) then
+			element.OverHealIndicator:SetAlphaFromBoolean(healClamped, 1, 0)
+		end
+	end
+
+	if(element.DamageAbsorb or element.OverDamageAbsorbIndicator) then
+		local damageAbsorbAmount, damageAbsorbClamped = element.values:GetDamageAbsorbs()
+		if(element.DamageAbsorb) then
+			element.DamageAbsorb:SetMinMaxValues(0, max)
+			element.DamageAbsorb:SetValue(damageAbsorbAmount)
+		end
+		if(element.OverDamageAbsorbIndicator) then
+			element.OverDamageAbsorbIndicator:SetAlphaFromBoolean(damageAbsorbClamped, 1, 0)
+		end
+	end
+
+	if(element.HealAbsorb or element.OverHealAbsorbIndicator) then
+		local healAbsorbAmount, healAbsorbClamped = element.values:GetHealAbsorbs()
+		if(element.HealAbsorb) then
+			element.HealAbsorb:SetMinMaxValues(0, max)
+			element.HealAbsorb:SetValue(healAbsorbAmount)
+		end
+		if(element.OverHealAbsorbIndicator) then
+			element.OverHealAbsorbIndicator:SetAlphaFromBoolean(healAbsorbClamped, 1, 0)
+		end
+	end
 
 	local lossPerc = 0
 	if(element.TempLoss) then
@@ -194,7 +296,56 @@ local function Update(self, event, unit)
 	end
 end
 
+local function UpdatePredictionSize(self, event, unit)
+	local element = self.Health
+
+	if(element.HealingAll) then
+		element.HealingAll[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.HealingAll, element.__size)
+	end
+
+	if(element.HealingPlayer) then
+		element.HealingPlayer[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.HealingPlayer, element.__size)
+	end
+
+	if(element.HealingOther) then
+		element.HealingOther[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.HealingOther, element.__size)
+	end
+
+	if(element.DamageAbsorb) then
+		element.DamageAbsorb[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.DamageAbsorb, element.__size)
+	end
+
+	if(element.HealAbsorb) then
+		element.HealAbsorb[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.HealAbsorb, element.__size)
+	end
+end
+
+local function shouldUpdatePredictionSize(self)
+	local element = self.Health
+
+	local isHoriz = element:GetOrientation() == 'HORIZONTAL'
+	local newSize = element[isHoriz and 'GetWidth' or 'GetHeight'](element)
+	if(isHoriz ~= element.__isHoriz or newSize ~= element.__size) then
+		element.__isHoriz = isHoriz
+		element.__size = newSize
+
+		return true
+	end
+end
+
 local function Path(self, ...)
+	--[[ Override: Health.UpdatePredictionSize(self, event, unit, ...)
+	Used to completely override the internal function for updating the healing prediction sub-widgets' size.
+
+	* self  - the parent object
+	* event - the event triggering the update (string)
+	* unit  - the unit accompanying the event (string)
+	* ...   - the arguments accompanying the event
+	--]]
+	if(shouldUpdatePredictionSize(self)) then
+		(self.Health.UpdatePredictionSize or UpdatePredictionSize) (self, ...)
+	end
+
 	--[[ Override: Health.Override(self, event, unit)
 	Used to completely override the internal update function.
 
@@ -210,6 +361,9 @@ local function Path(self, ...)
 end
 
 local function ForceUpdate(element)
+	element.__isHoriz = nil
+	element.__size = nil
+
 	Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
@@ -220,14 +374,9 @@ Used to toggle coloring if the unit is offline.
 * state    - the desired state (boolean)
 * isForced - forces the event update even if the state wasn't changed (boolean)
 --]]
-local function SetColorDisconnected(element, state, isForced)
+local function SetColorDisconnected(element, state, isForced) -- DEPRECATED
 	if(element.colorDisconnected ~= state or isForced) then
 		element.colorDisconnected = state
-		if(state) then
-			element.__owner:RegisterEvent('UNIT_CONNECTION', ColorPath)
-		else
-			element.__owner:UnregisterEvent('UNIT_CONNECTION', ColorPath)
-		end
 	end
 end
 
@@ -303,7 +452,7 @@ local function SetColorThreat(element, state, isForced)
 	end
 end
 
-local function Enable(self)
+local function Enable(self, unit)
 	local element = self.Health
 	if(element) then
 		element.__owner = self
@@ -314,12 +463,47 @@ local function Enable(self)
 		element.SetColorReaction = SetColorReaction
 		element.SetColorThreat = SetColorThreat
 
+		if(element.values) then
+			element.values:ResetPredictedValues()
+		else
+			element.values = CreateUnitHealPredictionCalculator()
+		end
+
 		if(not element.smoothing) then
 			element.smoothing = Enum.StatusBarInterpolation.Immediate
 		end
 
-		if(element.colorDisconnected) then
-			self:RegisterEvent('UNIT_CONNECTION', ColorPath)
+		if(element.maximumHealthClampMode) then
+			element.values:SetMaximumHealthMode(element.maximumHealthClampMode)
+		end
+
+		if(element.damageAbsorbClampMode) then
+			element.values:SetDamageAbsorbClampMode(element.damageAbsorbClampMode)
+		end
+
+		if(element.healAbsorbClampMode) then
+			element.values:SetHealAbsorbClampMode(element.healAbsorbClampMode)
+		end
+
+		if(element.healAbsorbMode) then
+			element.values:SetHealAbsorbMode(element.healAbsorbMode)
+		end
+
+		if(element.incomingHealClampMode) then
+			element.values:SetIncomingHealClampMode(element.incomingHealClampMode)
+		end
+
+		if(element.incomingHealOverflow) then
+			element.values:SetIncomingHealOverflowPercent(element.incomingHealOverflow)
+		end
+
+		self:RegisterEvent('UNIT_HEALTH', Path)
+		self:RegisterEvent('UNIT_MAXHEALTH', Path)
+		self:RegisterEvent('UNIT_CONNECTION', Path)
+
+		if(unit == 'party' or unit == 'raid') then
+			self:RegisterEvent('PARTY_MEMBER_ENABLE', Path)
+			self:RegisterEvent('PARTY_MEMBER_DISABLE', Path)
 		end
 
 		if(element.colorSelection) then
@@ -334,12 +518,75 @@ local function Enable(self)
 			self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
 		end
 
-		self:RegisterEvent('UNIT_HEALTH', Path)
-		self:RegisterEvent('UNIT_MAXHEALTH', Path)
-		self:RegisterEvent('UNIT_MAX_HEALTH_MODIFIERS_CHANGED', Path)
+		if(element.HealingAll or element.HealingPlayer or element.HealingOther or element.OverHealIndicator) then
+			self:RegisterEvent('UNIT_HEAL_PREDICTION', Path)
+		end
+
+		if(element.DamageAbsorb or element.OverDamageAbsorbIndicator) then
+			self:RegisterEvent('UNIT_ABSORB_AMOUNT_CHANGED', Path)
+		end
+
+		if(element.HealAbsorb or element.OverHealAbsorbIndicator) then
+			self:RegisterEvent('UNIT_HEAL_ABSORB_AMOUNT_CHANGED', Path)
+		end
+
+		if(element.TempLoss) then
+			self:RegisterEvent('UNIT_MAX_HEALTH_MODIFIERS_CHANGED', Path)
+		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+		end
+
+		if(element.HealingAll) then
+			if(element.HealingAll:IsObjectType('StatusBar') and not element.HealingAll:GetStatusBarTexture()) then
+				element.HealingAll:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+			end
+		end
+
+		if(element.HealingPlayer) then
+			if(element.HealingPlayer:IsObjectType('StatusBar') and not element.HealingPlayer:GetStatusBarTexture()) then
+				element.HealingPlayer:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+			end
+		end
+
+		if(element.HealingOther) then
+			if(element.HealingOther:IsObjectType('StatusBar') and not element.HealingOther:GetStatusBarTexture()) then
+				element.HealingOther:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+			end
+		end
+
+		if(element.OverHealIndicator) then
+			if(element.OverHealIndicator:IsObjectType('Texture') and not element.OverHealIndicator:GetTexture()) then
+				element.OverHealIndicator:SetTexture([[Interface\RaidFrame\Shield-Overshield]])
+				element.OverHealIndicator:SetBlendMode('ADD')
+			end
+		end
+
+		if(element.DamageAbsorb) then
+			if(element.DamageAbsorb:IsObjectType('StatusBar') and not element.DamageAbsorb:GetStatusBarTexture()) then
+				element.DamageAbsorb:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+			end
+		end
+
+		if(element.HealAbsorb) then
+			if(element.HealAbsorb:IsObjectType('StatusBar') and not element.HealAbsorb:GetStatusBarTexture()) then
+				element.HealAbsorb:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+			end
+		end
+
+		if(element.OverDamageAbsorbIndicator) then
+			if(element.OverDamageAbsorbIndicator:IsObjectType('Texture') and not element.OverDamageAbsorbIndicator:GetTexture()) then
+				element.OverDamageAbsorbIndicator:SetTexture([[Interface\RaidFrame\Shield-Overshield]])
+				element.OverDamageAbsorbIndicator:SetBlendMode('ADD')
+			end
+		end
+
+		if(element.OverHealAbsorbIndicator) then
+			if(element.OverHealAbsorbIndicator:IsObjectType('Texture') and not element.OverHealAbsorbIndicator:GetTexture()) then
+				element.OverHealAbsorbIndicator:SetTexture([[Interface\RaidFrame\Absorb-Overabsorb]])
+				element.OverHealAbsorbIndicator:SetBlendMode('ADD')
+			end
 		end
 
 		element:Show()
@@ -366,13 +613,50 @@ local function Disable(self)
 	if(element) then
 		element:Hide()
 
+		if(element.HealingAll) then
+			element.HealingAll:Hide()
+		end
+
+		if(element.HealingPlayer) then
+			element.HealingPlayer:Hide()
+		end
+
+		if(element.HealingOther) then
+			element.HealingOther:Hide()
+		end
+
+		if(element.OverHealIndicator) then
+			element.OverHealIndicator:Hide()
+		end
+
+		if(element.DamageAbsorb) then
+			element.DamageAbsorb:Hide()
+		end
+
+		if(element.HealAbsorb) then
+			element.HealAbsorb:Hide()
+		end
+
+		if(element.OverDamageAbsorbIndicator) then
+			element.OverDamageAbsorbIndicator:Hide()
+		end
+
+		if(element.OverHealAbsorbIndicator) then
+			element.OverHealAbsorbIndicator:Hide()
+		end
+
 		self:UnregisterEvent('UNIT_HEALTH', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
-		self:UnregisterEvent('UNIT_CONNECTION', ColorPath)
+		self:UnregisterEvent('UNIT_HEAL_PREDICTION', Path)
+		self:UnregisterEvent('UNIT_ABSORB_AMOUNT_CHANGED', Path)
+		self:UnregisterEvent('UNIT_HEAL_ABSORB_AMOUNT_CHANGED', Path)
+		self:UnregisterEvent('UNIT_MAX_HEALTH_MODIFIERS_CHANGED', Path)
+		self:UnregisterEvent('UNIT_CONNECTION', Path)
+		self:UnregisterEvent('PARTY_MEMBER_ENABLE', Path)
+		self:UnregisterEvent('PARTY_MEMBER_DISABLE', Path)
 		self:UnregisterEvent('UNIT_FACTION', ColorPath)
 		self:UnregisterEvent('UNIT_FLAGS', ColorPath)
 		self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
-		self:UnregisterEvent('UNIT_MAX_HEALTH_MODIFIERS_CHANGED', Path)
 
 		if(element.TempLoss) then
 			element.TempLoss:Hide()
