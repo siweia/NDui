@@ -620,8 +620,8 @@ function UF:CreatePlates()
 	platesList[self] = self:GetName()
 end
 
-function UF:ToggleNameplateAuras()
-	if C.db["Nameplate"]["PlateAuras"] then
+function UF:ToggleNameplateAuras(shouldEnable)
+	if C.db["Nameplate"]["PlateAuras"] and shouldEnable then
 		if not self:IsElementEnabled("Auras") then
 			self:EnableElement("Auras")
 		end
@@ -633,7 +633,7 @@ function UF:ToggleNameplateAuras()
 end
 
 function UF:UpdateNameplateAuras()
-	UF.ToggleNameplateAuras(self)
+	UF.ToggleNameplateAuras(self, true)
 
 	if not C.db["Nameplate"]["PlateAuras"] then return end
 
@@ -731,11 +731,11 @@ function UF:RefreshAllPlates()
 end
 
 local DisabledElements = {
-	"Health", "Castbar", "HealthPrediction", "PvPClassificationIndicator", "ThreatIndicator", "Auras"
+	"Health", "Castbar", "HealthPrediction", "PvPClassificationIndicator", "ThreatIndicator"
 }
 
 local SoftTargetBlockElements = {
-	"Auras", "RaidTargetIndicator",
+	"RaidTargetIndicator",
 }
 
 function UF:UpdatePlateByType()
@@ -749,24 +749,29 @@ function UF:UpdatePlateByType()
 		name:Hide()
 	else
 		name:Show()
+		self:Tag(name, (not self.isSoftTarget and "[nplevel]" or "").."[name]")
 		name:UpdateTag()
 		name:ClearAllPoints()
 	end
 	raidtarget:ClearAllPoints()
 
-	if self.isSoftTarget then
+	local shouldEnableAura
+--[[	if self.isSoftTarget then
 		for _, element in pairs(SoftTargetBlockElements) do
 			if self:IsElementEnabled(element) then
 				self:DisableElement(element)
 			end
 		end
+		shouldEnableAura = false
 	else
 		for _, element in pairs(SoftTargetBlockElements) do
 			if not self:IsElementEnabled(element) then
 				self:EnableElement(element)
 			end
 		end
-	end
+		shouldEnableAura = true
+	end]]
+	shouldEnableAura = not self.isSoftTarget
 
 	if self.plateType == "NameOnly" then
 		for _, element in pairs(DisabledElements) do
@@ -774,6 +779,7 @@ function UF:UpdatePlateByType()
 				self:DisableElement(element)
 			end
 		end
+		shouldEnableAura = false
 
 		name:SetJustifyH("CENTER")
 		name:SetPoint("CENTER", self, "BOTTOM")
@@ -793,6 +799,7 @@ function UF:UpdatePlateByType()
 				self:EnableElement(element)
 			end
 		end
+		shouldEnableAura = true
 
 		name:SetJustifyH("LEFT")
 		hpval:Show()
@@ -809,7 +816,7 @@ function UF:UpdatePlateByType()
 
 	UF.UpdateNameplateSize(self)
 	UF.UpdateTargetIndicator(self)
-	--UF.ToggleNameplateAuras(self)
+	UF.ToggleNameplateAuras(self, shouldEnableAura)
 end
 
 function UF:RefreshPlateType(unit)
