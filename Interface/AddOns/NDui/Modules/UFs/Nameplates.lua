@@ -682,7 +682,8 @@ function UF:UpdateNameplateSize()
 
 	if self.plateType == "NameOnly" then
 		B.SetFontSize(self.nameText, nameOnlyTextSize)
-		self:Tag(self.nameText, "[nprare][nplevel][color][name]")
+		local prefix = (not self.isSoftTarget and "[nprare][nplevel]" or "")
+		self:Tag(self.nameText, prefix.."[color][name]")
 		self.__tagIndex = 6
 		B.SetFontSize(self.npcTitle, nameOnlyTitleSize)
 		self.npcTitle:UpdateTag()
@@ -749,14 +750,12 @@ function UF:UpdatePlateByType()
 		name:Hide()
 	else
 		name:Show()
-		self:Tag(name, (not self.isSoftTarget and "[nplevel]" or "").."[name]")
-		name:UpdateTag()
 		name:ClearAllPoints()
 	end
 	raidtarget:ClearAllPoints()
 
 	local shouldEnableAura
---[[	if self.isSoftTarget then
+	if self.isSoftTarget then
 		for _, element in pairs(SoftTargetBlockElements) do
 			if self:IsElementEnabled(element) then
 				self:DisableElement(element)
@@ -770,8 +769,7 @@ function UF:UpdatePlateByType()
 			end
 		end
 		shouldEnableAura = true
-	end]]
-	shouldEnableAura = not self.isSoftTarget
+	end
 
 	if self.plateType == "NameOnly" then
 		for _, element in pairs(DisabledElements) do
@@ -847,15 +845,15 @@ function UF:OnUnitFactionChanged(unit)
 	end
 end
 
-function UF:OnUnitSoftTargetChanged()
+function UF:OnUnitSoftTargetChanged(_, currentTarget)
+	if B:IsSecretValue(currentTarget) then return end
 	if not GetCVarBool("SoftTargetIconGameObject") then return end
 
 	for _, nameplate in pairs(C_NamePlate.GetNamePlates()) do
 		local unitFrame = nameplate and nameplate.unitFrame
-		if unitFrame then
-			unitFrame.previousType = nil
-			UF.RefreshPlateType(unitFrame, unitFrame.unit)
-			UF.UpdateTargetChange(unitFrame)
+		local guid = unitFrame and unitFrame.unitGUID
+		if guid and guid == currentTarget then
+			unitFrame.nameText:SetText(UnitNameFromGUID(guid))
 		end
 	end
 end
@@ -910,6 +908,7 @@ end
 function UF:OnNameplateRemoved()
 	if not self then return end
 	self.npcID = nil
+	self.nameText:SetText("")
 end
 
 function UF:OnTargetChanged(event, unit)
