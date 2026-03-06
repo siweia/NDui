@@ -6,7 +6,7 @@ local strmatch, format, tonumber, select = string.match, string.format, tonumber
 local GetUnitName = GetUnitName
 local IsPlayerSpell = IsPlayerSpell
 local C_MountJournal_GetMountFromSpell = C_MountJournal.GetMountFromSpell
-local BAGSLOT, BANK = BAGSLOT, BANK
+local BAGSLOT, BANK, UNKNOWN = BAGSLOT, BANK, UNKNOWN
 local LEARNT_STRING = "|cffff0000"..ALREADY_LEARNED.."|r"
 
 local types = {
@@ -100,7 +100,7 @@ function TT:SetupTooltipID()
 			else
 				local name = GetUnitName(caster, true)
 				local hexColor = B.HexRGB(B.UnitColor(caster))
-				self:AddDoubleLine(L["From"]..":", hexColor..name)
+				self:AddDoubleLine(L["From"]..":", hexColor..(name or UNKNOWN))
 			end
 			self:Show()
 		end

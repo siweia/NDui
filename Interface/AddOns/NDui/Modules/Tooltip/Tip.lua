@@ -199,10 +199,10 @@ function TT:OnTooltipSetUnit()
 		unitFullName = name.."-"..(realm or DB.MyRealm)
 		local pvpName = UnitPVPName(unit)
 		local relationship = UnitRealmRelationship(unit)
-		if not C.db["Tooltip"]["HideTitle"] and B:NotSecretValue(pvpName) and pvpName and pvpName ~= "" then
+		if not C.db["Tooltip"]["HideTitle"] and pvpName and B:NotSecretValue(pvpName) and pvpName ~= "" then
 			name = pvpName
 		end
-		if realm and realm ~= "" then
+		if realm and B:NotSecretValue(realm) and realm ~= "" then
 			if isShiftKeyDown or not C.db["Tooltip"]["HideRealm"] then
 				name = name.."-"..realm
 			elseif relationship == LE_REALM_RELATION_COALESCED then
