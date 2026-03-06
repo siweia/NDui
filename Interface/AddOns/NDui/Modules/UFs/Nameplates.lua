@@ -845,15 +845,13 @@ function UF:OnUnitFactionChanged(unit)
 	end
 end
 
-function UF:OnUnitSoftTargetChanged(_, currentTarget)
-	if B:IsSecretValue(currentTarget) then return end
+function UF:OnUnitSoftTargetChanged() -- needs review
 	if not GetCVarBool("SoftTargetIconGameObject") then return end
 
 	for _, nameplate in pairs(C_NamePlate.GetNamePlates()) do
 		local unitFrame = nameplate and nameplate.unitFrame
-		local guid = unitFrame and unitFrame.unitGUID
-		if guid and guid == currentTarget then
-			unitFrame.nameText:SetText(UnitNameFromGUID(guid))
+		if unitFrame then
+			unitFrame.nameText:UpdateTag()
 		end
 	end
 end
