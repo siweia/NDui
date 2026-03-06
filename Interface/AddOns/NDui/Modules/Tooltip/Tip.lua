@@ -425,7 +425,6 @@ function TT:ReskinTooltip()
 		return
 	end
 	if self:IsForbidden() then return end
-	self:SetScale(C.db["Tooltip"]["Scale"])
 
 	if not self.tipStyled then
 		self:HideBackdrop()
@@ -460,8 +459,9 @@ local function TooltipSetFont(font, size)
 end
 
 function TT:SetupTooltipFonts()
-	local textSize = DB.Font[2] + 2
-	local headerSize = DB.Font[2] + 4
+	local fontSize = C.db["Tooltip"]["FontSize"]
+	local textSize = fontSize + 2
+	local headerSize = fontSize + 4
 
 	TooltipSetFont(GameTooltipHeaderText, headerSize)
 	TooltipSetFont(GameTooltipText, textSize)
