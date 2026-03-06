@@ -9,7 +9,7 @@ local guiTab, guiPage, f = {}, {}
 
 -- Default Settings
 G.DefaultSettings = {
-	Reset3 = false,
+	Reset4 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -109,7 +109,7 @@ G.DefaultSettings = {
 		ItemFilter = true,
 		CustomItems = {},
 		CustomNames = {},
-		GatherEmpty = false,
+		GatherEmpty = true,
 		ShowNewItem = true,
 		SplitCount = 1,
 		SpecialBagsColor = true,
@@ -718,12 +718,11 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
 
-	if not C.db["Reset3"] then
-		C.db["UFs"]["RaidBuffPerRow"] = 7
-		C.db["UFs"]["RaidDebuffPerRow"] = 7
+	if not C.db["Reset4"] then
 		C.db["UFs"]["Portrait"] = false
 		C.db["UFs"]["MBPerRow"] = 13
-		C.db["Reset3"] = true
+		C.db["UFs"]["GatherEmpty"] = true
+		C.db["Reset4"] = true
 	end
 
 	B:SetupUIScale(true)
