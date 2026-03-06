@@ -94,6 +94,8 @@ function UF:CreatePip(stage)
 end
 
 function UF:PostUpdatePips(numStages)
+	if not numStages then return end
+
 	local pips = self.Pips
 	local num = #numStages
 
