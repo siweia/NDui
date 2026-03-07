@@ -13,18 +13,19 @@ C.themes["Blizzard_AdventureMap"] = function()
 
 	dialog:HookScript("OnShow", function(self)
 		if self.styled then return end
-
-		for _, bu in next, {dialog:GetChildren()} do
-			if bu.Icon then
-				B.ReskinIcon(bu.Icon)
-				local bg = B.CreateBDFrame(bu.Icon, .25)
-				bg:SetPoint("BOTTOMRIGHT")
-				bu.ItemNameBG:Hide()
-			end
-		end
 		dialog.Details.Child.TitleHeader:SetTextColor(1, .8, 0)
 		dialog.Details.Child.ObjectivesHeader:SetTextColor(1, .8, 0)
 
 		self.styled = true
+
+		for _, bu in next, {dialog:GetChildren()} do
+			if bu.Icon and not bu.bg then
+				B.ReskinIcon(bu.Icon)
+				local bg = B.CreateBDFrame(bu.Icon, .25)
+				bg:SetPoint("BOTTOMRIGHT")
+				bu.ItemNameBG:Hide()
+				bu.bg = bg
+			end
+		end
 	end)
 end
