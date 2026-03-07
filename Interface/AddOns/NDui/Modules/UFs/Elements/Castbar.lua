@@ -5,7 +5,7 @@ local UF = B:GetModule("UnitFrames")
 function UF:UpdateCastbarGlow(unit)
 	if self.barGlow and self.spellID then
 		local isImportant = C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(self.spellID)
-		self.barGlow:SetAlphaFromBoolean(isImportant, 1, 0)
+		self.barGlow:SetAlphaFromBoolean(isImportant, .7, 0)
 	end
 end
 
