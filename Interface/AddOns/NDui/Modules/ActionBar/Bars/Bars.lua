@@ -22,10 +22,34 @@ function Bar:UpdateAllSize()
 	Bar:UpdateVehicleButton()
 end
 
+function Bar:UpdateCastVFX(button)
+	local buttonWidth, buttonHeight = button:GetSize()
+	local maskWidth, maskHeight = buttonWidth * 1.5, buttonHeight * 1.5
+
+	local spellCastAnim = button.SpellCastAnimFrame
+	if spellCastAnim then
+		local endBurst = spellCastAnim.EndBurst
+		if endBurst then
+			endBurst.EndMask:SetSize(maskWidth, maskHeight)
+		end
+
+		local spellCastFill = spellCastAnim.Fill
+		if spellCastFill then
+			spellCastFill.FillMask:SetSize(maskWidth, maskHeight)
+		end
+	end
+	local interruptDisplay = button.InterruptDisplay
+	local interruptHighlight = interruptDisplay and interruptDisplay.Highlight
+	if interruptHighlight then
+		interruptHighlight.Mask:SetSize(maskWidth, maskHeight)
+	end
+end
+
 function Bar:UpdateFontSize(button, fontSize)
 	B.SetFontSize(button.Name, fontSize)
 	B.SetFontSize(button.Count, fontSize)
 	B.SetFontSize(button.HotKey, fontSize)
+	Bar:UpdateCastVFX(button)
 end
 
 function Bar:UpdateActionSize(name)

@@ -124,6 +124,13 @@ function Bar:StyleActionButton(button)
 		Bar.UpdateHotKey(hotkey)
 		hooksecurefunc(hotkey, "SetText", Bar.UpdateHotKey)
 	end
+	-- Cast VFX
+	local spellCastAnim = button.SpellCastAnimFrame
+	local spellCastFill = spellCastAnim and spellCastAnim.Fill
+	if spellCastFill then
+		spellCastFill.InnerGlowTexture:SetAllPoints(icon)
+		spellCastFill.InnerGlowTexture:SetTexCoord(unpack(DB.TexCoord))
+	end
 
 	button.__styled = true
 end
