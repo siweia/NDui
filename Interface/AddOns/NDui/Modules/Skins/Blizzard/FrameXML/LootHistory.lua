@@ -61,6 +61,7 @@ tinsert(C.defaultThemes, function()
 				item.bg = B.ReskinIcon(item.icon)
 				item.bg:SetFrameLevel(item.bg:GetFrameLevel() + 1)
 				B.ReskinIconBorder(item.IconBorder, true)
+				item.IconOverlay:SetAlpha(0)
 			end
 
 			button.styled = true

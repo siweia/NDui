@@ -55,3 +55,22 @@ C.themes["Blizzard_HousingCharter"] = function()
 		B.Reskin(frame.CloseButton)
 	end
 end
+
+C.themes["Blizzard_HousingCornerstone"] = function()
+	local frame = HousingCornerstonePurchaseFrame
+	if frame then
+		B.StripTextures(frame)
+		B.SetBD(frame)
+		B.Reskin(frame.BuyButton)
+		B.ReskinClose(frame.CloseButton)
+		B.StripTextures(frame.MoneyFrameBackdrop)
+		B.CreateBDFrame(frame.MoneyFrameBackdrop, .25)
+	end
+
+	local frame = HousingCornerstoneVisitorFrame
+	if frame then
+		B.StripTextures(frame)
+		B.SetBD(frame)
+		B.ReskinClose(frame.CloseButton)
+	end
+end
