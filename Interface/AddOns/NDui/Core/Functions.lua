@@ -1882,13 +1882,13 @@ end
 -- Add API
 do
 	local function WatchPixelSnap(frame, snap)
-		if (frame and not frame:IsForbidden()) and frame.PixelSnapDisabled and snap then
+		if B:NotSecretTable(frame) and (frame and not frame:IsForbidden()) and frame.PixelSnapDisabled and snap then
 			frame.PixelSnapDisabled = nil
 		end
 	end
 
 	local function DisablePixelSnap(frame)
-		if (frame and not frame:IsForbidden()) and not frame.PixelSnapDisabled then
+		if B:NotSecretTable(frame) and (frame and not frame:IsForbidden()) and not frame.PixelSnapDisabled then
 			if frame.SetSnapToPixelGrid then
 				frame:SetSnapToPixelGrid(false)
 				frame:SetTexelSnappingBias(0)
