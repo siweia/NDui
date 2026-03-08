@@ -907,6 +907,7 @@ function UF:OnNameplateRemoved()
 	if not self then return end
 	self.npcID = nil
 	self.nameText:SetText("")
+	self.npcTitle:SetText("")
 end
 
 function UF:OnTargetChanged(event, unit)
