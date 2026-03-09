@@ -131,6 +131,9 @@ function Bar:StyleActionButton(button)
 		spellCastFill.InnerGlowTexture:SetAllPoints(icon)
 		spellCastFill.InnerGlowTexture:SetTexCoord(unpack(DB.TexCoord))
 	end
+	if button.lossOfControlCooldown then
+		button.lossOfControlCooldown:SetInside()
+	end
 
 	button.__styled = true
 end
