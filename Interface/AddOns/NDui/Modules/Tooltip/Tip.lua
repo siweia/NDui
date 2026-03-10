@@ -324,9 +324,11 @@ function TT:OnTooltipSetUnit()
 	TT.PetInfo_Setup(self, unit)
 
 	-- Ignore note
-	local ignoreNote = unitFullName and NDuiADB["IgnoreNotes"][unitFullName]
-	if ignoreNote then
-		self:AddLine(format(ignoreString, ignoreNote), 1,1,1, 1)
+	if unitFullName and B:NotSecretValue(unitFullName) then
+		local ignoreNote = NDuiADB["IgnoreNotes"][unitFullName]
+		if ignoreNote then
+			self:AddLine(format(ignoreString, ignoreNote), 1,1,1, 1)
+		end
 	end
 end
 
