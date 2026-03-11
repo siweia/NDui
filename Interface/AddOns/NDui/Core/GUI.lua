@@ -9,7 +9,7 @@ local guiTab, guiPage, f = {}, {}
 
 -- Default Settings
 G.DefaultSettings = {
-	Reset3 = false,
+	Reset4 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -109,7 +109,7 @@ G.DefaultSettings = {
 		ItemFilter = true,
 		CustomItems = {},
 		CustomNames = {},
-		GatherEmpty = false,
+		GatherEmpty = true,
 		ShowNewItem = true,
 		SplitCount = 1,
 		SpecialBagsColor = true,
@@ -320,8 +320,8 @@ G.DefaultSettings = {
 		RaidCDSize = 12,
 		RaidNumBuff = 6,
 		RaidNumDebuff = 6,
-		RaidBuffType = 2,
-		RaidDebuffType = 2,
+		RaidBuffType = 1,
+		RaidDebuffType = 4,
 		RaidBuffPerRow = 7,
 		RaidDebuffPerRow = 7,
 
@@ -516,6 +516,7 @@ G.DefaultSettings = {
 		OnlyArmorIcons = false,
 		HideAllID = false,
 		MythicScore = true,
+		FontSize = 12,
 	},
 	Misc = {
 		Mail = true,
@@ -525,7 +526,6 @@ G.DefaultSettings = {
 		GemNEnchant = true,
 		AzeriteTraits = true,
 		MissingStats = true,
-		SoloInfo = true,
 		RareAlerter = true,
 		RarePrint = true,
 		Focuser = true,
@@ -579,6 +579,7 @@ G.DefaultSettings = {
 		W3Point = 1,
 		CentralBuffView = false,
 		CentralUtilView = false,
+		CombatAnimation = true,
 	},
 	Tutorial = {
 		Complete = false,
@@ -608,7 +609,6 @@ G.AccountSettings = {
 	ClickSets = {},
 	TexStyle = 2,
 	KeystoneInfo = {},
-	AutoBubbles = false,
 	DisableInfobars = false,
 	ContactList = {},
 	CustomJunkList = {},
@@ -719,11 +719,13 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
 
-	if not C.db["Reset3"] then
-		C.db["UFs"]["RaidBuffPerRow"] = 7
-		C.db["UFs"]["RaidDebuffPerRow"] = 7
+	if not C.db["Reset4"] then
 		C.db["UFs"]["Portrait"] = false
-		C.db["Reset3"] = true
+		C.db["UFs"]["MBPerRow"] = 13
+		C.db["UFs"]["GatherEmpty"] = true
+		C.db["UFs"]["RaidBuffType"] = 1
+		C.db["UFs"]["RaidDebuffType"] = 4
+		C.db["Reset4"] = true
 	end
 
 	B:SetupUIScale(true)
@@ -1085,10 +1087,6 @@ local function updateIgnoredRares()
 	B:GetModule("Misc"):RareAlert_UpdateIgnored()
 end
 
-local function updateSoloInfo()
-	B:GetModule("Misc"):SoloInfo()
-end
-
 local function updateSpellItemAlert()
 	B:GetModule("Misc"):SpellItemAlert()
 end
@@ -1155,6 +1153,13 @@ local function updateTimeMode()
 	SetCVar("timeMgrUseMilitaryTime", NDuiADB["MilitaryTime"] and "1" or "0")
 end
 
+local function updateTooltipFont()
+	local TT = B:GetModule("Tooltip")
+	if TT then
+		TT:SetupTooltipFonts()
+	end
+end
+
 StaticPopupDialogs["RESET_DETAILS"] = {
 	text = L["Reset Details check"],
 	button1 = YES,
@@ -1200,7 +1205,7 @@ G.TabList = {
 	L["Maps"],
 	IsNew..L["Skins"],
 	L["Tooltip"],
-	L["Misc"],
+	IsNew..L["Misc"],
 	IsNew..L["UI Settings"],
 	L["Profile"],
 }
@@ -1405,8 +1410,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "SpellItemAlert", L["SpellItemAlert"].."*", nil, nil, updateSpellItemAlert, L["SpellItemAlertTip"]},
 		{1, "Misc", "LeaderOnly", IsNew..L["LeaderOnly"].."*", true, nil, nil, L["LeaderOnlyTip"]},
 		{},--blank
-		{1, "Misc", "SoloInfo", L["SoloInfo"].."*", nil, nil, updateSoloInfo},
-		{},--blank
 		{1, "Misc", "RareAlerter", HeaderTag..L["Rare Alert"].."*", nil, nil, updateRareAlert},
 		{1, "Misc", "RarePrint", L["Alert In Chat"].."*"},
 		{1, "Misc", "RareAlertInWild", L["RareAlertInWild"].."*"},
@@ -1492,7 +1495,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Rematch", L["Rematch Skin"], true},
 	},
 	[12] = {
-		{3, "Tooltip", "Scale", L["Tooltip Scale"].."*", nil, {.5, 1.5, .1}},
+		{3, "Tooltip", "FontSize", L["Tooltip FontSize"].."*", nil, {8, 42, 1}, updateTooltipFont},
 		{4, "Tooltip", "TipAnchor", L["TipAnchor"].."*", true, {L["TOPLEFT"], L["TOPRIGHT"], L["BOTTOMLEFT"], L["BOTTOMRIGHT"]}, nil, L["TipAnchorTip"]},
 		{4, "Tooltip", "HideInCombat", L["HideInCombat"].."*", nil, {DISABLE, "ALT", "SHIFT", "CTRL", ALWAYS}, nil, L["HideInCombatTip"]},
 		{4, "Tooltip", "CursorMode", L["Follow Cursor"].."*", true, {DISABLE, L["LEFT"], L["TOP"], L["RIGHT"]}},
@@ -1517,10 +1520,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
-		{1, "ACCOUNT", "AutoBubbles", L["AutoBubbles"], true},
+		{1, "Misc", "InstantDelete", L["InstantDelete"].."*", true},
 		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
 		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
-		{1, "Misc", "InstantDelete", L["InstantDelete"].."*"},
+		{1, "Misc", "CombatAnimation", IsNew..L["CombatAnimation"], nil, nil, toggleBossBanner},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "FasterSkip", L["FasterMovieSkip"].."*", true, nil, nil, L["FasterMovieSkipTip"]},

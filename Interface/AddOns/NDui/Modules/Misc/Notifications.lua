@@ -12,7 +12,6 @@ local GetSpellLink = C_Spell.GetSpellLink
 local GetSpellName = C_Spell.GetSpellName
 local GetActionInfo, GetMacroSpell, GetMacroItem = GetActionInfo, GetMacroSpell, GetMacroItem
 local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
-local C_Timer_After = C_Timer.After
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_VignetteInfo_GetVignetteInfo = C_VignetteInfo.GetVignetteInfo
 local C_VignetteInfo_GetVignettePosition = C_VignetteInfo.GetVignettePosition
@@ -22,62 +21,6 @@ local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePre
 
 local function IsRandomGroup()
 	return IsPartyLFG() or C_PartyInfo.IsPartyWalkIn()
-end
-
---[[
-	SoloInfo是一个告知你当前副本难度的小工具，防止我有时候单刷时进错难度了。
-	instList左侧是副本ID，你可以使用"/getid"命令来获取当前副本的ID；右侧的是副本难度，常用的一般是：2为5H，4为25普通，6为25H。
-]]
-local soloInfo
-local instList = {
-	[556] = 2,		-- H塞塔克大厅，乌鸦
-	[575] = 2,		-- H乌特加德之巅，蓝龙
-	[585] = 2,		-- H魔导师平台，白鸡
-	[631] = 6,		-- 25H冰冠堡垒，无敌
-	[1205] = 16,	-- M黑石，裂蹄牛
-	[1448] = 16,	-- M地狱火，魔钢
-	[1651] = 23,	-- M卡拉赞，新午夜
-}
-
-function M:SoloInfo_Create()
-	if soloInfo then soloInfo:Show() return end
-
-	soloInfo = CreateFrame("Frame", nil, UIParent)
-	soloInfo:SetPoint("CENTER", 0, 120)
-	soloInfo:SetSize(150, 70)
-	B.SetBD(soloInfo)
-
-	soloInfo.Text = B.CreateFS(soloInfo, 14, "")
-	soloInfo.Text:SetWordWrap(true)
-	soloInfo:SetScript("OnMouseUp", function() soloInfo:Hide() end)
-end
-
-function M:SoloInfo_Update()
-	local name, instType, diffID, diffName, _, _, _, instID = GetInstanceInfo()
-	if diffID == 8 then return end -- don't alert in mythic+
-
-	if (diffName and diffName ~= "") and instType ~= "none" and diffID ~= 24 and instList[instID] and instList[instID] ~= diffID then
-		M:SoloInfo_Create()
-		soloInfo.Text:SetText(DB.InfoColor..name..DB.MyColor.."\n( "..diffName.." )\n\n"..DB.InfoColor..L["Wrong Difficulty"])
-	else
-		if soloInfo then soloInfo:Hide() end
-	end
-end
-
-function M:SoloInfo_DelayCheck()
-	C_Timer_After(3, M.SoloInfo_Update)
-end
-
-function M:SoloInfo()
-	if C.db["Misc"]["SoloInfo"] then
-		M:SoloInfo_Update()
-		B:RegisterEvent("PLAYER_ENTERING_WORLD", M.SoloInfo_DelayCheck)
-		B:RegisterEvent("PLAYER_DIFFICULTY_CHANGED", M.SoloInfo_DelayCheck)
-	else
-		if soloInfo then soloInfo:Hide() end
-		B:UnregisterEvent("PLAYER_ENTERING_WORLD", M.SoloInfo_DelayCheck)
-		B:UnregisterEvent("PLAYER_DIFFICULTY_CHANGED", M.SoloInfo_DelayCheck)
-	end
 end
 
 --[[
@@ -637,7 +580,6 @@ end
 
 -- Init
 function M:AddAlerts()
-	M:SoloInfo()
 	M:RareAlert()
 	--M:InterruptAlert()
 	C_Timer.After(0, M.VersionCheck) -- add delay to avoid taint

@@ -969,6 +969,20 @@ function UF:PostProcessAuraData(unit, data, filter)
 	return data
 end
 
+local satedDebuffs = {
+	[57723] = true, -- 筋疲力尽
+	[57724] = true, -- 心满意足
+	[80354] = true, -- 时空错位
+	[95809] = true, -- 疯狂
+	[160455] = true, -- 疲倦
+	[264689] = true, -- 疲倦
+	[390435] = true, -- 筋疲力尽
+}
+
+local function isBloodLustDebuff(data)
+	return B:NotSecretValue(data.spellId) and satedDebuffs[data.spellId]
+end
+
 function UF.RaidFrame_FilterAura(element, _, data)
 	local value = element.__value
 	if data.isHarmfulAura then
@@ -977,7 +991,7 @@ function UF.RaidFrame_FilterAura(element, _, data)
 		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show displayable debuff
 			return data.isPlayerDispellable
 		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- mix filters
-			return data.isRaidInCombatAura or data.isPlayerDispellable or data.isImportantAura
+			return data.isRaidInCombatAura or data.isPlayerDispellable or data.isImportantAura or isBloodLustDebuff(data)
 		elseif C.db["UFs"][value.."DebuffType"] == 5 then -- show all
 			return true
 		end

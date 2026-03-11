@@ -74,6 +74,7 @@ function Bar:StyleActionButton(button)
 	local iconMask = button.IconMask
 	local petShine = _G[buttonName.."Shine"]
 	local autoCastable = button.AutoCastable
+	local autoCastOverlay = button.AutoCastOverlay
 
 	if normal then normal:SetAlpha(0) end
 	if normal2 then normal2:SetAlpha(0) end
@@ -87,6 +88,9 @@ function Bar:StyleActionButton(button)
 	if autoCastable then
 		autoCastable:SetTexCoord(.217, .765, .217, .765)
 		autoCastable:SetInside()
+	end
+	if autoCastOverlay then
+		autoCastOverlay:SetOutside()
 	end
 
 	if icon then
@@ -119,6 +123,16 @@ function Bar:StyleActionButton(button)
 	if hotkey then
 		Bar.UpdateHotKey(hotkey)
 		hooksecurefunc(hotkey, "SetText", Bar.UpdateHotKey)
+	end
+	-- Cast VFX
+	local spellCastAnim = button.SpellCastAnimFrame
+	local spellCastFill = spellCastAnim and spellCastAnim.Fill
+	if spellCastFill then
+		spellCastFill.InnerGlowTexture:SetAllPoints(icon)
+		spellCastFill.InnerGlowTexture:SetTexCoord(unpack(DB.TexCoord))
+	end
+	if button.lossOfControlCooldown then
+		button.lossOfControlCooldown:SetInside()
 	end
 
 	button.__styled = true

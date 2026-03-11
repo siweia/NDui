@@ -109,3 +109,95 @@ function M:LoginAnimation()
 	SLASH_NDUI_PLAYLOGO1 = "/nlogo"
 end
 M:RegisterMisc("LoginAnimation", M.LoginAnimation)
+
+-- 战斗状态提示
+function M:CombatAnimation()
+	if not C.db["Misc"]["CombatAnimation"] then return end
+
+	local ENTERING_COMBAT = _G.ENTERING_COMBAT
+	local LEAVING_COMBAT = _G.LEAVING_COMBAT
+
+	local cfg = {         -- 预留选项
+		dropDist = -80,   -- 下落距离
+		bounce1 = 30,     -- 第一次回弹高度
+		bounce2 = 12,     -- 第二次回弹高度
+		targetY = 150,    -- 目标中心点 Y 坐标
+		fontSize = 32,
+	}
+	local initialOffset = cfg.targetY - cfg.dropDist
+
+	local alertFrame = CreateFrame("Frame", "NDui_CombatStateAlertFrame", UIParent)
+	alertFrame:SetSize(1, 1)
+	alertFrame:SetPoint("CENTER", 0, cfg.targetY)
+	alertFrame:Hide()
+
+	local text = B.CreateFS(alertFrame, cfg.fontSize, "")
+	text:ClearAllPoints()
+	text:SetPoint("CENTER")
+
+	local anim = alertFrame:CreateAnimationGroup()
+	-- 阶段一：加速下落
+	local drop = anim:CreateAnimation("Translation")
+	drop:SetOffset(0, cfg.dropDist)
+	drop:SetDuration(0.2)
+	drop:SetOrder(1)
+	-- 阶段二：第一次回弹
+	local b1_up = anim:CreateAnimation("Translation")
+	b1_up:SetOffset(0, cfg.bounce1)
+	b1_up:SetDuration(0.12)
+	b1_up:SetOrder(2)
+	-- 阶段三：第一次回落
+	local b1_down = anim:CreateAnimation("Translation")
+	b1_down:SetOffset(0, -cfg.bounce1)
+	b1_down:SetDuration(0.1)
+	b1_down:SetOrder(3)
+	-- 阶段四：第二次回弹
+	local b2_up = anim:CreateAnimation("Translation")
+	b2_up:SetOffset(0, cfg.bounce2)
+	b2_up:SetDuration(0.08)
+	b2_up:SetOrder(4)
+	-- 阶段五：第二次回落归位
+	local b2_down = anim:CreateAnimation("Translation")
+	b2_down:SetOffset(0, -cfg.bounce2)
+	b2_down:SetDuration(0.06)
+	b2_down:SetOrder(5)
+	-- 阶段六：停留后上滑淡出
+	local fadeOut = anim:CreateAnimation("Alpha")
+	fadeOut:SetFromAlpha(1)
+	fadeOut:SetToAlpha(0)
+	fadeOut:SetDuration(0.8)
+	fadeOut:SetStartDelay(0.6)
+	fadeOut:SetOrder(6)
+	local slide = anim:CreateAnimation("Translation")
+	slide:SetOffset(0, 50)
+	slide:SetDuration(0.8)
+	slide:SetStartDelay(0.6)
+	slide:SetOrder(6)
+	-- 动画结束：重置
+	anim:SetScript("OnFinished", function()
+		alertFrame:Hide()
+		alertFrame:SetAlpha(1)
+		alertFrame:ClearAllPoints()
+		alertFrame:SetPoint("CENTER", 0, cfg.targetY)
+	end)
+
+	local function updateCombatState(event)
+		if event == "PLAYER_REGEN_DISABLED" then
+			text:SetText(ENTERING_COMBAT)
+			text:SetTextColor(1, 0.1, 0.1)
+		else
+			text:SetText(LEAVING_COMBAT)
+			text:SetTextColor(0.1, 1, 0.1)
+		end
+
+		anim:Stop()
+		alertFrame:SetAlpha(1)
+		alertFrame:ClearAllPoints()
+		alertFrame:SetPoint("CENTER", 0, initialOffset)
+		alertFrame:Show()
+		anim:Play()
+	end
+	B:RegisterEvent("PLAYER_REGEN_ENABLED", updateCombatState)
+	B:RegisterEvent("PLAYER_REGEN_DISABLED", updateCombatState)
+end
+M:RegisterMisc("CombatAnimation", M.CombatAnimation)

@@ -78,7 +78,7 @@ function TT:UpdateFactionLine(lineData)
 		end
 	elseif unitClass and strfind(linetext, unitClass) then
 		lineData.leftText = gsub(linetext, "(.-)%S+$", replaceSpecInfo)
-	elseif unitCreature and linetext == unitCreature then
+	elseif unitCreature and B:NotSecretValue(unitCreature) and linetext == unitCreature then
 		return true
 	end
 end
@@ -199,10 +199,10 @@ function TT:OnTooltipSetUnit()
 		unitFullName = name.."-"..(realm or DB.MyRealm)
 		local pvpName = UnitPVPName(unit)
 		local relationship = UnitRealmRelationship(unit)
-		if not C.db["Tooltip"]["HideTitle"] and pvpName and pvpName ~= "" then
+		if not C.db["Tooltip"]["HideTitle"] and pvpName and B:NotSecretValue(pvpName) and pvpName ~= "" then
 			name = pvpName
 		end
-		if realm and realm ~= "" then
+		if realm and B:NotSecretValue(realm) and realm ~= "" then
 			if isShiftKeyDown or not C.db["Tooltip"]["HideRealm"] then
 				name = name.."-"..realm
 			elseif relationship == LE_REALM_RELATION_COALESCED then
@@ -425,7 +425,6 @@ function TT:ReskinTooltip()
 		return
 	end
 	if self:IsForbidden() then return end
-	self:SetScale(C.db["Tooltip"]["Scale"])
 
 	if not self.tipStyled then
 		self:HideBackdrop()
@@ -460,8 +459,9 @@ local function TooltipSetFont(font, size)
 end
 
 function TT:SetupTooltipFonts()
-	local textSize = DB.Font[2] + 2
-	local headerSize = DB.Font[2] + 4
+	local fontSize = C.db["Tooltip"]["FontSize"]
+	local textSize = fontSize + 2
+	local headerSize = fontSize + 4
 
 	TooltipSetFont(GameTooltipHeaderText, headerSize)
 	TooltipSetFont(GameTooltipText, textSize)

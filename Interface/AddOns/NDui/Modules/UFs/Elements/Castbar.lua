@@ -3,9 +3,9 @@ local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
 function UF:UpdateCastbarGlow(unit)
-	if self.barGlow then
+	if self.barGlow and self.spellID then
 		local isImportant = C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(self.spellID)
-		self.barGlow:SetAlphaFromBoolean(isImportant, 1, 0)
+		self.barGlow:SetAlphaFromBoolean(isImportant, .7, 0)
 	end
 end
 
@@ -94,6 +94,8 @@ function UF:CreatePip(stage)
 end
 
 function UF:PostUpdatePips(numStages)
+	if not numStages then return end
+
 	local pips = self.Pips
 	local num = #numStages
 

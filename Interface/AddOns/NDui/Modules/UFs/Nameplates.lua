@@ -620,8 +620,8 @@ function UF:CreatePlates()
 	platesList[self] = self:GetName()
 end
 
-function UF:ToggleNameplateAuras()
-	if C.db["Nameplate"]["PlateAuras"] then
+function UF:ToggleNameplateAuras(shouldEnable)
+	if C.db["Nameplate"]["PlateAuras"] and shouldEnable then
 		if not self:IsElementEnabled("Auras") then
 			self:EnableElement("Auras")
 		end
@@ -633,7 +633,7 @@ function UF:ToggleNameplateAuras()
 end
 
 function UF:UpdateNameplateAuras()
-	UF.ToggleNameplateAuras(self)
+	UF.ToggleNameplateAuras(self, true)
 
 	if not C.db["Nameplate"]["PlateAuras"] then return end
 
@@ -682,7 +682,8 @@ function UF:UpdateNameplateSize()
 
 	if self.plateType == "NameOnly" then
 		B.SetFontSize(self.nameText, nameOnlyTextSize)
-		self:Tag(self.nameText, "[nprare][nplevel][color][name]")
+		local prefix = (not self.isSoftTarget and "[nprare][nplevel]" or "")
+		self:Tag(self.nameText, prefix.."[color][name]")
 		self.__tagIndex = 6
 		B.SetFontSize(self.npcTitle, nameOnlyTitleSize)
 		self.npcTitle:UpdateTag()
@@ -731,11 +732,11 @@ function UF:RefreshAllPlates()
 end
 
 local DisabledElements = {
-	"Health", "Castbar", "HealthPrediction", "PvPClassificationIndicator", "ThreatIndicator", "Auras"
+	"Health", "Castbar", "HealthPrediction", "PvPClassificationIndicator", "ThreatIndicator"
 }
 
 local SoftTargetBlockElements = {
-	"Auras", "RaidTargetIndicator",
+	"RaidTargetIndicator",
 }
 
 function UF:UpdatePlateByType()
@@ -749,23 +750,25 @@ function UF:UpdatePlateByType()
 		name:Hide()
 	else
 		name:Show()
-		name:UpdateTag()
 		name:ClearAllPoints()
 	end
 	raidtarget:ClearAllPoints()
 
+	local shouldEnableAura
 	if self.isSoftTarget then
 		for _, element in pairs(SoftTargetBlockElements) do
 			if self:IsElementEnabled(element) then
 				self:DisableElement(element)
 			end
 		end
+		shouldEnableAura = false
 	else
 		for _, element in pairs(SoftTargetBlockElements) do
 			if not self:IsElementEnabled(element) then
 				self:EnableElement(element)
 			end
 		end
+		shouldEnableAura = true
 	end
 
 	if self.plateType == "NameOnly" then
@@ -774,6 +777,7 @@ function UF:UpdatePlateByType()
 				self:DisableElement(element)
 			end
 		end
+		shouldEnableAura = false
 
 		name:SetJustifyH("CENTER")
 		name:SetPoint("CENTER", self, "BOTTOM")
@@ -793,6 +797,7 @@ function UF:UpdatePlateByType()
 				self:EnableElement(element)
 			end
 		end
+		shouldEnableAura = true
 
 		name:SetJustifyH("LEFT")
 		hpval:Show()
@@ -809,7 +814,7 @@ function UF:UpdatePlateByType()
 
 	UF.UpdateNameplateSize(self)
 	UF.UpdateTargetIndicator(self)
-	--UF.ToggleNameplateAuras(self)
+	UF.ToggleNameplateAuras(self, shouldEnableAura)
 end
 
 function UF:RefreshPlateType(unit)
@@ -840,16 +845,13 @@ function UF:OnUnitFactionChanged(unit)
 	end
 end
 
-function UF:OnUnitSoftTargetChanged(previousTarget, currentTarget)
+function UF:OnUnitSoftTargetChanged() -- needs review
 	if not GetCVarBool("SoftTargetIconGameObject") then return end
 
 	for _, nameplate in pairs(C_NamePlate.GetNamePlates()) do
 		local unitFrame = nameplate and nameplate.unitFrame
-		local guid = unitFrame and unitFrame.unitGUID
-		if guid and (guid == previousTarget or guid == currentTarget) then
-			unitFrame.previousType = nil
-			UF.RefreshPlateType(unitFrame, unitFrame.unit)
-			UF.UpdateTargetChange(unitFrame)
+		if unitFrame then
+			unitFrame.nameText:UpdateTag()
 		end
 	end
 end
@@ -904,6 +906,8 @@ end
 function UF:OnNameplateRemoved()
 	if not self then return end
 	self.npcID = nil
+	self.nameText:SetText("")
+	self.npcTitle:SetText("")
 end
 
 function UF:OnTargetChanged(event, unit)

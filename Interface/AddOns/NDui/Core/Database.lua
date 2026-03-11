@@ -267,10 +267,10 @@ DB.ReminderBuffs = {
 		},
 	},
 	EVOKER = {
-		{	spells = {	-- 魔法之源
-				[369459] = true,
+		{	spells = {	-- 青铜龙的祝福
+				[381748] = true,
 			},
-			depend = 369459,
+			depend = 364342,
 			instance = true,
 		},
 	},

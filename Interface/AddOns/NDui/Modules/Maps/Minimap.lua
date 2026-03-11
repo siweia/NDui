@@ -25,21 +25,14 @@ function module:CreatePulse()
 	anim.fader:SetSmoothing("OUT")
 
 	local function updateMinimapAnim(event)
-		if event == "PLAYER_REGEN_DISABLED" then
-			bg:SetBackdropBorderColor(1, 0, 0)
+		if C_Calendar.GetNumPendingInvites() > 0 or MinimapMailFrame:IsShown() then
+			bg:SetBackdropBorderColor(1, 1, 0)
 			anim:Play()
-		elseif not InCombatLockdown() then
-			if C_Calendar.GetNumPendingInvites() > 0 or MinimapMailFrame:IsShown() then
-				bg:SetBackdropBorderColor(1, 1, 0)
-				anim:Play()
-			else
-				anim:Stop()
-				bg:SetBackdropBorderColor(0, 0, 0)
-			end
+		else
+			anim:Stop()
+			bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end
-	B:RegisterEvent("PLAYER_REGEN_ENABLED", updateMinimapAnim)
-	B:RegisterEvent("PLAYER_REGEN_DISABLED", updateMinimapAnim)
 	B:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateMinimapAnim)
 	B:RegisterEvent("UPDATE_PENDING_MAIL", updateMinimapAnim)
 
