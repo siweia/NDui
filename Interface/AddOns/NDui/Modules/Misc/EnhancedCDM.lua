@@ -4,7 +4,6 @@ local M = B:GetModule("Misc")
 
 -- Centralized BuffIconCooldownViewer
 local activeButtons = {}
-local lastVisible = 0
 
 local function GetButtonSpacing(frame)
 	return frame.iconPadding + frame:GetAdditionalPaddingOffset()
@@ -29,8 +28,6 @@ function M:CDM_RefreshBuffsAnchor()
 		end
 	end
 
-	if numVisible == lastVisible then return end
-	lastVisible = numVisible
 	if numVisible == 0 then return end
 
 	local buttonWidth = activeButtons[1]:GetWidth() or 32
