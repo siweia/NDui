@@ -926,7 +926,7 @@ function UF:PlateVisibility(event)
 		UIFrameFadeIn(self.Power, .3, self.Power:GetAlpha(), 1)
 		UIFrameFadeIn(self.Power.bg, .3, self.Power.bg:GetAlpha(), .7)
 		UIFrameFadeIn(self.ClassPowerBar, .3, self.ClassPowerBar:GetAlpha(), 1)
-		if self.Stagger then
+		if self.Stagger and self:IsElementEnabled("Stagger") then
 			UIFrameFadeIn(self.Stagger, .3, self.Stagger:GetAlpha(), 1)
 		end
 	else
@@ -938,7 +938,7 @@ function UF:PlateVisibility(event)
 		UIFrameFadeOut(self.Power, 2, self.Power:GetAlpha(), alpha)
 		UIFrameFadeOut(self.Power.bg, 2, self.Power.bg:GetAlpha(), alpha)
 		UIFrameFadeOut(self.ClassPowerBar, 2, self.ClassPowerBar:GetAlpha(), alpha)
-		if self.Stagger then
+		if self.Stagger and self:IsElementEnabled("Stagger") then
 			UIFrameFadeOut(self.Stagger, 2, self.Stagger:GetAlpha(), alpha)
 		end
 	end
