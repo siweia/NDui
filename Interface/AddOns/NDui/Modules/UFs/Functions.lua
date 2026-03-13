@@ -928,7 +928,7 @@ function UF.Nameplate_FilterAura(element, unit, data)
 	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then -- only highlight you can dispel
 		return true
 	else
-		return (element.onlyShowPlayer and data.isPlayerAura) or (data.isHarmfulAura and data.isCrowdControlAura)
+		return (element.onlyShowPlayer and data.isPlayerAura and data.isNameplateOnlyAura) or (data.isHarmfulAura and data.isCrowdControlAura)
 	end
 end
 
@@ -966,6 +966,7 @@ function UF:PostProcessAuraData(unit, data, filter)
 	data.isExtDefensiveAura = IsAuraPassed(unit, data, filter, "EXTERNAL_DEFENSIVE") -- defensive buffs by  others
 	data.isPlayerCancelable = IsAuraPassed(unit, data, filter, "CANCELABLE") -- dispel buffs and cancelable buffs
 	data.isPlayerDispellable = IsAuraPassed(unit, data, filter, "RAID_PLAYER_DISPELLABLE") -- dispel debuffs
+	data.isNameplateOnlyAura = IsAuraPassed(unit, data, filter, "INCLUDE_NAME_PLATE_ONLY") -- nameplate only auras
 	return data
 end
 
