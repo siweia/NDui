@@ -138,6 +138,9 @@ C.themes["Blizzard_PlayerChoice"] = function()
 							end
 						end
 					end
+					if widgetFrame.Label then
+						ReskinOptionText(widgetFrame.Label, 1, .8, 0)
+					end
 				end
 			end
 		end
