@@ -698,6 +698,13 @@ TT:RegisterTooltips("NDui", function()
 		if AltoTooltip then
 			TT.ReskinTooltip(AltoTooltip)
 		end
+		-- Angrier world quests
+		if AWQTooltip then
+			TT.ReskinTooltip(AWQTooltip)
+		end
+		if AWQItemTooltip then
+			TT.ReskinTooltip(AWQItemTooltip)
+		end
 	end)
 
 	if C_AddOns.IsAddOnLoaded("BattlePetBreedID") then
