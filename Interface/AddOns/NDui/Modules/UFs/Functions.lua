@@ -775,7 +775,7 @@ function UF:CreateCastBar(self)
 	cb.PostCastInterruptible = UF.UpdateCastBarColor
 	cb.PostCastStop = UF.Castbar_FailedColor
 	cb.PostCastFail = UF.Castbar_FailedColor
-	cb.PostCastInterrupted = UF.Castbar_FailedColor
+	cb.PostCastInterrupted = UF.Castbar_UpdateInterrupted
 	cb.CreatePip = UF.CreatePip
 	cb.PostUpdatePips = UF.PostUpdatePips
 
