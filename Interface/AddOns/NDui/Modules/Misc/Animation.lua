@@ -5,12 +5,46 @@ local M = B:GetModule("Misc")
 local soundID = SOUNDKIT.UI_LEGENDARY_LOOT_TOAST
 local PlaySound = PlaySound
 
+-- Shared animation functions
+local function createTranslation(anim, order, offsetX, offsetY, duration, smoothing, delay)
+    local obj = anim:CreateAnimation("Translation")
+    obj:SetOffset(offsetX, offsetY)
+    obj:SetDuration(duration)
+    obj:SetOrder(order)
+    if smoothing then obj:SetSmoothing(smoothing) end
+    if delay then obj:SetStartDelay(delay) end
+    return obj
+end
+
+local function createAlpha(anim, order, fromAlpha, toAlpha, duration, delay)
+    local obj = anim:CreateAnimation("Alpha")
+    obj:SetFromAlpha(fromAlpha)
+    obj:SetToAlpha(toAlpha)
+    obj:SetDuration(duration)
+    obj:SetOrder(order)
+    if delay then obj:SetStartDelay(delay) end
+    return obj
+end
+
+local function createScale(anim, order, fromX, fromY, toX, toY, duration, smoothing, delay)
+    local obj = anim:CreateAnimation("Scale")
+    obj:SetScaleFrom(fromX, fromY)
+    obj:SetScaleTo(toX, toY)
+    obj:SetDuration(duration)
+    obj:SetOrder(order)
+    obj:SetOrigin("CENTER", 0, 0)
+    if smoothing then obj:SetSmoothing(smoothing) end
+    if delay then obj:SetStartDelay(delay) end
+    return obj
+end
+
+-- Logo Animation
 local needAnimation
 
 function M:Logo_PlayAnimation()
-	if needAnimation then
+	if needAnimation and M.logoFrame then
 		M.logoFrame:Show()
-		B:UnregisterEvent(self, M.Logo_PlayAnimation)
+		B:UnregisterEvent("PLAYER_STARTED_MOVING", M.Logo_PlayAnimation)
 		needAnimation = false
 	end
 end
@@ -21,13 +55,15 @@ function M:Logo_CheckStatus(isInitialLogin)
 		M:Logo_Create()
 		B:RegisterEvent("PLAYER_STARTED_MOVING", M.Logo_PlayAnimation)
 	end
-	B:UnregisterEvent(self, M.Logo_CheckStatus)
+	B:UnregisterEvent("PLAYER_ENTERING_WORLD", M.Logo_CheckStatus)
 end
 
 function M:Logo_Create()
+	if M.logoFrame then return end
+
 	local frame = CreateFrame("Frame", nil, UIParent)
 	frame:SetSize(300, 150)
-	frame:SetPoint("CENTER", UIParent, "BOTTOM", -500, GetScreenHeight()*.618)
+	frame:SetPoint("CENTER", UIParent, "BOTTOM", -500, GetScreenHeight() * .618)
 	frame:SetFrameStrata("HIGH")
 	frame:SetAlpha(0)
 	frame:Hide()
@@ -36,62 +72,23 @@ function M:Logo_Create()
 	tex:SetAllPoints()
 	tex:SetTexture(DB.logoTex)
 
-	local delayTime = 0
-	local timer1 = .5
-	local timer2 = 2
-	local timer3 = .2
-
 	local anim = frame:CreateAnimationGroup()
+	local timer1, timer2, timer3 = 0.5, 2.0, 0.2
 
-	anim.move1 = anim:CreateAnimation("Translation")
-	anim.move1:SetOffset(480, 0)
-	anim.move1:SetDuration(timer1)
-	anim.move1:SetStartDelay(delayTime)
+	-- Order 1: 右移 + 淡入
+	createTranslation(anim, 1, 480, 0, timer1, "IN")
+	local fadeIn = createAlpha(anim, 1, 0, 1, timer1)
+	-- Order 2: 慢速右移
+	createTranslation(anim, 2, 80, 0, timer2)
+	-- Order 3: 轻微左回撤
+	createTranslation(anim, 3, -40, 0, timer3)
+	-- Order 4: 快速右移 + 淡出
+	createTranslation(anim, 4, 480, 0, timer1)
+	createAlpha(anim, 4, 1, 0, timer1)
 
-	anim.fadeIn = anim:CreateAnimation("Alpha")
-	anim.fadeIn:SetFromAlpha(0)
-	anim.fadeIn:SetToAlpha(1)
-	anim.fadeIn:SetDuration(timer1)
-	anim.fadeIn:SetSmoothing("IN")
-	anim.fadeIn:SetStartDelay(delayTime)
-
-	delayTime = delayTime + timer1
-
-	anim.move2 = anim:CreateAnimation("Translation")
-	anim.move2:SetOffset(80, 0)
-	anim.move2:SetDuration(timer2)
-	anim.move2:SetStartDelay(delayTime)
-
-	delayTime = delayTime + timer2
-
-	anim.move3 = anim:CreateAnimation("Translation")
-	anim.move3:SetOffset(-40, 0)
-	anim.move3:SetDuration(timer3)
-	anim.move3:SetStartDelay(delayTime)
-
-	delayTime = delayTime + timer3
-
-	anim.move4 = anim:CreateAnimation("Translation")
-	anim.move4:SetOffset(480, 0)
-	anim.move4:SetDuration(timer1)
-	anim.move4:SetStartDelay(delayTime)
-
-	anim.fadeOut = anim:CreateAnimation("Alpha")
-	anim.fadeOut:SetFromAlpha(1)
-	anim.fadeOut:SetToAlpha(0)
-	anim.fadeOut:SetDuration(timer1)
-	anim.fadeOut:SetSmoothing("OUT")
-	anim.fadeOut:SetStartDelay(delayTime)
-
-	frame:SetScript("OnShow", function()
-		anim:Play()
-	end)
-	anim:SetScript("OnFinished", function()
-		frame:Hide()
-	end)
-	anim.fadeIn:SetScript("OnFinished", function()
-		PlaySound(soundID)
-	end)
+	frame:SetScript("OnShow", function() anim:Play() end)
+	anim:SetScript("OnFinished", function() frame:Hide() end)
+	fadeIn:SetScript("OnFinished", function() PlaySound(soundID) end)
 
 	M.logoFrame = frame
 end
@@ -110,76 +107,54 @@ function M:LoginAnimation()
 end
 M:RegisterMisc("LoginAnimation", M.LoginAnimation)
 
--- 战斗状态提示
+-- Combat Animation
 function M:CombatAnimation()
 	if not C.db["Misc"]["CombatAnimation"] then return end
 
 	local ENTERING_COMBAT = _G.ENTERING_COMBAT
 	local LEAVING_COMBAT = _G.LEAVING_COMBAT
 
-	local cfg = {         -- 预留选项
-		dropDist = -80,   -- 下落距离
-		bounce1 = 30,     -- 第一次回弹高度
-		bounce2 = 12,     -- 第二次回弹高度
-		targetY = 150,    -- 目标中心点 Y 坐标
-		fontSize = 32,
+	local cfg = {
+		slideInDist    = 350,
+		nudgeDist      = -40,
+		slideOutDist   = 480,
+		targetY        = 150,
+		minScale       = .1,
+		maxScale       = 1.5,
+		inDuration     = .3,
+		bounceDuration = .15,
+		holdDuration   = .8,
+		nudgeDuration  = .2,
+		outDuration    = .5,
 	}
-	local initialOffset = cfg.targetY - cfg.dropDist
 
-	local alertFrame = CreateFrame("Frame", "NDui_CombatStateAlertFrame", UIParent)
-	alertFrame:SetSize(1, 1)
-	alertFrame:SetPoint("CENTER", 0, cfg.targetY)
-	alertFrame:Hide()
+	local frame = CreateFrame("Frame", nil, UIParent)
+	frame:SetSize(1, 1)
+	frame:SetPoint("CENTER", -cfg.slideInDist, cfg.targetY)
+	frame:SetAlpha(0)
+	frame:Hide()
 
-	local text = B.CreateFS(alertFrame, cfg.fontSize, "")
+	local text = B.CreateFS(frame, 32, "")
 	text:ClearAllPoints()
 	text:SetPoint("CENTER")
 
-	local anim = alertFrame:CreateAnimationGroup()
-	-- 阶段一：加速下落
-	local drop = anim:CreateAnimation("Translation")
-	drop:SetOffset(0, cfg.dropDist)
-	drop:SetDuration(0.2)
-	drop:SetOrder(1)
-	-- 阶段二：第一次回弹
-	local b1_up = anim:CreateAnimation("Translation")
-	b1_up:SetOffset(0, cfg.bounce1)
-	b1_up:SetDuration(0.12)
-	b1_up:SetOrder(2)
-	-- 阶段三：第一次回落
-	local b1_down = anim:CreateAnimation("Translation")
-	b1_down:SetOffset(0, -cfg.bounce1)
-	b1_down:SetDuration(0.1)
-	b1_down:SetOrder(3)
-	-- 阶段四：第二次回弹
-	local b2_up = anim:CreateAnimation("Translation")
-	b2_up:SetOffset(0, cfg.bounce2)
-	b2_up:SetDuration(0.08)
-	b2_up:SetOrder(4)
-	-- 阶段五：第二次回落归位
-	local b2_down = anim:CreateAnimation("Translation")
-	b2_down:SetOffset(0, -cfg.bounce2)
-	b2_down:SetDuration(0.06)
-	b2_down:SetOrder(5)
-	-- 阶段六：停留后上滑淡出
-	local fadeOut = anim:CreateAnimation("Alpha")
-	fadeOut:SetFromAlpha(1)
-	fadeOut:SetToAlpha(0)
-	fadeOut:SetDuration(0.8)
-	fadeOut:SetStartDelay(0.6)
-	fadeOut:SetOrder(6)
-	local slide = anim:CreateAnimation("Translation")
-	slide:SetOffset(0, 50)
-	slide:SetDuration(0.8)
-	slide:SetStartDelay(0.6)
-	slide:SetOrder(6)
-	-- 动画结束：重置
-	anim:SetScript("OnFinished", function()
-		alertFrame:Hide()
-		alertFrame:SetAlpha(1)
-		alertFrame:ClearAllPoints()
-		alertFrame:SetPoint("CENTER", 0, cfg.targetY)
-	end)
+	local anim = frame:CreateAnimationGroup()
+
+	-- 阶段 1：入场（左滑 + 淡入 + 放大）
+	createTranslation(anim, 1, cfg.slideInDist, 0, cfg.inDuration, "IN")
+	createAlpha(anim, 1, 0, 1, cfg.inDuration)
+	createScale(anim, 1, cfg.minScale, cfg.minScale, cfg.maxScale, cfg.maxScale, cfg.inDuration, "IN")
+	-- 阶段 2：回弹（缩小至正常）
+	createScale(anim, 2, cfg.maxScale, cfg.maxScale, 1.0, 1.0, cfg.bounceDuration, "OUT")
+	-- 阶段 3：蓄力（向左微移，带停留延迟）
+	createTranslation(anim, 3, cfg.nudgeDist, 0, cfg.nudgeDuration, nil, cfg.holdDuration)
+	-- 阶段 4：退场（右滑 + 淡出 + 缩小）
+	local totalMoveOut = -cfg.nudgeDist + cfg.slideOutDist
+	createTranslation(anim, 4, totalMoveOut, 0, cfg.outDuration)
+	createAlpha(anim, 4, 1, 0, cfg.outDuration)
+	createScale(anim, 4, 1.0, 1.0, cfg.minScale, cfg.minScale, cfg.outDuration)
+
+	anim:SetScript("OnFinished", function() frame:Hide() end)
 
 	local function updateCombatState(event)
 		if event == "PLAYER_REGEN_DISABLED" then
@@ -191,10 +166,7 @@ function M:CombatAnimation()
 		end
 
 		anim:Stop()
-		alertFrame:SetAlpha(1)
-		alertFrame:ClearAllPoints()
-		alertFrame:SetPoint("CENTER", 0, initialOffset)
-		alertFrame:Show()
+		frame:Show()
 		anim:Play()
 	end
 	B:RegisterEvent("PLAYER_REGEN_ENABLED", updateCombatState)
