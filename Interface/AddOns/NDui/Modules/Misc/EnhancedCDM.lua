@@ -108,9 +108,28 @@ local function Handle_UtilityCooldownViewer()
 	hooksecurefunc(UtilityCooldownViewer, "RefreshLayout", M.CDM_RefreshGrid)
 end
 
+-- Essential cooldown
+function M:AttachPlayerPlate()
+	local playerPlate = oUF_PlayerPlate
+	if not playerPlate then return end
+
+	playerPlate:ClearAllPoints()
+	if C.db["Misc"]["AttachPlayerPlate"] then
+		playerPlate:SetPoint("BOTTOMLEFT", EssentialCooldownViewer, "TOPLEFT", 2, 1)
+		playerPlate:SetPoint("BOTTOMRIGHT", EssentialCooldownViewer, "TOPRIGHT", -2, 1)
+	else
+		playerPlate:SetPoint("TOPLEFT", playerPlate.mover)
+		local UF = B:GetModule("UnitFrames")
+		if UF then
+			UF:ResizePlayerPlate()
+		end
+	end
+end
+
 local function LoadScript()
 	Handle_BuffIconCooldownViewer()
 	Handle_UtilityCooldownViewer()
+	M:AttachPlayerPlate()
 end
 
 local function JustWait(event, addon)

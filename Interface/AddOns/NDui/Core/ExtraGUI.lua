@@ -2855,7 +2855,9 @@ function G:SetupCooldownViewer(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 	local parent = scroll.child
 	local offset = -10
+	local MISC = B:GetModule("Misc")
 
 	createOptionCheck(parent, offset, L["CentralizedBuffIcon"], "Misc", "CentralBuffView")
 	createOptionCheck(parent, offset-30, L["CentralizedUtility"], "Misc", "CentralUtilView")
+	createOptionCheck(parent, offset-60, L["AttachPlayerPlate"], "Misc", "AttachPlayerPlate", MISC.AttachPlayerPlate)
 end

@@ -579,6 +579,7 @@ G.DefaultSettings = {
 		W3Point = 1,
 		CentralBuffView = false,
 		CentralUtilView = false,
+		AttachPlayerPlate = false,
 		CombatAnimation = true,
 	},
 	Tutorial = {
