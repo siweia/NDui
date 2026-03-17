@@ -202,10 +202,10 @@ function UF:UpdateColor(_, unit)
 			if not isPlayer and isInInstance and C.db["Nameplate"]["MobTypeColoring"] then
 				local pLevel = UnitEffectiveLevel("player")
 				local uLevel = UnitEffectiveLevel(unit)
-				local isBoss = (uLevel == pLevel + 2 or uLevel == -1) or UnitIsBossMob(unit)
-				local isLieutenant = (uLevel == pLevel + 1) or UnitIsLieutenant(unit)
 				local classification = UnitClassification(unit)
 				local isElite = classification == "elite" or classification == "rareelite"
+				local isBoss = (uLevel == pLevel + 2 or uLevel == -1) or UnitIsBossMob(unit)
+				local isLieutenant = UnitIsLieutenant(unit) or (isElite and uLevel == pLevel + 1)
 				local bossColor = C.db["Nameplate"]["BossColor"]
 				local lieutenantColor = C.db["Nameplate"]["LieutenantColor"]
 				local casterColor = C.db["Nameplate"]["CasterColor"]
