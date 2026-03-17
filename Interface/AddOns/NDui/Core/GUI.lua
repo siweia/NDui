@@ -440,6 +440,8 @@ G.DefaultSettings = {
 		PlateRange = 45,
 		AurasPerRow = 6,
 		ShowDispel = true,
+		CCPerRow = 6,
+		NumCC = 10,
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -1323,6 +1325,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Nameplate", "SizeRatio", L["SizeRatio"].."*", true, {.5, 1, .1}, refreshNameplates},
 		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {1, 20, 1}, refreshNameplates},
 		{3, "Nameplate", "AurasPerRow", L["IconsPerRow"].."*", true, {1, 20, 1}, refreshNameplates},
+		{3, "Nameplate", "NumCC", L["NumCC"].."*", false, {1, 20, 1}, refreshNameplates},
+		{3, "Nameplate", "CCPerRow", L["CCPerRow"].."*", true, {1, 20, 1}, refreshNameplates},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", L["ExecuteRatio"].."*", true, {0, 90, 1}, refreseExecuteRatio, L["ExecuteRatioTip"]},

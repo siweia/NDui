@@ -928,7 +928,7 @@ function UF.Nameplate_FilterAura(element, unit, data)
 	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then -- only highlight you can dispel
 		return true
 	else
-		return (element.onlyShowPlayer and data.isPlayerAura and data.isNameplateOnlyAura) or (data.isHarmfulAura and data.isCrowdControlAura)
+		return (data.isPlayerAura and data.isNameplateOnlyAura) and not (data.isHarmfulAura and data.isCrowdControlAura)
 	end
 end
 
@@ -1177,7 +1177,7 @@ function UF:CreateAuras(self)
 		bu.gap = false
 		bu.disableMouse = true
 	--	bu.disableCooldown = true
-		bu.onlyShowPlayer = true
+	--	bu.onlyShowPlayer = true
 		bu.FilterAura = UF.Nameplate_FilterAura
 	end
 
