@@ -636,8 +636,6 @@ end
 function UF:UpdateNameplateAuras()
 	UF.ToggleNameplateAuras(self, true)
 
-	if not C.db["Nameplate"]["PlateAuras"] then return end
-
 	local element = self.Auras
 	if C.db["Nameplate"]["TargetPower"] then
 		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
@@ -651,17 +649,19 @@ function UF:UpdateNameplateAuras()
 	element.showStealableBuffs = true
 	element.alwaysShowStealable = C.db["Nameplate"]["ShowDispel"]
 	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
+	element.sizeRatio = C.db["Nameplate"]["SizeRatio"]
 	UF:UpdateAuraContainer(self, element, element.numTotal)
 	element:ForceUpdate()
 end
 
 function UF:UpdateNameplateDebuffs()
 	local element = self.Debuffs
-	element.numDebuffs = C.db["Nameplate"]["NumCC"]
+	element.numDebuffs = not C.db["Nameplate"]["PlateCC"] and 0 or C.db["Nameplate"]["NumCC"]
 	element.maxCols = C.db["Nameplate"]["CCPerRow"]
-	element.fontSize = C.db["Nameplate"]["FontSize"]
+	element.fontSize = C.db["Nameplate"]["CCFontSize"]
 	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
+	element.sizeRatio = C.db["Nameplate"]["CCSizeRatio"]
 	UF:UpdateAuraContainer(self, element, element.numDebuffs)
 	if element.ForceUpdate then
 		element:ForceUpdate()

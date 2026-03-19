@@ -1008,13 +1008,13 @@ local function createOptionCheck(parent, offset, text, key, value, callback, too
 end
 
 local function sliderValueChanged(self, v)
-	local current = tonumber(format("%.0f", v))
+	local current = B:Round(tonumber(v), 2)
 	self.value:SetText(current)
 	C.db[self.__key][self.__value] = current
 	if self.__update then self.__update() end
 end
 
-local function createOptionSlider(parent, title, minV, maxV, defaultV, yOffset, value, func, key)
+local function createOptionSlider(parent, title, minV, maxV, defaultV, yOffset, value, func, key, step)
 	local slider = B.CreateSlider(parent, title, minV, maxV, 1, 30, yOffset)
 	if not key then key = "UFs" end
 	slider:SetValue(C.db[key][value])
@@ -1023,6 +1023,7 @@ local function createOptionSlider(parent, title, minV, maxV, defaultV, yOffset, 
 	slider.__value = value
 	slider.__update = func
 	slider.__default = defaultV
+	slider:SetValueStep(step or 1)
 	slider:SetScript("OnValueChanged", sliderValueChanged)
 end
 
@@ -2860,4 +2861,39 @@ function G:SetupCooldownViewer(parent)
 	createOptionCheck(parent, offset, L["CentralizedBuffIcon"], "Misc", "CentralBuffView")
 	createOptionCheck(parent, offset-30, L["CentralizedUtility"], "Misc", "CentralUtilView")
 	createOptionCheck(parent, offset-60, L["AttachPlayerPlate"], "Misc", "AttachPlayerPlate", MISC.AttachPlayerPlate)
+end
+
+function G:SetupNameplateAuras(parent)
+	local guiName = "NDuiGUI_NameplateAurasSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["PlateAuras"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+	local UF = B:GetModule("UnitFrames")
+
+	createOptionCheck(parent, offset, L["Dispellable"], "Nameplate", "ShowDispel", UF.RefreshAllPlates)
+	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-65, "FontSize", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-135, "SizeRatio", UF.RefreshAllPlates, "Nameplate", .1)
+	createOptionSlider(parent, L["Max Auras"], 1, 20, 5, offset-205, "maxAuras", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["IconsPerRow"], 1, 20, 6, offset-275, "AurasPerRow", UF.RefreshAllPlates, "Nameplate")
+end
+
+function G:SetupNameplateCC(parent)
+	local guiName = "NDuiGUI_NameplatCCSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["PlateCC"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+	local UF = B:GetModule("UnitFrames")
+
+	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-30, "CCFontSize", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-100, "CCSizeRatio", UF.RefreshAllPlates, "Nameplate", .1)
+	createOptionSlider(parent, L["Max Auras"], 1, 20, 10, offset-170, "NumCC", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["IconsPerRow"], 1, 20, 6, offset-240, "CCPerRow", UF.RefreshAllPlates, "Nameplate")
 end

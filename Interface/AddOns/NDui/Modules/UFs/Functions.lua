@@ -899,7 +899,7 @@ function UF.PostUpdateButton(element, button, unit, data)
 
 	local style = element.__owner.mystyle
 	if style == "nameplate" then
-		button:SetSize(element.size, element.size * C.db["Nameplate"]["SizeRatio"])
+		button:SetSize(element.size, element.size * element.sizeRatio)
 	else
 		button:SetSize(element.size, element.size)
 	end
@@ -1174,6 +1174,7 @@ function UF:CreateAuras(self)
 		bu.fontSize = C.db["Nameplate"]["FontSize"]
 		bu.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 		bu.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
+		bu.sizeRatio = C.db["Nameplate"]["SizeRatio"]
 		bu.gap = false
 		bu.disableMouse = true
 	--	bu.disableCooldown = true

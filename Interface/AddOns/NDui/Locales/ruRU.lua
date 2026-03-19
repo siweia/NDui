@@ -945,5 +945,4 @@ L["LetterMode"] = "Letter Mode" -- need translation
 L["LocaleMode"] = "Locale Mode" -- need translation
 L["CombatAnimation"] = "Combat Animation" -- need translation
 L["AttachPlayerPlate"] = "Attached playerplate" -- need translation
-L["NumCC"] = "Max CC debufs" -- need translation
-L["CCPerRow"] = "CC debuffs per row" -- need translation
+L["PlateCC"] = "Show CC auras" -- need translation
