@@ -992,7 +992,7 @@ function UF.RaidFrame_FilterAura(element, _, data)
 		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show displayable debuff
 			return data.isPlayerDispellable
 		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- mix filters
-			return data.isRaidInCombatAura or data.isPlayerDispellable or data.isImportantAura or isBloodLustDebuff(data)
+			return data.isRaidInCombatAura or data.isPlayerDispellable or data.isImportantAura or (not InCombatLockdown() and isBloodLustDebuff(data))
 		elseif C.db["UFs"][value.."DebuffType"] == 5 then -- show all
 			return true
 		end
