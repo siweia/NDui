@@ -4,6 +4,8 @@ local Bar = B:GetModule("Actionbar")
 
 local keyButton = gsub(KEY_BUTTON4, "%d", "")
 local keyNumpad = gsub(KEY_NUMPAD1, "%d", "")
+local GetProfessionQualityInfo = C_ActionBar.GetProfessionQualityInfo
+local IsItemAction = C_ActionBar.IsItemAction
 
 local replaces = {
 	{"("..keyButton..")", "M"},
@@ -43,14 +45,40 @@ function Bar:UpdateHotKey()
 	self:SetFormattedText("%s", text)
 end
 
-function Bar:UpdateEquipedColor(button)
-	if not button.__bg then return end
-
-	if button.Border:IsShown() then
-		button.__bg:SetBackdropBorderColor(0, .7, .1)
-	else
-		button.__bg:SetBackdropBorderColor(0, 0, 0)
+local function ClearProfessionQuality(self)
+	if self.ProfessionQualityOverlayFrame then
+		self.ProfessionQualityOverlayFrame:Hide()
 	end
+end
+
+local function UpdateProfessionQuality(self)
+	if self._state_type == "custom" then return end
+
+	local action = self._state_action
+	if action and IsItemAction(action) then
+		local qualityInfo = GetProfessionQualityInfo(action)
+		if qualityInfo then
+			if not self.ProfessionQualityOverlayFrame then
+				self.ProfessionQualityOverlayFrame = CreateFrame("Frame", nil, self, "ActionButtonTextureOverlayTemplate")
+				self.ProfessionQualityOverlayFrame:SetPoint("TOPLEFT", 14, -14)
+			end
+			self.ProfessionQualityOverlayFrame:Show()
+			self.ProfessionQualityOverlayFrame.Texture:SetAtlas(qualityInfo.iconInventory, TextureKitConstants.UseAtlasSize)
+			return
+		end
+	end
+	ClearProfessionQuality(self)
+end
+
+function Bar:UpdateEquipedColor(button)
+	if button.__bg then
+		if button.Border:IsShown() then
+			button.__bg:SetBackdropBorderColor(0, .7, .1)
+		else
+			button.__bg:SetBackdropBorderColor(0, 0, 0)
+		end
+	end
+	UpdateProfessionQuality(button)
 end
 
 function Bar:StyleActionButton(button)
