@@ -1,8 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
---[[
-/run HousingItemEarnedAlertFrameSystem:AddAlert({ itemType = Enum.HousingItemToastType.Decor, icon = 7423477, itemName = 'Covered Square Suramar Table' })
-]]
+
 -- Fix Alertframe bg
 local function fixBg(frame)
 	if frame:IsObjectType("AnimationGroup") then
@@ -346,9 +344,11 @@ tinsert(C.defaultThemes, function()
 				frame.bg:SetPoint("TOPLEFT", 8, -13)
 				frame.bg:SetPoint("BOTTOMRIGHT", -8, 10)
 
-				frame.Icon:SetSize(52, 52)
-				local iconBg = B.ReskinIcon(frame.Icon)
-				iconBg:SetBackdropBorderColor(HOUSING_REWARD_TOAST_LABEL_FONT_COLOR:GetRGBA())
+				if frame.Icon then
+					frame.Icon:SetSize(52, 52)
+					local iconBg = B.ReskinIcon(frame.Icon)
+					iconBg:SetBackdropBorderColor(HOUSING_REWARD_TOAST_LABEL_FONT_COLOR:GetRGBA())
+				end
 				frame.Border:Hide()
 				frame.Background:SetTexture("")
 			end
@@ -369,6 +369,8 @@ tinsert(C.defaultThemes, function()
 	AlertTemplateFunc[NewRuneforgePowerAlertSystem] = AlertTemplateFunc[NewPetAlertSystem]
 	AlertTemplateFunc[NewCosmeticAlertFrameSystem] = AlertTemplateFunc[NewPetAlertSystem]
 	AlertTemplateFunc[NewWarbandSceneAlertSystem] = AlertTemplateFunc[NewPetAlertSystem]
+
+	AlertTemplateFunc[InitiativeTaskCompleteAlertFrameSystem] = AlertTemplateFunc[HousingItemEarnedAlertFrameSystem]
 
 	hooksecurefunc(AlertFrame, "AddAlertFrame", function(_, frame)
 		local func = AlertTemplateFunc[frame.queue]
