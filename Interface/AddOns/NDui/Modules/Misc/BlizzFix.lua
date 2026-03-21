@@ -153,3 +153,11 @@ end
 function SetTooltipMoney(frame, money, _, prefixText, suffixText)
 	frame:AddLine((prefixText or "").." "..GetCoinTextureString(money).." "..(suffixText or ""), 1,1,1)
 end
+
+-- fix SetPassThroughButtons
+C_Timer.After(1, function()
+	_G.QuestPinMixin.SetPassThroughButtons = B.Dummy
+	_G.BonusObjectivePinMixin.SetPassThroughButtons = B.Dummy
+	_G.WorldQuestPinMixin.SetPassThroughButtons = B.Dummy
+	_G.FlightPointPinMixin.SetPassThroughButtons = B.Dummy
+end)

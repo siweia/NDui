@@ -138,9 +138,9 @@ function TT:OnTooltipCleared()
 		self.roleFrame:Hide()
 	end
 
-	GameTooltip_ClearMoney(self)
-	GameTooltip_ClearStatusBars(self)
-	GameTooltip_ClearProgressBars(self)
+--	GameTooltip_ClearMoney(self)
+--	GameTooltip_ClearStatusBars(self)
+--	GameTooltip_ClearProgressBars(self)
 
 	if self.bg then B.SetBorderColor(self.bg) end
 end
@@ -324,9 +324,11 @@ function TT:OnTooltipSetUnit()
 	TT.PetInfo_Setup(self, unit)
 
 	-- Ignore note
-	local ignoreNote = unitFullName and NDuiADB["IgnoreNotes"][unitFullName]
-	if ignoreNote then
-		self:AddLine(format(ignoreString, ignoreNote), 1,1,1, 1)
+	if unitFullName and B:NotSecretValue(unitFullName) then
+		local ignoreNote = NDuiADB["IgnoreNotes"][unitFullName]
+		if ignoreNote then
+			self:AddLine(format(ignoreString, ignoreNote), 1,1,1, 1)
+		end
 	end
 end
 
@@ -345,8 +347,9 @@ function TT:RefreshStatusBar()
 		self.text = B.CreateFS(self, 12, "")
 	end
 	local unit = TT.GetUnit(self:GetParent())
-	if unit then
-		self.text:SetText(B.Numb(UnitHealth(unit)))
+	local ok, value = pcall(UnitHealth, unit)
+	if ok and value then
+		self.text:SetText(B.Numb(value))
 	else
 		self.text:SetText("")
 	end
@@ -695,6 +698,13 @@ TT:RegisterTooltips("NDui", function()
 		-- Altoholic
 		if AltoTooltip then
 			TT.ReskinTooltip(AltoTooltip)
+		end
+		-- Angrier world quests
+		if AWQTooltip then
+			TT.ReskinTooltip(AWQTooltip)
+		end
+		if AWQItemTooltip then
+			TT.ReskinTooltip(AWQItemTooltip)
 		end
 	end)
 

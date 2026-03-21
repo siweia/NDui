@@ -4,7 +4,6 @@ local M = B:GetModule("Misc")
 
 -- Centralized BuffIconCooldownViewer
 local activeButtons = {}
-local lastVisible = 0
 
 local function GetButtonSpacing(frame)
 	return frame.iconPadding + frame:GetAdditionalPaddingOffset()
@@ -29,8 +28,6 @@ function M:CDM_RefreshBuffsAnchor()
 		end
 	end
 
-	if numVisible == lastVisible then return end
-	lastVisible = numVisible
 	if numVisible == 0 then return end
 
 	local buttonWidth = activeButtons[1]:GetWidth() or 32
@@ -111,9 +108,28 @@ local function Handle_UtilityCooldownViewer()
 	hooksecurefunc(UtilityCooldownViewer, "RefreshLayout", M.CDM_RefreshGrid)
 end
 
+-- Essential cooldown
+function M:AttachPlayerPlate()
+	local playerPlate = oUF_PlayerPlate
+	if not playerPlate then return end
+
+	playerPlate:ClearAllPoints()
+	if C.db["Misc"]["AttachPlayerPlate"] then
+		playerPlate:SetPoint("BOTTOMLEFT", EssentialCooldownViewer, "TOPLEFT", 2, 1)
+		playerPlate:SetPoint("BOTTOMRIGHT", EssentialCooldownViewer, "TOPRIGHT", -2, 1)
+	else
+		playerPlate:SetPoint("TOPLEFT", playerPlate.mover)
+		local UF = B:GetModule("UnitFrames")
+		if UF then
+			UF:ResizePlayerPlate()
+		end
+	end
+end
+
 local function LoadScript()
 	Handle_BuffIconCooldownViewer()
 	Handle_UtilityCooldownViewer()
+	M:AttachPlayerPlate()
 end
 
 local function JustWait(event, addon)

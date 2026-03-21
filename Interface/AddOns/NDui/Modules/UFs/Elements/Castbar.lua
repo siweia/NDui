@@ -55,7 +55,11 @@ function UF:UpdateCastBarColor(unit)
 	UF.UpdateCastbarGlow(self, unit)
 end
 
-function UF:Castbar_FailedColor(unit, interruptedBy)
+function UF:Castbar_FailedColor(unit)
+	self:SetStatusBarColor(1, .1, 0)
+end
+
+function UF:Castbar_UpdateInterrupted(unit, interruptedBy)
 	self:SetStatusBarColor(1, .1, 0)
 
 	if C.db["Nameplate"]["Interruptor"] and self.spellTarget and interruptedBy ~= nil then

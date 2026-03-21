@@ -944,3 +944,5 @@ L["ChannelAbbr"] = "Kanal Abk."
 L["LetterMode"] = "Buchstabenmodus"
 L["LocaleMode"] = "Gebietsmodus"
 L["CombatAnimation"] = "Combat Animation" -- need translation
+L["AttachPlayerPlate"] = "Attached playerplate" -- need translation
+L["PlateCC"] = "Show CC auras" -- need translation
