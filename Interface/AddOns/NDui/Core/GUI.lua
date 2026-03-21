@@ -446,6 +446,11 @@ G.DefaultSettings = {
 		PlateRange = 45,
 		AurasPerRow = 6,
 		ShowDispel = true,
+		PlateCC = true,
+		CCFontSize = 14,
+		CCSizeRatio = .5,
+		NumCC = 10,
+		CCPerRow = 6,
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -849,6 +854,14 @@ local function setupRaidAuras()
 	G:SetupRaidAuras(guiPage[4])
 end
 
+local function setupNameplateAuras()
+	G:SetupNameplateAuras(guiPage[5])
+end
+
+local function setupNameplateCC()
+	G:SetupNameplateCC(guiPage[5])
+end
+
 local function setupAuraWatch()
 	f:Hide()
 	SlashCmdList["NDUI_AWCONFIG"]()
@@ -1204,11 +1217,11 @@ G.TabList = {
 	L["Bags"],
 	L["Unitframes"],
 	IsNew..L["RaidFrame"],
-	L["Nameplate"],
-	IsNew..L["PlayerPlate"],
+	IsNew..L["Nameplate"],
+	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
-	IsNew..L["ChatFrame"],
+	L["ChatFrame"],
 	L["Maps"],
 	IsNew..L["Skins"],
 	L["Tooltip"],
@@ -1321,14 +1334,10 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "NameType", L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
-		{1, "Nameplate", "PlateAuras", L["PlateAuras"].."*", nil, nil, refreshNameplates},
-		{1, "Nameplate", "ShowDispel", L["Dispellable"].."*", true, nil, refreshNameplates},
+		{1, "Nameplate", "PlateAuras", IsNew..L["PlateAuras"].."*", nil, setupNameplateAuras, refreshNameplates},
+		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"].."*", true, setupNameplateCC, refreshNameplates},
 		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
 		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", true, nil, refreshNameplates, L["DebuffColorTip"]},
-		{3, "Nameplate", "FontSize", L["AuraFontSize"].."*", nil, {10, 30, 1}, refreshNameplates},
-		{3, "Nameplate", "SizeRatio", L["SizeRatio"].."*", true, {.5, 1, .1}, refreshNameplates},
-		{3, "Nameplate", "maxAuras", L["Max Auras"].."*", false, {1, 20, 1}, refreshNameplates},
-		{3, "Nameplate", "AurasPerRow", L["IconsPerRow"].."*", true, {1, 20, 1}, refreshNameplates},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", L["ExecuteRatio"].."*", true, {0, 90, 1}, refreseExecuteRatio, L["ExecuteRatioTip"]},

@@ -131,12 +131,17 @@ function M:CombatAnimation()
 	local frame = CreateFrame("Frame", nil, UIParent)
 	frame:SetSize(1, 1)
 	frame:SetPoint("CENTER", -cfg.slideInDist, cfg.targetY)
-	frame:SetAlpha(0)
 	frame:Hide()
 
 	local text = B.CreateFS(frame, 32, "")
 	text:ClearAllPoints()
 	text:SetPoint("CENTER")
+
+	local bg = frame:CreateTexture(nil, "ARTWORK")
+	bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
+	bg:SetTexCoord(0, .66, 0, .31)
+	bg:SetPoint("BOTTOM", 0, -20)
+	bg:SetSize(150, 30)
 
 	local anim = frame:CreateAnimationGroup()
 
@@ -159,10 +164,12 @@ function M:CombatAnimation()
 	local function updateCombatState(event)
 		if event == "PLAYER_REGEN_DISABLED" then
 			text:SetText(ENTERING_COMBAT)
-			text:SetTextColor(1, 0.1, 0.1)
+			text:SetTextColor(1, .1, .1)
+			bg:SetVertexColor(1, .1, .1, .8)
 		else
 			text:SetText(LEAVING_COMBAT)
-			text:SetTextColor(0.1, 1, 0.1)
+			text:SetTextColor(.1, 1, .1)
+			bg:SetVertexColor(.1, 1, .1, .8)
 		end
 
 		anim:Stop()

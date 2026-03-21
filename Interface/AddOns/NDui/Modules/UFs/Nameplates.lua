@@ -59,7 +59,7 @@ function UF:SetupCVars()
 	SetCVar("NamePlateVerticalScale", 1)
 	SetCVar("NamePlateClassificationScale", 1)
 
-	SetCVar("nameplateShowSelf", 0)
+	--SetCVar("nameplateShowSelf", 0) -- default player plate
 	SetCVar("nameplateResourceOnTarget", 0)
 	UF:UpdatePlateSize()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateSize", UF.UpdatePlateSize)
@@ -627,6 +627,7 @@ function UF:CreatePlates()
 	UF:CreateRaidMark(self)
 	UF:CreatePrediction(self)
 	UF:CreateAuras(self)
+	UF:CreatePlateDebuffs(self)
 	UF:CreatePVPClassify(self)
 	UF:CreateThreatColor(self)
 
@@ -669,8 +670,6 @@ end
 function UF:UpdateNameplateAuras()
 	UF.ToggleNameplateAuras(self, true)
 
-	if not C.db["Nameplate"]["PlateAuras"] then return end
-
 	local element = self.Auras
 	if C.db["Nameplate"]["TargetPower"] then
 		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
@@ -684,9 +683,44 @@ function UF:UpdateNameplateAuras()
 	element.showStealableBuffs = true
 	element.alwaysShowStealable = C.db["Nameplate"]["ShowDispel"]
 	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
+	element.sizeRatio = C.db["Nameplate"]["SizeRatio"]
 	UF:UpdateAuraContainer(self, element, element.numTotal)
 	element:ForceUpdate()
 end
+
+function UF:UpdateNameplateDebuffs()
+	local element = self.Debuffs
+	element.numDebuffs = not C.db["Nameplate"]["PlateCC"] and 0 or C.db["Nameplate"]["NumCC"]
+	element.maxCols = C.db["Nameplate"]["CCPerRow"]
+	element.fontSize = C.db["Nameplate"]["CCFontSize"]
+	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
+	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
+	element.sizeRatio = C.db["Nameplate"]["CCSizeRatio"]
+	UF:UpdateAuraContainer(self, element, element.numDebuffs)
+	if element.ForceUpdate then
+		element:ForceUpdate()
+	end
+end
+
+function UF.Nameplate_FilterDebuff(element, _, data)
+	return data.isHarmfulAura and data.isCrowdControlAura
+end
+
+function UF:CreatePlateDebuffs(self)
+	local element = CreateFrame("Frame", nil, self)
+	element:SetPoint("LEFT", self.Health, "RIGHT", 5, 0)
+	element.initialAnchor = "LEFT"
+	element.disableMouse = true
+	element.spacing = 3
+	self.Debuffs = element
+
+	UF.UpdateNameplateDebuffs(self)
+	element.FilterAura = UF.Nameplate_FilterDebuff
+	element.PostCreateButton = UF.PostCreateButton
+	element.PostUpdateButton = UF.PostUpdateButton
+	element.PostProcessAuraData = UF.PostProcessAuraData
+end
+
 
 UF.PlateNameTags = {
 	[1] = "",
@@ -753,6 +787,7 @@ function UF:RefreshNameplats()
 		UF.UpdateNameplateSize(nameplate)
 		UF.UpdateUnitClassify(nameplate)
 		UF.UpdateNameplateAuras(nameplate)
+		UF.UpdateNameplateDebuffs(nameplate)
 		UF.UpdateTargetIndicator(nameplate)
 		UF.UpdateTargetChange(nameplate)
 	end

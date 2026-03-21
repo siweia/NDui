@@ -899,7 +899,7 @@ function UF.PostUpdateButton(element, button, unit, data)
 
 	local style = element.__owner.mystyle
 	if style == "nameplate" then
-		button:SetSize(element.size, element.size * C.db["Nameplate"]["SizeRatio"])
+		button:SetSize(element.size, element.size * element.sizeRatio)
 	else
 		button:SetSize(element.size, element.size)
 	end
@@ -928,7 +928,7 @@ function UF.Nameplate_FilterAura(element, unit, data)
 	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then -- only highlight you can dispel
 		return true
 	else
-		return (element.onlyShowPlayer and data.isPlayerAura and data.isNameplateOnlyAura) or (data.isHarmfulAura and data.isCrowdControlAura)
+		return (data.isPlayerAura and data.isNameplateOnlyAura) and not (data.isHarmfulAura and data.isCrowdControlAura)
 	end
 end
 
@@ -992,7 +992,7 @@ function UF.RaidFrame_FilterAura(element, _, data)
 		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show displayable debuff
 			return data.isPlayerDispellable
 		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- mix filters
-			return data.isRaidInCombatAura or data.isPlayerDispellable or data.isImportantAura or isBloodLustDebuff(data)
+			return data.isRaidInCombatAura or data.isPlayerDispellable or data.isImportantAura or (not InCombatLockdown() and isBloodLustDebuff(data))
 		elseif C.db["UFs"][value.."DebuffType"] == 5 then -- show all
 			return true
 		end
@@ -1174,10 +1174,11 @@ function UF:CreateAuras(self)
 		bu.fontSize = C.db["Nameplate"]["FontSize"]
 		bu.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 		bu.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
+		bu.sizeRatio = C.db["Nameplate"]["SizeRatio"]
 		bu.gap = false
 		bu.disableMouse = true
 	--	bu.disableCooldown = true
-		bu.onlyShowPlayer = true
+	--	bu.onlyShowPlayer = true
 		bu.FilterAura = UF.Nameplate_FilterAura
 	end
 
