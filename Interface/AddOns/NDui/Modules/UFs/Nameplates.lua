@@ -14,6 +14,15 @@ local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local GetTime = GetTime
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local GetSpellName = C_Spell.GetSpellName
+local UnitEffectiveLevel, UnitClassBase, GetInstanceInfo = UnitEffectiveLevel, UnitClassBase, GetInstanceInfo
+local UnitIsBossMob, UnitIsLieutenant = UnitIsBossMob, UnitIsLieutenant
+
+-- Instance type tracker for mob type coloring
+local isInInstance = false
+local function updateZoneType()
+	local _, zoneType = GetInstanceInfo()
+	isInInstance = (zoneType == "party" or zoneType == "raid")
+end
 
 -- Init
 function UF:UpdatePlateCVars()
@@ -190,7 +199,32 @@ function UF:UpdateColor(_, unit)
 		elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.TrashUnits[npcID] then
 			r, g, b = .6, .6, .6
 		else
-			r, g, b = UnitSelectionColor(unit, true)
+			if not isPlayer and isInInstance and C.db["Nameplate"]["MobTypeColoring"] then
+				local pLevel = UnitEffectiveLevel("player")
+				local uLevel = UnitEffectiveLevel(unit)
+				local classification = UnitClassification(unit)
+				local isElite = classification == "elite" or classification == "rareelite"
+				local isBoss = (uLevel == pLevel + 2 or uLevel == -1) or UnitIsBossMob(unit)
+				local isLieutenant = UnitIsLieutenant(unit) or (isElite and uLevel == pLevel + 1)
+				local bossColor = C.db["Nameplate"]["BossColor"]
+				local lieutenantColor = C.db["Nameplate"]["LieutenantColor"]
+				local casterColor = C.db["Nameplate"]["CasterColor"]
+				local meleeColor = C.db["Nameplate"]["MeleeColor"]
+				local trivialColor = C.db["Nameplate"]["TrivialColor"]
+				if isBoss then
+					r, g, b = bossColor.r, bossColor.g, bossColor.b
+				elseif isLieutenant then
+					r, g, b = lieutenantColor.r, lieutenantColor.g, lieutenantColor.b
+				elseif UnitClassBase(unit) == "PALADIN" then
+					r, g, b = casterColor.r, casterColor.g, casterColor.b
+				elseif isElite then
+					r, g, b = meleeColor.r, meleeColor.g, meleeColor.b
+				else
+					r, g, b = trivialColor.r, trivialColor.g, trivialColor.b
+				end
+			else
+				r, g, b = UnitSelectionColor(unit, true)
+			end
 			if status and (C.db["Nameplate"]["TankMode"] or DB.Role == "Tank") then
 				if status == 3 then
 					if DB.Role ~= "Tank" and revertThreat then
@@ -892,6 +926,8 @@ function UF:OnUnitSoftTargetChanged() -- needs review
 end
 
 function UF:RefreshPlateByEvents()
+	updateZoneType()
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateZoneType)
 	B:RegisterEvent("UNIT_FACTION", UF.OnUnitFactionChanged)
 	B:RegisterEvent("PLAYER_SOFT_INTERACT_CHANGED", UF.OnUnitSoftTargetChanged)
 end
