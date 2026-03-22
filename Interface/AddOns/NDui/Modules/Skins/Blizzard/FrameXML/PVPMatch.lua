@@ -38,7 +38,7 @@ tinsert(C.defaultThemes, function()
 
 	B.StripTextures(tabContainer)
 	for i = 1, 3 do
-		B.ReskinTab(tabContainer.TabGroup["Tab"..i])
+		B.StripTextures(tabContainer.TabGroup["Tab"..i]) -- ReskinTab might taint the score board
 	end
 
 	-- match results
