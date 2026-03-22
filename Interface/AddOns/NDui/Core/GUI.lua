@@ -337,7 +337,7 @@ G.DefaultSettings = {
 		FocusAuraOffset = 10,
 
 		PrivateAuras = true,
-		PrivateSize = 22,
+		PAIconSize = 14,
 		CDAnimation = true,
 		CDText = true,
 	},
