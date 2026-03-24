@@ -2788,7 +2788,7 @@ function G:SetupPrivateAuras(parent)
 
 	createOptionCheck(parent, offset, L["CDAnimation"], "UFs", "CDAnimation", updatePrivateAuras)
 	createOptionCheck(parent, offset-30, L["CDText"], "UFs", "CDText", updatePrivateAuras)
-	createOptionSlider(parent, L["Auras Size"], 10, 50, 22, offset-110, "PrivateSize", updatePrivateAuras, "UFs")
+	createOptionSlider(parent, L["Auras Size"], 10, 50, 22, offset-110, "PAIconSize", updatePrivateAuras, "UFs")
 end
 
 function G:SetupDamageMeters(parent)

@@ -16,7 +16,7 @@ end
 
 function UF:UpdatePrivateAuras(element, force)
 	local db = C.db["UFs"]
-	element.size = db.PrivateSize
+	element.size = db.PAIconSize
 	element.spacing = 3
 	element.borderScale = element.size / 16
 	element.initialAnchor = "BOTTOMLEFT"
