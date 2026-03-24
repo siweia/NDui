@@ -115,9 +115,10 @@ function TT:SetupTooltipID()
 			TT.AddLineForID(self, id, types.spell)
 		end
 		if caster and B:NotSecretValue(caster) then
-			local name = GetUnitName(caster, true)
+			local name, server = UnitName(caster)
+			local fullName = name..(server and "-"..server or "")
 			local hexColor = B.HexRGB(B.UnitColor(caster))
-			self:AddDoubleLine(L["From"]..":", hexColor..name)
+			self:AddDoubleLine(L["From"]..":", hexColor..fullName)
 			self:Show()
 		end
 	end
