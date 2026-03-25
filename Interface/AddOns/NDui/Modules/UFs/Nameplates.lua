@@ -89,18 +89,6 @@ function UF:CreateUnitTable()
 	refreshNameplateUnits("CustomUnits")
 end
 
-UF.PowerUnits = {}
-function UF:CreatePowerUnitTable()
-	refreshNameplateUnits("PowerUnits")
-end
-
-function UF:UpdateUnitPower()
-	local unitName = self.unitName
-	local npcID = self.npcID
-	local shouldShowPower = UF.PowerUnits[unitName] or UF.PowerUnits[npcID]
-	self.powerText:SetShown(shouldShowPower)
-end
-
 -- Off-tank threat color
 local groupRoles, isInGroup = {}
 local function refreshGroupRoles()
@@ -633,10 +621,6 @@ function UF:CreatePlates()
 
 	self.Auras.showStealableBuffs = true
 	self.Auras.alwaysShowStealable = C.db["Nameplate"]["ShowDispel"]
-	self.powerText = B.CreateFS(self, 22)
-	self.powerText:ClearAllPoints()
-	self.powerText:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -4)
-	self:Tag(self.powerText, "[perpp]")
 
 	local title = B.CreateFS(self, C.db["Nameplate"]["NameOnlyTitleSize"])
 	title:ClearAllPoints()

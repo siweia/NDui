@@ -394,8 +394,6 @@ G.DefaultSettings = {
 		ShowCustomUnits = true,
 		CustomColor = {r=0, g=.8, b=.3},
 		CustomUnits = {},
-		ShowPowerUnits = true,
-		PowerUnits = {},
 		VerticalSpacing = 1.1,
 		ShowPlayerPlate = false,
 		PPWidth = 175,
@@ -826,10 +824,6 @@ local function setupNameplateUnitFilter()
 	G:NameplateUnitFilter(guiPage[5])
 end
 
-local function setupNameplatePowerUnits()
-	G:NameplatePowerUnits(guiPage[5])
-end
-
 local function setupNameplateSize()
 	G:SetupNameplateSize(guiPage[5])
 end
@@ -979,10 +973,6 @@ end
 
 local function updateCustomUnitList()
 	B:GetModule("UnitFrames"):CreateUnitTable()
-end
-
-local function updatePowerUnitList()
-	B:GetModule("UnitFrames"):CreatePowerUnitTable()
 end
 
 local function refreshNameplates()
@@ -1361,7 +1351,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", true, setupPlateCastbarGlow, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", nil, nil, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "ShowCustomUnits", HeaderTag..L["ShowCustomUnits"].."*", true, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitsTip"]},
-		--{1, "Nameplate", "ShowPowerUnits", HeaderTag..L["ShowPowerUnits"].."*", true, setupNameplatePowerUnits, updatePowerUnitList, L["PowerUnitsTip"]},
 		{1, "Nameplate", "MobTypeColoring", HeaderTag..L["MobTypeColoring"].."*", nil, setupNameplateMobColors, nil, L["MobTypeColoringTip"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
