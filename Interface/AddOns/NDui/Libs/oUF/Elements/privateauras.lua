@@ -81,11 +81,18 @@ local function SetPosition(element, aura, auraIndex)
 end
 
 local function resetAnchors(element)
-	for _, anchor in next, element.anchors do
-		C_UnitAuras.RemovePrivateAuraAnchor(anchor)
-	end
+	if(element.anchors) then
+		for _, anchor in next, element.anchors do
+			C_UnitAuras.RemovePrivateAuraAnchor(anchor)
+		end
 
-	table.wipe(element.anchors)
+		table.wipe(element.anchors)
+	end
+end
+
+local function resetAnchorsAfterCombat(self)
+	resetAnchors(self.PrivateAuras)
+	self:UnregisterEvent('PLAYER_REGEN_ENABLED', resetAnchorsAfterCombat)
 end
 
 local function Update(self)
@@ -161,8 +168,14 @@ local function Path(self, ...)
 
 	* self - the PrivateAuras element
 	--]]
-	do
-		(self.PrivateAuras.Override or Update) (self, ...)
+	if(InCombatLockdown()) then
+		self:RegisterEvent('PLAYER_REGEN_ENABLED', Path, true)
+	else
+		self:UnregisterEvent('PLAYER_REGEN_ENABLED', Path)
+
+		do
+			(self.PrivateAuras.Override or Update) (self, ...)
+		end
 	end
 end
 
@@ -173,17 +186,15 @@ end
 local function Disable(self)
 	local element = self.PrivateAuras
 	if(element and element.anchors) then
-		resetAnchors(element)
+		if(InCombatLockdown()) then
+			self:RegisterEvent('PLAYER_REGEN_ENABLED', resetAnchorsAfterCombat, true)
+		else
+			resetAnchors(element)
+		end
 	end
 end
 
 local function Enable(self, unit)
-	if(self.unit ~= 'player' and not self.unit:match('raid%d?$') and not self.unit:match('party%d?$')) then
-		Disable(self)
-
-		return false
-	end
-
 	local element = self.PrivateAuras
 	if(element) then
 		element.__owner = self
