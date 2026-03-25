@@ -361,7 +361,7 @@ function A:AuraWatch_SetupCD(index, name, icon, start, duration, _, type, id, ch
 	if frame.Spellname then frame.Spellname:SetText(name) end
 	if frame.Statusbar then
 		if durationObj and frame.Statusbar.SetTimerDuration then
-			frame.Statusbar:SetTimerDuration(durationObj)
+			frame.Statusbar:SetTimerDuration(durationObj, nil, 1)
 			frame:SetScript("OnUpdate", nil)
 		else
 			frame.duration = duration

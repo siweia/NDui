@@ -1211,7 +1211,7 @@ function UF:UpdateGCDTicker()
 		if C_Spell.GetSpellCooldownDuration and self.SetTimerDuration then
 			local gcdDuration = C_Spell.GetSpellCooldownDuration(61304)
 			if gcdDuration then
-				self:SetTimerDuration(gcdDuration, nil, 1)
+				self:SetTimerDuration(gcdDuration)
 				self.spark:Show()
 				return
 			end
