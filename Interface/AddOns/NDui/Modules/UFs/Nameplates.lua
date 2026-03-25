@@ -919,7 +919,6 @@ end
 local function onTargetChanged(self, event, unit)
 	if not self then return end
 
-	UF.UpdateUnitPower(self)
 	UF.UpdateTargetChange(self)
 	UF.UpdateQuestUnit(self, event, unit)
 	UF.UpdateUnitClassify(self, unit)
