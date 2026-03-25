@@ -52,11 +52,18 @@ function A:TotemBar_Update()
 	for button in _G.TotemFrame.totemPool:EnumerateActive() do
 		activeTotems = activeTotems + 1
 
-		local _, _, start, dur, icon = GetTotemInfo(button.slot)
+		local haveTotem, _, start, dur, icon = GetTotemInfo(button.slot)
 		local totem = totems[activeTotems]
-		if start then
+		if haveTotem and start then
 			totem.Icon:SetTexture(icon)
-			totem.CD:SetCooldown(start, dur)
+			if GetTotemDuration and totem.CD.SetCooldownFromDurationObject then
+				local durationObj = GetTotemDuration(button.slot)
+				if durationObj then
+					totem.CD:SetCooldownFromDurationObject(durationObj)
+				end
+			else
+				totem.CD:SetCooldown(start, dur)
+			end
 			totem.CD:Show()
 			totem:SetAlpha(1)
 		else

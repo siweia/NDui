@@ -184,12 +184,9 @@ function UF:Avada_UpdateCD(button, spellID)
 	local chargeInfo = C_Spell.GetSpellCharges(spellID)
 	local charges = chargeInfo and chargeInfo.currentCharges
 	local maxCharges = chargeInfo and chargeInfo.maxCharges
-	local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
-	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
 
 	local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
-	local start = cooldownInfo and cooldownInfo.startTime
-	local duration = cooldownInfo and cooldownInfo.duration
+	local cdIsActive = cooldownInfo and cooldownInfo.isActive
 
 	if charges and maxCharges > 1 then
 		button.Count:SetText(charges)
@@ -197,12 +194,24 @@ function UF:Avada_UpdateCD(button, spellID)
 		button.Count:SetText("")
 	end
 	if charges and charges > 0 and charges < maxCharges then
-		button.CD:SetCooldown(chargeStart, chargeDuration)
+		if button.CD.SetCooldownFromDurationObject and chargeInfo then
+			button.CD:SetCooldownFromDurationObject({
+				startTime = chargeInfo.cooldownStartTime,
+				duration = chargeInfo.cooldownDuration,
+				modRate = chargeInfo.chargeModRate,
+			})
+		elseif chargeInfo then
+			button.CD:SetCooldown(chargeInfo.cooldownStartTime, chargeInfo.cooldownDuration)
+		end
 		button.CD:Show()
 		button.Icon:SetDesaturated(false)
 		button.Count:SetTextColor(0, 1, 0)
-	elseif start and duration > 1.5 then
-		button.CD:SetCooldown(start, duration)
+	elseif cdIsActive and not cooldownInfo.isOnGCD then
+		if button.CD.SetCooldownFromDurationObject then
+			button.CD:SetCooldownFromDurationObject(cooldownInfo)
+		else
+			button.CD:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
+		end
 		button.CD:Show()
 		button.Icon:SetDesaturated(true)
 		button.Count:SetTextColor(1, 1, 1)
@@ -223,8 +232,12 @@ function UF:Avada_UpdateItem(button, itemID)
 	end
 
 	local start, duration = C_Item.GetItemCooldown(itemID)
-	if start and duration > 3 then
-		button.CD:SetCooldown(start, duration)
+	if start and duration and duration > 3 then
+		if button.CD.SetCooldownFromDurationObject then
+			button.CD:SetCooldownFromDurationObject({startTime = start, duration = duration, modRate = 1})
+		else
+			button.CD:SetCooldown(start, duration)
+		end
 		button.CD:Show()
 		button.Icon:SetDesaturated(true)
 	else

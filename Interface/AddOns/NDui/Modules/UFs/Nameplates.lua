@@ -1205,17 +1205,27 @@ end
 
 function UF:UpdateGCDTicker()
 	local cooldownInfo = C_Spell.GetSpellCooldown(61304)
-	local start = cooldownInfo and cooldownInfo.startTime
-	local duration = cooldownInfo and cooldownInfo.duration
+	local isActive = cooldownInfo and cooldownInfo.isActive
 
-	if start > 0 and duration > 0 then
-		if self.duration ~= duration then
-			self:SetMinMaxValues(0, duration)
-			self.duration = duration
+	if isActive then
+		if not self.gcdStart then
+			self.gcdStart = GetTime()
+			self.gcdDuration = max(1.5 / (1 + (GetHaste() or 0) / 100), 0.75)
 		end
-		self:SetValue(GetTime() - start)
-		self.spark:Show()
+		local elapsed = GetTime() - self.gcdStart
+		if elapsed < self.gcdDuration then
+			if self.duration ~= self.gcdDuration then
+				self:SetMinMaxValues(0, self.gcdDuration)
+				self.duration = self.gcdDuration
+			end
+			self:SetValue(elapsed)
+			self.spark:Show()
+		else
+			self.gcdStart = nil
+			self.spark:Hide()
+		end
 	else
+		self.gcdStart = nil
 		self.spark:Hide()
 	end
 end

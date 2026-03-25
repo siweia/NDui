@@ -195,8 +195,12 @@ local onAttributeChanged = [[
 function ExtraQuestButton:BAG_UPDATE_COOLDOWN()
 	if self:IsShown() and self.itemID then
 		local start, duration = C_Item.GetItemCooldown(self.itemID)
-		if duration > 0 then
-			self.Cooldown:SetCooldown(start, duration)
+		if duration and duration > 0 then
+			if self.Cooldown.SetCooldownFromDurationObject then
+				self.Cooldown:SetCooldownFromDurationObject({startTime = start, duration = duration, modRate = 1})
+			else
+				self.Cooldown:SetCooldown(start, duration)
+			end
 			self.Cooldown:Show()
 		else
 			self.Cooldown:Hide()

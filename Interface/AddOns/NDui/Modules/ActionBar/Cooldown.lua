@@ -142,7 +142,8 @@ function module:StartTimer(start, duration, modRate)
 
 	-- hide cooldown flash if barFader enabled
 	if parent and parent.__faderParent then
-		if self:GetEffectiveAlpha() > 0 then
+		local effectiveAlpha = self:GetEffectiveAlpha()
+		if effectiveAlpha and effectiveAlpha > 0 then
 			self:Show()
 		else
 			self:Hide()
@@ -178,10 +179,21 @@ end
 
 function module:CooldownUpdate()
 	local button = self:GetParent()
-	local start, duration, _, modRate = GetActionCooldown(button.action)
-
-	if shouldUpdateTimer(self, start) then
-		module.StartTimer(self, start, duration, modRate)
+	local cooldownInfo = C_ActionBar and C_ActionBar.GetActionCooldown and C_ActionBar.GetActionCooldown(button.action)
+	if cooldownInfo then
+		local start = cooldownInfo.startTime
+		local duration = cooldownInfo.duration
+		local modRate = cooldownInfo.modRate
+		if cooldownInfo.isActive and shouldUpdateTimer(self, start) then
+			module.StartTimer(self, start, duration, modRate)
+		elseif not cooldownInfo.isActive and self.timer then
+			module.StopTimer(self.timer)
+		end
+	else
+		local start, duration, _, modRate = GetActionCooldown(button.action)
+		if shouldUpdateTimer(self, start) then
+			module.StartTimer(self, start, duration, modRate)
+		end
 	end
 end
 

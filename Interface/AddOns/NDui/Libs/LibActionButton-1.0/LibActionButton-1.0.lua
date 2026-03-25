@@ -1965,7 +1965,8 @@ function UpdateUsable(self)
 
 	if WoWRetail and self._state_type == "action" then
 		local isLevelLinkLocked = C_LevelLink.IsActionLocked(self._state_action)
-		if not self.icon:IsDesaturated() then
+		local isDesaturated = self.icon:IsDesaturated()
+		if isDesaturated == false then
 			self.icon:SetDesaturated(isLevelLinkLocked)
 		end
 
@@ -2019,14 +2020,21 @@ local function CreateChargeCooldownFrame(parent)
 end
 
 local function StartChargeCooldown(parent, chargeStart, chargeDuration, chargeModRate)
-	if chargeStart == 0 then
-		ClearChargeCooldown(parent)
-		return
-	end
-
 	parent.chargeCooldown = parent.chargeCooldown or CreateChargeCooldownFrame(parent)
 
-	CooldownFrame_Set(parent.chargeCooldown, chargeStart, chargeDuration, true, true, chargeModRate)
+	if parent.chargeCooldown.SetCooldownFromDurationObject then
+		parent.chargeCooldown:SetCooldownFromDurationObject({
+			startTime = chargeStart,
+			duration = chargeDuration,
+			modRate = chargeModRate,
+		})
+	else
+		if chargeStart == 0 then
+			ClearChargeCooldown(parent)
+			return
+		end
+		CooldownFrame_Set(parent.chargeCooldown, chargeStart, chargeDuration, true, true, chargeModRate)
+	end
 
 	-- update charge cooldown skin when masque is used
 	if Masque and Masque.UpdateCharge then
@@ -2090,10 +2098,15 @@ function UpdateCooldown(self)
 		cooldownInfo = self:GetCooldownInfo() or defaultCooldownInfo
 		chargeInfo = self:GetChargeInfo() or defaultChargeInfo
 
-		local locStart, locDuration = self:GetLossOfControlCooldown()
-		lossOfControlInfo.startTime = locStart
-		lossOfControlInfo.duration = locDuration
-		lossOfControlInfo.modRate = cooldownInfo.modRate
+		if self.GetLossOfControlCooldownInfo then
+			lossOfControlInfo = self:GetLossOfControlCooldownInfo() or defaultLossOfControlInfo
+			lossOfControlInfo.modRate = lossOfControlInfo.modRate or cooldownInfo.modRate
+		else
+			local locStart, locDuration = self:GetLossOfControlCooldown()
+			lossOfControlInfo.startTime = locStart
+			lossOfControlInfo.duration = locDuration
+			lossOfControlInfo.modRate = cooldownInfo.modRate
+		end
 	end
 
 	if not self.config.lossOfControlCooldown or not lossOfControlInfo or not lossOfControlInfo.startTime or not lossOfControlInfo.duration then
@@ -2108,10 +2121,47 @@ function UpdateCooldown(self)
 		chargeInfo = defaultChargeInfo
 	end
 
-	self.cooldown:SetDrawBling(self.cooldown:GetEffectiveAlpha() > 0.5)
+	local effectiveAlpha = self.cooldown:GetEffectiveAlpha()
+	self.cooldown:SetDrawBling(effectiveAlpha ~= nil and effectiveAlpha > 0.5)
 
-	-- 12.0 helper function
-	if ActionButton_ApplyCooldown then
+	-- 12.0.1+ API: use SetCooldownFromDurationObject to handle secret values
+	if self.cooldown.SetCooldownFromDurationObject then
+		local locIsActive = lossOfControlInfo.isActive or false
+		local cdIsActive = cooldownInfo.isActive or false
+		local locShouldReplace = lossOfControlInfo.shouldReplaceNormalCooldown
+
+		if locIsActive and (locShouldReplace or not cdIsActive) then
+			if self.cooldown.currentCooldownType ~= COOLDOWN_TYPE_LOSS_OF_CONTROL then
+				self.cooldown:SetEdgeTexture("Interface\\Cooldown\\edge-LoC")
+				self.cooldown:SetSwipeColor(0.17, 0, 0)
+				self.cooldown.currentCooldownType = COOLDOWN_TYPE_LOSS_OF_CONTROL
+				UpdateCooldownNumberHidden(self)
+			end
+
+			self.cooldown:SetCooldownFromDurationObject(lossOfControlInfo)
+			self.cooldown:SetScript("OnCooldownDone", OnCooldownDone, false)
+			ClearChargeCooldown(self)
+		else
+			if self.cooldown.currentCooldownType ~= COOLDOWN_TYPE_NORMAL then
+				self.cooldown:SetEdgeTexture("Interface\\Cooldown\\edge")
+				self.cooldown:SetSwipeColor(0, 0, 0)
+				self.cooldown.currentCooldownType = COOLDOWN_TYPE_NORMAL
+				UpdateCooldownNumberHidden(self)
+			end
+
+			self.cooldown:SetScript("OnCooldownDone", OnCooldownDone, locIsActive)
+
+			local charges = chargeInfo.currentCharges
+			local maxCharges = chargeInfo.maxCharges
+			if charges and maxCharges and maxCharges > 1 and charges < maxCharges then
+				StartChargeCooldown(self, chargeInfo.cooldownStartTime, chargeInfo.cooldownDuration, chargeInfo.chargeModRate)
+			else
+				ClearChargeCooldown(self)
+			end
+			self.cooldown:SetCooldownFromDurationObject(cooldownInfo)
+		end
+	elseif ActionButton_ApplyCooldown then
+		-- pre-12.0.1 secure helper
 		ActionButton_ApplyCooldown(self.cooldown, cooldownInfo, self.chargeCooldown, chargeInfo, self.lossOfControlCooldown, lossOfControlInfo)
 	else
 		local locStart, locDuration = lossOfControlInfo.startTime, lossOfControlInfo.duration
@@ -2679,6 +2729,11 @@ Action.GetCount                 = function(self) return GetActionCount(self._sta
 Action.GetChargeInfo            = function(self) return GetActionChargeInfo(self._state_action) end
 Action.GetCooldownInfo          = function(self) return GetActionCooldownInfo(self._state_action) end
 Action.GetLossOfControlCooldown = function(self) return GetActionLossOfControlCooldown(self._state_action) end
+Action.GetLossOfControlCooldownInfo = function(self)
+	if C_ActionBar and C_ActionBar.GetActionLossOfControlCooldownInfo then
+		return C_ActionBar.GetActionLossOfControlCooldownInfo(self._state_action)
+	end
+end
 Action.IsAttack                 = function(self) return IsAttackAction(self._state_action) end
 Action.IsEquipped               = function(self) return IsEquippedAction(self._state_action) end
 Action.IsCurrentlyActive        = function(self) return IsCurrentAction(self._state_action) end
@@ -2757,6 +2812,8 @@ end
 if not WoWRetail then
 	-- disable loss of control cooldown on classic
 	Action.GetLossOfControlCooldown = function(self) return 0,0 end
+	Action.GetLossOfControlCooldownInfo = function(self) return defaultLossOfControlInfo end
+	Spell.GetLossOfControlCooldownInfo = function(self) return defaultLossOfControlInfo end
 end
 
 local GetSpellTexture = C_Spell and C_Spell.GetSpellTexture or GetSpellTexture
@@ -2768,6 +2825,7 @@ local IsSpellUsable = C_Spell and C_Spell.IsSpellUsable or IsUsableSpell
 local IsConsumableSpell = C_Spell and C_Spell.IsConsumableSpell or IsConsumableSpell
 local IsSpellInRange = C_Spell and C_Spell.IsSpellInRange or IsSpellInRange
 local GetSpellLossOfControlCooldown = C_Spell and C_Spell.GetSpellLossOfControlCooldown or GetSpellLossOfControlCooldown
+local GetSpellLossOfControlCooldownInfo = C_Spell and C_Spell.GetSpellLossOfControlCooldownInfo
 
 local BOOKTYPE_SPELL = Enum.SpellBookSpellBank and Enum.SpellBookSpellBank.Player or "spell"
 -----------------------------------------------------------
@@ -2779,6 +2837,11 @@ Spell.GetCount                 = function(self) return GetSpellCastCount(self._s
 Spell.GetChargeInfo            = function(self) return C_Spell.GetSpellCharges(self._state_action) end
 Spell.GetCooldownInfo          = function(self) return C_Spell.GetSpellCooldown(self._state_action) end
 Spell.GetLossOfControlCooldown = function(self) return GetSpellLossOfControlCooldown(self._state_action) end
+Spell.GetLossOfControlCooldownInfo = function(self)
+	if GetSpellLossOfControlCooldownInfo then
+		return GetSpellLossOfControlCooldownInfo(self._state_action)
+	end
+end
 Spell.IsAttack                 = function(self) local slot = FindSpellBookSlotBySpellID(self._state_action) return slot and IsAttackSpell(slot, BOOKTYPE_SPELL) or nil end
 Spell.IsEquipped               = function(self) return nil end
 Spell.IsCurrentlyActive        = function(self) return IsCurrentSpell(self._state_action) end

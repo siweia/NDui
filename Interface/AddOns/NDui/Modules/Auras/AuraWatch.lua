@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local A = B:GetModule("Auras")
 
@@ -343,14 +343,18 @@ function A:AuraWatch_UpdateTimer()
 end
 
 -- Update cooldown
-function A:AuraWatch_SetupCD(index, name, icon, start, duration, _, type, id, charges)
+function A:AuraWatch_SetupCD(index, name, icon, start, duration, _, type, id, charges, durationObject)
 	local frames = FrameList[index]
 	local frame = frames[frames.Index]
 	if frame then frame:Show() end
 	if frame.Icon then frame.Icon:SetTexture(icon) end
 	if frame.Cooldown then
 		frame.Cooldown:SetReverse(false)
-		frame.Cooldown:SetCooldown(start, duration)
+		if durationObject and frame.Cooldown.SetCooldownFromDurationObject then
+			frame.Cooldown:SetCooldownFromDurationObject(durationObject)
+		else
+			frame.Cooldown:SetCooldown(start, duration)
+		end
 		frame.Cooldown:Show()
 	end
 	if frame.Count then frame.Count:SetText(charges) end
@@ -382,20 +386,22 @@ function A:AuraWatch_UpdateCD()
 					local name, icon = GetSpellName(value.SpellID), GetSpellTexture(value.SpellID)
 
 					local cooldownInfo = C_Spell.GetSpellCooldown(value.SpellID)
-					local start = cooldownInfo and cooldownInfo.startTime
-					local duration = cooldownInfo and cooldownInfo.duration
+					local cdIsActive = cooldownInfo and cooldownInfo.isActive
 
 					local chargeInfo = C_Spell.GetSpellCharges(spellID)
 					local charges = chargeInfo and chargeInfo.currentCharges
 					local maxCharges = chargeInfo and chargeInfo.maxCharges
-					local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
-					local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
 
 					if group.Mode == "ICON" then name = nil end
 					if charges and maxCharges and maxCharges > 1 and charges < maxCharges then
-						A:AuraWatch_SetupCD(KEY, name, icon, chargeStart, chargeDuration, true, 1, value.SpellID, charges)
-					elseif start and duration > C.db["AuraWatch"]["MinCD"] then
-						A:AuraWatch_SetupCD(KEY, name, icon, start, duration, true, 1, value.SpellID)
+						local chargeDurObj = chargeInfo and {
+							startTime = chargeInfo.cooldownStartTime,
+							duration = chargeInfo.cooldownDuration,
+							modRate = chargeInfo.chargeModRate,
+						}
+						A:AuraWatch_SetupCD(KEY, name, icon, chargeInfo.cooldownStartTime, chargeInfo.cooldownDuration, true, 1, value.SpellID, charges, chargeDurObj)
+					elseif cdIsActive and not cooldownInfo.isOnGCD then
+						A:AuraWatch_SetupCD(KEY, name, icon, cooldownInfo.startTime, cooldownInfo.duration, true, 1, value.SpellID, nil, cooldownInfo)
 					end
 				elseif value.ItemID then
 					local start, duration = C_Item.GetItemCooldown(value.ItemID)
