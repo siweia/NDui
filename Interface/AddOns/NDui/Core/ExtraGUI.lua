@@ -2897,3 +2897,20 @@ function G:SetupNameplateCC(parent)
 	createOptionSlider(parent, L["Max Auras"], 1, 20, 10, offset-170, "NumCC", UF.RefreshAllPlates, "Nameplate")
 	createOptionSlider(parent, L["IconsPerRow"], 1, 20, 6, offset-240, "CCPerRow", UF.RefreshAllPlates, "Nameplate")
 end
+
+function G:SetupNameplateMobColors(parent)
+	local guiName = "NDuiGUI_MobColorsSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["MobTypeColoring"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+
+	createOptionSwatch(scroll.child, L["BossColor"], "Nameplate", "BossColor", 10, offset)
+	createOptionSwatch(scroll.child, L["LieutenantColor"], "Nameplate", "LieutenantColor", 10, offset-30)
+	createOptionSwatch(scroll.child, L["CasterColor"], "Nameplate", "CasterColor", 10, offset-60)
+	createOptionSwatch(scroll.child, L["MeleeColor"], "Nameplate", "MeleeColor", 10, offset-90)
+	createOptionSwatch(scroll.child, L["TrivialColor"], "Nameplate", "TrivialColor", 10, offset-120)
+end

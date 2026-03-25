@@ -842,6 +842,10 @@ local function setupPlateCastbarGlow()
 	G:PlateCastbarGlow(guiPage[5])
 end
 
+local function setupNameplateMobColors()
+	G:SetupNameplateMobColors(guiPage[5])
+end
+
 local function setupBuffFrame()
 	G:SetupBuffFrame(guiPage[7])
 end
@@ -1353,17 +1357,12 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ColoredFocus", HeaderTag..L["ColoredFocus"].."*", true, nil, nil, L["ColoredFocusTip"]},
 		{5, "Nameplate", "TargetColor", L["TargetNP Color"].."*"},
 		{5, "Nameplate", "FocusColor", L["FocusNP Color"].."*", 2},
-		{1, "Nameplate", "MobTypeColoring", HeaderTag..L["MobTypeColoring"], nil, nil, nil, L["MobTypeColoringTip"]},
-		{5, "Nameplate", "BossColor", L["BossColor"]},
-		{5, "Nameplate", "LieutenantColor", L["LieutenantColor"], 1},
-		{5, "Nameplate", "CasterColor", L["CasterColor"], 2},
-		{5, "Nameplate", "MeleeColor", L["MeleeColor"]},
-		{5, "Nameplate", "TrivialColor", L["TrivialColor"], 1},
 		--{1, "Nameplate", "ColorByDot", HeaderTag..L["ColorByDot"].."*", nil, setupNameplateColorDots, nil, L["ColorByDotTip"]},
 		--{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", true, setupPlateCastbarGlow, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", nil, nil, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "ShowCustomUnits", HeaderTag..L["ShowCustomUnits"].."*", true, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitsTip"]},
 		--{1, "Nameplate", "ShowPowerUnits", HeaderTag..L["ShowPowerUnits"].."*", true, setupNameplatePowerUnits, updatePowerUnitList, L["PowerUnitsTip"]},
+		{1, "Nameplate", "MobTypeColoring", HeaderTag..L["MobTypeColoring"].."*", nil, setupNameplateMobColors, nil, L["MobTypeColoringTip"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
 		{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true, nil, nil, L["RevertThreatTip"]},
