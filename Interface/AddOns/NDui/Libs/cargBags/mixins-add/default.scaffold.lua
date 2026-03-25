@@ -79,11 +79,7 @@ end
 ]]
 local function ItemButton_UpdateCooldown(self, item)
 	if(item.cdEnable == 1 and item.cdStart and item.cdStart > 0) then
-		if self.Cooldown.SetCooldownFromDurationObject then
-			self.Cooldown:SetCooldownFromDurationObject({startTime = item.cdStart, duration = item.cdFinish, modRate = 1})
-		else
-			self.Cooldown:SetCooldown(item.cdStart, item.cdFinish)
-		end
+		self.Cooldown:SetCooldown(item.cdStart, item.cdFinish)
 		self.Cooldown:Show()
 	else
 		self.Cooldown:Hide()

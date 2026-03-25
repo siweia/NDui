@@ -194,12 +194,11 @@ function UF:Avada_UpdateCD(button, spellID)
 		button.Count:SetText("")
 	end
 	if charges and charges > 0 and charges < maxCharges then
-		if button.CD.SetCooldownFromDurationObject and chargeInfo then
-			button.CD:SetCooldownFromDurationObject({
-				startTime = chargeInfo.cooldownStartTime,
-				duration = chargeInfo.cooldownDuration,
-				modRate = chargeInfo.chargeModRate,
-			})
+		if button.CD.SetCooldownFromDurationObject and C_Spell.GetSpellChargeDuration then
+			local chargeDuration = C_Spell.GetSpellChargeDuration(spellID)
+			if chargeDuration then
+				button.CD:SetCooldownFromDurationObject(chargeDuration)
+			end
 		elseif chargeInfo then
 			button.CD:SetCooldown(chargeInfo.cooldownStartTime, chargeInfo.cooldownDuration)
 		end
@@ -207,8 +206,11 @@ function UF:Avada_UpdateCD(button, spellID)
 		button.Icon:SetDesaturated(false)
 		button.Count:SetTextColor(0, 1, 0)
 	elseif cdIsActive and not cooldownInfo.isOnGCD then
-		if button.CD.SetCooldownFromDurationObject then
-			button.CD:SetCooldownFromDurationObject(cooldownInfo)
+		if button.CD.SetCooldownFromDurationObject and C_Spell.GetSpellCooldownDuration then
+			local cdDuration = C_Spell.GetSpellCooldownDuration(spellID)
+			if cdDuration then
+				button.CD:SetCooldownFromDurationObject(cdDuration)
+			end
 		else
 			button.CD:SetCooldown(cooldownInfo.startTime, cooldownInfo.duration)
 		end
@@ -233,11 +235,7 @@ function UF:Avada_UpdateItem(button, itemID)
 
 	local start, duration = C_Item.GetItemCooldown(itemID)
 	if start and duration and duration > 3 then
-		if button.CD.SetCooldownFromDurationObject then
-			button.CD:SetCooldownFromDurationObject({startTime = start, duration = duration, modRate = 1})
-		else
-			button.CD:SetCooldown(start, duration)
-		end
+		button.CD:SetCooldown(start, duration)
 		button.CD:Show()
 		button.Icon:SetDesaturated(true)
 	else

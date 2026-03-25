@@ -343,15 +343,15 @@ function A:AuraWatch_UpdateTimer()
 end
 
 -- Update cooldown
-function A:AuraWatch_SetupCD(index, name, icon, start, duration, _, type, id, charges, durationObject)
+function A:AuraWatch_SetupCD(index, name, icon, start, duration, _, type, id, charges, durationObj)
 	local frames = FrameList[index]
 	local frame = frames[frames.Index]
 	if frame then frame:Show() end
 	if frame.Icon then frame.Icon:SetTexture(icon) end
 	if frame.Cooldown then
 		frame.Cooldown:SetReverse(false)
-		if durationObject and frame.Cooldown.SetCooldownFromDurationObject then
-			frame.Cooldown:SetCooldownFromDurationObject(durationObject)
+		if durationObj and frame.Cooldown.SetCooldownFromDurationObject then
+			frame.Cooldown:SetCooldownFromDurationObject(durationObj)
 		else
 			frame.Cooldown:SetCooldown(start, duration)
 		end
@@ -360,11 +360,16 @@ function A:AuraWatch_SetupCD(index, name, icon, start, duration, _, type, id, ch
 	if frame.Count then frame.Count:SetText(charges) end
 	if frame.Spellname then frame.Spellname:SetText(name) end
 	if frame.Statusbar then
-		frame.duration = duration
-		frame.start = start
-		frame.expires = nil
-		frame.elapsed = 0
-		frame:SetScript("OnUpdate", A.AuraWatch_UpdateTimer)
+		if durationObj and frame.Statusbar.SetTimerDuration then
+			frame.Statusbar:SetTimerDuration(durationObj)
+			frame:SetScript("OnUpdate", nil)
+		else
+			frame.duration = duration
+			frame.start = start
+			frame.expires = nil
+			frame.elapsed = 0
+			frame:SetScript("OnUpdate", A.AuraWatch_UpdateTimer)
+		end
 	end
 	frame.type = type
 	frame.spellID = id
@@ -394,14 +399,11 @@ function A:AuraWatch_UpdateCD()
 
 					if group.Mode == "ICON" then name = nil end
 					if charges and maxCharges and maxCharges > 1 and charges < maxCharges then
-						local chargeDurObj = chargeInfo and {
-							startTime = chargeInfo.cooldownStartTime,
-							duration = chargeInfo.cooldownDuration,
-							modRate = chargeInfo.chargeModRate,
-						}
+						local chargeDurObj = C_Spell.GetSpellChargeDuration and C_Spell.GetSpellChargeDuration(value.SpellID)
 						A:AuraWatch_SetupCD(KEY, name, icon, chargeInfo.cooldownStartTime, chargeInfo.cooldownDuration, true, 1, value.SpellID, charges, chargeDurObj)
 					elseif cdIsActive and not cooldownInfo.isOnGCD then
-						A:AuraWatch_SetupCD(KEY, name, icon, cooldownInfo.startTime, cooldownInfo.duration, true, 1, value.SpellID, nil, cooldownInfo)
+						local cdDurObj = C_Spell.GetSpellCooldownDuration and C_Spell.GetSpellCooldownDuration(value.SpellID)
+						A:AuraWatch_SetupCD(KEY, name, icon, cooldownInfo.startTime, cooldownInfo.duration, true, 1, value.SpellID, nil, cdDurObj)
 					end
 				elseif value.ItemID then
 					local start, duration = C_Item.GetItemCooldown(value.ItemID)
