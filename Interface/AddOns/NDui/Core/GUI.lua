@@ -435,7 +435,7 @@ G.DefaultSettings = {
 		ColorByDot = false,
 		DotColor = {r=1, g=.5, b=.2},
 		DotSpells = {},
-		MobTypeColoring = true,
+		MobTypeColoring = false,
 		BossColor = {r=.42, g=.17, b=.69},
 		LieutenantColor = {r=.28, g=.26, b=1},
 		CasterColor = {r=0, g=.82, b=1},
