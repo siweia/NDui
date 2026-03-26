@@ -200,14 +200,22 @@ function UF:UpdateColor(_, unit)
 				local meleeColor = C.db["Nameplate"]["MeleeColor"]
 				local trivialColor = C.db["Nameplate"]["TrivialColor"]
 				if isBoss then
-					r, g, b = bossColor.r, bossColor.g, bossColor.b
+					if C.db["Nameplate"]["ShowBossColor"] then
+						r, g, b = bossColor.r, bossColor.g, bossColor.b
+					end
 				elseif isLieutenant then
-					r, g, b = lieutenantColor.r, lieutenantColor.g, lieutenantColor.b
+					if C.db["Nameplate"]["ShowLieutColor"] then
+						r, g, b = lieutenantColor.r, lieutenantColor.g, lieutenantColor.b
+					end
 				elseif UnitClassBase(unit) == "PALADIN" then
-					r, g, b = casterColor.r, casterColor.g, casterColor.b
+					if C.db["Nameplate"]["ShowCasterColor"] then
+						r, g, b = casterColor.r, casterColor.g, casterColor.b
+					end
 				elseif isElite then
-					r, g, b = meleeColor.r, meleeColor.g, meleeColor.b
-				else
+					if C.db["Nameplate"]["ShowMeleeColor"] then
+						r, g, b = meleeColor.r, meleeColor.g, meleeColor.b
+					end
+				elseif C.db["Nameplate"]["ShowTrivialColor"] then
 					r, g, b = trivialColor.r, trivialColor.g, trivialColor.b
 				end
 			else

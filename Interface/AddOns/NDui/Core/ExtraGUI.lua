@@ -2810,9 +2810,13 @@ function G:SetupNameplateMobColors(parent)
 	local parent = scroll.child
 	local offset = -10
 
-	createOptionSwatch(scroll.child, L["BossColor"], "Nameplate", "BossColor", 10, offset)
-	createOptionSwatch(scroll.child, L["LieutenantColor"], "Nameplate", "LieutenantColor", 10, offset-30)
-	createOptionSwatch(scroll.child, L["CasterColor"], "Nameplate", "CasterColor", 10, offset-60)
-	createOptionSwatch(scroll.child, L["MeleeColor"], "Nameplate", "MeleeColor", 10, offset-90)
-	createOptionSwatch(scroll.child, L["TrivialColor"], "Nameplate", "TrivialColor", 10, offset-120)
+	local function createOptions(offset, locale, value1, value2)
+		createOptionCheck(parent, offset, locale, "Nameplate", value1)
+		createOptionSwatch(parent, locale, "Nameplate", value2, 15, offset-30)
+	end
+	createOptions(offset, L["BossColor"], "ShowBossColor", "BossColor")
+	createOptions(offset-60, L["LieutenantColor"], "ShowLieutColor", "LieutenantColor")
+	createOptions(offset-120, L["CasterColor"], "ShowCasterColor", "CasterColor")
+	createOptions(offset-180, L["MeleeColor"], "ShowMeleeColor", "MeleeColor")
+	createOptions(offset-240, L["TrivialColor"], "ShowTrivialColor", "TrivialColor")
 end
