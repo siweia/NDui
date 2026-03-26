@@ -78,15 +78,23 @@ function M:TradeTabs_Update()
 			tab.cover:Hide()
 		end
 
-		local start, duration
+		local start, duration, cdObject
 		if itemID then
 			start, duration = C_Item.GetItemCooldown(itemID)
 		else
 			local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
-			start = cooldownInfo and cooldownInfo.startTime
-			duration = cooldownInfo and cooldownInfo.duration
+			if cooldownInfo then
+				start = cooldownInfo.startTime
+				duration = cooldownInfo.duration
+				cdObject = cooldownInfo.isActive and C_Spell.GetSpellCooldownDuration(spellID)
+			end
 		end
-		if start then
+
+		if B:IsSecretValue(duration) then
+			if cdObject then
+				tab.CD:SetCooldownFromDurationObject(cdObject)
+			end
+		elseif start and duration then
 			tab.CD:SetCooldown(start, duration)
 		end
 	end

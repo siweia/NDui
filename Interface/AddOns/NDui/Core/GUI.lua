@@ -394,8 +394,6 @@ G.DefaultSettings = {
 		ShowCustomUnits = true,
 		CustomColor = {r=0, g=.8, b=.3},
 		CustomUnits = {},
-		ShowPowerUnits = true,
-		PowerUnits = {},
 		VerticalSpacing = 1.1,
 		ShowPlayerPlate = false,
 		PPWidth = 175,
@@ -435,6 +433,17 @@ G.DefaultSettings = {
 		ColorByDot = false,
 		DotColor = {r=1, g=.5, b=.2},
 		DotSpells = {},
+		MobTypeColoring = false,
+		ShowBossColor = false,
+		ShowLieutColor = false,
+		ShowCasterColor = true,
+		ShowMeleeColor = false,
+		ShowTrivialColor = false,
+		BossColor = {r=.42, g=.17, b=.69},
+		LieutenantColor = {r=.28, g=.26, b=1},
+		CasterColor = {r=0, g=.82, b=1},
+		MeleeColor = {r=1, g=0, b=0},
+		TrivialColor = {r=.65, g=.65, b=.65},
 		RaidTargetX = 0,
 		RaidTargetY = 3,
 		PlateRange = 45,
@@ -820,10 +829,6 @@ local function setupNameplateUnitFilter()
 	G:NameplateUnitFilter(guiPage[5])
 end
 
-local function setupNameplatePowerUnits()
-	G:NameplatePowerUnits(guiPage[5])
-end
-
 local function setupNameplateSize()
 	G:SetupNameplateSize(guiPage[5])
 end
@@ -834,6 +839,10 @@ end
 
 local function setupPlateCastbarGlow()
 	G:PlateCastbarGlow(guiPage[5])
+end
+
+local function setupNameplateMobColors()
+	G:SetupNameplateMobColors(guiPage[5])
 end
 
 local function setupBuffFrame()
@@ -969,10 +978,6 @@ end
 
 local function updateCustomUnitList()
 	B:GetModule("UnitFrames"):CreateUnitTable()
-end
-
-local function updatePowerUnitList()
-	B:GetModule("UnitFrames"):CreatePowerUnitTable()
 end
 
 local function refreshNameplates()
@@ -1351,7 +1356,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", true, setupPlateCastbarGlow, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", nil, nil, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "ShowCustomUnits", HeaderTag..L["ShowCustomUnits"].."*", true, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitsTip"]},
-		--{1, "Nameplate", "ShowPowerUnits", HeaderTag..L["ShowPowerUnits"].."*", true, setupNameplatePowerUnits, updatePowerUnitList, L["PowerUnitsTip"]},
+		{1, "Nameplate", "MobTypeColoring", IsNew..HeaderTag..L["MobTypeColoring"].."*", nil, setupNameplateMobColors, nil, L["MobTypeColoringTip"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
 		{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true, nil, nil, L["RevertThreatTip"]},

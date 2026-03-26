@@ -175,7 +175,6 @@ function module:CheckNameplateFilters()
 --	CheckNameplateFilter(C.WhiteList, "NameplateWhite")
 --	CheckNameplateFilter(C.BlackList, "NameplateBlack")
 	cleanupNameplateUnits("CustomUnits")
---	cleanupNameplateUnits("PowerUnits")
 end
 
 function module:OnLogin()

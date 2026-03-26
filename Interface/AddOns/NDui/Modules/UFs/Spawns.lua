@@ -321,7 +321,6 @@ function UF:OnLogin()
 
 		UF:SetupCVars()
 		UF:CreateUnitTable()
-		UF:CreatePowerUnitTable()
 		UF:UpdateGroupRoles()
 		UF:QuestIconCheck()
 		UF:RefreshPlateByEvents()

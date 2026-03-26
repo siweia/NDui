@@ -390,7 +390,6 @@ local spellBooleanValues = {
 
 local booleanTable = {
 	["CustomUnits"] = true,
-	["PowerUnits"] = true,
 	["DotSpells"] = true,
 }
 

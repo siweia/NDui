@@ -117,6 +117,21 @@ function M:AttachPlayerPlate()
 	if C.db["Misc"]["AttachPlayerPlate"] then
 		playerPlate:SetPoint("BOTTOMLEFT", EssentialCooldownViewer, "TOPLEFT", 2, 1)
 		playerPlate:SetPoint("BOTTOMRIGHT", EssentialCooldownViewer, "TOPRIGHT", -2, 1)
+
+		local barWidth = playerPlate:GetWidth()
+		local barHeight = C.db["Nameplate"]["PPBarHeight"]
+		local bars = playerPlate.ClassPower or playerPlate.Runes
+		if bars then
+			playerPlate.ClassPowerBar:SetSize(barWidth, barHeight)
+			local max = bars.__max
+			for i = 1, max do
+				bars[i]:SetHeight(barHeight)
+				bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)
+			end
+		end
+		if playerPlate.Stagger then
+			playerPlate.Stagger:SetSize(barWidth, barHeight)
+		end
 	else
 		playerPlate:SetPoint("TOPLEFT", playerPlate.mover)
 		local UF = B:GetModule("UnitFrames")
