@@ -84,17 +84,17 @@ function M:TradeTabs_Update()
 		else
 			local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
 			if cooldownInfo then
-				if cooldownInfo.isActive then
-					cdObject = C_Spell.GetSpellCooldownDuration(spellID)
-				end
 				start = cooldownInfo.startTime
 				duration = cooldownInfo.duration
+				cdObject = cooldownInfo.isActive and C_Spell.GetSpellCooldownDuration(spellID)
 			end
 		end
 
-		if B:IsSecretValue(cdObject) then
-			tab.CD:SetCooldownFromDurationObject(cdObject)
-		elseif start then
+		if B:IsSecretValue(duration) then
+			if cdObject then
+				tab.CD:SetCooldownFromDurationObject(cdObject)
+			end
+		elseif start and duration then
 			tab.CD:SetCooldown(start, duration)
 		end
 	end
