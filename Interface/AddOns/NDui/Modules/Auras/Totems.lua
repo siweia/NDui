@@ -53,10 +53,9 @@ function A:TotemBar_Update()
 		activeTotems = activeTotems + 1
 
 		local _, _, start, dur, icon = GetTotemInfo(button.slot)
-		local durationObj = GetTotemDuration and GetTotemDuration(button.slot)
 		local totem = totems[activeTotems]
-		if B:IsSecretValue(durationObj) then
-			totem.CD:SetCooldownFromDurationObject(durationObj)
+		if B:IsSecretValue(dur) then
+			totem.CD:SetCooldownFromDurationObject(GetTotemDuration(button.slot))
 			totem.CD:Show()
 			totem:SetAlpha(1)
 		elseif start and dur then
