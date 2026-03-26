@@ -22,7 +22,7 @@ function TT:PetInfo_Update(petType)
 end
 
 function TT:PetInfo_Reset()
-	if self.petIcon and self.petIcon:GetAlpha() ~= 0 then
+	if self.petIcon then
 		self.petIcon:SetAlpha(0)
 	end
 end
