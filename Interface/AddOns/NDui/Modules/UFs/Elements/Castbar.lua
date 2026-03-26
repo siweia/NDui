@@ -119,3 +119,15 @@ function UF:PostUpdatePips(numStages)
 		end
 	end
 end
+
+function UF:CustomTimeText(durationObject)
+	if durationObject then
+		local duration = durationObject:GetRemainingDuration()
+		local total = durationObject:GetTotalDuration()
+		local delayText = ""
+		if self.delay ~= 0 then
+			delayText = format("|cffff0000%s%.2f|r", self.channeling and '-' or '+', self.delay)
+		end
+		self.Time:SetFormattedText('%.1f%s | %.1f', duration, delayText, total)
+	end
+end

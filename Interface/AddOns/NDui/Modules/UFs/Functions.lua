@@ -778,6 +778,8 @@ function UF:CreateCastBar(self)
 	cb.PostCastInterrupted = UF.Castbar_UpdateInterrupted
 	cb.CreatePip = UF.CreatePip
 	cb.PostUpdatePips = UF.PostUpdatePips
+	cb.CustomTimeText = UF.CustomTimeText
+	cb.CustomDelayText = UF.CustomTimeText
 
 	self.Castbar = cb
 end
