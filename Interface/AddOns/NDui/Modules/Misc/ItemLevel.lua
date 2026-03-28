@@ -163,6 +163,7 @@ function M:ItemLevel_UpdateInfo(slotFrame, info, quality)
 	if infoType == "table" then
 		local enchant = info.enchantText
 		if enchant then
+			enchant = gsub(enchant, "^.-%s%-%s", "") -- remove enchant prefix
 			slotFrame.enchantText:SetText(enchant)
 		end
 
