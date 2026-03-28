@@ -89,48 +89,6 @@ function UF:CreateUnitTable()
 	refreshNameplateUnits("CustomUnits")
 end
 
--- Off-tank threat color
-local groupRoles, isInGroup = {}
-local function refreshGroupRoles()
-	local isInRaid = IsInRaid()
-	isInGroup = isInRaid or IsInGroup()
-	wipe(groupRoles)
-
-	if isInGroup then
-		local numPlayers = (isInRaid and GetNumGroupMembers()) or GetNumSubgroupMembers()
-		local unit = (isInRaid and "raid") or "party"
-		for i = 1, numPlayers do
-			local index = unit..i
-			if UnitExists(index) then
-				groupRoles[UnitName(index)] = UnitGroupRolesAssigned(index)
-			end
-		end
-	end
-end
-
-local function resetGroupRoles()
-	isInGroup = IsInRaid() or IsInGroup()
-	wipe(groupRoles)
-end
-
-function UF:UpdateGroupRoles()
-	refreshGroupRoles()
-	B:RegisterEvent("GROUP_ROSTER_UPDATE", refreshGroupRoles)
-	B:RegisterEvent("GROUP_LEFT", resetGroupRoles)
-end
-
-function UF:CheckThreatStatus(unit)
-	if not UnitExists(unit) then return end
-
-	local unitTarget = unit.."target"
-	local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, "player") and groupRoles[UnitName(unitTarget)] or "NONE"
-	if DB.Role == "Tank" and unitRole == "TANK" then
-		return true, UnitThreatSituation(unitTarget, unit)
-	else
-		return false, UnitThreatSituation("player", unit)
-	end
-end
-
 -- Update unit color
 local executedCurve = C_CurveUtil.CreateColorCurve()
 executedCurve:SetType(Enum.LuaCurveType.Step)
@@ -151,7 +109,6 @@ function UF:UpdateColor(_, unit)
 	local isCustomUnit = UF.CustomUnits[name] or UF.CustomUnits[npcID]
 	local isPlayer = self.isPlayer
 	local isFriendly = self.isFriendly
-	--local isOffTank, status = UF:CheckThreatStatus(unit)
 	local status = UnitThreatSituation("player", unit)
 	local customColor = C.db["Nameplate"]["CustomColor"]
 	local secureColor = C.db["Nameplate"]["SecureColor"]
