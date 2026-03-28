@@ -172,8 +172,10 @@ function UF:UpdateColor(_, unit)
 					if C.db["Nameplate"]["ShowMeleeColor"] then
 						r, g, b = meleeColor.r, meleeColor.g, meleeColor.b
 					end
-				elseif C.db["Nameplate"]["ShowTrivialColor"] then
-					r, g, b = trivialColor.r, trivialColor.g, trivialColor.b
+				else
+					if C.db["Nameplate"]["ShowTrivialColor"] then
+						r, g, b = trivialColor.r, trivialColor.g, trivialColor.b
+					end
 				end
 			else
 				r, g, b = UnitSelectionColor(unit, true)
