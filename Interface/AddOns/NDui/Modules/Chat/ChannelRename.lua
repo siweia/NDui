@@ -145,6 +145,7 @@ local cnColonChannels = {
 	OFFICER = true,
 	CHANNEL = true,
 	PARTY = true,
+	RAID = true,
 	INSTANCE_CHAT = true,
 }
 
