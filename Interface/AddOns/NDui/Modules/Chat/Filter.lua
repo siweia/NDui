@@ -121,6 +121,7 @@ function module:GetFilterResult(event, msg, name, flag, guid)
 end
 
 function module:UpdateChatFilter(event, msg, author, _, _, _, flag, _, _, _, _, lineID, guid)
+	if B:IsSecretValue(msg) then return end
 	if lineID ~= prevLineID then
 		prevLineID = lineID
 
@@ -155,6 +156,7 @@ function module:ToggleChatBubble(party)
 end
 
 function module:UpdateAddOnBlocker(event, msg, author)
+	if B:IsSecretValue(msg) then return end
 	local name = Ambiguate(author, "none")
 	if UnitIsUnit(name, "player") then return end
 
@@ -248,6 +250,7 @@ function module.ReplaceChatHyperlink(link, linkType, value)
 end
 
 function module:UpdateChatItemLevel(_, msg, ...)
+	if B:IsSecretValue(msg) then return end
 	msg = gsub(msg, "(|H([^:]+):(%d+):.-|h.-|h)", module.ReplaceChatHyperlink)
 	return false, msg, ...
 end
@@ -255,6 +258,7 @@ end
 -- Filter azerite message on island expeditions
 local AZERITE_STR = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub("%%d/%%d ", "")
 local function filterAzeriteGain(_, _, msg)
+	if B:IsSecretValue(msg) then return end
 	if strfind(msg, AZERITE_STR) then
 		return true
 	end
