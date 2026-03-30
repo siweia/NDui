@@ -177,7 +177,8 @@ function UF:UpdateColor(_, unit)
 						r, g, b = trivialColor.r, trivialColor.g, trivialColor.b
 					end
 				end
-			else
+			end
+			if not r then
 				r, g, b = UnitSelectionColor(unit, true)
 			end
 			if status and (C.db["Nameplate"]["TankMode"] or DB.Role == "Tank") then
