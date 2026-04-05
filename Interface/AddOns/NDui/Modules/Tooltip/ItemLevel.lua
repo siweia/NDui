@@ -26,7 +26,7 @@ TT.TierSets = {
 	-- PRIEST
 	[250049] = true, [250054] = true, [250050] = true, [250051] = true, [250052] = true,
 	-- DEATHKNIGHT
-	[249968] = true, [249969] = true, [249970] = true, [249971] = true, [237631] = true,
+	[249968] = true, [249969] = true, [249970] = true, [249971] = true, [249973] = true,
 	-- SHAMAN
 	[249977] = true, [249978] = true, [249979] = true, [249980] = true, [249982] = true,
 	-- MAGE
