@@ -48,43 +48,48 @@ function module:Chatbar()
 		return bu
 	end
 
+	local function SaveOpenChat(...)
+		if C_ChatInfo.InChatMessagingLockdown() then return end
+		return ChatFrameUtil.OpenChat(...)
+	end
+
 	-- Create Chatbars
 	local buttonInfo = {
 		{1, 1, 1, SAY.."/"..YELL, function(_, btn)
 			if btn == "RightButton" then
-				ChatFrameUtil.OpenChat("/y ", chatFrame)
+				SaveOpenChat("/y ", chatFrame)
 			else
-				ChatFrameUtil.OpenChat("/s ", chatFrame)
+				SaveOpenChat("/s ", chatFrame)
 			end
 		end},
 		{1, .5, 1, WHISPER, function(_, btn)
 			if btn == "RightButton" then
 				ChatFrame_ReplyTell(chatFrame)
 				if not editBox:IsVisible() or editBox:GetAttribute("chatType") ~= "WHISPER" then
-					ChatFrameUtil.OpenChat("/w ", chatFrame)
+					SaveOpenChat("/w ", chatFrame)
 				end
 			else
 				if UnitExists("target") and UnitName("target") and UnitIsPlayer("target") and GetDefaultLanguage("player") == GetDefaultLanguage("target") then
 					local name = GetUnitName("target", true)
-					ChatFrameUtil.OpenChat("/w "..name.." ", chatFrame)
+					SaveOpenChat("/w "..name.." ", chatFrame)
 				else
-					ChatFrameUtil.OpenChat("/w ", chatFrame)
+					SaveOpenChat("/w ", chatFrame)
 				end
 			end
 		end},
-		{.65, .65, 1, PARTY, function() ChatFrameUtil.OpenChat("/p ", chatFrame) end},
+		{.65, .65, 1, PARTY, function() SaveOpenChat("/p ", chatFrame) end},
 		{1, .5, 0, INSTANCE.."/"..RAID, function()
 			if IsPartyLFG() or C_PartyInfo.IsPartyWalkIn() then
-				ChatFrameUtil.OpenChat("/i ", chatFrame)
+				SaveOpenChat("/i ", chatFrame)
 			else
-				ChatFrameUtil.OpenChat("/raid ", chatFrame)
+				SaveOpenChat("/raid ", chatFrame)
 			end
 		end},
 		{.25, 1, .25, GUILD.."/"..OFFICER, function(_, btn)
 			if btn == "RightButton" and C_GuildInfo_IsGuildOfficer() then
-				ChatFrameUtil.OpenChat("/o ", chatFrame)
+				SaveOpenChat("/o ", chatFrame)
 			else
-				ChatFrameUtil.OpenChat("/g ", chatFrame)
+				SaveOpenChat("/g ", chatFrame)
 			end
 		end},
 	}
@@ -134,7 +139,7 @@ function module:Chatbar()
 					print("|cffFF7F50"..QUIT.."|r "..DB.InfoColor..L["World Channel"])
 					module.InWorldChannel = false
 				elseif module.WorldChannelID then
-					ChatFrameUtil.OpenChat("/"..module.WorldChannelID, chatFrame)
+					SaveOpenChat("/"..module.WorldChannelID, chatFrame)
 				end
 			else
 				JoinPermanentChannel(channelName, nil, 1)
