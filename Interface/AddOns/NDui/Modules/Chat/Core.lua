@@ -291,7 +291,7 @@ end
 
 function module.OnChatWhisper(event, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
-	if B:IsSecretValue(author) then return end
+	if B:IsSecretValue(msg) then return end
 	for word in pairs(whisperList) do
 		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
 			if event == "CHAT_MSG_BN_WHISPER" then
@@ -422,8 +422,8 @@ function module:OnLogin()
 		end
 	end)
 
-	hooksecurefunc("FCFTab_UpdateColors", module.UpdateTabColors)
-	hooksecurefunc("FloatingChatFrameManager_OnEvent", module.UpdateTabEventColors)
+	--hooksecurefunc("FCFTab_UpdateColors", module.UpdateTabColors)
+	--hooksecurefunc("FloatingChatFrameManager_OnEvent", module.UpdateTabEventColors)
 	hooksecurefunc(ChatFrameUtil, "ProcessMessageEventFilters", module.PlayWhisperSound)
 	hooksecurefunc("FCF_MinimizeFrame", module.HandleMinimizedFrame)
 	hooksecurefunc("ChatEdit_CustomTabPressed", module.UpdateTabChannelSwitch)
