@@ -64,7 +64,7 @@ function UF:Castbar_UpdateInterrupted(unit, interruptedBy)
 
 	if C.db["Nameplate"]["Interruptor"] and self.spellTarget and interruptedBy ~= nil then
 		local sourceName = UnitNameFromGUID(interruptedBy)
-		local _, class = GetPlayerInfoByGUID(interruptedBy)
+		local class = UnitClassFromGUID(interruptedBy)
 		class = class or "PRIEST"
 		local classColor = C_ClassColor.GetClassColor(class)
 		self.Text:SetText(INTERRUPTED.." > "..classColor:WrapTextInColorCode(sourceName))
