@@ -123,6 +123,7 @@ function M:AttachPlayerPlate()
 		local bars = playerPlate.ClassPower or playerPlate.Runes
 		if bars then
 			playerPlate.ClassPowerBar:SetSize(barWidth, barHeight)
+			playerPlate.ClassPowerBar.width = barWidth
 			local max = bars.__max
 			for i = 1, max do
 				bars[i]:SetHeight(barHeight)

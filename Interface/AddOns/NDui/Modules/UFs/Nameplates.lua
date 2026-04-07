@@ -987,6 +987,7 @@ function UF:ResizePlayerPlate()
 		local bars = plate.ClassPower or plate.Runes
 		if bars then
 			plate.ClassPowerBar:SetSize(barWidth, barHeight)
+			plate.ClassPowerBar.width = barWidth
 			local max = bars.__max
 			for i = 1, max do
 				bars[i]:SetHeight(barHeight)
@@ -1187,6 +1188,7 @@ function UF:ResizeTargetPower()
 	local bars = plate.ClassPower or plate.Runes
 	if bars then
 		plate.ClassPowerBar:SetSize(barWidth, barHeight)
+		plate.ClassPowerBar.width = barWidth
 		local max = bars.__max
 		for i = 1, max do
 			bars[i]:SetHeight(barHeight)

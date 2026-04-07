@@ -1279,7 +1279,7 @@ function UF.PostUpdateClassPower(element, cur, max, diff, _, chargedPowerPoints)
 
 	if diff then
 		for i = 1, max do
-			element[i]:SetWidth((element.__owner.ClassPowerBar:GetWidth() - (max-1)*C.margin)/max)
+			element[i]:SetWidth((element.__owner.ClassPowerBar.width - (max-1)*C.margin)/max)
 		end
 		for i = max + 1, 10 do
 			element[i].bg:Hide()
@@ -1340,6 +1340,7 @@ function UF:CreateClassPower(self)
 	local maxBar = isDK and 6 or 10
 	local bar = CreateFrame("Frame", "$parentClassPowerBar", self)
 	bar:SetSize(barWidth, barHeight)
+	bar.width = barWidth
 	bar:SetPoint(unpack(barPoint))
 
 	-- show bg while size changed
@@ -1489,6 +1490,7 @@ function UF:UpdateUFClassPower()
 	if bars then
 		local bar = playerFrame.ClassPowerBar
 		bar:SetSize(barWidth, barHeight)
+		bar.width = barWidth
 		bar:SetPoint("BOTTOMLEFT", playerFrame, "TOPLEFT", xOffset, yOffset)
 		if bar.bg then bar.bg:Show() end
 		local max = bars.__max
