@@ -422,8 +422,8 @@ function module:OnLogin()
 		end
 	end)
 
-	--hooksecurefunc("FCFTab_UpdateColors", module.UpdateTabColors)
-	--hooksecurefunc("FloatingChatFrameManager_OnEvent", module.UpdateTabEventColors)
+	hooksecurefunc("FCFTab_UpdateColors", module.UpdateTabColors)
+	hooksecurefunc("FloatingChatFrameManager_OnEvent", module.UpdateTabEventColors)
 	hooksecurefunc(ChatFrameUtil, "ProcessMessageEventFilters", module.PlayWhisperSound)
 	hooksecurefunc("FCF_MinimizeFrame", module.HandleMinimizedFrame)
 	hooksecurefunc("ChatEdit_CustomTabPressed", module.UpdateTabChannelSwitch)
