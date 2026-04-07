@@ -555,6 +555,8 @@ end
 
 -- Create Nameplates
 local platesList = {}
+UF.nameplateUnits = {}
+
 function UF:CreatePlates()
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
@@ -857,7 +859,7 @@ function UF:RefreshPlateType(unit)
 end
 
 function UF:OnUnitFactionChanged(unit)
-	if strfind(unit, "^[ab]%w+") then return end -- bossN and arenaN are not allowed here
+	if not UF.nameplateUnits[unit] then return end
 
 	local nameplate = C_NamePlate_GetNamePlateForUnit(unit)
 	local unitFrame = nameplate and nameplate.unitFrame
@@ -898,6 +900,8 @@ end
 function UF:OnNameplateAdded(event, unit)
 	if not self then return end
 
+	UF.nameplateUnits[unit] = true
+
 	local name = UnitName(unit)
 	self.unitName = B:NotSecretValue(name) and name or nil
 	local guid = UnitGUID(unit)
@@ -925,11 +929,12 @@ function UF:OnNameplateAdded(event, unit)
 	onTargetChanged(self, event, unit)
 end
 
-function UF:OnNameplateRemoved()
+function UF:OnNameplateRemoved(_, unit)
 	if not self then return end
 	self.npcID = nil
 	self.nameText:SetText("")
 	self.npcTitle:SetText("")
+	UF.nameplateUnits[unit] = nil
 end
 
 function UF:OnTargetChanged(event, unit)
