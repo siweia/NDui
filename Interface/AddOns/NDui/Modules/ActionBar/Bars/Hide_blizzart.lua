@@ -81,7 +81,7 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	DisableDefaultBarEvents()
+--	DisableDefaultBarEvents()
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
 	-- Update token panel
