@@ -59,6 +59,7 @@ function M:OnLogin()
 	M:AutoEquipBySpec()
 	M:UpdateScreenShot()
 	M:MoveBlizzFrames()
+	M:HandleNDuiTitle()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -799,6 +800,28 @@ function M:MoveBlizzFrames()
 		B:BlizzFrameMover(CharacterFrame)
 	end
 	B:BlizzFrameMover(QuestLogFrame)
+end
+
+function M:HandleNDuiTitle()
+	-- Square NDui logo texture
+	local function replaceIconString(self, text)
+		if not text then text = self:GetText() end
+		if not text or text == "" then return end
+
+		if strfind(text, "NDui") or strfind(text, "BaudErrorFrame") then
+			local newText, count = gsub(text, "|T([^:]-):[%d+:]+|t", "|T"..DB.chatLogo..":12:24|t")
+			if count > 0 then self:SetFormattedText("%s", newText) end
+		end
+	end
+
+	hooksecurefunc("AddonList_InitAddon", function(entry)
+		if not entry.logoHooked then
+			replaceIconString(entry.Title)
+			hooksecurefunc(entry.Title, "SetText", replaceIconString)
+
+			entry.logoHooked = true
+		end
+	end)
 end
 
 -- Fix errors in Cata beta
