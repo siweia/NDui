@@ -398,8 +398,10 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			CastingBarFrame_SetUnit(CastingBarFrame, nil)
-			CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
+			PlayerCastingBarFrame:UnregisterAllEvents()
+			PlayerCastingBarFrame:Hide()
+			PetCastingBarFrame:UnregisterAllEvents()
+			PetCastingBarFrame:Hide()
 		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
@@ -446,8 +448,14 @@ local function Disable(self)
 		element:SetScript('OnUpdate', nil)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
-			PetCastingBarFrame_OnLoad(PetCastingBarFrame)
+			for event in next, eventMethods do
+				PlayerCastingBarFrame:RegisterUnitEvent(event, 'player')
+				PetCastingBarFrame:RegisterUnitEvent(event, 'pet')
+			end
+
+			PlayerCastingBarFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
+			PetCastingBarFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
+			PetCastingBarFrame:RegisterEvent('UNIT_PET')
 		end
 	end
 end
