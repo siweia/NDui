@@ -7,8 +7,10 @@ local MAX_ARENA_ENEMIES = _G.MAX_ARENA_ENEMIES or 5
 -- sourced from FrameXML/TargetFrame.lua
 local MAX_BOSS_FRAMES = _G.MAX_BOSS_FRAMES or 5
 
--- sourced from FrameXML/PartyMemberFrame.lua
-local MAX_PARTY_MEMBERS = _G.MAX_PARTY_MEMBERS or 4
+-- sourced from Blizzard_FrameXMLBase/Shared/Constants.lua
+local MEMBERS_PER_RAID_GROUP = _G.MEMBERS_PER_RAID_GROUP or 5
+
+local isPartyHooked = false
 
 local hiddenParent = CreateFrame('Frame', nil, UIParent)
 hiddenParent:SetAllPoints()
@@ -97,12 +99,17 @@ function oUF:DisableBlizzard(unit)
 			end
 		end
 	elseif(unit:match('party%d?$')) then
-		local id = unit:match('party(%d)')
-		if(id) then
-			handleFrame('PartyMemberFrame' .. id)
-		else
-			for i = 1, MAX_PARTY_MEMBERS do
-				handleFrame(string.format('PartyMemberFrame%d', i))
+		if(not isPartyHooked) then
+			isPartyHooked = true
+
+			handleFrame(PartyFrame)
+
+			for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+				handleFrame(frame, true)
+			end
+
+			for i = 1, MEMBERS_PER_RAID_GROUP do
+				handleFrame('CompactPartyFrameMember' .. i)
 			end
 		end
 	elseif(unit:match('arena%d?$')) then
