@@ -27,6 +27,14 @@ local function ResetButtonAnchor(button)
 	button:SetAllPoints()
 end
 
+local function ShowNewHighlight(self)
+	self.newHL:Show()
+end
+
+local function HideNewHighlight(self)
+	self.newHL:Hide()
+end
+
 function Bar:MicroButton_Create(parent, data, exclude)
 	local texture, method, tooltip = unpack(data)
 
@@ -56,9 +64,16 @@ function Bar:MicroButton_Create(parent, data, exclude)
 			B.AddTooltip(button, "ANCHOR_RIGHT", button.newbieText, "system")
 		end
 
-		local hl = button:GetHighlightTexture()
-		Bar:MicroButton_SetupTexture(hl, texture)
-		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
+		button:GetHighlightTexture():SetAlpha(0)
+		-- add a new highlight texture
+		local newHL = button:CreateTexture(nil, "ARTWORK")
+		newHL:SetBlendMode("ADD")
+		newHL:Hide()
+		Bar:MicroButton_SetupTexture(newHL, texture)
+		if not C.db["Skins"]["ClassLine"] then newHL:SetVertexColor(1, 1, 1) end
+		button.newHL = newHL
+		button:HookScript("OnEnter", ShowNewHighlight)
+		button:HookScript("OnLeave", HideNewHighlight)
 
 		local flash = button.Flash
 		Bar:MicroButton_SetupTexture(flash, texture)
@@ -120,8 +135,9 @@ function Bar:MicroMenu_Setup()
 		end
 	end
 
-	local column = min(12, perRow)
-	local rows = ceil(12/perRow)
+	local maxButtons = 12 -- total buttons
+	local column = min(maxButtons, perRow)
+	local rows = ceil(maxButtons/perRow)
 	local width = column*size + (column-1)*margin
 	local height = size*rows + (rows-1)*margin
 	menubar:SetSize(width, height)
@@ -163,10 +179,13 @@ function Bar:MicroMenu()
 	Bar:MicroMenu_Setup()
 
 	-- Default elements
-	B.HideObject(PVPMicroButtonTexture)
 	B.HideObject(MicroButtonPortrait)
-	B.HideObject(HelpMicroButton)
+	B.HideOption(HelpMicroButton)
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)
+	B.HideObject(MainMenuMicroButton.PerformanceIndicator)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
+	MicroMenuContainer:KillEditMode()
+	MicroMenu.GetEdgeButton = B.Dummy
+	PVPMicroButtonTexture:SetAlpha(0)
 end
