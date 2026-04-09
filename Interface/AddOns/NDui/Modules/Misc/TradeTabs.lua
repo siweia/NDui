@@ -159,6 +159,7 @@ function M:TradeTabs_Create(spellID, tradeName)
 	tab:SetAttribute("spell", name)
 	tab:SetNormalTexture(texture)
 	tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	tab:RegisterForClicks("AnyUp", "AnyDown")
 	tab:Show()
 
 	tab.CD = CreateFrame("Cooldown", nil, tab, "CooldownFrameTemplate")
