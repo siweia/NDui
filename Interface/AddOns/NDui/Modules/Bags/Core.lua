@@ -5,8 +5,6 @@ local module = B:RegisterModule("Bags")
 local cargBags = ns.cargBags
 
 local ipairs, strmatch, unpack, ceil = ipairs, string.match, unpack, math.ceil
-local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE
-local LE_ITEM_CLASS_QUIVER, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_QUIVER, LE_ITEM_CLASS_CONTAINER
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem
 local IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, IsShiftKeyDown, DeleteCursorItem
 local SortBankBags, SortBags, InCombatLockdown, ClearCursor = SortBankBags, SortBags, InCombatLockdown, ClearCursor
@@ -547,7 +545,7 @@ local function favouriteOnClick(self)
 	local link = info and info.hyperlink
 	local itemID = info and info.itemID
 
-	if texture and quality > LE_ITEM_QUALITY_POOR then
+	if texture and quality > Enum.ItemQuality.Poor then
 		ClearCursor()
 		module.selectItemID = itemID
 		module.CustomMenu[1].text = link
@@ -661,7 +659,7 @@ local function deleteButtonOnClick(self)
 	local texture = info and info.iconFileID
 	local quality = info and info.quality
 
-	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < LE_ITEM_QUALITY_RARE) then
+	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < Enum.ItemQuality.Rare) then
 		PickupContainerItem(self.bagId, self.slotId)
 		DeleteCursorItem()
 	end
@@ -885,7 +883,7 @@ function module:OnLogin()
 
 	function MyButton:OnUpdateButton(item)
 		if self.JunkIcon then
-			if (MerchantFrame:IsShown() or customJunkEnable) and (item.quality == LE_ITEM_QUALITY_POOR or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.quality == Enum.ItemQuality.Poor or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice then
 				self.JunkIcon:Show()
 			else
 				self.JunkIcon:Hide()
@@ -1133,9 +1131,9 @@ function module:OnLogin()
 			self:SetBackdropBorderColor(0, 0, 0)
 		end
 
-		if classID == LE_ITEM_CLASS_CONTAINER then
+		if classID == Enum.ItemClass.Container then
 			cargBags.BagGroups[self.bagId] = subClassID or 0
-		elseif classID == LE_ITEM_CLASS_QUIVER then
+		elseif classID == Enum.ItemClass.Quiver then
 			cargBags.BagGroups[self.bagId] = -1
 		else
 			cargBags.BagGroups[self.bagId] = 0

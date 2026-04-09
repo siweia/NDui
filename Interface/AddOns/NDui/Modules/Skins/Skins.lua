@@ -5,7 +5,6 @@ local S = B:RegisterModule("Skins")
 local pairs, wipe = pairs, wipe
 local xpcall = xpcall
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
-local LE_ITEM_QUALITY_COMMON, BAG_ITEM_QUALITY_COLORS = LE_ITEM_QUALITY_COMMON, BAG_ITEM_QUALITY_COLORS
 
 C.defaultThemes = {}
 C.themes = {}
@@ -62,9 +61,9 @@ function S:LoadAddOnSkins()
 
 	hooksecurefunc("SetItemButtonQuality", function(button, quality, itemID)
 		if quality then
-			if quality >= LE_ITEM_QUALITY_COMMON and BAG_ITEM_QUALITY_COLORS[quality] then
+			if quality >= Enum.ItemQuality.Common and DB.QualityColors[quality] then
 				button.IconBorder:Show()
-				button.IconBorder:SetVertexColor(BAG_ITEM_QUALITY_COLORS[quality].r, BAG_ITEM_QUALITY_COLORS[quality].g, BAG_ITEM_QUALITY_COLORS[quality].b)
+				button.IconBorder:SetVertexColor(DB.QualityColors[quality].r, DB.QualityColors[quality].g, DB.QualityColors[quality].b)
 			else
 				button.IconBorder:Hide()
 			end

@@ -8,9 +8,10 @@ local strmatch, strfind, strsplit, mod = string.match, string.find, string.split
 
 local COLOR = {r = .1, g = 1, b = .1}
 local knowables, knowns = {
-	[LE_ITEM_CLASS_CONSUMABLE] = true,
-	[LE_ITEM_CLASS_RECIPE] = true,
-	[LE_ITEM_CLASS_MISCELLANEOUS] = true,
+	[Enum.ItemClass.Consumable] = true,
+	[Enum.ItemClass.Recipe] = true,
+	[Enum.ItemClass.Miscellaneous] = true,
+	[Enum.ItemClass.ItemEnhancement] = true,
 }, {}
 
 local function isPetCollected(speciesID)
@@ -31,7 +32,7 @@ local function IsAlreadyKnown(link, index)
 		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
 		if not name then return end
 
-		if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then
+		if itemClassID == Enum.ItemClass.Battlepet and index then
 			local speciesID = B.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
 			return isPetCollected(speciesID)
 		else

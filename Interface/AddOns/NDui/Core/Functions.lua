@@ -714,14 +714,14 @@ do
 	end
 
 	local AtlasToQuality = {
-		["auctionhouse-itemicon-border-gray"] = LE_ITEM_QUALITY_POOR,
-		["auctionhouse-itemicon-border-white"] = LE_ITEM_QUALITY_COMMON,
-		["auctionhouse-itemicon-border-green"] = LE_ITEM_QUALITY_UNCOMMON,
-		["auctionhouse-itemicon-border-blue"] = LE_ITEM_QUALITY_RARE,
-		["auctionhouse-itemicon-border-purple"] = LE_ITEM_QUALITY_EPIC,
-		["auctionhouse-itemicon-border-orange"] = LE_ITEM_QUALITY_LEGENDARY,
-		["auctionhouse-itemicon-border-artifact"] = LE_ITEM_QUALITY_ARTIFACT,
-		["auctionhouse-itemicon-border-account"] = LE_ITEM_QUALITY_HEIRLOOM,
+		["auctionhouse-itemicon-border-gray"] = Enum.ItemQuality.Poor,
+		["auctionhouse-itemicon-border-white"] = Enum.ItemQuality.Common,
+		["auctionhouse-itemicon-border-green"] = Enum.ItemQuality.Uncommon,
+		["auctionhouse-itemicon-border-blue"] = Enum.ItemQuality.Rare,
+		["auctionhouse-itemicon-border-purple"] = Enum.ItemQuality.Epic,
+		["auctionhouse-itemicon-border-orange"] = Enum.ItemQuality.Legendary,
+		["auctionhouse-itemicon-border-artifact"] = Enum.ItemQuality.Artifact,
+		["auctionhouse-itemicon-border-account"] = Enum.ItemQuality.Heirloom,
 	}
 	local function updateIconBorderColorByAtlas(self, atlas)
 		local quality = AtlasToQuality[atlas]
