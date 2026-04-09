@@ -555,6 +555,11 @@ function module:SetupMinimap()
 	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
+	hooksecurefunc(Minimap, "SetPoint", function(frame, _, _, _, _, _, force)
+		if force then return end
+		frame:ClearAllPoints()
+		frame:SetPoint("TOPRIGHT", mover, "TOPRIGHT", 0, 0, true)
+	end)
 	Minimap.mover = mover
 
 	self:UpdateMinimapScale()
@@ -576,6 +581,7 @@ function module:SetupMinimap()
 		"MinimapZoomIn",
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
+		"MinimapToggleButton",
 	}
 
 	for _, v in pairs(frames) do
