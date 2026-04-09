@@ -715,8 +715,8 @@ do
 
 	local AtlasToQuality = {
 		["auctionhouse-itemicon-border-gray"] = Enum.ItemQuality.Poor,
-		["auctionhouse-itemicon-border-white"] = Enum.ItemQuality.Common,
-		["auctionhouse-itemicon-border-green"] = Enum.ItemQuality.Uncommon,
+		["auctionhouse-itemicon-border-white"] = Enum.ItemQuality.Standard,
+		["auctionhouse-itemicon-border-green"] = Enum.ItemQuality.Good,
 		["auctionhouse-itemicon-border-blue"] = Enum.ItemQuality.Rare,
 		["auctionhouse-itemicon-border-purple"] = Enum.ItemQuality.Epic,
 		["auctionhouse-itemicon-border-orange"] = Enum.ItemQuality.Legendary,

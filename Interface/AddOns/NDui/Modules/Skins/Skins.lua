@@ -61,7 +61,7 @@ function S:LoadAddOnSkins()
 
 	hooksecurefunc("SetItemButtonQuality", function(button, quality, itemID)
 		if quality then
-			if quality >= Enum.ItemQuality.Common and DB.QualityColors[quality] then
+			if quality >= Enum.ItemQuality.Standard and DB.QualityColors[quality] then
 				button.IconBorder:Show()
 				button.IconBorder:SetVertexColor(DB.QualityColors[quality].r, DB.QualityColors[quality].g, DB.QualityColors[quality].b)
 			else

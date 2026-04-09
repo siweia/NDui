@@ -62,7 +62,7 @@ for index, value in pairs(qualityColors) do
 end
 DB.QualityColors[-1] = {r = 0, g = 0, b = 0}
 DB.QualityColors[Enum.ItemQuality.Poor] = {r = COMMON_GRAY_COLOR.r, g = COMMON_GRAY_COLOR.g, b = COMMON_GRAY_COLOR.b}
-DB.QualityColors[Enum.ItemQuality.Common] = {r = 0, g = 0, b = 0}
+DB.QualityColors[Enum.ItemQuality.Standard] = {r = 0, g = 0, b = 0}
 DB.QualityColors[99] = {r = 1, g = 0, b = 0}
 
 -- Fonts

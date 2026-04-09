@@ -79,7 +79,7 @@ end
 local function isItemEquipment(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterEquipment"] then return end
-	return item.link and item.quality > Enum.ItemQuality.Common and module:IsItemHasLevel(item)
+	return item.link and item.quality > Enum.ItemQuality.Standard and module:IsItemHasLevel(item)
 end
 
 local consumableIDs = {
