@@ -53,17 +53,19 @@ end
 
 function module:ReskinRegions()
 	-- Tracking icon
-	MiniMapTracking:SetScale(.8)
-	MiniMapTracking:ClearAllPoints()
-	MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, 2, -4)
-	MiniMapTracking:SetFrameLevel(999)
-	MiniMapTrackingBackground:Hide()
-	MiniMapTrackingButtonBorder:Hide()
-	B.ReskinIcon(MiniMapTrackingIcon)
-	MiniMapTrackingIconOverlay:SetAlpha(0)
-	local hl = MiniMapTrackingButton:GetHighlightTexture()
-	hl:SetColorTexture(1, 1, 1, .25)
-	hl:SetAllPoints(MiniMapTrackingIcon)
+	if MiniMapTracking then
+		MiniMapTracking:SetScale(.8)
+		MiniMapTracking:ClearAllPoints()
+		MiniMapTracking:SetPoint("BOTTOMRIGHT", Minimap, 2, -4)
+		MiniMapTracking:SetFrameLevel(999)
+		MiniMapTrackingBackground:Hide()
+		MiniMapTrackingButtonBorder:Hide()
+		B.ReskinIcon(MiniMapTrackingIcon)
+		MiniMapTrackingIconOverlay:SetAlpha(0)
+		local hl = MiniMapTrackingButton:GetHighlightTexture()
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetAllPoints(MiniMapTrackingIcon)
+	end
 
 	-- Mail icon
 	MiniMapMailFrame:ClearAllPoints()
@@ -577,9 +579,15 @@ function module:SetupMinimap()
 	}
 
 	for _, v in pairs(frames) do
-		B.HideObject(_G[v])
+		local frame = _G[v]
+		if frame then
+			B.HideObject(_G[v])
+		end
 	end
 	MinimapCluster:EnableMouse(false)
+	MinimapCluster:KillEditMode()
+	MinimapCluster:SetAllPoints(Minimap)
+	MinimapCluster.BorderTop:Hide()
 
 	-- Add Elements
 	self:CreatePulse()
