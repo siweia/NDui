@@ -131,25 +131,6 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(GameFontNormal)
 	ReskinFont(GameFontNormalHuge2)
 
-	-- Refont RaidFrame Health
-	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
-		if frame:IsForbidden() then return end
-		if not frame.statusText then return end
-
-		local options = DefaultCompactUnitFrameSetupOptions
-		frame.statusText:ClearAllPoints()
-		frame.statusText:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", 3, options.height/3 - 5)
-		frame.statusText:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -3, options.height/3 - 5)
-
-		if not frame.fontStyled then
-			local fontName, fontSize = frame.statusText:GetFont()
-			frame.statusText:SetFont(fontName, fontSize, "OUTLINE")
-			frame.statusText:SetTextColor(.7, .7, .7)
-			frame.statusText:SetShadowColor(0, 0, 0, 0)
-			frame.fontStyled = true
-		end
-	end)
-
 	-- WhoFrame LevelText
 	hooksecurefunc("WhoList_Update", function()
 		for i = 1, WHOS_TO_DISPLAY, 1 do
