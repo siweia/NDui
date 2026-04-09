@@ -26,6 +26,16 @@ function module:TabSetAlpha(alpha)
 	end
 end
 
+local function updateChatAnchor(self, _, _, _, x, y)
+	if not C.db["Chat"]["Lock"] then return end
+	if not (x == 0 and y == 30) then
+		self:ClearAllPoints()
+		self:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 0, 30)
+		self:SetWidth(C.db["Chat"]["ChatWidth"])
+		self:SetHeight(C.db["Chat"]["ChatHeight"])
+	end
+end
+
 local isScaling = false
 function module:UpdateChatSize()
 	if not C.db["Chat"]["Lock"] then return end
@@ -465,7 +475,7 @@ function module:OnLogin()
 	if C.db["Chat"]["Lock"] then
 		module:UpdateChatSize()
 		B:RegisterEvent("UI_SCALE_CHANGED", module.UpdateChatSize)
-		hooksecurefunc("FCF_SavePositionAndDimensions", module.UpdateChatSize)
+		hooksecurefunc(ChatFrame1, "SetPoint", updateChatAnchor)
 		FCF_SavePositionAndDimensions(ChatFrame1)
 	end
 
