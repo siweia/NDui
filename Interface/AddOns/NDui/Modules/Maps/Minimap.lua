@@ -51,6 +51,12 @@ function module:CreatePulse()
 	end)
 end
 
+local function UpdateLFGIcon()
+	LFGMinimapFrame:ClearAllPoints()
+	LFGMinimapFrame:SetPoint("RIGHT", Minimap, 5, 0)
+	LFGMinimapFrameBorder:Hide()
+end
+
 function module:ReskinRegions()
 	-- Tracking icon
 	if MiniMapTracking then
@@ -107,10 +113,10 @@ function module:ReskinRegions()
 	end)
 
 	-- LFG Icon
-	if MiniMapLFGFrame then
-		MiniMapLFGFrame:ClearAllPoints()
-		MiniMapLFGFrame:SetPoint("RIGHT", Minimap, 5, 0)
-		MiniMapLFGFrameBorder:Hide()
+	if LFGMinimapFrame then
+		UpdateLFGIcon()
+	else
+		EventUtil.ContinueOnAddOnLoaded("Blizzard_GroupFinder_VanillaStyle", UpdateLFGIcon)
 	end
 
 	-- Difficulty Flags
@@ -555,10 +561,8 @@ function module:SetupMinimap()
 	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
-	hooksecurefunc(Minimap, "SetPoint", function(frame, _, _, _, _, _, force)
-		if force then return end
-		frame:ClearAllPoints()
-		frame:SetPoint("TOPRIGHT", mover, "TOPRIGHT", 0, 0, true)
+	hooksecurefunc(MinimapCluster, "SetPoint", function(frame)
+		frame:SetAllPoints(Minimap)
 	end)
 	Minimap.mover = mover
 
@@ -592,6 +596,7 @@ function module:SetupMinimap()
 	end
 	MinimapCluster:EnableMouse(false)
 	MinimapCluster:KillEditMode()
+	MinimapCluster:ClearAllPoints()
 	MinimapCluster:SetAllPoints(Minimap)
 	MinimapCluster.BorderTop:Hide()
 
