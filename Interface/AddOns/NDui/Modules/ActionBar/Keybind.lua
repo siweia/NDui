@@ -10,7 +10,6 @@ local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKe
 local GetBindingKey, SetBinding, SaveBindings, LoadBindings = GetBindingKey, SetBinding, SaveBindings, LoadBindings
 local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
 local NOT_BOUND = NOT_BOUND
-local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 -- Button types
 local function hookActionButton(self)
@@ -113,8 +112,8 @@ function Bar:Bind_Create()
 		button:HookScript("OnEnter", hookSpellButton)
 	end
 
-	if not IsAddOnLoaded("Blizzard_MacroUI") then
-		hooksecurefunc("LoadAddOn", Bar.Bind_RegisterMacro)
+	if not C_AddOns.IsAddOnLoaded("Blizzard_MacroUI") then
+		hooksecurefunc(C_AddOns, "LoadAddOn", Bar.Bind_RegisterMacro)
 	else
 		Bar.Bind_RegisterMacro("Blizzard_MacroUI")
 	end
