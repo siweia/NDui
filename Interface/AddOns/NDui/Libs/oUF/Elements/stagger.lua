@@ -27,6 +27,9 @@ A default texture will be applied if the widget is a StatusBar and doesn't have 
 
 local _, ns = ...
 local oUF = ns.oUF
+local Private = oUF.Private
+
+local unitIsUnit = Private.unitIsUnit
 
 -- sourced from Blizzard_FrameXMLBase/Constants.lua
 local SPEC_MONK_BREWMASTER = _G.SPEC_MONK_BREWMASTER or 1
@@ -202,7 +205,7 @@ local function Enable(self, unit)
 	end
 
 	local element = self.Stagger
-	if(element and UnitIsUnit(unit, 'player')) then
+	if(element and unitIsUnit(unit, 'player')) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 

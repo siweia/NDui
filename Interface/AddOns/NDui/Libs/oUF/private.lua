@@ -30,6 +30,12 @@ function Private.unitExists(unit)
 	return unit and (UnitExists(unit) or UnitIsVisible(unit))
 end
 
+function Private.unitIsUnit(unit1, unit2)
+	-- TODO: use C_Secrets.CanCompareUnitTokens instead of pcall
+	local isOk, isUnit = pcall(UnitIsUnit, unit1, unit2)
+	return isOk and isUnit
+end
+
 local validator = CreateFrame('Frame')
 
 function Private.validateEventUnit(unit)

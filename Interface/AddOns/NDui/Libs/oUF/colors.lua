@@ -228,6 +228,10 @@ colors.power[Enum.PowerType.Essence or 19] = colors.power.ESSENCE
 colors.power.ALTERNATE = oUF:CreateColor(0.7, 0.7, 0.6)
 colors.power[Enum.PowerType.Alternate or 10] = colors.power.ALTERNATE
 
+-- fake power types, no ID equivalent will exist to avoid collisions
+colors.power.ICICLES = oUF:CreateColor(116, 217, 246) -- based on spell icon
+colors.power.TIP_OF_THE_SPEAR = oUF:CreateColor(108, 188, 40) -- based on spell icon
+
 for i = 0, 3 do
 	colors.threat[i] = oUF:CreateColor(GetThreatStatusColor(i))
 end

@@ -24,6 +24,9 @@ A default texture will be applied if the widget is a Texture and doesn't have a 
 
 local _, ns = ...
 local oUF = ns.oUF
+local Private = oUF.Private
+
+local unitIsUnit = Private.unitIsUnit
 
 local function Update(self, event)
 	local element = self.RestingIndicator
@@ -71,7 +74,7 @@ end
 
 local function Enable(self, unit)
 	local element = self.RestingIndicator
-	if(element and UnitIsUnit(unit, 'player')) then
+	if(element and unitIsUnit(unit, 'player')) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 

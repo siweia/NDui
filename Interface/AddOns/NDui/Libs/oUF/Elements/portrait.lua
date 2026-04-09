@@ -38,9 +38,12 @@ the unit.
 
 local _, ns = ...
 local oUF = ns.oUF
+local Private = oUF.Private
+
+local unitIsUnit = Private.unitIsUnit
 
 local function Update(self, event, unit)
-	if(not unit or not UnitIsUnit(self.unit, unit)) then return end
+	if(not unit or not unitIsUnit(self.unit, unit)) then return end
 
 	local element = self.Portrait
 

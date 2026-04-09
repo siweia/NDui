@@ -52,7 +52,9 @@ The following options are listed by priority. The first check that returns true 
 
 local _, ns = ...
 local oUF = ns.oUF
+local Private = oUF.Private
 
+local unitIsUnit = Private.unitIsUnit
 local playerClass = UnitClassBase('player')
 
 -- sourced from Blizzard_UnitFrame/AlternatePowerBar.lua
@@ -62,7 +64,7 @@ local ADDITIONAL_POWER_BAR_NAME = 'MANA'
 local ADDITIONAL_POWER_BAR_INDEX = 0
 
 local function UpdateColor(self, event, unit, powerType)
-	if(not (unit and UnitIsUnit(unit, 'player') and powerType == ADDITIONAL_POWER_BAR_NAME)) then return end
+	if(not (unit and unitIsUnit(unit, 'player') and powerType == ADDITIONAL_POWER_BAR_NAME)) then return end
 	local element = self.AdditionalPower
 
 	local color
@@ -70,7 +72,7 @@ local function UpdateColor(self, event, unit, powerType)
 		color = self.colors.power[ADDITIONAL_POWER_BAR_INDEX]
 
 		if(element.colorPowerSmooth and color and color:GetCurve()) then
-			color = UnitPowerPercent(unit, true, color:GetCurve())
+			color = UnitPowerPercent(unit, nil, true, color:GetCurve())
 		end
 	end
 
@@ -90,7 +92,7 @@ local function UpdateColor(self, event, unit, powerType)
 end
 
 local function Update(self, event, unit, powerType)
-	if(not (unit and UnitIsUnit(unit, 'player') and powerType == ADDITIONAL_POWER_BAR_NAME)) then return end
+	if(not (unit and unitIsUnit(unit, 'player') and powerType == ADDITIONAL_POWER_BAR_NAME)) then return end
 	local element = self.AdditionalPower
 
 	--[[ Callback: AdditionalPower:PreUpdate(unit)
@@ -376,7 +378,7 @@ end
 
 local function Enable(self, unit)
 	local element = self.AdditionalPower
-	if(element and UnitIsUnit(unit, 'player')) then
+	if(element and unitIsUnit(unit, 'player')) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 		element.SetFrequentUpdates = SetFrequentUpdates
