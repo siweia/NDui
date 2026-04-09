@@ -14,6 +14,7 @@ local GetContainerItemID = C_Container.GetContainerItemID
 local GetContainerNumSlots = C_Container.GetContainerNumSlots
 local PickupContainerItem = C_Container.PickupContainerItem
 local SplitContainerItem = C_Container.SplitContainerItem
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS or 4
 local NUM_BANKBAGSLOTS = NUM_BANKBAGSLOTS or 7

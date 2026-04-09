@@ -1,6 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local _G = getfenv(0)
 local strmatch, tonumber, pairs, unpack, rad = string.match, tonumber, pairs, unpack, math.rad

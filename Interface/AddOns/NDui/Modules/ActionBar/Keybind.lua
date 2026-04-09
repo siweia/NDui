@@ -10,6 +10,7 @@ local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKe
 local GetBindingKey, SetBinding, SaveBindings, LoadBindings = GetBindingKey, SetBinding, SaveBindings, LoadBindings
 local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
 local NOT_BOUND = NOT_BOUND
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 -- Button types
 local function hookActionButton(self)

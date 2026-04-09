@@ -19,6 +19,7 @@ local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuild
 local UnitName, GetPetHappiness = UnitName, GetPetHappiness
 local UnitIsPlayer, GuildInvite, C_FriendList_AddFriend = UnitIsPlayer, GuildInvite, C_FriendList.AddFriend
 local TakeTaxiNode, IsMounted, Dismount, C_Timer_After = TakeTaxiNode, IsMounted, Dismount, C_Timer.After
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 --[[
 	Miscellaneous 各种有用没用的小玩意儿

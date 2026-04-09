@@ -13,6 +13,7 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetWorldPosFromMapPos = C_Map.GetWorldPosFromMapPos
 local C_MapExplorationInfo_GetExploredMapTextures = C_MapExplorationInfo.GetExploredMapTextures
 local TexturePool_HideAndClearAnchors = TexturePool_HideAndClearAnchors
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)

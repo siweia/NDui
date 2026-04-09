@@ -8,6 +8,7 @@ local strmatch, strfind, strupper = strmatch, strfind, strupper
 local UIFrameFadeOut, UIFrameFadeIn = UIFrameFadeOut, UIFrameFadeIn
 local GetInstanceInfo, GetDifficultyInfo = GetInstanceInfo, GetDifficultyInfo
 local C_Timer_After = C_Timer.After
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local cr, cg, cb = DB.r, DB.g, DB.b
 
 function module:CreatePulse()
@@ -541,6 +542,7 @@ function module:Minimap_OnMouseUp(btn)
 end
 
 function module:SetupMinimap()
+	if IsAddOnLoaded("SexyMap") then C.db["Map"]["DisableMinimap"] = true end
 	if C.db["Map"]["DisableMinimap"] then return end
 
 	-- Shape and Position

@@ -5,6 +5,7 @@ local B, C, L, DB = unpack(ns)
 -- NDui MOD
 --------------------------
 local _G, pairs, type = getfenv(0), pairs, type
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local frames = {
 	-- ["FrameName"] = true (the parent frame should be moved) or false (the frame itself should be moved)

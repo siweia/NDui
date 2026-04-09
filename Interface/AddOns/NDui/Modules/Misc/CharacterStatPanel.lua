@@ -5,6 +5,7 @@ local M = B:GetModule("Misc")
 local wipe, gmatch, tinsert, ipairs, pairs = wipe, gmatch, tinsert, ipairs, pairs
 local tonumber, tostring, max = tonumber, tostring, max
 local cr, cg, cb = DB.r, DB.g, DB.b
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local hasOtherAddon
 
