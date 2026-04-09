@@ -135,12 +135,12 @@ function Bar:ToggleAspectBar()
 
 	if C.db["Actionbar"]["AspectBar"] then
 		Bar.CheckKnownAspects()
-		B:RegisterEvent("LEARNED_SPELL_IN_TAB", Bar.CheckKnownAspects)
+		B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", Bar.CheckKnownAspects)
 		Bar:CheckActiveAspect("player")
 		B:RegisterEvent("UNIT_AURA", Bar.CheckActiveAspect)
 		aspectFrame:Show()
 	else
-		B:UnregisterEvent("LEARNED_SPELL_IN_TAB", Bar.CheckKnownAspects)
+		B:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED", Bar.CheckKnownAspects)
 		B:UnregisterEvent("UNIT_AURA", Bar.CheckActiveAspect)
 		aspectFrame:Hide()
 	end
