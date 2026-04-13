@@ -70,7 +70,7 @@ function cargBags:GetImplementation(name)
 	return self.classes.Implementation:Get(name)
 end
 
-local function toggleBag(forceopen)	cargBags.blizzard:Toggle(true)	end
+local function toggleBag(forceopen)	cargBags.blizzard:Toggle(forceopen)	end
 local function toggleNoForce() cargBags.blizzard:Toggle() end
 local function closeBag() cargBags.blizzard:Hide() end
 
@@ -87,9 +87,10 @@ function cargBags:ReplaceBlizzard(name)
 
 	OpenAllBags = toggleBag	-- Name is misleading, Blizz-function actually toggles bags
 	OpenBackpack = toggleBag -- Blizz does not provide toggling here
-	CloseAllBags = closeBag
-	CloseBackpack = closeBag
 	OpenBag = toggleBag		-- fixed the loot won alert frame
+
+	hooksecurefunc("CloseAllBags", closeBag)
+	hooksecurefunc("CloseBackpack", closeBag)
 
 	BankFrame:UnregisterAllEvents()
 	BankFrame:SetParent(NDui[1].HiddenFrame)
