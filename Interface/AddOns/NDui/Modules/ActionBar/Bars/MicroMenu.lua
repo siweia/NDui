@@ -152,6 +152,10 @@ function Bar:MicroMenu()
 	menubar.mover = B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 	Bar:MicroMenu_Lines(menubar)
 
+	StoreMicroButton:ClearAllPoints()
+	StoreMicroButton:SetPoint("CENTER")
+	StoreMicroButton:Show()
+
 	-- Generate Buttons
 	local buttonInfo = {
 		{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
@@ -172,7 +176,6 @@ function Bar:MicroMenu()
 		Bar:MicroButton_Create(menubar, info)
 	end
 
-	StoreMicroButton:Show()
 	Bar:MicroButton_Create(menubar, {"guild", "GuildMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")}, true)
 	GuildMicroButton:SetAllPoints(SocialsMicroButton)
 
