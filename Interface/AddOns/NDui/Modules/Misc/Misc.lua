@@ -836,3 +836,7 @@ end
 if not TalentMicroButtonAlert then
 	TalentMicroButtonAlert = CreateFrame("Frame")
 end
+
+-- Fix errors in alert
+TalentMicroButtonAlert.MicroButton = CreateFrame("Frame")
+TalentMicroButtonAlert.MicroButton.EvaluateAlertVisibility = function() end
