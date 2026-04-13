@@ -76,9 +76,9 @@ function Bar:HideBlizz()
 		frame:SetParent(B.HiddenFrame)
 	end
 
-	C_Timer.After(0, function()
-		MainActionBar:SetParent(B.HiddenFrame)
-	end)
+	B.HideOption(MainActionBar)
+	MainActionBar:ClearAllPoints()
+	MainActionBar:SetPoint("BOTTOMLEFT", UIParent, -100, -100)
 
 	for _, frame in next, framesToDisable do
 		frame:UnregisterAllEvents()

@@ -338,6 +338,8 @@ function Bar:OnLogin()
 	Bar:UpdateBarConfig()
 	Bar:UpdateVisibility()
 	Bar:UpdateAllSize()
+	Bar:HunterAspectBar()
+	Bar:TotemBar()
 	Bar:HideBlizz()
 
 	if C_PetBattles.IsInBattle() then
@@ -346,7 +348,4 @@ function Bar:OnLogin()
 		Bar:ReassignBindings()
 	end
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.ReassignBindings)
-
-	Bar:HunterAspectBar()
-	Bar:TotemBar()
 end
