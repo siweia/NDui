@@ -180,14 +180,14 @@ function M:SetupScript(bar)
 	bar:SetScript("OnEvent", M.ExpBar_Update)
 	bar:SetScript("OnEnter", M.ExpBar_UpdateTooltip)
 	bar:SetScript("OnLeave", B.HideTooltip)
-	bar:SetScript("OnMouseUp", function(_, btn)
+--[[bar:SetScript("OnMouseUp", function(_, btn)
 		if not HasArtifactEquipped() or btn ~= "LeftButton" then return end
 		if not ArtifactFrame or not ArtifactFrame:IsShown() then
 			SocketInventoryItem(16)
 		else
 			B:TogglePanel(ArtifactFrame)
 		end
-	end)
+	end)]]
 	hooksecurefunc(StatusTrackingBarManager, "UpdateBarsShown", function()
 		M.ExpBar_Update(bar)
 	end)
