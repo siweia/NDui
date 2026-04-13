@@ -163,7 +163,7 @@ function Bar:MicroMenu()
 		{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
 		{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
 		{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
-		{"store", function() if not InCombatLockdown() then ToggleStoreUI() end end, BLIZZARD_STORE},
+		{"store", "StoreMicroButton", BLIZZARD_STORE},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
 		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
 	}
@@ -172,6 +172,7 @@ function Bar:MicroMenu()
 		Bar:MicroButton_Create(menubar, info)
 	end
 
+	StoreMicroButton:Show()
 	Bar:MicroButton_Create(menubar, {"guild", "GuildMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")}, true)
 	GuildMicroButton:SetAllPoints(SocialsMicroButton)
 
