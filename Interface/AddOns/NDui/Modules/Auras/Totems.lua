@@ -52,17 +52,18 @@ function A:TotemBar_Update()
 	for button in _G.TotemFrame.totemPool:EnumerateActive() do
 		activeTotems = activeTotems + 1
 
-		local _, _, start, dur, icon = GetTotemInfo(button.slot)
+		local haveTotem, _, start, dur, icon = GetTotemInfo(button.slot)
 		local totem = totems[activeTotems]
-		if start and dur then
+		if haveTotem and dur > 0 then
 			totem.CD:SetCooldown(start, dur)
 			totem.CD:Show()
 			totem:SetAlpha(1)
+			totem.Icon:SetTexture(icon)
 		else
+			totem.Icon:SetTexture("")
 			totem.CD:Hide()
 			totem:SetAlpha(0)
 		end
-		totem.Icon:SetTexture(icon)
 
 		button:ClearAllPoints()
 		button:SetParent(totem)
