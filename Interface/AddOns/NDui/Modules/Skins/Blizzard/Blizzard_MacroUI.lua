@@ -30,12 +30,15 @@ C.themes["Blizzard_MacroUI"] = function()
 	handleMacroButton(MacroFrameSelectedMacroButton)
 
 	C_Timer.After(0, function() -- add delay to avoid taint
-		hooksecurefunc(MacroFrame.MacroSelector.ScrollBox, "Update", function(self)
+		local scrollBox = MacroFrame.MacroSelector.ScrollBox
+		hooksecurefunc(scrollBox, "Update", function(self)
 			if self.view then
 				self:ForEachFrame(handleMacroButton)
 			end
 		end)
-		MacroFrame.MacroSelector.ScrollBox:ForEachFrame(handleMacroButton)
+		if scrollBox.view then
+			scrollBox:ForEachFrame(handleMacroButton)
+		end
 	end)
 
 	B.ReskinIconSelector(MacroPopupFrame)
