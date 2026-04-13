@@ -11,7 +11,7 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainMenuBar, MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar, PossessActionBar, PetActionBar, StanceBar, StatusTrackingBarManager, BagsBar
+	MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar, PossessActionBar, PetActionBar, StanceBar, StatusTrackingBarManager, BagsBar
 }
 
 local framesToDisable = {
@@ -75,6 +75,10 @@ function Bar:HideBlizz()
 	for _, frame in next, framesToHide do
 		frame:SetParent(B.HiddenFrame)
 	end
+
+	C_Timer.After(0, function()
+		MainActionBar:SetParent(B.HiddenFrame)
+	end)
 
 	for _, frame in next, framesToDisable do
 		frame:UnregisterAllEvents()

@@ -12,17 +12,26 @@ local colorTable = {
 	[_G.AIR_TOTEM_SLOT]   = DB.QualityColors[4],
 }
 
-local function reskinTotemButton(button, nobg, uncut)
-	B.StripTextures(button, 1)
+local function reskinTotemButton(button, nobg, uncut, strip)
+	if strip then
+		B.StripTextures(button, 4)
+	else
+		if button.overlayTex then button.overlayTex:Hide() end
+		if button.SlotBackground then button.SlotBackground:Hide() end
+		if button:GetNormalTexture() then button:GetNormalTexture():Hide() end
+		if button.PushedTexture then button.PushedTexture:SetAlpha(0) end
+	end
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-	local icon = button:GetRegions()
-	if not button.icon then button.icon = icon end
-	if not uncut then
-		icon:SetTexCoord(unpack(DB.TexCoord))
-	end
-	if not nobg then
-		button.bg = B.SetBD(icon)
+	local icon = _G[button:GetName().."Icon"] or button:GetRegions()
+	if icon then
+		if not button.icon then button.icon = icon end
+		if not uncut then
+			icon:SetTexCoord(unpack(DB.TexCoord))
+		end
+		if not nobg then
+			button.bg = B.SetBD(icon)
+		end
 	end
 end
 
@@ -55,20 +64,21 @@ function Bar:TotemBar()
 
 	MultiCastActionBarFrame:SetParent(frame)
 	--MultiCastActionBarFrame.SetParent = B.Dummy
-	MultiCastActionBarFrame:ClearAllPoints()
-	MultiCastActionBarFrame:SetPoint("BOTTOMLEFT", 0, margin/2)
-	MultiCastActionBarFrame.SetPoint = B.Dummy
+	--MultiCastActionBarFrame:ClearAllPoints()
+	--MultiCastActionBarFrame:SetPoint("BOTTOMLEFT", 0, margin/2)
+	--MultiCastActionBarFrame.SetPoint = B.Dummy
 	MultiCastActionBarFrame:SetScript("OnUpdate", nil)
 	MultiCastActionBarFrame:SetScript("OnShow", nil)
 	MultiCastActionBarFrame:SetScript("OnHide", nil)
 
-	reskinTotemButton(MultiCastSummonSpellButton)
+	B.StripTextures(MultiCastSummonSpellButton,4)
+	reskinTotemButton(MultiCastSummonSpellButton, nil, nil, true)
 	MultiCastSummonSpellButton:SetSize(iconSize, iconSize)
 	MultiCastSummonSpellButton:ClearAllPoints()
 	MultiCastSummonSpellButton:SetPoint("RIGHT", _G.MultiCastSlotButton1, "LEFT", -margin, 0)
 	tinsert(buttons, MultiCastSummonSpellButton)
 
-	reskinTotemButton(MultiCastRecallSpellButton)
+	reskinTotemButton(MultiCastRecallSpellButton, nil, nil, true)
 	MultiCastRecallSpellButton:SetSize(iconSize, iconSize)
 	tinsert(buttons, MultiCastRecallSpellButton)
 
