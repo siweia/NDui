@@ -56,7 +56,7 @@ hooksecurefunc("GuildStatus_Update", function()
 			if fullName and online then
 				local r, g, b = classColor(class, true)
 				_G["GuildFrameGuildStatusButton"..i.."Name"]:SetTextColor(r, g, b)
-				local lr, lg, lb = oUF:RGBColorGradient(rankIndex, 10, unpack(rankColor))
+				local lr, lg, lb = B:RGBColorGradient(rankIndex, 10, unpack(rankColor))
 				if lr then
 					_G["GuildFrameGuildStatusButton"..i.."Rank"]:SetTextColor(lr, lg, lb)
 				end

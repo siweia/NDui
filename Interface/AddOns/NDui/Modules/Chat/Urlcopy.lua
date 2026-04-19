@@ -51,7 +51,7 @@ function module:SearchForURL(text, ...)
 	self.am(self, text, ...)
 end
 
-function module:HyperlinkShowHook(link, _, button)
+function module:Hyperlink_Show(link, button)
 	local type, value = strmatch(link, "(%a+):(.+)")
 	local hide
 	if button == "LeftButton" and IsModifierKeyDown() then
@@ -80,7 +80,7 @@ function module:HyperlinkShowHook(link, _, button)
 			end
 		end
 	elseif type == "url" then
-		local eb = LAST_ACTIVE_CHAT_EDIT_BOX or _G[self:GetName().."EditBox"]
+		local editBox = ChatEdit_ChooseBoxForSend()
 		if eb then
 			eb:Show()
 			eb:SetText(value)
@@ -92,7 +92,7 @@ function module:HyperlinkShowHook(link, _, button)
 	if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
 end
 
-function module.SetItemRefHook(link, _, button)
+function module:ItemRef_CopyName(link, button)
 	if strsub(link, 1, 6) == "player" and button == "LeftButton" and IsModifiedClick("CHATLINK") then
 		if not StaticPopup_Visible("ADD_IGNORE") and not StaticPopup_Visible("ADD_FRIEND") and not StaticPopup_Visible("ADD_GUILDMEMBER") and not StaticPopup_Visible("ADD_RAIDMEMBER") and not StaticPopup_Visible("CHANNEL_INVITE") and not ChatEdit_GetActiveWindow() then
 			local namelink, fullname
@@ -121,6 +121,11 @@ function module.SetItemRefHook(link, _, button)
 	end
 end
 
+function module.SetItemRefHook(link, _, button)
+	module:ItemRef_CopyName(link, button)
+	module:Hyperlink_Show(link, button)
+end
+
 function module:UrlCopy()
 	for i = 1, NUM_CHAT_WINDOWS do
 		if i ~= 2 then
@@ -137,6 +142,5 @@ function module:UrlCopy()
 		return orig(self, link, ...)
 	end
 
-	hooksecurefunc("ChatFrame_OnHyperlinkShow", self.HyperlinkShowHook)
 	hooksecurefunc("SetItemRef", self.SetItemRefHook)
 end

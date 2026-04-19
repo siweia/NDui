@@ -65,7 +65,7 @@ local function isLowDurability()
 end
 
 local function getDurabilityColor(cur, max)
-	local r, g, b = oUF:RGBColorGradient(cur, max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	local r, g, b = B:RGBColorGradient(cur, max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 	return r, g, b
 end
 

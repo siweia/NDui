@@ -6,7 +6,7 @@ local _G = _G
 local tinsert, mod, min, ceil = tinsert, mod, min, ceil
 local margin, padding = C.Bars.margin, C.Bars.padding
 
-local num = NUM_STANCE_SLOTS
+local num = NUM_STANCE_SLOTS or 10
 
 function Bar:UpdateStanceBar()
 	local frame = _G["NDui_ActionBarStance"]
@@ -48,11 +48,13 @@ function Bar:CreateStancebar()
 	Bar.movers[11] = frame.mover
 
 	-- StanceBar
+	if not DB.isNewPatch then
 	StanceBarFrame:SetParent(frame)
 	StanceBarFrame:EnableMouse(false)
 	StanceBarLeft:SetTexture(nil)
 	StanceBarMiddle:SetTexture(nil)
 	StanceBarRight:SetTexture(nil)
+	end
 
 	for i = 1, num do
 		local button = _G["StanceButton"..i]

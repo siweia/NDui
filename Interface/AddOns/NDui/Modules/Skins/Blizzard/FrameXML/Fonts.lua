@@ -135,6 +135,7 @@ tinsert(C.defaultThemes, function()
 	ReskinFont(PriceFontGreen)
 	ReskinFont(PriceFontRed)
 
+	if not DB.isNewPatch then
 	-- Refont RaidFrame Health
 	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
 		if frame:IsForbidden() then return end
@@ -153,6 +154,7 @@ tinsert(C.defaultThemes, function()
 			frame.fontStyled = true
 		end
 	end)
+end
 
 	-- WhoFrame LevelText
 	hooksecurefunc("WhoList_Update", function()

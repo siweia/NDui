@@ -143,9 +143,11 @@ function Bar:ReskinBars()
 	--extra action button
 	Bar:StyleActionButton(ExtraActionButton1)
 	--spell flyout
+	if not DB.isNewPatch then
 	SpellFlyoutBackgroundEnd:SetTexture(nil)
 	SpellFlyoutHorizontalBackground:SetTexture(nil)
 	SpellFlyoutVerticalBackground:SetTexture(nil)
+	end
 	local function checkForFlyoutButtons()
 		local i = 1
 		local button = _G["SpellFlyoutButton"..i]

@@ -163,7 +163,9 @@ function Bar:MicroMenu()
 	-- Default elements
 	B.HideObject(PVPMicroButtonTexture)
 	B.HideObject(MicroButtonPortrait)
-	B.HideObject(HelpMicroButton)
+	if not DB.isNewPatch then
+		B.HideObject(HelpMicroButton)
+	end
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)

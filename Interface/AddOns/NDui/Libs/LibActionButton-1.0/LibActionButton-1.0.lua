@@ -1251,7 +1251,11 @@ function InitializeEventHandler()
 	lib.eventFrame:RegisterEvent("START_AUTOREPEAT_SPELL")
 	lib.eventFrame:RegisterEvent("STOP_AUTOREPEAT_SPELL")
 	lib.eventFrame:RegisterEvent("UNIT_INVENTORY_CHANGED")
+	if NDui[4].isNewPatch then
+		lib.eventFrame:RegisterEvent("LEARNED_SPELL_IN_SKILL_LINE")
+	else
 	lib.eventFrame:RegisterEvent("LEARNED_SPELL_IN_TAB")
+	end
 	lib.eventFrame:RegisterEvent("PET_STABLE_UPDATE")
 	lib.eventFrame:RegisterEvent("PET_STABLE_SHOW")
 	lib.eventFrame:RegisterEvent("SPELL_UPDATE_CHARGES")

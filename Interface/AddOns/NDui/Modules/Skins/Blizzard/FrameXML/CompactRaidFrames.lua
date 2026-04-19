@@ -54,6 +54,8 @@ tinsert(C.defaultThemes, function()
 	local bd = B.SetBD(CompactRaidFrameManager)
 	bd:SetPoint("TOPLEFT")
 	bd:SetPoint("BOTTOMRIGHT", -9, 9)
+	if not DB.isNewPatch then
 	B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameProfileSelector)
+	end
 	B.ReskinCheck(CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

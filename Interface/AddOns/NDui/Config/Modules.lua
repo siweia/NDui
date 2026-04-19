@@ -10,7 +10,7 @@ C.Bars = {
 
 -- BUFF/DEBUFF相关
 C.Auras = {
-	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, 0},			-- BUFF默认位置
+	BuffPos			= {"TOPRIGHT", MinimapCluster, "TOPLEFT", -15, 0},	-- BUFF默认位置
 	TotemsPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -450, 20},	-- 图腾助手默认位置
 
 	-- 技能监控各组初始位置

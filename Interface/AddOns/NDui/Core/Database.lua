@@ -8,8 +8,7 @@ DB.Version = GetAddOnMetadata("NDui", "Version")
 DB.Support = GetAddOnMetadata("NDui", "X-Support")
 DB.Client = GetLocale()
 DB.ScreenWidth, DB.ScreenHeight = GetPhysicalScreenSize()
-DB.isClassic = select(4, GetBuildInfo()) < 90000
-DB.isNewPatch = select(4, GetBuildInfo()) >= 50501 -- 5.5.1
+DB.isNewPatch = select(4, GetBuildInfo()) >= 50504 -- 5.5.4
 
 -- Deprecated
 do

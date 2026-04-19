@@ -25,6 +25,8 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(closeDialog)
 	local bg = B.SetBD(closeDialog)
 	bg:SetFrameLevel(1)
+	if not DB.isNewPatch then
 	B.Reskin(closeDialog.ConfirmButton)
 	B.Reskin(closeDialog.ResumeButton)
+	end
 end)

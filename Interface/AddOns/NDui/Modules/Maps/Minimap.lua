@@ -485,7 +485,7 @@ function module:ShowCalendar()
 end
 
 local function GetVolumeColor(cur)
-	local r, g, b = oUF:RGBColorGradient(cur, 100, 1, 1, 1, 1, .8, 0, 1, 0, 0)
+	local r, g, b = B:RGBColorGradient(cur, 100, 1, 1, 1, 1, .8, 0, 1, 0, 0)
 	return r, g, b
 end
 
@@ -556,6 +556,11 @@ function module:SetupMinimap()
 	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
+	if DB.isNewPatch then
+	hooksecurefunc(MinimapCluster, "SetPoint", function(frame)
+		frame:SetAllPoints(Minimap)
+	end)
+	end
 	Minimap.mover = mover
 
 	self:UpdateMinimapScale()
@@ -577,18 +582,30 @@ function module:SetupMinimap()
 		"MinimapZoomIn",
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
+		"MinimapToggleButton",
 	}
 
 	for _, v in pairs(frames) do
-		B.HideObject(_G[v])
+		local frame = _G[v]
+		if frame then
+			B.HideObject(_G[v])
+		end
 	end
 	MinimapCluster:EnableMouse(false)
+	if DB.isNewPatch then
+	MinimapCluster:KillEditMode()
+	MinimapCluster:ClearAllPoints()
+	MinimapCluster:SetAllPoints(Minimap)
+	MinimapCluster.BorderTop:Hide()
+	end
 
 	-- Add Elements
 	self:CreatePulse()
 	self:ReskinRegions()
 	self:RecycleBin()
+	if not DB.isNewPatch then
 	self:WhoPingsMyMap()
+	end
 	self:ShowMinimapHelpInfo()
 	self:SoundVolume()
 
