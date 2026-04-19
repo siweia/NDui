@@ -4,7 +4,7 @@ local M = B:GetModule("Misc")
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
 local GetSpellCooldown, GetSpellInfo = GetSpellCooldown, GetSpellInfo
-local IsPassiveSpell = C_Spell and C_Spell.IsSpellPassive or IsPassiveSpell
+local IsPassiveSpell = C_Spell and C_Spell.IsSpellBookItemPassive or IsPassiveSpell
 local GetSpellBookItemInfo = C_SpellBook and C_SpellBook.GetSpellBookItemInfo or GetSpellBookItemInfo
 local IsCurrentSpell, IsPlayerSpell, UseItemByName = IsCurrentSpell, IsPlayerSpell, UseItemByName
 local GetProfessions, GetProfessionInfo = GetProfessions, GetProfessionInfo
