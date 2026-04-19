@@ -4,6 +4,8 @@ local SoundTime = 0
 local enableTaint = false
 BaudErrorFrameConfig = BaudErrorFrameConfig or {}
 
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
+
 local function RegisterTaintEvents(self)
 	self:RegisterEvent("ADDON_ACTION_BLOCKED")
 	self:RegisterEvent("MACRO_ACTION_BLOCKED")
