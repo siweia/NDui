@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+if not DB.isNewPatch then return end
 
 local function reskinOptionCheck(button)
 	B.ReskinCheck(button)
@@ -8,7 +9,6 @@ end
 
 tinsert(C.defaultThemes, function()
 	local frame = EditModeManagerFrame
-	if not frame then return end
 
 	B.StripTextures(frame)
 	B.SetBD(frame)
