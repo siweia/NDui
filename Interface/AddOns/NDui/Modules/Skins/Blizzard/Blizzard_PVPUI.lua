@@ -18,6 +18,7 @@ C.themes["Blizzard_PVPUI"] = function()
 			local cu = bu.CurrencyDisplay
 	
 			bu.Ring:Hide()
+			if bu.CircleMask then bu.CircleMask:Hide() end
 			B.Reskin(bu, true)
 			bu.Background:SetInside(bu.__bg)
 			bu.Background:SetColorTexture(r, g, b, .25)

@@ -520,34 +520,38 @@ C.themes["Blizzard_Collections"] = function()
 	end)
 
 	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
-	B.StripTextures(SetsTransmogFrame)
-	B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
-	B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
+	if SetsTransmogFrame then -- isNewPatch, removed
+		B.StripTextures(SetsTransmogFrame)
+		B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
+		B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
+	end
 
 	-- [[ Wardrobe ]]
 
 	local WardrobeFrame = WardrobeFrame
-	local WardrobeTransmogFrame = WardrobeTransmogFrame
+	if WardrobeFrame then
+		local WardrobeTransmogFrame = WardrobeTransmogFrame
 
-	B.ReskinPortraitFrame(WardrobeFrame)
-	B.StripTextures(WardrobeTransmogFrame)
-	B.Reskin(WardrobeTransmogFrame.ApplyButton)
-	B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+		B.ReskinPortraitFrame(WardrobeFrame)
+		B.StripTextures(WardrobeTransmogFrame)
+		B.Reskin(WardrobeTransmogFrame.ApplyButton)
+		B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
 
-	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand", "Ranged"}
-	for i = 1, #slots do
-		local slot = WardrobeTransmogFrame[slots[i].."Button"]
-		if slot then
-			slot.Border:Hide()
-			B.ReskinIcon(slot.Icon)
-			slot:SetHighlightTexture(DB.bdTex)
-			local hl = slot:GetHighlightTexture()
-			hl:SetVertexColor(1, 1, 1, .25)
-			hl:SetAllPoints(slot.Icon)
+		local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand", "Ranged"}
+		for i = 1, #slots do
+			local slot = WardrobeTransmogFrame[slots[i].."Button"]
+			if slot then
+				slot.Border:Hide()
+				B.ReskinIcon(slot.Icon)
+				slot:SetHighlightTexture(DB.bdTex)
+				local hl = slot:GetHighlightTexture()
+				hl:SetVertexColor(1, 1, 1, .25)
+				hl:SetAllPoints(slot.Icon)
+			end
 		end
-	end
 
-	-- Outfit Frame
-	B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
-	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
+		-- Outfit Frame
+		B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
+		B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
+	end
 end

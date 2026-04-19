@@ -63,6 +63,7 @@ C.themes["Blizzard_TalentUI"] = function()
 			local bu = frame["specButton"..i]
 			local _, _, _, icon, role = GetSpecializationInfo(i, false, frame.isPet)
 			B.StripTextures(bu)
+			if bu.CircleMask then bu.CircleMask:Hide() end
 			B.Reskin(bu, true)
 
 			bu.selectedTex:SetColorTexture(r, g, b, .25)
@@ -77,6 +78,7 @@ C.themes["Blizzard_TalentUI"] = function()
 
 		local scrollChild = frame.spellsScroll.child
 		B.StripTextures(scrollChild)
+		if scrollChild.CircleMask then scrollChild.CircleMask:Hide() end
 		B.ReskinIcon(scrollChild.specIcon)
 	end
 
@@ -106,6 +108,7 @@ C.themes["Blizzard_TalentUI"] = function()
 				frame.subText:SetTextColor(.75, .75, .75)
 
 				if not frame.styled then
+					if frame.CircleMask then frame.CircleMask:Hide() end
 					frame.ring:Hide()
 					B.ReskinIcon(frame.icon)
 
