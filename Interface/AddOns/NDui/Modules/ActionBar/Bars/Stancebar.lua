@@ -58,6 +58,7 @@ function Bar:CreateStancebar()
 
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
+		button:SetParent(frame)
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
 	end

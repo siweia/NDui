@@ -29,6 +29,14 @@ local function ResetButtonAnchor(button)
 	button:SetAllPoints()
 end
 
+local function ShowNewHighlight(self)
+	self.newHL:Show()
+end
+
+local function HideNewHighlight(self)
+	self.newHL:Hide()
+end
+
 function Bar:MicroButton_Create(parent, data)
 	local texture, method, tooltip = unpack(data)
 
@@ -47,7 +55,7 @@ function Bar:MicroButton_Create(parent, data)
 		hooksecurefunc(button, "SetParent", ResetButtonParent)
 		ResetButtonAnchor(button)
 		hooksecurefunc(button, "SetPoint", ResetButtonAnchor)
-		button:UnregisterAllEvents()
+		--button:UnregisterAllEvents()
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:SetDisabledTexture(0)
@@ -56,9 +64,16 @@ function Bar:MicroButton_Create(parent, data)
 			B.AddTooltip(button, "ANCHOR_RIGHT", button.newbieText, "system")
 		end
 
-		local hl = button:GetHighlightTexture()
-		Bar:MicroButton_SetupTexture(hl, texture)
-		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
+		button:GetHighlightTexture():SetAlpha(0)
+		-- add a new highlight texture
+		local newHL = button:CreateTexture(nil, "ARTWORK")
+		newHL:SetBlendMode("ADD")
+		newHL:Hide()
+		Bar:MicroButton_SetupTexture(newHL, texture)
+		if not C.db["Skins"]["ClassLine"] then newHL:SetVertexColor(1, 1, 1) end
+		button.newHL = newHL
+		button:HookScript("OnEnter", ShowNewHighlight)
+		button:HookScript("OnLeave", HideNewHighlight)
 
 		local flash = button.Flash
 		Bar:MicroButton_SetupTexture(flash, texture)
@@ -136,6 +151,12 @@ function Bar:MicroMenu()
 	menubar.mover = B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 	Bar:MicroMenu_Lines(menubar)
 
+	if DB.isNewPatch then
+	StoreMicroButton:ClearAllPoints()
+	StoreMicroButton:SetPoint("CENTER")
+	StoreMicroButton:Show()
+	end
+
 	-- Generate Buttons
 	local buttonInfo = {
 		{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
@@ -163,10 +184,11 @@ function Bar:MicroMenu()
 	-- Default elements
 	B.HideObject(PVPMicroButtonTexture)
 	B.HideObject(MicroButtonPortrait)
-	if not DB.isNewPatch then
-		B.HideObject(HelpMicroButton)
-	end
+	B.HideOption(HelpMicroButton)
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
+	if DB.isNewPatch then
+		MicroMenu.UpdateHelpTicketButtonAnchor = B.Dummy
+	end
 end

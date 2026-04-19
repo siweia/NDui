@@ -10,18 +10,32 @@ local scripts = {
 	"OnShow", "OnHide", "OnEvent", "OnEnter", "OnLeave", "OnUpdate", "OnValueChanged", "OnClick", "OnMouseDown", "OnMouseUp",
 }
 
-local framesToHide = {
-	MainMenuBar, OverrideActionBar, MultiBarLeft, MultiBarRight
-}
+local framesToHide, framesToDisable
+if DB.isNewPatch then
+	framesToHide = {
+		MainMenuBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar, PossessActionBar, PetActionBar, StanceBar, StatusTrackingBarManager, BagsBar
+	}
 
-local framesToDisable = {
-	MainMenuBar,
-	MicroButtonAndBagsBar, MainMenuBarArtFrame, StatusTrackingBarManager,
-	ActionBarDownButton, ActionBarUpButton,
-	OverrideActionBar,
-	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
-	VerticalMultiBarsContainer,
-}
+	framesToDisable = {
+		MainMenuBar, MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, PossessActionBar, PetActionBar, StanceBar,
+		MicroButtonAndBagsBar, StatusTrackingBarManager, MainMenuBarVehicleLeaveButton,
+		OverrideActionBar,
+		OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
+	}
+else
+	framesToHide = {
+		MainMenuBar, OverrideActionBar, MultiBarLeft, MultiBarRight
+	}
+
+	framesToDisable = {
+		MainMenuBar,
+		MicroButtonAndBagsBar, MainMenuBarArtFrame, StatusTrackingBarManager,
+		ActionBarDownButton, ActionBarUpButton,
+		OverrideActionBar,
+		OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
+		VerticalMultiBarsContainer,
+	}
+end
 
 local function DisableAllScripts(frame)
 	for _, script in next, scripts do
@@ -45,6 +59,12 @@ function Bar:HideBlizz()
 
 	for _, frame in next, framesToHide do
 		frame:SetParent(B.HiddenFrame)
+	end
+
+	if DB.isNewPatch then
+		B.HideOption(MainActionBar)
+		MainActionBar:ClearAllPoints()
+		MainActionBar:SetPoint("BOTTOMLEFT", UIParent, -100, -100)
 	end
 
 	for _, frame in next, framesToDisable do
