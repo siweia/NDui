@@ -237,9 +237,17 @@ local function buttonOnClick(self, btn)
 		end
 	else
 		if self.isBNet then
+			if DB.isNewPatch then
+			ChatFrameUtil.SendBNetTell(self.data[2])
+			else
 			ChatFrame_SendBNetTell(self.data[2])
+			end
 		else
+			if DB.isNewPatch then
+			ChatFrameUtil.SendTell(self.data[1], SELECTED_DOCK_FRAME)
+			else
 			ChatFrame_SendTell(self.data[1], SELECTED_DOCK_FRAME)
+			end
 		end
 	end
 end

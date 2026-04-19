@@ -55,6 +55,7 @@ function M:OnLogin()
 	M:AutoEquipBySpec()
 	M:UpdateScreenShot()
 	M:MoveBlizzFrames()
+	M:HandleNDuiTitle()
 
 	-- Auto chatBubbles
 	if NDuiADB["AutoBubbles"] then
@@ -374,7 +375,11 @@ end
 
 function M:CustomMenu_Whisper(rootDescription, data)
 	rootDescription:CreateButton(DB.InfoColor..WHISPER, function()
+		if DB.isNewPatch then
+		ChatFrameUtil.SendTell(data.name)
+		else
 		ChatFrame_SendTell(data.name)
+		end
 	end)
 end
 
@@ -706,6 +711,29 @@ do
 		if not NDuiADB["Help"]["AltPower"] then
 			HelpTip:Show(self, altPowerInfo)
 			B:ShowHelpTip(self, L["Drag AltBar Tip"], "RIGHT", 20, 0, nil, "AltPower")
+		end
+	end)
+end
+
+function M:HandleNDuiTitle()
+	if not DB.isNewPatch then return end
+	-- Square NDui logo texture
+	local function replaceIconString(self, text)
+		if not text then text = self:GetText() end
+		if not text or text == "" then return end
+
+		if strfind(text, "NDui") or strfind(text, "BaudErrorFrame") then
+			local newText, count = gsub(text, "|T([^:]-):[%d+:]+|t", "|T"..DB.chatLogo..":12:24|t")
+			if count > 0 then self:SetFormattedText("%s", newText) end
+		end
+	end
+
+	hooksecurefunc("AddonList_InitAddon", function(entry)
+		if not entry.logoHooked then
+			replaceIconString(entry.Title)
+			hooksecurefunc(entry.Title, "SetText", replaceIconString)
+
+			entry.logoHooked = true
 		end
 	end)
 end

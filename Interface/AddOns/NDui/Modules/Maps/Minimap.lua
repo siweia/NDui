@@ -106,6 +106,11 @@ function module:ReskinRegions()
 		MiniMapLFGFrame:SetPoint("RIGHT", Minimap, 5, 0)
 		MiniMapLFGFrameBorder:Hide()
 	end
+	if LFGMinimapFrame then
+		LFGMinimapFrame:ClearAllPoints()
+		LFGMinimapFrame:SetPoint("RIGHT", Minimap, 5, 0)
+		LFGMinimapFrameBorder:Hide()
+	end
 
 	-- Difficulty Flags
 	local function handleFlag(diff)
