@@ -30,9 +30,16 @@ end
 
 function UF:UpdatePlateClickThru()
 	if InCombatLockdown() then return end
-
+	if DB.isNewPatch then
+	local hitInset = 10000 -- some large number that will ensure we have full coverage
+	local enemyInset = C.db["Nameplate"]["EnemyThru"] and hitInset or -hitInset
+	C_NamePlateManager.SetNamePlateHitTestInsets(Enum.NamePlateType.Enemy, enemyInset, enemyInset, enemyInset, enemyInset)
+	local friendlyInset = C.db["Nameplate"]["FriendlyThru"] and hitInset or -hitInset
+	C_NamePlateManager.SetNamePlateHitTestInsets(Enum.NamePlateType.Friendly, friendlyInset, friendlyInset, friendlyInset, friendlyInset)
+	else
 	C_NamePlate_SetNamePlateEnemyClickThrough(C.db["Nameplate"]["EnemyThru"])
 	C_NamePlate_SetNamePlateFriendlyClickThrough(C.db["Nameplate"]["FriendlyThru"])
+	end
 end
 
 function UF:SetupCVars()

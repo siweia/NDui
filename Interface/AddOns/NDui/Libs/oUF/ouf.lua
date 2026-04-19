@@ -765,7 +765,9 @@ function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 	-- and because forbidden nameplates exist, we have to allow default nameplate
 	-- driver to create, update, and remove Blizz nameplates.
 	-- Disable only not forbidden nameplates.
+	if not NDui[4].isNewPatch then
 	hooksecurefunc(NamePlateDriverFrame, 'AcquireUnitFrame', self.DisableNamePlate)
+	end
 
 	local eventHandler = CreateFrame('Frame', 'oUF_NamePlateDriver')
 	eventHandler:RegisterEvent('NAME_PLATE_UNIT_ADDED')
@@ -803,6 +805,8 @@ function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 		elseif(event == 'NAME_PLATE_UNIT_ADDED' and unit) then
 			local nameplate = C_NamePlate.GetNamePlateForUnit(unit)
 			if(not nameplate) then return end
+
+			oUF:DisableBlizzardNamePlate(nameplate)
 
 			if(not nameplate.unitFrame) then
 				nameplate.style = style
