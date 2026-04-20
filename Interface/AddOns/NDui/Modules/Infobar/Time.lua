@@ -260,21 +260,16 @@ local communityFeastTime = {
 }
 
 local delveList = {
-	{uiMapID = 2248, delveID = 7787}, -- Earthcrawl Mines
-	{uiMapID = 2248, delveID = 7781}, -- Kriegval's Rest
-	{uiMapID = 2248, delveID = 7779}, -- Fungal Folly
-	{uiMapID = 2215, delveID = 7789}, -- Skittering Breach
-	{uiMapID = 2215, delveID = 7785}, -- Nightfall Sanctum
-	{uiMapID = 2215, delveID = 7783}, -- The Sinkhole
-	{uiMapID = 2215, delveID = 7780}, -- Mycomancer Cavern
-	{uiMapID = 2214, delveID = 7782}, -- The Waterworks
-	{uiMapID = 2214, delveID = 7788}, -- The Dread Pit
-	{uiMapID = 2214, delveID = 8181}, -- Excavation Site 9
-	{uiMapID = 2255, delveID = 7790}, -- The Spiral Weave
-	{uiMapID = 2255, delveID = 7784}, -- Tak-Rethan Abyss
-	{uiMapID = 2255, delveID = 7786}, -- The Underkeep
-	{uiMapID = 2346, delveID = 8246}, -- Sidestree Sluice
-	{uiMapID = 2371, delveID = 8273}, -- Archival Assault
+	{uiMapID = 2393, delveID = 8426}, -- 學院災禍
+	{uiMapID = 2424, delveID = 8428}, -- 幻日廣場
+	{uiMapID = 2405, delveID = 8430}, -- 戮日者聖所
+	{uiMapID = 2405, delveID = 8432}, -- 影衛崗哨
+	{uiMapID = 2413, delveID = 8434}, -- 怨鬥坑洞
+	{uiMapID = 2413, delveID = 8436}, -- 回憶裂口
+	{uiMapID = 2395, delveID = 8438}, -- 暗影領區
+	{uiMapID = 2393, delveID = 8440}, -- 黑暗之途
+	{uiMapID = 2437, delveID = 8442}, -- 暮光墓穴
+	{uiMapID = 2437, delveID = 8444}, -- 阿塔阿曼
 }
 
 info.onEnter = function(self)
