@@ -58,7 +58,9 @@ function Bar:CreateStancebar()
 
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
-		button:SetParent(frame)
+		if DB.isNewPatch then
+			button:SetParent(frame)
+		end
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
 	end
