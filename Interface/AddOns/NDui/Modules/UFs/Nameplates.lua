@@ -648,7 +648,7 @@ function UF:UpdateNameplateDebuffs()
 	element.maxCols = C.db["Nameplate"]["CCPerRow"]
 	element.fontSize = C.db["Nameplate"]["CCFontSize"]
 	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
-	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
+	element.desaturateDebuff = false
 	element.sizeRatio = C.db["Nameplate"]["CCSizeRatio"]
 	UF:UpdateAuraContainer(self, element, element.numDebuffs)
 	if element.ForceUpdate then
