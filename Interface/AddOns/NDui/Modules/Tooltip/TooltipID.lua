@@ -84,43 +84,41 @@ function TT:SetupTooltipID()
 	hooksecurefunc(ItemRefTooltip, "SetHyperlink", TT.SetHyperLinkID)
 
 	-- Spells
-	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
-		if self:IsForbidden() then return end
-		local data = C_UnitAuras.GetAuraDataByIndex(...)
-		if not data then return end
-
+	local function HandleAuraData(self, data)
 		local id, caster = data.spellId, data.sourceUnit
 		if id then
 			TT.AddLineForID(self, id, types.spell)
 		end
 		if caster then
 			if B:IsSecretValue(caster) then
-				local name = UnitName(caster)
-				self:AddDoubleLine(L["From"]..":", name)
+				local ok, name = pcall(UnitName, caster)
+				if ok then
+					self:AddDoubleLine(L["From"]..":", name)
+					self:Show()
+				end
 			else
 				local name = GetUnitName(caster, true)
 				local hexColor = B.HexRGB(B.UnitColor(caster))
 				self:AddDoubleLine(L["From"]..":", hexColor..(name or UNKNOWN))
+				self:Show()
 			end
-			self:Show()
 		end
-	end)
+	end
 
-	local function UpdateAuraTip(self, unit, auraInstanceID)
-		local data = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
+	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
+		if self:IsForbidden() then return end
+		local data = C_UnitAuras.GetAuraDataByIndex(...)
 		if not data then return end
 
-		local id, caster = data.spellId, data.sourceUnit
-		if id then
-			TT.AddLineForID(self, id, types.spell)
-		end
-		if caster and B:NotSecretValue(caster) then
-			local name, server = UnitName(caster)
-			local fullName = name..(server and "-"..server or "")
-			local hexColor = B.HexRGB(B.UnitColor(caster))
-			self:AddDoubleLine(L["From"]..":", hexColor..fullName)
-			self:Show()
-		end
+		HandleAuraData(self, data)
+	end)
+
+	local function UpdateAuraTip(self, ...)
+		if self:IsForbidden() then return end
+		local data = C_UnitAuras.GetAuraDataByAuraInstanceID(...)
+		if not data then return end
+
+		HandleAuraData(self, data)
 	end
 	hooksecurefunc(GameTooltip, "SetUnitBuffByAuraInstanceID", UpdateAuraTip)
 	hooksecurefunc(GameTooltip, "SetUnitDebuffByAuraInstanceID", UpdateAuraTip)
