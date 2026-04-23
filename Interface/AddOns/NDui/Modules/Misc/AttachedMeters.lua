@@ -64,7 +64,7 @@ function M:AttachedMeters_Setup()
 				else
 					frame:SetWidth(tarOption.width)
 				end
-				frame.ResizeButton:StopMovingOrSizing() -- help to remember size and anchor
+				frame.MinimizeContainer.ResizeButton:StopMovingOrSizing() -- help to remember size and anchor
 				frame:ClearAllPoints()
 				local anchorInfo = pointData[option.attachedPoint]
 				frame:SetPoint(anchorInfo.relFrom, option.attachedTarget, anchorInfo.relTo, anchorInfo.xOffset, anchorInfo.yOffset)

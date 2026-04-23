@@ -41,14 +41,24 @@ local function ReskinMeterWindow(frame)
 	frame:SetClampedToScreen(false)
 	frame.Header:SetTexture()
 	local bg = B.SetBD(frame.Header)
-	bg:SetPoint("TOPLEFT", frame.Header, 17, -2)
+	bg:SetPoint("TOPLEFT", frame.Header, 12, -2)
 	bg:SetPoint("BOTTOMRIGHT", frame.Header, -17, 2)
 
-	B.ReskinTrimScroll(frame.ScrollBar)
-	frame.ScrollBox:ForEachFrame(updateBar)
-	hooksecurefunc(frame.ScrollBox, "Update", updateBox)
+	B.ReskinCollapse(frame.MinimizeButton)
+	local container = frame.MinimizeContainer
+	if container then
+		B.ReskinTrimScroll(container.ScrollBar)
+		container.ScrollBox:ForEachFrame(updateBar)
+		hooksecurefunc(container.ScrollBox, "Update", updateBox)
 
-	local background = frame.Background
+		B.ReskinTrimScroll(container.SourceWindow.ScrollBar)
+		container.SourceWindow.Background:SetTexture()
+		B.SetBD(container.SourceWindow.Background):SetInside(nil, 2, 2)
+		container.SourceWindow.ScrollBox:ForEachFrame(updateBar)
+		hooksecurefunc(container.SourceWindow.ScrollBox, "Update", updateBox)
+	end
+
+	local background = container and container.Background
 	if background then
 		background:SetTexture()
 		background.bg = B.SetBD(background, 1)
@@ -65,12 +75,6 @@ local function ReskinMeterWindow(frame)
 
 	updateButtonState(frame.SettingsDropdown)
 	hooksecurefunc(frame.SettingsDropdown, "OnButtonStateChanged", updateButtonState)
-
-	B.ReskinTrimScroll(frame.SourceWindow.ScrollBar)
-	frame.SourceWindow.Background:SetTexture()
-	B.SetBD(frame.SourceWindow.Background):SetInside(nil, 2, 2)
-	frame.SourceWindow.ScrollBox:ForEachFrame(updateBar)
-	hooksecurefunc(frame.SourceWindow.ScrollBox, "Update", updateBox)
 
 	local localEntry = frame.LocalPlayerEntry
 	if localEntry then
