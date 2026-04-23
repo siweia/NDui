@@ -19,6 +19,7 @@ local tempAnchor = {
 	unitToken = "player",
 	auraIndex = 1,
 	parent = UIParent,
+	isContainer = false,
 	showCountdownFrame = false,
 	showCountdownNumbers = false,
 	durationAnchor = tempDuration,
