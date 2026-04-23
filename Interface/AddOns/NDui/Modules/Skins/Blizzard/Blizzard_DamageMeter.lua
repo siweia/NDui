@@ -35,6 +35,26 @@ local function updateBox(self)
 	self:ForEachFrame(updateBar)
 end
 
+local function updateMinimizeButton(frame, collapsed)
+	local minimize = frame.MinimizeButton
+	if minimize then
+		minimize.__texture:DoCollapse(collapsed)
+	end
+end
+
+local function reskinMinimizeButton(frame)
+	local minimize = frame.MinimizeButton
+	if minimize then
+		B.ReskinCollapse(minimize)
+		minimize:GetNormalTexture():SetAlpha(0)
+		minimize:GetPushedTexture():SetAlpha(0)
+		minimize.__texture:DoCollapse(false)
+	end
+	if frame.SetMinimized then
+		hooksecurefunc(frame, "SetMinimized", updateMinimizeButton)
+	end
+end
+
 local function ReskinMeterWindow(frame)
 	if not frame or frame.styled then return end
 
@@ -44,7 +64,8 @@ local function ReskinMeterWindow(frame)
 	bg:SetPoint("TOPLEFT", frame.Header, 12, -2)
 	bg:SetPoint("BOTTOMRIGHT", frame.Header, -17, 2)
 
-	B.ReskinCollapse(frame.MinimizeButton)
+	reskinMinimizeButton(frame)
+
 	local container = frame.MinimizeContainer
 	if container then
 		B.ReskinTrimScroll(container.ScrollBar)
@@ -88,7 +109,7 @@ C.themes["Blizzard_DamageMeter"] = function()
 	if not C.db["Skins"]["DamageMeter"] then return end
 
 	C_Timer.After(1, function() -- delay to prevent taint
-		hooksecurefunc(DamageMeter, "SetupSessionWindow", function(_, windowData)
+		hooksecurefunc(DamageMeter, "SetupSessionWindow", function(_, _, windowData)
 			ReskinMeterWindow(windowData.sessionWindow)
 		end)
 

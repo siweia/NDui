@@ -13,8 +13,8 @@ local options = {
 local pointData = {
 	[1] = {relFrom = "BOTTOM", relTo = "TOP", xOffset = 0, yOffset = 0},
 	[2] = {relFrom = "TOP", relTo = "BOTTOM", xOffset = 0, yOffset = 0},
-	[3] = {relFrom = "RIGHT", relTo = "LEFT", xOffset = 32, yOffset = 0},
-	[4] = {relFrom = "LEFT", relTo = "RIGHT", xOffset = -32, yOffset = 0},
+	[3] = {relFrom = "RIGHT", relTo = "LEFT", xOffset = 28, yOffset = 0},
+	[4] = {relFrom = "LEFT", relTo = "RIGHT", xOffset = -28, yOffset = 0},
 }
 
 local frameIndex = {
