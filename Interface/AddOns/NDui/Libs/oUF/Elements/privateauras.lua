@@ -90,11 +90,6 @@ local function resetAnchors(element)
 	end
 end
 
-local function resetAnchorsAfterCombat(self)
-	resetAnchors(self.PrivateAuras)
-	self:UnregisterEvent('PLAYER_REGEN_ENABLED', resetAnchorsAfterCombat)
-end
-
 local function Update(self)
 	local element = self.PrivateAuras
 	if(element.anchors) then
@@ -134,6 +129,7 @@ local function Update(self)
 			unitToken = element.__owner.unit,
 			auraIndex = index,
 			parent = aura,
+			isContainer = false,
 			showCountdownFrame = not element.disableCooldown,
 			showCountdownNumbers = not element.disableCooldownText,
 			iconInfo = {
@@ -168,14 +164,8 @@ local function Path(self, ...)
 
 	* self - the PrivateAuras element
 	--]]
-	if(InCombatLockdown()) then
-		self:RegisterEvent('PLAYER_REGEN_ENABLED', Path, true)
-	else
-		self:UnregisterEvent('PLAYER_REGEN_ENABLED', Path)
-
-		do
-			(self.PrivateAuras.Override or Update) (self, ...)
-		end
+	do
+		(self.PrivateAuras.Override or Update) (self, ...)
 	end
 end
 
@@ -186,11 +176,7 @@ end
 local function Disable(self)
 	local element = self.PrivateAuras
 	if(element and element.anchors) then
-		if(InCombatLockdown()) then
-			self:RegisterEvent('PLAYER_REGEN_ENABLED', resetAnchorsAfterCombat, true)
-		else
-			resetAnchors(element)
-		end
+		resetAnchors(element)
 	end
 end
 
