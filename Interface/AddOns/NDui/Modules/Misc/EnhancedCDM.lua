@@ -34,7 +34,8 @@ function M:CDM_RefreshBuffsAnchor()
 	local spacing = GetButtonSpacing(cooldownViewer)
 	local step = buttonWidth + spacing
 	local totalWidth = (buttonWidth * numVisible) + (spacing * (numVisible - 1))
-	local startX = (cooldownViewer:GetWidth() - totalWidth) / 2
+	local scale = cooldownViewer.iconScale or 1
+	local startX = (cooldownViewer:GetWidth() / scale - totalWidth) / 2
 
 	for i = 1, #activeButtons do
 		local button = activeButtons[i]
