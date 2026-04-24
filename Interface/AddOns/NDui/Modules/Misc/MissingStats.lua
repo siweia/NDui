@@ -12,7 +12,7 @@ local HIGHLIGHT_FONT_COLOR_CODE, FONT_COLOR_CODE_CLOSE = HIGHLIGHT_FONT_COLOR_CO
 function M:MissingStats()
 	if not C.db["Misc"]["MissingStats"] then return end
 	if C_AddOns.IsAddOnLoaded("DejaCharacterStats") then return end
-
+--[=[
 	local statPanel = CreateFrame("Frame", nil, CharacterFrameInsetRight)
 	statPanel:SetSize(200, 350)
 	statPanel:SetPoint("TOP", 0, -5)
@@ -71,7 +71,7 @@ function M:MissingStats()
 			},
 		},
 	}
-
+]=]
 	PAPERDOLL_STATINFO["ENERGY_REGEN"].updateFunc = function(statFrame, unit)
 		statFrame.numericValue = 0
 		PaperDollFrame_SetEnergyRegen(statFrame, unit)
