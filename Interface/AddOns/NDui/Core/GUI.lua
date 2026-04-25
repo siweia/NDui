@@ -32,7 +32,7 @@ G.DefaultSettings = {
 		KeyDown = true,
 		ButtonLock = true,
 		CDFontSize = 16,
-		CDFormat = 1,
+		CDFormat = 4,
 
 		Bar1 = true,
 		Bar1Flyout = 1,
@@ -921,7 +921,7 @@ local function updateEquipColor()
 end
 
 local function updateCooldown()
-	SetCVar("countdownForCooldowns", C.db["Actionbar"]["CDFormat"] ~= 4 and 1 or 0)
+	B:GetModule("Cooldown"):UpdateCooldownFormat()
 end
 
 local function updateCDText()
@@ -1233,7 +1233,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
-		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorText"], L["WhiteText"], DEFAULT, DISABLE}, updateCooldown},
+		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorTenth"], L["ColorText"], L["WhiteTenth"], L["WhiteText"], DISABLE}, updateCooldown},
 		{3, "Actionbar", "CDFontSize", L["CDFontSize"].."*", true, {5, 30, 1}, updateCDText},
 		{},--blank
 		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
