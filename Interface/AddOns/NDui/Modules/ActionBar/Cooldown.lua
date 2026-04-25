@@ -4,9 +4,9 @@ local module = B:RegisterModule("Cooldown")
 
 local numberFormatter = C_StringUtil.CreateNumericRuleFormatter()
 numberFormatter:SetBreakpoints({
-	{ threshold = 0, format = CreateColor(1, 0, 0, 1):WrapTextInColorCode("%.1f") },
-	{ threshold = 3.01, format = CreateColor(1, 1, 0, 1):WrapTextInColorCode("%d"), components = {{div = 1, step = 1, rounding = Enum.NumericRuleFormatRounding.Up}} },
-	{ threshold = 10.01, format = CreateColor(.8, .8, .2, 1):WrapTextInColorCode("%d"), components = {{div = 1, step = 1, rounding = Enum.NumericRuleFormatRounding.Up}} },
+	{ threshold = 0, format = CreateColor(1, 0, 0, 1):WrapTextInColorCode("%.1f"), components = {{step = .1, rounding = Enum.NumericRuleFormatRounding.Up}} },
+	{ threshold = 3, format = CreateColor(1, 1, 0, 1):WrapTextInColorCode("%d"), components = {{div = 1, step = 1, rounding = Enum.NumericRuleFormatRounding.Up}} },
+	{ threshold = 10, format = CreateColor(.8, .8, .2, 1):WrapTextInColorCode("%d"), components = {{div = 1, step = 1, rounding = Enum.NumericRuleFormatRounding.Up}} },
 	{ threshold = 60, format = "%d:%02d", components = {{div = 60}, {mod = 60}} },
 	{ threshold = 60*10, format = "%d"..DB.MyColor.."m", components = {{div = 60, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}} }, -- 10 minutes
 	{ threshold = 3600*2, format = "%d"..DB.MyColor.."h", components = {{div = 3600, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}} }, -- 2 hour
@@ -15,8 +15,8 @@ numberFormatter:SetBreakpoints({
 
 local numberFormatter2 = C_StringUtil.CreateNumericRuleFormatter()
 numberFormatter2:SetBreakpoints({
-	{ threshold = 0, format = "%.1f" },
-	{ threshold = 3.01, format = "%d", components = {{div = 1, step = 1, rounding = Enum.NumericRuleFormatRounding.Up}} },
+	{ threshold = 0, format = "%.1f", components = {{step = .1, rounding = Enum.NumericRuleFormatRounding.Up}} },
+	{ threshold = 3, format = "%d", components = {{div = 1, step = 1, rounding = Enum.NumericRuleFormatRounding.Up}} },
 	{ threshold = 60, format = "%d:%02d", components = {{div = 60}, {mod = 60}} },
 	{ threshold = 60*10, format = "%dm", components = {{div = 60, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}} }, -- 10 minutes
 	{ threshold = 3600*2, format = "%dh", components = {{div = 3600, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}} }, -- 2 hour
