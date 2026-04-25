@@ -209,9 +209,33 @@ function module:OnSetHideCountdownNumbers(hide)
 end
 
 function module:OnLogin()
-	SetCVar("countdownForCooldowns", C.db["Actionbar"]["Cooldown"] and 1 or 0)
---[=[ -- disabled in 12.0
 	if not C.db["Actionbar"]["Cooldown"] then return end
+
+	local numberFormatter = C_StringUtil.CreateNumericRuleFormatter()
+	numberFormatter:SetBreakpoints({
+		{ threshold = 0, format = CreateColor(1, 0, 0, 1):WrapTextInColorCode("%.1f") },
+		{ threshold = 3.01, format = CreateColor(1, 1, 0, 1):WrapTextInColorCode("%d") },
+		{ threshold = 10.01, format = CreateColor(.8, .8, .2, 1):WrapTextInColorCode("%d"), components = {{div = 1, step = 1, rounding = Enum.NumericRuleFormatRounding.Up}} },
+		{ threshold = 60, format = "%d:%02d", components = {{div = 60}, {mod = 60}} },
+		{ threshold = 60*10, format = "%d"..DB.MyColor.."m", components = {{div = 60, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}} }, -- 10 minutes
+		{ threshold = 3600*2, format = "%d"..DB.MyColor.."h", components = {{div = 3600, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}} }, -- 2 hour
+		{ threshold = 86400, format = "%d"..DB.MyColor.."d", components = {{div = 86400, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}} }, -- 1 day
+	})
+
+	local function updateCooldown(self)
+		self:SetCountdownFormatter(numberFormatter)
+	end
+
+	local cooldown_mt = getmetatable(ActionButton1Cooldown).__index
+	hooksecurefunc(cooldown_mt, "SetCooldown", updateCooldown)
+	hooksecurefunc(cooldown_mt, "SetCooldownDuration", updateCooldown)
+	hooksecurefunc(cooldown_mt, "Clear", updateCooldown)
+	hooksecurefunc(cooldown_mt, "SetHideCountdownNumbers", updateCooldown)
+	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", updateCooldown)
+	hooksecurefunc(cooldown_mt, "SetCooldownFromDurationObject", updateCooldown)
+
+	SetCVar("countdownForCooldowns", 1)
+--[=[ -- disabled in 12.0
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, "SetCooldown", module.StartTimer)
