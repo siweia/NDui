@@ -24,11 +24,7 @@ G.DefaultSettings = {
 		Macro = true,
 		Grid = true,
 		Classcolor = false,
-		Cooldown = true,
-		MmssTH = 60,
-		TenthTH = 3,
 		BindType = 1,
-		OverrideWA = false,
 		MicroMenu = true,
 		ShowStance = true,
 		EquipColor = false,
@@ -36,6 +32,7 @@ G.DefaultSettings = {
 		KeyDown = true,
 		ButtonLock = true,
 		CDFontSize = 16,
+		CDFormat = 1,
 
 		Bar1 = true,
 		Bar1Flyout = 1,
@@ -924,7 +921,7 @@ local function updateEquipColor()
 end
 
 local function updateCooldown()
-	SetCVar("countdownForCooldowns", C.db["Actionbar"]["Cooldown"] and 1 or 0)
+	SetCVar("countdownForCooldowns", C.db["Actionbar"]["CDFormat"] ~= 4 and 1 or 0)
 end
 
 local function updateCDText()
@@ -1236,12 +1233,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
-		{1, "Actionbar", "Cooldown", HeaderTag..L["Show Cooldown"].."*", nil, nil, updateCooldown},
-		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
+		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorText"], L["WhiteText"], DEFAULT, DISABLE}, updateCooldown},
 		{3, "Actionbar", "CDFontSize", L["CDFontSize"].."*", true, {5, 30, 1}, updateCDText},
-		--{1, "Actionbar", "OverrideWA", L["HideCooldownOnWA"].."*", true},
-		--{3, "Actionbar", "MmssTH", L["MmssThreshold"].."*", nil, {60, 600, 1}, nil, L["MmssThresholdTip"]},
-		--{3, "Actionbar", "TenthTH", L["TenthThreshold"].."*", true, {0, 60, 1}, nil, L["TenthThresholdTip"]},
 		{},--blank
 		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
 		{1, "Actionbar", "ButtonLock", L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},
@@ -1252,6 +1245,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Actionbar", "ShowGlow", L["ShowGlow"].."*", nil, nil, updateOverlays},
 		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
+		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
