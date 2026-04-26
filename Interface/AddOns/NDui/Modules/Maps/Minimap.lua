@@ -602,6 +602,9 @@ function module:SetupMinimap()
 	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
+	hooksecurefunc(MinimapCluster, "SetPoint", function(frame)
+		frame:SetAllPoints(Minimap)
+	end)
 	Minimap.mover = mover
 
 	self:UpdateMinimapScale()
