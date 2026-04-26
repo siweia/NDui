@@ -25,6 +25,9 @@ C.Auras = {
 	WarningPos		= {"BOTTOMLEFT", UIParent, "BOTTOM", 200, 370},		-- 目标重要光环分组
 	InternalPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -425, 500},	-- 法术内置冷却分组
 }
+if not ns[4].isNewPatch then
+C.Auras.BuffPos	= {"TOPRIGHT", Minimap, "TOPLEFT", -15, 0}
+end
 
 -- 头像相关
 C.UFs = {
