@@ -57,7 +57,7 @@ local function DisableDefaultBarEvents() -- credit: Simpy
 	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN") -- needed for cooldowns of them both
 	hooksecurefunc(_G.ActionBarButtonEventsFrame, "RegisterFrame", buttonEventsRegisterFrame)
 	buttonEventsRegisterFrame(_G.ActionBarButtonEventsFrame)
-	MultiActionBar_ShowAllGrid = B.Dummy
+	MultiActionBar_ShowAllGrids = B.Dummy
 end
 
 function Bar:HideBlizz()
