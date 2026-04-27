@@ -276,3 +276,31 @@ oUF.Tags.Methods["monkstagger"] = function(unit)
 	return B.Numb(cur).." | "..DB.MyColor..B:Round(perc*100).."%"
 end
 oUF.Tags.Events["monkstagger"] = "UNIT_MAXHEALTH UNIT_AURA"
+
+-- DH
+local SPELL_DARK_HEART = Constants.UnitPowerSpellIDs.DARK_HEART_SPELL_ID or 1225789
+local SPELL_SILENCE_THE_WHISPERS = Constants.UnitPowerSpellIDs.SILENCE_THE_WHISPERS_SPELL_ID or 1227702
+local SPELL_VOID_METAMORPHOSIS = Constants.UnitPowerSpellIDs.VOID_METAMORPHOSIS_SPELL_ID or 1217607
+
+local function GetSoulFragments()
+	if(C_UnitAuras.GetPlayerAuraBySpellID(SPELL_VOID_METAMORPHOSIS)) then
+		local auraInfo = C_UnitAuras.GetPlayerAuraBySpellID(SPELL_SILENCE_THE_WHISPERS)
+		if(auraInfo) then
+			return auraInfo.applications / GetCollapsingStarCost()
+		end
+	else
+		local auraInfo = C_UnitAuras.GetPlayerAuraBySpellID(SPELL_DARK_HEART)
+		if(auraInfo) then
+			return auraInfo.applications / C_Spell.GetSpellMaxCumulativeAuraApplications(SPELL_DARK_HEART)
+		end
+	end
+
+	return 0
+end
+
+oUF.Tags.Methods["SoulFragments"] = function(unit)
+	if unit ~= "player" then return end
+	local cur = GetSoulFragments() * 100
+	return cur > 0 and B:Round(cur) or ""
+end
+oUF.Tags.Events["SoulFragments"] = "UNIT_AURA"
