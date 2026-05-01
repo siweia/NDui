@@ -286,12 +286,12 @@ local function GetSoulFragments()
 	if(C_UnitAuras.GetPlayerAuraBySpellID(SPELL_VOID_METAMORPHOSIS)) then
 		local auraInfo = C_UnitAuras.GetPlayerAuraBySpellID(SPELL_SILENCE_THE_WHISPERS)
 		if(auraInfo) then
-			return auraInfo.applications / GetCollapsingStarCost()
+			return auraInfo.applications
 		end
 	else
 		local auraInfo = C_UnitAuras.GetPlayerAuraBySpellID(SPELL_DARK_HEART)
 		if(auraInfo) then
-			return auraInfo.applications / C_Spell.GetSpellMaxCumulativeAuraApplications(SPELL_DARK_HEART)
+			return auraInfo.applications
 		end
 	end
 
@@ -300,7 +300,7 @@ end
 
 oUF.Tags.Methods["SoulFragments"] = function(unit)
 	if unit ~= "player" then return end
-	local cur = GetSoulFragments() * 100
-	return cur > 0 and B:Round(cur) or ""
+	local cur = GetSoulFragments()
+	return cur > 0 and cur or ""
 end
 oUF.Tags.Events["SoulFragments"] = "UNIT_AURA"
