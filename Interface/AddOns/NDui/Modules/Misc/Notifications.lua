@@ -509,22 +509,26 @@ function M:SendCurrentSpell(thisTime, spellID)
 	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
 
 	if charges and maxCharges then
-		if charges ~= maxCharges then
-			local remain = chargeStart + chargeDuration - thisTime
-			B:SendChatMessage(format(L["ChargesRemaining"], spellLink, charges, maxCharges, GetRemainTime(remain)), M:GetMsgChannel())
-		else
-			B:SendChatMessage(format(L["ChargesCompleted"], spellLink, charges, maxCharges), M:GetMsgChannel())
+		if B:NotSecretValue(charges) then
+			if charges ~= maxCharges then
+				local remain = chargeStart + chargeDuration - thisTime
+				B:SendChatMessage(format(L["ChargesRemaining"], spellLink, charges, maxCharges, GetRemainTime(remain)), M:GetMsgChannel())
+			else
+				B:SendChatMessage(format(L["ChargesCompleted"], spellLink, charges, maxCharges), M:GetMsgChannel())
+			end
 		end
 	else
 		local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
 		local start = cooldownInfo and cooldownInfo.startTime
 		local duration = cooldownInfo and cooldownInfo.duration
 
-		if start and duration > 0 then
-			local remain = start + duration - thisTime
-			B:SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())
-		else
-			B:SendChatMessage(format(L["CooldownCompleted"], spellLink), M:GetMsgChannel())
+		if B:NotSecretValue(duration) then
+			if start and duration > 0 then
+				local remain = start + duration - thisTime
+				B:SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())
+			else
+				B:SendChatMessage(format(L["CooldownCompleted"], spellLink), M:GetMsgChannel())
+			end
 		end
 	end
 end
