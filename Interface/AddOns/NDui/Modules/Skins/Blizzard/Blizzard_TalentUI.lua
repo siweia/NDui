@@ -33,6 +33,10 @@ C.themes["Blizzard_TalentUI"] = function()
 	PlayerTalentFrameTalentPointsText:ClearAllPoints()
 	PlayerTalentFrameTalentPointsText:SetPoint("RIGHT", PlayerTalentFramePointsBar, "RIGHT", -12, 1)
 
+	if PlayerTalentFrameCancelButton then
+		B.Reskin(PlayerTalentFrameCancelButton)
+	end
+
 	for i = 1, 3 do
 		local tab = _G["PlayerSpecTab"..i]
 		if tab then

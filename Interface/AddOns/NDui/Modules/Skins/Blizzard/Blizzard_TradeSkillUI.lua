@@ -11,6 +11,11 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	B.ReskinArrow(TradeSkillDecrementButton, "left")
 	B.ReskinArrow(TradeSkillIncrementButton, "right")
 	B.ReskinInput(TradeSkillInputBox)
+	if TradeSearchInputBox then
+		B.ReskinInput(TradeSearchInputBox)
+		TradeSearchInputBox:ClearAllPoints()
+		TradeSearchInputBox:SetPoint("TOPRIGHT", -60, -15)
+	end
 	--B.ReskinInput(TradeSkillFrameEditBox)
 	--TradeSkillFrameBottomLeftTexture:Hide()
 	--TradeSkillFrameBottomRightTexture:Hide()
