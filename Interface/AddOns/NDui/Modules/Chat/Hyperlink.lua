@@ -10,56 +10,6 @@ local BNInviteFriend = BNInviteFriend
 local CanCooperateWithGameAccount = CanCooperateWithGameAccount
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 
-local foundurl = false
-
-local function convertLink(text, value)
-	return "|Hurl:"..tostring(value).."|h"..DB.InfoColor..text.."|r|h"
-end
-
-local function highlightURL(_, url)
-	foundurl = true
-	return " "..convertLink("["..url.."]", url).." "
-end
-
-function module:SearchForURL(text, ...)
-	if not text or B:IsSecretValue(text) then
-		return self:addMsg(text, ...)
-	end
-
-	foundurl = false
-
-	if strfind(text, "%pTInterface%p+") or strfind(text, "%pTINTERFACE%p+") then
-		foundurl = true
-	end
-
-	if not foundurl then
-		--192.168.1.1:1234
-		text = gsub(text, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?:%d%d?%d?%d?%d?)(%s?)", highlightURL)
-	end
-	if not foundurl then
-		--192.168.1.1
-		text = gsub(text, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)(%s?)", highlightURL)
-	end
-	if not foundurl then
-		--www.teamspeak.com:3333
-		text = gsub(text, "(%s?)([%w_-]+%.?[%w_-]+%.[%w_-]+:%d%d%d?%d?%d?)(%s?)", highlightURL)
-	end
-	if not foundurl then
-		--http://www.google.com
-		text = gsub(text, "(%s?)(%a+://[%w_/%.%?%%=~&-'%-]+)(%s?)", highlightURL)
-	end
-	if not foundurl then
-		--www.google.com
-		text = gsub(text, "(%s?)(www%.[%w_/%.%?%%=~&-'%-]+)(%s?)", highlightURL)
-	end
-	if not foundurl then
-		--lol@lol.com
-		text = gsub(text, "(%s?)([_%w-%.~-]+@[_%w-]+%.[_%w-%.]+)(%s?)", highlightURL)
-	end
-
-	self:addMsg(text, ...)
-end
-
 function module:Hyperlink_Show(link, button)
 	local type, value = strmatch(link, "(%a+):(.+)")
 	local hide
@@ -149,21 +99,6 @@ function module.SetItemRefHook(link, _, button)
 	module:Hyperlink_Show(link, button)
 end
 
-function module:UrlCopy()
-	for i = 1, NUM_CHAT_WINDOWS do
-		if i ~= 2 then
-			local chatFrame = _G["ChatFrame"..i]
-			chatFrame.addMsg = chatFrame.AddMessage
-			chatFrame.AddMessage = self.SearchForURL
-		end
-	end
-
-	local orig = ItemRefTooltip.SetHyperlink
-	function ItemRefTooltip:SetHyperlink(link, ...)
-		if link and strsub(link, 0, 3) == "url" then return end
-
-		return orig(self, link, ...)
-	end
-
+function module:Hyperlink()
 	hooksecurefunc("SetItemRef", self.SetItemRefHook)
 end

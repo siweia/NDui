@@ -161,6 +161,14 @@ local function KillCNColon(link, tag)
 	end
 end
 
+local function convertLink(text, value)
+	return "|Hurl:"..tostring(value).."|h"..DB.InfoColor..text.."|r|h"
+end
+
+local function highlightURL(_, url)
+	return " "..convertLink("["..url.."]", url).." "
+end
+
 -- Filter: intercept chat events, build formatted msg, apply modifications, call AddMessage securely
 local function ChatMsgFilter(self, event,
 	msg, sender, language, channelString, target, flags, zoneChannelID, channelIndex, channelBaseName, languageID,
@@ -173,6 +181,15 @@ local function ChatMsgFilter(self, event,
 	if strfind(msg, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then
 		return true
 	end
+
+	-- URL highlighting (inline, avoid separate filter pass)
+	msg = gsub(msg, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?:%d%d?%d?%d?%d?)(%s?)", highlightURL)
+	msg = gsub(msg, "(%s?)(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)(%s?)", highlightURL)
+	msg = gsub(msg, "(%s?)([%w_-]+%.?[%w_-]+%.[%w_-]+:%d%d%d?%d?%d?)(%s?)", highlightURL)
+	msg = gsub(msg, "(%s?)(%a+://[%w_/%.%?%%=~&-'%-]+)(%s?)", highlightURL)
+	msg = gsub(msg, "(%s?)(www%.[%w_/%.%?%%=~&-'%-]+)(%s?)", highlightURL)
+	msg = gsub(msg, "(%s?)([_%w-%.~-]+@[_%w-]+%.[_%w-%.]+)(%s?)", highlightURL)
+
 	-- 1. Get format key (e.g. CHAT_SAY_GET = "%s:\32")
 	local chatType = strsub(event, 10)
 	local formatKey = _G["CHAT_"..chatType.."_GET"]
