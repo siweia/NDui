@@ -46,6 +46,17 @@ function UF:UpdatePlateSize()
 	end
 end
 
+local function PurgeKey(t, k) -- code from platynator
+	t[k] = nil
+	local c = 42
+	repeat
+		if t[c] == nil then
+			t[c] = nil
+		end
+		c = c + 1
+	until issecurevariable(t, k)
+end
+
 function UF:SetupCVars()
 	UF:UpdatePlateCVars()
 	SetCVar("nameplateOverlapH", .8)
@@ -65,6 +76,10 @@ function UF:SetupCVars()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateSize", UF.UpdatePlateSize)
 	-- fix blizz friendly plate visibility
 	SetCVar("nameplatePlayerMaxDistance", 60)
+	-- hide realm name in blizz nameonly
+	if NamePlateFriendlyFrameOptions then
+		PurgeKey(NamePlateFriendlyFrameOptions, "updateNameUsesGetUnitName")
+	end
 end
 
 -- Elements
