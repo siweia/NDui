@@ -2,7 +2,8 @@
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
-local gsub, strfind, strmatch, format, strsub, strlen = string.gsub, string.find, string.match, string.format, string.sub, string.len
+local gsub, strfind, strmatch, format, strsub, strlen, strupper = string.gsub, string.find, string.match, string.format, string.sub, string.len, string.upper
+local tostring = tostring
 local BetterDate, time, date, GetCVarBool = BetterDate, time, date, GetCVarBool
 local RemoveExtraSpaces = RemoveExtraSpaces
 local INTERFACE_ACTION_BLOCKED = INTERFACE_ACTION_BLOCKED
@@ -210,11 +211,11 @@ local function ChatMsgFilter(self, event, msg, sender, language, channelString, 
 	-- Per-window visibility check
 	local chatType = strsub(event, 10)
 	local chatGroup = ChatFrameUtil.GetChatCategory(chatType)
+	local channelLength = strlen(channelString)
 
 	-- For CHANNEL type: check self.channelList (mirrors Blizzard's logic in MessageEventHandler)
 	-- For non-CHANNEL types: use FCFManager_ShouldSuppressMessage
 	if chatType == "CHANNEL" then
-		local channelLength = strlen(channelString)
 		if channelLength > 0 then
 			local found = false
 			for index, value in pairs(self.channelList) do
@@ -267,15 +268,13 @@ local function ChatMsgFilter(self, event, msg, sender, language, channelString, 
 		playerLink = GetPlayerLink(sender, "["..coloredName.."]", lineID, chatGroup, 0)
 	end
 
-	local msgText = msg
-	msgText = gsub(msgText, "%%", "%%%%")
-	msgText = C_ChatInfo.ReplaceIconAndGroupExpressions(msgText, suppressRaidIcons)
-	msgText = RemoveExtraSpaces(msgText)
+	msg = gsub(msg, "%%", "%%%%")
+	msg = C_ChatInfo.ReplaceIconAndGroupExpressions(msg, suppressRaidIcons)
+	msg = RemoveExtraSpaces(msg)
 
-	local outMsg = format(formatKey..msgText, pflag..playerLink)
+	local outMsg = format(formatKey..msg, pflag..playerLink)
 
 	-- Add channel prefix for custom channels
-	local channelLength = strlen(channelString)
 	if channelLength > 0 then
 		local channelName = ChatFrameUtil.ResolvePrefixedChannelName(channelString)
 		if channelName then
