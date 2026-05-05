@@ -178,12 +178,33 @@ local function GetChatTarget(chatGroup, playerTarget, channelTarget)
 	end
 end
 
+-- Dedup cache: prevent double-processing when addons like WhisperPop
+-- re-invoke event filters manually after WoW already processed them,
+-- which would cause self:AddMessage to be called twice -> duplicate messages.
+local processedLines = {}
+local processedCount = 0
+local PROCESSED_LINES_MAX = 200
+
 -- Chat event filter: format message, respect window settings, use correct colors
 local function ChatMsgFilter(self, event, msg, sender, language, channelString, target, flags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, senderGUID, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, suppressRaidIcons)
 	if B:IsSecretValue(msg) then return end
 
 	if strfind(msg, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then
 		return true
+	end
+
+	-- Dedup: skip if this message was already processed for this chat frame
+	if lineID and lineID > 0 then
+		local key = self:GetName() .. "_" .. lineID
+		if processedLines[key] then
+			return true
+		end
+		processedLines[key] = true
+		processedCount = processedCount + 1
+		if processedCount > PROCESSED_LINES_MAX then
+			wipe(processedLines)
+			processedCount = 0
+		end
 	end
 
 	-- Per-window visibility check
