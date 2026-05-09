@@ -35,6 +35,25 @@ local function HideNewHighlight(self)
 	self.newHL:Hide()
 end
 
+local function ToggleSocialMicroMenu()
+	-- NDui这里只保留一个图标入口
+	if CVarCallbackRegistry:GetCVarValueBool("useClassicGuildUI") then
+		ToggleFriendsFrame()
+	else
+		ToggleGuildFrame()
+	end
+end
+
+local function TogglePVPMicroMenu()
+	-- 直接调用暴雪PvP微型按钮原本执行的入口，避免原生按钮隐藏后丢失点击区域
+	TogglePVPFrame()
+end
+
+local function ToggleLFGMicroMenu()
+	-- 直接调用暴雪组队查找器入口，不可用状态由暴雪函数自身处理。
+	PVEFrame_ToggleFrame()
+end
+
 function Bar:MicroButton_Create(parent, data, exclude)
 	local texture, method, tooltip = unpack(data)
 
@@ -79,6 +98,8 @@ function Bar:MicroButton_Create(parent, data, exclude)
 		Bar:MicroButton_SetupTexture(flash, texture)
 		if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
 	else
+		-- 函数型按钮没有暴雪Button子框架，需要由外层框架直接接收鼠标点击。
+		bu:EnableMouse(true)
 		bu:SetScript("OnMouseUp", method)
 		B.AddTooltip(bu, "ANCHOR_RIGHT", tooltip)
 
@@ -163,9 +184,9 @@ function Bar:MicroMenu()
 		{"talents", "TalentMicroButton", MicroButtonTooltipText(TALENTS, "TOGGLETALENTS")},
 		{"achievements", "AchievementMicroButton", MicroButtonTooltipText(ACHIEVEMENT_BUTTON, "TOGGLEACHIEVEMENT")},
 		{"quests", "QuestLogMicroButton", MicroButtonTooltipText(QUESTLOG_BUTTON, "TOGGLEQUESTLOG")},
-		{"guild", "SocialsMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
-		{"encounter", "PVPMicroButton", MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
-		{"LFG", "LFGMicroButton", MicroButtonTooltipText(LFG_BUTTON, "TOGGLELFG")},
+		{"guild", ToggleSocialMicroMenu, MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
+		{"encounter", TogglePVPMicroMenu, MicroButtonTooltipText(PLAYER_V_PLAYER, "TOGGLECHARACTER4")},
+		{"LFG", ToggleLFGMicroMenu, MicroButtonTooltipText(LFG_BUTTON, "TOGGLEGROUPFINDER")},
 		{"collections", "CollectionsMicroButton", MicroButtonTooltipText(COLLECTIONS, "TOGGLECOLLECTIONS")},
 		{"store", "StoreMicroButton", BLIZZARD_STORE},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
@@ -175,9 +196,6 @@ function Bar:MicroMenu()
 	for _, info in pairs(buttonInfo) do
 		Bar:MicroButton_Create(menubar, info)
 	end
-
-	Bar:MicroButton_Create(menubar, {"guild", "GuildMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")}, true)
-	GuildMicroButton:SetAllPoints(SocialsMicroButton)
 
 	-- Order Positions
 	Bar:MicroMenu_Setup()
