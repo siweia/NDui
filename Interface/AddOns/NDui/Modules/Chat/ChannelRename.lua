@@ -147,8 +147,8 @@ local cnColonChannels = {
 	INSTANCE_CHAT = true,
 }
 
-local cnPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%].-)"..colon.."%s"
-local enPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%].-):%s"
+local cnPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%]|h.-)"..colon.."%s"
+local enPattern = "(|Hplayer[^]]*:([^:]+):[^]]*%]|h.-):%s"
 
 local function KillColon(link, tag)
 	if channels[tag] then
@@ -158,7 +158,7 @@ end
 
 local function KillCNColon(link, tag)
 	if cnColonChannels[tag] then
-		return link.." "
+		return link..": "
 	end
 end
 
@@ -289,7 +289,7 @@ local function ChatMsgFilter(self, event, msg, sender, language, channelString, 
 
 	outMsg = gsub(outMsg, "(|Hplayer:([^|:]+))", AddAuthorLogo)
 	if isCN then outMsg = gsub(outMsg, cnPattern, KillCNColon) end
-	outMsg = gsub(outMsg, enPattern, KillColon)
+	--outMsg = gsub(outMsg, enPattern, KillColon)
 	outMsg = gsub(outMsg, matchPattern, AbbrChannelName)
 
 	self:AddMessage(outMsg, info.r, info.g, info.b, info.id)
