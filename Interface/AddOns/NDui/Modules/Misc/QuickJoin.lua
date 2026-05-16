@@ -116,9 +116,10 @@ function M:ShowLeaderOverallScore()
 				or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
 			if showScore then
 				local oldName = self.ActivityName:GetText()
-				oldName = gsub(oldName, ".-"..HEADER_COLON, "") -- Tazavesh
-				self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(showScore), oldName)
-
+				if B:NotSecretValue(oldName) then
+					oldName = gsub(oldName, ".-"..HEADER_COLON, "") -- Tazavesh
+					self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(showScore), oldName)
+				end
 				if not self.crossFactionLogo then
 					local logo = self:CreateTexture(nil, "OVERLAY")
 					logo:SetPoint("TOPLEFT", -6, 5)
