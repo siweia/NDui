@@ -130,8 +130,11 @@ function Bar:StyleActionButton(button)
 	end
 	if cooldown then
 		cooldown:SetAllPoints()
-		button.cooldownText = cooldown:GetRegions()
-		button.cooldownText:SetFontObject(Game16Font)
+		local region = cooldown:GetRegions()
+		if region and region:IsObjectType("FontString") then
+			region:SetFontObject(Game16Font)
+			button.cooldownText = region
+		end
 	end
 	if pushed then
 		pushed:SetInside()
