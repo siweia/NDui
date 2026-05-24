@@ -85,7 +85,8 @@ function M:CDM_RefreshGrid()
 	local frameSize = isHorizontal and self:GetWidth() or self:GetHeight()
 	local buttonSize = isHorizontal and buttonList[1]:GetWidth() or buttonList[1]:GetHeight()
 	local leftoverSize = buttonSize * leftover + (spacing * (leftover - 1))
-	local centerOffset = (frameSize - leftoverSize) / 2
+	local scale = self.iconScale or 1
+	local centerOffset = (frameSize / scale - leftoverSize) / 2
 
 	for i = 1, numButtons do
 		local button = buttonList[i]
