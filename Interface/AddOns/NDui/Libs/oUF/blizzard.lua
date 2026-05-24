@@ -160,10 +160,11 @@ function oUF:DisableBlizzard(unit)
 				handleFrame(frame, true)
 			end
 
-			-- NDui: handle sub frames
-			for i = 1, 5 do
-				handleFrame(_G['ArenaEnemyMatchFrame'..i], true)
-				handleFrame(_G['ArenaEnemyPrepFrame'..i], true)
+			-- old arena frames, they're still used for flag carriers etc in battlegrounds
+			handleFrame(ArenaEnemyMatchFramesContainer)
+
+			for _, frame in next, ArenaEnemyMatchFramesContainer.UnitFrames do
+				handleFrame(frame, true)
 			end
 		end
 	elseif(unit:match('nameplate%d?%d?%d?$')) then
