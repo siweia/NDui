@@ -844,7 +844,7 @@ function module:OnLogin()
 	}
 
 	local function isItemNeedsLevel(item)
-		return item.link and item.quality > 1 and module:IsItemHasLevel(item)
+		return item.link and item.quality > 1 and item.ilvl
 	end
 
 	local function UpdatePawnArrow(self, item)
@@ -871,9 +871,12 @@ function module:OnLogin()
 		end
 
 		self.iLvl:SetText("")
-		if C.db["Bags"]["BagsiLvl"] and isItemNeedsLevel(item) then
-			local level = item.level
-			if level and level > C.db["Bags"]["iLvlToShow"] then
+		if C.db["Bags"]["BagsiLvl"] then
+			local level = item.level -- ilvl for keystone and battlepet
+			if not level and isItemNeedsLevel(item) then
+				level = item.ilvl
+			end
+			if level then
 				local color = DB.QualityColors[item.quality]
 				self.iLvl:SetText(level)
 				self.iLvl:SetTextColor(color.r, color.g, color.b)
