@@ -591,7 +591,7 @@ function UF:CreatePlates()
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 	self:SetPoint("CENTER")
-	self:SetScale(NDuiADB["UIScale"])
+	--self:SetScale(NDuiADB["UIScale"])
 
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
