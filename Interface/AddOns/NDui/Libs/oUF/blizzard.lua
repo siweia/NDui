@@ -13,7 +13,6 @@ local MAX_PARTY_MEMBERS = _G.MAX_PARTY_MEMBERS or 4
 -- sourced from Blizzard_FrameXMLBase/Shared/Constants.lua
 local MEMBERS_PER_RAID_GROUP = _G.MEMBERS_PER_RAID_GROUP or 5
 
-local isNewPatch = NDui[4].isNewPatch
 local hookedNameplates = {}
 local isPartyHooked = false
 local isPartyHooked = false
@@ -105,28 +104,17 @@ function oUF:DisableBlizzard(unit)
 			end
 		end
 	elseif(unit:match('party%d?$')) then
-		if not isNewPatch then
-		local id = unit:match('party(%d)')
-		if(id) then
-			handleFrame('PartyMemberFrame' .. id)
-		else
-			for i = 1, MAX_PARTY_MEMBERS do
-				handleFrame(string.format('PartyMemberFrame%d', i))
+		if(not isPartyHooked) then
+			isPartyHooked = true
+
+			handleFrame(PartyFrame)
+
+			for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+				handleFrame(frame, true)
 			end
-		end
-		else
-			if(not isPartyHooked) then
-				isPartyHooked = true
 
-				handleFrame(PartyFrame)
-
-				for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
-					handleFrame(frame, true)
-				end
-
-				for i = 1, MEMBERS_PER_RAID_GROUP do
-					handleFrame('CompactPartyFrameMember' .. i)
-				end
+			for i = 1, MEMBERS_PER_RAID_GROUP do
+				handleFrame('CompactPartyFrameMember' .. i)
 			end
 		end
 	elseif(unit:match('arena%d?$')) then
@@ -145,20 +133,7 @@ function oUF:DisableBlizzard(unit)
 	end
 end
 
-function oUF:DisableNamePlate(frame)
-	if(not(frame and frame.UnitFrame)) then return end
-	if(frame.UnitFrame:IsForbidden()) then return end
-
-	if(not frame.UnitFrame.isHooked) then
-		frame.UnitFrame:HookScript('OnShow', insecureOnShow)
-		frame.UnitFrame.isHooked = true
-	end
-
-	handleFrame(frame.UnitFrame, true)
-end
-
 function oUF:DisableBlizzardNamePlate(frame)
-	if not isNewPatch then return end
 	if(not(frame and frame.UnitFrame)) then return end
 	if(frame.UnitFrame:IsForbidden()) then return end
 

@@ -129,11 +129,7 @@ function module:Chatbar()
 				end
 			else
 				JoinPermanentChannel(channelName, nil, 1)
-				if DB.isNewPatch then
 				ChatFrame1:AddChannel(channelName)
-				else
-				ChatFrame_AddChannel(ChatFrame1, channelName)
-				end
 				print("|cff00C957"..JOIN.."|r "..DB.InfoColor..L["World Channel"])
 				module.InWorldChannel = true
 			end

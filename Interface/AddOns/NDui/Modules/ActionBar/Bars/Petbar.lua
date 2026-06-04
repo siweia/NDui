@@ -6,8 +6,6 @@ local _G = _G
 local tinsert = tinsert
 local margin = C.Bars.margin
 
-if DB.isNewPatch then
-
 local function hasPetActionHighlightMark(index)
 	return PET_ACTION_HIGHLIGHT_MARKS[index];
 end
@@ -175,36 +173,4 @@ function Bar:CreatePetbar()
 	B:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR", Bar.PetBarOnEvent)
 	B:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED", Bar.PetBarOnEvent)
 	B:RegisterEvent("PLAYER_FARSIGHT_FOCUS_CHANGED", Bar.PetBarOnEvent)
-end
-
-else
-function Bar:CreatePetbar()
-	local num = NUM_PET_ACTION_SLOTS
-	local buttonList = {}
-
-	local frame = CreateFrame("Frame", "NDui_ActionBarPet", UIParent, "SecureHandlerStateTemplate")
-	frame.mover = B.Mover(frame, L["Pet Actionbar"], "PetBar", {"BOTTOM", _G.NDui_ActionBar2, "TOP", 0, margin})
-	Bar.movers[10] = frame.mover
-
-	--PetActionBarFrame:SetParent(frame)
-	--PetActionBarFrame:EnableMouse(false)
-	--SlidingActionBarTexture0:SetTexture(nil)
-	--SlidingActionBarTexture1:SetTexture(nil)
-
-	for i = 1, num do
-		local button = _G["PetActionButton"..i]
-		button:SetParent(frame)
-		tinsert(buttonList, button)
-		tinsert(Bar.buttons, button)
-		local hotkey = button.HotKey
-		if hotkey then
-			hotkey:ClearAllPoints()
-			hotkey:SetPoint("TOPRIGHT")
-		end
-	end
-	frame.buttons = buttonList
-
-	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar][shapeshift] hide; [pet] show; hide"
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
-end
 end

@@ -375,11 +375,7 @@ end
 
 function M:CustomMenu_Whisper(rootDescription, data)
 	rootDescription:CreateButton(DB.InfoColor..WHISPER, function()
-		if DB.isNewPatch then
 		ChatFrameUtil.SendTell(data.name)
-		else
-		ChatFrame_SendTell(data.name)
-		end
 	end)
 end
 

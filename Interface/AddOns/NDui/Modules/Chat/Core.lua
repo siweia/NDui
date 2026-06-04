@@ -439,13 +439,8 @@ function module:OnLogin()
 	end)
 
 	hooksecurefunc("FCFTab_UpdateColors", module.UpdateTabColors)
-	if DB.isNewPatch then
 	hooksecurefunc("FloatingChatFrameManager_OnEvent", module.UpdateTabEventColors)
 	hooksecurefunc(ChatFrameUtil, "ProcessMessageEventFilters", module.PlayWhisperSound)
-	else
-	hooksecurefunc("FloatingChatFrame_OnEvent", module.UpdateTabEventColors)
-	hooksecurefunc("ChatFrame_MessageEventHandler", module.PlayWhisperSound)
-	end
 	hooksecurefunc("FCF_MinimizeFrame", module.HandleMinimizedFrame)
 
 	-- Default
@@ -482,9 +477,7 @@ function module:OnLogin()
 		B:RegisterEvent("UI_SCALE_CHANGED", module.UpdateChatSize)
 		hooksecurefunc("FCF_SavePositionAndDimensions", module.UpdateChatSize)
 		FCF_SavePositionAndDimensions(ChatFrame1)
-		if DB.isNewPatch then
 		hooksecurefunc(ChatFrame1, "SetPoint", updateChatAnchor)
-		end
 	end
 
 	-- Extra elements in chat tab menu

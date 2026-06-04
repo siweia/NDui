@@ -561,11 +561,9 @@ function module:SetupMinimap()
 	local mover = B.Mover(Minimap, L["Minimap"], "Minimap", C.Minimap.Pos)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint("TOPRIGHT", mover)
-	if DB.isNewPatch then
 	hooksecurefunc(MinimapCluster, "SetPoint", function(frame)
 		frame:SetAllPoints(Minimap)
 	end)
-	end
 	Minimap.mover = mover
 
 	self:UpdateMinimapScale()
@@ -597,20 +595,16 @@ function module:SetupMinimap()
 		end
 	end
 	MinimapCluster:EnableMouse(false)
-	if DB.isNewPatch then
 	MinimapCluster:KillEditMode()
 	MinimapCluster:ClearAllPoints()
 	MinimapCluster:SetAllPoints(Minimap)
 	MinimapCluster.BorderTop:Hide()
-	end
 
 	-- Add Elements
 	self:CreatePulse()
 	self:ReskinRegions()
 	self:RecycleBin()
-	if not DB.isNewPatch then
-	self:WhoPingsMyMap()
-	end
+	--self:WhoPingsMyMap()
 	self:ShowMinimapHelpInfo()
 	self:SoundVolume()
 

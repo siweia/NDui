@@ -1849,8 +1849,6 @@ local function OpenGUI()
 end
 
 function G:OnLogin()
-	if DB.isNewPatch then
-
 	local function toggleGUI()
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
 		OpenGUI()
@@ -1872,23 +1870,4 @@ function G:OnLogin()
 			end
 		end
 	end)
-
-else
-	local gui = CreateFrame("Button", "GameMenuFrameNDui", GameMenuFrame, "GameMenuButtonTemplate, BackdropTemplate")
-	gui:SetText("|T"..DB.chatLogo..":12:24|t |cff0080ffNDui|r")
-	gui:SetPoint("TOP", GameMenuButtonAddons, "BOTTOM", 0, -21)
-	GameMenuFrame:HookScript("OnShow", function(self)
-		GameMenuButtonLogout:SetPoint("TOP", gui, "BOTTOM", 0, -21)
-		self:SetHeight(self:GetHeight() + gui:GetHeight() + 22)
-	end)
-
-	gui:SetScript("OnClick", function()
-		if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
-		OpenGUI()
-		HideUIPanel(GameMenuFrame)
-		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
-	end)
-
-	if C.db["Skins"]["BlizzardSkins"] then B.Reskin(gui) end
-end
 end

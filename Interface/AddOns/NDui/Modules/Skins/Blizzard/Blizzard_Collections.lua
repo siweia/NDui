@@ -519,13 +519,6 @@ C.themes["Blizzard_Collections"] = function()
 		end
 	end)
 
-	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
-	if SetsTransmogFrame then -- isNewPatch, removed
-		B.StripTextures(SetsTransmogFrame)
-		B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
-		B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
-	end
-
 	-- [[ Wardrobe ]]
 
 	local WardrobeFrame = WardrobeFrame

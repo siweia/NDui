@@ -151,11 +151,9 @@ function Bar:MicroMenu()
 	menubar.mover = B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 	Bar:MicroMenu_Lines(menubar)
 
-	if DB.isNewPatch then
 	StoreMicroButton:ClearAllPoints()
 	StoreMicroButton:SetPoint("CENTER")
 	StoreMicroButton:Show()
-	end
 
 	-- Generate Buttons
 	local buttonInfo = {
@@ -188,7 +186,5 @@ function Bar:MicroMenu()
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)
-	if DB.isNewPatch then
-		MicroMenu.UpdateHelpTicketButtonAnchor = B.Dummy
-	end
+	MicroMenu.UpdateHelpTicketButtonAnchor = B.Dummy
 end

@@ -18,9 +18,6 @@ tinsert(C.defaultThemes, function()
 	InboxFrame:GetRegions():Hide()
 	SendMailMoneyBg:Hide()
 	SendMailMoneyInset:Hide()
-	if not DB.isNewPatch then
-	OpenMailFrameIcon:Hide()
-	end
 	OpenMailHorizontalBarLeft:Hide()
 	B.StripTextures(SendMailFrame)
 	OpenStationeryBackgroundLeft:Hide()

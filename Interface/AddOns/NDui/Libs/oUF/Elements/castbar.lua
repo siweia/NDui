@@ -92,7 +92,6 @@ local oUF = ns.oUF
 local FALLBACK_ICON = 136243 -- Interface\ICONS\Trade_Engineering
 local FAILED = _G.FAILED or 'Failed'
 local INTERRUPTED = _G.INTERRUPTED or 'Interrupted'
-local isNewPatch = NDui[4].isNewPatch
 
 local function resetAttributes(self)
 	self.castID = nil
@@ -405,15 +404,10 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			if isNewPatch then
 			PlayerCastingBarFrame:UnregisterAllEvents()
 			PlayerCastingBarFrame:Hide()
 			PetCastingBarFrame:UnregisterAllEvents()
 			PetCastingBarFrame:Hide()
-			else
-			CastingBarFrame_SetUnit(CastingBarFrame, nil)
-			CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
-			end
 		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
@@ -453,7 +447,6 @@ local function Disable(self)
 		element:SetScript('OnUpdate', nil)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			if isNewPatch then
 			for event in next, eventMethods do
 				PlayerCastingBarFrame:RegisterUnitEvent(event, 'player')
 				PetCastingBarFrame:RegisterUnitEvent(event, 'pet')
@@ -462,10 +455,6 @@ local function Disable(self)
 			PlayerCastingBarFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
 			PetCastingBarFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
 			PetCastingBarFrame:RegisterEvent('UNIT_PET')
-			else
-			CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
-			PetCastingBarFrame_OnLoad(PetCastingBarFrame)
-			end
 		end
 	end
 end
