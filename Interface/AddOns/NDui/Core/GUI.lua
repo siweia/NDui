@@ -1109,8 +1109,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "Actionbar", "AspectBar", HeaderTag..L["AspectBar"].."*", nil, nil, toggleAspectBar},
 		--{1, "Actionbar", "VerticleAspect", L["VerticleAspect"].."*", nil, nil, updateAspectStatus},
 		--{3, "Actionbar", "AspectSize", L["AspectSize"].."*", nil, {24, 60, 1}, updateAspectStatus},
-		{1, "Actionbar", "TotemBar", HeaderTag..L["TotemBar"]},
-		{3, "Actionbar", "TotemSize", L["TotemSize"].."*", nil, {24, 60, 1}, updateTotemSize},
+		--{1, "Actionbar", "TotemBar", HeaderTag..L["TotemBar"]},
+		--{3, "Actionbar", "TotemSize", L["TotemSize"].."*", nil, {24, 60, 1}, updateTotemSize},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},

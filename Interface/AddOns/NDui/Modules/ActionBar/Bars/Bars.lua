@@ -354,5 +354,5 @@ function Bar:OnLogin()
 	B:RegisterEvent("PET_BATTLE_OPENING_DONE", Bar.ClearBindings)
 
 	--Bar:HunterAspectBar()
-	Bar:TotemBar()
+	--Bar:TotemBar()
 end
