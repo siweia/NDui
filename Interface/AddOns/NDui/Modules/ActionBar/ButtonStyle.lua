@@ -143,14 +143,16 @@ function Bar:ReskinBars()
 	--extra action button
 	Bar:StyleActionButton(ExtraActionButton1)
 	--spell flyout
+	SpellFlyout.Background:SetAlpha(0)
+	local numFlyouts = 1
 	local function checkForFlyoutButtons()
-		local i = 1
-		local button = _G["SpellFlyoutButton"..i]
-		while button and button:IsShown() do
+		local button = _G["SpellFlyoutPopupButton"..numFlyouts]
+		while button do
 			Bar:StyleActionButton(button)
-			i = i + 1
-			button = _G["SpellFlyoutButton"..i]
+			numFlyouts = numFlyouts + 1
+			button = _G["SpellFlyoutPopupButton"..numFlyouts]
 		end
 	end
 	SpellFlyout:HookScript("OnShow", checkForFlyoutButtons)
+	SpellFlyout:HookScript("OnHide", checkForFlyoutButtons)
 end
