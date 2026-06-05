@@ -77,13 +77,18 @@ if(not customClassColors()) then
 	end)
 end
 
-colors.debuff[0] = CreateColor(0, 0, 0)
-colors.debuff[1] = DEBUFF_TYPE_MAGIC_COLOR
-colors.debuff[2] = DEBUFF_TYPE_CURSE_COLOR
-colors.debuff[3] = DEBUFF_TYPE_DISEASE_COLOR
-colors.debuff[4] = DEBUFF_TYPE_POISON_COLOR
-colors.debuff[9] = CreateColor(243, 95, 245)
-colors.debuff[11] = DEBUFF_TYPE_BLEED_COLOR
+local DEBUFF_DISPLAY_INFO = {
+	["Magic"] = DEBUFF_TYPE_MAGIC_COLOR,
+	["Curse"] = DEBUFF_TYPE_CURSE_COLOR,
+	["Disease"] = DEBUFF_TYPE_DISEASE_COLOR,
+	["Poison"] = DEBUFF_TYPE_POISON_COLOR,
+	["Bleed"] = DEBUFF_TYPE_BLEED_COLOR,
+	["None"] = DEBUFF_TYPE_NONE_COLOR,
+}
+
+for debuffType, color in next, DEBUFF_DISPLAY_INFO do
+	colors.debuff[debuffType] = {color.r, color.g, color.b}
+end
 
 for eclass, color in next, FACTION_BAR_COLORS do
 	colors.reaction[eclass] = {color.r, color.g, color.b}
