@@ -14,7 +14,6 @@ local GetContainerItemInfo = GetContainerItemInfo
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
 local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-local CalculateTotalNumberOfFreeBagSlots = CalculateTotalNumberOfFreeBagSlots
 local slotString = L["Bags"]..": %s%d"
 
 local profit, spent, oldMoney = 0, 0, 0
@@ -49,6 +48,18 @@ local function getClassIcon(class)
 	c1, c2, c3, c4 = (c1+.03)*50, (c2-.03)*50, (c3+.03)*50, (c4-.03)*50
 	local classStr = "|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:"..c1..":"..c2..":"..c3..":"..c4.."|t "
 	return classStr or ""
+end
+
+local function CalculateTotalNumberOfFreeBagSlots()
+	local totalFree, freeSlots, bagFamily = 0;
+	for i = 0, 4 do
+		freeSlots, bagFamily = C_Container.GetContainerNumFreeSlots(i);
+		if ( bagFamily == 0 ) then
+			totalFree = totalFree + freeSlots;
+		end
+	end
+
+	return totalFree;
 end
 
 local function getSlotString()
