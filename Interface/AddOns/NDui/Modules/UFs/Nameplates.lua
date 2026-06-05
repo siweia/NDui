@@ -24,7 +24,8 @@ function UF:UpdatePlateCVars()
 	SetCVar("nameplateMaxAlpha", C.db["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateNotSelectedAlpha", C.db["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateOverlapV", C.db["Nameplate"]["VerticalSpacing"])
-	SetCVar("nameplateShowOnlyNames", C.db["Nameplate"]["CVarOnlyNames"] and 1 or 0)
+	SetCVar("nameplateShowOnlyNameForFriendlyPlayerUnits", C.db["Nameplate"]["CVarOnlyNames"] and 1 or 0)
+	SetCVar("nameplateUseClassColorForFriendlyPlayerUnitNames", C.db["Nameplate"]["CVarOnlyNames"] and 1 or 0)
 	SetCVar("nameplateShowFriendlyNPCs", C.db["Nameplate"]["CVarShowNPCs"] and 1 or 0)
 end
 
