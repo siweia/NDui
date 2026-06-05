@@ -302,13 +302,13 @@ local defaultItem = cargBags:NewItemTable()
 	@param i <table> [optional]
 	@return i <table>
 ]]
-local iLvlClassIDs = {
+DB.iLvlClassIDs = {
 	[Enum.ItemClass.Gem] = Enum.ItemGemSubclass.Artifactrelic,
 	[Enum.ItemClass.Armor] = 0,
 	[Enum.ItemClass.Weapon] = 0,
 }
 local function isItemHasLevel(item)
-	local index = iLvlClassIDs[item.classID]
+	local index = DB.iLvlClassIDs[item.classID]
 	return index and (index == 0 or index == item.subClassID)
 end
 
