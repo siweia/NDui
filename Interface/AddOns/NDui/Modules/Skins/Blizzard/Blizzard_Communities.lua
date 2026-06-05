@@ -287,6 +287,20 @@ C.themes["Blizzard_Communities"] = function()
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
 	B.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
 
+	local detailFrame = CommunitiesFrame.GuildMemberDetailFrame
+	B.StripTextures(detailFrame)
+	B.SetBD(detailFrame)
+	B.ReskinClose(detailFrame.CloseButton)
+	B.Reskin(detailFrame.RemoveButton)
+	B.Reskin(detailFrame.GroupInviteButton)
+	B.ReskinDropDown(detailFrame.RankDropdown)
+	B.StripTextures(detailFrame.NoteBackground)
+	B.CreateBDFrame(detailFrame.NoteBackground, .25)
+	B.StripTextures(detailFrame.OfficerNoteBackground)
+	B.CreateBDFrame(detailFrame.OfficerNoteBackground, .25)
+	detailFrame:ClearAllPoints()
+	detailFrame:SetPoint("TOPLEFT", CommunitiesFrame, "TOPRIGHT", 34, 0)
+
 	hooksecurefunc(CommunitiesFrame.MemberList.ScrollBox, "Update", function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
