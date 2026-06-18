@@ -84,23 +84,6 @@ local function ApplyDBMStyle(self)
 end
 
 function S:DBMSkin()
-	-- Default notice message
-	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
-	RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
-		if strfind(textString, "|T") then
-			if strmatch(textString, ":(%d+):(%d+)") then
-				local size1, size2 = strmatch(textString, ":(%d+):(%d+)")
-				size1, size2 = size1 + 3, size2 + 3
-				textString = gsub(textString,":(%d+):(%d+)",":"..size1..":"..size2..":0:0:64:64:5:59:5:59")
-			elseif strmatch(textString, ":(%d+)|t") then
-				local size = strmatch(textString, ":(%d+)|t")
-				size = size + 3
-				textString = gsub(textString,":(%d+)|t",":"..size..":"..size..":0:0:64:64:5:59:5:59|t")
-			end
-		end
-		return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
-	end
-
 	if not C_AddOns.IsAddOnLoaded("DBM-Core") then return end
 	if not C.db["Skins"]["DBM"] then return end
 
