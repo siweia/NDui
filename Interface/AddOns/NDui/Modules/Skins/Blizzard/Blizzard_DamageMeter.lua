@@ -58,11 +58,11 @@ end
 local function ReskinMeterWindow(frame)
 	if not frame or frame.styled then return end
 
-	frame:SetClampedToScreen(false)
+	--frame:SetClampedToScreen(false)
 	frame.Header:SetTexture()
 	local bg = B.SetBD(frame.Header)
-	bg:SetPoint("TOPLEFT", frame.Header, 12, -2)
-	bg:SetPoint("BOTTOMRIGHT", frame.Header, -17, 2)
+	bg:SetPoint("TOPLEFT", frame.Header, 0, -2)
+	bg:SetPoint("BOTTOMRIGHT", frame.Header, -0, 2)
 
 	reskinMinimizeButton(frame)
 
@@ -84,7 +84,7 @@ local function ReskinMeterWindow(frame)
 		background:SetTexture()
 		background.bg = B.SetBD(background, 1)
 		background.bg:SetPoint("TOPLEFT", bg, "BOTTOMLEFT", 0, -2)
-		background.bg:SetPoint("BOTTOMRIGHT", background, -7, 0)
+		background.bg:SetPoint("BOTTOMRIGHT", background, 0, 0)
 		updateBGAlpha(background, background:GetAlpha())
 		hooksecurefunc(background, "SetAlpha", updateBGAlpha)
 	end
@@ -120,6 +120,6 @@ C.themes["Blizzard_DamageMeter"] = function()
 			end
 		end
 
-		DamageMeter:SetClampedToScreen(false)
+	--	DamageMeter:SetClampedToScreen(false)
 	end)
 end
