@@ -87,7 +87,7 @@ function module:Chatbar()
 			local editBox = ChatEdit_ChooseBoxForSend()
 			if editBox then
 				editBox:Show()
-				--editBox:SetFocus()
+				editBox:SetFocus()
 				editBox:SetAttribute("chatType", "PARTY")
 				ChatEdit_UpdateHeader(editBox)
 			end
