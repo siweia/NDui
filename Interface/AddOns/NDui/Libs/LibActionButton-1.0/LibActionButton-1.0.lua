@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-NDui"
-local MINOR_VERSION = 147
+local MINOR_VERSION = 149
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -239,6 +239,7 @@ function lib:CreateButton(id, name, header, config)
 	button:SetScript("PreClick", Generic.PreClick)
 	button:SetScript("PostClick", Generic.PostClick)
 	button:SetScript("OnEvent", Generic.OnButtonEvent)
+	button:SetScript("OnAttributeChanged", nil) -- inherited templates bring in a handler here which we don't want, so get rid of it
 
 	button.id = id
 	button.header = header
@@ -541,6 +542,9 @@ end
 
 function Generic:OnButtonEvent(event, ...)
 	if event == "GLOBAL_MOUSE_UP" then
+		if self:GetButtonState() == "PUSHED" then
+			self:SetButtonState("NORMAL")
+		end
 		self:UnregisterEvent(event)
 
 		UpdateFlyout(self)
