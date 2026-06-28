@@ -56,5 +56,8 @@ C.themes["Blizzard_Transmog"] = function()
 		B.ReskinArrow(TabContent.SetsFrame.PagedContent.PagingControls.NextPageButton, "right")
 		B.ReskinArrow(TabContent.CustomSetsFrame.PagedContent.PagingControls.PrevPageButton, "left")
 		B.ReskinArrow(TabContent.CustomSetsFrame.PagedContent.PagingControls.NextPageButton, "right")
+
+		B.ReskinCheck(TabContent.ItemsFrame.SecondaryAppearanceToggle.Checkbox)
+		B.ReskinDropDown(TabContent.ItemsFrame.WeaponSheatheDropdown)
 	end
 end
