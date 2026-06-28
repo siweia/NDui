@@ -23,11 +23,13 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(TimeAlertFrame)
 
 	-- Battletag invite frame
-	local border, send, cancel = BattleTagInviteFrame:GetChildren()
-	border:Hide()
-	B.Reskin(send)
-	B.Reskin(cancel)
-	B.SetBD(BattleTagInviteFrame)
+	if not DB.isNewPatch then
+		local border, send, cancel = BattleTagInviteFrame:GetChildren()
+		border:Hide()
+		B.Reskin(send)
+		B.Reskin(cancel)
+		B.SetBD(BattleTagInviteFrame)
+	end
 
 	local friendTex = "Interface\\HELPFRAME\\ReportLagIcon-Chat"
 	local queueTex = "Interface\\HELPFRAME\\HelpIcon-ItemRestoration"

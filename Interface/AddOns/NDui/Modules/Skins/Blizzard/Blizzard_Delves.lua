@@ -13,6 +13,7 @@ local function updateButton(self)
 end
 
 local function reskinOptionSlot(frame, skip)
+	if not frame then return end -- isNewPatch
 	local option = frame.OptionsList
 	B.StripTextures(option)
 	local bg = B.SetBD(option, nil, -5, 5, 5, -5)

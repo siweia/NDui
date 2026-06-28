@@ -24,8 +24,10 @@ tinsert(C.defaultThemes, function()
 
 	ReskinFont(RaidWarningFrame.slot1)
 	ReskinFont(RaidWarningFrame.slot2)
+	if not DB.isNewPatch then
 	ReskinFont(RaidBossEmoteFrame.slot1)
 	ReskinFont(RaidBossEmoteFrame.slot2)
+	end
 	ReskinFont(AchievementFont_Small)
 	ReskinFont(AchievementCriteriaFont)
 	ReskinFont(AchievementDescriptionFont)

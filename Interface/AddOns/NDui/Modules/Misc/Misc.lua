@@ -96,6 +96,7 @@ end
 
 -- Hide boss emote
 function M:ToggleBossEmote()
+	if DB.isNewPatch then return end
 	if C.db["Misc"]["HideBossEmote"] then
 		RaidBossEmoteFrame:UnregisterAllEvents()
 	else
