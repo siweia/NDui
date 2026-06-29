@@ -698,7 +698,7 @@ function module:SetupMinimap()
 	self:RecycleBin()
 	self:BlizzardACF() -- blizz addons collector
 	self:ReskinRegions()
-	self:WhoPingsMyMap()
+	--self:WhoPingsMyMap()
 	self:ShowMinimapHelpInfo()
 	self:SoundVolume()
 
