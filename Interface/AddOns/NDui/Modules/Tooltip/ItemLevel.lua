@@ -61,6 +61,7 @@ function TT:InspectOnUpdate(elapsed)
 	if self.elapsed > frequency then
 		self.elapsed = 0
 		self:Hide()
+		if InspectFrame and InspectFrame:IsShown() then return end
 		ClearInspectPlayer()
 
 		if currentUNIT and checkUnitGUID(currentUNIT) == currentGUID then
