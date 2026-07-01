@@ -11,7 +11,7 @@ local TT = B:GetModule("Tooltip")
 	4.显示队长分数，并简写集市钥石
 ]]
 local select, gsub = select, gsub
-local StaticPopup_Hide, HideUIPanel, GetTime = StaticPopup_Hide, HideUIPanel, GetTime
+local StaticPopup_Hide, HideUIPanel = StaticPopup_Hide, HideUIPanel
 local UnitIsGroupLeader = UnitIsGroupLeader
 local C_Timer_After, IsAltKeyDown = C_Timer.After, IsAltKeyDown
 local C_LFGList_GetSearchResultInfo = C_LFGList.GetSearchResultInfo
@@ -75,7 +75,6 @@ function M:AddAutoAcceptButton()
 	bu:SetPoint("BOTTOMLEFT", ApplicationViewerFrame.InfoBackground, 12, 5)
 	B.CreateFS(bu, 14, _G.LFG_LIST_AUTO_ACCEPT, "system", "LEFT", 24, 0)
 
-	local lastTime = 0
 	local function clickInviteButton(button)
 		if button.applicantID and button.InviteButton:IsEnabled() then
 			C_LFGList.InviteApplicant(button.applicantID)
@@ -87,14 +86,6 @@ function M:AddAutoAcceptButton()
 		if not UnitIsGroupLeader("player", LE_PARTY_CATEGORY_HOME) then return end
 
 		ApplicationViewerFrame.ScrollBox:ForEachFrame(clickInviteButton)
-
-		if ApplicationViewerFrame:IsShown() then
-			local now = GetTime()
-			if now - lastTime > 1 then
-				lastTime = now
-				ApplicationViewerFrame.RefreshButton:Click()
-			end
-		end
 	end)
 
 	hooksecurefunc("LFGListApplicationViewer_UpdateInfo", function(self)
