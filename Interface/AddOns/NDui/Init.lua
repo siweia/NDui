@@ -18,9 +18,9 @@ local host = CreateFrame("Frame")
 host:SetScript("OnEvent", function(_, event, ...)
 	for func in pairs(events[event]) do
 		if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-			func(event, CombatLogGetCurrentEventInfo())
+			xpcall(func, geterrorhandler(), event, CombatLogGetCurrentEventInfo())
 		else
-			func(event, ...)
+			xpcall(func, geterrorhandler(), event, ...)
 		end
 	end
 end)
