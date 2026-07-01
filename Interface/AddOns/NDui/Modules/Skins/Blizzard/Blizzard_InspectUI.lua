@@ -1,6 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local inspectPVPFrameUpdateHooked
+
 C.themes["Blizzard_InspectUI"] = function()
 	B.StripTextures(InspectModelFrame, true)
 	InspectGuildFrameBG:Hide()
@@ -8,6 +10,19 @@ C.themes["Blizzard_InspectUI"] = function()
 	InspectPaperDollFrame.ViewButton:ClearAllPoints()
 	InspectPaperDollFrame.ViewButton:SetPoint("TOP", InspectFrame, 0, -45)
 	InspectPVPFrame.BG:Hide()
+
+	if InspectPVPFrame_Update and not inspectPVPFrameUpdateHooked then
+		inspectPVPFrameUpdateHooked = true
+
+		local orig_InspectPVPFrame_Update = InspectPVPFrame_Update
+		InspectPVPFrame_Update = function(...)
+			local unit = InspectFrame and InspectFrame.unit
+			if type(unit) ~= "string" or unit == "" then return end
+
+			return orig_InspectPVPFrame_Update(...)
+		end
+	end
+
 	B.Reskin(InspectPaperDollItemsFrame.InspectTalents)
 
 	-- Character
