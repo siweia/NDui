@@ -17,6 +17,26 @@ local GetSpellName = C_Spell.GetSpellName
 local UnitEffectiveLevel, UnitClassBase, GetInstanceInfo = UnitEffectiveLevel, UnitClassBase, GetInstanceInfo
 local UnitIsBossMob, UnitIsLieutenant = UnitIsBossMob, UnitIsLieutenant
 
+-- Rainbow HSL to RGB conversion
+local function RainbowColor(hue)
+	-- hue: 0~1, returns r, g, b (0~1) at full saturation and 50% lightness
+	local h = hue * 6
+	local x = 1.0 - math.abs(h % 2 - 1)
+	if h < 1 then
+		return 1.0, x, 0
+	elseif h < 2 then
+		return x, 1.0, 0
+	elseif h < 3 then
+		return 0, 1.0, x
+	elseif h < 4 then
+		return 0, x, 1.0
+	elseif h < 5 then
+		return x, 0, 1.0
+	else
+		return 1.0, 0, x
+	end
+end
+
 -- Instance type tracker for mob type coloring
 local isInInstance = false
 local function updateZoneType()
@@ -140,8 +160,27 @@ function UF:UpdateColor(_, unit)
 	if not UnitIsConnected(unit) then
 		r, g, b = .7, .7, .7
 	else
+		-- Restore normal texture when unit is no longer the rainbow target
+		if element.rainbowActive and not (C.db["Nameplate"]["ColoredTarget"]
+			and C.db["Nameplate"]["ColoredTargetRainbow"]
+			and UnitIsUnit(unit, "target")) then
+			element:SetStatusBarTexture(DB.normTex)
+			element.rainbowActive = nil
+		end
 		if C.db["Nameplate"]["ColoredTarget"] and UnitIsUnit(unit, "target") then
-			r, g, b = targetColor.r, targetColor.g, targetColor.b
+			if C.db["Nameplate"]["ColoredTargetRainbow"] then
+				r, g, b = 1, 1, 1
+				if not element.rainbowActive then
+					element:SetStatusBarTexture("Interface\\AddOns\\NDui\\Media\\rainbow_gradient.png")
+					element.rainbowActive = true
+				end
+			else
+				r, g, b = targetColor.r, targetColor.g, targetColor.b
+				if element.rainbowActive then
+					element:SetStatusBarTexture(DB.normTex)
+					element.rainbowActive = nil
+				end
+			end
 		elseif C.db["Nameplate"]["ColoredFocus"] and UnitIsUnit(unit, "focus") then
 			r, g, b = focusColor.r, focusColor.g, focusColor.b
 		elseif isCustomUnit then
@@ -295,6 +334,7 @@ function UF:UpdateTargetIndicator()
 	if style == 1 then
 		element:Hide()
 	else
+		if element.rainbowUpdater then element.rainbowUpdater:Hide() end
 		if style == 2 then
 			element.Arrow:ClearAllPoints()
 			element.Arrow:SetPoint("BOTTOM", element, "TOP", 0, 20)
@@ -354,6 +394,16 @@ function UF:UpdateTargetIndicator()
 				element.Glow:Show()
 				element.nameGlow:Hide()
 			end
+		elseif style == 7 then
+			element.Arrow:Hide()
+			if isNameOnly then
+				element.Glow:Hide()
+				element.nameGlow:Show()
+			else
+				element.Glow:Show()
+				element.nameGlow:Hide()
+			end
+			if element.rainbowUpdater then element.rainbowUpdater:Show() end
 		end
 		element:Show()
 	end
@@ -392,6 +442,25 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetVertexColor(0, .6, 1)
 	frame.nameGlow:SetBlendMode("ADD")
 	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
+
+	-- Rainbow updater for style 7 (border glow)
+	frame.rainbowTime = 0
+	local rainbowUpdater = CreateFrame("Frame", nil, frame)
+	rainbowUpdater:Hide()
+	rainbowUpdater:SetScript("OnUpdate", function(_, elapsed)
+		if not frame:IsShown() then return end
+		frame.rainbowTime = frame.rainbowTime + elapsed
+		local period = 2
+		if frame.rainbowTime > period then frame.rainbowTime = frame.rainbowTime - period end
+		local glowR, glowG, glowB = RainbowColor(frame.rainbowTime / period)
+		if frame.nameGlow:IsShown() then
+			frame.nameGlow:SetVertexColor(glowR, glowG, glowB)
+		end
+		if frame.Glow:IsShown() then
+			frame.Glow:SetBackdropBorderColor(glowR, glowG, glowB)
+		end
+	end)
+	frame.rainbowUpdater = rainbowUpdater
 
 	self.TargetIndicator = frame
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
