@@ -12,9 +12,10 @@ local HEIRLOOMS = _G.HEIRLOOMS
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
+local inspectFrameLockTime, inspectNotifyLockTime = 10, 3
 local cache, weapon, currentUNIT, currentGUID, inspectGUID = {}, {}
 local updater
-local inspectFrameTime = 0
+local inspectFrameTime, inspectNotifyTime = 0, 0
 local tooltipInspecting
 
 TT.TierSets = {
@@ -59,22 +60,49 @@ local function checkUnitGUID(unit)
 	return B:NotSecretValue(guid) and guid
 end
 
+local function StopInspectUpdate(clearGUID)
+	if updater then updater:Hide() end
+	if clearGUID then inspectGUID = nil end
+end
+
+local function CancelInspectUpdate()
+	StopInspectUpdate(true)
+	B:UnregisterEvent("INSPECT_READY", TT.GetInspectInfo)
+end
+
 local function InspectFrameIsBusy()
-	if GetTime() - inspectFrameTime < 3 then return true end
+	local now = GetTime()
+	if inspectFrameTime > 0 and now - inspectFrameTime < inspectFrameLockTime then return true end
+	if inspectNotifyTime > 0 and now - inspectNotifyTime < inspectNotifyLockTime then return true end
 
 	return InspectFrame and InspectFrame:IsShown()
 end
 
+local function OnInspectUnit()
+	inspectFrameTime = GetTime()
+	CancelInspectUpdate()
+end
+
+local function HookInspectUnit()
+	if not InspectUnit or TT.inspectUnitHooked then return end
+
+	hooksecurefunc("InspectUnit", OnInspectUnit)
+	TT.inspectUnitHooked = true
+end
+
+local function OnInspectUILoaded(event, addon)
+	if addon ~= "Blizzard_InspectUI" then return end
+
+	HookInspectUnit()
+	B:UnregisterEvent(event, OnInspectUILoaded)
+end
+
 hooksecurefunc("NotifyInspect", function()
 	if not tooltipInspecting then
-		inspectFrameTime = GetTime()
+		inspectNotifyTime = GetTime()
+		CancelInspectUpdate()
 	end
 end)
-
-local function StopInspectUpdate(clearGUID)
-	updater:Hide()
-	if clearGUID then inspectGUID = nil end
-end
 
 function TT:InspectOnUpdate(elapsed)
 	self.elapsed = (self.elapsed or frequency) + elapsed
@@ -83,7 +111,7 @@ function TT:InspectOnUpdate(elapsed)
 
 		if currentUNIT and checkUnitGUID(currentUNIT) == currentGUID then
 			if InspectFrameIsBusy() then
-				StopInspectUpdate(true)
+				CancelInspectUpdate()
 				return
 			end
 
@@ -94,7 +122,7 @@ function TT:InspectOnUpdate(elapsed)
 			NotifyInspect(currentUNIT)
 			tooltipInspecting = nil
 		else
-			StopInspectUpdate(true)
+			CancelInspectUpdate()
 		end
 	end
 end
@@ -102,6 +130,12 @@ end
 updater = CreateFrame("Frame")
 updater:SetScript("OnUpdate", TT.InspectOnUpdate)
 updater:Hide()
+
+GameTooltip:HookScript("OnTooltipCleared", CancelInspectUpdate)
+HookInspectUnit()
+if not TT.inspectUnitHooked then
+	B:RegisterEvent("ADDON_LOADED", OnInspectUILoaded)
+end
 
 local lastTime = 0
 function TT:GetInspectInfo(...)
