@@ -67,7 +67,9 @@ end
 
 local function CancelInspectUpdate()
 	StopInspectUpdate(true)
-	B:UnregisterEvent("INSPECT_READY", TT.GetInspectInfo)
+	if TT.GetInspectInfo then
+		B:UnregisterEvent("INSPECT_READY", TT.GetInspectInfo)
+	end
 end
 
 local function InspectFrameIsBusy()
@@ -131,7 +133,6 @@ updater = CreateFrame("Frame")
 updater:SetScript("OnUpdate", TT.InspectOnUpdate)
 updater:Hide()
 
-GameTooltip:HookScript("OnTooltipCleared", CancelInspectUpdate)
 HookInspectUnit()
 if not TT.inspectUnitHooked then
 	B:RegisterEvent("ADDON_LOADED", OnInspectUILoaded)
