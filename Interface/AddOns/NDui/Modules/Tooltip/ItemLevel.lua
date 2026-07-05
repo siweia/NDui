@@ -12,7 +12,10 @@ local HEIRLOOMS = _G.HEIRLOOMS
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
-local cache, weapon, currentUNIT, currentGUID = {}, {}
+local cache, weapon, currentUNIT, currentGUID, inspectGUID = {}, {}
+local updater
+local inspectFrameTime = 0
+local tooltipInspecting
 
 TT.TierSets = {
 	-- WARRIOR
@@ -56,21 +59,47 @@ local function checkUnitGUID(unit)
 	return B:NotSecretValue(guid) and guid
 end
 
+local function InspectFrameIsBusy()
+	if GetTime() - inspectFrameTime < 3 then return true end
+
+	return InspectFrame and InspectFrame:IsShown()
+end
+
+hooksecurefunc("NotifyInspect", function()
+	if not tooltipInspecting then
+		inspectFrameTime = GetTime()
+	end
+end)
+
+local function StopInspectUpdate(clearGUID)
+	updater:Hide()
+	if clearGUID then inspectGUID = nil end
+end
+
 function TT:InspectOnUpdate(elapsed)
 	self.elapsed = (self.elapsed or frequency) + elapsed
 	if self.elapsed > frequency then
 		self.elapsed = 0
-		self:Hide()
-		ClearInspectPlayer()
 
 		if currentUNIT and checkUnitGUID(currentUNIT) == currentGUID then
+			if InspectFrameIsBusy() then
+				StopInspectUpdate(true)
+				return
+			end
+
 			B:RegisterEvent("INSPECT_READY", TT.GetInspectInfo)
+			inspectGUID = currentGUID
+			StopInspectUpdate()
+			tooltipInspecting = true
 			NotifyInspect(currentUNIT)
+			tooltipInspecting = nil
+		else
+			StopInspectUpdate(true)
 		end
 	end
 end
 
-local updater = CreateFrame("Frame")
+updater = CreateFrame("Frame")
 updater:SetScript("OnUpdate", TT.InspectOnUpdate)
 updater:Hide()
 
@@ -89,7 +118,9 @@ function TT:GetInspectInfo(...)
 		end
 	elseif self == "INSPECT_READY" then
 		local guid = ...
-		if B:NotSecretValue(guid) and guid == currentGUID then
+		if B:NotSecretValue(guid) and guid == currentGUID and guid == inspectGUID then
+			inspectGUID = nil
+
 			local level = TT:GetUnitItemLevel(currentUNIT)
 			cache[guid].level = level
 			cache[guid].getTime = GetTime()
@@ -99,6 +130,12 @@ function TT:GetInspectInfo(...)
 			else
 				TT:InspectUnit(currentUNIT, true)
 			end
+
+			if not InspectFrameIsBusy() then
+				ClearInspectPlayer()
+			end
+		else
+			inspectGUID = nil
 		end
 		B:UnregisterEvent(self, TT.GetInspectInfo)
 	end
@@ -246,7 +283,7 @@ function TT:InspectUnit(unit, forced)
 		if not C.db["Tooltip"]["SpecLevelByShift"] and IsShiftKeyDown() then forced = true end
 		if level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = frequency return end
 		if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") then return end
-		if InspectFrame and InspectFrame:IsShown() then return end
+		if InspectFrameIsBusy() then return end
 
 		self:SetupItemLevel()
 		updater:Show()
