@@ -187,10 +187,12 @@ info.onEnter = function(self)
 		for k, v in pairs(NDuiADB["totalGold"][myRealm]) do
 			local gold, class = unpack(v)
 			local name = Ambiguate(k.."-"..myRealm, "none")
-			if (isShiftKeyDown or currentAccounts < maxAccounts) and (gold > showGoldGap or UnitIsUnit(name, "player")) then
-				local r, g, b = B.ClassColor(class)
-				GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
-				currentAccounts = currentAccounts + 1
+			if gold > showGoldGap or UnitIsUnit(name, "player") then
+				if (isShiftKeyDown or currentAccounts < maxAccounts) then
+					local r, g, b = B.ClassColor(class)
+					GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+					currentAccounts = currentAccounts + 1
+				end
 				totalGold = totalGold + gold
 			end
 		end
