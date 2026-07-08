@@ -16,6 +16,21 @@ local function highlightURL(_, url)
 	return " "..convertLink("["..url.."]", url).." "
 end
 
+local function showURLCopy(chatFrame, url)
+	if url and url ~= "" then
+		local eb = LAST_ACTIVE_CHAT_EDIT_BOX
+			or (chatFrame and _G[chatFrame:GetName().."EditBox"])
+			or (SELECTED_DOCK_FRAME and _G[SELECTED_DOCK_FRAME:GetName().."EditBox"])
+			or ChatFrame1EditBox
+		if eb then
+			eb:Show()
+			eb:SetText(url)
+			eb:SetFocus()
+			eb:HighlightText()
+		end
+	end
+end
+
 function module:SearchForURL(text, ...)
 	foundurl = false
 
@@ -80,16 +95,17 @@ function module:HyperlinkShowHook(link, _, button)
 			end
 		end
 	elseif type == "url" then
-		local eb = LAST_ACTIVE_CHAT_EDIT_BOX or _G[self:GetName().."EditBox"]
-		if eb then
-			eb:Show()
-			eb:SetText(value)
-			eb:SetFocus()
-			eb:HighlightText()
-		end
+		showURLCopy(self, value)
 	end
 
 	if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
+end
+
+function module:HyperlinkClickHook(chatFrame, link, _, button)
+	local type, value = strmatch(link, "(%a+):(.+)")
+	if type == "url" and button == "LeftButton" then
+		showURLCopy(chatFrame, value)
+	end
 end
 
 function module.SetItemRefHook(link, _, button)
@@ -137,7 +153,9 @@ function module:UrlCopy()
 		return orig(self, link, ...)
 	end
 
-	if ChatFrame_OnHyperlinkShow then -- isNewPatch, needs review
+	if EventRegistry then
+		EventRegistry:RegisterCallback("ChatFrame.OnHyperlinkClick", self.HyperlinkClickHook, self)
+	elseif ChatFrame_OnHyperlinkShow then
 		hooksecurefunc("ChatFrame_OnHyperlinkShow", self.HyperlinkShowHook)
 	end
 	hooksecurefunc("SetItemRef", self.SetItemRefHook)
