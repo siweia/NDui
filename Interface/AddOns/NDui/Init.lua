@@ -30,10 +30,16 @@ end)
 function B:RegisterEvent(event, func, unit1, unit2)
 	if not events[event] then
 		events[event] = {}
+		local success
 		if unit1 then
-			host:RegisterUnitEvent(event, unit1, unit2)
+			success = pcall(host.RegisterUnitEvent, host, event, unit1, unit2)
 		else
-			host:RegisterEvent(event)
+			success = pcall(host.RegisterEvent, host, event)
+		end
+		-- Some Classic events disappear between client builds; skip unknown ones instead of breaking startup.
+		if not success then
+			events[event] = nil
+			return
 		end
 	end
 

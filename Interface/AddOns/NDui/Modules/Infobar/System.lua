@@ -45,8 +45,13 @@ end
 
 local usageColor = {0, 1, 0, 1, 1, 0, 1, 0, 0}
 local function smoothColor(cur, max)
-	local r, g, b = oUF:RGBColorGradient(cur, max, unpack(usageColor))
-	return r, g, b
+	if oUF and oUF.RGBColorGradient then
+		return oUF:RGBColorGradient(cur, max, unpack(usageColor))
+	elseif max > 0 and cur / max > .5 then
+		return 1, 1, 0
+	else
+		return 0, 1, 0
+	end
 end
 
 local infoTable = {}

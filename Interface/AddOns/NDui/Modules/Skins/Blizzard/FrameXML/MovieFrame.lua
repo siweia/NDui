@@ -16,7 +16,8 @@ tinsert(C.defaultThemes, function()
 
 	-- Movie
 
-	local closeDialog = MovieFrame.CloseDialog
+	local closeDialog = MovieFrame and MovieFrame.CloseDialog
+	if not closeDialog then return end
 
 	closeDialog:HookScript("OnShow", function(self)
 		self:SetScale(UIParent:GetScale())

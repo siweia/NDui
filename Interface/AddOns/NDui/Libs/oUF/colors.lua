@@ -82,15 +82,16 @@ if(not customClassColors()) then
 	end)
 end
 
-for debuffType, color in next, DebuffTypeColor do
+-- Recent Classic builds may leave some old FrameXML color tables unavailable at load time.
+for debuffType, color in next, DebuffTypeColor or {} do
 	colors.debuff[debuffType] = {color.r, color.g, color.b}
 end
 
-for eclass, color in next, FACTION_BAR_COLORS do
+for eclass, color in next, FACTION_BAR_COLORS or {} do
 	colors.reaction[eclass] = {color.r, color.g, color.b}
 end
 
-for power, color in next, PowerBarColor do
+for power, color in next, PowerBarColor or {} do
 	if (type(power) == 'string') then
 		if(type(select(2, next(color))) == 'table') then
 			colors.power[power] = {}
@@ -121,6 +122,8 @@ colors.power[13] = colors.power.INSANITY
 colors.power[16] = colors.power.ARCANE_CHARGES
 colors.power[17] = colors.power.FURY
 colors.power[18] = colors.power.PAIN
+
+colors.debuff.none = colors.debuff.none or {0, 0, 0}
 
 local function colorsAndPercent(a, b, ...)
 	if(a <= 0 or b == 0) then

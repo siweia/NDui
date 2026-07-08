@@ -356,6 +356,11 @@ function module:WhoPingsMyMap()
 	anim.fader:SetSmoothing("OUT")
 	anim.fader:SetStartDelay(3)
 
+	-- MINIMAP_PING was removed from some clients; probing avoids an unknown-event error.
+	local pingFrame = CreateFrame("Frame")
+	if not pcall(pingFrame.RegisterEvent, pingFrame, "MINIMAP_PING") then return end
+	pingFrame:UnregisterEvent("MINIMAP_PING")
+
 	B:RegisterEvent("MINIMAP_PING", function(_, unit)
 		if unit == "player" then return end -- ignore player ping
 

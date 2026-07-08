@@ -18,8 +18,8 @@ tinsert(C.defaultThemes, function()
 	InboxFrame:GetRegions():Hide()
 	SendMailMoneyBg:Hide()
 	SendMailMoneyInset:Hide()
-	OpenMailFrameIcon:Hide()
-	OpenMailHorizontalBarLeft:Hide()
+	if OpenMailFrameIcon then OpenMailFrameIcon:Hide() end
+	if OpenMailHorizontalBarLeft then OpenMailHorizontalBarLeft:Hide() end
 	B.StripTextures(SendMailFrame)
 	OpenStationeryBackgroundLeft:Hide()
 	OpenStationeryBackgroundRight:Hide()

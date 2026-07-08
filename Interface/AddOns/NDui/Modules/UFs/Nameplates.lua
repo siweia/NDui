@@ -33,8 +33,17 @@ end
 function UF:UpdatePlateClickThru()
 	if InCombatLockdown() then return end
 
-	C_NamePlate_SetNamePlateEnemyClickThrough(C.db["Nameplate"]["EnemyThru"])
-	C_NamePlate_SetNamePlateFriendlyClickThrough(C.db["Nameplate"]["FriendlyThru"])
+	-- Retail-style click-through helpers are missing on some Classic clients; CVars keep the option working there.
+	if C_NamePlate_SetNamePlateEnemyClickThrough then
+		C_NamePlate_SetNamePlateEnemyClickThrough(C.db["Nameplate"]["EnemyThru"])
+	else
+		SetCVar("nameplateEnemyClickThrough", C.db["Nameplate"]["EnemyThru"] and 1 or 0)
+	end
+	if C_NamePlate_SetNamePlateFriendlyClickThrough then
+		C_NamePlate_SetNamePlateFriendlyClickThrough(C.db["Nameplate"]["FriendlyThru"])
+	else
+		SetCVar("nameplateFriendlyClickThrough", C.db["Nameplate"]["FriendlyThru"] and 1 or 0)
+	end
 end
 
 function UF:SetupCVars()

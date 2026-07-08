@@ -2034,7 +2034,9 @@ end
 function EndChargeCooldown(self)
 	self:Hide()
 	self:SetParent(UIParent)
-	self.parent.chargeCooldown = nil
+	if self.parent then
+		self.parent.chargeCooldown = nil
+	end
 	self.parent = nil
 	tinsert(lib.ChargeCooldowns, self)
 end

@@ -10,8 +10,11 @@ local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeav
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 
 -- Custom colors
+oUF.colors = oUF.colors or {smooth = {}, debuff = {}, power = {}, class = {}, reaction = {}}
 oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
+oUF.colors.debuff = oUF.colors.debuff or {}
 oUF.colors.debuff.none = {0, 0, 0}
+oUF.colors.power = oUF.colors.power or {}
 
 local function ReplacePowerColor(name, index, color)
 	oUF.colors.power[name] = color

@@ -65,8 +65,15 @@ local function isLowDurability()
 end
 
 local function getDurabilityColor(cur, max)
-	local r, g, b = oUF:RGBColorGradient(cur, max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
-	return r, g, b
+	if oUF and oUF.RGBColorGradient then
+		return oUF:RGBColorGradient(cur, max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	elseif cur >= max then
+		return 0, 1, 0
+	elseif cur > max / 2 then
+		return 1, 1, 0
+	else
+		return 1, 0, 0
+	end
 end
 
 info.eventList = {

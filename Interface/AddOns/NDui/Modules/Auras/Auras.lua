@@ -137,7 +137,7 @@ function A:UpdateAuras(button, index)
 	end
 
 	if filter == "HARMFUL" then
-		local color = oUF.colors.debuff[debuffType or "none"]
+		local color = oUF.colors and oUF.colors.debuff and oUF.colors.debuff[debuffType or "none"] or {0, 0, 0}
 		button:SetBackdropBorderColor(color[1], color[2], color[3])
 	else
 		button:SetBackdropBorderColor(0, 0, 0)

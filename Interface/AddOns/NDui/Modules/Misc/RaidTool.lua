@@ -16,6 +16,31 @@ local DoReadyCheck, GetReadyCheckStatus = DoReadyCheck, GetReadyCheckStatus
 local C_Timer_After = C_Timer.After
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
+local function GetRaidTargetText(index)
+	if index == 0 then
+		return RAID_TARGET_NONE or NONE or "None"
+	end
+	return _G["COMBATLOG_ICON_RAIDTARGET"..index] or _G["RAID_TARGET_"..index] or RAID_TARGET_ICON or ("Marker "..index)
+end
+
+-- UnitPopup raid-target mixins moved in newer clients, so keep a static menu fallback.
+local raidTargetInfo = {
+	[1] = {arg1 = 8},
+	[2] = {arg1 = 7},
+	[3] = {arg1 = 6},
+	[4] = {arg1 = 5},
+	[5] = {arg1 = 4},
+	[6] = {arg1 = 3},
+	[7] = {arg1 = 2},
+	[8] = {arg1 = 1},
+	[9] = {arg1 = 0},
+}
+for _, info in pairs(raidTargetInfo) do
+	local index = info.arg1
+	info.icon = index > 0 and "Interface\\TargetingFrame\\UI-RaidTargetingIcon_"..index
+	info.text = (info.icon and "|T"..info.icon..":0|t " or "")..GetRaidTargetText(index)
+end
+
 function M:RaidTool_Visibility(frame)
 	if IsInGroup() then
 		frame:Show()
@@ -546,18 +571,29 @@ function M:RaidTool_EasyMarker()
 		UnitPopupRaidTarget1ButtonMixin,
 		UnitPopupRaidTargetNoneButtonMixin
 	}
-	for index, mixin in pairs(mixins) do
-		local t1, t2, t3, t4 = mixin:GetTextureCoords()
-		menuList[index] = {
-			text = GetMenuTitle(mixin:GetText(), mixin:GetColor()),
-			icon = mixin:GetIcon(),
-			tCoordLeft = t1,
-			tCoordRight = t2,
-			tCoordTop = t3,
-			tCoordBottom = t4,
-			arg1 = 9 - index,
-			func = SetRaidTargetByIndex,
-		}
+	for index = 1, 9 do
+		local mixin = mixins[index]
+		local fallback = raidTargetInfo[index]
+		if mixin then
+			local t1, t2, t3, t4 = mixin:GetTextureCoords()
+			menuList[index] = {
+				text = GetMenuTitle(mixin:GetText(), mixin:GetColor()),
+				icon = mixin:GetIcon(),
+				tCoordLeft = t1,
+				tCoordRight = t2,
+				tCoordTop = t3,
+				tCoordBottom = t4,
+				arg1 = 9 - index,
+				func = SetRaidTargetByIndex,
+			}
+		elseif fallback then
+			menuList[index] = {
+				text = fallback.text,
+				icon = fallback.icon,
+				arg1 = fallback.arg1,
+				func = SetRaidTargetByIndex,
+			}
+		end
 	end
 
 	local function GetModifiedState()

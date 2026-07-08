@@ -755,6 +755,10 @@ do
 	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
 	function B:ClassIconTexCoord(class)
 		local tcoords = CLASS_ICON_TCOORDS[class]
+		if not tcoords then
+			self:SetTexCoord(unpack(DB.TexCoord))
+			return
+		end
 		self:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
 	end
 
@@ -862,6 +866,7 @@ do
 		"Center",
 	}
 	function B:Reskin(noHighlight, override)
+		if not self then return end
 		if self.SetNormalTexture and not override then self:SetNormalTexture(0) end
 		if self.SetHighlightTexture then self:SetHighlightTexture(0) end
 		if self.SetPushedTexture then self:SetPushedTexture(0) end
