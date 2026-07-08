@@ -106,6 +106,8 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(dialog.CancelButton)
 
 	local function ReskinLayoutDialog(dialog)
+		if not dialog then return end
+
 		B.StripTextures(dialog)
 		B.SetBD(dialog)
 		B.Reskin(dialog.AcceptButton)

@@ -574,7 +574,7 @@ function M:RaidTool_EasyMarker()
 	for index = 1, 9 do
 		local mixin = mixins[index]
 		local fallback = raidTargetInfo[index]
-		if mixin then
+		if mixin and mixin.GetTextureCoords and mixin.GetText and mixin.GetColor and mixin.GetIcon then
 			local t1, t2, t3, t4 = mixin:GetTextureCoords()
 			menuList[index] = {
 				text = GetMenuTitle(mixin:GetText(), mixin:GetColor()),

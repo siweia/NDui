@@ -362,6 +362,8 @@ do
 		"ScrollDownBorder",
 	}
 	function B:StripTextures(kill)
+		if not self then return end
+
 		local frameName = self.GetName and self:GetName()
 		for _, texture in pairs(blizzTextures) do
 			local blizzFrame = self[texture] or (frameName and _G[frameName..texture])
