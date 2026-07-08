@@ -58,6 +58,7 @@ local function DisableDefaultBarEvents() -- credit: Simpy
 	hooksecurefunc(_G.ActionBarButtonEventsFrame, "RegisterFrame", buttonEventsRegisterFrame)
 	buttonEventsRegisterFrame(_G.ActionBarButtonEventsFrame)
 	MultiActionBar_ShowAllGrids = B.Dummy
+	MultiActionBar_HideAllGrids = B.Dummy
 end
 
 function Bar:HideBlizz()
