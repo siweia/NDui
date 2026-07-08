@@ -803,6 +803,8 @@ function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 		elseif(event == 'NAME_PLATE_UNIT_ADDED' and unit) then
 			local nameplate = C_NamePlate.GetNamePlateForUnit(unit)
 			if(not nameplate) then return end
+			-- The Blizzard UnitFrame is assigned by now; hide it before attaching the oUF plate.
+			self:DisableNamePlate(nameplate)
 
 			if(not nameplate.unitFrame) then
 				nameplate.style = style
