@@ -604,7 +604,7 @@ function module:SetupMinimap()
 	self:CreatePulse()
 	self:ReskinRegions()
 	self:RecycleBin()
-	self:WhoPingsMyMap()
+	--self:WhoPingsMyMap()
 	self:ShowMinimapHelpInfo()
 	self:SoundVolume()
 
