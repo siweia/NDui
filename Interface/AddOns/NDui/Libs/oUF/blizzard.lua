@@ -1,8 +1,21 @@
 local parent, ns = ...
 local oUF = ns.oUF
 
+-- sourced from Blizzard_ArenaUI/Blizzard_ArenaUI.lua
+local MAX_ARENA_ENEMIES = _G.MAX_ARENA_ENEMIES or 5
+
+-- sourced from FrameXML/TargetFrame.lua
+local MAX_BOSS_FRAMES = _G.MAX_BOSS_FRAMES or 5
+
 -- sourced from FrameXML/PartyMemberFrame.lua
-local MAX_PARTY_MEMBERS = MAX_PARTY_MEMBERS or 4
+local MAX_PARTY_MEMBERS = _G.MAX_PARTY_MEMBERS or 4
+
+-- sourced from Blizzard_FrameXMLBase/Shared/Constants.lua
+local MEMBERS_PER_RAID_GROUP = _G.MEMBERS_PER_RAID_GROUP or 5
+
+local hookedNameplates = {}
+local isPartyHooked = false
+local isPartyHooked = false
 
 local hiddenParent = CreateFrame('Frame', nil, UIParent)
 hiddenParent:SetAllPoints()
@@ -102,14 +115,26 @@ function oUF:DisableBlizzard(unit)
 	end
 end
 
-function oUF:DisableNamePlate(frame)
+function oUF:DisableBlizzardNamePlate(frame)
 	if(not(frame and frame.UnitFrame)) then return end
 	if(frame.UnitFrame:IsForbidden()) then return end
 
-	if(not frame.UnitFrame.isHooked) then
-		frame.UnitFrame:HookScript('OnShow', insecureOnShow)
-		frame.UnitFrame.isHooked = true
+	if(not hookedNameplates[frame]) then
+		-- BUG: the hit rect (for clicking) is tied to the original UnitFrame object on the
+		--      nameplate, so we can't hide it. instead we force it to be invisible, and adjust
+		--      the hit rect insets around it so it matches the nameplate object itself, but we
+		--      do that in SpawnNamePlates instead
+		-- TODO: remove this hack once we can adjust hitrects ourselves, coming in a later build
+		local locked = false
+		hooksecurefunc(frame.UnitFrame, 'SetAlpha', function(UnitFrame)
+			if(locked or UnitFrame:IsForbidden()) then return end
+			locked = true
+			UnitFrame:SetAlpha(0)
+			locked = false
+		end)
+
+		hookedNameplates[frame] = true
 	end
 
-	handleFrame(frame.UnitFrame, true)
+	handleFrame(frame.UnitFrame, true, true)
 end
