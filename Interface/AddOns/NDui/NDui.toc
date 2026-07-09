@@ -1,8 +1,8 @@
-## Interface: 20505
+## Interface: 20506
 ## Title: |cff0080ffNDui|r |cff00ff00Classic|r
 ## X-Credits: Elv, Freebaser, Haleth, Haste, lightspark, Loshine, Neavo, p3lim, Paopao001, Qulight, Ray, Rubgrsch, Tuller, zork.
 ## Author: Siweia
 ## Notes: Empty toc for Curseforge
-## Version: 2.21.7
+## Version: 2.22.0
 ## X-Support: Anniversary
 ## X-Website: https://github.com/siweia/NDui/tree/Anniversary
