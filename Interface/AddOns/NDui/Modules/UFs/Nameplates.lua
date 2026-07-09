@@ -26,15 +26,19 @@ function UF:UpdatePlateCVars()
 	SetCVar("nameplateMaxAlpha", C.db["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateNotSelectedAlpha", C.db["Nameplate"]["MinAlpha"])
 	SetCVar("nameplateOverlapV", C.db["Nameplate"]["VerticalSpacing"])
-	SetCVar("nameplateShowOnlyNames", C.db["Nameplate"]["CVarOnlyNames"] and 1 or 0)
+	SetCVar("nameplateShowOnlyNameForFriendlyPlayerUnits", C.db["Nameplate"]["CVarOnlyNames"] and 1 or 0)
+	SetCVar("nameplateUseClassColorForFriendlyPlayerUnitNames", C.db["Nameplate"]["CVarOnlyNames"] and 1 or 0)
 	SetCVar("nameplateShowFriendlyNPCs", C.db["Nameplate"]["CVarShowNPCs"] and 1 or 0)
 end
 
 function UF:UpdatePlateClickThru()
 	if InCombatLockdown() then return end
 
-	C_NamePlate_SetNamePlateEnemyClickThrough(C.db["Nameplate"]["EnemyThru"])
-	C_NamePlate_SetNamePlateFriendlyClickThrough(C.db["Nameplate"]["FriendlyThru"])
+	local hitInset = 10000 -- some large number that will ensure we have full coverage
+	local enemyInset = C.db["Nameplate"]["EnemyThru"] and hitInset or -hitInset
+	C_NamePlateManager.SetNamePlateHitTestInsets(Enum.NamePlateType.Enemy, enemyInset, enemyInset, enemyInset, enemyInset)
+	local friendlyInset = C.db["Nameplate"]["FriendlyThru"] and hitInset or -hitInset
+	C_NamePlateManager.SetNamePlateHitTestInsets(Enum.NamePlateType.Friendly, friendlyInset, friendlyInset, friendlyInset, friendlyInset)
 end
 
 function UF:SetupCVars()
@@ -699,7 +703,7 @@ function UF:CreatePlates()
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 	self:SetPoint("CENTER")
-	self:SetScale(NDuiADB["UIScale"])
+	--self:SetScale(NDuiADB["UIScale"])
 
 	local health = CreateFrame("StatusBar", nil, self)
 	health:SetAllPoints()
