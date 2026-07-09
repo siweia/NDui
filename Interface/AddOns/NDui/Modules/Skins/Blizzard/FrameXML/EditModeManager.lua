@@ -129,6 +129,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	ReskinLayoutDialog(EditModeNewLayoutDialog)
+	ReskinLayoutDialog(EditModeLayoutDialog)
 	ReskinLayoutDialog(EditModeImportLayoutDialog)
 end)
