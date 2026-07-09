@@ -546,8 +546,19 @@ function M:RaidTool_EasyMarker()
 		UnitPopupRaidTarget1ButtonMixin,
 		UnitPopupRaidTargetNoneButtonMixin
 	}
+	local coords = {
+		[1] = {.75, 1, .25, .5},
+		[2] = {.5, .75, .25, .5},
+		[3] = {.25, .5, .25, .5},
+		[4] = {0, .25, .25, .5},
+		[5] = {.75, 1, 0, .25},
+		[6] = {.5, .75, 0, .25},
+		[7] = {.25, .5, 0, .25},
+		[8] = {0, .25, 0, .25},
+		[9] = {0, 1, 0, 1},
+	}
 	for index, mixin in pairs(mixins) do
-		local t1, t2, t3, t4 = mixin:GetTextureCoords()
+		local t1, t2, t3, t4 = unpack(coords[index])
 		menuList[index] = {
 			text = GetMenuTitle(mixin:GetText(), mixin:GetColor()),
 			icon = mixin:GetIcon(),
