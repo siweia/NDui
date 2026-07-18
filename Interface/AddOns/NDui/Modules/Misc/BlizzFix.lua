@@ -152,12 +152,14 @@ function BackdropTemplateMixin:SetupTextureCoordinates()
 end
 
 -- Fix quest offer tooltip layout taint
-local staticGridMixin = _G.StaticGridLayoutFrameMixin
-local staticGridLayout = staticGridMixin and staticGridMixin.Layout
-local secureCall = _G.securecallfunction or _G.securecall
-if staticGridLayout and secureCall then
-	function staticGridMixin:Layout(...)
-		return secureCall(staticGridLayout, self, ...)
+do
+	local staticGridMixin = _G.StaticGridLayoutFrameMixin
+	local staticGridLayout = staticGridMixin and staticGridMixin.Layout
+	local secureCall = _G.securecallfunction or _G.securecall
+	if staticGridLayout and secureCall then
+		function staticGridMixin:Layout(...)
+			return secureCall(staticGridLayout, self, ...)
+		end
 	end
 end
 
