@@ -47,9 +47,7 @@ function M:UpdateProfessions()
 				local slotID = i + spelloffset
 				if not C_SpellBook.IsSpellBookItemPassive(slotID, BOOKTYPE_PROFESSION) then
 					local spellID = GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION).spellID
-					if i == 1 then
-						M:TradeTabs_Create(spellID)
-					else
+					if spellID then
 						M:TradeTabs_Create(spellID)
 					end
 				end
