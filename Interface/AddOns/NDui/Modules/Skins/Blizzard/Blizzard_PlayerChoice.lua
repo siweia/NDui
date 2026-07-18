@@ -60,6 +60,13 @@ C.themes["Blizzard_PlayerChoice"] = function()
 		local isIgnored = ignoredTextureKit[self.uiTextureKit]
 		self.bg:SetShown(not isIgnored)
 
+		local optionsContainer = self.OptionButtonsContainer
+		if optionsContainer and optionsContainer.buttonFramePool then
+			for frame in optionsContainer.buttonFramePool:EnumerateActive() do
+				ReskinOptionButton(frame.Button)
+			end
+		end
+
 		if not self.optionFrameTemplate then return end
 
 		for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
@@ -68,8 +75,11 @@ C.themes["Blizzard_PlayerChoice"] = function()
 				ReskinOptionText(header.Text, 1, .8, 0)
 				if header.Contents then ReskinOptionText(header.Contents.Text, 1, .8, 0) end
 			end
-			ReskinOptionText(optionFrame.OptionText, 1, 1, 1)
-			B.ReplaceIconString(optionFrame.OptionText.String)
+
+			if optionFrame.OptionText then
+				ReskinOptionText(optionFrame.OptionText, 1, 1, 1)
+				B.ReplaceIconString(optionFrame.OptionText.String)
+			end
 
 			if optionFrame.Artwork and isIgnored then optionFrame.Artwork:SetSize(64, 64) end -- fix high resolution icons
 
