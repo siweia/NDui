@@ -569,6 +569,25 @@ local eventMethods = {
 	UNIT_SPELLCAST_NOT_INTERRUPTIBLE = CastInterruptible,
 }
 
+local secureCall = _G.securecallfunction or _G.securecall
+local function RegisterBlizzardEvent(frame, event, unit)
+	if(unit) then
+		local method = frame.RegisterUnitEvent
+		if(secureCall) then
+			secureCall(method, frame, event, unit)
+		else
+			method(frame, event, unit)
+		end
+	else
+		local method = frame.RegisterEvent
+		if(secureCall) then
+			secureCall(method, frame, event)
+		else
+			method(frame, event)
+		end
+	end
+end
+
 local function Enable(self, unit)
 	local element = self.Castbar
 	if(element and unit and not unit:match('%wtarget$')) then
@@ -633,13 +652,13 @@ local function Disable(self)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
 			for event in next, eventMethods do
-				PlayerCastingBarFrame:RegisterUnitEvent(event, 'player')
-				PetCastingBarFrame:RegisterUnitEvent(event, 'pet')
+				RegisterBlizzardEvent(PlayerCastingBarFrame, event, 'player')
+				RegisterBlizzardEvent(PetCastingBarFrame, event, 'pet')
 			end
 
-			PlayerCastingBarFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
-			PetCastingBarFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
-			PetCastingBarFrame:RegisterEvent('UNIT_PET')
+			RegisterBlizzardEvent(PlayerCastingBarFrame, 'PLAYER_ENTERING_WORLD')
+			RegisterBlizzardEvent(PetCastingBarFrame, 'PLAYER_ENTERING_WORLD')
+			RegisterBlizzardEvent(PetCastingBarFrame, 'UNIT_PET')
 		end
 	end
 end
