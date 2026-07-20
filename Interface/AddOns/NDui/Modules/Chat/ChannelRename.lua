@@ -188,6 +188,9 @@ local PROCESSED_LINES_MAX = 200
 
 -- Chat event filter: format message, respect window settings, use correct colors
 local function ChatMsgFilter(self, event, msg, sender, language, channelString, target, flags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, senderGUID, bnSenderID, isMobile, isSubtitle, hideSenderInLetterbox, suppressRaidIcons)
+	-- Let Blizzard's secure handler process restricted chat values.
+	if B:IsSecretValue(msg) or B:IsSecretValue(sender) then return end
+
 	if strfind(msg, INTERFACE_ACTION_BLOCKED) and not DB.isDeveloper then
 		return true
 	end
