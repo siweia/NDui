@@ -755,6 +755,7 @@ do
 	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
 	function B:ClassIconTexCoord(class)
 		local tcoords = CLASS_ICON_TCOORDS[class]
+		if not tcoords then return end -- PETS for anniversary?
 		self:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
 	end
 

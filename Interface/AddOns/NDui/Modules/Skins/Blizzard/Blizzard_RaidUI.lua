@@ -27,7 +27,7 @@ C.themes["Blizzard_RaidUI"] = function()
 		local bu = _G["RaidClassButton"..value.button]
 		local icon = _G["RaidClassButton"..value.button.."IconTexture"]
 		bu:GetRegions():Hide()
-		B.CreateBDFrame(bu)
+		B.CreateBDFrame(icon)
 		if value.button > 10 then
 			icon:SetTexCoord(unpack(DB.TexCoord))
 		else
