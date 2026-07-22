@@ -191,6 +191,9 @@ local function CastStart(self, event, unit)
 		return
 	end
 
+	-- reset first to avoid any attributes that might be stuck
+	resetAttributes(element)
+
 	local direction, duration = Enum.StatusBarTimerDirection.ElapsedTime
 	local name, text, texture, startTime, endTime, isTradeSkill, _, notInterruptible, spellID, castID = UnitCastingInfo(unit)
 	if(name) then
