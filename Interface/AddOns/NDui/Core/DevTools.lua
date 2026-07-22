@@ -18,7 +18,7 @@ local gsub, pairs, tonumber, tostring = gsub, pairs, tonumber, tostring
 local floor, ceil = math.floor, math.ceil
 
 DB.Devs = {
-	["唛喏-寒冰之王"] = true, -- classic
+	["唛喏-狮心"] = true, -- classic
 	["Huniverster-BadgeofJustice"] = true, -- classic beta
 	["寧德-ClassicPTRRealm1"] = true, -- classic ptr
 	["Huniverster-ClassicPTRRealm2"] = true, -- classic ptr
