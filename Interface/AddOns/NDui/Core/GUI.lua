@@ -606,6 +606,7 @@ G.AccountSettings = {
 	Changelog = {},
 	totalGold = {},
 	ShowSlots = false,
+	ShowCoords = false,
 	RepairType = 1,
 	AutoSell = true,
 	GuildSortBy = 1,
