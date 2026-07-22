@@ -165,14 +165,14 @@ end
 
 -- Reanchor UIWidgetBelowMinimapContainerFrame
 function M:UIWidgetFrameMover()
-	local frame = CreateFrame("Frame", "NDuiUIWidgetMover", UIParent)
-	frame:SetSize(200, 50)
-	B.Mover(frame, L["UIWidgetFrame"], "UIWidgetFrame", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -20})
+	local frame1 = CreateFrame("Frame", "NDuiUIWidgetMover", UIParent)
+	frame1:SetSize(200, 50)
+	B.Mover(frame1, L["UIWidgetFrame"], "UIWidgetFrame", {"TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -20})
 
 	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, "SetPoint", function(self, _, parent)
-		if parent == "MinimapCluster" or parent == MinimapCluster then
+		if parent ~= frame1 then
 			self:ClearAllPoints()
-			self:SetPoint("TOPRIGHT", frame)
+			self:SetPoint("TOPRIGHT", frame1)
 		end
 	end)
 end
