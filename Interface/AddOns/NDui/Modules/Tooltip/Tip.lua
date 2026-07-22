@@ -146,7 +146,7 @@ function TT:OnTooltipSetUnit()
 		local name, realm = UnitName(unit)
 		local pvpName = UnitPVPName(unit)
 		local relationship = UnitRealmRelationship(unit)
-		if not C.db["Tooltip"]["HideTitle"] and pvpName then
+		if not C.db["Tooltip"]["HideTitle"] and pvpName and pvpName ~= "" then
 			name = pvpName
 		end
 		if realm and realm ~= "" then
