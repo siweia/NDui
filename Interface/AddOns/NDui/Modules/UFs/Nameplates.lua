@@ -719,8 +719,7 @@ function UF:UpdateNameplateSize()
 
 	if self.plateType == "NameOnly" then
 		B.SetFontSize(self.nameText, nameOnlyTextSize)
-		local prefix = (not self.isSoftTarget and "[nprare][nplevel]" or "")
-		self:Tag(self.nameText, prefix.."[color][name]")
+		self:Tag(self.nameText, "[nprare][nplevel][color][name]")
 		self.__tagIndex = 6
 		B.SetFontSize(self.npcTitle, nameOnlyTitleSize)
 		self.npcTitle:UpdateTag()
@@ -773,10 +772,6 @@ local DisabledElements = {
 	"Health", "Castbar", "HealthPrediction", "PvPClassificationIndicator", "ThreatIndicator"
 }
 
-local SoftTargetBlockElements = {
-	"RaidTargetIndicator",
-}
-
 function UF:UpdatePlateByType()
 	local name = self.nameText
 	local hpval = self.healthValue
@@ -793,22 +788,6 @@ function UF:UpdatePlateByType()
 	raidtarget:ClearAllPoints()
 
 	local shouldEnableAura
-	if self.isSoftTarget then
-		for _, element in pairs(SoftTargetBlockElements) do
-			if self:IsElementEnabled(element) then
-				self:DisableElement(element)
-			end
-		end
-		shouldEnableAura = false
-	else
-		for _, element in pairs(SoftTargetBlockElements) do
-			if not self:IsElementEnabled(element) then
-				self:EnableElement(element)
-			end
-		end
-		shouldEnableAura = true
-	end
-
 	if self.plateType == "NameOnly" then
 		for _, element in pairs(DisabledElements) do
 			if self:IsElementEnabled(element) then
@@ -858,8 +837,7 @@ end
 function UF:RefreshPlateType(unit)
 	self.reaction = UnitReaction(unit, "player")
 	self.isFriendly = self.reaction and self.reaction >= 4 and not UnitCanAttack("player", unit)
-	self.isSoftTarget = UnitIsUnit(unit, "softinteract")
-	if C.db["Nameplate"]["NameOnlyMode"] and self.isFriendly or self.widgetsOnly or self.isSoftTarget then
+	if C.db["Nameplate"]["NameOnlyMode"] and self.isFriendly or self.widgetsOnly then
 		self.plateType = "NameOnly"
 	elseif C.db["Nameplate"]["FriendPlate"] and self.isFriendly then
 		self.plateType = "FriendPlate"
@@ -883,22 +861,10 @@ function UF:OnUnitFactionChanged(unit)
 	end
 end
 
-function UF:OnUnitSoftTargetChanged() -- needs review
-	if not GetCVarBool("SoftTargetIconGameObject") then return end
-
-	for _, nameplate in pairs(C_NamePlate.GetNamePlates()) do
-		local unitFrame = nameplate and nameplate.unitFrame
-		if unitFrame then
-			unitFrame.nameText:UpdateTag()
-		end
-	end
-end
-
 function UF:RefreshPlateByEvents()
 	updateZoneType()
 	B:RegisterEvent("PLAYER_ENTERING_WORLD", updateZoneType)
 	B:RegisterEvent("UNIT_FACTION", UF.OnUnitFactionChanged)
-	B:RegisterEvent("PLAYER_SOFT_INTERACT_CHANGED", UF.OnUnitSoftTargetChanged)
 end
 
 local function onTargetChanged(self, event, unit)
