@@ -131,7 +131,6 @@ local function CreateBossStyle(self)
 	UF:CreateDebuffs(self)
 	UF:CreateClickSets(self)
 	UF:CreatePrivateAuras(self)
-	UF:CreateTargetBorder(self)
 end
 
 local function CreateArenaStyle(self)
