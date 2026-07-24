@@ -13,6 +13,7 @@ local C_Mail_IsCommandPending = C_Mail.IsCommandPending
 local ATTACHMENTS_MAX_RECEIVE, ERR_MAIL_DELETE_ITEM_ERROR = ATTACHMENTS_MAX_RECEIVE, ERR_MAIL_DELETE_ITEM_ERROR
 local NORMAL_STRING = GUILDCONTROL_OPTION16
 local OPENING_STRING = OPEN_ALL_MAIL_BUTTON_OPENING
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 local mailIndex, timeToWait, totalCash, inboxItems = 0, .15, 0, {}
 local isGoldCollecting
@@ -408,7 +409,7 @@ end
 
 function M:MailBox()
 	if not C.db["Misc"]["Mail"] then return end
-	if IsAddOnLoaded("Postal") then return end
+	if C_AddOns.IsAddOnLoaded("Postal") then return end
 
 	-- Delete buttons
 	for i = 1, 7 do

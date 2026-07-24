@@ -122,7 +122,7 @@ function A:InitReminder()
 		parentFrame:Show()
 
 		A:Reminder_CheckMeleeSpell()
-		B:RegisterEvent("LEARNED_SPELL_IN_TAB", A.Reminder_CheckMeleeSpell)
+		B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", A.Reminder_CheckMeleeSpell)
 
 		A:Reminder_OnEvent()
 		B:RegisterEvent("UNIT_AURA", A.Reminder_OnEvent, "player")
@@ -133,7 +133,7 @@ function A:InitReminder()
 	else
 		if parentFrame then
 			parentFrame:Hide()
-			B:UnregisterEvent("LEARNED_SPELL_IN_TAB", A.Reminder_CheckMeleeSpell)
+			B:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED", A.Reminder_CheckMeleeSpell)
 			B:UnregisterEvent("UNIT_AURA", A.Reminder_OnEvent)
 			B:UnregisterEvent("PLAYER_REGEN_ENABLED", A.Reminder_OnEvent)
 			B:UnregisterEvent("PLAYER_REGEN_DISABLED", A.Reminder_OnEvent)

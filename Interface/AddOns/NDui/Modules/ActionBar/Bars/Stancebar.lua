@@ -7,7 +7,7 @@ local tinsert, mod, min, ceil = tinsert, mod, min, ceil
 local cfg = C.Bars.stancebar
 local margin, padding = C.Bars.margin, C.Bars.padding
 
-local num = NUM_STANCE_SLOTS
+local num = NUM_STANCE_SLOTS or 10
 --local NUM_POSSESS_SLOTS = NUM_POSSESS_SLOTS
 
 function Bar:UpdateStanceBar()
@@ -50,14 +50,9 @@ function Bar:CreateStancebar()
 	Bar.movers[8] = frame.mover
 
 	-- StanceBar
-	StanceBarFrame:SetParent(frame)
-	StanceBarFrame:EnableMouse(false)
-	StanceBarLeft:SetTexture(nil)
-	StanceBarMiddle:SetTexture(nil)
-	StanceBarRight:SetTexture(nil)
-
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
+		button:SetParent(frame)
 		tinsert(buttonList, button)
 		tinsert(Bar.buttons, button)
 	end

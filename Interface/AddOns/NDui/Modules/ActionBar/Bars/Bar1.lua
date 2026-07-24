@@ -152,7 +152,7 @@ function Bar:CreateBar1()
 	RegisterStateDriver(frame, "page", actionPage)
 
 	-- FrameXML/ActionButton.lua
-	hooksecurefunc("ActionButton_UpdateCount", self.FixActionCount)
+	--hooksecurefunc("ActionButton_UpdateCount", self.FixActionCount)
 end
 
 function Bar:OnLogin()

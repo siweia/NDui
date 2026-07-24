@@ -1,6 +1,8 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
+
 tinsert(C.defaultThemes, function()
 	if not IsAddOnLoaded("Blizzard_CUFProfiles") then return end
 	if not IsAddOnLoaded("Blizzard_CompactRaidFrames") then return end
@@ -53,6 +55,6 @@ tinsert(C.defaultThemes, function()
 	local bd = B.CreateBDFrame(CompactRaidFrameManager, nil, true)
 	bd:SetPoint("TOPLEFT")
 	bd:SetPoint("BOTTOMRIGHT", -9, 9)
-	B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameProfileSelector)
+	--B.ReskinDropDown(CompactRaidFrameManagerDisplayFrameProfileSelector)
 	B.ReskinCheck(CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

@@ -483,7 +483,7 @@ function module:EasyTrackMenu()
 	end
 
 	-- Click Func
-	local hasAlaCalendar = IsAddOnLoaded("alaCalendar")
+	local hasAlaCalendar = C_AddOns.IsAddOnLoaded("alaCalendar")
 	Minimap:SetScript("OnMouseUp", function(self, btn)
 		if btn == "RightButton" then
 			toggleTrackMenu(self)
@@ -640,7 +640,7 @@ function module:SetupMinimap()
 	self:CreatePulse()
 	self:ReskinRegions()
 	self:RecycleBin()
-	self:WhoPingsMyMap()
+	--self:WhoPingsMyMap()
 	self:EasyTrackMenu()
 	self:ShowMinimapHelpInfo()
 	self:MinimapDifficulty()

@@ -106,6 +106,6 @@ function Bar:CustomBar()
 	Bar:CreateCustomBar({"BOTTOM", UIParent, "BOTTOM", 0, 140})
 	if DB.MyClass == "DRUID" then
 		UpdatePageBySpells()
-		B:RegisterEvent("LEARNED_SPELL_IN_TAB", UpdatePageBySpells)
+		B:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", UpdatePageBySpells)
 	end
 end

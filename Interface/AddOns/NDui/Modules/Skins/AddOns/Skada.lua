@@ -2,6 +2,8 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local S = B:GetModule("Skins")
 
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
+
 function S:SkadaSkin()
 	if not C.db["Skins"]["Skada"] then return end
 	if not IsAddOnLoaded("Skada") then return end

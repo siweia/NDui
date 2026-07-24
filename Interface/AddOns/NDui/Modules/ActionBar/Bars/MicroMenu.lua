@@ -163,7 +163,6 @@ function Bar:MicroMenu()
 
 	-- Default elements
 	B.HideObject(MicroButtonPortrait)
-	B.HideObject(MainMenuBarDownload)
 	B.HideObject(HelpOpenWebTicketButton)
 	B.HideObject(MainMenuBarPerformanceBar)
 	MainMenuMicroButton:SetScript("OnUpdate", nil)

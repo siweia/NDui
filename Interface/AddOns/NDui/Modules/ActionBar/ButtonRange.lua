@@ -95,6 +95,7 @@ local function button_UpdateUsable(button)
 end
 
 function module:OnLogin()
+	if DB.isNewPatch then return end
 	hooksecurefunc("ActionButton_OnUpdate", self.Register)
 	hooksecurefunc("ActionButton_Update", self.UpdateButtonStatus)
 	hooksecurefunc("ActionButton_UpdateUsable", button_UpdateUsable)

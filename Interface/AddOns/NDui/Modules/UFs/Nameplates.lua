@@ -12,6 +12,7 @@ local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFa
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local C_NamePlate_SetNamePlateEnemyClickThrough = C_NamePlate.SetNamePlateEnemyClickThrough
 local C_NamePlate_SetNamePlateFriendlyClickThrough = C_NamePlate.SetNamePlateFriendlyClickThrough
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local INTERRUPTED = INTERRUPTED
 local _QuestieTooltips, _QuestiePlayer
 

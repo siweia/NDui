@@ -14,6 +14,7 @@ local GetMinimapZoneText = GetMinimapZoneText
 local AuraUtil_FindAuraByName = AuraUtil.FindAuraByName
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
+local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 --[[
 	闭上你的嘴！

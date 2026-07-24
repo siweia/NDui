@@ -14,9 +14,10 @@ local colors = {
 	disconnected = {0.6, 0.6, 0.6},
 	tapped = {0.6, 0.6, 0.6},
 	runes = {
-		{247 / 255, 65 / 255, 57 / 255}, -- blood
-		{148 / 255, 203 / 255, 247 / 255}, -- frost
-		{173 / 255, 235 / 255, 66 / 255}, -- unholy
+		{1, 0, 0},   -- blood
+		{0, 1, 1},   -- frost
+		{0, .5, 0},  -- unholy
+		{.9, .1, 1}, -- death
 	},
 	selection = {
 		[ 0] = {255 / 255, 0 / 255, 0 / 255}, -- HOSTILE
@@ -81,7 +82,16 @@ if(not customClassColors()) then
 	end)
 end
 
-for debuffType, color in next, DebuffTypeColor do
+local DEBUFF_DISPLAY_INFO = {
+	["Magic"] = DEBUFF_TYPE_MAGIC_COLOR,
+	["Curse"] = DEBUFF_TYPE_CURSE_COLOR,
+	["Disease"] = DEBUFF_TYPE_DISEASE_COLOR,
+	["Poison"] = DEBUFF_TYPE_POISON_COLOR,
+	["Bleed"] = DEBUFF_TYPE_BLEED_COLOR,
+	["None"] = DEBUFF_TYPE_NONE_COLOR,
+}
+
+for debuffType, color in next, DEBUFF_DISPLAY_INFO do
 	colors.debuff[debuffType] = {color.r, color.g, color.b}
 end
 

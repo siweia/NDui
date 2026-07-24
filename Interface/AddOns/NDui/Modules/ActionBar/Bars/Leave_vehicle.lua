@@ -34,25 +34,19 @@ function Bar:CreateLeaveVehicle()
 	button.icon:SetDrawLayer("ARTWORK")
 	button.icon.__lockdown = true
 
-	hooksecurefunc("MainMenuBarVehicleLeaveButton_Update", function()
-		if UnitOnTaxi("player") then
-			button:Show()
-		else
-			button:Hide()
-			button:SetChecked(false)
-		end
-	end)
-
-	button:SetScript("OnClick", function()
+	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton.OnEnter)
+	button:SetScript("OnLeave", B.HideTooltip)
+	button:SetScript("OnClick", function(self)
 		if UnitOnTaxi("player") then
 			TaxiRequestEarlyLanding()
 		else
 			VehicleExit()
 		end
-		button:SetChecked(true)
+		self:SetChecked(true)
 	end)
-	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
-	button:SetScript("OnLeave", B.HideTooltip)
+	button:SetScript("OnShow", function(self)
+		self:SetChecked(false)
+	end)
 
 	frame.buttons = buttonList
 

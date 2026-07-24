@@ -5,6 +5,7 @@ local Bar = B:GetModule("Actionbar")
 local _G = getfenv(0)
 local pairs, gsub, unpack = pairs, gsub, unpack
 local IsEquippedAction = IsEquippedAction
+local NUM_STANCE_SLOTS = NUM_STANCE_SLOTS or 10
 
 local function CallButtonFunctionByName(button, func, ...)
 	if button and func and button[func] then
@@ -375,10 +376,10 @@ function Bar:ReskinBars()
 	Bar:StyleAllActionButtons(cfg)
 
 	-- Update hotkeys
-	hooksecurefunc("ActionButton_UpdateHotkeys", Bar.UpdateHotKey)
-	hooksecurefunc("PetActionButton_SetHotkeys", Bar.UpdateHotKey)
+	--hooksecurefunc("ActionButton_UpdateHotkeys", Bar.UpdateHotKey)
+	--hooksecurefunc("PetActionButton_SetHotkeys", Bar.UpdateHotKey)
 	Bar:UpdateStanceHotKey()
 	B:RegisterEvent("UPDATE_BINDINGS", Bar.UpdateStanceHotKey)
 	-- Equip item
-	hooksecurefunc("ActionButton_Update", Bar.UpdateEquipItemColor)
+	--hooksecurefunc("ActionButton_Update", Bar.UpdateEquipItemColor)
 end
