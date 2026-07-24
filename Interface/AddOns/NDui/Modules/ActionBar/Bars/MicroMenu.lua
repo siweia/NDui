@@ -27,6 +27,14 @@ local function ResetButtonAnchor(button)
 	button:SetAllPoints()
 end
 
+local function ShowNewHighlight(self)
+	self.newHL:Show()
+end
+
+local function HideNewHighlight(self)
+	self.newHL:Hide()
+end
+
 function Bar:MicroButton_Create(parent, data, exclude)
 	local texture, method, tooltip = unpack(data)
 
@@ -57,9 +65,16 @@ function Bar:MicroButton_Create(parent, data, exclude)
 			B.AddTooltip(button, "ANCHOR_RIGHT", button.newbieText, "system")
 		end
 
-		local hl = button:GetHighlightTexture()
-		Bar:MicroButton_SetupTexture(hl, texture)
-		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
+		button:GetHighlightTexture():SetAlpha(0)
+		-- add a new highlight texture
+		local newHL = button:CreateTexture(nil, "ARTWORK")
+		newHL:SetBlendMode("ADD")
+		newHL:Hide()
+		Bar:MicroButton_SetupTexture(newHL, texture)
+		if not C.db["Skins"]["ClassLine"] then newHL:SetVertexColor(1, 1, 1) end
+		button.newHL = newHL
+		button:HookScript("OnEnter", ShowNewHighlight)
+		button:HookScript("OnLeave", HideNewHighlight)
 
 		local flash = button.Flash
 		Bar:MicroButton_SetupTexture(flash, texture)
