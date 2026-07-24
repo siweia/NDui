@@ -635,6 +635,9 @@ function module:SetupMinimap()
 		end
 	end
 	MinimapCluster:EnableMouse(false)
+	--MinimapCluster:KillEditMode()
+	MinimapCluster:SetAllPoints(Minimap)
+	MinimapCluster.BorderTop:Hide()
 
 	-- Add Elements
 	self:CreatePulse()

@@ -398,8 +398,9 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			CastingBarFrame_SetUnit(CastingBarFrame, nil)
-			CastingBarFrame_SetUnit(PetCastingBarFrame, nil)
+			PlayerCastingBarFrame:SetUnit(nil)
+			PetCastingBarFrame:SetUnit(nil)
+			PetCastingBarFrame:UnregisterEvent('UNIT_PET')
 		end
 
 		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
@@ -446,8 +447,8 @@ local function Disable(self)
 		element:SetScript('OnUpdate', nil)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			CastingBarFrame_OnLoad(CastingBarFrame, 'player', true, false)
-			PetCastingBarFrame_OnLoad(PetCastingBarFrame)
+			PlayerCastingBarFrame:OnLoad()
+			PetCastingBarFrame:OnLoad()
 		end
 	end
 end
