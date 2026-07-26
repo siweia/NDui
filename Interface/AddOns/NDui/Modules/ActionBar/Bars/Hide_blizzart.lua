@@ -11,13 +11,12 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainMenuBar, OverrideActionBar,
+	MainMenuBar, MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, OverrideActionBar, PossessActionBar, PetActionBar, StanceBar, StatusTrackingBarManager, BagsBar
 }
 
 local framesToDisable = {
-	MainMenuBar,
-	MicroButtonAndBagsBar, MainMenuBarArtFrame, StatusTrackingBarManager,
-	ActionBarDownButton, ActionBarUpButton,
+	MainMenuBar, MainActionBar, MultiBarBottomLeft, MultiBarBottomRight, MultiBarLeft, MultiBarRight, MultiBar5, MultiBar6, MultiBar7, PossessActionBar, PetActionBar, StanceBar,
+	MicroButtonAndBagsBar, StatusTrackingBarManager, MainMenuBarVehicleLeaveButton,
 	OverrideActionBar,
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
 }
@@ -28,6 +27,43 @@ local function DisableAllScripts(frame)
 			frame:SetScript(script, nil)
 		end
 	end
+end
+
+local function updateTokenVisibility()
+	TokenFrame_LoadUI()
+	TokenFrame_Update()
+	BackpackTokenFrame_Update()
+end
+
+local function buttonEventsRegisterFrame(self, added)
+	local frames = self.frames
+	for index = #frames, 1, -1 do
+		local frame = frames[index]
+		local wasAdded = frame == added
+		if not added or wasAdded then
+			if not strmatch(frame:GetName(), "ExtraActionButton%d") then
+				self.frames[index] = nil
+			end
+
+			if wasAdded then
+				break
+			end
+		end
+	end
+end
+
+local function DisableDefaultBarEvents() -- credit: Simpy
+	-- shut down some events for things we dont use
+	_G.ActionBarController:UnregisterAllEvents()
+	_G.ActionBarController:RegisterEvent("SETTINGS_LOADED") -- this is needed for page controller to spawn properly
+	_G.ActionBarController:RegisterEvent("UPDATE_EXTRA_ACTIONBAR") -- this is needed to let the ExtraActionBar show
+	_G.ActionBarActionEventsFrame:UnregisterAllEvents()
+	-- used for ExtraActionButton and TotemBar (on wrath)
+	_G.ActionBarButtonEventsFrame:UnregisterAllEvents()
+	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- needed to let the ExtraActionButton show and Totems to swap
+	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN") -- needed for cooldowns of them both
+	hooksecurefunc(_G.ActionBarButtonEventsFrame, "RegisterFrame", buttonEventsRegisterFrame)
+	buttonEventsRegisterFrame(_G.ActionBarButtonEventsFrame)
 end
 
 function Bar:HideBlizz()
@@ -45,41 +81,9 @@ function Bar:HideBlizz()
 		DisableAllScripts(frame)
 	end
 
-	-- Update button grid
-	local function buttonShowGrid(name, showgrid)
-		for i = 1, 12 do
-			local button = _G[name..i]
-			if button then
-				button:SetAttribute("showgrid", showgrid)
-				ActionButton_ShowGrid(button, ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
-			end
-		end
-	end
-
-	local updateAfterCombat
-	local function ToggleButtonGrid()
-		if InCombatLockdown() then
-			updateAfterCombat = true
-			B:RegisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
-		else
-			local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
-			buttonShowGrid("ActionButton", showgrid)
-			buttonShowGrid("MultiBarBottomLeftButton", showgrid)
-			buttonShowGrid("MultiBarBottomRightButton", showgrid)
-			buttonShowGrid("MultiBarRightButton", showgrid)
-			buttonShowGrid("MultiBarLeftButton", showgrid)
-			buttonShowGrid("NDui_ActionBarXButton", showgrid)
-			if updateAfterCombat then
-				B:UnregisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
-				updateAfterCombat = false
-			end
-		end
-	end
-	--hooksecurefunc("MultiActionBar_UpdateGridVisibility", ToggleButtonGrid)
-	--hooksecurefunc("MultiActionBar_HideAllGrids", ToggleButtonGrid)
-	--B:RegisterEvent("ACTIONBAR_HIDEGRID", ToggleButtonGrid)
-	--ToggleButtonGrid()
-
+	DisableDefaultBarEvents()
 	-- Hide blizz options
 	SetCVar("multiBarRightVerticalLayout", 0)
+	-- Update token panel
+	B:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateTokenVisibility)
 end

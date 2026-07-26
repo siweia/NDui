@@ -5,7 +5,6 @@ local Bar = B:GetModule("Actionbar")
 local _G = _G
 local tinsert = tinsert
 local UnitOnTaxi, TaxiRequestEarlyLanding, VehicleExit = UnitOnTaxi, TaxiRequestEarlyLanding, VehicleExit
-local cfg = C.Bars.leave_vehicle
 local padding = C.Bars.padding
 
 function Bar:UpdateVehicleButton()
@@ -22,10 +21,10 @@ end
 function Bar:CreateLeaveVehicle()
 	local buttonList = {}
 
-	local frame = CreateFrame("Frame", "NDui_ActionBarExit", UIParent)
+	local frame = CreateFrame("Frame", "NDui_ActionBarExit", UIParent, "SecureHandlerStateTemplate")
 	frame.mover = B.Mover(frame, L["LeaveVehicle"], "LeaveVehicle", {"BOTTOM", UIParent, "BOTTOM", 320, 100})
 
-	local button = CreateFrame("CheckButton", "NDui_LeaveVehicleButton", frame, "ActionButtonTemplate")
+	local button = CreateFrame("CheckButton", "NDui_LeaveVehicleButton", frame, "ActionButtonTemplate, SecureHandlerClickTemplate")
 	tinsert(buttonList, button)
 	button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 	button:RegisterForClicks("AnyUp")
@@ -34,7 +33,7 @@ function Bar:CreateLeaveVehicle()
 	button.icon:SetDrawLayer("ARTWORK")
 	button.icon.__lockdown = true
 
-	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton.OnEnter)
+	button:SetScript("OnEnter", MainMenuBarVehicleLeaveButton_OnEnter)
 	button:SetScript("OnLeave", B.HideTooltip)
 	button:SetScript("OnClick", function(self)
 		if UnitOnTaxi("player") then
@@ -50,7 +49,9 @@ function Bar:CreateLeaveVehicle()
 
 	frame.buttons = buttonList
 
-	if cfg.fader then
-		Bar.CreateButtonFrameFader(frame, buttonList, cfg.fader)
-	end
+	frame.frameVisibility = "[canexitvehicle]c;[mounted]m;n"
+	RegisterStateDriver(frame, "exit", frame.frameVisibility)
+
+	frame:SetAttribute("_onstate-exit", [[ if CanExitVehicle() then self:Show() else self:Hide() end ]])
+	if not CanExitVehicle() then frame:Hide() end
 end
