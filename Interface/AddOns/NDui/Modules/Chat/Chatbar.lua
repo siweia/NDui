@@ -85,11 +85,13 @@ function module:Chatbar()
 	local roll = AddButton(.8, 1, .6, LOOT_ROLL)
 	roll:SetAttribute("type", "macro")
 	roll:SetAttribute("macrotext", "/roll")
+	roll:RegisterForClicks("AnyUp", "AnyDown")
 
 	-- COMBATLOG
 	local combat = AddButton(1, 1, 0, BINDING_NAME_TOGGLECOMBATLOG)
 	combat:SetAttribute("type", "macro")
 	combat:SetAttribute("macrotext", "/combatlog")
+	combat:RegisterForClicks("AnyUp", "AnyDown")
 
 	-- WORLD CHANNEL
 	if GetCVar("portal") == "CN" then
@@ -127,7 +129,7 @@ function module:Chatbar()
 				end
 			else
 				JoinPermanentChannel(channelName, nil, 1)
-				ChatFrame_AddChannel(ChatFrame1, channelName)
+				ChatFrame1:AddChannel(channelName)
 				print("|cff00C957"..JOIN.."|r "..DB.InfoColor..L["World Channel"])
 				module.InWorldChannel = true
 			end

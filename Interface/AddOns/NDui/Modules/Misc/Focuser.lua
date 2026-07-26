@@ -13,7 +13,8 @@ local pending = {}
 
 function M:Focuser_Setup()
 	if not self or self.focuser then return end
-	if self:GetName() and strmatch(self:GetName(), "oUF_NPs") then return end
+	local name = self.GetName and self:GetName()
+	if name and strmatch(name, "oUF_NPs") then return end
 
 	if not InCombatLockdown() then
 		self:SetAttribute(modifier.."-type"..mouseButton, "focus")
@@ -54,10 +55,11 @@ function M:Focuser()
 	f:SetAttribute("type1", "macro")
 	f:SetAttribute("macrotext", "/focus mouseover")
 	SetOverrideBindingClick(FocuserButton, true, modifier.."-BUTTON"..mouseButton, "FocuserButton")
+	f:RegisterForClicks("LeftButtonUp", "LeftButtonDown")
 
 	hooksecurefunc("CreateFrame", M.Focuser_CreateFrameHook)
 	M:Focuser_OnEvent()
 	B:RegisterEvent("PLAYER_REGEN_ENABLED", M.Focuser_OnEvent)
 	B:RegisterEvent("GROUP_ROSTER_UPDATE", M.Focuser_OnEvent)
 end
---M:RegisterMisc("Focuser", M.Focuser)
+M:RegisterMisc("Focuser", M.Focuser)

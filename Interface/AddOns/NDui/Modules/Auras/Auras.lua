@@ -17,8 +17,13 @@ end
 function A:HideBlizBuff()
 	if not C.db["Auras"]["BuffFrame"] and not C.db["Auras"]["HideBlizBuff"] then return end
 
-	B.HideObject(_G.BuffFrame)
-	--B.HideObject(_G.TemporaryEnchantFrame)
+	B:RegisterEvent("PLAYER_ENTERING_WORLD", function(_, isLogin, isReload)
+		if isLogin or isReload then
+			B.HideObject(_G.BuffFrame)
+			B.HideObject(_G.DebuffFrame)
+			BuffFrame.numHideableBuffs = 0 -- fix error when on editmode
+		end
+	end)
 end
 
 function A:BuildBuffFrame()

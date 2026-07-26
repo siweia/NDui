@@ -141,7 +141,7 @@ function TT:UpdateSpellCaster(...)
 	if unitCaster then
 		local name = GetUnitName(unitCaster, true)
 		local hexColor = B.HexRGB(B.UnitColor(unitCaster))
-		self:AddDoubleLine(L["From"]..":", hexColor..name)
+		self:AddDoubleLine(L["From"]..":", hexColor..(name or ""))
 		self:Show()
 	end
 end
