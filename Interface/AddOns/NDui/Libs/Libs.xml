@@ -7,6 +7,4 @@
 
 	<Include file="cargBags\cargBags.xml"/>
 	<Include file="oUF\oUF.xml"/>
-
-	<Script file="LibShowUIPanel-1.0.lua"/>
 </Ui>
