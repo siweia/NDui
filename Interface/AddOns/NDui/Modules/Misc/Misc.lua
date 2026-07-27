@@ -636,3 +636,7 @@ end
 function M:UpdateMaxZoomLevel()
 	SetCVar("cameraDistanceMaxZoomFactor", C.db["Misc"]["MaxZoom"])
 end
+
+-- Fix errors helptips
+TalentMicroButtonAlert.MicroButton = CreateFrame("Frame")
+TalentMicroButtonAlert.MicroButton.EvaluateAlertVisibility = function() end
