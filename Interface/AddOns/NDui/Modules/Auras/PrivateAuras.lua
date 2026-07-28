@@ -1,5 +1,7 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+if DB.isNewPatch then return end
+
 local PA = B:RegisterModule("PrivateAuras")
 local A = B:GetModule("Auras")
 
