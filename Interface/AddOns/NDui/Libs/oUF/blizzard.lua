@@ -1,4 +1,4 @@
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 
 -- sourced from Blizzard_ArenaUI/Blizzard_ArenaUI.lua
@@ -76,6 +76,10 @@ function oUF:DisableBlizzard(unit)
 
 		-- For the damn vehicle support:
 		PlayerFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
+		PlayerFrame:RegisterEvent('UNIT_ENTERING_VEHICLE')
+		PlayerFrame:RegisterEvent('UNIT_ENTERED_VEHICLE')
+		PlayerFrame:RegisterEvent('UNIT_EXITING_VEHICLE')
+		PlayerFrame:RegisterEvent('UNIT_EXITED_VEHICLE')
 
 		-- User placed frames don't animate
 		PlayerFrame:SetUserPlaced(true)
@@ -90,13 +94,27 @@ function oUF:DisableBlizzard(unit)
 		handleFrame(TargetofFocusFrame)
 	elseif(unit == 'targettarget') then
 		handleFrame(TargetFrameToT)
-	elseif(unit:match('party%d?$')) then
-		local id = unit:match('party(%d)')
+	elseif(unit:match('boss%d?$')) then
+		local id = unit:match('boss(%d)')
 		if(id) then
-			handleFrame('PartyMemberFrame' .. id)
+			handleFrame('Boss' .. id .. 'TargetFrame')
 		else
-			for i = 1, MAX_PARTY_MEMBERS do
-				handleFrame(string.format('PartyMemberFrame%d', i))
+			for i = 1, MAX_BOSS_FRAMES do
+				handleFrame(string.format('Boss%dTargetFrame', i))
+			end
+		end
+	elseif(unit:match('party%d?$')) then
+		if(not isPartyHooked) then
+			isPartyHooked = true
+
+			handleFrame(PartyFrame)
+
+			for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
+				handleFrame(frame, true)
+			end
+
+			for i = 1, MEMBERS_PER_RAID_GROUP do
+				handleFrame('CompactPartyFrameMember' .. i)
 			end
 		end
 	elseif(unit:match('arena%d?$')) then
