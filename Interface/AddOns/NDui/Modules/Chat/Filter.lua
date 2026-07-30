@@ -2,44 +2,71 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local module = B:GetModule("Chat")
 
-local strfind, strmatch, gsub, strrep = string.find, string.match, string.gsub, string.rep
+local strbyte, strfind, strmatch, gmatch, gsub, strrep, format = string.byte, string.find, string.match, string.gmatch, string.gsub, string.rep, string.format
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
-local min, max, tremove = math.min, math.max, table.remove
+local abs, floor, min, max, tremove = math.abs, math.floor, math.min, math.max, table.remove
 local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup, C_Timer.After
-local Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar = Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar
-local GetItemInfo, GetItemStats = GetItemInfo, GetItemStats
-local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
+local Ambiguate, UnitIsUnit, GetTime, SetCVar = Ambiguate, UnitIsUnit, GetTime, SetCVar
+local GetItemInfo = C_Item.GetItemInfo or GetItemInfo
+local GetItemStats = C_Item.GetItemStats or GetItemStats
 
 -- Filter Chat symbols
 local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~"}
 
 local FilterList = {}
+local function SplitKeywords(list, variable)
+	wipe(list)
+	for keyword in gmatch(variable or "", "%S+") do
+		list[#list+1] = keyword
+	end
+end
+
 function module:UpdateFilterList()
-	B.SplitList(FilterList, NDuiADB["ChatFilterList"], true)
+	SplitKeywords(FilterList, NDuiADB["ChatFilterList"])
 end
 
 local WhiteFilterList = {}
 function module:UpdateFilterWhiteList()
-	B.SplitList(WhiteFilterList, NDuiADB["ChatFilterWhiteList"], true)
+	SplitKeywords(WhiteFilterList, NDuiADB["ChatFilterWhiteList"])
 end
 
 -- ECF strings compare
 local last, this = {}, {}
-function module:CompareStrDiff(sA, sB) -- arrays of bytes
+function module:CompareStrDiff(sA, sB)
 	local len_a, len_b = #sA, #sB
+	local maxLength = max(len_a, len_b)
+	if maxLength == 0 or sA == sB then return 0 end
+
+	local maxDiff = floor(maxLength*.1)
+	if maxDiff == 0 or abs(len_a - len_b) > maxDiff then return 1 end
+
+	-- Only the distance threshold matters here, so keep the DP inside its allowed band.
+	local limit = maxDiff + 1
 	for j = 0, len_b do
-		last[j+1] = j
+		last[j+1] = j <= maxDiff and j or limit
 	end
+
 	for i = 1, len_a do
-		this[1] = i
-		for j = 1, len_b do
-			this[j+1] = (sA[i] == sB[j]) and last[j] or (min(last[j+1], this[j], last[j]) + 1)
+		local from = max(1, i - maxDiff)
+		local to = min(len_b, i + maxDiff)
+		this[1] = i <= maxDiff and i or limit
+		if from > 1 then this[from] = limit end
+
+		local rowMin = from == 1 and this[1] or limit
+		local byteA = strbyte(sA, i)
+		for j = from, to do
+			local cost = byteA == strbyte(sB, j) and 0 or 1
+			local value = min(last[j+1] + 1, this[j] + 1, last[j] + cost)
+			this[j+1] = value
+			if value < rowMin then rowMin = value end
 		end
-		for j = 0, len_b do
-			last[j+1] = this[j+1]
-		end
+		if to < len_b then this[to+2] = limit end
+		if rowMin > maxDiff then return 1 end
+
+		last, this = this, last
 	end
-	return this[len_b+1] / max(len_a, len_b)
+
+	return last[len_b+1] / maxLength
 end
 
 C.BadBoys = {} -- debug
@@ -59,52 +86,50 @@ function module:GetFilterResult(event, msg, name, flag, guid)
 
 	if C.db["Chat"]["BlockSpammer"] and C.BadBoys[name] and C.BadBoys[name] >= 5 then return true end
 
-	local filterMsg = gsub(msg, "|H.-|h(.-)|h", "%1")
-	filterMsg = gsub(filterMsg, "|c%x%x%x%x%x%x%x%x", "")
-	filterMsg = gsub(filterMsg, "|r", "")
-
-	-- Trash Filter
-	for _, symbol in ipairs(msgSymbols) do
-		filterMsg = gsub(filterMsg, symbol, "")
+	local filterMsg = msg
+	if strfind(filterMsg, "|H", 1, true) then
+		filterMsg = gsub(filterMsg, "|H.-|h(.-)|h", "%1")
+	end
+	if strfind(filterMsg, "|c", 1, true) then
+		filterMsg = gsub(filterMsg, "|c%x%x%x%x%x%x%x%x", "")
+	end
+	if strfind(filterMsg, "|r", 1, true) then
+		filterMsg = gsub(filterMsg, "|r", "")
 	end
 
-	if event == "CHAT_MSG_CHANNEL" then
-		local matches = 0
+	-- Trash Filter
+	for i = 1, #msgSymbols do
+		local symbol = msgSymbols[i]
+		if strfind(filterMsg, symbol, 1, true) then
+			filterMsg = gsub(filterMsg, symbol, "")
+		end
+	end
+
+	if event == "CHAT_MSG_CHANNEL" and #WhiteFilterList > 0 then
 		local found
-		for keyword in pairs(WhiteFilterList) do
-			if keyword ~= "" then
+		for i = 1, #WhiteFilterList do
+			if strfind(filterMsg, WhiteFilterList[i]) then
 				found = true
-				local _, count = gsub(filterMsg, keyword, "")
-				if count > 0 then
-					matches = matches + 1
-				end
+				break
 			end
 		end
-		if matches == 0 and found then
+		if not found then
 			return 0
 		end
 	end
 
 	local matches = 0
-	for keyword in pairs(FilterList) do
-		if keyword ~= "" then
-			local _, count = gsub(filterMsg, keyword, "")
-			if count > 0 then
-				matches = matches + 1
-			end
+	local requiredMatches = C.db["Chat"]["Matches"]
+	for i = 1, #FilterList do
+		if strfind(filterMsg, FilterList[i]) then
+			matches = matches + 1
+			if matches >= requiredMatches then return true end
 		end
 	end
 
-	if matches >= C.db["Chat"]["Matches"] then
-		return true
-	end
-
 	-- ECF Repeat Filter
-	local msgTable = {name, {}, GetTime()}
 	if filterMsg == "" then filterMsg = msg end
-	for i = 1, #filterMsg do
-		msgTable[2][i] = filterMsg:byte(i)
-	end
+	local msgTable = {name, filterMsg, GetTime()}
 	local chatLinesSize = #chatLines
 	chatLines[chatLinesSize+1] = msgTable
 	for i = 1, chatLinesSize do
@@ -152,11 +177,10 @@ function module:ToggleChatBubble(party)
 end
 
 function module:UpdateAddOnBlocker(event, msg, author)
-	local name = Ambiguate(author, "none")
-	if UnitIsUnit(name, "player") then return end
-
 	for _, word in ipairs(addonBlockList) do
 		if strfind(msg, word) then
+			local name = Ambiguate(author, "none")
+			if UnitIsUnit(name, "player") then return end
 			if event == "CHAT_MSG_SAY" or event == "CHAT_MSG_YELL" then
 				module:ToggleChatBubble()
 			elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
