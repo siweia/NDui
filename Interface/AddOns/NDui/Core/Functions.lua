@@ -1477,6 +1477,7 @@ do
 		if portrait then
 			portrait:SetAlpha(0)
 		end
+		if self.BorderTexture then self.BorderTexture:SetAlpha(0) end
 		local closeButton = self.CloseButton or (frameName and _G[frameName.."CloseButton"])
 		if closeButton then
 			B.ReskinClose(closeButton, bg, -5, -5)

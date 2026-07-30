@@ -50,7 +50,6 @@ C.themes["Blizzard_Collections"] = function()
 			end
 		end
 	end
-	CollectionsJournal.BorderTexture:SetAlpha(0)
 
 	-- [[ Mounts and pets ]]
 
