@@ -34,6 +34,7 @@ C.themes["Blizzard_Communities"] = function()
 
 	B.ReskinPortraitFrame(CommunitiesFrame)
 	CommunitiesFrame.PortraitOverlay:SetAlpha(0)
+	CommunitiesFrame.BorderTexture:SetAlpha(0)
 	B.ReskinDropDown(CommunitiesFrame.StreamDropdown)
 	B.ReskinDropDown(CommunitiesFrame.CommunitiesListDropdown)
 	B.StripTextures(CommunitiesFrame.MaximizeMinimizeFrame)
