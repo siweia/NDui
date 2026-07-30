@@ -50,6 +50,7 @@ C.themes["Blizzard_Collections"] = function()
 			end
 		end
 	end
+	CollectionsJournal.BorderTexture:SetAlpha(0)
 
 	-- [[ Mounts and pets ]]
 
@@ -380,37 +381,4 @@ C.themes["Blizzard_Collections"] = function()
 			ic.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end)
-
-	local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
-	B.StripTextures(SetsTransmogFrame)
-	B.ReskinArrow(SetsTransmogFrame.PagingFrame.PrevPageButton, "left")
-	B.ReskinArrow(SetsTransmogFrame.PagingFrame.NextPageButton, "right")
-
-	-- [[ Wardrobe ]]
-
-	local WardrobeFrame = WardrobeFrame
-	local WardrobeTransmogFrame = WardrobeTransmogFrame
-
-	B.ReskinPortraitFrame(WardrobeFrame)
-	B.StripTextures(WardrobeTransmogFrame)
-	B.Reskin(WardrobeTransmogFrame.ApplyButton)
-	B.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
-	WardrobeTransmogFrame.Model.ClearAllPendingButton:DisableDrawLayer("BACKGROUND")
-
-	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand", "Ranged"}
-	for i = 1, #slots do
-		local slot = WardrobeTransmogFrame[slots[i].."Button"]
-		if slot then
-			slot.Border:Hide()
-			B.ReskinIcon(slot.Icon)
-			slot:SetHighlightTexture(DB.bdTex)
-			local hl = slot:GetHighlightTexture()
-			hl:SetVertexColor(1, 1, 1, .25)
-			hl:SetAllPoints(slot.Icon)
-		end
-	end
-
-	-- Outfit Frame
-	B.ReskinDropDown(WardrobeTransmogFrame.OutfitDropdown)
-	B.Reskin(WardrobeTransmogFrame.OutfitDropdown.SaveButton)
 end
