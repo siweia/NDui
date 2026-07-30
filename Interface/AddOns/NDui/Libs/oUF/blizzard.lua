@@ -15,7 +15,6 @@ local MEMBERS_PER_RAID_GROUP = _G.MEMBERS_PER_RAID_GROUP or 5
 
 local hookedNameplates = {}
 local isPartyHooked = false
-local isPartyHooked = false
 
 local hiddenParent = CreateFrame('Frame', nil, UIParent)
 hiddenParent:SetAllPoints()
