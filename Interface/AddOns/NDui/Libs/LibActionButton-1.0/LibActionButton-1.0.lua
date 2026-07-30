@@ -2688,7 +2688,7 @@ Action.GetSpellId               = function(self)
 		elseif subType == "item" then
 			return nil -- item macros seems to return bogus values we can't support
 		else
-			return nil -- what else is there? spell id is only used for highlights and cast bars
+			return (GetMacroSpell(id))
 		end
 	end
 end
