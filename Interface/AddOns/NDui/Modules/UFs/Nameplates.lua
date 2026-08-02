@@ -704,6 +704,7 @@ function UF:UpdateNameplateSize()
 	local nameTextOffset = C.db["Nameplate"]["NameTextOffset"]
 	local healthTextSize = C.db["Nameplate"]["HealthTextSize"]
 	local healthTextOffset = C.db["Nameplate"]["HealthTextOffset"]
+	local RaidTargetX, RaidTargetY = C.db["Nameplate"]["RaidTargetX"], C.db["Nameplate"]["RaidTargetY"]
 	if C.db["Nameplate"]["FriendPlate"] and self.isFriendly and not C.db["Nameplate"]["NameOnlyMode"] then -- cannot use plateType here
 		plateWidth, plateHeight = C.db["Nameplate"]["FriendPlateWidth"], C.db["Nameplate"]["FriendPlateHeight"]
 		plateCBHeight, plateCBOffset = C.db["Nameplate"]["FriendPlateCBHeight"], C.db["Nameplate"]["FriendPlateCBOffset"]
@@ -711,6 +712,7 @@ function UF:UpdateNameplateSize()
 		nameTextOffset = C.db["Nameplate"]["FriendNameOffset"]
 		healthTextSize = C.db["Nameplate"]["FriendHealthSize"]
 		healthTextOffset = C.db["Nameplate"]["FriendHealthOffset"]
+		RaidTargetX, RaidTargetY = C.db["Nameplate"]["FriendRaidTargetX"], C.db["Nameplate"]["FriendRaidTargetY"]
 	end
 	local iconSize = plateHeight + plateCBHeight + 5
 	local nameType = C.db["Nameplate"]["NameType"]
@@ -744,7 +746,7 @@ function UF:UpdateNameplateSize()
 		self.healthValue:SetPoint("RIGHT", self, 0, healthTextOffset)
 		self:Tag(self.healthValue, "[VariousHP("..UF.VariousTagIndex[C.db["Nameplate"]["HealthType"]]..")]")
 		self.healthValue:UpdateTag()
-		self.RaidTargetIndicator:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", C.db["Nameplate"]["RaidTargetX"], C.db["Nameplate"]["RaidTargetY"])
+		self.RaidTargetIndicator:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", RaidTargetX, RaidTargetY)
 	end
 	self.nameText:UpdateTag()
 end
