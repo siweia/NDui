@@ -68,8 +68,10 @@ local function ReskinMeterWindow(frame)
 
 	local container = frame.MinimizeContainer
 	if container then
-		B.ReskinTrimScroll(container.ScrollBar)
-		container.ScrollBox:ForEachFrame(updateBar)
+		if container:IsVisible() then
+			B.ReskinTrimScroll(container.ScrollBar)
+			container.ScrollBox:ForEachFrame(updateBar)
+		end
 		hooksecurefunc(container.ScrollBox, "Update", updateBox)
 
 		B.ReskinTrimScroll(container.SourceWindow.ScrollBar)
