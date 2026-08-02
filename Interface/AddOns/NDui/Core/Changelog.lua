@@ -2,26 +2,22 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 if DB.Client ~= "zhCN" then return end
 
-local strsplit, pairs = string.split, pairs
+local strsplit, ipairs = string.split, ipairs
 
 local hx = {
-	"修正部分冷却显示错误的问题；",
-	"姓名版部分选项调整；",
-	"施法条的计时方式调整；",
-	"重构聊天频道名称简写；",
-	"修正部分因秘密值导致的报错；",
-	"更新套装ID列表；",
-	"角色页面的附魔显示方式调整；",
-	"oUF更新；",
-	"界面美化部分模块更新；",
-	"信息条部分模块更新；",
-	"修正居中冷却管理在缩放时异常的问题；",
-	"禁用角色面板属性的大部分显示；",
-	"添加选项以调整冷却计时的方式；",
-	"更新噬灭DH能量条数值显示；",
-	"修正MDT超链接报错的问题；",
-	"修正密语回复快捷键失效的问题；",
-	"控制台及本地文本更新。",
+	"LAB更新；",
+	"信息条更新，支持显示实时坐标；",
+	"邮件一键收取更新；",
+	"界面美化更新；",
+	"修正部分潜在的污染；",
+	"oUF核心更新；",
+	"团队框体点击施法更新；",
+	"鼠标提示装等获取更新；",
+	"微型菜单材质更新；",
+	"聊天过滤更新；",
+	"恢复友方姓名板的独立选项；",
+	"修正部分反馈的问题；",
+	"预更新部分12.1的内容。",
 }
 
 local f
@@ -44,7 +40,7 @@ local function changelog()
 	lr:SetPoint("TOP", 50, -35)
 
 	local offset = 0
-	for n, t in pairs(hx) do
+	for n, t in ipairs(hx) do
 		B.CreateFS(f, 14, n..". "..t, false, "TOPLEFT", 15, -(50 + offset))
 		offset = offset + 24
 	end
