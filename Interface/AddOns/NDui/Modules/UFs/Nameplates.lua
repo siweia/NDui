@@ -810,6 +810,7 @@ function UF:UpdatePlateByType()
 				self:EnableElement(element)
 			end
 		end
+		self.Health:ForceUpdate()
 		shouldEnableAura = true
 
 		name:SetJustifyH("LEFT")
