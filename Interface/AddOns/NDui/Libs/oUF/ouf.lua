@@ -901,11 +901,15 @@ do
 			end
 
 			if(UnitNameplateShowsWidgetsOnly(unit) or UnitIsGameObject(unit)) then
-				previouslyActiveElements[nameplate.unitFrame] = {}
+				local disabledElements = previouslyActiveElements[nameplate.unitFrame]
+				if(not disabledElements) then
+					disabledElements = {}
+					previouslyActiveElements[nameplate.unitFrame] = disabledElements
+				end
 
 				for element in next, activeElements[nameplate.unitFrame] do
 					nameplate.unitFrame:DisableElement(element, unit)
-					previouslyActiveElements[nameplate.unitFrame][element] = true
+					disabledElements[element] = true
 				end
 
 				-- no point showing our unit frame when there's only widgets,
@@ -923,7 +927,7 @@ do
 						nameplate.unitFrame:EnableElement(element, unit)
 					end
 
-					table.wipe(previouslyActiveElements[nameplate.unitFrame])
+					previouslyActiveElements[nameplate.unitFrame] = nil
 
 					nameplate.unitFrame:Show()
 				end
