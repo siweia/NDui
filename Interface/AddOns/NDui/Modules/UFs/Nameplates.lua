@@ -889,7 +889,7 @@ function UF:OnNameplateAdded(event, unit)
 
 	local blizzPlate = self:GetParent().UnitFrame
 	if blizzPlate then
-		self.widgetContainer = blizzPlate.WidgetContainer
+	--[=[	self.widgetContainer = blizzPlate.WidgetContainer
 		if self.widgetContainer then
 			--self.widgetContainer:SetParent(self)
 			self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
@@ -899,7 +899,7 @@ function UF:OnNameplateAdded(event, unit)
 		if self.softTargetFrame then
 			--self.softTargetFrame:SetParent(self)
 			self.softTargetFrame:SetScale(1/NDuiADB["UIScale"])
-		end
+		end]=]
 	end
 
 	UF.RefreshPlateType(self, unit)
