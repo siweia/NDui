@@ -152,6 +152,10 @@ function Bar:MicroMenu()
 	menubar.mover = B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
 	Bar:MicroMenu_Lines(menubar)
 
+	StoreMicroButton:ClearAllPoints()
+	StoreMicroButton:SetPoint("CENTER")
+	StoreMicroButton:Show()
+
 	-- Generate Buttons
 	local buttonInfo = {
 		{"player", "CharacterMicroButton", MicroButtonTooltipText(CHARACTER_BUTTON, "TOGGLECHARACTER0")},
@@ -161,7 +165,7 @@ function Bar:MicroMenu()
 		--{"guild", "GuildMicroButton", MicroButtonTooltipText(GUILD_AND_COMMUNITIES, "TOGGLESOCIAL")},
 		{"guild", "SocialsMicroButton", MicroButtonTooltipText(SOCIAL_BUTTON, "TOGGLESOCIAL")},
 		{"LFG", "WorldMapMicroButton", MicroButtonTooltipText(WORLDMAP_BUTTON, "TOGGLEWORLDMAP")},
-		{"store", function() ToggleStoreUI() end, BLIZZARD_STORE},
+		{"store", "StoreMicroButton", BLIZZARD_STORE},
 		{"collections", "HelpMicroButton", MicroButtonTooltipText(HELP_BUTTON, "TOGGLEHELP")},
 		{"help", "MainMenuMicroButton", MicroButtonTooltipText(MAINMENU_BUTTON, "TOGGLEGAMEMENU")},
 		{"bags", function() ToggleAllBags() end, MicroButtonTooltipText(BAGSLOT, "OPENALLBAGS")},
