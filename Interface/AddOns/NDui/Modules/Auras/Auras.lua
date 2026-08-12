@@ -33,6 +33,7 @@ function A:HideBlizBuff()
 end
 
 function A:BuildBuffFrame()
+	if DB.isNewPatch then return end
 	if not C.db["Auras"]["BuffFrame"] then return end
 
 	-- Config

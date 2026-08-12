@@ -15,7 +15,7 @@ oUF.colors.health:SetCurve({
 	[.5] = CreateColor(.85, .8, .45),
 	[ 1] = CreateColor(.1, .1, .1),
 })
-oUF.colors.dispel[oUF.Enum.DispelType.None] = oUF:CreateColor(0, 0, 0)
+oUF.colors.dispel.None = oUF:CreateColor(0, 0, 0)
 
 local function ReplacePowerColor(name, index, r, g, b)
 	oUF.colors.power[name] = oUF:CreateColor(r, g, b)
@@ -197,7 +197,7 @@ function UF:CreateHealthBar(self)
 	health:SetHeight(healthHeight)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
-	health:SetFrameLevel(self:GetFrameLevel() - 2)
+	--health:SetFrameLevel(self:GetFrameLevel() - 1)
 
 	self.backdrop = B.SetBD(health, 0)
 	if self.backdrop.__shadow then
@@ -420,7 +420,7 @@ function UF:CreatePowerBar(self)
 	end
 	power:SetHeight(powerHeight)
 	power.wasHidden = powerHeight == 0
-	power:SetFrameLevel(self:GetFrameLevel() - 2)
+	--power:SetFrameLevel(self:GetFrameLevel() - 2)
 	power.backdrop = B.CreateBDFrame(power, 0)
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")
@@ -1103,6 +1103,7 @@ function UF:UpdateUFAuras()
 end
 
 function UF:ToggleUFAuras(frame, enable)
+	if DB.isNewPatch then return end
 	if not frame then return end
 	if enable then
 		if not frame:IsElementEnabled("Auras") then
