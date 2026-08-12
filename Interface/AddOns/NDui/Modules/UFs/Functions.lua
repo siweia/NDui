@@ -1620,14 +1620,12 @@ function UF:CreatePrediction(self)
 	overHealAbsorb:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMLEFT", 5, -2)
 
 	-- Register with oUF
-	self.HealthPrediction = {
-		healingAll = myBar,
-		damageAbsorb = absorbBar,
-		healAbsorb = healAbsorbBar,
-		overDamageAbsorbIndicator = overAbsorb,
-		overHealAbsorbIndicator = overHealAbsorb,
-	}
 	self.predicFrame = frame
+	self.Health.HealingAll = myBar
+	self.Health.DamageAbsorb = absorbBar
+	self.Health.HealAbsorb = healAbsorbBar
+	self.Health.OverDamageAbsorbIndicator = overAbsorb
+	self.Health.OverHealAbsorbIndicator = overAbsorb
 end
 
 function UF.PostUpdateAddPower(element, cur, max)

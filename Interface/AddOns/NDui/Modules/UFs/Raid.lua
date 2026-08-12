@@ -36,7 +36,7 @@ function UF:CreateRaidIcons(self)
 end
 
 function UF:UpdateTargetBorder()
-	if UnitIsUnit("target", self.unit) then
+	if UnitIsUnit("target", self.__unit) then
 		self.TargetBorder:Show()
 	else
 		self.TargetBorder:Hide()
@@ -54,7 +54,7 @@ function UF:CreateTargetBorder(self)
 end
 
 function UF:UpdateThreatBorder(_, unit)
-	if unit ~= self.unit then return end
+	if unit ~= self.__unit then return end
 
 	local element = self.ThreatIndicator
 	local status = UnitThreatSituation(unit)

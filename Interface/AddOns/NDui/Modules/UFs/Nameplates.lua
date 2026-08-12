@@ -115,7 +115,7 @@ function UF:UpdateExcutedCurve()
 end
 
 function UF:UpdateColor(_, unit)
-	if not unit or self.unit ~= unit then return end
+	if not unit or self.__unit ~= unit then return end
 
 	local element = self.Health
 	local name = self.unitName
@@ -238,7 +238,7 @@ function UF:UpdateColor(_, unit)
 end
 
 function UF:UpdateThreatColor(_, unit)
-	if unit ~= self.unit then return end
+	if unit ~= self.__unit then return end
 
 	UF.UpdateColor(self, _, unit)
 end
@@ -255,7 +255,7 @@ end
 
 function UF:UpdateFocusColor()
 	if C.db["Nameplate"]["ColoredFocus"] then
-		UF.UpdateThreatColor(self, _, self.unit)
+		UF.UpdateThreatColor(self, _, self.__unit)
 	end
 end
 
@@ -264,7 +264,7 @@ function UF:UpdateTargetChange()
 	local element = self.TargetIndicator
 	if not element then return end
 
-	local unit = self.unit
+	local unit = self.__unit
 	if C.db["Nameplate"]["TargetIndicator"] ~= 1 then
 		if UnitIsUnit(unit, "target") and not UnitIsUnit(unit, "player") then
 			element:Show()
@@ -416,7 +416,7 @@ function UF:UpdateQuestUnit(_, unit)
 		return
 	end
 
-	unit = unit or self.unit
+	unit = unit or self.__unit
 	local questProgress
 	local prevDiff = 0
 
@@ -492,7 +492,7 @@ end
 
 function UF:UpdateUnitClassify(unit)
 	if not self.ClassifyIndicator then return end
-	if not unit then unit = self.unit end
+	if not unit then unit = self.__unit end
 
 	self.ClassifyIndicator:Hide()
 
@@ -510,18 +510,18 @@ end
 
 -- Mouseover indicator
 function UF:IsMouseoverUnit()
-	if not self or not self.unit then return end
+	if not self or not self.__unit then return end
 
 	if self:IsVisible() and UnitExists("mouseover") then
-		return UnitIsUnit("mouseover", self.unit)
+		return UnitIsUnit("mouseover", self.__unit)
 	end
 	return false
 end
 
 function UF:UpdateMouseoverShown()
-	if not self or not self.unit then return end
+	if not self or not self.__unit then return end
 
-	if self:IsShown() and UnitIsUnit("mouseover", self.unit) then
+	if self:IsShown() and UnitIsUnit("mouseover", self.__unit) then
 		self.HighlightIndicator:Show()
 		self.HighlightUpdater:Show()
 	else
@@ -921,7 +921,7 @@ end
 -- Player Nameplate
 function UF:PlateVisibility(event)
 	local alpha = C.db["Nameplate"]["PPFadeoutAlpha"]
-	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.unit) then
+	if (event == "PLAYER_REGEN_DISABLED" or InCombatLockdown()) and UnitIsUnit("player", self.__unit) then
 		if self:IsElementEnabled("Health") then
 			UIFrameFadeIn(self.Health, .3, self.Health:GetAlpha(), 1)
 			UIFrameFadeIn(self.Health.bg, .3, self.Health.bg:GetAlpha(), .7)
