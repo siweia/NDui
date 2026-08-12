@@ -5,6 +5,7 @@ local oUF = ns.oUF
 local UF = B:RegisterModule("UnitFrames")
 
 local pairs, next, unpack = pairs, next, unpack
+local max = math.max
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 local FALLBACK_COLOR = {r=0, g=0, b=0}
@@ -197,7 +198,7 @@ function UF:CreateHealthBar(self)
 	health:SetHeight(healthHeight)
 	health:SetStatusBarTexture(DB.normTex)
 	health:SetStatusBarColor(.1, .1, .1)
-	--health:SetFrameLevel(self:GetFrameLevel() - 1)
+	health:SetFrameLevel(max(self:GetFrameLevel() - 2, 0))
 
 	self.backdrop = B.SetBD(health, 0)
 	if self.backdrop.__shadow then
@@ -420,7 +421,7 @@ function UF:CreatePowerBar(self)
 	end
 	power:SetHeight(powerHeight)
 	power.wasHidden = powerHeight == 0
-	--power:SetFrameLevel(self:GetFrameLevel() - 2)
+	power:SetFrameLevel(max(self:GetFrameLevel() - 2, 0))
 	power.backdrop = B.CreateBDFrame(power, 0)
 
 	local bg = power:CreateTexture(nil, "BACKGROUND")
@@ -851,42 +852,47 @@ function UF:ReskinTimerTrakcer(self)
 end
 
 -- Auras Relevant
-function UF:UpdateIconTexCoord(width, height)
-	local ratio = height / width
-	local mult = (1 - ratio) / 2
-	self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
-end
-
 function UF.PostCreateButton(element, button)
 	local fontSize = element.fontSize or element.size*.4
-	local parentFrame = CreateFrame("Frame", nil, button)
-	parentFrame:SetAllPoints()
-	parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
-	button.Count = B.CreateFS(parentFrame, fontSize, "", false, "BOTTOMRIGHT", 6, -3)
-	button.Cooldown:SetReverse(true)
-	button.CooldownText = button.Cooldown:GetRegions()
-	button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
+	if button.Cooldown then
+		button.Cooldown:SetReverse(true)
+		button.CooldownText = button.Cooldown:GetRegions()
+		if button.CooldownText then
+			button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
+		end
+	end
 
 	local isRaid = element.__owner.mystyle == "raid"
-	button.Cooldown:SetHideCountdownNumbers(isRaid and not C.db["UFs"]["RaidCDText"])
+	if button.Cooldown then
+		button.Cooldown:SetHideCountdownNumbers(isRaid and not C.db["UFs"]["RaidCDText"])
+	end
 	button.iconbg = B.ReskinIcon(button.Icon, not isRaid)
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
 
-	button.Overlay:Hide()
-	button.Overlay = nil -- needs review
-	button.Stealable:SetAtlas("bags-newitem")
+	if button.Overlay then
+		button.Overlay:Hide()
+		button.Overlay = nil
+	end
+	if button.Stealable then
+		button.Stealable:SetAtlas("bags-newitem")
+	end
 
 	if element.__owner.mystyle == "nameplate" then
-		hooksecurefunc(button, "SetSize", UF.UpdateIconTexCoord)
-		button.timer = B.CreateFS(button, fontSize, "")
-		button.timer:ClearAllPoints()
-		button.timer:SetPoint("LEFT", button, "TOPLEFT", -2, 0)
-		button.Count:ClearAllPoints()
-		button.Count:SetPoint("RIGHT", button, "BOTTOMRIGHT", 5, 0)
+		if button.Time then
+			button.Time:ClearAllPoints()
+			button.Time:SetPoint("LEFT", button, "TOPLEFT", -2, 0)
+		end
+		if button.Count then
+			button.Count:ClearAllPoints()
+			button.Count:SetPoint("RIGHT", button, "BOTTOMRIGHT", 5, 0)
+		end
 	end
+
+	element.__buttons = element.__buttons or {}
+	element.__buttons[button] = true
 end
 
 local filteredStyle = {
@@ -1016,18 +1022,18 @@ end
 function UF:UpdateAuraContainer(parent, element, maxAuras)
 	local width = parent:GetWidth()
 	local iconsPerRow = element.maxCols
-	local maxLines = iconsPerRow and B:Round(maxAuras/iconsPerRow) or 2
-	element.size = iconsPerRow and auraIconSize(width, iconsPerRow, element.spacing) or element.size
-	element:SetSize(width, (element.size + element.spacing) * maxLines)
+	if not iconsPerRow then return end
+	element.size = auraIconSize(width, iconsPerRow, element.spacing or 0)
+	if element.SetFlowLayoutMaximumLineSize then
+		element:SetFlowLayoutMaximumLineSize(width)
+	end
 
 	local fontSize = element.fontSize or element.size*.4
 	local cooldownNumber = parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"] or false
-	for i = 1, #element do
-		local button = element[i]
-		if button then
-			if button.timer then B.SetFontSize(button.timer, fontSize) end
-			if button.Count then B.SetFontSize(button.Count, fontSize) end
-			button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
+	for button in pairs(element.__buttons or {}) do
+		if button.Count then B.SetFontSize(button.Count, fontSize) end
+		if button.Time then B.SetFontSize(button.Time, fontSize) end
+		if button.Cooldown then
 			button.Cooldown:SetHideCountdownNumbers(cooldownNumber)
 		end
 	end
@@ -1103,7 +1109,6 @@ function UF:UpdateUFAuras()
 end
 
 function UF:ToggleUFAuras(frame, enable)
-	if DB.isNewPatch then return end
 	if not frame then return end
 	if enable then
 		if not frame:IsElementEnabled("Auras") then
@@ -1139,8 +1144,63 @@ function UF:UpdateAuraDirection(self, element)
 	element.initialAnchor = value.initialAnchor
 	element["growthX"] = value.growthX
 	element["growthY"] = value.growthY
+	element:SetFlowLayoutAnchorPoint(value.initialAnchor)
+	element:SetFlowLayoutGrowthDirection(
+		value.growthX == "LEFT" and -1 or 1,
+		value.growthY == "DOWN" and -1 or 1
+	)
 	element:ClearAllPoints()
 	element:SetPoint(value.initialAnchor, self, value.relAnchor, value.x, value.y * yOffset)
+end
+
+local function AuraGroupLayout(element, index)
+	return {
+		elementSpacing = element.spacing,
+		lineSpacing = element.spacing,
+		groupSpacing = element.spacing,
+		groupLineSpacing = element.spacing,
+		forceNewLine = false,
+		layoutIndex = index,
+	}
+end
+
+local function AddAuraGroup(element, name, filter, count, index)
+	element.__groups[name] = element:AddGroup(filter, {
+		maxFrameCount = count,
+		layout = AuraGroupLayout(element, index),
+	})
+end
+
+local function SetAuraGroup(element, name, filter, count, candidates, sortMethod)
+	local key = element.__groups[name]
+	if not key then return end
+	element:SetAuraGroupFilterString(key, filter)
+	element:SetAuraGroupCandidateFilters(key, candidates)
+	element:SetAuraGroupMaxFrameCount(key, count or 0)
+	element:SetAuraGroupSortMethod(key, sortMethod or AuraContainerSortMethod.Default, AuraContainerSortDirection.Normal)
+end
+
+local function CreateAuraElement(self, options)
+	local element = self:CreateAuras({
+		initialAnchor = options.initialAnchor,
+		growthX = options.growthX,
+		growthY = options.growthY,
+		layout = AnchorUtil.FlowLayoutAxis.Horizontal,
+		layoutLimit = self:GetWidth(),
+	})
+
+	element.__groups = {}
+	element.__value = options.value
+	element.spacing = options.spacing or 0
+	element.fontSize = options.fontSize
+	element.sizeRatio = options.sizeRatio or 1
+	element.disableMouse = options.disableMouse
+	element.showDebuffType = options.showDebuffType
+	element.showCount = true
+	element.showDuration = true
+	element.showStealableBorder = true
+	element.PostCreateButton = UF.PostCreateButton
+	return element
 end
 
 local auraUFs = {
@@ -1152,111 +1212,92 @@ local auraUFs = {
 }
 function UF:CreateAuras(self)
 	local mystyle = self.mystyle
-	local bu = CreateFrame("Frame", nil, self)
-	bu:SetFrameLevel(self:GetFrameLevel() + 2)
-	bu.gap = true
-	bu.initialAnchor = "TOPLEFT"
-	bu["growthY"] = "DOWN"
-	bu.spacing = 3
-	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
+	local bu = CreateAuraElement(self, {
+		initialAnchor = "TOPLEFT",
+		growthX = "RIGHT",
+		growthY = "DOWN",
+		spacing = 3,
+	})
 	if auraUFs[mystyle] then
 		bu.__value = auraUFs[mystyle]
 		UF:ConfigureAuras(bu)
 		UF:UpdateAuraDirection(self, bu)
-		bu.FilterAura = UF.UnitFrame_FilterAura
+		AddAuraGroup(bu, "Buffs", "HELPFUL", bu.numBuffs, 1)
+		AddAuraGroup(bu, "Debuffs", "HARMFUL", bu.numDebuffs, 2)
 	elseif mystyle == "nameplate" then
-		bu.initialAnchor = "BOTTOMLEFT"
-		bu["growthY"] = "UP"
+		bu:SetFlowLayoutAnchorPoint("BOTTOMLEFT")
+		bu:SetFlowLayoutGrowthDirection(1, 1)
 		if C.db["Nameplate"]["TargetPower"] then
 			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
 		else
 			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
 		end
 		bu.numTotal = C.db["Nameplate"]["maxAuras"]
+		bu.numBuffs = bu.numTotal
+		bu.numDebuffs = 0
 		bu.maxCols = C.db["Nameplate"]["AurasPerRow"]
 		bu.fontSize = C.db["Nameplate"]["FontSize"]
 		bu.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 		bu.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
 		bu.sizeRatio = C.db["Nameplate"]["SizeRatio"]
-		bu.gap = false
 		bu.disableMouse = true
-	--	bu.disableCooldown = true
-	--	bu.onlyShowPlayer = true
-		bu.FilterAura = UF.Nameplate_FilterAura
+		AddAuraGroup(bu, "Buffs", "HELPFUL|IMPORTANT", bu.numBuffs, 1)
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
-	bu.showStealableBuffs = true
-	bu.PostCreateButton = UF.PostCreateButton
-	bu.PostUpdateButton = UF.PostUpdateButton
-	bu.PostUpdateGapButton = UF.PostUpdateGapButton
-	bu.PostProcessAuraData = UF.PostProcessAuraData
 
 	self.Auras = bu
 end
 
 function UF:CreateBuffs(self)
 	local mystyle = self.mystyle
-	local bu = CreateFrame("Frame", nil, self)
-	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
+	local bu = CreateAuraElement(self, {
+		initialAnchor = mystyle == "raid" and "TOPLEFT" or "BOTTOMLEFT",
+		growthX = "RIGHT",
+		growthY = mystyle == "raid" and "DOWN" or "UP",
+		spacing = mystyle == "raid" and 2 or 3,
+		value = mystyle == "raid" and "Raid" or "Boss",
+		disableMouse = mystyle == "raid",
+	})
+	bu.__auraType = "buffs"
 	if mystyle == "raid" then
-		bu.initialAnchor = "TOPLEFT"
-		bu["growthX"] = "RIGHT"
-		bu["growthY"] = "DOWN"
 		bu.__value = "Raid"
 		bu:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
-		bu.disableMouse = true
-		bu.spacing = 2
-		bu.FilterAura = UF.RaidFrame_FilterAura
 	else
-		bu.initialAnchor = "BOTTOMLEFT"
-		bu["growthX"] = "RIGHT"
-		bu["growthY"] = "UP"
 		bu.__value = "Boss"
 		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
-		bu.spacing = 3
-		bu.FilterAura = UF.UnitFrame_FilterAura
 	end
 
 	UF:ConfigureBuffAndDebuff(bu)
+	AddAuraGroup(bu, "Buffs", "HELPFUL", bu.num, 1)
 	UF:UpdateAuraContainer(self, bu, bu.num)
-	bu.showStealableBuffs = true
-	bu.PostCreateButton = UF.PostCreateButton
-	bu.PostUpdateButton = UF.PostUpdateButton
-	bu.PostProcessAuraData = UF.PostProcessAuraData
 
 	self.Buffs = bu
 end
 
 function UF:CreateDebuffs(self)
 	local mystyle = self.mystyle
-	local bu = CreateFrame("Frame", nil, self)
-	bu.tooltipAnchor = "ANCHOR_BOTTOMLEFT"
-	bu.showDebuffType = true
+	local bu = CreateAuraElement(self, {
+		initialAnchor = mystyle == "raid" and "BOTTOMRIGHT" or "TOPRIGHT",
+		growthX = "LEFT",
+		growthY = mystyle == "raid" and "UP" or "DOWN",
+		spacing = mystyle == "raid" and 2 or 3,
+		value = mystyle == "raid" and "Raid" or "Boss",
+		disableMouse = mystyle == "raid",
+		showDebuffType = true,
+	})
+	bu.__auraType = "debuffs"
 	if mystyle == "raid" then
-		bu.initialAnchor = "BOTTOMRIGHT"
-		bu["growthX"] = "LEFT"
-		bu["growthY"] = "UP"
 		bu.__value = "Raid"
 		bu:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
-		bu.disableMouse = true
-		bu.spacing = 2
-		bu.FilterAura = UF.RaidFrame_FilterAura
 	else
-		bu.initialAnchor = "TOPRIGHT"
-		bu["growthX"] = "LEFT"
-		bu["growthY"] = "DOWN"
 		bu.__value = "Boss"
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
-		bu.spacing = 3
-		bu.FilterAura = UF.UnitFrame_FilterAura
 	end
 
 	UF:ConfigureBuffAndDebuff(bu, true)
+	AddAuraGroup(bu, "Debuffs", "HARMFUL", bu.num, 1)
 	UF:UpdateAuraContainer(self, bu, bu.num)
-	bu.PostCreateButton = UF.PostCreateButton
-	bu.PostUpdateButton = UF.PostUpdateButton
-	bu.PostProcessAuraData = UF.PostProcessAuraData
 
 	self.Debuffs = bu
 end
@@ -1626,7 +1667,14 @@ function UF:CreatePrediction(self)
 	self.Health.DamageAbsorb = absorbBar
 	self.Health.HealAbsorb = healAbsorbBar
 	self.Health.OverDamageAbsorbIndicator = overAbsorb
-	self.Health.OverHealAbsorbIndicator = overAbsorb
+	self.Health.OverHealAbsorbIndicator = overHealAbsorb
+end
+
+function UF.CreateAuraButton(element, button, isDebuff)
+	UF.PostCreateButton(element, button)
+	button.__isDebuff = isDebuff
+	button.__owner = element
+	element.__buttons[button] = true
 end
 
 function UF.PostUpdateAddPower(element, cur, max)

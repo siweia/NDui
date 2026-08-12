@@ -770,7 +770,7 @@ function UF:RefreshAllPlates()
 end
 
 local DisabledElements = {
-	"Health", "Castbar", "HealthPrediction", "PvPClassificationIndicator", "ThreatIndicator"
+	"Health", "Castbar", "PvPClassificationIndicator", "ThreatIndicator"
 }
 
 function UF:UpdatePlateByType()

@@ -56,7 +56,7 @@ local function UpdateAuras(element, list, maxButtons, unit, filter)
 end
 
 local function Update(self, event, unit, isFullUpdate, updatedAuras)
-	if self.unit ~= unit then return end
+	if self.__unit ~= unit then return end
 
 	local element = self.RaidAuras
 	if element then
@@ -78,7 +78,7 @@ local function Path(self, ...)
 end
 
 local function ForceUpdate(element)
-	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
+	return Path(element.__owner, "ForceUpdate", element.__owner.__unit)
 end
 
 local function Enable(self)
@@ -97,7 +97,7 @@ end
 local function Disable(self)
 	local element = self.RaidAuras
 	if element then
-		wipe(element.list)
+		wipe(element.buffList)
 		wipe(element.debuffList)
 		self:UnregisterEvent("UNIT_AURA", Path)
 	end

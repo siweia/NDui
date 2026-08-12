@@ -108,7 +108,7 @@ end
 
 local function Update(self, event)
 	local element = self.EnemyRange
-	local unit = self.unit
+	local unit = self.__unit
 	local inRange
 
 	if unit and UnitCanAttack("player", unit) then

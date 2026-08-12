@@ -111,7 +111,7 @@ function UF:AuraButton_OnEnter()
 	if not self.index then return end
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
 	GameTooltip:ClearLines()
-	GameTooltip:SetUnitAura(self.__unit, self.index, self.filter)
+	GameTooltip:SetUnitAura(self.unit, self.index, self.filter)
 	GameTooltip:Show()
 end
 
