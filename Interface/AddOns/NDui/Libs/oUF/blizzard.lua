@@ -7,37 +7,11 @@ local MAX_BOSS_FRAMES = _G.MAX_BOSS_FRAMES or 5
 -- sourced from Blizzard_FrameXMLBase/Shared/Constants.lua
 local MEMBERS_PER_RAID_GROUP = _G.MEMBERS_PER_RAID_GROUP or 5
 
-local hookedFrames = {}
 local isArenaHooked = false
 local isBossHooked = false
 local isPartyHooked = false
 
-local hiddenParent = CreateFrame('Frame', nil, UIParent)
-hiddenParent:SetAllPoints()
-hiddenParent:Hide()
-
-local looseFrames = {}
-local watcher = CreateFrame('Frame')
-watcher:RegisterEvent('PLAYER_REGEN_ENABLED')
-watcher:SetScript('OnEvent', function()
-	for frame in next, looseFrames do
-		frame:SetParent(hiddenParent)
-	end
-
-	table.wipe(looseFrames)
-end)
-
-local function resetParent(self, parent)
-	if(parent ~= hiddenParent) then
-		if(InCombatLockdown() and self:IsProtected()) then
-			looseFrames[self] = true
-		else
-			self:SetParent(hiddenParent)
-		end
-	end
-end
-
-local function handleFrame(baseName, doNotReparent)
+local function handleFrame(baseName)
 	local frame
 	if(type(baseName) == 'string') then
 		frame = _G[baseName]
@@ -47,17 +21,7 @@ local function handleFrame(baseName, doNotReparent)
 
 	if(frame) then
 		frame:UnregisterAllEvents()
-		frame:Hide()
-
-		if(not doNotReparent) then
-			frame:SetParent(hiddenParent)
-
-			if(not hookedFrames[frame]) then
-				hooksecurefunc(frame, 'SetParent', resetParent)
-
-				hookedFrames[frame] = true
-			end
-		end
+		frame:SetRolesets('alwaysBlocked')
 
 		local health = frame.healthBar or frame.healthbar or frame.HealthBar or (frame.HealthBarsContainer and frame.HealthBarsContainer.healthBar)
 		if(health) then
@@ -128,12 +92,8 @@ function oUF:DisableBlizzard(unit)
 			-- future, watch it
 			handleFrame(BossTargetFrameContainer)
 
-			-- do not reparent frames controlled by containers, the vert/horiz
-			-- layout code will go insane because it won't be able to calculate
-			-- the size properly, 0 or negative sizes in turn will break the
-			-- layout manager, fun...
 			for i = 1, MAX_BOSS_FRAMES do
-				handleFrame('Boss' .. i .. 'TargetFrame', true)
+				handleFrame('Boss' .. i .. 'TargetFrame')
 			end
 		end
 	elseif(unit:match('party%d?$')) then
@@ -143,7 +103,7 @@ function oUF:DisableBlizzard(unit)
 			handleFrame(PartyFrame)
 
 			for frame in PartyFrame.PartyMemberFramePool:EnumerateActive() do
-				handleFrame(frame, true)
+				handleFrame(frame)
 			end
 
 			for i = 1, MEMBERS_PER_RAID_GROUP do
@@ -157,18 +117,18 @@ function oUF:DisableBlizzard(unit)
 			handleFrame(CompactArenaFrame)
 
 			for _, frame in next, CompactArenaFrame.memberUnitFrames do
-				handleFrame(frame, true)
+				handleFrame(frame)
 			end
 
 			-- old arena frames, they're still used for flag carriers etc in battlegrounds
 			handleFrame(ArenaEnemyMatchFramesContainer)
 
 			for _, frame in next, ArenaEnemyMatchFramesContainer.UnitFrames do
-				handleFrame(frame, true)
+				handleFrame(frame)
 			end
 		end
 	elseif(unit:match('nameplate%d?%d?%d?$')) then
 		local frame = C_NamePlate.GetNamePlateForUnit(unit)
-		handleFrame(frame.UnitFrame, true)
+		handleFrame(frame.UnitFrame)
 	end
 end

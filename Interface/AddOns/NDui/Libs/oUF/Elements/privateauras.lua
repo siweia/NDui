@@ -126,7 +126,7 @@ local function Update(self)
 		end
 
 		table.insert(element.anchors, C_UnitAuras.AddPrivateAuraAnchor({
-			unitToken = element.__owner.unit,
+			unitToken = element.__owner.__unit,
 			auraIndex = index,
 			parent = aura,
 			isContainer = false,

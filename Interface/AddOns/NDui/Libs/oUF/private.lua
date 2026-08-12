@@ -31,9 +31,7 @@ function Private.unitExists(unit)
 end
 
 function Private.unitIsUnit(unit1, unit2)
-	-- TODO: use C_Secrets.CanCompareUnitTokens instead of pcall
-	local isOk, isUnit = pcall(UnitIsUnit, unit1, unit2)
-	return isOk and isUnit
+	return C_Secrets.CanCompareUnitTokens(unit1, unit2) and UnitIsUnit(unit1, unit2)
 end
 
 local validator = CreateFrame('Frame')

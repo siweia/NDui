@@ -35,7 +35,7 @@ local Private = oUF.Private
 local unitExists = Private.unitExists
 
 local function Update(self, event, unit)
-	if(unit ~= self.unit) then return end
+	if(unit ~= self.__unit) then return end
 
 	local element = self.ThreatIndicator
 	--[[ Callback: ThreatIndicator:PreUpdate(unit)
@@ -47,7 +47,7 @@ local function Update(self, event, unit)
 	if(element.PreUpdate) then element:PreUpdate(unit) end
 
 	local feedbackUnit = element.feedbackUnit
-	unit = unit or self.unit
+	unit = unit or self.__unit
 
 	local status
 	-- BUG: Non-existent '*target' or '*pet' units cause UnitThreatSituation() errors
@@ -97,7 +97,7 @@ local function Path(self, ...)
 end
 
 local function ForceUpdate(element)
-	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+	return Path(element.__owner, 'ForceUpdate', element.__owner.__unit)
 end
 
 local function Enable(self)

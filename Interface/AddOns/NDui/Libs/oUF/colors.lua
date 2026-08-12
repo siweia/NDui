@@ -145,14 +145,10 @@ if(not customClassColors()) then
 	end)
 end
 
--- copy of DEBUFF_DISPLAY_INFO from AuraUtil
-colors.dispel[oUF.Enum.DispelType.None] = _G.DEBUFF_TYPE_NONE_COLOR
-colors.dispel[oUF.Enum.DispelType.Magic] = _G.DEBUFF_TYPE_MAGIC_COLOR
-colors.dispel[oUF.Enum.DispelType.Curse] = _G.DEBUFF_TYPE_CURSE_COLOR
-colors.dispel[oUF.Enum.DispelType.Disease] = _G.DEBUFF_TYPE_DISEASE_COLOR
-colors.dispel[oUF.Enum.DispelType.Poison] = _G.DEBUFF_TYPE_POISON_COLOR
-colors.dispel[oUF.Enum.DispelType.Bleed] = _G.DEBUFF_TYPE_BLEED_COLOR
-colors.dispel[oUF.Enum.DispelType.Enrage] = oUF:CreateColor(243, 95, 245)
+for dispelName, dispelInfo in next, AuraUtil.GetDebuffDisplayInfoTable() do
+	colors.dispel[dispelName] = oUF:CreateColor(dispelInfo.color:GetRGB())
+end
+colors.dispel.Enrage = oUF:CreateColor(243, 95, 245) -- no default color by Blizzard
 
 for eclass, color in next, _G.FACTION_BAR_COLORS do
 	colors.reaction[eclass] = oUF:CreateColor(color.r, color.g, color.b)

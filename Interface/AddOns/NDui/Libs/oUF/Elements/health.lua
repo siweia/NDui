@@ -151,10 +151,12 @@ local _, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
 
+local STATE = {}
+
 local unitSelectionType = Private.unitSelectionType
 
 local function UpdateColor(self, event, unit)
-	if(not unit or self.unit ~= unit) then return end
+	if(not unit or self.__unit ~= unit) then return end
 	local element = self.Health
 
 	local color
@@ -168,7 +170,13 @@ local function UpdateColor(self, event, unit)
 		or (element.colorClassNPC and not (UnitIsPlayer(unit) or UnitInPartyIsAI(unit)))
 		or (element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
 		local _, class = UnitClass(unit)
-		color = self.colors.class[class]
+		if(issecretvalue(class)) then
+			-- BUG: we can't use custom colors if the class is secret
+			-- https://github.com/oUF-wow/oUF/issues/873
+			color = C_ClassColor.GetClassColor(class)
+		else
+			color = self.colors.class[class]
+		end
 	elseif(element.colorSelection and unitSelectionType(unit, element.considerSelectionInCombatHostile)) then
 		color = self.colors.selection[unitSelectionType(unit, element.considerSelectionInCombatHostile)]
 	elseif(element.colorReaction and UnitReaction(unit, 'player')) then
@@ -207,7 +215,7 @@ local function ColorPath(self, ...)
 end
 
 local function Update(self, event, unit)
-	if(not unit or self.unit ~= unit) then return end
+	if(not unit or self.__unit ~= unit) then return end
 	local element = self.Health
 
 	--[[ Callback: Health:PreUpdate(unit)
@@ -231,9 +239,6 @@ local function Update(self, event, unit)
 	else
 		element:SetValue(max, element.smoothing)
 	end
-
-	element.cur = cur -- DEPRECATED: use element.values
-	element.max = max -- DEPRECATED: use element.values
 
 	if(element.HealingAll or element.HealingPlayer or element.HealingOther or element.OverHealIndicator) then
 		local allHeal, playerHeal, otherHeal, healClamped = element.values:GetIncomingHeals()
@@ -299,35 +304,36 @@ end
 local function UpdatePredictionSize(self, event, unit)
 	local element = self.Health
 
+	local method = STATE[element].horizontal and 'SetWidth' or 'SetHeight'
 	if(element.HealingAll) then
-		element.HealingAll[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.HealingAll, element.__size)
+		element.HealingAll[method](element.HealingAll, STATE[element].size)
 	end
 
 	if(element.HealingPlayer) then
-		element.HealingPlayer[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.HealingPlayer, element.__size)
+		element.HealingPlayer[method](element.HealingPlayer, STATE[element].size)
 	end
 
 	if(element.HealingOther) then
-		element.HealingOther[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.HealingOther, element.__size)
+		element.HealingOther[method](element.HealingOther, STATE[element].size)
 	end
 
 	if(element.DamageAbsorb) then
-		element.DamageAbsorb[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.DamageAbsorb, element.__size)
+		element.DamageAbsorb[method](element.DamageAbsorb, STATE[element].size)
 	end
 
 	if(element.HealAbsorb) then
-		element.HealAbsorb[element.__isHoriz and 'SetWidth' or 'SetHeight'](element.HealAbsorb, element.__size)
+		element.HealAbsorb[method](element.HealAbsorb, STATE[element].size)
 	end
 end
 
 local function shouldUpdatePredictionSize(self)
 	local element = self.Health
 
-	local isHoriz = element:GetOrientation() == 'HORIZONTAL'
-	local newSize = element[isHoriz and 'GetWidth' or 'GetHeight'](element)
-	if(isHoriz ~= element.__isHoriz or newSize ~= element.__size) then
-		element.__isHoriz = isHoriz
-		element.__size = newSize
+	local horizontal = element:GetOrientation() == 'HORIZONTAL'
+	local size = horizontal and element:GetWidth() or element:GetHeight()
+	if(horizontal ~= STATE[element].horizontal or size ~= STATE[element].size) then
+		STATE[element].horizontal = horizontal
+		STATE[element].size = size
 
 		return true
 	end
@@ -361,23 +367,10 @@ local function Path(self, ...)
 end
 
 local function ForceUpdate(element)
-	element.__isHoriz = nil
-	element.__size = nil
+	STATE[element].horizontal = nil
+	STATE[element].size = nil
 
-	Path(element.__owner, 'ForceUpdate', element.__owner.unit)
-end
-
---[[ Health:SetColorDisconnected(state, isForced)
-Used to toggle coloring if the unit is offline.
-
-* self     - the Health element
-* state    - the desired state (boolean)
-* isForced - forces the event update even if the state wasn't changed (boolean)
---]]
-local function SetColorDisconnected(element, state, isForced) -- DEPRECATED
-	if(element.colorDisconnected ~= state or isForced) then
-		element.colorDisconnected = state
-	end
+	Path(element.__owner, 'ForceUpdate', element.__owner.__unit)
 end
 
 --[[ Health:SetColorSelection(state, isForced)
@@ -457,11 +450,12 @@ local function Enable(self, unit)
 	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
-		element.SetColorDisconnected = SetColorDisconnected
 		element.SetColorSelection = SetColorSelection
 		element.SetColorTapping = SetColorTapping
 		element.SetColorReaction = SetColorReaction
 		element.SetColorThreat = SetColorThreat
+
+		STATE[element] = {}
 
 		if(element.values) then
 			element.values:ResetPredictedValues()
