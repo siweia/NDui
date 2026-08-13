@@ -784,8 +784,6 @@ function UF:CreateCastBar(self)
 	cb.PostCastInterrupted = UF.Castbar_UpdateInterrupted
 	cb.CreatePip = UF.CreatePip
 	cb.PostUpdatePips = UF.PostUpdatePips
-	cb.CustomTimeText = UF.CustomTimeText
-	cb.CustomDelayText = UF.CustomTimeText
 
 	self.Castbar = cb
 end
@@ -865,6 +863,9 @@ end
 
 function UF.PostCreateButton(element, button)
 	local fontSize = element.fontSize or element.size*.4
+	if button.Count then
+		button.Count:SetFont(DB.Font[1], fontSize, DB.Font[3])
+	end
 	if button.Cooldown then
 		button.Cooldown:SetReverse(true)
 		button.CooldownText = button.Cooldown:GetRegions()
@@ -892,7 +893,7 @@ function UF.PostCreateButton(element, button)
 	end
 
 	if element.__owner.mystyle == "nameplate" then
-		hooksecurefunc(button, "SetSize", UF.UpdateIconTexCoord)
+		UF.UpdateIconTexCoord(button, element.size, element.size * element.sizeRatio)
 		if button.Count then
 			button.Count:ClearAllPoints()
 			button.Count:SetPoint("RIGHT", button, "BOTTOMRIGHT", 5, 0)
@@ -914,12 +915,6 @@ function UF.PostUpdateButton(element, button, unit, data)
 	if data.duration then button.iconbg:Show() end
 
 	local style = element.__owner.mystyle
-	if style == "nameplate" then
-		button:SetSize(element.size, element.size * element.sizeRatio)
-	else
-		button:SetSize(element.size, element.size)
-	end
-
 	if element.desaturateDebuff and data.isHarmfulAura and filteredStyle[style] and not data.isPlayerAura then
 		button.Icon:SetDesaturated(true)
 	else
@@ -1024,10 +1019,11 @@ function UF.RaidFrame_FilterAura(element, _, data)
 end
 
 function UF:UpdateAuraContainer(parent, element, maxAuras)
+	if parent.mystyle == "nameplate" then return end
+
 	local fontSize = element.fontSize or element.size*.4
 	local cooldownNumber = parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"] or false
 	for button in pairs(element.__buttons or {}) do
-		button:SetSize(element.size, element.size)
 		if button.Count then B.SetFontSize(button.Count, fontSize) end
 		if button.CooldownText then B.SetFontSize(button.CooldownText, fontSize) end
 		if button.Cooldown then
@@ -1165,6 +1161,8 @@ end
 local function AddAuraGroup(element, name, filter, count, index)
 	element.__groups[name] = element:AddGroup(filter, {
 		maxFrameCount = count,
+		size = element.size,
+		height = element.__owner.mystyle == "nameplate" and element.size * element.sizeRatio or nil,
 		layout = AuraGroupLayout(element, index),
 	})
 end

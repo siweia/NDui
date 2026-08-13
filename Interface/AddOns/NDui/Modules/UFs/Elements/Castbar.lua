@@ -2,9 +2,9 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
-function UF:UpdateCastbarGlow(unit)
-	if self.barGlow and self.spellID then
-		local isImportant = C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(self.spellID)
+function UF:UpdateCastbarGlow(spellID)
+	if self.barGlow then
+		local isImportant = spellID and C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(spellID)
 		self.barGlow:SetAlphaFromBoolean(isImportant, .7, 0)
 	end
 end
@@ -43,27 +43,28 @@ function UF:UpdateCastBarColors()
 	UF.NotInterruptColor:SetRGB(notInterruptColor.r, notInterruptColor.g, notInterruptColor.b)
 end
 
-function UF:UpdateCastBarColor(unit)
+function UF:UpdateCastBarColor(unit, spellID, notInterruptible)
 	if unit == "player" then
 		self:SetStatusBarColor(UF.OwnCastColor:GetRGB())
 	elseif not UnitIsUnit(unit, "player") then
-		self:GetStatusBarTexture():SetVertexColorFromBoolean(self.notInterruptible, UF.NotInterruptColor, UF.CastingColor)
+		self:GetStatusBarTexture():SetVertexColorFromBoolean(notInterruptible, UF.NotInterruptColor, UF.CastingColor)
 	else
 		self:SetStatusBarColor(UF.CastingColor:GetRGB())
 	end
 	UF.UpdateSpellTarget(self, unit)
-	UF.UpdateCastbarGlow(self, unit)
+	UF.UpdateCastbarGlow(self, spellID)
 end
 
 function UF:Castbar_FailedColor(unit)
 	self:SetStatusBarColor(1, .1, 0)
 end
 
-function UF:Castbar_UpdateInterrupted(unit, interruptedBy)
+function UF:Castbar_UpdateInterrupted(unit, spellID, interruptedBy)
 	self:SetStatusBarColor(1, .1, 0)
 
-	if C.db["Nameplate"]["Interruptor"] and self.spellTarget and interruptedBy ~= nil then
+	if C.db["Nameplate"]["Interruptor"] and self.spellTarget and interruptedBy and B:NotSecretValue(interruptedBy) then
 		local sourceName = UnitNameFromGUID(interruptedBy)
+		if not sourceName or B:IsSecretValue(sourceName) then return end
 		local _, class = GetPlayerInfoByGUID(interruptedBy)
 		class = class or "PRIEST"
 		local classColor = C_ClassColor.GetClassColor(class)
@@ -120,14 +121,3 @@ function UF:PostUpdatePips(numStages)
 	end
 end
 
-function UF:CustomTimeText(durationObject)
-	if durationObject then
-		local duration = durationObject:GetRemainingDuration()
-		local total = durationObject:GetTotalDuration()
-		local delayText = ""
-		if self.delay ~= 0 then
-			delayText = format("|cffff0000%s%.2f|r", self.channeling and '-' or '+', self.delay)
-		end
-		self.Time:SetFormattedText('%.1f%s | %.1f', duration, delayText, total)
-	end
-end
