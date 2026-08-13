@@ -3,8 +3,8 @@ local B, C, L, DB = unpack(ns)
 
 local function ReskinFont(font, size)
 	if not font then
-	--	if DB.isDeveloper then print("UNKNOWN FONT.") end
-	--	return
+		if DB.isDeveloper then print("UNKNOWN FONT.") end
+		return
 	end
 	local oldSize = select(2, font:GetFont())
 	size = size or oldSize

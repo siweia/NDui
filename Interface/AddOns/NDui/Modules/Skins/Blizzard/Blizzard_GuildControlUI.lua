@@ -1,9 +1,12 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function updateGuildRanks()
-	for i = 1, GuildControlGetNumRanks() do
-		local rank = _G["GuildControlUIRankOrderFrameRank"..i]
+local function updateGuildRanks(orderFrame)
+	local prefix = orderFrame:GetName().."Rank"
+	for i = 1, MAX_GUILDRANKS do
+		local rank = _G[prefix..i]
+		if not rank then break end
+
 		if not rank.styled then
 			rank.upButton.icon:Hide()
 			rank.downButton.icon:Hide()
@@ -39,8 +42,11 @@ C.themes["Blizzard_GuildControlUI"] = function()
 	GuildControlUIHbar:Hide()
 
 	-- Guild ranks
-	B:RegisterEvent("GUILD_RANKS_UPDATE", updateGuildRanks)
 	hooksecurefunc("GuildControlUI_RankOrder_Update", updateGuildRanks)
+	if GuildControlUI.selectedTab == 1 then
+		hooksecurefunc(GuildControlUI, "rankUpdate", updateGuildRanks)
+	end
+	updateGuildRanks(GuildControlUIRankOrderFrame)
 
 	-- Guild tabs
 	local checkboxes = {"viewCB", "depositCB"}
