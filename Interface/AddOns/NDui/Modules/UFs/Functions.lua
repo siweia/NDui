@@ -55,7 +55,12 @@ end
 
 local function UF_OnEnter(self)
 	if not self.disableTooltip then
-		UnitFrame_OnEnter(self)
+		local unit = self.__unit
+		if unit then
+			-- Blizzard's unit tooltip helpers still read the public unit field.
+			self.unit = unit
+			UnitFrame_OnEnter(self)
+		end
 	end
 	self.Highlight:Show()
 end
