@@ -645,7 +645,7 @@ function UF:UpdateNameplateAuras()
 		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
 	end
 	element.numTotal = C.db["Nameplate"]["maxAuras"]
-	element.maxCols = C.db["Nameplate"]["AurasPerRow"]
+	element.size = C.db["Nameplate"]["AuraSize"]
 	element.fontSize = C.db["Nameplate"]["FontSize"]
 	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 	element.showStealableBuffs = true
@@ -659,7 +659,7 @@ end
 function UF:UpdateNameplateDebuffs()
 	local element = self.Debuffs
 	element.numDebuffs = not C.db["Nameplate"]["PlateCC"] and 0 or C.db["Nameplate"]["NumCC"]
-	element.maxCols = C.db["Nameplate"]["CCPerRow"]
+	element.size = C.db["Nameplate"]["CCSize"]
 	element.fontSize = C.db["Nameplate"]["CCFontSize"]
 	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
 	element.desaturateDebuff = false
@@ -965,7 +965,7 @@ function UF:ResizePlayerPlate()
 		if bars then
 			plate.ClassPowerBar:SetSize(barWidth, barHeight)
 			plate.ClassPowerBar.width = barWidth
-			local max = bars.__max
+			local max = bars.__max or #bars
 			for i = 1, max do
 				bars[i]:SetHeight(barHeight)
 				bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)
@@ -1166,7 +1166,7 @@ function UF:ResizeTargetPower()
 	if bars then
 		plate.ClassPowerBar:SetSize(barWidth, barHeight)
 		plate.ClassPowerBar.width = barWidth
-		local max = bars.__max
+		local max = bars.__max or #bars
 		for i = 1, max do
 			bars[i]:SetHeight(barHeight)
 			bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)

@@ -1839,12 +1839,12 @@ function G:SetupUFAuras(parent)
 	local parent, offset = scroll.child, -10
 
 	local defaultData = {
-		["Player"] = {1, 1, 9, 20, 20},
-		["Target"] = {2, 2, 9, 20, 20},
-		["Focus"] = {3, 2, 9, 20, 20},
-		["ToT"] = {1, 1, 5, 6, 6},
-		["Pet"] = {1, 1, 5, 6, 6},
-		["Boss"] = {2, 3, 6, 6, 6},
+		["Player"] = {1, 1, 22, 20, 20},
+		["Target"] = {2, 2, 22, 20, 20},
+		["Focus"] = {3, 2, 16, 20, 20},
+		["ToT"] = {1, 1, 12, 6, 6},
+		["Pet"] = {1, 1, 12, 6, 6},
+		["Boss"] = {2, 3, 16, 6, 6},
 	}
 	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"], L["ShowCancelable"]}
 	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"], L["ShowDispell"]}
@@ -1867,10 +1867,10 @@ function G:SetupUFAuras(parent)
 		createOptionSlider(parent, L["MaxBuffs"], 1, 40, default[4], offset-300, value.."NumBuff", func)
 		createOptionSlider(parent, L["MaxDebuffs"], 1, 40, default[5], offset-370, value.."NumDebuff", func)
 		if isBoss then
-			createOptionSlider(parent, "Buff "..L["IconsPerRow"], 5, 20, default[3], offset-440, value.."BuffPerRow", func)
-			createOptionSlider(parent, "Debuff "..L["IconsPerRow"], 5, 20, default[3], offset-510, value.."DebuffPerRow", func)
+			createOptionSlider(parent, "Buff "..L["Auras Size"], 5, 50, default[3], offset-440, value.."BuffSize", func)
+			createOptionSlider(parent, "Debuff "..L["Auras Size"], 5, 50, default[3], offset-510, value.."DebuffSize", func)
 		else
-			createOptionSlider(parent, L["IconsPerRow"], 5, 20, default[3], offset-440, value.."AurasPerRow", func)
+			createOptionSlider(parent, L["Auras Size"], 5, 50, default[3], offset-440, value.."AuraSize", func)
 		end
 	end
 
@@ -2085,7 +2085,7 @@ function G:SetupBuffFrame(parent)
 		createOptionCheck(parent, offset-35, L["ReverseGrow"], "Auras", "Reverse"..value, func)
 		createOptionSlider(parent, L["Auras Size"], 24, 50, defaultSize, offset-100, value.."Size", func, "Auras")
 		if value ~= "Private" then -- no func for private auras
-			createOptionSlider(parent, L["IconsPerRow"], 10, 40, defaultPerRow, offset-170, value.."sPerRow", func, "Auras")
+			createOptionSlider(parent, L["Auras Size"], 10, 40, defaultPerRow, offset-170, value.."sPerRow", func, "Auras")
 		end
 	end
 
@@ -2737,12 +2737,12 @@ function G:SetupRaidAuras(parent)
 
 	createOptionTitle(parent, "Buffs", offset-160)
 	createOptionDropdown(parent, L["RaidBuffType"], offset-210, {DISABLE, L["Blizzard"], L["Defensive"], L["CombinedFilters"]}, nil, "UFs", "RaidBuffType", 2, updateRaidAuras)
-	createOptionSlider(parent, L["RaidBuffPerRow"], 1, 20, 7, offset-280, "RaidBuffPerRow", updateRaidAuras, "UFs")
+	createOptionSlider(parent, L["RaidBuffPerRow"], 1, 20, 7, offset-280, "RaidBuffSize", updateRaidAuras, "UFs")
 	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-360, "RaidNumBuff", updateRaidAuras, "UFs")
 
 	createOptionTitle(parent, "Debuffs", offset-420)
 	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, {DISABLE, L["Blizzard"], L["ShowDispell"], L["CombinedFilters"], L["ShowAll"]}, nil, "UFs", "RaidDebuffType", 2, updateRaidAuras)
-	createOptionSlider(parent, L["RaidDebuffPerRow"], 1, 20, 7, offset-540, "RaidDebuffPerRow", updateRaidAuras, "UFs")
+	createOptionSlider(parent, L["RaidDebuffPerRow"], 1, 20, 7, offset-540, "RaidDebuffSize", updateRaidAuras, "UFs")
 	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-600, "RaidNumDebuff", updateRaidAuras, "UFs")
 end
 
@@ -2777,7 +2777,7 @@ function G:SetupNameplateAuras(parent)
 	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-65, "FontSize", UF.RefreshAllPlates, "Nameplate")
 	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-135, "SizeRatio", UF.RefreshAllPlates, "Nameplate", .1)
 	createOptionSlider(parent, L["Max Auras"], 1, 20, 5, offset-205, "maxAuras", UF.RefreshAllPlates, "Nameplate")
-	createOptionSlider(parent, L["IconsPerRow"], 1, 20, 6, offset-275, "AurasPerRow", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["Auras Size"], 1, 20, 6, offset-275, "AuraSize", UF.RefreshAllPlates, "Nameplate")
 end
 
 function G:SetupNameplateCC(parent)
@@ -2794,7 +2794,7 @@ function G:SetupNameplateCC(parent)
 	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-30, "CCFontSize", UF.RefreshAllPlates, "Nameplate")
 	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-100, "CCSizeRatio", UF.RefreshAllPlates, "Nameplate", .1)
 	createOptionSlider(parent, L["Max Auras"], 1, 20, 10, offset-170, "NumCC", UF.RefreshAllPlates, "Nameplate")
-	createOptionSlider(parent, L["IconsPerRow"], 1, 20, 6, offset-240, "CCPerRow", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["Auras Size"], 1, 20, 6, offset-240, "CCSize", UF.RefreshAllPlates, "Nameplate")
 end
 
 function G:SetupNameplateMobColors(parent)
