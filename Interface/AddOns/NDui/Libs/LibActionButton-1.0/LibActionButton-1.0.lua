@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-NDui"
-local MINOR_VERSION = 153
+local MINOR_VERSION = 155
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -689,6 +689,14 @@ end
 function Generic:UpdateAlpha()
 	UpdateCooldown(self)
 end
+
+function Generic:OnActionBarSlotChanged()
+	if self._state_type == "action" then
+		ClearNewActionHighlight(self._state_action, true)
+	end
+	Update(self)
+end
+
 
 -----------------------------------------------------------
 --- flyouts
@@ -1370,8 +1378,7 @@ function OnEvent(frame, event, arg1, ...)
 	elseif event == "ACTIONBAR_SLOT_CHANGED" then
 		for button in next, ButtonRegistry do
 			if button._state_type == "action" and (arg1 == 0 or arg1 == tonumber(button._state_action)) then
-				ClearNewActionHighlight(button._state_action, true, false)
-				Update(button)
+				button:OnActionBarSlotChanged()
 			end
 		end
 	elseif event == "PLAYER_ENTERING_WORLD" or event == "UPDATE_VEHICLE_ACTIONBAR" then
@@ -2688,7 +2695,7 @@ Action.GetSpellId               = function(self)
 		elseif subType == "item" then
 			return nil -- item macros seems to return bogus values we can't support
 		else
-			return (GetMacroSpell(id))
+			return (GetMacroSpell(id)) -- classic does not use the subType, so keep this as a fallback
 		end
 	end
 end
