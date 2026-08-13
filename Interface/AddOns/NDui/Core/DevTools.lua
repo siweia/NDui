@@ -40,8 +40,11 @@ SLASH_RELOADUI1 = "/rl"
 SlashCmdList["NDUI_ENUMTIP"] = function()
 	local enumf = EnumerateFrames()
 	while enumf do
-		if (enumf:IsObjectType("GameTooltip") or strfind((enumf:GetName() or ""):lower(), "tip")) and enumf:IsVisible() and enumf:GetPoint() then
-			print(enumf:GetName())
+		local name = enumf:GetName()
+		local isTooltip = enumf:IsObjectType("GameTooltip")
+			or (type(name) == "string" and B:NotSecretValue(name) and strfind(name, "[Tt][Ii][Pp]"))
+		if isTooltip and enumf:IsVisible() and enumf:GetPoint() then
+			print(name)
 		end
 		enumf = EnumerateFrames(enumf)
 	end
