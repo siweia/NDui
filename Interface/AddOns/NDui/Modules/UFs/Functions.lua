@@ -1303,7 +1303,8 @@ function UF:CreateDebuffs(self)
 end
 
 -- Class Powers
-function UF.PostUpdateClassPower(element, cur, max, diff, _, chargedPowerPoints)
+function UF.PostUpdateClassPower(element, cur, max, _, diff, _, chargedPowerPoints)
+	element.__max = max
 	if not cur or cur == 0 then
 		for i = 1, 10 do
 			element[i].bg:Hide()

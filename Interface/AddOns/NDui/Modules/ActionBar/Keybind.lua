@@ -9,7 +9,7 @@ local GetSpellBookItemName = C_SpellBook and C_SpellBook.GetSpellBookItemName or
 local GetMacroInfo = GetMacroInfo
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown
 local GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings = GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings
-local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
+local MAX_ACCOUNT_MACROS = (Constants.MacroConsts and Constants.MacroConsts.MAX_ACCOUNT_MACROS) or _G.MAX_ACCOUNT_MACROS
 local NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION = NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION
 
 -- Button types

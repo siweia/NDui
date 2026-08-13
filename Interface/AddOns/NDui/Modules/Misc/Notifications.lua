@@ -3,10 +3,10 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local format, gsub, strsplit, strfind = string.format, string.gsub, string.split, string.find
+local bit_band, bit_bor = bit.band, bit.bor
 local pairs, wipe = pairs, wipe
 local GetInstanceInfo, PlaySound, print = GetInstanceInfo, PlaySound, print
 local IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsInRaid, IsInGroup, IsInInstance, IsInGuild
-local UnitInRaid, UnitInParty = UnitInRaid, UnitInParty
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
 local GetSpellLink = C_Spell.GetSpellLink
 local GetSpellName = C_Spell.GetSpellName
@@ -18,6 +18,7 @@ local C_VignetteInfo_GetVignettePosition = C_VignetteInfo.GetVignettePosition
 local C_Texture_GetAtlasInfo = C_Texture.GetAtlasInfo
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
+local groupAffiliationMask = bit_bor(Enum.CombatLogObject.AffiliationParty, Enum.CombatLogObject.AffiliationRaid)
 
 local function IsRandomGroup()
 	return IsPartyLFG() or C_PartyInfo.IsPartyWalkIn()
@@ -181,7 +182,8 @@ function M:InterruptAlert_Update(...)
 	local _, eventType, _, sourceGUID, sourceName, sourceFlags, _, _, destName, _, _, spellID, _, _, extraskillID, _, _, auraType = ...
 	if not sourceGUID or sourceName == destName then return end
 
-	if UnitInRaid(sourceName) or UnitInParty(sourceName) or M:IsAllyPet(sourceFlags) then
+	local isGroupPlayer = bit_band(sourceFlags, groupAffiliationMask) > 0 and bit_band(sourceFlags, Enum.CombatLogObject.TypePlayer) > 0
+	if isGroupPlayer or M:IsAllyPet(sourceFlags) then
 		local infoText = infoType[eventType]
 		if infoText then
 			local sourceSpellID, destSpellID

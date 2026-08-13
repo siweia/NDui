@@ -40,7 +40,7 @@ local function fixAnim(frame)
 		frame.Arrows.ArrowsAnim:HookScript("OnFinished", fixParentbg)
 	end
 
-	frame.hookded = true
+	frame.hooked = true
 end
 
 tinsert(C.defaultThemes, function()

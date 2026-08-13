@@ -44,6 +44,7 @@ local frames = {
 	--["TradeFrame"] = false,
 	["TutorialFrame"] = false,
 	["SettingsPanel"] = false,
+	["SocialUIFrame"] = false,
 }
 
 -- Frame Existing Check

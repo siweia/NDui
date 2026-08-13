@@ -3,13 +3,34 @@ local B, C, L, DB = unpack(ns)
 
 local function ReskinFont(font, size)
 	if not font then
-		if DB.isDeveloper then print("UNKNOWN FONT.") end
-		return
+	--	if DB.isDeveloper then print("UNKNOWN FONT.") end
+	--	return
 	end
 	local oldSize = select(2, font:GetFont())
 	size = size or oldSize
 	B.SetFontSize(font, size*C.db["Skins"]["FontScale"])
 	font:SetShadowColor(0, 0, 0, 0)
+end
+
+local function ReskinRaidWarningFont(font)
+	if font.__nduiFontStyled then return end
+
+	local size = select(2, font:GetFont())
+	B.SetFontSize(font, size)
+	font:SetTextScale(C.db["Skins"]["FontScale"])
+	font:SetShadowColor(0, 0, 0, 0)
+	font.__nduiFontStyled = true
+end
+
+local function ReskinRaidWarningFonts(frame)
+	for font in frame.fontStringPool:EnumerateActive() do
+		ReskinRaidWarningFont(font)
+	end
+end
+
+local function SetupRaidWarningFonts(frame)
+	ReskinRaidWarningFonts(frame)
+	hooksecurefunc(frame, "AcquireString", ReskinRaidWarningFonts)
 end
 
 tinsert(C.defaultThemes, function()
@@ -22,12 +43,9 @@ tinsert(C.defaultThemes, function()
 
 	if not C.db["Skins"]["FontOutline"] then return end
 
-	ReskinFont(RaidWarningFrame.slot1)
-	ReskinFont(RaidWarningFrame.slot2)
-	if not DB.isNewPatch then
-	ReskinFont(RaidBossEmoteFrame.slot1)
-	ReskinFont(RaidBossEmoteFrame.slot2)
-	end
+	SetupRaidWarningFonts(RaidWarningFrame)
+	SetupRaidWarningFonts(CinematicFrame.BossEmoteFrame)
+
 	ReskinFont(AchievementFont_Small)
 	ReskinFont(AchievementCriteriaFont)
 	ReskinFont(AchievementDescriptionFont)

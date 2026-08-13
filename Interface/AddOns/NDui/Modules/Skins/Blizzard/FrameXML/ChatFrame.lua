@@ -112,10 +112,12 @@ tinsert(C.defaultThemes, function()
 
 	-- VoiceActivityManager
 	hooksecurefunc(VoiceActivityManager, "LinkFrameNotificationAndGuid", function(_, _, notification, guid)
+		if C_ChatInfo.InChatMessagingLockdown() then return end
+
 		local class = select(2, GetPlayerInfoByGUID(guid))
 		if class then
 			local color = DB.ClassColors[class]
-			if notification.Name then
+			if color and notification.Name then
 				notification.Name:SetTextColor(color.r, color.g, color.b)
 			end
 		end

@@ -3,9 +3,12 @@ local B, C, L, DB = unpack(ns)
 local TT = B:GetModule("Tooltip")
 
 local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
+local canaccessallvalues = canaccessallvalues
 local GetUnitName = GetUnitName
 local IsPlayerSpell = IsPlayerSpell
 local C_MountJournal_GetMountFromSpell = C_MountJournal.GetMountFromSpell
+local ShouldUnitAuraIndexBeSecret = C_Secrets.ShouldUnitAuraIndexBeSecret
+local ShouldUnitAuraInstanceBeSecret = C_Secrets.ShouldUnitAuraInstanceBeSecret
 local BAGSLOT, BANK, UNKNOWN = BAGSLOT, BANK, UNKNOWN
 local LEARNT_STRING = "|cffff0000"..ALREADY_LEARNED.."|r"
 
@@ -105,17 +108,17 @@ function TT:SetupTooltipID()
 		end
 	end
 
-	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, ...)
-		if self:IsForbidden() then return end
-		local data = C_UnitAuras.GetAuraDataByIndex(...)
+	hooksecurefunc(GameTooltip, "SetUnitAura", function(self, unit, index, filter)
+		if self:IsForbidden() or not canaccessallvalues(unit, index, filter) or ShouldUnitAuraIndexBeSecret(unit, index, filter) then return end
+		local data = C_UnitAuras.GetAuraDataByIndex(unit, index, filter)
 		if not data then return end
 
 		HandleAuraData(self, data)
 	end)
 
-	local function UpdateAuraTip(self, ...)
-		if self:IsForbidden() then return end
-		local data = C_UnitAuras.GetAuraDataByAuraInstanceID(...)
+	local function UpdateAuraTip(self, unit, auraInstanceID)
+		if self:IsForbidden() or not canaccessallvalues(unit, auraInstanceID) or ShouldUnitAuraInstanceBeSecret(unit, auraInstanceID) then return end
+		local data = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
 		if not data then return end
 
 		HandleAuraData(self, data)

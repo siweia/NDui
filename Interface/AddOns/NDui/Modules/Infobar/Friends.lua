@@ -10,6 +10,7 @@ local C_Timer_After = C_Timer.After
 local C_FriendList_GetNumFriends = C_FriendList.GetNumFriends
 local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
+local C_FriendList_IsLegacyFriendSystemEnabled = C_FriendList.IsLegacyFriendSystemEnabled
 local FriendsFrame_GetFormattedCharacterName = FriendsFrame_GetFormattedCharacterName
 local BNGetNumFriends, GetQuestDifficultyColor = BNGetNumFriends, GetQuestDifficultyColor
 local HybridScrollFrame_GetOffset, HybridScrollFrame_Update = HybridScrollFrame_GetOffset, HybridScrollFrame_Update
@@ -526,8 +527,11 @@ function info:FriendsPanel_OnMouseWheel(delta)
 end
 
 function info:FriendsPanel_Refresh()
-	local numFriends = C_FriendList_GetNumFriends()
-	local onlineFriends = C_FriendList_GetNumOnlineFriends()
+	local numFriends, onlineFriends = 0, 0
+	if not C_FriendList_IsLegacyFriendSystemEnabled or C_FriendList_IsLegacyFriendSystemEnabled() then
+		numFriends = C_FriendList_GetNumFriends()
+		onlineFriends = C_FriendList_GetNumOnlineFriends()
+	end
 	local numBNet, onlineBNet = BNGetNumFriends()
 	local totalOnline = onlineFriends + onlineBNet
 	local totalFriends = numFriends + numBNet
@@ -547,6 +551,9 @@ info.eventList = {
 	"FRIENDLIST_UPDATE",
 	"PLAYER_ENTERING_WORLD",
 }
+if C_FriendList_IsLegacyFriendSystemEnabled then
+	tinsert(info.eventList, "LEGACY_FRIEND_SYSTEM_STATUS_UPDATED")
+end
 
 info.onEvent = function(self)
 	info:FriendsPanel_Refresh()

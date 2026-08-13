@@ -55,6 +55,15 @@ local function replaceIconString(self, text)
 	if count > 0 then self:SetFormattedText("%s", newText) end
 end
 
+local function reskinConcessionRewardText(frame)
+	local rewardText = frame.RewardsFrame.Text
+	if rewardText.__nduiIconHooked then return end
+
+	replaceIconString(rewardText)
+	hooksecurefunc(rewardText, "SetText", replaceIconString)
+	rewardText.__nduiIconHooked = true
+end
+
 local function reskinConfirmIcon(frame)
 	if frame.bg then return end
 	frame.bg = B.ReskinIcon(frame.Icon)
@@ -85,8 +94,9 @@ C.themes["Blizzard_WeeklyRewards"] = function()
 		local confirmFrame = self.confirmSelectionFrame
 		if confirmFrame then
 			if not confirmFrame.styled then
-				reskinConfirmIcon(confirmFrame.ItemFrame)
-				WeeklyRewardsFrameNameFrame:Hide()
+				local itemFrame = confirmFrame.ItemFrame
+				reskinConfirmIcon(itemFrame)
+				itemFrame.NameFrame:Hide()
 				confirmFrame.styled = true
 			end
 
@@ -99,9 +109,9 @@ C.themes["Blizzard_WeeklyRewards"] = function()
 		end
 	end)
 
-	local rewardText = WeeklyRewardsFrame.ConcessionFrame.RewardsFrame.Text
-	replaceIconString(rewardText)
-	hooksecurefunc(rewardText, "SetText", replaceIconString)
+	for _, concessionFrame in ipairs({WeeklyRewardsFrame.ConcessionsFrame.Rewards:GetChildren()}) do
+		reskinConcessionRewardText(concessionFrame)
+	end
 
 	local dialog = WeeklyRewardExpirationWarningDialog
 	if dialog then

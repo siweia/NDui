@@ -4,7 +4,7 @@ local B, C, L, DB = unpack(ns)
 C.themes["Blizzard_HousingDashboard"] = function()
 	B.ReskinPortraitFrame(HousingDashboardFrame)
 	B.Reskin(HousingDashboardFrame.HouseInfoContent.HouseFinderButton)
-	B.ReskinDropDown(HousingDashboardFrame.HouseInfoContent.HouseDropdown)
+	B.ReskinDropDown(HousingDashboardFrame.HouseDropdown.Dropdown)
 	B.ReskinCheck(HousingDashboardFrame.HouseInfoContent.ContentFrame.HouseUpgradeFrame.WatchFavorButton)
 	B.Reskin(HousingDashboardFrame.HouseInfoContent.DashboardNoHousesFrame.NoHouseButton)
 

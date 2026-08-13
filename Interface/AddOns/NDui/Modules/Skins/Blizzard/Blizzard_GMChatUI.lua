@@ -1,11 +1,13 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
--- /run LoadAddOn'Blizzard_GMChatUI' GMChatFrame:Show()
+-- /run C_AddOns.LoadAddOn'Blizzard_GMChatUI' GMChatFrame:Show()
 C.themes["Blizzard_GMChatUI"] = function()
 	local frame = _G["GMChatFrame"]
 	frame:SetClampRectInsets(0, 0, 0, 0)
 	B.StripTextures(frame)
+	B.ReskinTrimScroll(frame.ScrollBar)
+
 	local bg = B.SetBD(frame)
 	bg:SetPoint("BOTTOMRIGHT", C.mult, -5)
 
@@ -19,13 +21,13 @@ C.themes["Blizzard_GMChatUI"] = function()
 	eb:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -28, -32)
 
 	local bg = B.SetBD(eb)
-	bg:Hide()
-	hooksecurefunc("ChatEdit_DeactivateChat", function(editBox)
-		if editBox.isGM then bg:Hide() end
+	hooksecurefunc(ChatFrameUtil, "DeactivateChat", function(editBox)
+		if editBox == GMChatFrameEditBox then bg:Hide() end
 	end)
-	hooksecurefunc("ChatEdit_ActivateChat", function(editBox)
-		if editBox.isGM then bg:Show() end
+	hooksecurefunc(ChatFrameUtil, "ActivateChat", function(editBox)
+		if editBox == GMChatFrameEditBox then bg:Show() end
 	end)
+	bg:SetShown(ChatFrameUtil.GetActiveWindow() == GMChatFrameEditBox)
 
 	local lang = _G["GMChatFrameEditBoxLanguage"]
 	lang:GetRegions():SetAlpha(0)

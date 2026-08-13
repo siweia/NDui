@@ -17,6 +17,7 @@ local MailFrame, MailFrameTab_OnClick, SendMailNameEditBox = MailFrame, MailFram
 local ChatEdit_ChooseBoxForSend, ChatEdit_ActivateChat, ChatFrame_OpenChat, ChatFrame_GetMobileEmbeddedTexture = ChatEdit_ChooseBoxForSend, ChatEdit_ActivateChat, ChatFrame_OpenChat, ChatFrame_GetMobileEmbeddedTexture
 local GetNumGuildMembers, GetGuildInfo, GetGuildRosterInfo, IsInGuild = GetNumGuildMembers, GetGuildInfo, GetGuildRosterInfo, IsInGuild
 local GetQuestDifficultyColor, UnitInRaid, UnitInParty = GetQuestDifficultyColor, UnitInRaid, UnitInParty
+local ShouldUnitIdentityBeSecret = C_Secrets.ShouldUnitIdentityBeSecret
 local HybridScrollFrame_GetOffset, HybridScrollFrame_Update = HybridScrollFrame_GetOffset, HybridScrollFrame_Update
 local C_GuildInfo_GuildRoster = C_GuildInfo.GuildRoster
 local InviteToGroup = C_PartyInfo.InviteUnit
@@ -86,7 +87,11 @@ function info:GuildPanel_UpdateButton(button)
 	button.name:SetText(namecolor..playerName..status)
 
 	local zonecolor = DB.GreyColor
-	if UnitInRaid(name) or UnitInParty(name) then
+	local isGrouped = UnitInParty(name)
+	if not isGrouped and not ShouldUnitIdentityBeSecret(name) then
+		isGrouped = UnitInRaid(name)
+	end
+	if isGrouped then
 		zonecolor = DB.InfoColor
 	elseif GetAreaText() == zone then
 		zonecolor = "|cff4cff4c"
@@ -361,6 +366,6 @@ info.onMouseUp = function()
 
 	if not IsInGuild() then return end
 	infoFrame:Hide()
-	if not CommunitiesFrame then LoadAddOn("Blizzard_Communities") end
+	if not CommunitiesFrame then C_AddOns.LoadAddOn("Blizzard_Communities") end
 	if CommunitiesFrame then ToggleFrame(CommunitiesFrame) end
 end

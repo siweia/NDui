@@ -141,6 +141,42 @@ hooksecurefunc(FriendsListFrame.ScrollBox, "Update", function(self)
 	end
 end)
 
+if FriendsListSocialCardMixin then
+	local function getSocialFriendInfo(self)
+		local accountInfo = self.elementData and self.elementData.accountInfo
+		local gameAccountInfo = accountInfo and accountInfo.gameAccountInfo
+		if not gameAccountInfo or not gameAccountInfo.isOnline or gameAccountInfo.clientProgram ~= BNET_CLIENT_WOW then return end
+
+		return accountInfo, gameAccountInfo
+	end
+
+	hooksecurefunc(FriendsListSocialCardMixin, "RefreshFriendCharacterDataDisplayText", function(self)
+		local accountInfo, gameAccountInfo = getSocialFriendInfo(self)
+		if not accountInfo then return end
+
+		local class = gameAccountInfo.classFilename
+		if not class or class == "" then class = gameAccountInfo.className end
+		local name = FriendsListUtil.GetFormattedCharacterName(accountInfo)
+		if name and class then
+			self.Name:SetText(classColor(class)..name.."|r")
+		end
+		if gameAccountInfo.characterLevel then
+			local level = gameAccountInfo.characterLevel
+			self.Level:SetText(diffColor(level)..format(SOCIAL_UI_RECENT_ALLIES_CARD_LEVEL_DISPLAY_FORMAT, level).."|r")
+		end
+		if gameAccountInfo.className and class then
+			self.Class:SetText(classColor(class)..gameAccountInfo.className.."|r")
+		end
+	end)
+
+	hooksecurefunc(FriendsListSocialCardMixin, "RefreshLocationDisplayText", function(self)
+		local _, gameAccountInfo = getSocialFriendInfo(self)
+		if gameAccountInfo and gameAccountInfo.areaName == GetAreaText() then
+			self.Location:SetText(format("|cff00ff00%s|r", gameAccountInfo.areaName))
+		end
+	end)
+end
+
 -- Whoframe
 local columnTable = {
 	["zone"] = "",

@@ -45,11 +45,10 @@ local function updateButtons(frame)
 		B.StripTextures(header)
 
 		if header.Right then
-			B.StripTextures(header)
 			hooksecurefunc(header.Right, "SetAtlas", updateCollapse)
 			hooksecurefunc(header.HighlightRight, "SetAtlas", updateCollapse)
-			updateCollapse(header.Right)
-			updateCollapse(header.HighlightRight)
+			updateCollapse(header.Right, header.Right:GetAtlas())
+			updateCollapse(header.HighlightRight, header.HighlightRight:GetAtlas())
 			B.CreateBDFrame(header, .25):SetInside(nil, 2, 2)
 		end
 		header.styled = true
