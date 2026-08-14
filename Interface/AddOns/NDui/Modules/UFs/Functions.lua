@@ -871,7 +871,7 @@ local function CreateAuraDispelBorder(button)
 	local thickness = C.mult
 	local border = CreateFrame("Frame", nil, button)
 	border:SetAllPoints()
-	border:SetFrameLevel(button.Cooldown:GetFrameLevel() + 2)
+	border:SetFrameLevel(button.Cooldown:GetFrameLevel())
 	local textures = {}
 
 	local top = border:CreateTexture(nil, "OVERLAY", nil, 7)

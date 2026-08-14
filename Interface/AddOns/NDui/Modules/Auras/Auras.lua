@@ -170,7 +170,7 @@ local function CreateDispelBorder(button)
 	local thickness = C.mult * 2
 	local border = CreateFrame("Frame", nil, button)
 	border:SetAllPoints()
-	border:SetFrameLevel(button.Cooldown:GetFrameLevel() + 2)
+	border:SetFrameLevel(button.Cooldown:GetFrameLevel())
 	local textures = {}
 
 	local top = border:CreateTexture(nil, "OVERLAY", nil, 7)
