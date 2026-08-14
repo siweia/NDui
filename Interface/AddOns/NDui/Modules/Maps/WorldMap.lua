@@ -1,5 +1,5 @@
 local _, ns = ...
-local B, C, L, DB = unpack(ns)
+local B, C, L = unpack(ns)
 local module = B:RegisterModule("Maps")
 
 local select, wipe, strmatch, gmatch, tinsert, pairs = select, wipe, strmatch, gmatch, tinsert, pairs
@@ -9,14 +9,12 @@ local CreateVector2D = CreateVector2D
 local UnitPosition = UnitPosition
 local C_Map_GetMapArtID = C_Map.GetMapArtID
 local C_Map_GetMapArtLayers = C_Map.GetMapArtLayers
-local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetWorldPosFromMapPos = C_Map.GetWorldPosFromMapPos
 local C_MapExplorationInfo_GetExploredMapTextures = C_MapExplorationInfo.GetExploredMapTextures
 local TexturePool_HideAndClearAnchors = TexturePool_HideAndClearAnchors
 
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
-local currentMapID, playerCoords, cursorCoords
 
 function module:GetPlayerMapPos(mapID)
 	if not mapID then return end
@@ -36,73 +34,6 @@ function module:GetPlayerMapPos(mapID)
 	tempVec2D:Subtract(mapRect[1])
 
 	return tempVec2D.y/mapRect[2].y, tempVec2D.x/mapRect[2].x
-end
-
-function module:GetCursorCoords()
-	if not WorldMapFrame.ScrollContainer:IsMouseOver() then return end
-
-	local cursorX, cursorY = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
-	if cursorX < 0 or cursorX > 1 or cursorY < 0 or cursorY > 1 then return end
-	return cursorX, cursorY
-end
-
-local function CoordsFormat(owner, none)
-	local text = none and ": --, --" or ": %.1f, %.1f"
-	return owner..DB.MyColor..text
-end
-
-function module:UpdateCoords(elapsed)
-	self.elapsed = (self.elapsed or 0) + elapsed
-	if self.elapsed > .1 then
-		local cursorX, cursorY = module:GetCursorCoords()
-		if cursorX and cursorY then
-			cursorCoords:SetFormattedText(CoordsFormat(L["Mouse"]), 100 * cursorX, 100 * cursorY)
-			cursorCoords:Show()
-		else
-			cursorCoords:Hide()
-		end
-
-		if not currentMapID then
-			playerCoords:SetText(CoordsFormat(PLAYER, true))
-		else
-			local x, y = module:GetPlayerMapPos(currentMapID)
-			if not x or (x == 0 and y == 0) then
-				playerCoords:SetText(CoordsFormat(PLAYER, true))
-			else
-				playerCoords:SetFormattedText(CoordsFormat(PLAYER), 100 * x, 100 * y)
-			end
-		end
-
-		self.elapsed = 0
-	end
-end
-
-function module:UpdateMapID()
-	if self:GetMapID() == C_Map_GetBestMapForUnit("player") then
-		currentMapID = self:GetMapID()
-	else
-		currentMapID = nil
-	end
-end
-
-function module:SetupCoords()
-	local textParent = CreateFrame("Frame", nil, WorldMapFrame)
-	textParent:SetPoint("BOTTOMLEFT", WorldMapFrame.ScrollContainer)
-	textParent:SetSize(1, 18)
-	textParent:SetFrameLevel(5)
-	B.SetGradient(textParent, "H", 0,0,0, .5, 0, 450, 18):SetPoint("LEFT")
-
-	playerCoords = B.CreateFS(textParent, 13, "", false, "LEFT", 5, 0)
-	playerCoords:SetJustifyH("LEFT")
-	cursorCoords = B.CreateFS(textParent, 13, "", false, "LEFT", 180, 0)
-	cursorCoords:SetJustifyH("LEFT")
-	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
-
-	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", module.UpdateMapID)
-	hooksecurefunc(WorldMapFrame, "OnMapChanged", module.UpdateMapID)
-
-	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
-	CoordsUpdater:SetScript("OnUpdate", module.UpdateCoords)
 end
 
 function module:UpdateMapScale()
@@ -282,7 +213,7 @@ function module:SetupWorldMap()
 	--QuestMapFrame:SetScript("OnHide", nil) -- fix map toggle taint -- fix by LibShowUIPanel
 
 	self:WorldMapScale()
-	self:SetupCoords()
+	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 	self:RemoveMapFog()
 end
 
