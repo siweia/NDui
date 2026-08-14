@@ -4,7 +4,7 @@ local UF = B:GetModule("UnitFrames")
 
 function UF:UpdateCastbarGlow(spellID)
 	if self.barGlow then
-		local isImportant = spellID and C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(spellID)
+		local isImportant = C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(spellID)
 		self.barGlow:SetAlphaFromBoolean(isImportant, .7, 0)
 	end
 end
@@ -18,12 +18,16 @@ function UF:UpdateSpellTarget(unit)
 		end
 		self.spellTarget:SetAlphaFromBoolean(isTargetingYou, 0, 1)
 
-		local name = UnitSpellTargetName(unit)
-		local class = UnitSpellTargetClass(unit)
-		self.spellTarget:SetText(name or "")
-		if class then
-			self.spellTarget:SetTextColor(C_ClassColor.GetClassColor(class):GetRGB())
+		if UnitShouldDisplaySpellTargetName(unit) then
+			self.spellTarget:SetText(UnitSpellTargetName(unit))
+			local classColor = C_ClassColor.GetClassColor(UnitSpellTargetClass(unit))
+			if classColor then
+				self.spellTarget:SetTextColor(classColor:GetRGB())
+			else
+				self.spellTarget:SetTextColor(1, 1, 1)
+			end
 		else
+			self.spellTarget:SetText("")
 			self.spellTarget:SetTextColor(1, 1, 1)
 		end
 	end
@@ -62,15 +66,17 @@ end
 function UF:Castbar_UpdateInterrupted(unit, spellID, interruptedBy)
 	self:SetStatusBarColor(1, .1, 0)
 
-	if C.db["Nameplate"]["Interruptor"] and self.spellTarget and interruptedBy and B:NotSecretValue(interruptedBy) then
-		local sourceName = UnitNameFromGUID(interruptedBy)
-		if not sourceName or B:IsSecretValue(sourceName) then return end
-		local _, class = GetPlayerInfoByGUID(interruptedBy)
-		class = class or "PRIEST"
-		local classColor = C_ClassColor.GetClassColor(class)
-		self.Text:SetText(INTERRUPTED.." > "..classColor:WrapTextInColorCode(sourceName))
-		self.Time:SetText("")
-	end
+	if not C.db["Nameplate"]["Interruptor"] or not self.spellTarget or not B:NotSecretValue(interruptedBy) then return end
+	if not interruptedBy then return end
+
+	local sourceName = UnitNameFromGUID(interruptedBy)
+	if not B:NotSecretValue(sourceName) or not sourceName then return end
+
+	local _, class = GetPlayerInfoByGUID(interruptedBy)
+	class = class or "PRIEST"
+	local classColor = C_ClassColor.GetClassColor(class)
+	self.Text:SetText(INTERRUPTED.." > "..classColor:WrapTextInColorCode(sourceName))
+	self.Time:SetText("")
 end
 
 -- Empower Pips

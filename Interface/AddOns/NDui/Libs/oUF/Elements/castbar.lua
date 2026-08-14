@@ -84,11 +84,17 @@ local _, ns = ...
 local oUF = ns.oUF
 
 local STATE = {}
+local issecretvalue = issecretvalue
 
 local FALLBACK_ICON = 136243 -- Interface\ICONS\Trade_Engineering
 local FAILED = _G.FAILED or 'Failed'
 local INTERRUPTED = _G.INTERRUPTED or 'Interrupted'
 local GLOBAL_SPELL_ID = 61304 -- Global Cooldown
+
+local function HasInterruptedBy(interruptedBy)
+	-- Opaque GUIDs still identify an interrupted cast; only their contents are unavailable.
+	return issecretvalue(interruptedBy) or interruptedBy ~= nil
+end
 
 local defaultFormatter = C_StringUtil.CreateSecondsFormatter()
 defaultFormatter:SetDefaultAbbreviation(Enum.SecondsFormatterAbbreviation.OneLetter)
@@ -397,7 +403,8 @@ local function CastStop(self, event, unit, _, spellID, ...)
 
 	if(element.Spark) then element.Spark:Hide() end
 
-	if(interruptedBy) then
+	local wasInterrupted = HasInterruptedBy(interruptedBy)
+	if(wasInterrupted) then
 		if(element.Text) then element.Text:SetText(INTERRUPTED) end
 
 		STATE[element].holdTime = element.timeToHold or 0
@@ -407,7 +414,7 @@ local function CastStop(self, event, unit, _, spellID, ...)
 		element:SetValue(1)
 	end
 
-	if(interruptedBy) then
+	if(wasInterrupted) then
 		--[[ Callback: Castbar:PostCastInterrupted(unit, spellID, interruptedBy)
 		Called after the element has been updated when a spell cast or channel has stopped.
 
@@ -465,7 +472,7 @@ local function CastFail(self, event, unit, _, spellID, ...)
 	element:SetMinMaxValues(0, 1)
 	element:SetValue(1)
 
-	if(interruptedBy) then
+	if(event == 'UNIT_SPELLCAST_INTERRUPTED') then
 		if(element.PostCastInterrupted) then
 			element:PostCastInterrupted(unit, spellID, interruptedBy)
 		end
