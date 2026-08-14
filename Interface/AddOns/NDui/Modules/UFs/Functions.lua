@@ -18,6 +18,12 @@ oUF.colors.health:SetCurve({
 })
 oUF.colors.dispel.None = oUF:CreateColor(0, 0, 0)
 
+local UNITFRAME_AURA_DISPEL_COLORS = {}
+for dispelName, color in pairs(oUF.colors.dispel) do
+	UNITFRAME_AURA_DISPEL_COLORS[dispelName] = color
+end
+UNITFRAME_AURA_DISPEL_COLORS.None = oUF:CreateColor(1, 0, 0)
+
 local function ReplacePowerColor(name, index, r, g, b)
 	oUF.colors.power[name] = oUF:CreateColor(r, g, b)
 	oUF.colors.power[index] = oUF.colors.power[name]
@@ -861,7 +867,53 @@ function UF:UpdateIconTexCoord(width, height)
 	self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
 end
 
-function UF.PostCreateButton(element, button)
+local function CreateAuraDispelBorder(button)
+	local thickness = C.mult
+	local border = CreateFrame("Frame", nil, button)
+	border:SetAllPoints()
+	border:SetFrameLevel(button.Cooldown:GetFrameLevel() + 2)
+	local textures = {}
+
+	local top = border:CreateTexture(nil, "OVERLAY", nil, 7)
+	top:SetColorTexture(1, 1, 1)
+	top:SetPoint("TOPLEFT", button)
+	top:SetPoint("TOPRIGHT", button)
+	top:SetHeight(thickness)
+	textures[1] = top
+
+	local bottom = border:CreateTexture(nil, "OVERLAY", nil, 7)
+	bottom:SetColorTexture(1, 1, 1)
+	bottom:SetPoint("BOTTOMLEFT", button)
+	bottom:SetPoint("BOTTOMRIGHT", button)
+	bottom:SetHeight(thickness)
+	textures[2] = bottom
+
+	local left = border:CreateTexture(nil, "OVERLAY", nil, 7)
+	left:SetColorTexture(1, 1, 1)
+	left:SetPoint("TOPLEFT", button)
+	left:SetPoint("BOTTOMLEFT", button)
+	left:SetWidth(thickness)
+	textures[3] = left
+
+	local right = border:CreateTexture(nil, "OVERLAY", nil, 7)
+	right:SetColorTexture(1, 1, 1)
+	right:SetPoint("TOPRIGHT", button)
+	right:SetPoint("BOTTOMRIGHT", button)
+	right:SetWidth(thickness)
+	textures[4] = right
+
+	local options = {
+		showWhenHarmful = true,
+		showWithoutDispelType = true,
+		style = Enum.CustomAuraButtonDispelTypeTextureStyle.PreserveAsset,
+		customDispelColorMap = UNITFRAME_AURA_DISPEL_COLORS,
+	}
+	for _, texture in ipairs(textures) do
+		button:AddDispelTypeTexture(texture, options)
+	end
+end
+
+function UF.PostCreateButton(element, button, options)
 	local fontSize = element.fontSize or element.size*.4
 	if button.Count then
 		button.Count:SetFont(DB.Font[1], fontSize, DB.Font[3])
@@ -879,6 +931,12 @@ function UF.PostCreateButton(element, button)
 		button.Cooldown:SetHideCountdownNumbers(isRaid and not C.db["UFs"]["RaidCDText"])
 	end
 	button.iconbg = B.ReskinIcon(button.Icon)
+	button.iconbg:SetBackdropBorderColor(0, 0, 0)
+	B.CreateSD(button)
+
+	if options and options.showDebuffTypeBorder then
+		CreateAuraDispelBorder(button)
+	end
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
@@ -1037,8 +1095,8 @@ function UF:ConfigureAuras(element)
 	element.numBuffs = C.db["UFs"][value.."BuffType"] ~= 1 and C.db["UFs"][value.."NumBuff"] or 0
 	element.numDebuffs = C.db["UFs"][value.."DebuffType"] ~= 1 and C.db["UFs"][value.."NumDebuff"] or 0
 	element.size = C.db["UFs"][value.."AuraSize"]
-	element.showBuffBorder = true
-	element.showDebuffBorder = C.db["UFs"]["DebuffColor"]
+	-- Keep oUF's native Border uncreated; Blizzard can show it again after a layout-side Hide.
+	element.showDebuffTypeBorder = C.db["UFs"]["DebuffColor"]
 	element.desaturateDebuff = C.db["UFs"]["Desaturate"]
 	element.fontSize = C.db["UFs"]["CDFontSize"]
 end
@@ -1060,7 +1118,7 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	local isRaid = value == "Raid"
 	element.num = C.db["UFs"][value..vType.."Type"] ~= 1 and C.db["UFs"][value.."Num"..vType] or 0
 	element.size = C.db["UFs"][value..vType.."Size"]
-	element.showDebuffBorder = isRaid or C.db["UFs"]["DebuffColor"]
+	element.showDebuffTypeBorder = isDebuff and (isRaid or C.db["UFs"]["DebuffColor"])
 	element.desaturateDebuff = not isRaid and C.db["UFs"]["Desaturate"]
 	element.fontSize = C.db["UFs"]["RaidCDSize"]
 end
@@ -1163,6 +1221,7 @@ local function AddAuraGroup(element, name, filter, count, index)
 		maxFrameCount = count,
 		size = element.size,
 		height = element.__owner.mystyle == "nameplate" and element.size * element.sizeRatio or nil,
+		showDebuffTypeBorder = filter == "HARMFUL" and element.showDebuffTypeBorder,
 		layout = AuraGroupLayout(element, index),
 	})
 end
@@ -1278,7 +1337,6 @@ function UF:CreateDebuffs(self)
 		spacing = mystyle == "raid" and 2 or 3,
 		value = mystyle == "raid" and "Raid" or "Boss",
 		disableMouse = mystyle == "raid",
-		showDebuffBorder = true,
 	})
 	bu.__auraType = "debuffs"
 	if mystyle == "raid" then
