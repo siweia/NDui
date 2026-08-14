@@ -134,6 +134,7 @@ function UF:UpdateColor(_, unit)
 	local targetColor = C.db["Nameplate"]["TargetColor"]
 	local focusColor = C.db["Nameplate"]["FocusColor"]
 	local dotColor = C.db["Nameplate"]["DotColor"]
+	local classColor
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
@@ -149,12 +150,16 @@ function UF:UpdateColor(_, unit)
 			r, g, b = dotColor.r, dotColor.g, dotColor.b
 		elseif isPlayer and isFriendly then
 			if C.db["Nameplate"]["FriendlyCC"] then
-				r, g, b = B.UnitColor(unit)
+				local class = select(2, UnitClass(unit))
+				classColor = class and C_ClassColor.GetClassColor(class)
+				if not classColor then r, g, b = 1, 1, 1 end
 			else
 				r, g, b = .3, .3, 1
 			end
 		elseif isPlayer and (not isFriendly) and C.db["Nameplate"]["HostileCC"] then
-			r, g, b = B.UnitColor(unit)
+			local class = select(2, UnitClass(unit))
+			classColor = class and C_ClassColor.GetClassColor(class)
+			if not classColor then r, g, b = 1, 1, 1 end
 		elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.TrashUnits[npcID] then
 			r, g, b = .6, .6, .6
 		else
@@ -219,7 +224,9 @@ function UF:UpdateColor(_, unit)
 		end
 	end
 
-	if r or g or b then
+	if classColor then
+		element:SetStatusBarColor(classColor:GetRGB())
+	elseif r or g or b then
 		element:SetStatusBarColor(r, g, b)
 	end
 

@@ -82,7 +82,7 @@ oUF.Tags.Methods["color"] = function(unit)
 	if UnitIsTapDenied(unit) then
 		return B.HexRGB(oUF.colors.tapped)
 	elseif UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
-		return B.HexRGB(oUF.colors.class[class])
+		return B.ClassColorString(class)
 	elseif reaction then
 		return B.HexRGB(oUF.colors.reaction[reaction])
 	else
@@ -256,7 +256,7 @@ oUF.Tags.Methods["tarname"] = function(unit)
 	local tarUnit = unit.."target"
 	if UnitExists(tarUnit) then
 		local _, tarClass = UnitClass(tarUnit)
-		return B.HexRGB(oUF.colors.class[tarClass])..UnitName(tarUnit)
+		return B.ClassColorString(tarClass)..UnitName(tarUnit)
 	end
 end
 oUF.Tags.Events["tarname"] = "UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH"

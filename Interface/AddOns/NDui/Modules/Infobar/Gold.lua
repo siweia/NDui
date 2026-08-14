@@ -118,7 +118,7 @@ function RebuildCharList()
 			if not (realm == myRealm and name == myName) then
 				index = index + 1
 				if not menuList[index] then menuList[index] = {} end
-				menuList[index].text = B.HexRGB(B.ClassColor(value[2]))..Ambiguate(name.."-"..realm, "none")
+				menuList[index].text = B.ClassColorString(value[2])..Ambiguate(name.."-"..realm, "none")
 				menuList[index].notCheckable = true
 				menuList[index].arg1 = realm
 				menuList[index].arg2 = name

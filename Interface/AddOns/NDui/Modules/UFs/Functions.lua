@@ -174,7 +174,7 @@ function UF.HealthPostUpdate(element, unit)
 		local color
 		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
 			local _, class = UnitClass(unit)
-			color = self.colors.class[class]
+			color = class and C_ClassColor.GetClassColor(class)
 		elseif UnitReaction(unit, "player") then
 			color = self.colors.reaction[UnitReaction(unit, "player")]
 		end

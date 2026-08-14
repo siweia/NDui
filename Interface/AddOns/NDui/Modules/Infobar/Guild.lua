@@ -81,7 +81,7 @@ function info:GuildPanel_UpdateButton(button)
 
 	B.ClassIconTexCoord(button.class, class)
 
-	local namecolor = B.HexRGB(B.ClassColor(class))
+	local namecolor = B.ClassColorString(class)
 	local isTimerunning = guid and C_ChatInfo.IsTimerunningPlayer(guid)
 	local playerName = isTimerunning and TimerunningUtil.AddSmallIcon(name) or name
 	button.name:SetText(namecolor..playerName..status)

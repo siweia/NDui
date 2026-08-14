@@ -745,7 +745,7 @@ function G:SetupSpellsIndicator(parent)
 	end
 	local index = 1
 	for class, value in pairs(UF.NonSecretSpells) do
-		local color = B.HexRGB(B.ClassColor(class))
+		local color = B.ClassColorString(class)
 		local localClassName = LOCALIZED_CLASS_NAMES_MALE[class] or OTHER
 		menuList[index] = {text = color..localClassName, notCheckable = true, hasArrow = true, menuList = {}}
 
