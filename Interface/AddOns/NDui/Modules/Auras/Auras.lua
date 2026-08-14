@@ -222,10 +222,6 @@ local function StyleAuraButton(element, button, showDebuffTypeBorder)
 	button.__nduiBackdrop = backdrop
 	B.CreateSD(button)
 
-	if showDebuffTypeBorder then
-		CreateDispelBorder(button)
-	end
-
 	if button.Count then
 		button.Count:ClearAllPoints()
 		button.Count:SetPoint("TOPRIGHT", button, -1, -3)
@@ -247,6 +243,10 @@ local function StyleAuraButton(element, button, showDebuffTypeBorder)
 	button.Highlight = highlight
 
 	UpdateButtonAppearance(button, element.__nduiConfig)
+
+	if showDebuffTypeBorder then
+		CreateDispelBorder(button)
+	end
 end
 
 local function InitializeAuraButton(element, options, button)
@@ -257,7 +257,6 @@ local function InitializeAuraButton(element, options, button)
 	local icon = button:CreateTexture(nil, "BORDER")
 	icon:SetInside()
 	button.Icon = icon
-	button:SetIcon(icon)
 
 	local cooldown = CreateFrame("Cooldown", "$parentCooldown", button, "CooldownFrameTemplate")
 	cooldown:SetAllPoints()
@@ -266,7 +265,6 @@ local function InitializeAuraButton(element, options, button)
 	cooldown:SetDrawBling(false)
 	cooldown:SetCountdownFormatter(CooldownFormatter)
 	button.Cooldown = cooldown
-	button:SetDurationCooldown(cooldown)
 	button.CooldownText = cooldown:GetCountdownFontString()
 
 	local textFrame = CreateFrame("Frame", nil, button)
@@ -275,13 +273,14 @@ local function InitializeAuraButton(element, options, button)
 
 	local count = textFrame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
 	button.Count = count
-	button:SetApplicationCount(count, {formatter = COUNT_FORMATTER})
 
+	StyleAuraButton(element, button, options.showDebuffTypeBorder)
+	button:SetIcon(icon)
+	button:SetDurationCooldown(cooldown)
+	button:SetApplicationCount(count, {formatter = COUNT_FORMATTER})
 	if options.cancelButton then
 		button:SetCancelAuraButtons(options.cancelButton)
 	end
-
-	StyleAuraButton(element, button, options.showDebuffTypeBorder)
 end
 
 local function UpdateItemEnchantmentBorder(button, inventorySlot)
@@ -298,16 +297,16 @@ local function InitializeItemEnchantmentButton(container, inventorySlot, button)
 	local icon = button:CreateTexture(nil, "BORDER")
 	icon:SetInside()
 	button.Icon = icon
-	button:SetIcon(icon)
 
 	local time = button:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
 	button.Time = time
-	button:SetDurationText(time, {binding = ITEM_DURATION_BINDING})
-	button:SetCancelAuraButtons(CANCEL_AURA_BUTTONS)
 
 	StyleAuraButton(container, button)
-	container.__itemButtons[inventorySlot] = button
 	UpdateItemEnchantmentBorder(button, inventorySlot)
+	button:SetIcon(icon)
+	button:SetDurationText(time, {binding = ITEM_DURATION_BINDING})
+	button:SetCancelAuraButtons(CANCEL_AURA_BUTTONS)
+	container.__itemButtons[inventorySlot] = button
 end
 
 local function CreateItemEnchantmentOptions(container, inventorySlot)

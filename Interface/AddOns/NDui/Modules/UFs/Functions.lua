@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local oUF = ns.oUF
 local UF = B:RegisterModule("UnitFrames")
+local Cooldown = B:GetModule("Cooldown")
 
 local pairs, next, unpack = pairs, next, unpack
 local max = math.max
@@ -861,6 +862,55 @@ function UF:ReskinTimerTrakcer(self)
 end
 
 -- Auras Relevant
+local AURA_DURATION_BREAKPOINTS = {
+	{
+		threshold = 0,
+		step = 1,
+		rounding = Enum.NumericRuleFormatRounding.Down,
+		format = "%d",
+	},
+	{
+		threshold = SECONDS_PER_MIN,
+		format = "%d:%02d",
+		components = {
+			{div = SECONDS_PER_MIN, step = 1, rounding = Enum.NumericRuleFormatRounding.Down},
+			{mod = SECONDS_PER_MIN, step = 1, rounding = Enum.NumericRuleFormatRounding.Down},
+		},
+	},
+	{
+		threshold = 5 * SECONDS_PER_MIN,
+		format = "%dm",
+		components = {{div = SECONDS_PER_MIN, step = 1, rounding = Enum.NumericRuleFormatRounding.Down}},
+	},
+	{
+		threshold = SECONDS_PER_HOUR,
+		format = "%dh",
+		components = {{div = SECONDS_PER_HOUR, step = 1, rounding = Enum.NumericRuleFormatRounding.Down}},
+	},
+	{
+		threshold = SECONDS_PER_DAY,
+		format = "%dd",
+		components = {{div = SECONDS_PER_DAY, step = 1, rounding = Enum.NumericRuleFormatRounding.Down}},
+	},
+}
+local HIDDEN_AURA_DURATION_BREAKPOINTS = {{threshold = 0, format = ""}}
+
+local function UpdateAuraDurationFormatter(element, hidden)
+	local formatter = element.__nduiDurationFormatter
+	if not formatter then
+		formatter = C_StringUtil.CreateNumericRuleFormatter()
+		element.__nduiDurationFormatter = formatter
+	end
+
+	hidden = hidden and true or false
+	if element.__nduiDurationHidden ~= hidden then
+		formatter:SetBreakpoints(hidden and HIDDEN_AURA_DURATION_BREAKPOINTS or AURA_DURATION_BREAKPOINTS)
+		element.__nduiDurationHidden = hidden
+	end
+
+	return formatter
+end
+
 function UF:UpdateIconTexCoord(width, height)
 	local ratio = height / width
 	local mult = (1 - ratio) / 2
@@ -915,6 +965,7 @@ end
 
 function UF.PostCreateButton(element, button, options)
 	local fontSize = element.fontSize or element.size*.4
+	local isRaid = element.__owner.mystyle == "raid"
 	if button.Count then
 		button.Count:SetFont(DB.Font[1], fontSize, DB.Font[3])
 	end
@@ -924,11 +975,8 @@ function UF.PostCreateButton(element, button, options)
 		if button.CooldownText then
 			button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
 		end
-	end
-
-	local isRaid = element.__owner.mystyle == "raid"
-	if button.Cooldown then
-		button.Cooldown:SetHideCountdownNumbers(isRaid and not C.db["UFs"]["RaidCDText"])
+		Cooldown:IgnoreCooldown(button.Cooldown)
+		button.Cooldown:SetCountdownFormatter(UpdateAuraDurationFormatter(element, isRaid and not C.db["UFs"]["RaidCDText"]))
 	end
 	button.iconbg = B.ReskinIcon(button.Icon)
 	button.iconbg:SetBackdropBorderColor(0, 0, 0)
@@ -1076,18 +1124,11 @@ function UF.RaidFrame_FilterAura(element, _, data)
 	end
 end
 
-function UF:UpdateAuraContainer(parent, element, maxAuras)
+function UF:UpdateAuraContainer(parent, element)
 	if parent.mystyle == "nameplate" then return end
 
-	local fontSize = element.fontSize or element.size*.4
-	local cooldownNumber = parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"] or false
-	for button in pairs(element.__buttons or {}) do
-		if button.Count then B.SetFontSize(button.Count, fontSize) end
-		if button.CooldownText then B.SetFontSize(button.CooldownText, fontSize) end
-		if button.Cooldown then
-			button.Cooldown:SetHideCountdownNumbers(cooldownNumber)
-		end
-	end
+	-- AuraButton regions are forbidden after the provider initializer returns.
+	UpdateAuraDurationFormatter(element, parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"])
 end
 
 function UF:ConfigureAuras(element)
