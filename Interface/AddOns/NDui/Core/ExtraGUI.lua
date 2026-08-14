@@ -593,16 +593,19 @@ function G:SetupNameplateFilter(parent)
 	end
 end
 
-local function updateCornerSpells()
-	B:GetModule("UnitFrames"):UpdateCornerSpells()
-end
-
 function G:SetupSpellsIndicator(parent)
 	local guiName = "NDuiGUI_SpellsIndicator"
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
 	local panel = createExtraGUI(parent, guiName, L["BuffIndicator"].."*")
+	local cornerSpellsChanged
+	local function updateCornerSpells()
+		if not cornerSpellsChanged then return end
+		B:GetModule("UnitFrames"):UpdateCornerSpells()
+		G.needUIReload = true
+		cornerSpellsChanged = nil
+	end
 	panel:SetScript("OnHide", updateCornerSpells)
 
 	local barList = {}
@@ -638,6 +641,7 @@ function G:SetupSpellsIndicator(parent)
 			end
 			barList[spellID] = nil
 			sortBars(barList)
+			cornerSpellsChanged = true
 		end)
 
 		name = L[anchor] or name
@@ -662,6 +666,7 @@ function G:SetupSpellsIndicator(parent)
 		NDuiADB["CornerSpells"][DB.MyClass][spellID] = {anchor, {r, g, b}, showAll}
 		createBar(parent.child, spellID, anchor, r, g, b, showAll)
 		parent.box:SetText("")
+		cornerSpellsChanged = true
 	end
 
 	StaticPopupDialogs["RESET_NDUI_RaidBuffsWhite"] = {

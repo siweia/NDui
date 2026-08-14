@@ -306,6 +306,8 @@ function M:RaidTool_BuffChecker(parent)
 	end
 
 	local function scanBuff()
+		if C_Secrets.ShouldAurasBeSecret() then return end
+
 		for i = 1, numGroups do wipe(NoBuff[i]) end
 		numPlayer = 0
 

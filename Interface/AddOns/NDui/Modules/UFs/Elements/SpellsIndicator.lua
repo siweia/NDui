@@ -1,7 +1,45 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF
 local UF = B:GetModule("UnitFrames")
+local Cooldown = B:GetModule("Cooldown")
+
+local sort, tinsert = table.sort, table.insert
+
+local COUNT_FORMATTER = C_StringUtil.CreateNumericRuleFormatter()
+COUNT_FORMATTER:SetBreakpoints({
+	{threshold = 0, format = ""},
+	{threshold = 2, format = "%d", step = 1, rounding = Enum.NumericRuleFormatRounding.Down},
+})
+
+local DURATION_FORMATTER = C_StringUtil.CreateNumericRuleFormatter()
+DURATION_FORMATTER:SetBreakpoints({
+	{
+		threshold = 0,
+		format = "%d",
+		step = 1,
+		rounding = Enum.NumericRuleFormatRounding.Nearest,
+	},
+	{
+		threshold = SECONDS_PER_MIN,
+		format = "%dm",
+		components = {{div = SECONDS_PER_MIN, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}},
+	},
+	{
+		threshold = SECONDS_PER_HOUR,
+		format = "%dh",
+		components = {{div = SECONDS_PER_HOUR, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}},
+	},
+	{
+		threshold = SECONDS_PER_DAY,
+		format = "%dd",
+		components = {{div = SECONDS_PER_DAY, step = 1, rounding = Enum.NumericRuleFormatRounding.Nearest}},
+	},
+})
+
+local DURATION_BINDING = C_DurationUtil.CreateDurationTextBinding()
+DURATION_BINDING:SetFormatter(DURATION_FORMATTER)
+DURATION_BINDING:SetExpiredText("")
+DURATION_BINDING:SetZeroDurationText("")
 
 local counterOffsets = {
 	["TOPLEFT"] = {{6, 1}, {"LEFT", "RIGHT", -2, 0}, {2, -2}},
@@ -14,15 +52,11 @@ local counterOffsets = {
 	["BOTTOM"] = {{0, 0}, {"RIGHT", "LEFT", 2, 0}, {0, 2}},
 }
 
-function UF:SpellsIndicator_OnUpdate(elapsed)
-	B.CooldownOnUpdate(self, elapsed, true)
-end
-
 UF.CornerSpells = {}
 function UF:UpdateCornerSpells()
 	wipe(UF.CornerSpells)
 
-	for spellID, value in pairs(C.CornerBuffs[DB.MyClass]) do
+	for spellID, value in pairs(C.CornerBuffs[DB.MyClass] or {}) do
 		local modData = NDuiADB["CornerSpells"][DB.MyClass]
 		if not (modData and modData[spellID]) then
 			local r, g, b = unpack(value[2])
@@ -38,109 +72,95 @@ function UF:UpdateCornerSpells()
 	end
 end
 
-local anchors = {"TOPLEFT", "TOP", "TOPRIGHT", "LEFT", "RIGHT", "BOTTOMLEFT", "BOTTOM", "BOTTOMRIGHT"}
+local function CreateIndicatorButton(element, options, button)
+	local anchor = options.__anchor
+	local r, g, b = unpack(options.__color)
+	local indicatorType = options.__indicatorType
+
+	button:SetFrameLevel(options.__frameLevel)
+	button:SetSize(options.size, options.size)
+	button:SetScale(options.__scale)
+	button:EnableMouse(false)
+	button:ClearAllPoints()
+	local x, y = unpack(counterOffsets[anchor][3])
+	button:SetPoint(anchor, element.__owner.Health, anchor, x, y)
+
+	local count = button:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
+	count:SetFont(DB.Font[1], 12, DB.Font[3])
+	button.Count = count
+
+	if indicatorType == 3 then
+		local timer = button:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
+		timer:SetFont(DB.Font[1], 12, DB.Font[3])
+		timer:SetPoint("CENTER", -counterOffsets[anchor][2][3], 0)
+		timer:SetTextColor(r, g, b)
+		button.Time = timer
+
+		local point, anchorPoint, countX, countY = unpack(counterOffsets[anchor][2])
+		count:SetPoint(point, timer, anchorPoint, countX, countY)
+		button:SetDurationText(timer, {binding = DURATION_BINDING})
+	else
+		local icon = button:CreateTexture(nil, "BORDER")
+		icon:SetAllPoints()
+		button.Icon = icon
+		if indicatorType == 1 then
+			icon:SetTexture(DB.bdTex)
+			icon:SetVertexColor(r, g, b)
+		else
+			button:SetIcon(icon)
+		end
+		button.bg = B.ReskinIcon(icon)
+
+		local cooldown = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+		cooldown:SetAllPoints()
+		cooldown:SetReverse(true)
+		Cooldown:IgnoreCooldown(cooldown)
+		cooldown:SetHideCountdownNumbers(true)
+		button.Cooldown = cooldown
+		button:SetDurationCooldown(cooldown)
+
+		count:SetPoint("CENTER", unpack(counterOffsets[anchor][1]))
+	end
+
+	button:SetApplicationCount(count, {formatter = COUNT_FORMATTER})
+end
 
 function UF:CreateSpellsIndicator(self)
+	if not C.db["UFs"]["RaidBuffIndicator"] then return end
+
+	local spellIDs = {}
+	for spellID in pairs(UF.CornerSpells) do
+		tinsert(spellIDs, spellID)
+	end
+	if #spellIDs == 0 then return end
+	sort(spellIDs)
+
+	local element = self:CreateAuras()
+	element:SetAllPoints(self.Health)
+	element.disableMouse = true
+
 	local spellSize = C.db["UFs"]["RaidSpellSize"] or 10
-
-	local buttons = {}
-	for _, anchor in pairs(anchors) do
-		local button = CreateFrame("Frame", nil, self.Health)
-		button:SetFrameLevel(self:GetFrameLevel()+10)
-		button:SetSize(spellSize, spellSize)
-		local x, y = unpack(counterOffsets[anchor][3])
-		button:SetPoint(anchor, x, y)
-		button:Hide()
-
-		button.icon = button:CreateTexture(nil, "BORDER")
-		button.icon:SetAllPoints()
-		button.bg = B.ReskinIcon(button.icon)
-
-		button.cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
-		button.cd:SetAllPoints()
-		button.cd:SetReverse(true)
-		button.cd:SetHideCountdownNumbers(true)
-
-		button.timer = B.CreateFS(button, 12, "", false, "CENTER", -counterOffsets[anchor][2][3], 0)
-		button.count = B.CreateFS(button, 12, "")
-
-		button.anchor = anchor
-		buttons[anchor] = button
-
-		UF:RefreshBuffIndicator(button)
+	local indicatorType = C.db["UFs"]["BuffIndicatorType"]
+	local scale = C.db["UFs"]["BuffIndicatorScale"]
+	local baseFrameLevel = self:GetFrameLevel() + 10
+	for index, spellID in ipairs(spellIDs) do
+		local value = UF.CornerSpells[spellID]
+		local filter = value[3] and "HELPFUL" or "HELPFUL|PLAYER"
+		element:AddSlot(filter, {
+			size = spellSize,
+			CreateButton = CreateIndicatorButton,
+			candidateFilters = {includeSpellIDs = {[spellID] = true}},
+			sortMethod = AuraContainerSortMethod.Default,
+			sortDirection = AuraContainerSortDirection.Normal,
+			__anchor = value[1],
+			__color = value[2],
+			__indicatorType = indicatorType,
+			__scale = scale,
+			__frameLevel = baseFrameLevel + index,
+		})
 	end
 
-	self.SpellsIndicator = buttons
-
-	UF.SpellsIndicator_UpdateOptions(self)
-end
-
-function UF:SpellsIndicator_UpdateButton(button, aura, r, g, b)
-	if C.db["UFs"]["BuffIndicatorType"] == 3 then
-		if aura.duration and aura.duration > 0 then
-			button.expiration = aura.expiration
-			button:SetScript("OnUpdate", UF.SpellsIndicator_OnUpdate)
-		else
-			button:SetScript("OnUpdate", nil)
-		end
-		button.timer:SetTextColor(r, g, b)
-	else
-		if aura.duration and aura.duration > 0 then
-			button.cd:SetCooldown(aura.expiration - aura.duration, aura.duration)
-			button.cd:Show()
-		else
-			button.cd:Hide()
-		end
-		if C.db["UFs"]["BuffIndicatorType"] == 1 then
-			button.icon:SetVertexColor(r, g, b)
-		else
-			button.icon:SetTexture(aura.texture)
-		end
-	end
-
-	button.count:SetText(aura.count > 1 and aura.count or "")
-	button:Show()
-end
-
-function UF:SpellsIndicator_HideButtons()
-	for _, button in pairs(self.SpellsIndicator) do
-		button:Hide()
-	end
-end
-
-function UF:RefreshBuffIndicator(bu)
-	if C.db["UFs"]["BuffIndicatorType"] == 3 then
-		local point, anchorPoint, x, y = unpack(counterOffsets[bu.anchor][2])
-		bu.timer:Show()
-		bu.count:ClearAllPoints()
-		bu.count:SetPoint(point, bu.timer, anchorPoint, x, y)
-		bu.icon:Hide()
-		bu.cd:Hide()
-		bu.bg:Hide()
-	else
-		bu:SetScript("OnUpdate", nil)
-		bu.timer:Hide()
-		bu.count:ClearAllPoints()
-		bu.count:SetPoint("CENTER", unpack(counterOffsets[bu.anchor][1]))
-		if C.db["UFs"]["BuffIndicatorType"] == 1 then
-			bu.icon:SetTexture(DB.bdTex)
-		else
-			bu.icon:SetVertexColor(1, 1, 1)
-		end
-		bu.icon:Show()
-		bu.cd:Show()
-		bu.bg:Show()
-	end
-end
-
-function UF:SpellsIndicator_UpdateOptions()
-	local spells = self.SpellsIndicator
-	if not spells then return end
-
-	for anchor, button in pairs(spells) do
-		button:SetScale(C.db["UFs"]["BuffIndicatorScale"])
-		UF:RefreshBuffIndicator(button)
-	end
+	self.SpellsIndicator = element
 end
 
 -- None secret spells in 12.0.1

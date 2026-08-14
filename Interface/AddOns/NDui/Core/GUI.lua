@@ -1075,7 +1075,7 @@ local function refreshPlateByEvents()
 end
 
 local function updateRaidAurasOptions()
-	B:GetModule("UnitFrames"):RaidAuras_UpdateOptions()
+	G.needUIReload = true
 end
 
 local function refreseExecuteRatio()
