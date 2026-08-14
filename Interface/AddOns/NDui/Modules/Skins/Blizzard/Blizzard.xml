@@ -5,6 +5,7 @@
 	<Script file="Blizzard_AnimaDiversionUI.lua"/>
 	<Script file="Blizzard_ArchaeologyUI.lua"/>
 	<Script file="Blizzard_ArtifactUI.lua"/>
+	<Script file="Blizzard_AuraContainer.lua"/>
 	<Script file="Blizzard_AuctionHouseUI.lua"/>
 	<Script file="Blizzard_AzeriteUI.lua"/>
 	<Script file="Blizzard_BarbershopUI.lua"/>
