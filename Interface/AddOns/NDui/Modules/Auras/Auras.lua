@@ -7,6 +7,7 @@ local _G = getfenv(0)
 local floor, ipairs = math.floor, ipairs
 local CreateFrame = CreateFrame
 local GetInventoryItemQuality = GetInventoryItemQuality
+local GetTemporaryEnchantmentInfo = C_PaperDollInfo.GetTemporaryEnchantmentInfo
 local InCombatLockdown = InCombatLockdown
 local RegisterStateDriver = RegisterStateDriver
 local ShouldAurasBeSecret = C_Secrets.ShouldAurasBeSecret
@@ -76,31 +77,28 @@ ITEM_DURATION_BINDING:SetFormatter(ITEM_DURATION_FORMATTER)
 ITEM_DURATION_BINDING:SetExpiredText("")
 ITEM_DURATION_BINDING:SetZeroDurationText("")
 
-local function HideBlizzardDebuffVisuals(frame)
-	if not frame then return end
-
-	frame:SetAlpha(0)
-	frame:EnableMouse(false)
-
-	if frame.AuraContainer then
-		frame.AuraContainer:Hide()
-	end
-
-	for _, anchor in ipairs(frame.PrivateAuraAnchors or {}) do
-		anchor:Hide()
-	end
-
-	-- DebuffFrame must keep running so it can update DeadlyDebuffFrame.
-	frame:Show()
-end
-
 local function HideBlizzardAuraFrames()
 	if _G.BuffFrame then
 		B.HideObject(_G.BuffFrame)
 		_G.BuffFrame.numHideableBuffs = 0
 	end
 
-	HideBlizzardDebuffVisuals(_G.DebuffFrame)
+	local frame = _G.DebuffFrame
+	if frame then
+		frame:SetAlpha(0)
+		frame:EnableMouse(false)
+
+		if frame.AuraContainer then
+			frame.AuraContainer:Hide()
+		end
+
+		for _, anchor in ipairs(frame.PrivateAuraAnchors or {}) do
+			anchor:Hide()
+		end
+
+		-- DebuffFrame must keep running so it can update DeadlyDebuffFrame.
+		frame:Show()
+	end
 end
 
 function A:HideBlizBuff()
@@ -115,18 +113,6 @@ end
 
 local function GetMaxFrameCount(cfg)
 	return cfg.wrapAfter * cfg.maxWraps
-end
-
-local function GetRowWidth(cfg)
-	return cfg.size * cfg.wrapAfter + C.margin * (cfg.wrapAfter - 1)
-end
-
-local function GetHolderWidth(cfg)
-	return (cfg.size + C.margin) * cfg.wrapAfter
-end
-
-local function GetHolderHeight(cfg)
-	return (cfg.size + cfg.offset) * cfg.maxWraps
 end
 
 local function GetLayoutOptions(cfg)
@@ -320,8 +306,11 @@ end
 
 local function CreateHolder(name, cfg, visibility)
 	local holder = CreateFrame("Frame", name, UIParent)
+	local holderWidth = (cfg.size + C.margin) * cfg.wrapAfter
+	local holderHeight = (cfg.size + cfg.offset) * cfg.maxWraps
+
 	holder:SetClampedToScreen(true)
-	holder:SetSize(GetHolderWidth(cfg), GetHolderHeight(cfg))
+	holder:SetSize(holderWidth, holderHeight)
 	RegisterStateDriver(holder, "visibility", visibility or "[petbattle] hide; show")
 	return holder
 end
@@ -340,9 +329,10 @@ end
 
 local function CreateAuraContainer(owner, holder, cfg)
 	local anchor, growthX = GetAnchorOptions(cfg)
+	local rowWidth = cfg.size * cfg.wrapAfter + C.margin * (cfg.wrapAfter - 1)
 	local container = owner:CreateAuras({
 		layout = AnchorUtil.FlowLayoutAxis.Horizontal,
-		layoutLimit = GetRowWidth(cfg),
+		layoutLimit = rowWidth,
 		initialAnchor = anchor,
 		growthX = growthX < 0 and "LEFT" or "RIGHT",
 		growthY = "DOWN",
@@ -384,7 +374,7 @@ end
 local function GetActiveItemEnchantmentCount()
 	local activeCount = 0
 	for _, slot in ipairs(ITEM_ENCHANTMENT_SLOTS) do
-		local enchantmentInfo = C_PaperDollInfo.GetTemporaryEnchantmentInfo(slot)
+		local enchantmentInfo = GetTemporaryEnchantmentInfo(slot)
 		if enchantmentInfo and enchantmentInfo.hasExpirationTime then
 			activeCount = activeCount + 1
 		end
@@ -455,9 +445,6 @@ local function UpdateBuffHolderVisibility(owner)
 end
 
 function A:CreatePlayerAuraFrames(owner)
-	if A.auraContainersBuilt then return end
-	A.auraContainersBuilt = true
-
 	A.BuffContainer = CreateAuraContainer(owner, A.PlayerBuffFrame, A.settings.Buffs)
 	AddItemEnchantments(A.BuffContainer)
 	AddAuraGroup(A.BuffContainer, "HELPFUL")
