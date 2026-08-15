@@ -2728,18 +2728,31 @@ function G:SetupRaidAuras(parent)
 			UF:UpdateUFAuras()
 		end
 	end
+	local raidBuffOptions = {
+		DISABLE,
+		L["Blizzard"],
+		L["Defensive"],
+		-- L["CombinedFilters"],
+	}
+	local raidDebuffOptions = {
+		DISABLE,
+		L["Blizzard"],
+		L["ShowDispell"],
+		-- L["CombinedFilters"],
+		L["ShowAll"],
+	}
 
 	createOptionTitle(parent, GENERAL, offset)
 	createOptionCheck(parent, offset-35, L["CDText"], "UFs", "RaidCDText", updateRaidAuras)
 	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-90, "RaidCDSize", queueAuraReload)
 
 	createOptionTitle(parent, "Buffs", offset-160)
-	createOptionDropdown(parent, L["RaidBuffType"], offset-210, {DISABLE, L["Blizzard"], L["Defensive"], L["CombinedFilters"]}, nil, "UFs", "RaidBuffType", 2, updateRaidAuras)
+	createOptionDropdown(parent, L["RaidBuffType"], offset-210, raidBuffOptions, nil, "UFs", "RaidBuffType", 2, updateRaidAuras)
 	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-280, "RaidBuffSize", queueAuraReload, "UFs")
 	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-360, "RaidNumBuff", updateRaidAuras, "UFs")
 
 	createOptionTitle(parent, "Debuffs", offset-420)
-	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, {DISABLE, L["Blizzard"], L["ShowDispell"], L["CombinedFilters"], L["ShowAll"]}, nil, "UFs", "RaidDebuffType", 2, updateRaidAuras)
+	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateRaidAuras)
 	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-540, "RaidDebuffSize", queueAuraReload, "UFs")
 	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-600, "RaidNumDebuff", updateRaidAuras, "UFs")
 end

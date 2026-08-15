@@ -10,6 +10,7 @@ local guiTab, guiPage, f = {}, {}
 -- Default Settings
 G.DefaultSettings = {
 	Reset4 = false,
+	Reset5 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -318,7 +319,7 @@ G.DefaultSettings = {
 		RaidNumBuff = 6,
 		RaidNumDebuff = 6,
 		RaidBuffType = 1,
-		RaidDebuffType = 4,
+		RaidDebuffType = 2,
 		RaidBuffSize = 12,
 		RaidDebuffSize = 12,
 
@@ -737,8 +738,21 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		C.db["UFs"]["MBPerRow"] = 13
 		C.db["UFs"]["GatherEmpty"] = true
 		C.db["UFs"]["RaidBuffType"] = 1
-		C.db["UFs"]["RaidDebuffType"] = 4
+		C.db["UFs"]["RaidDebuffType"] = 2
 		C.db["Reset4"] = true
+	end
+
+	if not C.db["Reset5"] then
+		local ufs = C.db["UFs"]
+		if ufs["RaidBuffType"] == 4 then
+			ufs["RaidBuffType"] = 2
+		end
+		if ufs["RaidDebuffType"] == 5 then
+			ufs["RaidDebuffType"] = 4
+		elseif ufs["RaidDebuffType"] == 4 then
+			ufs["RaidDebuffType"] = 2
+		end
+		C.db["Reset5"] = true
 	end
 
 	B:SetupUIScale(true)

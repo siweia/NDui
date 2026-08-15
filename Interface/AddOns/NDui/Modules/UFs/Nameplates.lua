@@ -626,7 +626,7 @@ function UF:CreatePlates()
 end
 
 function UF:ToggleNameplateAuras(shouldEnable)
-	if C.db["Nameplate"]["PlateAuras"] and shouldEnable then
+	if (C.db["Nameplate"]["PlateAuras"] or C.db["Nameplate"]["PlateCC"]) and shouldEnable then
 		if not self:IsElementEnabled("Auras") then
 			self:EnableElement("Auras")
 		end
@@ -646,49 +646,17 @@ function UF:UpdateNameplateAuras()
 	else
 		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
 	end
-	element.numTotal = C.db["Nameplate"]["maxAuras"]
+	element.numTotal = C.db["Nameplate"]["PlateAuras"] and C.db["Nameplate"]["maxAuras"] or 0
 	element.size = C.db["Nameplate"]["AuraSize"]
 	element.fontSize = C.db["Nameplate"]["FontSize"]
-	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
+	element.showDebuffTypeBorder = C.db["Nameplate"]["DebuffColor"]
 	element.showStealableBuffs = true
 	element.alwaysShowStealable = C.db["Nameplate"]["ShowDispel"]
 	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
 	element.sizeRatio = C.db["Nameplate"]["SizeRatio"]
+	element.filter = "HARMFUL|PLAYER|INCLUDE_NAME_PLATE_ONLY"
 	UF:UpdateAuraContainer(self, element, element.numTotal)
 	element:ForceUpdate()
-end
-
-function UF:UpdateNameplateDebuffs()
-	local element = self.Debuffs
-	element.numDebuffs = not C.db["Nameplate"]["PlateCC"] and 0 or C.db["Nameplate"]["NumCC"]
-	element.size = C.db["Nameplate"]["CCSize"]
-	element.fontSize = C.db["Nameplate"]["CCFontSize"]
-	element.showDebuffType = C.db["Nameplate"]["DebuffColor"]
-	element.desaturateDebuff = false
-	element.sizeRatio = C.db["Nameplate"]["CCSizeRatio"]
-	UF:UpdateAuraContainer(self, element, element.numDebuffs)
-	if element.ForceUpdate then
-		element:ForceUpdate()
-	end
-end
-
-function UF.Nameplate_FilterDebuff(element, _, data)
-	return data.isHarmfulAura and data.isCrowdControlAura
-end
-
-function UF:CreatePlateDebuffs(self)
-	local element = CreateFrame("Frame", nil, self)
-	element:SetPoint("LEFT", self.Health, "RIGHT", 5, 0)
-	element.initialAnchor = "LEFT"
-	element.disableMouse = true
-	element.spacing = 3
-	self.Debuffs = element
-
-	UF.UpdateNameplateDebuffs(self)
-	element.FilterAura = UF.Nameplate_FilterDebuff
-	element.PostCreateButton = UF.PostCreateButton
-	element.PostUpdateButton = UF.PostUpdateButton
-	element.PostProcessAuraData = UF.PostProcessAuraData
 end
 
 
