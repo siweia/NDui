@@ -1,6 +1,5 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local oUF = ns.oUF
 local A = B:RegisterModule("Auras")
 
 local _G = getfenv(0)
@@ -11,10 +10,13 @@ local GetTemporaryEnchantmentInfo = C_PaperDollInfo.GetTemporaryEnchantmentInfo
 local InCombatLockdown = InCombatLockdown
 local RegisterStateDriver = RegisterStateDriver
 local ShouldAurasBeSecret = C_Secrets.ShouldAurasBeSecret
+local UnitHasVehiclePlayerFrameUI = UnitHasVehiclePlayerFrameUI
 local CooldownFormatter = B:GetModule("Cooldown"):GetNumberFormatter()
 
 local DURATION_HEIGHT = 12
 local CANCEL_AURA_BUTTONS = "RightButtonUp RightButtonDown"
+local BUFF_GROUP_KEY = "Buffs"
+local DEBUFF_GROUP_KEY = "Debuffs"
 local ITEM_ENCHANTMENT_SLOTS = {
 	INVSLOT_MAINHAND,
 	INVSLOT_OFFHAND,
@@ -235,37 +237,39 @@ local function StyleAuraButton(element, button, showDebuffTypeBorder)
 	end
 end
 
-local function InitializeAuraButton(element, options, button)
-	button:EnableMouse(true)
-	button:SetTooltipAnchorPoint("ANCHOR_BOTTOMLEFT", -5, -5)
-	button:SetHideTooltipInCombat(false)
+local function CreateAuraButtonInitializer(container, cancelButton, showDebuffTypeBorder)
+	return function(button)
+		button:EnableMouse(true)
+		button:SetTooltipAnchorPoint("ANCHOR_BOTTOMLEFT", -5, -5)
+		button:SetHideTooltipInCombat(false)
 
-	local icon = button:CreateTexture(nil, "BORDER")
-	icon:SetInside()
-	button.Icon = icon
+		local icon = button:CreateTexture(nil, "BORDER")
+		icon:SetInside()
+		button.Icon = icon
 
-	local cooldown = CreateFrame("Cooldown", "$parentCooldown", button, "CooldownFrameTemplate")
-	cooldown:SetAllPoints()
-	cooldown:SetReverse(true)
-	cooldown:SetEdgeTexture(DB.bgTex)
-	cooldown:SetDrawBling(false)
-	cooldown:SetCountdownFormatter(CooldownFormatter)
-	button.Cooldown = cooldown
-	button.CooldownText = cooldown:GetCountdownFontString()
+		local cooldown = CreateFrame("Cooldown", "$parentCooldown", button, "CooldownFrameTemplate")
+		cooldown:SetAllPoints()
+		cooldown:SetReverse(true)
+		cooldown:SetEdgeTexture(DB.bgTex)
+		cooldown:SetDrawBling(false)
+		cooldown:SetCountdownFormatter(CooldownFormatter)
+		button.Cooldown = cooldown
+		button.CooldownText = cooldown:GetCountdownFontString()
 
-	local textFrame = CreateFrame("Frame", nil, button)
-	textFrame:SetAllPoints()
-	textFrame:SetFrameLevel(cooldown:GetFrameLevel() + 1)
+		local textFrame = CreateFrame("Frame", nil, button)
+		textFrame:SetAllPoints()
+		textFrame:SetFrameLevel(cooldown:GetFrameLevel() + 1)
 
-	local count = textFrame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
-	button.Count = count
+		local count = textFrame:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
+		button.Count = count
 
-	StyleAuraButton(element, button, options.showDebuffTypeBorder)
-	button:SetIcon(icon)
-	button:SetDurationCooldown(cooldown)
-	button:SetApplicationCount(count, {formatter = COUNT_FORMATTER})
-	if options.cancelButton then
-		button:SetCancelAuraButtons(options.cancelButton)
+		StyleAuraButton(container, button, showDebuffTypeBorder)
+		button:SetIcon(icon)
+		button:SetDurationCooldown(cooldown)
+		button:SetApplicationCount(count, {formatter = COUNT_FORMATTER})
+		if cancelButton then
+			button:SetCancelAuraButtons(cancelButton)
+		end
 	end
 end
 
@@ -315,34 +319,28 @@ local function CreateHolder(name, cfg, visibility)
 	return holder
 end
 
-local function CreateOverlayHolder(name, parent)
-	local holder = CreateFrame("Frame", name, parent)
-	holder:SetAllPoints(parent)
-	return holder
-end
-
 function A:CreateAuraHeader(filter, name, visibility)
 	local cfg = filter == "HELPFUL" and A.settings.Buffs or A.settings.Debuffs
 	local holderName = name or (filter == "HELPFUL" and "NDuiPlayerBuffs" or "NDuiPlayerDebuffs")
 	return CreateHolder(holderName, cfg, visibility)
 end
 
-local function CreateAuraContainer(owner, holder, cfg)
+local function CreateAuraContainer(name, holder, cfg)
 	local anchor, growthX = GetAnchorOptions(cfg)
 	local rowWidth = cfg.size * cfg.wrapAfter + C.margin * (cfg.wrapAfter - 1)
-	local container = owner:CreateAuras({
-		layout = AnchorUtil.FlowLayoutAxis.Horizontal,
-		layoutLimit = rowWidth,
-		initialAnchor = anchor,
-		growthX = growthX < 0 and "LEFT" or "RIGHT",
-		growthY = "DOWN",
-	})
-	container:SetParent(holder)
-	container:ClearAllPoints()
+	local container = CreateFrame("AuraContainer", name, holder, "CustomAuraContainerTemplate")
+	container:SetEnabled(false)
 	container:SetPoint(anchor, holder, anchor)
+	container:SetFlowLayoutAxis(AnchorUtil.FlowLayoutAxis.Horizontal)
+	container:SetFlowLayoutAnchorPoint(anchor)
+	container:SetFlowLayoutGrowthDirection(
+		growthX < 0 and AnchorUtil.FlowDirection.Left or AnchorUtil.FlowDirection.Right,
+		AnchorUtil.FlowDirection.Down
+	)
+	container:SetFlowLayoutPadding(0, 0, 0, 0)
+	container:SetFlowLayoutMaximumLineSize(rowWidth)
 	container.__nduiConfig = cfg
 	container.__itemButtons = {}
-	container.CreateButton = InitializeAuraButton
 	return container
 end
 
@@ -359,16 +357,19 @@ end
 
 local function AddAuraGroup(container, filter, showDebuffTypeBorder)
 	local cfg = container.__nduiConfig
-	local groupKey = container:AddGroup(filter, {
+	local groupKey = filter == "HELPFUL" and BUFF_GROUP_KEY or DEBUFF_GROUP_KEY
+	container:AddAuraGroup(groupKey, filter, {
 		maxFrameCount = GetMaxFrameCount(cfg),
-		cancelButton = filter == "HELPFUL" and CANCEL_AURA_BUTTONS or nil,
-		showDebuffTypeBorder = showDebuffTypeBorder,
+		initializeFrame = CreateAuraButtonInitializer(
+			container,
+			filter == "HELPFUL" and CANCEL_AURA_BUTTONS or nil,
+			showDebuffTypeBorder
+		),
 		sortMethod = AuraContainerSortMethod.Default,
 		sortDirection = AuraContainerSortDirection.Normal,
 		layout = GetLayoutOptions(cfg),
 	})
 	container.__groupKey = groupKey
-	return groupKey
 end
 
 local function GetActiveItemEnchantmentCount()
@@ -384,11 +385,10 @@ end
 
 function A:UpdateBuffAuraLimit()
 	local activeCount = GetActiveItemEnchantmentCount()
-	for _, container in ipairs({A.BuffContainer, A.VehicleBuffContainer}) do
-		if container and container.__groupKey then
-			local maxFrameCount = GetMaxFrameCount(container.__nduiConfig) - activeCount
-			container:SetAuraGroupMaxFrameCount(container.__groupKey, maxFrameCount)
-		end
+	local container = A.BuffContainer
+	if container and container.__groupKey then
+		local maxFrameCount = GetMaxFrameCount(container.__nduiConfig) - activeCount
+		container:SetAuraGroupMaxFrameCount(container.__groupKey, maxFrameCount)
 	end
 end
 
@@ -416,16 +416,25 @@ local function UpdateItemEnchantmentBorders()
 	end
 	itemBorderUpdatePending = nil
 
-	for _, container in ipairs({A.BuffContainer, A.VehicleBuffContainer}) do
-		if container then
-			for inventorySlot, button in pairs(container.__itemButtons) do
-				UpdateItemEnchantmentBorder(button, inventorySlot)
-			end
+	local container = A.BuffContainer
+	if container then
+		for inventorySlot, button in pairs(container.__itemButtons) do
+			UpdateItemEnchantmentBorder(button, inventorySlot)
 		end
 	end
 end
 
-local function OnAuraEvent(_, event)
+local function UpdateAuraUnits()
+	local unit = UnitHasVehiclePlayerFrameUI("player") and "vehicle" or "player"
+	A.BuffContainer:SetUnit(unit)
+	A.DebuffContainer:SetUnit(unit)
+end
+
+local function OnAuraEvent(_, event, unit)
+	if event == "PLAYER_ENTERING_WORLD" or unit == "player" then
+		UpdateAuraUnits()
+	end
+
 	A:UpdateBuffAuraLimit()
 
 	if itemBorderUpdatePending or event == "PLAYER_ENTERING_WORLD" or event == "WEAPON_SLOT_CHANGED" then
@@ -433,42 +442,24 @@ local function OnAuraEvent(_, event)
 	end
 end
 
-local activeBuffUnit
-local function UpdateBuffHolderVisibility(owner)
-	local unit = owner.__unit
-	if unit == activeBuffUnit then return end
-
-	activeBuffUnit = unit
-	local isVehicle = unit == "vehicle"
-	A.PlayerBuffFrame:SetShown(not isVehicle)
-	A.VehicleBuffFrame:SetShown(isVehicle)
-end
-
-function A:CreatePlayerAuraFrames(owner)
-	A.BuffContainer = CreateAuraContainer(owner, A.PlayerBuffFrame, A.settings.Buffs)
+function A:CreatePlayerAuraFrames()
+	A.BuffContainer = CreateAuraContainer("NDuiPlayerBuffsContainer", A.BuffFrame, A.settings.Buffs)
 	AddItemEnchantments(A.BuffContainer)
 	AddAuraGroup(A.BuffContainer, "HELPFUL")
 
-	A.VehicleBuffContainer = CreateAuraContainer(owner, A.VehicleBuffFrame, A.settings.Buffs)
-	AddItemEnchantments(A.VehicleBuffContainer)
-	AddAuraGroup(A.VehicleBuffContainer, "HELPFUL")
-
-	A.DebuffContainer = CreateAuraContainer(owner, A.DebuffFrame, A.settings.Debuffs)
+	A.DebuffContainer = CreateAuraContainer("NDuiPlayerDebuffsContainer", A.DebuffFrame, A.settings.Debuffs)
 	AddAuraGroup(A.DebuffContainer, "HARMFUL", true)
 
 	A:UpdateBuffAuraLimit()
-
-	local previousPostUpdate = owner.PostUpdate
-	owner.PostUpdate = function(self, event)
-		if previousPostUpdate then
-			previousPostUpdate(self, event)
-		end
-		UpdateBuffHolderVisibility(self)
-	end
-	UpdateBuffHolderVisibility(owner)
+	UpdateAuraUnits()
+	A.BuffContainer:SetEnabled(true)
+	A.DebuffContainer:SetEnabled(true)
 
 	local controller = CreateFrame("Frame")
 	controller:RegisterEvent("PLAYER_ENTERING_WORLD")
+	controller:RegisterEvent("UNIT_ENTERED_VEHICLE")
+	controller:RegisterEvent("UNIT_EXITING_VEHICLE")
+	controller:RegisterEvent("UNIT_EXITED_VEHICLE")
 	controller:RegisterEvent("PLAYER_REGEN_ENABLED")
 	controller:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 	controller:RegisterEvent("ENCOUNTER_END")
@@ -478,13 +469,6 @@ function A:CreatePlayerAuraFrames(owner)
 	controller:RegisterEvent("WEAPON_SLOT_CHANGED")
 	controller:SetScript("OnEvent", OnAuraEvent)
 	A.controller = controller
-end
-
-local function CreateAuraOwner(self)
-	self:SetSize(1, 1)
-	self:SetPoint("TOPLEFT", UIParent)
-	self:EnableMouse(false)
-	A:CreatePlayerAuraFrames(self)
 end
 
 function A:BuildBuffFrame()
@@ -497,21 +481,12 @@ function A:BuildBuffFrame()
 	A.BuffFrame:ClearAllPoints()
 	A.BuffFrame:SetPoint("TOPRIGHT", A.BuffFrame.mover)
 
-	A.PlayerBuffFrame = CreateOverlayHolder("NDuiPlayerBuffHolder", A.BuffFrame)
-	A.VehicleBuffFrame = CreateOverlayHolder("NDuiVehicleBuffHolder", A.BuffFrame)
-
 	A.DebuffFrame = A:CreateAuraHeader("HARMFUL", "NDuiPlayerDebuffs")
 	A.DebuffFrame.mover = B.Mover(A.DebuffFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", A.BuffFrame.mover, "BOTTOMRIGHT", 0, -12})
 	A.DebuffFrame:ClearAllPoints()
 	A.DebuffFrame:SetPoint("TOPRIGHT", A.DebuffFrame.mover)
 
-	local activeStyle = oUF:GetActiveStyle()
-	oUF:RegisterStyle("NDuiPlayerAuras", CreateAuraOwner)
-	oUF:SetActiveStyle("NDuiPlayerAuras")
-	A.AuraOwner = oUF:Spawn("player", "oUF_NDuiPlayerAuras", true)
-	if activeStyle then
-		oUF:SetActiveStyle(activeStyle)
-	end
+	A:CreatePlayerAuraFrames()
 end
 
 function A:OnLogin()
