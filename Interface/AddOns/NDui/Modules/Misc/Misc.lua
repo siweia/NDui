@@ -781,14 +781,14 @@ function M:EnhancedPicker()
 
 	local count = 0
 	for class, name in pairs(LOCALIZED_CLASS_NAMES_MALE) do
-		local value = DB.ClassColors[class]
+		local value = C_ClassColor.GetClassColor(class)
 		if value then
 			local bu = B.CreateButton(colorBar, 22, 22, true)
-			bu.Icon:SetColorTexture(value.r, value.g, value.b)
+			bu.Icon:SetColorTexture(value:GetRGB())
 			bu:SetPoint("LEFT", count*22, 0)
-			bu.colorStr = value.colorStr
+			bu.colorStr = value:GenerateHexColor()
 			bu:SetScript("OnClick", M.EnhancedPicker_UpdateColor)
-			B.AddTooltip(bu, "ANCHOR_TOP", "|c"..value.colorStr..name)
+			B.AddTooltip(bu, "ANCHOR_TOP", value:GenerateHexColorMarkup()..name)
 
 			count = count + 1
 		end

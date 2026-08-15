@@ -101,7 +101,7 @@ function TT:SetupTooltipID()
 				end
 			else
 				local name = GetUnitName(caster, true)
-				local hexColor = B.HexRGB(B.UnitColor(caster))
+				local hexColor = B.UnitColorString(caster)
 				self:AddDoubleLine(L["From"]..":", hexColor..(name or UNKNOWN))
 				self:Show()
 			end

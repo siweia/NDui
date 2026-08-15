@@ -158,16 +158,21 @@ do
 	function B.HexRGB(r, g, b)
 		if r then
 			if type(r) == "table" then
-				if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
+				return "|c"..C_ColorUtil.GenerateTextColorCode(r)
 			end
 			return format("|cff%02x%02x%02x", r*255, g*255, b*255)
 		end
 	end
 
 	function B.ClassColor(class)
-		local color = DB.ClassColors[class]
+		local color = class and C_ClassColor.GetClassColor(class)
 		if not color then return 1, 1, 1 end
-		return color.r, color.g, color.b
+		return color:GetRGB()
+	end
+
+	function B.ClassColorString(class)
+		local color = class and C_ClassColor.GetClassColor(class)
+		return color and color:GenerateHexColorMarkup() or "|cffffffff"
 	end
 
 	function B.UnitColor(unit)
@@ -187,6 +192,14 @@ do
 			end
 		end
 		return r, g, b
+	end
+
+	function B.UnitColorString(unit)
+		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
+			local class = select(2, UnitClass(unit))
+			return B.ClassColorString(class)
+		end
+		return B.HexRGB(B.UnitColor(unit))
 	end
 
 	local function colorsAndPercent(a, b, ...)

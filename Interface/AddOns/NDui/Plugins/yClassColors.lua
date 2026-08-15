@@ -11,13 +11,17 @@ local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 
 -- Colors
 local function classColor(class, showRGB)
-	local color = DB.ClassColors[DB.ClassList[class] or class]
-	if not color then color = DB.ClassColors["PRIEST"] end
+	local classFile = class
+	if B:NotSecretValue(class) then
+		classFile = DB.ClassList[class] or class
+	end
+	local color = classFile and C_ClassColor.GetClassColor(classFile)
+	if not color then color = C_ClassColor.GetClassColor("PRIEST") end
 
 	if showRGB then
-		return color.r, color.g, color.b
+		return color:GetRGB()
 	else
-		return "|c"..color.colorStr
+		return color:GenerateHexColorMarkup()
 	end
 end
 

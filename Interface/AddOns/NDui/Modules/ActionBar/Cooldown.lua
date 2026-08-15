@@ -5,6 +5,7 @@ local module = B:RegisterModule("Cooldown")
 local DISABLE_INDEX = 5
 local numberFormatter = C_StringUtil.CreateNumericRuleFormatter()
 local hookedCooldownFrames = {}
+local ignoredCooldownFrames = {}
 
 local ROUNDING_UP = Enum.NumericRuleFormatRounding.Up
 local ROUNDING_NEAREST = Enum.NumericRuleFormatRounding.Nearest
@@ -56,11 +57,22 @@ function module:UpdateBreakPoints()
 end
 
 local function updateCooldown(cooldown)
-	if not cooldown or B:IsSecretTable(cooldown) or hookedCooldownFrames[cooldown] then return end
+	if not cooldown or ignoredCooldownFrames[cooldown] or B:IsSecretTable(cooldown) or hookedCooldownFrames[cooldown] then return end
 
 	local isEnable = C.db["Actionbar"]["CDFormat"] ~= DISABLE_INDEX
 	cooldown:SetCountdownFormatter(isEnable and numberFormatter or nil)
 	hookedCooldownFrames[cooldown] = true
+end
+
+function module:IgnoreCooldown(cooldown)
+	if not cooldown then return end
+
+	ignoredCooldownFrames[cooldown] = true
+	hookedCooldownFrames[cooldown] = nil
+end
+
+function module:GetNumberFormatter()
+	return numberFormatter
 end
 
 function module:UpdateCooldownFormat()

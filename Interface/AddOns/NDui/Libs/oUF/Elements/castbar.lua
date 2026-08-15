@@ -84,11 +84,16 @@ local _, ns = ...
 local oUF = ns.oUF
 
 local STATE = {}
+local issecretvalue = issecretvalue
 
-local FALLBACK_ICON = 136243 -- Interface\ICONS\Trade_Engineering
 local FAILED = _G.FAILED or 'Failed'
 local INTERRUPTED = _G.INTERRUPTED or 'Interrupted'
 local GLOBAL_SPELL_ID = 61304 -- Global Cooldown
+
+local function HasInterruptedBy(interruptedBy)
+	-- Opaque GUIDs still identify an interrupted cast; only their contents are unavailable.
+	return issecretvalue(interruptedBy) or interruptedBy ~= nil
+end
 
 local defaultFormatter = C_StringUtil.CreateSecondsFormatter()
 defaultFormatter:SetDefaultAbbreviation(Enum.SecondsFormatterAbbreviation.OneLetter)
@@ -182,44 +187,69 @@ Defaults to the object unit.
 * self - the Castbar widget
 * unit - the unit for which the update has been triggered (string)
 --]]
-local function ShouldShow(element, unit)
-	return element.__owner.__unit == unit
-end
-
-local function CastStart(self, event, unit)
-	local element = self.Castbar
-	if(not (element.ShouldShow or ShouldShow) (element, unit)) then
+local function GetDisplayUnit(element, eventUnit)
+	-- Secret unit payloads have already been filtered by RegisterUnitEvent. For public
+	-- payloads, keep the active/real unit distinction used during vehicle transitions.
+	local unit = element.__owner.__unit
+	if(not issecretvalue(eventUnit) and eventUnit ~= unit) then
 		return
 	end
 
-	-- reset first to avoid any attributes that might be stuck
-	resetState(element)
-
-	local direction, duration = Enum.StatusBarTimerDirection.ElapsedTime
-	local name, displayName, texture, startTime, endTime, isTradeSkill, _, notInterruptible, spellID, castID = UnitCastingInfo(unit)
-	if(name) then
-		STATE[element].casting = true
-		duration = UnitCastingDuration(unit)
-	else
-		local isEmpowered
-		name, displayName, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID, isEmpowered, _, castID = UnitChannelInfo(unit)
-		if(isEmpowered) then
-			STATE[element].empowering = true
-			duration = UnitEmpoweredChannelDuration(unit)
-		else
-			STATE[element].channeling = true
-			duration = UnitChannelDuration(unit)
-			direction = Enum.StatusBarTimerDirection.RemainingTime
-		end
+	if(element.ShouldShow and not element:ShouldShow(unit)) then
+		return
 	end
 
-	if(not name or (isTradeSkill and element.hideTradeSkills)) then
+	return unit
+end
+
+local function CastStart(self, event, eventUnit, _castGUID, _spellID, eventCastID)
+	local element = self.Castbar
+	local unit = GetDisplayUnit(element, eventUnit)
+	if(not unit) then return end
+
+	local direction, duration = Enum.StatusBarTimerDirection.ElapsedTime
+	local displayName, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID, castID, _
+	_, displayName, texture, startTime, endTime, isTradeSkill, _, notInterruptible, spellID, castID = UnitCastingInfo(unit)
+	local isCasting = isTradeSkill ~= nil
+	local isEmpowered
+	if(not isCasting) then
+		_, displayName, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID, isEmpowered, _, castID = UnitChannelInfo(unit)
+	end
+
+	-- The frame can be registered for both its active and real unit while in a vehicle.
+	-- Match only on public cast state and NeverSecret castBarID, never on the event unit.
+	if((eventCastID ~= nil and eventCastID ~= castID)
+	or (event == 'UNIT_SPELLCAST_START' and not isCasting)
+	or (event == 'UNIT_SPELLCAST_CHANNEL_START' and (isTradeSkill == nil or isCasting or isEmpowered))
+	or (event == 'UNIT_SPELLCAST_EMPOWER_START' and not isEmpowered)
+	) then
+		return
+	end
+
+	if(isTradeSkill == nil or (isTradeSkill and element.hideTradeSkills)) then
+		resetState(element)
+
 		-- don't cancel hold time when we swap targets
 		if(not (event == 'PLAYER_TARGET_CHANGED' and STATE[element].holdTime and STATE[element].holdTime > 0)) then
 			element:Hide()
 		end
 
 		return
+	end
+
+	-- reset first to avoid any attributes that might be stuck
+	resetState(element)
+
+	if(isCasting) then
+		STATE[element].casting = true
+		duration = UnitCastingDuration(unit)
+	elseif(isEmpowered) then
+		STATE[element].empowering = true
+		duration = UnitEmpoweredChannelDuration(unit)
+	else
+		STATE[element].channeling = true
+		duration = UnitChannelDuration(unit)
+		direction = Enum.StatusBarTimerDirection.RemainingTime
 	end
 
 	STATE[element].delay = 0
@@ -244,7 +274,7 @@ local function CastStart(self, event, unit)
 		element.Time.binding:SetDuration(duration)
 	end
 
-	if(element.Icon) then element.Icon:SetTexture(texture or FALLBACK_ICON) end
+	if(element.Icon) then element.Icon:SetTexture(texture) end
 	if(element.Shield) then element.Shield:SetAlphaFromBoolean(notInterruptible, 1, 0) end
 	if(element.Spark) then element.Spark:Show() end
 	if(element.Text) then element.Text:SetText(displayName) end
@@ -309,23 +339,22 @@ local function CastStart(self, event, unit)
 	element:Show()
 end
 
-local function CastUpdate(self, event, unit, _, spellID, castID)
+local function CastUpdate(self, event, eventUnit, _castGUID, spellID, castID)
 	local element = self.Castbar
-	if(not (element.ShouldShow or ShouldShow) (element, unit)) then
-		return
-	end
+	local unit = GetDisplayUnit(element, eventUnit)
+	if(not unit) then return end
 
 	if(not element:IsShown() or not castID or STATE[element].castID ~= castID) then
 		return
 	end
 
 	local direction = Enum.StatusBarTimerDirection.ElapsedTime
-	local duration, name, startTime, delayTime, _
+	local duration, startTime, delayTime, isTradeSkill, _
 	if(event == 'UNIT_SPELLCAST_DELAYED') then
-		name, _, _, _, _, _, _, _, _, _, delayTime = UnitCastingInfo(unit)
+		_, _, _, _, _, isTradeSkill, _, _, _, _, delayTime = UnitCastingInfo(unit)
 		duration = UnitCastingDuration(unit)
 	else
-		name, _, _, startTime = UnitChannelInfo(unit)
+		_, _, _, startTime, _, isTradeSkill = UnitChannelInfo(unit)
 		if(event == 'UNIT_SPELLCAST_EMPOWER_UPDATE') then
 			duration = UnitEmpoweredChannelDuration(unit)
 		else
@@ -334,7 +363,7 @@ local function CastUpdate(self, event, unit, _, spellID, castID)
 		end
 	end
 
-	if(not name) then return end
+	if(isTradeSkill == nil) then return end
 
 	if(unit == 'player' and startTime) then
 		-- we can only calculate delay for players
@@ -376,11 +405,10 @@ local function CastUpdate(self, event, unit, _, spellID, castID)
 	end
 end
 
-local function CastStop(self, event, unit, _, spellID, ...)
+local function CastStop(self, event, eventUnit, _castGUID, spellID, ...)
 	local element = self.Castbar
-	if(not (element.ShouldShow or ShouldShow) (element, unit)) then
-		return
-	end
+	local unit = GetDisplayUnit(element, eventUnit)
+	if(not unit) then return end
 
 	local castID, interruptedBy, empowerComplete
 	if(event == 'UNIT_SPELLCAST_STOP') then
@@ -397,7 +425,8 @@ local function CastStop(self, event, unit, _, spellID, ...)
 
 	if(element.Spark) then element.Spark:Hide() end
 
-	if(interruptedBy) then
+	local wasInterrupted = HasInterruptedBy(interruptedBy)
+	if(wasInterrupted) then
 		if(element.Text) then element.Text:SetText(INTERRUPTED) end
 
 		STATE[element].holdTime = element.timeToHold or 0
@@ -407,7 +436,7 @@ local function CastStop(self, event, unit, _, spellID, ...)
 		element:SetValue(1)
 	end
 
-	if(interruptedBy) then
+	if(wasInterrupted) then
 		--[[ Callback: Castbar:PostCastInterrupted(unit, spellID, interruptedBy)
 		Called after the element has been updated when a spell cast or channel has stopped.
 
@@ -436,11 +465,10 @@ local function CastStop(self, event, unit, _, spellID, ...)
 	resetState(element)
 end
 
-local function CastFail(self, event, unit, _, spellID, ...)
+local function CastFail(self, event, eventUnit, _castGUID, spellID, ...)
 	local element = self.Castbar
-	if(not (element.ShouldShow or ShouldShow) (element, unit)) then
-		return
-	end
+	local unit = GetDisplayUnit(element, eventUnit)
+	if(not unit) then return end
 
 	local castID, interruptedBy
 	if(event == 'UNIT_SPELLCAST_INTERRUPTED') then
@@ -465,7 +493,7 @@ local function CastFail(self, event, unit, _, spellID, ...)
 	element:SetMinMaxValues(0, 1)
 	element:SetValue(1)
 
-	if(interruptedBy) then
+	if(event == 'UNIT_SPELLCAST_INTERRUPTED') then
 		if(element.PostCastInterrupted) then
 			element:PostCastInterrupted(unit, spellID, interruptedBy)
 		end
@@ -485,16 +513,21 @@ local function CastFail(self, event, unit, _, spellID, ...)
 	resetState(element)
 end
 
-local function CastInterruptible(self, event, unit)
+local function CastInterruptible(self, _event, eventUnit)
 	local element = self.Castbar
-	if(not (element.ShouldShow or ShouldShow) (element, unit)) then
-		return
-	end
+	local unit = GetDisplayUnit(element, eventUnit)
+	if(not unit) then return end
 
 	if(not element:IsShown()) then return end
-	-- ISSUE: we can't verify if this is for an active cast/channel/empower without castID
 
-	local notInterruptible = event == 'UNIT_SPELLCAST_NOT_INTERRUPTIBLE'
+	-- The event has no castBarID, so re-query the active unit instead of trusting its unit payload.
+	local isTradeSkill, notInterruptible, _
+	_, _, _, _, _, isTradeSkill, _, notInterruptible = UnitCastingInfo(unit)
+	if(isTradeSkill == nil) then
+		_, _, _, _, _, isTradeSkill, notInterruptible = UnitChannelInfo(unit)
+	end
+	if(isTradeSkill == nil) then return end
+
 	STATE[element].notInterruptible = notInterruptible
 
 	if(element.Shield) then element.Shield:SetAlphaFromBoolean(notInterruptible, 1, 0) end
@@ -522,11 +555,10 @@ local function globalTimerCallback(element)
 	globalTimer = nil
 end
 
-local function CastGlobal(self, event, unit, _, spellID)
+local function CastGlobal(self, _event, eventUnit, _castGUID, spellID)
 	local element = self.Castbar
-	if(not (element.ShouldShow or ShouldShow) (element, unit)) then
-		return
-	end
+	local unit = GetDisplayUnit(element, eventUnit)
+	if(not unit) then return end
 
 	-- ensure a real cast is not active
 	if(STATE[element].castID) then

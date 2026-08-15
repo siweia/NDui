@@ -100,7 +100,7 @@ function TT:GetTarget(unit)
 	if B:NotSecretValue(isYou) and isYou then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
-		return B.HexRGB(B.UnitColor(unit))..UnitName(unit).."|r"
+		return B.UnitColorString(unit)..UnitName(unit).."|r"
 	end
 end
 
@@ -254,8 +254,7 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	local r, g, b = B.UnitColor(unit)
-	local hexColor = B.HexRGB(r, g, b)
+	local hexColor = B.UnitColorString(unit)
 	local text = GameTooltipTextLeft1:GetText()
 	if text then
 		local ricon = GetRaidTargetIndex(unit)

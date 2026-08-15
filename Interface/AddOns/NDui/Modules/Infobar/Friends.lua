@@ -253,7 +253,7 @@ local function GetButtonTexFromInviteType(guid, factionName)
 end
 
 local function GetNameAndInviteType(class, charName, guid, factionName)
-	return format("%s%s|r %s", B.HexRGB(B.ClassColor(DB.ClassList[class])), charName, GetButtonTexFromInviteType(guid, factionName))
+	return format("%s%s|r %s", B.ClassColorString(DB.ClassList[class]), charName, GetButtonTexFromInviteType(guid, factionName))
 end
 
 local function buttonOnClick(self, btn)
@@ -361,7 +361,7 @@ local function buttonOnEnter(self)
 					end
 
 					class = DB.ClassList[class]
-					local classColor = B.HexRGB(B.ClassColor(class))
+					local classColor = B.ClassColorString(class)
 					if faction == "Horde" then
 						clientString = "|TInterface\\FriendsFrame\\PlusManz-Horde:16:|t"
 					elseif faction == "Alliance" then
@@ -400,7 +400,7 @@ local function buttonOnEnter(self)
 		GameTooltip:AddLine(L["WoW"], 1,.8,0)
 		GameTooltip:AddLine(" ")
 		local name, level, class, area, _, note = unpack(self.data)
-		local classColor = B.HexRGB(B.ClassColor(class))
+		local classColor = B.ClassColorString(class)
 		GameTooltip:AddLine(format("%s %s%s", level, classColor, name))
 		GameTooltip:AddLine(format("%s%s", inactiveZone, area))
 
@@ -456,7 +456,7 @@ function info:FriendsPanel_UpdateButton(button)
 		button.status:SetTexture(status)
 		local zoneColor = GetAreaText() == area and activeZone or inactiveZone
 		local levelColor = B.HexRGB(GetQuestDifficultyColor(level))
-		local classColor = DB.ClassColors[class] or levelColor
+		local classColor = class and C_ClassColor.GetClassColor(class) or GetQuestDifficultyColor(level)
 		button.name:SetText(format("%s%s|r %s%s", levelColor, level, B.HexRGB(classColor), name))
 		button.zone:SetText(format("%s%s", zoneColor, area))
 		C_Texture.SetTitleIconTexture(button.gameIcon, BNET_CLIENT_WOW, Enum.TitleIconVersion.Medium)
@@ -471,7 +471,7 @@ function info:FriendsPanel_UpdateButton(button)
 		local zoneColor = inactiveZone
 		local name = inactiveZone..charName
 		if client == BNET_CLIENT_WOW then
-			local color = DB.ClassColors[class] or GetQuestDifficultyColor(1)
+			local color = class and C_ClassColor.GetClassColor(class) or GetQuestDifficultyColor(1)
 			name = B.HexRGB(color)..charName
 			zoneColor = GetAreaText() == infoText and activeZone or inactiveZone
 		end

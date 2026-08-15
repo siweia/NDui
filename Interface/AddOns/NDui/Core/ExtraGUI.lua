@@ -593,16 +593,19 @@ function G:SetupNameplateFilter(parent)
 	end
 end
 
-local function updateCornerSpells()
-	B:GetModule("UnitFrames"):UpdateCornerSpells()
-end
-
 function G:SetupSpellsIndicator(parent)
 	local guiName = "NDuiGUI_SpellsIndicator"
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
 	local panel = createExtraGUI(parent, guiName, L["BuffIndicator"].."*")
+	local cornerSpellsChanged
+	local function updateCornerSpells()
+		if not cornerSpellsChanged then return end
+		B:GetModule("UnitFrames"):UpdateCornerSpells()
+		G.needUIReload = true
+		cornerSpellsChanged = nil
+	end
 	panel:SetScript("OnHide", updateCornerSpells)
 
 	local barList = {}
@@ -638,6 +641,7 @@ function G:SetupSpellsIndicator(parent)
 			end
 			barList[spellID] = nil
 			sortBars(barList)
+			cornerSpellsChanged = true
 		end)
 
 		name = L[anchor] or name
@@ -662,6 +666,7 @@ function G:SetupSpellsIndicator(parent)
 		NDuiADB["CornerSpells"][DB.MyClass][spellID] = {anchor, {r, g, b}, showAll}
 		createBar(parent.child, spellID, anchor, r, g, b, showAll)
 		parent.box:SetText("")
+		cornerSpellsChanged = true
 	end
 
 	StaticPopupDialogs["RESET_NDUI_RaidBuffsWhite"] = {
@@ -740,7 +745,7 @@ function G:SetupSpellsIndicator(parent)
 	end
 	local index = 1
 	for class, value in pairs(UF.NonSecretSpells) do
-		local color = B.HexRGB(B.ClassColor(class))
+		local color = B.ClassColorString(class)
 		local localClassName = LOCALIZED_CLASS_NAMES_MALE[class] or OTHER
 		menuList[index] = {text = color..localClassName, notCheckable = true, hasArrow = true, menuList = {}}
 
@@ -1837,6 +1842,9 @@ function G:SetupUFAuras(parent)
 
 	local UF = B:GetModule("UnitFrames")
 	local parent, offset = scroll.child, -10
+	local function queueAuraReload()
+		G.needUIReload = true
+	end
 
 	local defaultData = {
 		["Player"] = {1, 1, 22, 20, 20},
@@ -1876,7 +1884,7 @@ function G:SetupUFAuras(parent)
 
 	createOptionTitle(parent, GENERAL, offset)
 	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", UF.UpdateUFAuras, L["DesaturateIconTip"])
-	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", UF.UpdateUFAuras, L["DebuffColorTip"])
+	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", queueAuraReload, L["DebuffColorTip"])
 	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-130, "CDFontSize", UF.UpdateUFAuras)
 
 	local options = {
@@ -2052,25 +2060,14 @@ function G:SetupBuffFrame(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, L["BuffFrame"].."*")
+	local panel = createExtraGUI(parent, guiName, L["BuffFrame"])
 	local scroll = G:CreateScroll(panel, 260, 540)
 
-	local A = B:GetModule("Auras")
 	local parent, offset = scroll.child, -10
 	local defaultSize, defaultPerRow = 30, 16
 
-	local function updateBuffFrame()
-		if not A.settings then return end
-		A:UpdateOptions()
-		A:UpdateHeader(A.BuffFrame)
-		A.BuffFrame.mover:SetSize(A.BuffFrame:GetSize())
-	end
-
-	local function updateDebuffFrame()
-		if not A.settings then return end
-		A:UpdateOptions()
-		A:UpdateHeader(A.DebuffFrame)
-		A.DebuffFrame.mover:SetSize(A.DebuffFrame:GetSize())
+	local function queueAuraReload()
+		G.needUIReload = true
 	end
 
 	local function updatePrivateAuras()
@@ -2089,8 +2086,8 @@ function G:SetupBuffFrame(parent)
 		end
 	end
 
-	createOptionGroup(parent, "Buffs*", offset, "Buff", updateBuffFrame)
-	createOptionGroup(parent, "Debuffs*", offset-260, "Debuff", updateDebuffFrame)
+	createOptionGroup(parent, "Buffs", offset, "Buff", queueAuraReload)
+	createOptionGroup(parent, "Debuffs", offset-260, "Debuff", queueAuraReload)
 	createOptionGroup(parent, L["PrivateAuras"], offset-520, "Private", updatePrivateAuras)
 end
 

@@ -116,9 +116,9 @@ tinsert(C.defaultThemes, function()
 
 		local class = select(2, GetPlayerInfoByGUID(guid))
 		if class then
-			local color = DB.ClassColors[class]
+			local color = C_ClassColor.GetClassColor(class)
 			if color and notification.Name then
-				notification.Name:SetTextColor(color.r, color.g, color.b)
+				notification.Name:SetTextColor(color:GetRGB())
 			end
 		end
 	end)

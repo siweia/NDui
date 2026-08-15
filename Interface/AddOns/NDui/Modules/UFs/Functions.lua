@@ -3,6 +3,7 @@ local B, C, L, DB = unpack(ns)
 
 local oUF = ns.oUF
 local UF = B:RegisterModule("UnitFrames")
+local Cooldown = B:GetModule("Cooldown")
 
 local pairs, next, unpack = pairs, next, unpack
 local max = math.max
@@ -17,6 +18,12 @@ oUF.colors.health:SetCurve({
 	[ 1] = CreateColor(.1, .1, .1),
 })
 oUF.colors.dispel.None = oUF:CreateColor(0, 0, 0)
+
+local UNITFRAME_AURA_DISPEL_COLORS = {}
+for dispelName, color in pairs(oUF.colors.dispel) do
+	UNITFRAME_AURA_DISPEL_COLORS[dispelName] = color
+end
+UNITFRAME_AURA_DISPEL_COLORS.None = oUF:CreateColor(1, 0, 0)
 
 local function ReplacePowerColor(name, index, r, g, b)
 	oUF.colors.power[name] = oUF:CreateColor(r, g, b)
@@ -167,7 +174,7 @@ function UF.HealthPostUpdate(element, unit)
 		local color
 		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
 			local _, class = UnitClass(unit)
-			color = self.colors.class[class]
+			color = class and C_ClassColor.GetClassColor(class)
 		elseif UnitReaction(unit, "player") then
 			color = self.colors.reaction[UnitReaction(unit, "player")]
 		end
@@ -855,14 +862,110 @@ function UF:ReskinTimerTrakcer(self)
 end
 
 -- Auras Relevant
+local AURA_DURATION_BREAKPOINTS = {
+	{
+		threshold = 0,
+		step = 1,
+		rounding = Enum.NumericRuleFormatRounding.Down,
+		format = "%d",
+	},
+	{
+		threshold = SECONDS_PER_MIN,
+		format = "%d:%02d",
+		components = {
+			{div = SECONDS_PER_MIN, step = 1, rounding = Enum.NumericRuleFormatRounding.Down},
+			{mod = SECONDS_PER_MIN, step = 1, rounding = Enum.NumericRuleFormatRounding.Down},
+		},
+	},
+	{
+		threshold = 5 * SECONDS_PER_MIN,
+		format = "%dm",
+		components = {{div = SECONDS_PER_MIN, step = 1, rounding = Enum.NumericRuleFormatRounding.Down}},
+	},
+	{
+		threshold = SECONDS_PER_HOUR,
+		format = "%dh",
+		components = {{div = SECONDS_PER_HOUR, step = 1, rounding = Enum.NumericRuleFormatRounding.Down}},
+	},
+	{
+		threshold = SECONDS_PER_DAY,
+		format = "%dd",
+		components = {{div = SECONDS_PER_DAY, step = 1, rounding = Enum.NumericRuleFormatRounding.Down}},
+	},
+}
+local HIDDEN_AURA_DURATION_BREAKPOINTS = {{threshold = 0, format = ""}}
+
+local function UpdateAuraDurationFormatter(element, hidden)
+	local formatter = element.__nduiDurationFormatter
+	if not formatter then
+		formatter = C_StringUtil.CreateNumericRuleFormatter()
+		element.__nduiDurationFormatter = formatter
+	end
+
+	hidden = hidden and true or false
+	if element.__nduiDurationHidden ~= hidden then
+		formatter:SetBreakpoints(hidden and HIDDEN_AURA_DURATION_BREAKPOINTS or AURA_DURATION_BREAKPOINTS)
+		element.__nduiDurationHidden = hidden
+	end
+
+	return formatter
+end
+
 function UF:UpdateIconTexCoord(width, height)
 	local ratio = height / width
 	local mult = (1 - ratio) / 2
 	self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
 end
 
-function UF.PostCreateButton(element, button)
+local function CreateAuraDispelBorder(button)
+	local thickness = C.mult
+	local border = CreateFrame("Frame", nil, button)
+	border:SetAllPoints()
+	border:SetFrameLevel(button.Cooldown:GetFrameLevel())
+	local textures = {}
+
+	local top = border:CreateTexture(nil, "OVERLAY", nil, 7)
+	top:SetColorTexture(1, 1, 1)
+	top:SetPoint("TOPLEFT", button)
+	top:SetPoint("TOPRIGHT", button)
+	top:SetHeight(thickness)
+	textures[1] = top
+
+	local bottom = border:CreateTexture(nil, "OVERLAY", nil, 7)
+	bottom:SetColorTexture(1, 1, 1)
+	bottom:SetPoint("BOTTOMLEFT", button)
+	bottom:SetPoint("BOTTOMRIGHT", button)
+	bottom:SetHeight(thickness)
+	textures[2] = bottom
+
+	local left = border:CreateTexture(nil, "OVERLAY", nil, 7)
+	left:SetColorTexture(1, 1, 1)
+	left:SetPoint("TOPLEFT", button)
+	left:SetPoint("BOTTOMLEFT", button)
+	left:SetWidth(thickness)
+	textures[3] = left
+
+	local right = border:CreateTexture(nil, "OVERLAY", nil, 7)
+	right:SetColorTexture(1, 1, 1)
+	right:SetPoint("TOPRIGHT", button)
+	right:SetPoint("BOTTOMRIGHT", button)
+	right:SetWidth(thickness)
+	textures[4] = right
+
+	local options = {
+		showWhenHarmful = true,
+		showWithoutDispelType = true,
+		style = Enum.CustomAuraButtonDispelTypeTextureStyle.PreserveAsset,
+		customDispelColorMap = UNITFRAME_AURA_DISPEL_COLORS,
+	}
+	for _, texture in ipairs(textures) do
+		button:AddDispelTypeTexture(texture, options)
+	end
+end
+
+function UF.PostCreateButton(element, button, options)
 	local fontSize = element.fontSize or element.size*.4
+	local isRaid = element.__owner.mystyle == "raid"
 	if button.Count then
 		button.Count:SetFont(DB.Font[1], fontSize, DB.Font[3])
 	end
@@ -872,13 +975,16 @@ function UF.PostCreateButton(element, button)
 		if button.CooldownText then
 			button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
 		end
-	end
-
-	local isRaid = element.__owner.mystyle == "raid"
-	if button.Cooldown then
-		button.Cooldown:SetHideCountdownNumbers(isRaid and not C.db["UFs"]["RaidCDText"])
+		Cooldown:IgnoreCooldown(button.Cooldown)
+		button.Cooldown:SetCountdownFormatter(UpdateAuraDurationFormatter(element, isRaid and not C.db["UFs"]["RaidCDText"]))
 	end
 	button.iconbg = B.ReskinIcon(button.Icon)
+	button.iconbg:SetBackdropBorderColor(0, 0, 0)
+	B.CreateSD(button)
+
+	if options and options.showDebuffTypeBorder then
+		CreateAuraDispelBorder(button)
+	end
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
 	button.HL:SetColorTexture(1, 1, 1, .25)
@@ -1018,18 +1124,11 @@ function UF.RaidFrame_FilterAura(element, _, data)
 	end
 end
 
-function UF:UpdateAuraContainer(parent, element, maxAuras)
+function UF:UpdateAuraContainer(parent, element)
 	if parent.mystyle == "nameplate" then return end
 
-	local fontSize = element.fontSize or element.size*.4
-	local cooldownNumber = parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"] or false
-	for button in pairs(element.__buttons or {}) do
-		if button.Count then B.SetFontSize(button.Count, fontSize) end
-		if button.CooldownText then B.SetFontSize(button.CooldownText, fontSize) end
-		if button.Cooldown then
-			button.Cooldown:SetHideCountdownNumbers(cooldownNumber)
-		end
-	end
+	-- AuraButton regions are forbidden after the provider initializer returns.
+	UpdateAuraDurationFormatter(element, parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"])
 end
 
 function UF:ConfigureAuras(element)
@@ -1037,8 +1136,8 @@ function UF:ConfigureAuras(element)
 	element.numBuffs = C.db["UFs"][value.."BuffType"] ~= 1 and C.db["UFs"][value.."NumBuff"] or 0
 	element.numDebuffs = C.db["UFs"][value.."DebuffType"] ~= 1 and C.db["UFs"][value.."NumDebuff"] or 0
 	element.size = C.db["UFs"][value.."AuraSize"]
-	element.showBuffBorder = true
-	element.showDebuffBorder = C.db["UFs"]["DebuffColor"]
+	-- Keep oUF's native Border uncreated; Blizzard can show it again after a layout-side Hide.
+	element.showDebuffTypeBorder = C.db["UFs"]["DebuffColor"]
 	element.desaturateDebuff = C.db["UFs"]["Desaturate"]
 	element.fontSize = C.db["UFs"]["CDFontSize"]
 end
@@ -1060,7 +1159,7 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	local isRaid = value == "Raid"
 	element.num = C.db["UFs"][value..vType.."Type"] ~= 1 and C.db["UFs"][value.."Num"..vType] or 0
 	element.size = C.db["UFs"][value..vType.."Size"]
-	element.showDebuffBorder = isRaid or C.db["UFs"]["DebuffColor"]
+	element.showDebuffTypeBorder = isDebuff and (isRaid or C.db["UFs"]["DebuffColor"])
 	element.desaturateDebuff = not isRaid and C.db["UFs"]["Desaturate"]
 	element.fontSize = C.db["UFs"]["RaidCDSize"]
 end
@@ -1163,6 +1262,7 @@ local function AddAuraGroup(element, name, filter, count, index)
 		maxFrameCount = count,
 		size = element.size,
 		height = element.__owner.mystyle == "nameplate" and element.size * element.sizeRatio or nil,
+		showDebuffTypeBorder = filter == "HARMFUL" and element.showDebuffTypeBorder,
 		layout = AuraGroupLayout(element, index),
 	})
 end
@@ -1278,7 +1378,6 @@ function UF:CreateDebuffs(self)
 		spacing = mystyle == "raid" and 2 or 3,
 		value = mystyle == "raid" and "Raid" or "Boss",
 		disableMouse = mystyle == "raid",
-		showDebuffBorder = true,
 	})
 	bu.__auraType = "debuffs"
 	if mystyle == "raid" then
