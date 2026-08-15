@@ -13,7 +13,7 @@ local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNum
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local GetTime = GetTime
 local GetSpellName = C_Spell.GetSpellName
-local UnitEffectiveLevel, UnitClassBase, GetInstanceInfo = UnitEffectiveLevel, UnitClassBase, GetInstanceInfo
+local UnitEffectiveLevel, GetInstanceInfo = UnitEffectiveLevel, GetInstanceInfo
 local UnitIsBossMob, UnitIsLieutenant = UnitIsBossMob, UnitIsLieutenant
 
 -- Instance type tracker for mob type coloring
@@ -172,7 +172,6 @@ function UF:UpdateColor(_, unit)
 				local isLieutenant = UnitIsLieutenant(unit) or (isElite and uLevel == pLevel + 1)
 				local bossColor = C.db["Nameplate"]["BossColor"]
 				local lieutenantColor = C.db["Nameplate"]["LieutenantColor"]
-				local casterColor = C.db["Nameplate"]["CasterColor"]
 				local meleeColor = C.db["Nameplate"]["MeleeColor"]
 				local trivialColor = C.db["Nameplate"]["TrivialColor"]
 				if isBoss then
@@ -182,10 +181,6 @@ function UF:UpdateColor(_, unit)
 				elseif isLieutenant then
 					if C.db["Nameplate"]["ShowLieutColor"] then
 						r, g, b = lieutenantColor.r, lieutenantColor.g, lieutenantColor.b
-					end
-				elseif UnitClassBase(unit) == "PALADIN" then
-					if C.db["Nameplate"]["ShowCasterColor"] then
-						r, g, b = casterColor.r, casterColor.g, casterColor.b
 					end
 				elseif isElite then
 					if C.db["Nameplate"]["ShowMeleeColor"] then

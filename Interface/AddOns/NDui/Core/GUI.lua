@@ -285,7 +285,7 @@ G.DefaultSettings = {
 		PlayerNumDebuff = 20,
 		PlayerBuffType = 1,
 		PlayerDebuffType = 1,
-		PlayerAuraSize = 2,
+		PlayerAuraSize = 22,
 		TargetNumBuff = 20,
 		TargetNumDebuff = 20,
 		TargetBuffType = 2,
@@ -433,12 +433,10 @@ G.DefaultSettings = {
 		MobTypeColoring = false,
 		ShowBossColor = false,
 		ShowLieutColor = false,
-		ShowCasterColor = true,
 		ShowMeleeColor = false,
 		ShowTrivialColor = false,
 		BossColor = {r=.42, g=.17, b=.69},
 		LieutenantColor = {r=.28, g=.26, b=1},
-		CasterColor = {r=0, g=.82, b=1},
 		MeleeColor = {r=1, g=0, b=0},
 		TrivialColor = {r=.65, g=.65, b=.65},
 		RaidTargetX = 0,
@@ -1332,7 +1330,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Nameplate", "PlateAuras", IsNew..L["PlateAuras"].."*", nil, setupNameplateAuras, refreshNameplates},
 		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"].."*", true, setupNameplateCC, refreshNameplates},
-		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
+		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"], true},
 		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", true, nil, refreshNameplates, L["DebuffColorTip"]},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
@@ -1722,7 +1720,10 @@ local function CreateOption(i)
 			if tooltip then
 				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info", true)
 			end
-			if disabled then cb:Hide() end
+			if disabled then
+				cb:Disable()
+				cb:SetAlpha(.5)
+			end
 		-- Editbox
 		elseif optType == 2 then
 			local eb = B.CreateEditBox(parent, 200, 28)

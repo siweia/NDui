@@ -1262,7 +1262,7 @@ local function AddAuraGroup(element, name, filter, count, index)
 		maxFrameCount = count,
 		size = element.size,
 		height = element.__owner.mystyle == "nameplate" and element.size * element.sizeRatio or nil,
-		showDebuffTypeBorder = filter == "HARMFUL" and element.showDebuffTypeBorder,
+		showDebuffTypeBorder = name == "Debuffs" and element.showDebuffTypeBorder,
 		layout = AuraGroupLayout(element, index),
 	})
 end
@@ -1335,7 +1335,7 @@ function UF:CreateAuras(self)
 		bu.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
 		bu.sizeRatio = C.db["Nameplate"]["SizeRatio"]
 		bu.disableMouse = true
-		AddAuraGroup(bu, "Debuffs", "HARMFUL", bu.numTotal, 1)
+		AddAuraGroup(bu, "Debuffs", "HARMFUL|PLAYER", bu.numTotal, 1)
 	end
 
 	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
