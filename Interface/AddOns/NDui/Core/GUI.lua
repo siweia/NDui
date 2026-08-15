@@ -1289,7 +1289,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
-		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, setupPrivateAuras},
+		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, setupPrivateAuras, nil, nil, true},
 		{1, "UFs", "RaidAuras", IsNew..HeaderTag..L["RaidAuras"], true, setupRaidAuras},
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
@@ -1716,6 +1716,10 @@ local function CreateOption(i)
 				local bu = B.CreateGear(parent)
 				bu:SetPoint("LEFT", cb.name, "RIGHT", -2, 1)
 				bu:SetScript("OnClick", data)
+				if disabled then
+					bu:Disable()
+					bu:SetAlpha(.5)
+				end
 			end
 			if tooltip then
 				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info", true)
