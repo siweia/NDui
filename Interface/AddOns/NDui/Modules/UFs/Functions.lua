@@ -106,8 +106,10 @@ function UF:CreateHeader(self, onKeyDown)
 end
 
 local function UpdateHealthColorByIndex(health, index)
-	health.colorClass = (index == 2)
-	health.colorReaction = (index == 2)
+	local useClassGradient = index == 5
+	health.colorClass = (index == 2) or useClassGradient
+	health.colorReaction = (index == 2) or useClassGradient
+	health:SetStatusBarTexture(useClassGradient and DB.classGradientTex or DB.normTex)
 	if health.SetColorTapping then
 		health:SetColorTapping(index == 2)
 	else
@@ -151,36 +153,20 @@ bgCurve:AddPoint(0.0, CreateColor(1, 0, 0))
 bgCurve:AddPoint(0.5, CreateColor(1, .7, 0))
 bgCurve:AddPoint(1, CreateColor(.7, 1, 0))
 
-local endColor = oUF:CreateColor(0, 0, 0, .25)
-
 function UF.HealthPostUpdate(element, unit)
 	local self = element.__owner
 	local mystyle = self.mystyle
-	local useGradient, useGradientClass
+	local useGradient
 	if mystyle == "PlayerPlate" then
 		-- do nothing
 	elseif mystyle == "raid" then
 		useGradient = C.db["UFs"]["RaidHealthColor"] > 3
-		useGradientClass = C.db["UFs"]["RaidHealthColor"] == 5
 	else
 		useGradient = C.db["UFs"]["HealthColor"] > 3
-		useGradientClass = C.db["UFs"]["HealthColor"] == 5
 	end
 	if useGradient then
 		local color = UnitHealthPercent(unit, true, bgCurve)
 		element.bg:SetVertexColor(color:GetRGB())
-	end
-	if useGradientClass then
-		local color
-		if UnitIsPlayer(unit) or UnitInPartyIsAI(unit) then
-			local _, class = UnitClass(unit)
-			color = class and C_ClassColor.GetClassColor(class)
-		elseif UnitReaction(unit, "player") then
-			color = self.colors.reaction[UnitReaction(unit, "player")]
-		end
-		if color then
-			element:GetStatusBarTexture():SetGradient("HORIZONTAL", color, endColor)
-		end
 	end
 end
 
