@@ -71,10 +71,6 @@ function module:IgnoreCooldown(cooldown)
 	hookedCooldownFrames[cooldown] = nil
 end
 
-function module:GetNumberFormatter()
-	return numberFormatter
-end
-
 function module:UpdateCooldownFormat()
 	local mode = C.db["Actionbar"]["CDFormat"]
 	if mode == DISABLE_INDEX then
