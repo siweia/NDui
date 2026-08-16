@@ -12,5 +12,6 @@
 	<Script file="Elements\SpellsIndicator.lua"/>
 	<Script file="Elements\BuffsIndicator.lua"/>
 	<Script file="Elements\DebuffsIndicator.lua"/>
-	<Script file="Elements\PrivateAuras.lua"/>
+	<!-- 12.1 AuraContainer already includes private auras. -->
+	<!-- <Script file="Elements\PrivateAuras.lua"/> -->
 </Ui>

@@ -2071,25 +2071,25 @@ function G:SetupBuffFrame(parent)
 	local parent, offset = scroll.child, -10
 	local defaultSize, defaultPerRow = 30, 16
 
+	--[[ 12.1 CustomAuraContainer already includes private auras.
 	local function updatePrivateAuras()
 		local PA = B:GetModule("PrivateAuras")
 		if PA then
 			PA:Update()
 		end
 	end
+	]]
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
 		createOptionCheck(parent, offset-35, L["ReverseGrow"], "Auras", "Reverse"..value, func)
 		createOptionSlider(parent, L["Auras Size"], 24, 50, defaultSize, offset-100, value.."Size", func, "Auras")
-		if value ~= "Private" then -- no func for private auras
-			createOptionSlider(parent, L["IconsPerRow"], 10, 40, defaultPerRow, offset-170, value.."sPerRow", func, "Auras")
-		end
+		createOptionSlider(parent, L["IconsPerRow"], 10, 40, defaultPerRow, offset-170, value.."sPerRow", func, "Auras")
 	end
 
 	createOptionGroup(parent, "Buffs", offset, "Buff", queueAuraReload)
 	createOptionGroup(parent, "Debuffs", offset-260, "Debuff", queueAuraReload)
-	createOptionGroup(parent, L["PrivateAuras"], offset-520, "Private", updatePrivateAuras)
+	-- createOptionGroup(parent, L["PrivateAuras"], offset-520, "Private", updatePrivateAuras)
 end
 
 function G:NameplateColorDots(parent)
@@ -2663,6 +2663,7 @@ end
 --SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
 --SLASH_NDUI_AVADACONFIG1 = "/aa"
 
+--[[ 12.1 AuraContainer already includes private auras.
 function G:SetupPrivateAuras(parent)
 	local guiName = "NDuiGUI_PrivateAurasSetup"
 	toggleExtraGUI(guiName)
@@ -2687,6 +2688,7 @@ function G:SetupPrivateAuras(parent)
 	createOptionCheck(parent, offset-30, L["CDText"], "UFs", "CDText", updatePrivateAuras)
 	createOptionSlider(parent, L["Auras Size"], 10, 50, 22, offset-110, "PAIconSize", updatePrivateAuras, "UFs")
 end
+]]
 
 function G:SetupDamageMeters(parent)
 	local guiName = "NDuiGUI_DamageMetersSetup"

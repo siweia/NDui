@@ -861,9 +861,11 @@ local function setupBuffFrame()
 	G:SetupBuffFrame(guiPage[7])
 end
 
+--[[ 12.1 AuraContainer already includes private auras.
 local function setupPrivateAuras()
 	G:SetupPrivateAuras(guiPage[4])
 end
+]]
 
 local function setupRaidAuras()
 	G:SetupRaidAuras(guiPage[4])
@@ -1303,7 +1305,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
-		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, setupPrivateAuras, nil, nil, true},
+		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, nil, nil, nil, true},
 		{1, "UFs", "RaidAuras", IsNew..HeaderTag..L["RaidAuras"], true, setupRaidAuras},
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
