@@ -142,15 +142,6 @@ do
 	B:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
--- Fix blizzard ui error
-local old_SetupTextureCoordinates = BackdropTemplateMixin.SetupTextureCoordinates
-
-function BackdropTemplateMixin:SetupTextureCoordinates()
-	local width = self:GetWidth()
-	if B:IsSecretValue(width) then return end -- needs review
-	old_SetupTextureCoordinates(self)
-end
-
 -- fix money tooltip
 function SetTooltipMoney(frame, money, _, prefixText, suffixText)
 	frame:AddLine((prefixText or "").." "..GetCoinTextureString(money).." "..(suffixText or ""), 1,1,1)
