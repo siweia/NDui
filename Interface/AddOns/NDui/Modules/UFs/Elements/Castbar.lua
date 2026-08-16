@@ -2,6 +2,26 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local UF = B:GetModule("UnitFrames")
 
+local castTimeFormatter = C_StringUtil.CreateSecondsFormatter()
+castTimeFormatter:SetDefaultAbbreviation(Enum.SecondsFormatterAbbreviation.OneLetter)
+castTimeFormatter:SetMinInterval(Enum.SecondsFormatterInterval.Seconds)
+castTimeFormatter:SetMillisecondsThreshold(60)
+
+function UF.CreateCastbarTimeBinding()
+	local binding = C_DurationUtil.CreateDurationTextBinding()
+	binding:SetTextFormat("{}/{}", {
+		{
+			property = Enum.DurationTextBindingProperty.ElapsedDuration,
+			formatter = castTimeFormatter,
+		},
+		{
+			property = Enum.DurationTextBindingProperty.TotalDuration,
+			formatter = castTimeFormatter,
+		},
+	})
+	return binding
+end
+
 function UF:UpdateCastbarGlow(spellID)
 	if self.barGlow then
 		local isImportant = C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(spellID)

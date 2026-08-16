@@ -163,7 +163,7 @@ function UF:UpdateColor(_, unit)
 		elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.TrashUnits[npcID] then
 			r, g, b = .6, .6, .6
 		else
-			if not isPlayer and isInInstance and C.db["Nameplate"]["MobTypeColoring"] then
+			if not isPlayer and not isFriendly and isInInstance and C.db["Nameplate"]["MobTypeColoring"] then
 				local pLevel = UnitEffectiveLevel("player")
 				local uLevel = UnitEffectiveLevel(unit)
 				local classification = UnitClassification(unit)

@@ -711,6 +711,7 @@ function UF:CreateCastBar(self)
 	end
 
 	local timer = B.CreateFS(cb, 12, "", false, "RIGHT", -2, 0)
+	timer.binding = UF.CreateCastbarTimeBinding()
 	local name = B.CreateFS(cb, 12, "", false, "LEFT", 2, 0)
 	name:SetPoint("RIGHT", timer, "LEFT", -5, 0)
 	name:SetJustifyH("LEFT")
