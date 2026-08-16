@@ -475,6 +475,16 @@ do
 	B:RegisterEvent("CVAR_UPDATE", B.UpdateCVars)
 end
 
+local old_SetupTextureCoordinates = BackdropTemplateMixin.SetupTextureCoordinates
+local function SetupTextureCoordinates(self)
+	if not self:CanBeAccessedInContext() then return end
+
+	local width, height = self:GetSize()
+	if B:IsSecretValue(width) or B:IsSecretValue(height) then return end
+
+	old_SetupTextureCoordinates(self)
+end
+
 -- UI widgets
 do
 	-- HelpTip
@@ -603,6 +613,7 @@ do
 
 		shadowBackdrop.edgeSize = size or 5
 		self.__shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")
+		self.__shadow.SetupTextureCoordinates = SetupTextureCoordinates
 		self.__shadow:SetOutside(self, size or 4, size or 4)
 		self.__shadow:SetBackdrop(shadowBackdrop)
 		self.__shadow:SetBackdropBorderColor(0, 0, 0, size and 1 or .4)
@@ -627,6 +638,7 @@ do
 	end
 
 	function B:CreateBD(a)
+		self.SetupTextureCoordinates = SetupTextureCoordinates
 		defaultBackdrop.edgeSize = C.mult
 		self:SetBackdrop(defaultBackdrop)
 		self:SetBackdropColor(0, 0, 0, a or C.db["Skins"]["SkinAlpha"])
