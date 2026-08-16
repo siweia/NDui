@@ -138,8 +138,8 @@ C.themes["Blizzard_CooldownViewer"] = function()
 			end
 		end
 	end
-	hooksecurefunc(UtilityCooldownViewer, "RefreshLayout", reskinCooldownItem)
-	hooksecurefunc(EssentialCooldownViewer, "RefreshLayout", reskinCooldownItem)
-	hooksecurefunc(BuffIconCooldownViewer, "RefreshLayout", reskinCooldownItem)
-	hooksecurefunc(BuffBarCooldownViewer, "RefreshLayout", reskinCooldownItem)
+	for _, viewer in ipairs({UtilityCooldownViewer, EssentialCooldownViewer, BuffIconCooldownViewer, BuffBarCooldownViewer}) do
+		hooksecurefunc(viewer, "RefreshLayout", reskinCooldownItem)
+		reskinCooldownItem(viewer)
+	end
 end
