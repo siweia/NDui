@@ -2790,7 +2790,7 @@ function G:SetupNameplateAuras(parent)
 	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-65, "FontSize", queueAuraReload, "Nameplate")
 	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-135, "SizeRatio", queueAuraReload, "Nameplate", .1)
 	createOptionSlider(parent, L["Max Auras"], 1, 20, 5, offset-205, "maxAuras", UF.RefreshAllPlates, "Nameplate")
-	createOptionSlider(parent, L["Auras Size"], 1, 20, 16, offset-275, "AuraSize", queueAuraReload, "Nameplate")
+	createOptionSlider(parent, L["Auras Size"], 1, 40, 16, offset-275, "AuraSize", queueAuraReload, "Nameplate")
 end
 
 function G:SetupNameplateCC(parent)
@@ -2807,7 +2807,7 @@ function G:SetupNameplateCC(parent)
 	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-30, "CCFontSize", queueAuraReload, "Nameplate")
 	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-100, "CCSizeRatio", queueAuraReload, "Nameplate", .1)
 	createOptionSlider(parent, L["Max Auras"], 1, 20, 10, offset-170, "NumCC", UF.RefreshAllPlates, "Nameplate")
-	createOptionSlider(parent, L["Auras Size"], 1, 20, 12, offset-240, "CCSize", queueAuraReload, "Nameplate")
+	createOptionSlider(parent, L["Auras Size"], 1, 40, 12, offset-240, "CCSize", queueAuraReload, "Nameplate")
 end
 
 function G:SetupNameplateMobColors(parent)
