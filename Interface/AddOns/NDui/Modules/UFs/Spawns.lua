@@ -130,7 +130,7 @@ local function CreateBossStyle(self)
 	UF:CreateBuffs(self)
 	UF:CreateDebuffs(self)
 	UF:CreateClickSets(self)
-	UF:CreatePrivateAuras(self)
+	-- UF:CreatePrivateAuras(self) -- handled by the 12.1 AuraContainer
 end
 
 local function CreateArenaStyle(self)
@@ -168,7 +168,7 @@ local function CreateRaidStyle(self)
 	if self.raidType ~= "simple" then
 		UF:CreateRaidAuras(self)
 	end
-	UF:CreatePrivateAuras(self)
+	-- UF:CreatePrivateAuras(self) -- handled by the 12.1 AuraContainer
 	if C.db["UFs"]["RaidAuras"] then
 		UF:CreateBuffs(self)
 		UF:CreateDebuffs(self)

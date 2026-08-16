@@ -11,7 +11,7 @@ local InCombatLockdown = InCombatLockdown
 local RegisterStateDriver = RegisterStateDriver
 local ShouldAurasBeSecret = C_Secrets.ShouldAurasBeSecret
 local UnitHasVehiclePlayerFrameUI = UnitHasVehiclePlayerFrameUI
-local CooldownFormatter = B:GetModule("Cooldown"):GetNumberFormatter()
+local Cooldown = B:GetModule("Cooldown")
 
 local DURATION_HEIGHT = 12
 local CANCEL_AURA_BUTTONS = "RightButtonUp RightButtonDown"
@@ -35,8 +35,8 @@ local COLOR_RED = CreateColor(1, 0, 0, 1)
 local COLOR_YELLOW = CreateColor(1, 1, 0, 1)
 local DEBUFF_BORDER_COLORS = {None = COLOR_RED}
 
-local ITEM_DURATION_FORMATTER = C_StringUtil.CreateNumericRuleFormatter()
-ITEM_DURATION_FORMATTER:SetBreakpoints({
+local AURA_DURATION_FORMATTER = C_StringUtil.CreateNumericRuleFormatter()
+AURA_DURATION_FORMATTER:SetBreakpoints({
 	{
 		threshold = 0,
 		format = COLOR_RED:WrapTextInColorCode("%.1f"),
@@ -75,7 +75,7 @@ ITEM_DURATION_FORMATTER:SetBreakpoints({
 })
 
 local ITEM_DURATION_BINDING = C_DurationUtil.CreateDurationTextBinding()
-ITEM_DURATION_BINDING:SetFormatter(ITEM_DURATION_FORMATTER)
+ITEM_DURATION_BINDING:SetFormatter(AURA_DURATION_FORMATTER)
 ITEM_DURATION_BINDING:SetExpiredText("")
 ITEM_DURATION_BINDING:SetZeroDurationText("")
 
@@ -252,7 +252,8 @@ local function CreateAuraButtonInitializer(container, cancelButton, showDebuffTy
 		cooldown:SetReverse(true)
 		cooldown:SetEdgeTexture(DB.bgTex)
 		cooldown:SetDrawBling(false)
-		cooldown:SetCountdownFormatter(CooldownFormatter)
+		Cooldown:IgnoreCooldown(cooldown)
+		cooldown:SetCountdownFormatter(AURA_DURATION_FORMATTER)
 		button.Cooldown = cooldown
 		button.CooldownText = cooldown:GetCountdownFontString()
 

@@ -10,6 +10,7 @@ local guiTab, guiPage, f = {}, {}
 -- Default Settings
 G.DefaultSettings = {
 	Reset4 = false,
+	Reset5 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -285,7 +286,7 @@ G.DefaultSettings = {
 		PlayerNumDebuff = 20,
 		PlayerBuffType = 1,
 		PlayerDebuffType = 1,
-		PlayerAuraSize = 2,
+		PlayerAuraSize = 22,
 		TargetNumBuff = 20,
 		TargetNumDebuff = 20,
 		TargetBuffType = 2,
@@ -318,7 +319,7 @@ G.DefaultSettings = {
 		RaidNumBuff = 6,
 		RaidNumDebuff = 6,
 		RaidBuffType = 1,
-		RaidDebuffType = 4,
+		RaidDebuffType = 2,
 		RaidBuffSize = 12,
 		RaidDebuffSize = 12,
 
@@ -433,12 +434,10 @@ G.DefaultSettings = {
 		MobTypeColoring = false,
 		ShowBossColor = false,
 		ShowLieutColor = false,
-		ShowCasterColor = true,
 		ShowMeleeColor = false,
 		ShowTrivialColor = false,
 		BossColor = {r=.42, g=.17, b=.69},
 		LieutenantColor = {r=.28, g=.26, b=1},
-		CasterColor = {r=0, g=.82, b=1},
 		MeleeColor = {r=1, g=0, b=0},
 		TrivialColor = {r=.65, g=.65, b=.65},
 		RaidTargetX = 0,
@@ -739,8 +738,21 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		C.db["UFs"]["MBPerRow"] = 13
 		C.db["UFs"]["GatherEmpty"] = true
 		C.db["UFs"]["RaidBuffType"] = 1
-		C.db["UFs"]["RaidDebuffType"] = 4
+		C.db["UFs"]["RaidDebuffType"] = 2
 		C.db["Reset4"] = true
+	end
+
+	if not C.db["Reset5"] then
+		local ufs = C.db["UFs"]
+		if ufs["RaidBuffType"] == 4 then
+			ufs["RaidBuffType"] = 2
+		end
+		if ufs["RaidDebuffType"] == 5 then
+			ufs["RaidDebuffType"] = 4
+		elseif ufs["RaidDebuffType"] == 4 then
+			ufs["RaidDebuffType"] = 2
+		end
+		C.db["Reset5"] = true
 	end
 
 	B:SetupUIScale(true)
@@ -849,9 +861,11 @@ local function setupBuffFrame()
 	G:SetupBuffFrame(guiPage[7])
 end
 
+--[[ 12.1 AuraContainer already includes private auras.
 local function setupPrivateAuras()
 	G:SetupPrivateAuras(guiPage[4])
 end
+]]
 
 local function setupRaidAuras()
 	G:SetupRaidAuras(guiPage[4])
@@ -1291,7 +1305,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
-		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, setupPrivateAuras},
+		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, nil, nil, nil, true},
 		{1, "UFs", "RaidAuras", IsNew..HeaderTag..L["RaidAuras"], true, setupRaidAuras},
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
@@ -1332,7 +1346,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Nameplate", "PlateAuras", IsNew..L["PlateAuras"].."*", nil, setupNameplateAuras, refreshNameplates},
 		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"].."*", true, setupNameplateCC, refreshNameplates},
-		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"]},
+		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"], true},
 		{1, "Nameplate", "DebuffColor", L["DebuffColor"].."*", true, nil, refreshNameplates, L["DebuffColorTip"]},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
@@ -1718,11 +1732,18 @@ local function CreateOption(i)
 				local bu = B.CreateGear(parent)
 				bu:SetPoint("LEFT", cb.name, "RIGHT", -2, 1)
 				bu:SetScript("OnClick", data)
+				if disabled then
+					bu:Disable()
+					bu:SetAlpha(.5)
+				end
 			end
 			if tooltip then
 				B.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "info", true)
 			end
-			if disabled then cb:Hide() end
+			if disabled then
+				cb:Disable()
+				cb:SetAlpha(.5)
+			end
 		-- Editbox
 		elseif optType == 2 then
 			local eb = B.CreateEditBox(parent, 200, 28)

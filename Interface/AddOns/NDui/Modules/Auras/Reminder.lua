@@ -54,6 +54,7 @@ function A:Reminder_Update(cfg)
 				return
 			end
 		else
+			if C_Secrets.ShouldAurasBeSecret() then return end
 			for i = 1, 40 do
 				if ShouldUnitAuraIndexBeSecret("player", i, "HELPFUL") then return end
 				local auraData = C_UnitAuras.GetBuffDataByIndex("player", i, "HELPFUL")

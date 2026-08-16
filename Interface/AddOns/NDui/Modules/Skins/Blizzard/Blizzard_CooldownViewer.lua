@@ -55,38 +55,6 @@ local function updateButtons(frame)
 	end
 end
 
--- Dispel type border colors
-local dispelIndex = {
-	[0] = CreateColor(0, 0, 0),
-	[1] = DEBUFF_TYPE_MAGIC_COLOR,
-	[2] = DEBUFF_TYPE_CURSE_COLOR,
-	[3] = DEBUFF_TYPE_DISEASE_COLOR,
-	[4] = DEBUFF_TYPE_POISON_COLOR,
-	[9] = CreateColor(243, 95, 245),
-	[11] = DEBUFF_TYPE_BLEED_COLOR,
-};
-local borderCurve = C_CurveUtil.CreateColorCurve()
-borderCurve:SetType(Enum.LuaCurveType.Step)
-for index, color in next, dispelIndex do
-	borderCurve:AddPoint(index, color)
-end
-local function updateBorderColor(self, data)
-	local color = data and C_UnitAuras.GetAuraDispelTypeColor(self.__owner.auraDataUnit, data.auraInstanceID, borderCurve)
-	if color then
-		self.__owner.Icon.bg:SetBackdropBorderColor(color:GetRGB())
-	else
-		self.__owner.Icon.bg:SetBackdropBorderColor(0, 0, 0)
-	end
-end
-
-local function handleDebuffBorder(frame)
-	if frame.DebuffBorder then
-		frame.DebuffBorder:SetAlpha(0) -- hide the original border, and update ours
-		frame.DebuffBorder.__owner = frame
-		hooksecurefunc(frame.DebuffBorder, "UpdateFromAuraData", updateBorderColor)
-	end
-end
-
 C.themes["Blizzard_CooldownViewer"] = function()
 	local frame = CooldownViewerSettings
 	if frame then
@@ -116,6 +84,11 @@ C.themes["Blizzard_CooldownViewer"] = function()
 
 	local function reskinCooldownItem(self)
 		for itemFrame in self.itemFramePool:EnumerateActive() do
+			-- Keep the static NDui square border instead of Blizzard's rounded border.
+			if not itemFrame.styled and itemFrame.DebuffBorder then
+				itemFrame.DebuffBorder:SetAlpha(0)
+			end
+
 			if itemFrame.Bar then
 				if not itemFrame.styled then
 					local iconFrame = itemFrame.Icon
@@ -135,8 +108,6 @@ C.themes["Blizzard_CooldownViewer"] = function()
 						B.SetBD(barFrame)
 						barFrame:GetStatusBarTexture():ClearTextureSlice()
 					end
-
-					handleDebuffBorder(itemFrame)
 
 					itemFrame.styled = true
 				end
@@ -162,15 +133,13 @@ C.themes["Blizzard_CooldownViewer"] = function()
 						outOfRange:SetColorTexture(.8, .1, .1, .25)
 					end
 
-					handleDebuffBorder(itemFrame)
-
 					itemFrame.styled = true
 				end
 			end
 		end
 	end
-	hooksecurefunc(UtilityCooldownViewer, "RefreshLayout", reskinCooldownItem)
-	hooksecurefunc(EssentialCooldownViewer, "RefreshLayout", reskinCooldownItem)
-	hooksecurefunc(BuffIconCooldownViewer, "RefreshLayout", reskinCooldownItem)
-	hooksecurefunc(BuffBarCooldownViewer, "RefreshLayout", reskinCooldownItem)
+	for _, viewer in ipairs({UtilityCooldownViewer, EssentialCooldownViewer, BuffIconCooldownViewer, BuffBarCooldownViewer}) do
+		hooksecurefunc(viewer, "RefreshLayout", reskinCooldownItem)
+		reskinCooldownItem(viewer)
+	end
 end
