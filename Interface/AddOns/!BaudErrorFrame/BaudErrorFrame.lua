@@ -2,7 +2,16 @@ local SelectedError = 1
 local ErrorList = {}
 local SoundTime = 0
 local enableTaint = false
+local BaudErrorFrameAddCaptured
+local issecretvalue = issecretvalue
 BaudErrorFrameConfig = BaudErrorFrameConfig or {}
+
+local function PrepareErrorValue(value, secretText, nilText)
+	if issecretvalue(value) then return secretText end
+	if value == nil then return nilText end
+
+	return C_StringUtil.EscapeDecimalNonPrintables(tostring(value))
+end
 
 local function RegisterTaintEvents(self)
 	self:RegisterEvent("ADDON_ACTION_BLOCKED")
@@ -105,7 +114,13 @@ function BaudErrorFrameMinimapButton_OnUpdate(self)
 end
 
 function BaudErrorFrameHandler(Error)
-	BaudErrorFrameAdd(Error, 3)
+	local currentStackHeight = GetCallstackHeight()
+	local errorCallStackHeight = GetErrorCallstackHeight()
+	local errorStackOffset = errorCallStackHeight and (errorCallStackHeight - 1)
+	local debugStackLevel = currentStackHeight - (errorStackOffset or 0)
+	local Stack = debugstack(debugStackLevel)
+	local Locals = debuglocals(debugStackLevel, true)
+	BaudErrorFrameAddCaptured(Error, Stack, Locals)
 end
 
 function BaudErrorFrameShowError(Error)
@@ -117,7 +132,11 @@ function BaudErrorFrameShowError(Error)
 	end
 end
 
-function BaudErrorFrameAdd(Error, Retrace)
+BaudErrorFrameAddCaptured = function(Error, Stack, Locals)
+	Error = PrepareErrorValue(Error, "error handler received a secret error message.", "error handler received nil.")
+	Stack = PrepareErrorValue(Stack, "debugstack() returned secrets.", "debugstack() returned nil.")
+	Locals = PrepareErrorValue(Locals, "debuglocals() returned secrets.", "debuglocals() returned nil.")
+	Locals = Locals:gsub("|([kK])", "%1")
 	if Error:match("script ran too long") and not enableTaint then return end
 
 	for _, Value in pairs(ErrorList) do
@@ -130,11 +149,15 @@ function BaudErrorFrameAdd(Error, Retrace)
 		end
 	end
 
-	BaudErrorFrameShowError(Error)
-	tinsert(ErrorList, {Error = Error, Count = 1, Stack = debugstack(Retrace)})
-	BaudErrorFrameMinimapCount:SetText(getn(ErrorList))
-	BaudErrorFrameMinimapButton:Show()
-	BaudErrorFrameScrollBar_Update()
+        BaudErrorFrameShowError(Error)
+        tinsert(ErrorList, {Error = Error, Count = 1, Stack = Stack, Locals = Locals})
+        BaudErrorFrameMinimapCount:SetText(getn(ErrorList))
+        BaudErrorFrameMinimapButton:Show()
+        BaudErrorFrameScrollBar_Update()
+end
+
+function BaudErrorFrameAdd(Error, Retrace)
+        BaudErrorFrameAddCaptured(Error, debugstack(Retrace), "")
 end
 
 function BaudErrorFrame_Select(Index)
@@ -167,15 +190,28 @@ function BaudErrorFrameScrollValue()
 end
 
 local function colorStack(ret)
-	ret = tostring(ret) or "" -- Yes, it gets called with nonstring from somewhere /mikk
-	ret = ret:gsub("[%.I][%.n][%.t][%.e][%.r]face\\", "")
+        ret = ret or ""
+        ret = ret:gsub("[%.I][%.n][%.t][%.e][%.r]face\\", "")
 	ret = ret:gsub("|([^chHr])", "||%1"):gsub("|$", "||") -- Pipes
 	ret = ret:gsub("<(.-)>", "|cffffd200<%1>|r") -- Things wrapped in <>
 	ret = ret:gsub("%[(.-)%]", "|cffffd200[%1]|r") -- Things wrapped in []
 	ret = ret:gsub("([\"`'])(.-)([\"`'])", "|cff82c5ff%1%2%3|r") -- Quotes
 	ret = ret:gsub(":(%d+)([%S\n])", ":|cff7fff7f%1|r%2") -- Line numbers
 	ret = ret:gsub("([^\\]+%.lua)", "|cffffffff%1|r") -- Lua files
-	return ret
+        return ret
+end
+
+local function colorLocals(ret)
+        ret = ret or ""
+        ret = ret:gsub("[%.I][%.n][%.t][%.e][%.r]face\\", "")
+        ret = ret:gsub("|([^chHr])", "||%1"):gsub("|$", "||")
+        ret = ret:gsub("(%s-)([%a_%(][%a_%d%*%)]+) = ", "%1|cffffff80%2|r = ")
+        ret = ret:gsub("= (%-?[%d%p]+)\n", "= |cffff7fff%1|r\n")
+        ret = ret:gsub("= nil\n", "= |cffff7f7fnil|r\n")
+        ret = ret:gsub("= true\n", "= |cffff9100true|r\n")
+        ret = ret:gsub("= false\n", "= |cffff9100false|r\n")
+        ret = ret:gsub("= <(.-)>", "= |cffffd200<%1>|r")
+        return ret
 end
 
 function BaudErrorFrameScrollBar_Update()
@@ -210,22 +246,28 @@ function BaudErrorFrameScrollBar_Update()
 end
 
 function BaudErrorFrameEditBoxUpdate()
-	if ErrorList[SelectedError] then
-		local errorMsg = ErrorList[SelectedError].Error
-		local errorStr = strmatch(errorMsg, "near '(.*)'")
-		if errorStr and strbyte(errorStr) == 229 then -- fix utf8 str error
-			errorMsg = gsub(errorMsg, "('.*')$", "UTF8 string")
-		end
-		BaudErrorFrameEditBox.TextShown = colorStack(errorMsg.."\nCount: "..ErrorList[SelectedError].Count.."\n\nCall Stack:\n"..ErrorList[SelectedError].Stack)
-	else
-		BaudErrorFrameEditBox.TextShown = ""
+        if ErrorList[SelectedError] then
+                local ErrorData = ErrorList[SelectedError]
+                local errorMsg = ErrorData.Error
+                local errorStr = strmatch(errorMsg, "near '(.*)'")
+                if errorStr and strbyte(errorStr) == 229 then -- fix utf8 str error
+                        errorMsg = gsub(errorMsg, "('.*')$", "UTF8 string")
+                end
+                local text = colorStack(errorMsg.."\nCount: "..ErrorData.Count.."\n\nCall Stack:\n"..ErrorData.Stack)
+                if ErrorData.Locals ~= "" then
+                        text = text.."\n\nLocals:\n"..colorLocals(ErrorData.Locals)
+                end
+                BaudErrorFrameEditBox.TextShown = text
+        else
+                BaudErrorFrameEditBox.TextShown = ""
 	end
 	BaudErrorFrameEditBox:SetText(BaudErrorFrameEditBox.TextShown)
 end
 
 function BaudErrorFrameEditBox_OnTextChanged(self)
-	if self:GetText() ~= self.TextShown then
-		self:SetText(self.TextShown)
+	local textShown = self.TextShown or ""
+	if self:GetText() ~= textShown then
+		self:SetText(textShown)
 		self:ClearFocus()
 		return
 	end
