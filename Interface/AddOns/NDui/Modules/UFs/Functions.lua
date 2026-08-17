@@ -23,7 +23,9 @@ local UNITFRAME_AURA_DISPEL_COLORS = {}
 for dispelName, color in pairs(oUF.colors.dispel) do
 	UNITFRAME_AURA_DISPEL_COLORS[dispelName] = color
 end
-UNITFRAME_AURA_DISPEL_COLORS.None = oUF:CreateColor(1, 0, 0)
+UNITFRAME_AURA_DISPEL_COLORS.None = oUF:CreateColor(.2, 0, 0)
+UNITFRAME_AURA_DISPEL_COLORS.Bleed = oUF:CreateColor(.95, .05, .05)
+UNITFRAME_AURA_DISPEL_COLORS.Disease = oUF:CreateColor(1, .7, 0)
 
 local function ReplacePowerColor(name, index, r, g, b)
 	oUF.colors.power[name] = oUF:CreateColor(r, g, b)

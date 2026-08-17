@@ -33,7 +33,11 @@ COUNT_FORMATTER:SetBreakpoints({
 local ROUNDING_NEAREST = Enum.NumericRuleFormatRounding.Nearest
 local COLOR_RED = CreateColor(1, 0, 0, 1)
 local COLOR_YELLOW = CreateColor(1, 1, 0, 1)
-local DEBUFF_BORDER_COLORS = {None = COLOR_RED}
+local DEBUFF_BORDER_COLORS = {
+	None = CreateColor(.2, 0, 0, 1),
+	Bleed = CreateColor(.95, .05, .05, 1),
+	Disease = CreateColor(1, .7, 0, 1),
+}
 
 local AURA_DURATION_FORMATTER = C_StringUtil.CreateNumericRuleFormatter()
 AURA_DURATION_FORMATTER:SetBreakpoints({
