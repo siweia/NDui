@@ -549,7 +549,7 @@ end
 
 local function postUpdateRole(element, role)
 	if element:IsShown() then
-		if role == "DAMAGER" and C.db["UFs"]["ShowRoleMode"] == 3 then
+		if role == Enum.LFGRole.Damage and C.db["UFs"]["ShowRoleMode"] == 3 then
 			element:Hide()
 			return
 		end
