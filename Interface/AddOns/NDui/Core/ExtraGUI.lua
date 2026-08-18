@@ -598,7 +598,7 @@ function G:SetupSpellsIndicator(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, L["BuffIndicator"].."*")
+	local panel = createExtraGUI(parent, guiName, L["BuffIndicator"])
 	local cornerSpellsChanged
 	local function updateCornerSpells()
 		if not cornerSpellsChanged then return end
@@ -1025,6 +1025,16 @@ end
 
 local function queueAuraReload()
 	G.needUIReload = true
+end
+
+local function updateUFAurasAndQueueReload()
+	B:GetModule("UnitFrames"):UpdateUFAuras()
+	queueAuraReload()
+end
+
+local function updateNameplateAurasAndQueueReload()
+	B:GetModule("UnitFrames"):RefreshAllPlates()
+	queueAuraReload()
 end
 
 local function createOptionSlider(parent, title, minV, maxV, defaultV, yOffset, value, func, key, step)
@@ -1797,7 +1807,7 @@ function G:SetupMicroMenu(parent)
 	local parent, offset = scroll.child, -10
 	createOptionTitle(parent, L["Menubar"], offset)
 	createOptionSlider(parent, L["ButtonSize"], 20, 100, 22, offset-60, "MBSize", Bar.MicroMenu_Setup, "Actionbar")
-	createOptionSlider(parent, L["ButtonsPerRow"], 1, 13, 12, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
+	createOptionSlider(parent, L["ButtonsPerRow"], 1, 13, 13, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
 	createOptionSlider(parent, L["Spacing"], -10, 10, 5, offset-200, "MBSpacing", Bar.MicroMenu_Setup, "Actionbar")
 end
 
@@ -1845,7 +1855,7 @@ function G:SetupUFAuras(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, L["ShowAuras"].."*")
+	local panel = createExtraGUI(parent, guiName, L["ShowAuras"])
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local UF = B:GetModule("UnitFrames")
@@ -1888,7 +1898,7 @@ function G:SetupUFAuras(parent)
 	end
 
 	createOptionTitle(parent, GENERAL, offset)
-	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", UF.UpdateUFAuras, L["DesaturateIconTip"], true)
+	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", updateUFAurasAndQueueReload, L["DesaturateIconTip"], true)
 	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", queueAuraReload, L["DebuffColorTip"])
 	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-130, "CDFontSize", queueAuraReload)
 
@@ -1920,7 +1930,7 @@ function G:SetupUFAuras(parent)
 		panel:SetSize(260, 1)
 		panel:SetPoint("TOP", 0, -30)
 		panel:Hide()
-		createOptionGroup(panel, -195, data[i], UF.UpdateUFAuras, i == 6)
+		createOptionGroup(panel, -195, data[i], updateUFAurasAndQueueReload, i == 6)
 
 		dd.panels[i] = panel
 		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
@@ -2723,13 +2733,6 @@ function G:SetupRaidAuras(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 	local parent = scroll.child
 	local offset = -10
-	local UF = B:GetModule("UnitFrames")
-
-	local function updateRaidAuras()
-		if UF then
-			UF:UpdateUFAuras()
-		end
-	end
 	local raidBuffOptions = {
 		DISABLE,
 		L["Blizzard"],
@@ -2745,18 +2748,18 @@ function G:SetupRaidAuras(parent)
 	}
 
 	createOptionTitle(parent, GENERAL, offset)
-	createOptionCheck(parent, offset-35, L["CDText"], "UFs", "RaidCDText", updateRaidAuras)
+	createOptionCheck(parent, offset-35, L["CDText"], "UFs", "RaidCDText", updateUFAurasAndQueueReload)
 	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-90, "RaidCDSize", queueAuraReload)
 
 	createOptionTitle(parent, "Buffs", offset-160)
-	createOptionDropdown(parent, L["RaidBuffType"], offset-210, raidBuffOptions, nil, "UFs", "RaidBuffType", 2, updateRaidAuras)
+	createOptionDropdown(parent, L["RaidBuffType"], offset-210, raidBuffOptions, nil, "UFs", "RaidBuffType", 2, updateUFAurasAndQueueReload)
 	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-280, "RaidBuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-360, "RaidNumBuff", updateRaidAuras, "UFs")
+	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-360, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
 
 	createOptionTitle(parent, "Debuffs", offset-420)
-	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateRaidAuras)
+	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
 	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-540, "RaidDebuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-600, "RaidNumDebuff", updateRaidAuras, "UFs")
+	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-600, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
 end
 
 function G:SetupCooldownViewer(parent)
@@ -2780,16 +2783,15 @@ function G:SetupNameplateAuras(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, L["PlateAuras"].."*")
+	local panel = createExtraGUI(parent, guiName, L["PlateAuras"])
 	local scroll = G:CreateScroll(panel, 260, 540)
 	local parent = scroll.child
 	local offset = -10
-	local UF = B:GetModule("UnitFrames")
 
-	createOptionCheck(parent, offset, L["Dispellable"], "Nameplate", "ShowDispel", UF.RefreshAllPlates)
+	createOptionCheck(parent, offset, L["Dispellable"], "Nameplate", "ShowDispel", updateNameplateAurasAndQueueReload)
 	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-65, "FontSize", queueAuraReload, "Nameplate")
 	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-135, "SizeRatio", queueAuraReload, "Nameplate", .1)
-	createOptionSlider(parent, L["Max Auras"], 1, 20, 5, offset-205, "maxAuras", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["Max Auras"], 1, 20, 5, offset-205, "maxAuras", updateNameplateAurasAndQueueReload, "Nameplate")
 	createOptionSlider(parent, L["Auras Size"], 1, 40, 16, offset-275, "AuraSize", queueAuraReload, "Nameplate")
 end
 
@@ -2798,15 +2800,14 @@ function G:SetupNameplateCC(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then return end
 
-	local panel = createExtraGUI(parent, guiName, L["PlateCC"].."*")
+	local panel = createExtraGUI(parent, guiName, L["PlateCC"])
 	local scroll = G:CreateScroll(panel, 260, 540)
 	local parent = scroll.child
 	local offset = -10
-	local UF = B:GetModule("UnitFrames")
 
 	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-30, "CCFontSize", queueAuraReload, "Nameplate")
 	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-100, "CCSizeRatio", queueAuraReload, "Nameplate", .1)
-	createOptionSlider(parent, L["Max Auras"], 1, 20, 10, offset-170, "NumCC", UF.RefreshAllPlates, "Nameplate")
+	createOptionSlider(parent, L["Max Auras"], 1, 20, 10, offset-170, "NumCC", updateNameplateAurasAndQueueReload, "Nameplate")
 	createOptionSlider(parent, L["Auras Size"], 1, 40, 12, offset-240, "CCSize", queueAuraReload, "Nameplate")
 end
 

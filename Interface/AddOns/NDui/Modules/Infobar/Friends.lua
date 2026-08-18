@@ -604,7 +604,7 @@ info.onEnter = function(self)
 end
 
 local function delayLeave()
-	if MouseIsOver(infoFrame) then return end
+	if infoFrame:IsMouseOver() then return end
 	infoFrame:Hide()
 end
 

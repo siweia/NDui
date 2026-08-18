@@ -20,31 +20,31 @@ local tooltipInspecting
 
 TT.TierSets = {
 	-- WARRIOR
-	[249950] = true, [249951] = true, [249952] = true, [249953] = true, [249955] = true,
-	-- PALADIN
-	[249959] = true, [249960] = true, [249961] = true, [249962] = true, [249964] = true,
-	-- HUNTER
-	[249986] = true, [249987] = true, [249988] = true, [249989] = true, [249991] = true,
-	-- ROGUE
-	[250004] = true, [250005] = true, [250006] = true, [250007] = true, [250009] = true,
-	-- PRIEST
-	[250049] = true, [250054] = true, [250050] = true, [250051] = true, [250052] = true,
-	-- DEATHKNIGHT
-	[249968] = true, [249969] = true, [249970] = true, [249971] = true, [249973] = true,
-	-- SHAMAN
-	[249977] = true, [249978] = true, [249979] = true, [249980] = true, [249982] = true,
-	-- MAGE
-	[250058] = true, [250059] = true, [250060] = true, [250061] = true, [250063] = true,
-	-- WARLOCK
-	[250040] = true, [250041] = true, [250042] = true, [250043] = true, [250045] = true,
-	-- MONK
-	[250013] = true, [250014] = true, [250015] = true, [250016] = true, [250018] = true,
-	-- DRUID
-	[250022] = true, [250023] = true, [250024] = true, [250025] = true, [250027] = true,
-	-- DEMONHUNTER
-	[250031] = true, [250032] = true, [250033] = true, [250034] = true, [250036] = true,
-	-- EVOKER
-	[249995] = true, [249996] = true, [249997] = true, [249998] = true, [250000] = true,
+    [271454] = true, [271455] = true, [271456] = true, [271457] = true, [271459] = true,
+    -- PALADIN
+    [271463] = true, [271464] = true, [271465] = true, [271466] = true, [271468] = true,
+    -- HUNTER
+    [271490] = true, [271491] = true, [271492] = true, [271493] = true, [271495] = true,
+    -- ROGUE
+    [271508] = true, [271509] = true, [271510] = true, [271511] = true, [271513] = true,
+    -- PRIEST
+    [271553] = true, [271554] = true, [271555] = true, [271556] = true, [271558] = true,
+    -- DEATHKNIGHT
+    [271472] = true, [271473] = true, [271474] = true, [271475] = true, [271477] = true,
+    -- SHAMAN
+    [271481] = true, [271482] = true, [271483] = true, [271484] = true, [271486] = true,
+    -- MAGE
+    [271562] = true, [271563] = true, [271564] = true, [271565] = true, [271567] = true,
+    -- WARLOCK
+    [271544] = true, [271545] = true, [271546] = true, [271547] = true, [271549] = true,
+    -- MONK
+    [271517] = true, [271518] = true, [271519] = true, [271520] = true, [271522] = true,
+    -- DRUID
+    [271526] = true, [271527] = true, [271528] = true, [271529] = true, [271531] = true,
+    -- DEMONHUNTER
+    [271535] = true, [271536] = true, [271537] = true, [271538] = true, [271540] = true,
+    -- EVOKER
+    [271499] = true, [271500] = true, [271501] = true, [271502] = true, [271504] = true,
 }
 
 local formatSets = {

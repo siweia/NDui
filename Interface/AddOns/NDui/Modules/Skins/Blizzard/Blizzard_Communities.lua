@@ -22,6 +22,16 @@ local function reskinGuildCards(cards)
 	B.ReskinArrow(cards.NextPage, "right")
 end
 
+local function createAvatarBorder(parent, width, height, point, relativeTo, relativePoint, xOffset, yOffset)
+	local border = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+	border:SetSize(width, height)
+	border:SetPoint(point, relativeTo, relativePoint, xOffset or 0, yOffset or 0)
+	local level = parent:GetFrameLevel()
+	border:SetFrameLevel(level == 0 and 0 or level - 1)
+	B.CreateBD(border, .25)
+	return border
+end
+
 local function reskinCommunityCard(self)
 	for i = 1, self.ScrollTarget:GetNumChildren() do
 		local child = select(i, self.ScrollTarget:GetChildren())
@@ -29,7 +39,7 @@ local function reskinCommunityCard(self)
 			child.CircleMask:Hide()
 			child.LogoBorder:Hide()
 			child.Background:Hide()
-			B.ReskinIcon(child.CommunityLogo)
+			child.__avatarBorder = createAvatarBorder(child, 64, 64, "LEFT", child, "LEFT", 5, 0)
 			B.Reskin(child)
 
 			child.styled = true
@@ -127,12 +137,18 @@ C.themes["Blizzard_Communities"] = function()
 	for _, name in next, {"GuildFinderFrame", "InvitationFrame", "TicketFrame", "CommunityFinderFrame", "ClubFinderInvitationFrame"} do
 		local frame = CommunitiesFrame[name]
 		if frame then
-			B.StripTextures(frame)
+			-- Avatar textures are later passed to the restricted C_Club.SetAvatarTexture.
+			-- Do not let the generic region stripper mutate those textures.
+			if frame.CircleMask then
+				frame:DisableDrawLayer("BACKGROUND")
+			else
+				B.StripTextures(frame)
+			end
 			frame.InsetFrame:Hide()
 			if frame.CircleMask then
 				frame.CircleMask:Hide()
 				frame.IconRing:Hide()
-				B.ReskinIcon(frame.Icon)
+				frame.__avatarBorder = createAvatarBorder(frame, 63, 63, "TOP", frame.InvitationText, "BOTTOM", 0, -35)
 			end
 			if frame.FindAGuildButton then B.Reskin(frame.FindAGuildButton) end
 			if frame.AcceptButton then B.Reskin(frame.AcceptButton) end
