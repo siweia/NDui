@@ -735,7 +735,7 @@ loader:SetScript("OnEvent", function(self, _, addon)
 
 	if not C.db["Reset4"] then
 		C.db["UFs"]["Portrait"] = false
-		C.db["UFs"]["MBPerRow"] = 13
+		C.db["Actionbar"]["MBPerRow"] = 13
 		C.db["UFs"]["GatherEmpty"] = true
 		C.db["UFs"]["RaidBuffType"] = 1
 		C.db["UFs"]["RaidDebuffType"] = 2
