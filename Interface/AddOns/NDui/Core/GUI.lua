@@ -4,6 +4,7 @@ local G = B:RegisterModule("GUI")
 
 local unpack, strfind, gsub = unpack, strfind, gsub
 local tonumber, pairs, ipairs, next, type, tinsert = tonumber, pairs, ipairs, next, type, tinsert
+local min, max = math.min, math.max
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
 
@@ -11,6 +12,7 @@ local guiTab, guiPage, f = {}, {}
 G.DefaultSettings = {
 	Reset4 = false,
 	Reset5 = false,
+	Reset6 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -307,12 +309,18 @@ G.DefaultSettings = {
 		PetBuffType = 1,
 		PetDebuffType = 1,
 		PetAuraSize = 12,
-		BossNumBuff = 6,
+		BossNumBuff = 2,
 		BossNumDebuff = 6,
 		BossBuffType = 2,
 		BossDebuffType = 3,
 		BossBuffSize = 16,
 		BossDebuffSize = 16,
+		ArenaNumBuff = 2,
+		ArenaNumDebuff = 6,
+		ArenaBuffType = 2,
+		ArenaDebuffType = 2,
+		ArenaBuffSize = 16,
+		ArenaDebuffSize = 16,
 		RaidAuras = true,
 		RaidCDText = false,
 		RaidCDSize = 12,
@@ -381,10 +389,15 @@ G.DefaultSettings = {
 	},
 	Nameplate = {
 		Enable = true,
-		maxAuras = 5,
+		maxAuras = 6,
 		PlateAuras = true,
-		FontSize = 14,
+		FontSize = 12,
 		SizeRatio = .5,
+		PlateBuffs = true,
+		maxBuffs = 2,
+		BuffFontSize = 12,
+		BuffSizeRatio = .5,
+		BuffColor = false,
 		FriendlyCC = false,
 		HostileCC = true,
 		TankMode = false,
@@ -445,13 +458,13 @@ G.DefaultSettings = {
 		FriendRaidTargetX = 0,
 		FriendRaidTargetY = 3,
 		PlateRange = 45,
-		AuraSize = 16,
-		ShowDispel = true,
+		AuraSize = 24,
+		BuffSize = 24,
 		PlateCC = true,
-		CCFontSize = 14,
+		CCFontSize = 12,
 		CCSizeRatio = .5,
-		NumCC = 10,
-		CCSize = 12,
+		NumCC = 2,
+		CCSize = 24,
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -744,15 +757,53 @@ loader:SetScript("OnEvent", function(self, _, addon)
 
 	if not C.db["Reset5"] then
 		local ufs = C.db["UFs"]
-		if ufs["RaidBuffType"] == 4 then
-			ufs["RaidBuffType"] = 2
-		end
 		if ufs["RaidDebuffType"] == 5 then
 			ufs["RaidDebuffType"] = 4
 		elseif ufs["RaidDebuffType"] == 4 then
 			ufs["RaidDebuffType"] = 2
 		end
 		C.db["Reset5"] = true
+	end
+
+	if not C.db["Reset6"] then
+		local nameplate = C.db["Nameplate"]
+		nameplate["PlateBuffs"] = nameplate["PlateAuras"]
+		nameplate["BuffColor"] = nameplate["DebuffColor"]
+		nameplate["BuffSize"] = nameplate["AuraSize"]
+		nameplate["BuffFontSize"] = nameplate["FontSize"]
+		nameplate["BuffSizeRatio"] = nameplate["SizeRatio"]
+		if nameplate["maxAuras"] == 4 or nameplate["maxAuras"] == 5 then
+			nameplate["maxAuras"] = 6
+		end
+		if nameplate["AuraSize"] == 16 then
+			nameplate["AuraSize"] = 24
+			nameplate["BuffSize"] = 24
+		end
+		if nameplate["FontSize"] == 14 then
+			nameplate["FontSize"] = 12
+			nameplate["BuffFontSize"] = 12
+		end
+		if nameplate["CCSize"] == 12 then nameplate["CCSize"] = 24 end
+		if nameplate["CCFontSize"] == 14 then nameplate["CCFontSize"] = 12 end
+		nameplate["maxBuffs"] = min(max(nameplate["maxBuffs"], 1), 6)
+		nameplate["maxAuras"] = min(max(nameplate["maxAuras"], 1), 10)
+		nameplate["NumCC"] = min(max(nameplate["NumCC"], 1), 2)
+
+		local ufs = C.db["UFs"]
+		local bossBuffType = ufs["BossBuffType"]
+		-- Boss and Arena previously shared the Boss aura settings.
+		ufs["ArenaNumBuff"] = ufs["BossNumBuff"]
+		ufs["ArenaNumDebuff"] = ufs["BossNumDebuff"]
+		ufs["ArenaBuffSize"] = ufs["BossBuffSize"]
+		ufs["ArenaDebuffSize"] = ufs["BossDebuffSize"]
+		ufs["ArenaBuffType"] = bossBuffType == 1 and 1 or bossBuffType == 3 and 4 or 2
+		ufs["ArenaDebuffType"] = ufs["BossDebuffType"] == 1 and 1 or 2
+		ufs["BossBuffType"] = bossBuffType == 1 and 1 or 2
+		ufs["BossNumBuff"] = min(max(ufs["BossNumBuff"], 1), 6)
+		ufs["BossNumDebuff"] = min(max(ufs["BossNumDebuff"], 1), 10)
+		ufs["ArenaNumBuff"] = min(max(ufs["ArenaNumBuff"], 1), 6)
+		ufs["ArenaNumDebuff"] = min(max(ufs["ArenaNumDebuff"], 1), 10)
+		C.db["Reset6"] = true
 	end
 
 	B:SetupUIScale(true)
@@ -873,6 +924,10 @@ end
 
 local function setupNameplateAuras()
 	G:SetupNameplateAuras(guiPage[5])
+end
+
+local function setupNameplateBuffs()
+	G:SetupNameplateBuffs(guiPage[5])
 end
 
 local function setupNameplateCC()
@@ -1341,9 +1396,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
 		{1, "Nameplate", "PlateAuras", IsNew..L["PlateAuras"], nil, setupNameplateAuras, refreshNameplates},
-		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"], true, setupNameplateCC, refreshNameplates},
-		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"], true},
-		{1, "Nameplate", "DebuffColor", L["DebuffColor"], true, nil, refreshNameplates, L["DebuffColorTip"]},
+		{1, "Nameplate", "PlateBuffs", IsNew..L["PlateBuffs"], true, setupNameplateBuffs, refreshNameplates},
+		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"], nil, setupNameplateCC, refreshNameplates},
+		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", true, nil, refreshNameplates, L["DesaturateIconTip"], true},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", L["ExecuteRatio"].."*", true, {0, 90, 1}, refreseExecuteRatio, L["ExecuteRatioTip"]},

@@ -6,7 +6,7 @@ local UF = B:RegisterModule("UnitFrames")
 local Cooldown = B:GetModule("Cooldown")
 
 local pairs, next, unpack = pairs, next, unpack
-local max = math.max
+local max, min = math.max, math.min
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
 local FALLBACK_COLOR = {r=0, g=0, b=0}
@@ -943,6 +943,7 @@ local function CreateAuraDispelBorder(button)
 
 	local options = {
 		showWhenHarmful = true,
+		showWhenHelpful = true,
 		showWithoutDispelType = true,
 		style = Enum.CustomAuraButtonDispelTypeTextureStyle.PreserveAsset,
 		customDispelColorMap = UNITFRAME_AURA_DISPEL_COLORS,
@@ -953,7 +954,9 @@ local function CreateAuraDispelBorder(button)
 end
 
 function UF.PostCreateButton(element, button, options)
-	local fontSize = element.fontSize or element.size*.4
+	options = options or {}
+	local size = options.size or element.size
+	local fontSize = options.fontSize or element.fontSize or size*.4
 	local isRaid = element.__owner.mystyle == "raid"
 	if button.Count then
 		button.Count:SetFont(DB.Font[1], fontSize, DB.Font[3])
@@ -971,7 +974,7 @@ function UF.PostCreateButton(element, button, options)
 	button.iconbg:SetBackdropBorderColor(0, 0, 0)
 	B.CreateSD(button)
 
-	if options and options.showDebuffTypeBorder then
+	if options.showDebuffTypeBorder then
 		CreateAuraDispelBorder(button)
 	end
 
@@ -988,7 +991,8 @@ function UF.PostCreateButton(element, button, options)
 	end
 
 	if element.__owner.mystyle == "nameplate" then
-		UF.UpdateIconTexCoord(button, element.size, element.size * element.sizeRatio)
+		local sizeRatio = options.sizeRatio or element.sizeRatio
+		UF.UpdateIconTexCoord(button, size, size * sizeRatio)
 		if button.Count then
 			button.Count:ClearAllPoints()
 			button.Count:SetPoint("RIGHT", button, "BOTTOMRIGHT", 5, 0)
@@ -1121,6 +1125,107 @@ local function UpdateAuraGroup(element, name, filter, count)
 	element:SetAuraGroupMaxFrameCount(groupKey, count or 0)
 end
 
+local NAMEPLATE_AURA_GROUP_NAME = "NameplateAuras"
+local NAMEPLATE_AURA_SETTINGS = {
+	buffs = {
+		enabled = "PlateBuffs",
+		count = "maxBuffs",
+		size = "BuffSize",
+		fontSize = "BuffFontSize",
+		sizeRatio = "BuffSizeRatio",
+		typeBorder = "BuffColor",
+	},
+	debuffs = {
+		enabled = "PlateAuras",
+		count = "maxAuras",
+		size = "AuraSize",
+		fontSize = "FontSize",
+		sizeRatio = "SizeRatio",
+		typeBorder = "DebuffColor",
+	},
+}
+local NAMEPLATE_AURA_GROUPS = {
+	{ -- Boss and role buffs
+		auraType = "buffs",
+		filter = "HELPFUL",
+		candidateFilters = {
+			isBossOrRoleAura = true,
+		},
+	},
+	{ -- Other stealable buffs
+		auraType = "buffs",
+		filter = "HELPFUL|!IMPORTANT",
+		candidateFilters = {
+			isStealable = true,
+			isBossOrRoleAura = false,
+		},
+	},
+	{ -- Other important buffs
+		auraType = "buffs",
+		filter = "HELPFUL|IMPORTANT",
+		candidateFilters = {
+			isBossOrRoleAura = false,
+		},
+	},
+	{ -- Personal nameplate debuffs, excluding crowd control
+		auraType = "debuffs",
+		filter = "HARMFUL|PLAYER|INCLUDE_NAME_PLATE_ONLY|!CROWD_CONTROL",
+		candidateFilters = {
+			nameplateShowPersonal = true,
+		},
+	},
+	{ -- Other nameplate debuffs visible to everyone, excluding crowd control
+		auraType = "debuffs",
+		filter = "HARMFUL|INCLUDE_NAME_PLATE_ONLY|!CROWD_CONTROL",
+		candidateFilters = {
+			nameplateShowAll = true,
+			nameplateShowPersonal = false,
+		},
+	},
+}
+
+local BOSS_BUFF_GROUP_NAME = "BossBuffs"
+local BOSS_BUFF_GROUPS = {
+	NAMEPLATE_AURA_GROUPS[1],
+	NAMEPLATE_AURA_GROUPS[2],
+	NAMEPLATE_AURA_GROUPS[3],
+}
+
+local ARENA_BUFF_GROUP_NAME = "ArenaBuffs"
+local ARENA_BUFF_GROUPS = {
+	[3] = {
+		"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+		"HELPFUL|EXTERNAL_DEFENSIVE",
+	},
+	[5] = {
+		"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+		"HELPFUL|EXTERNAL_DEFENSIVE",
+		"HELPFUL|DISPELLABLE|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+	},
+}
+
+local ARENA_DEBUFF_GROUP_NAME = "ArenaDebuffs"
+local ARENA_DEBUFF_GROUPS = {
+	NAMEPLATE_AURA_GROUPS[4],
+	NAMEPLATE_AURA_GROUPS[5],
+	{
+		filter = "HARMFUL|CROWD_CONTROL|INCLUDE_NAME_PLATE_ONLY",
+	},
+}
+
+local RAID_BUFF_GROUP_NAME = "RaidBuffs"
+local RAID_BUFF_GROUPS = {
+	[3] = {
+		"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+		"HELPFUL|EXTERNAL_DEFENSIVE",
+	},
+	[4] = {
+		"HELPFUL|RAID_IN_COMBAT|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+		"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+		"HELPFUL|EXTERNAL_DEFENSIVE",
+	},
+}
+
 local RAID_DEBUFF_GROUP_NAME = "RaidDebuffs"
 local RAID_DEBUFF_GROUPS = {
 	{ -- Boss and role auras
@@ -1155,10 +1260,27 @@ local RAID_DEBUFF_GROUPS = {
 	},
 }
 
-local function UpdateRaidDebuffGroups(element)
-	local count = element.__filterType == 2 and element.num or 0
-	for index, group in ipairs(RAID_DEBUFF_GROUPS) do
-		UpdateAuraGroup(element, RAID_DEBUFF_GROUP_NAME..index, group.filter, count)
+local function GetNameplateAuraGroupCount(group)
+	local settings = NAMEPLATE_AURA_SETTINGS[group.auraType]
+	local db = C.db["Nameplate"]
+	return db[settings.enabled] and db[settings.count] or 0
+end
+
+local function UpdateNameplateAuraGroups(element)
+	for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
+		UpdateAuraGroup(element, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group))
+	end
+end
+
+local function UpdateAuraFilterGroups(element, groupName, filters, count)
+	for index, filter in ipairs(filters) do
+		UpdateAuraGroup(element, groupName..index, filter, count)
+	end
+end
+
+local function UpdateCandidateAuraGroups(element, groupName, groups, count)
+	for index, group in ipairs(groups) do
+		UpdateAuraGroup(element, groupName..index, group.filter, count)
 	end
 end
 
@@ -1168,13 +1290,39 @@ function UF:UpdateAuraContainer(parent, element)
 
 	local auraType = element.__auraType
 	if auraType then
-		local isRaidDebuffs = auraType == "debuffs" and element.__value == "Raid"
-		if isRaidDebuffs and element.__groups[RAID_DEBUFF_GROUP_NAME..1] then
-			UpdateRaidDebuffGroups(element)
+		if auraType == "nameplate" then
+			UpdateNameplateAuraGroups(element)
 		else
-			local groupName = auraType == "buffs" and "Buffs" or "Debuffs"
-			local count = isRaidDebuffs and element.__filterType == 2 and 0 or element.num or element.numTotal
-			UpdateAuraGroup(element, groupName, element.filter, count)
+			local isRaidBuffs = auraType == "buffs" and element.__value == "Raid"
+			local isRaidDebuffs = auraType == "debuffs" and element.__value == "Raid"
+			local isBossBuffs = auraType == "buffs" and element.__value == "Boss"
+			local isArenaBuffs = auraType == "buffs" and element.__value == "Arena"
+			local isArenaDebuffs = auraType == "debuffs" and element.__value == "Arena"
+			if isRaidBuffs and element.__groups[RAID_BUFF_GROUP_NAME..1] then
+				local groupType = element.__groups[RAID_BUFF_GROUP_NAME..3] and 4 or 3
+				local count = element.__filterType == groupType and element.num or 0
+				UpdateAuraFilterGroups(element, RAID_BUFF_GROUP_NAME, RAID_BUFF_GROUPS[groupType], count)
+			elseif isRaidDebuffs and element.__groups[RAID_DEBUFF_GROUP_NAME..1] then
+				local count = element.__filterType == 2 and element.num or 0
+				UpdateCandidateAuraGroups(element, RAID_DEBUFF_GROUP_NAME, RAID_DEBUFF_GROUPS, count)
+			elseif isBossBuffs and element.__groups[BOSS_BUFF_GROUP_NAME..1] then
+				local count = element.__filterType == 2 and element.num or 0
+				UpdateCandidateAuraGroups(element, BOSS_BUFF_GROUP_NAME, BOSS_BUFF_GROUPS, count)
+			elseif isArenaBuffs and element.__groups[ARENA_BUFF_GROUP_NAME..1] then
+				local groupType = element.__groups[ARENA_BUFF_GROUP_NAME..3] and 5 or 3
+				local count = element.__filterType == groupType and element.num or 0
+				UpdateAuraFilterGroups(element, ARENA_BUFF_GROUP_NAME, ARENA_BUFF_GROUPS[groupType], count)
+			elseif isArenaDebuffs and element.__groups[ARENA_DEBUFF_GROUP_NAME..1] then
+				local count = element.__filterType == 2 and element.num or 0
+				UpdateCandidateAuraGroups(element, ARENA_DEBUFF_GROUP_NAME, ARENA_DEBUFF_GROUPS, count)
+			else
+				local groupName = auraType == "buffs" and "Buffs" or "Debuffs"
+				local needsReload = isRaidBuffs and RAID_BUFF_GROUPS[element.__filterType]
+					or isRaidDebuffs and element.__filterType == 2
+					or isArenaBuffs and ARENA_BUFF_GROUPS[element.__filterType]
+				local count = needsReload and 0 or element.num or element.numTotal
+				UpdateAuraGroup(element, groupName, element.filter, count)
+			end
 		end
 	end
 
@@ -1219,7 +1367,7 @@ function UF:RefreshUFAuras(frame)
 	if not element then return end
 
 	UF:ConfigureAuras(element)
-	UF:UpdateAuraContainer(frame, element, element.numBuffs + element.numDebuffs)
+	UF:UpdateAuraContainer(frame, element)
 	UF:UpdateAuraDirection(frame, element)
 	element:ForceUpdate()
 end
@@ -1227,8 +1375,8 @@ end
 local raidBuffFilters = {
 	[1] = "HELPFUL",
 	[2] = "HELPFUL|RAID_IN_COMBAT",
-	[3] = "HELPFUL|BIG_DEFENSIVE",
-	-- [4] = "HELPFUL|RAID_IN_COMBAT|BIG_DEFENSIVE|EXTERNAL_DEFENSIVE",
+	[3] = RAID_BUFF_GROUPS[3][1],
+	[4] = RAID_BUFF_GROUPS[4][1],
 }
 
 local raidDebuffFilters = {
@@ -1237,6 +1385,14 @@ local raidDebuffFilters = {
 	[3] = "HARMFUL|DISPELLABLE",
 	-- [4] = "HARMFUL|RAID_IN_COMBAT|DISPELLABLE",
 	[4] = "HARMFUL",
+}
+
+local arenaBuffFilters = {
+	[1] = "HELPFUL",
+	[2] = "HELPFUL",
+	[3] = ARENA_BUFF_GROUPS[3][1],
+	[4] = "HELPFUL|DISPELLABLE",
+	[5] = ARENA_BUFF_GROUPS[5][1],
 }
 
 function UF:ConfigureBuffAndDebuff(element, isDebuff)
@@ -1248,6 +1404,8 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	element.num = filterType ~= 1 and C.db["UFs"][value.."Num"..vType] or 0
 	if isRaid then
 		element.filter = isDebuff and raidDebuffFilters[filterType] or raidBuffFilters[filterType]
+	elseif value == "Arena" and not isDebuff then
+		element.filter = arenaBuffFilters[filterType]
 	else
 		element.filter = isDebuff and unitFrameDebuffFilters[filterType] or unitFrameBuffFilters[filterType]
 	end
@@ -1263,14 +1421,14 @@ function UF:RefreshBuffAndDebuff(frame)
 	local element = frame.Buffs
 	if element then
 		UF:ConfigureBuffAndDebuff(element)
-		UF:UpdateAuraContainer(frame, element, element.num)
+		UF:UpdateAuraContainer(frame, element)
 		element:ForceUpdate()
 	end
 
 	local element = frame.Debuffs
 	if element then
 		UF:ConfigureBuffAndDebuff(element, true)
-		UF:UpdateAuraContainer(frame, element, element.num)
+		UF:UpdateAuraContainer(frame, element)
 		element:ForceUpdate()
 	end
 end
@@ -1282,8 +1440,11 @@ function UF:UpdateUFAuras()
 	UF:RefreshUFAuras(_G.oUF_ToT)
 	UF:RefreshUFAuras(_G.oUF_Pet)
 
-	for i = 1, 5 do
+	for i = 1, 10 do
 		UF:RefreshBuffAndDebuff(_G["oUF_Boss"..i])
+	end
+
+	for i = 1, 5 do
 		UF:RefreshBuffAndDebuff(_G["oUF_Arena"..i])
 	end
 
@@ -1340,24 +1501,37 @@ function UF:UpdateAuraDirection(self, element)
 end
 
 local function AuraGroupLayout(element, index)
+	local groupSpacing = element.groupSpacing
+	if groupSpacing == nil then groupSpacing = element.spacing end
 	return {
 		elementSpacing = element.spacing,
 		lineSpacing = element.spacing,
-		groupSpacing = element.spacing,
-		groupLineSpacing = element.spacing,
+		groupSpacing = groupSpacing,
+		groupLineSpacing = groupSpacing,
 		forceNewLine = false,
 		layoutIndex = index,
 	}
 end
 
-local function AddAuraGroup(element, name, filter, count, index, candidateFilters, sortMethod)
+local function AddAuraGroup(element, name, filter, count, index, candidateFilters, sortMethod, buttonOptions)
+	buttonOptions = buttonOptions or {}
+	local size = buttonOptions.size or element.size
+	local sizeRatio = buttonOptions.sizeRatio or element.sizeRatio
+	local showTypeBorder = buttonOptions.showDebuffTypeBorder
+	if showTypeBorder == nil then
+		local useTypeBorder = name == "Debuffs" or element.__auraType == "debuffs"
+		showTypeBorder = useTypeBorder and element.showDebuffTypeBorder
+	end
+
 	element.__groups[name] = element:AddGroup(filter, {
 		candidateFilters = candidateFilters,
 		maxFrameCount = count,
 		sortMethod = sortMethod,
-		size = element.size,
-		height = element.__owner.mystyle == "nameplate" and element.size * element.sizeRatio or nil,
-		showDebuffTypeBorder = (name == "Debuffs" or element.__auraType == "debuffs") and element.showDebuffTypeBorder,
+		size = size,
+		height = element.__owner.mystyle == "nameplate" and size * sizeRatio or nil,
+		fontSize = buttonOptions.fontSize,
+		sizeRatio = sizeRatio,
+		showDebuffTypeBorder = showTypeBorder,
 		layout = AuraGroupLayout(element, index),
 	})
 end
@@ -1374,6 +1548,7 @@ local function CreateAuraElement(self, options)
 	element.__groups = {}
 	element.__value = options.value
 	element.spacing = options.spacing or 0
+	element.groupSpacing = options.groupSpacing
 	element.fontSize = options.fontSize
 	element.sizeRatio = options.sizeRatio or 1
 	element.disableMouse = options.disableMouse
@@ -1393,6 +1568,10 @@ local auraUFs = {
 	["focus"] = "Focus",
 }
 
+function UF:ConfigureNameplateAuras(element)
+	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
+end
+
 function UF:CreateAuras(self)
 	local mystyle = self.mystyle
 	local bu = CreateAuraElement(self, {
@@ -1400,6 +1579,7 @@ function UF:CreateAuras(self)
 		growthX = "RIGHT",
 		growthY = "DOWN",
 		spacing = 3,
+		groupSpacing = mystyle == "nameplate" and 0 or nil,
 	})
 	if auraUFs[mystyle] then
 		bu.__value = auraUFs[mystyle]
@@ -1408,7 +1588,7 @@ function UF:CreateAuras(self)
 		AddAuraGroup(bu, "Buffs", bu.buffFilter, bu.numBuffs, 1)
 		AddAuraGroup(bu, "Debuffs", bu.debuffFilter, bu.numDebuffs, 2)
 	elseif mystyle == "nameplate" then
-		bu.__auraType = "debuffs"
+		bu.__auraType = "nameplate"
 		bu:SetFlowLayoutAnchorPoint("BOTTOMLEFT")
 		bu:SetFlowLayoutGrowthDirection(1, 1)
 		if C.db["Nameplate"]["TargetPower"] then
@@ -1416,27 +1596,30 @@ function UF:CreateAuras(self)
 		else
 			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
 		end
-		bu.numTotal = C.db["Nameplate"]["PlateAuras"] and C.db["Nameplate"]["maxAuras"] or 0
-		bu.size = C.db["Nameplate"]["AuraSize"]
-		bu.fontSize = C.db["Nameplate"]["FontSize"]
-		bu.showDebuffTypeBorder = C.db["Nameplate"]["DebuffColor"]
-		bu.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
-		bu.sizeRatio = C.db["Nameplate"]["SizeRatio"]
+		UF:ConfigureNameplateAuras(bu)
 		bu.disableMouse = true
-		bu.filter = "HARMFUL|PLAYER|INCLUDE_NAME_PLATE_ONLY"
-		AddAuraGroup(bu, "Debuffs", bu.filter, bu.numTotal, 1)
+		for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
+			local settings = NAMEPLATE_AURA_SETTINGS[group.auraType]
+			local db = C.db["Nameplate"]
+			AddAuraGroup(bu, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group), index, group.candidateFilters, nil, {
+				size = db[settings.size],
+				fontSize = db[settings.fontSize],
+				sizeRatio = db[settings.sizeRatio],
+				showDebuffTypeBorder = db[settings.typeBorder],
+			})
+		end
 	end
 
-	UF:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
+	UF:UpdateAuraContainer(self, bu)
 
 	self.Auras = bu
 end
 
 local function ConfigureNameplateDebuffs(element)
-	element.num = C.db["Nameplate"]["PlateCC"] and C.db["Nameplate"]["NumCC"] or 0
+	element.num = C.db["Nameplate"]["PlateCC"] and min(C.db["Nameplate"]["NumCC"], 2) or 0
 	element.size = C.db["Nameplate"]["CCSize"]
 	element.fontSize = C.db["Nameplate"]["CCFontSize"]
-	element.showDebuffTypeBorder = C.db["Nameplate"]["DebuffColor"]
+	element.showDebuffTypeBorder = false
 	element.desaturateDebuff = false
 	element.sizeRatio = C.db["Nameplate"]["CCSizeRatio"]
 	element.filter = "HARMFUL|CROWD_CONTROL|INCLUDE_NAME_PLATE_ONLY"
@@ -1470,46 +1653,57 @@ end
 
 function UF:CreateBuffs(self)
 	local mystyle = self.mystyle
+	local value = mystyle == "raid" and "Raid" or mystyle == "arena" and "Arena" or "Boss"
 	local bu = CreateAuraElement(self, {
 		initialAnchor = mystyle == "raid" and "TOPLEFT" or "BOTTOMLEFT",
 		growthX = "RIGHT",
 		growthY = mystyle == "raid" and "DOWN" or "UP",
 		spacing = mystyle == "raid" and 2 or 3,
-		value = mystyle == "raid" and "Raid" or "Boss",
+		value = value,
 		disableMouse = mystyle == "raid",
 	})
 	bu.__auraType = "buffs"
 	if mystyle == "raid" then
-		bu.__value = "Raid"
 		bu:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
 	else
-		bu.__value = "Boss"
 		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 	end
 
 	UF:ConfigureBuffAndDebuff(bu)
-	AddAuraGroup(bu, "Buffs", bu.filter, bu.num, 1)
-	UF:UpdateAuraContainer(self, bu, bu.num)
+	local filterGroups = mystyle == "raid" and RAID_BUFF_GROUPS[bu.__filterType]
+		or mystyle == "arena" and ARENA_BUFF_GROUPS[bu.__filterType]
+	if filterGroups then
+		local groupName = mystyle == "raid" and RAID_BUFF_GROUP_NAME or ARENA_BUFF_GROUP_NAME
+		for index, filter in ipairs(filterGroups) do
+			AddAuraGroup(bu, groupName..index, filter, bu.num, index)
+		end
+	elseif mystyle == "boss" then
+		for index, group in ipairs(BOSS_BUFF_GROUPS) do
+			AddAuraGroup(bu, BOSS_BUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters)
+		end
+	else
+		AddAuraGroup(bu, "Buffs", bu.filter, bu.num, 1)
+	end
+	UF:UpdateAuraContainer(self, bu)
 
 	self.Buffs = bu
 end
 
 function UF:CreateDebuffs(self)
 	local mystyle = self.mystyle
+	local value = mystyle == "raid" and "Raid" or mystyle == "arena" and "Arena" or "Boss"
 	local bu = CreateAuraElement(self, {
 		initialAnchor = mystyle == "raid" and "BOTTOMRIGHT" or "TOPRIGHT",
 		growthX = "LEFT",
 		growthY = mystyle == "raid" and "UP" or "DOWN",
 		spacing = mystyle == "raid" and 2 or 3,
-		value = mystyle == "raid" and "Raid" or "Boss",
+		value = value,
 		disableMouse = mystyle == "raid",
 	})
 	bu.__auraType = "debuffs"
 	if mystyle == "raid" then
-		bu.__value = "Raid"
 		bu:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
 	else
-		bu.__value = "Boss"
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 	end
 
@@ -1518,10 +1712,14 @@ function UF:CreateDebuffs(self)
 		for index, group in ipairs(RAID_DEBUFF_GROUPS) do
 			AddAuraGroup(bu, RAID_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters, AuraContainerSortMethod.Default)
 		end
+	elseif mystyle == "arena" then
+		for index, group in ipairs(ARENA_DEBUFF_GROUPS) do
+			AddAuraGroup(bu, ARENA_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters)
+		end
 	else
 		AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1)
 	end
-	UF:UpdateAuraContainer(self, bu, bu.num)
+	UF:UpdateAuraContainer(self, bu)
 
 	self.Debuffs = bu
 end

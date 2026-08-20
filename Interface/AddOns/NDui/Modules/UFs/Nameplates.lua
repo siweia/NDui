@@ -605,9 +605,6 @@ function UF:CreatePlates()
 	UF:CreatePVPClassify(self)
 	UF:CreateThreatColor(self)
 
-	self.Auras.showStealableBuffs = true
-	self.Auras.alwaysShowStealable = C.db["Nameplate"]["ShowDispel"]
-
 	local title = B.CreateFS(self, C.db["Nameplate"]["NameOnlyTitleSize"])
 	title:ClearAllPoints()
 	title:SetPoint("TOP", self.nameText, "BOTTOM", 0, -3)
@@ -626,7 +623,7 @@ function UF:CreatePlates()
 end
 
 function UF:ToggleNameplateAuras(shouldEnable)
-	if (C.db["Nameplate"]["PlateAuras"] or C.db["Nameplate"]["PlateCC"]) and shouldEnable then
+	if (C.db["Nameplate"]["PlateAuras"] or C.db["Nameplate"]["PlateBuffs"] or C.db["Nameplate"]["PlateCC"]) and shouldEnable then
 		if not self:IsElementEnabled("Auras") then
 			self:EnableElement("Auras")
 		end
@@ -646,16 +643,8 @@ function UF:UpdateNameplateAuras()
 	else
 		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
 	end
-	element.numTotal = C.db["Nameplate"]["PlateAuras"] and C.db["Nameplate"]["maxAuras"] or 0
-	element.size = C.db["Nameplate"]["AuraSize"]
-	element.fontSize = C.db["Nameplate"]["FontSize"]
-	element.showDebuffTypeBorder = C.db["Nameplate"]["DebuffColor"]
-	element.showStealableBuffs = true
-	element.alwaysShowStealable = C.db["Nameplate"]["ShowDispel"]
-	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
-	element.sizeRatio = C.db["Nameplate"]["SizeRatio"]
-	element.filter = "HARMFUL|PLAYER|INCLUDE_NAME_PLATE_ONLY"
-	UF:UpdateAuraContainer(self, element, element.numTotal)
+	UF:ConfigureNameplateAuras(element)
+	UF:UpdateAuraContainer(self, element)
 	element:ForceUpdate()
 end
 
