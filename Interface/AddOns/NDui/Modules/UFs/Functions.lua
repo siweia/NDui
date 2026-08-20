@@ -1121,14 +1121,61 @@ local function UpdateAuraGroup(element, name, filter, count)
 	element:SetAuraGroupMaxFrameCount(groupKey, count or 0)
 end
 
+local RAID_DEBUFF_GROUP_NAME = "RaidDebuffs"
+local RAID_DEBUFF_GROUPS = {
+	{ -- Boss and role auras
+		filter = "HARMFUL",
+		candidateFilters = {
+			isBossOrRoleAura = true,
+			isFromPlayerOrPlayerPet = false,
+		},
+	},
+	{ -- Other priority auras
+		filter = "HARMFUL",
+		candidateFilters = {
+			isBossOrRoleAura = false,
+			isPriorityAura = true,
+			isFromPlayerOrPlayerPet = false,
+		},
+	},
+	{ -- Dispellable auras
+		filter = "HARMFUL|DISPELLABLE",
+		candidateFilters = {
+			isBossOrRoleAura = false,
+			isPriorityAura = false,
+		},
+	},
+	{ -- Other regular auras
+		filter = "HARMFUL|!DISPELLABLE",
+		candidateFilters = {
+			isBossOrRoleAura = false,
+			isPriorityAura = false,
+			isFromPlayerOrPlayerPet = false,
+		},
+	},
+}
+
+local function UpdateRaidDebuffGroups(element)
+	local count = element.__filterType == 2 and element.num or 0
+	for index, group in ipairs(RAID_DEBUFF_GROUPS) do
+		UpdateAuraGroup(element, RAID_DEBUFF_GROUP_NAME..index, group.filter, count)
+	end
+end
+
 function UF:UpdateAuraContainer(parent, element)
 	UpdateAuraGroup(element, "Buffs", element.buffFilter, element.numBuffs)
 	UpdateAuraGroup(element, "Debuffs", element.debuffFilter, element.numDebuffs)
 
 	local auraType = element.__auraType
 	if auraType then
-		local groupName = auraType == "buffs" and "Buffs" or "Debuffs"
-		UpdateAuraGroup(element, groupName, element.filter, element.num or element.numTotal)
+		local isRaidDebuffs = auraType == "debuffs" and element.__value == "Raid"
+		if isRaidDebuffs and element.__groups[RAID_DEBUFF_GROUP_NAME..1] then
+			UpdateRaidDebuffGroups(element)
+		else
+			local groupName = auraType == "buffs" and "Buffs" or "Debuffs"
+			local count = isRaidDebuffs and element.__filterType == 2 and 0 or element.num or element.numTotal
+			UpdateAuraGroup(element, groupName, element.filter, count)
+		end
 	end
 
 	if parent.mystyle == "nameplate" then return end
@@ -1197,6 +1244,7 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	local vType = isDebuff and "Debuff" or "Buff"
 	local isRaid = value == "Raid"
 	local filterType = C.db["UFs"][value..vType.."Type"]
+	element.__filterType = filterType
 	element.num = filterType ~= 1 and C.db["UFs"][value.."Num"..vType] or 0
 	if isRaid then
 		element.filter = isDebuff and raidDebuffFilters[filterType] or raidBuffFilters[filterType]
@@ -1302,12 +1350,14 @@ local function AuraGroupLayout(element, index)
 	}
 end
 
-local function AddAuraGroup(element, name, filter, count, index)
+local function AddAuraGroup(element, name, filter, count, index, candidateFilters, sortMethod)
 	element.__groups[name] = element:AddGroup(filter, {
+		candidateFilters = candidateFilters,
 		maxFrameCount = count,
+		sortMethod = sortMethod,
 		size = element.size,
 		height = element.__owner.mystyle == "nameplate" and element.size * element.sizeRatio or nil,
-		showDebuffTypeBorder = name == "Debuffs" and element.showDebuffTypeBorder,
+		showDebuffTypeBorder = (name == "Debuffs" or element.__auraType == "debuffs") and element.showDebuffTypeBorder,
 		layout = AuraGroupLayout(element, index),
 	})
 end
@@ -1464,7 +1514,13 @@ function UF:CreateDebuffs(self)
 	end
 
 	UF:ConfigureBuffAndDebuff(bu, true)
-	AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1)
+	if mystyle == "raid" and bu.__filterType == 2 then
+		for index, group in ipairs(RAID_DEBUFF_GROUPS) do
+			AddAuraGroup(bu, RAID_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters, AuraContainerSortMethod.Default)
+		end
+	else
+		AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1)
+	end
 	UF:UpdateAuraContainer(self, bu, bu.num)
 
 	self.Debuffs = bu
