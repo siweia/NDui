@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Tip.lua"/>
+	<Script file="MapPOITooltip.lua"/>
 	<Script file="TooltipIcons.lua"/>
 	<Script file="TooltipID.lua"/>
 	<Script file="ItemLevel.lua"/>
