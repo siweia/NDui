@@ -173,6 +173,9 @@ local function CreateRaidStyle(self)
 		UF:CreateBuffs(self)
 		UF:CreateDebuffs(self)
 	end
+	if self.raidType ~= "simple" and C.db["UFs"]["RaidBigDefensive"] then
+		UF:CreateRaidBigDefensives(self)
+	end
 end
 
 local function CreateSimpleRaidStyle(self)

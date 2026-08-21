@@ -1098,25 +1098,36 @@ local ARENA_BUFF_GROUPS = {
 
 local ARENA_DEBUFF_GROUP_NAME = "ArenaDebuffs"
 local ARENA_DEBUFF_GROUPS = {
-	NAMEPLATE_AURA_GROUPS[4],
-	NAMEPLATE_AURA_GROUPS[5],
 	{
-		filter = "HARMFUL|CROWD_CONTROL|INCLUDE_NAME_PLATE_ONLY",
+		filter = "HARMFUL|PLAYER|INCLUDE_NAME_PLATE_ONLY",
+		candidateFilters = {
+			nameplateShowPersonal = true,
+		},
+	},
+	{
+		filter = "HARMFUL|INCLUDE_NAME_PLATE_ONLY",
+		candidateFilters = {
+			nameplateShowAll = true,
+			nameplateShowPersonal = false,
+		},
 	},
 }
 
-local RAID_BUFF_GROUP_NAME = "RaidBuffs"
-local RAID_BUFF_GROUPS = {
-	[3] = {
-		"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
-		"HELPFUL|EXTERNAL_DEFENSIVE",
-	},
-	[4] = {
-		"HELPFUL|RAID_IN_COMBAT|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
-		"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
-		"HELPFUL|EXTERNAL_DEFENSIVE",
-	},
+local RAID_BIG_DEFENSIVE_SIZE = 16
+local RAID_BIG_DEFENSIVE_SPACING = 2
+local RAID_BIG_DEFENSIVE_RIGHT_INSET = 17
+local RAID_BIG_DEFENSIVE_RESERVED_WIDTH = 54
+local RAID_BIG_DEFENSIVE_FILTERS = {
+	"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+	"HELPFUL|EXTERNAL_DEFENSIVE",
 }
+
+local function PostCreateRaidBigDefensiveButton(element, button, options)
+	UF.PostCreateButton(element, button, options)
+	button:ClearAllPoints()
+	local xOffset = -RAID_BIG_DEFENSIVE_RIGHT_INSET - (options.slotIndex - 1) * (RAID_BIG_DEFENSIVE_SIZE + RAID_BIG_DEFENSIVE_SPACING)
+	button:SetPoint("BOTTOMRIGHT", element.__owner.Health, "BOTTOMRIGHT", xOffset, C.db["UFs"]["RaidDebuffSize"] + 4)
+end
 
 local RAID_DEBUFF_GROUP_NAME = "RaidDebuffs"
 local RAID_DEBUFF_GROUPS = {
@@ -1185,33 +1196,29 @@ function UF:UpdateAuraContainer(parent, element)
 		if auraType == "nameplate" then
 			UpdateNameplateAuraGroups(element)
 		else
-			local isRaidBuffs = auraType == "buffs" and element.__value == "Raid"
 			local isRaidDebuffs = auraType == "debuffs" and element.__value == "Raid"
 			local isBossBuffs = auraType == "buffs" and element.__value == "Boss"
 			local isArenaBuffs = auraType == "buffs" and element.__value == "Arena"
 			local isArenaDebuffs = auraType == "debuffs" and element.__value == "Arena"
-			if isRaidBuffs and element.__groups[RAID_BUFF_GROUP_NAME..1] then
-				local groupType = element.__groups[RAID_BUFF_GROUP_NAME..3] and 4 or 3
-				local count = element.__filterType == groupType and element.num or 0
-				UpdateAuraFilterGroups(element, RAID_BUFF_GROUP_NAME, RAID_BUFF_GROUPS[groupType], count)
-			elseif isRaidDebuffs and element.__groups[RAID_DEBUFF_GROUP_NAME..1] then
+			if isRaidDebuffs and element.__groups[RAID_DEBUFF_GROUP_NAME..1] then
 				local count = element.__filterType == 2 and element.num or 0
 				UpdateCandidateAuraGroups(element, RAID_DEBUFF_GROUP_NAME, RAID_DEBUFF_GROUPS, count)
 			elseif isBossBuffs and element.__groups[BOSS_BUFF_GROUP_NAME..1] then
-				local count = element.__filterType == 2 and element.num or 0
+				local count = element.__filterType == 3 and element.num or 0
 				UpdateCandidateAuraGroups(element, BOSS_BUFF_GROUP_NAME, BOSS_BUFF_GROUPS, count)
 			elseif isArenaBuffs and element.__groups[ARENA_BUFF_GROUP_NAME..1] then
 				local groupType = element.__groups[ARENA_BUFF_GROUP_NAME..3] and 5 or 3
 				local count = element.__filterType == groupType and element.num or 0
 				UpdateAuraFilterGroups(element, ARENA_BUFF_GROUP_NAME, ARENA_BUFF_GROUPS[groupType], count)
 			elseif isArenaDebuffs and element.__groups[ARENA_DEBUFF_GROUP_NAME..1] then
-				local count = element.__filterType == 2 and element.num or 0
+				local count = element.__filterType == 3 and element.num or 0
 				UpdateCandidateAuraGroups(element, ARENA_DEBUFF_GROUP_NAME, ARENA_DEBUFF_GROUPS, count)
 			else
 				local groupName = auraType == "buffs" and "Buffs" or "Debuffs"
-				local needsReload = isRaidBuffs and RAID_BUFF_GROUPS[element.__filterType]
-					or isRaidDebuffs and element.__filterType == 2
+				local needsReload = isRaidDebuffs and element.__filterType == 2
+					or isBossBuffs and element.__filterType == 3
 					or isArenaBuffs and ARENA_BUFF_GROUPS[element.__filterType]
+					or isArenaDebuffs and element.__filterType == 3
 				local count = needsReload and 0 or element.num or element.numTotal
 				UpdateAuraGroup(element, groupName, element.filter, count)
 			end
@@ -1267,8 +1274,6 @@ end
 local raidBuffFilters = {
 	[1] = "HELPFUL",
 	[2] = "HELPFUL|RAID_IN_COMBAT",
-	[3] = RAID_BUFF_GROUPS[3][1],
-	[4] = RAID_BUFF_GROUPS[4][1],
 }
 
 local raidDebuffFilters = {
@@ -1287,6 +1292,18 @@ local arenaBuffFilters = {
 	[5] = ARENA_BUFF_GROUPS[5][1],
 }
 
+local bossBuffFilters = {
+	[1] = "HELPFUL",
+	[2] = "HELPFUL",
+	[3] = BOSS_BUFF_GROUPS[1].filter,
+}
+
+local arenaDebuffFilters = {
+	[1] = "HARMFUL",
+	[2] = "HARMFUL",
+	[3] = ARENA_DEBUFF_GROUPS[1].filter,
+}
+
 function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	local value = element.__value
 	local vType = isDebuff and "Debuff" or "Buff"
@@ -1296,8 +1313,15 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	element.num = filterType ~= 1 and C.db["UFs"][value.."Num"..vType] or 0
 	if isRaid then
 		element.filter = isDebuff and raidDebuffFilters[filterType] or raidBuffFilters[filterType]
+		if not isDebuff and filterType == 2 and element.__owner.raidType ~= "simple" and C.db["UFs"]["RaidBigDefensive"] then
+			element.filter = "HELPFUL|RAID_IN_COMBAT|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE"
+		end
+	elseif value == "Boss" and not isDebuff then
+		element.filter = bossBuffFilters[filterType]
 	elseif value == "Arena" and not isDebuff then
 		element.filter = arenaBuffFilters[filterType]
+	elseif value == "Arena" and isDebuff then
+		element.filter = arenaDebuffFilters[filterType]
 	else
 		element.filter = isDebuff and unitFrameDebuffFilters[filterType] or unitFrameBuffFilters[filterType]
 	end
@@ -1461,7 +1485,8 @@ function UF:UpdateAuraLayoutLimit(frame)
 
 	element = frame.Buffs
 	if element then
-		element:SetFlowLayoutMaximumLineSize(width)
+		local buffWidth = frame.BigDefensives and max(width - RAID_BIG_DEFENSIVE_RESERVED_WIDTH, element.size) or width
+		element:SetFlowLayoutMaximumLineSize(buffWidth)
 	end
 
 	element = frame.Debuffs
@@ -1580,14 +1605,12 @@ function UF:CreateBuffs(self)
 	end
 
 	UF:ConfigureBuffAndDebuff(bu)
-	local filterGroups = mystyle == "raid" and RAID_BUFF_GROUPS[bu.__filterType]
-		or mystyle == "arena" and ARENA_BUFF_GROUPS[bu.__filterType]
+	local filterGroups = mystyle == "arena" and ARENA_BUFF_GROUPS[bu.__filterType]
 	if filterGroups then
-		local groupName = mystyle == "raid" and RAID_BUFF_GROUP_NAME or ARENA_BUFF_GROUP_NAME
 		for index, filter in ipairs(filterGroups) do
-			AddAuraGroup(bu, groupName..index, filter, bu.num, index)
+			AddAuraGroup(bu, ARENA_BUFF_GROUP_NAME..index, filter, bu.num, index)
 		end
-	elseif mystyle == "boss" then
+	elseif mystyle == "boss" and bu.__filterType == 3 then
 		for index, group in ipairs(BOSS_BUFF_GROUPS) do
 			AddAuraGroup(bu, BOSS_BUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters)
 		end
@@ -1597,6 +1620,30 @@ function UF:CreateBuffs(self)
 	UF:UpdateAuraContainer(self, bu)
 
 	self.Buffs = bu
+end
+
+function UF:CreateRaidBigDefensives(self)
+	local bu = CreateAuraElement(self, {
+		initialAnchor = "TOPRIGHT",
+		growthX = "LEFT",
+		growthY = "DOWN",
+		fontSize = C.db["UFs"]["RaidCDSize"],
+		disableMouse = true,
+	})
+	bu:SetPoint("TOPLEFT", self)
+	bu.showStealableBorder = false
+	bu.PostCreateButton = PostCreateRaidBigDefensiveButton
+
+	for index, filter in ipairs(RAID_BIG_DEFENSIVE_FILTERS) do
+		bu:AddSlot(filter, {
+			size = RAID_BIG_DEFENSIVE_SIZE,
+			sortMethod = AuraContainerSortMethod.BigDefensive,
+			slotIndex = index,
+		})
+	end
+
+	self.BigDefensives = bu
+	UF:UpdateAuraLayoutLimit(self)
 end
 
 function UF:CreateDebuffs(self)
@@ -1622,7 +1669,7 @@ function UF:CreateDebuffs(self)
 		for index, group in ipairs(RAID_DEBUFF_GROUPS) do
 			AddAuraGroup(bu, RAID_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters, AuraContainerSortMethod.Default)
 		end
-	elseif mystyle == "arena" then
+	elseif mystyle == "arena" and bu.__filterType == 3 then
 		for index, group in ipairs(ARENA_DEBUFF_GROUPS) do
 			AddAuraGroup(bu, ARENA_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters)
 		end

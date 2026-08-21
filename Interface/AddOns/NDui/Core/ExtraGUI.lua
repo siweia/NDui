@@ -1874,7 +1874,7 @@ function G:SetupUFAuras(parent)
 	}
 	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"], L["ShowCancelable"]}
 	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"], L["ShowDispell"]}
-	local nameplateRuleOptions = {DISABLE, L["NameplateRules"]}
+	local builtInRuleOptions = {DISABLE, L["ShowAll"], L["Blizzard"]}
 	local arenaBuffOptions = {DISABLE, L["ShowAll"], L["Defensive"], L["ShowDispell"], L["CombinedFilters"]}
 	local growthOptions = {}
 	for i = 1, 4 do
@@ -1888,10 +1888,10 @@ function G:SetupUFAuras(parent)
 		local maxDebuffs = fixedPosition and 10 or 40
 		local selectedBuffOptions, selectedDebuffOptions = buffOptions, debuffOptions
 		if value == "Boss" then
-			selectedBuffOptions = nameplateRuleOptions
+			selectedBuffOptions = builtInRuleOptions
 		elseif value == "Arena" then
 			selectedBuffOptions = arenaBuffOptions
-			selectedDebuffOptions = nameplateRuleOptions
+			selectedDebuffOptions = builtInRuleOptions
 		end
 		createOptionTitle(parent, "", offset)
 		if fixedPosition then
@@ -2754,8 +2754,6 @@ function G:SetupRaidAuras(parent)
 	local raidBuffOptions = {
 		DISABLE,
 		L["Blizzard"],
-		L["Defensive"],
-		L["CombinedFilters"],
 	}
 	local raidDebuffOptions = {
 		DISABLE,
@@ -2770,14 +2768,15 @@ function G:SetupRaidAuras(parent)
 	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-90, "RaidCDSize", queueAuraReload)
 
 	createOptionTitle(parent, "Buffs", offset-160)
-	createOptionDropdown(parent, L["RaidBuffType"], offset-210, raidBuffOptions, nil, "UFs", "RaidBuffType", 2, updateUFAurasAndQueueReload)
-	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-280, "RaidBuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-360, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
+	createOptionDropdown(parent, L["RaidBuffType"], offset-210, raidBuffOptions, nil, "UFs", "RaidBuffType", 1, updateUFAurasAndQueueReload)
+	createOptionCheck(parent, offset-255, COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES, "UFs", "RaidBigDefensive", queueAuraReload, OPTION_TOOLTIP_COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES)
+	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-320, "RaidBuffSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-400, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
 
-	createOptionTitle(parent, "Debuffs", offset-420)
-	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
-	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-540, "RaidDebuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-600, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
+	createOptionTitle(parent, "Debuffs", offset-460)
+	createOptionDropdown(parent, L["RaidDebuffType"], offset-510, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
+	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-580, "RaidDebuffSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-640, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
 end
 
 function G:SetupCooldownViewer(parent)

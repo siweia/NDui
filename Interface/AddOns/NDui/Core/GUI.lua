@@ -334,6 +334,7 @@ G.DefaultSettings = {
 		RaidNumBuff = 6,
 		RaidNumDebuff = 6,
 		RaidBuffType = 1,
+		RaidBigDefensive = false,
 		RaidDebuffType = 2,
 		RaidBuffSize = 12,
 		RaidDebuffSize = 12,
@@ -797,6 +798,9 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		nameplate["NumCC"] = min(max(nameplate["NumCC"], 1), 2)
 
 		local ufs = C.db["UFs"]
+		local raidBuffType = ufs["RaidBuffType"]
+		ufs["RaidBigDefensive"] = raidBuffType == 3 or raidBuffType == 4
+		ufs["RaidBuffType"] = (raidBuffType == 2 or raidBuffType == 4) and 2 or 1
 		local unitFrameCDSize = ufs["CDFontSize"]
 		ufs["PlayerCDSize"] = unitFrameCDSize
 		ufs["TargetCDSize"] = unitFrameCDSize
