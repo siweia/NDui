@@ -707,6 +707,7 @@ function UF:UpdateNameplateSize()
 		self.healthValue:UpdateTag()
 		self.RaidTargetIndicator:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", RaidTargetX, RaidTargetY)
 	end
+	UF:UpdateAuraLayoutLimit(self)
 	self.nameText:UpdateTag()
 end
 

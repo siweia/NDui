@@ -1099,6 +1099,7 @@ local function SetUnitFrameSize(self, unit)
 	local powerOffset = C.db["UFs"][unit.."PowerOffset"]
 	local height = powerHeight == 0 and healthHeight or healthHeight + powerHeight + C.mult
 	self:SetSize(width, height)
+	B:GetModule("UnitFrames"):UpdateAuraLayoutLimit(self)
 	self.Health:SetHeight(healthHeight)
 	if self.nameText and nameOffset then
 		self.nameText:SetPoint("LEFT", 3, nameOffset)
@@ -1317,6 +1318,7 @@ function G:SetupSimpleRaidFrame(parent)
 				local powerHeight = 2*scale
 				local healthHeight = frameHeight - powerHeight
 				frame:SetSize(frameWidth, frameHeight)
+				UF:UpdateAuraLayoutLimit(frame)
 				frame.Health:SetHeight(healthHeight)
 				frame.Power:SetHeight(powerHeight)
 				UF.UpdateRaidNameAnchor(frame, frame.nameText)

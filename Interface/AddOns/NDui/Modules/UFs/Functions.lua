@@ -9,7 +9,6 @@ local pairs, next, unpack = pairs, next, unpack
 local max, min = math.max, math.min
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
 local x1, x2, y1, y2 = unpack(DB.TexCoord)
-local FALLBACK_COLOR = {r=0, g=0, b=0}
 
 -- Custom colors
 oUF.colors.health:SetCurve({
@@ -954,7 +953,6 @@ local function CreateAuraDispelBorder(button)
 end
 
 function UF.PostCreateButton(element, button, options)
-	options = options or {}
 	local size = options.size or element.size
 	local fontSize = options.fontSize or element.fontSize or size*.4
 	local isRaid = element.__owner.mystyle == "raid"
@@ -998,88 +996,9 @@ function UF.PostCreateButton(element, button, options)
 			button.Count:SetPoint("RIGHT", button, "BOTTOMRIGHT", 5, 0)
 		end
 	end
-
-	element.__buttons = element.__buttons or {}
-	element.__buttons[button] = true
 end
 
-local filteredStyle = {
-	["target"] = true,
-	["nameplate"] = true,
-	["boss"] = true,
-	["arena"] = true,
-}
-
-function UF.PostUpdateButton(element, button, unit, data)
-	if data.duration then button.iconbg:Show() end
-
-	local style = element.__owner.mystyle
-	if element.desaturateDebuff and data.isHarmfulAura and filteredStyle[style] and not data.isPlayerAura then
-		button.Icon:SetDesaturated(true)
-	else
-		button.Icon:SetDesaturated(false)
-	end
-
-	if data.isHarmfulAura and element.showDebuffBorder then
-		local color = C_UnitAuras.GetAuraDispelTypeColor(unit, data.auraInstanceID, element.dispelColorCurve) or FALLBACK_COLOR
-		button.iconbg:SetBackdropBorderColor(color.r, color.g, color.b)
-	else
-		button.iconbg:SetBackdropBorderColor(0, 0, 0)
-	end
-end
-
-function UF.PostUpdateGapButton(_, _, button)
-	if button.iconbg and button.iconbg:IsShown() then
-		button.iconbg:Hide()
-	end
-end
-
-function UF.Nameplate_FilterAura(element, unit, data)
-	if element.alwaysShowStealable and (not data.isHarmfulAura) and type(data.dispelName) ~= "nil" and (not UnitIsPlayer(unit)) then -- only highlight you can dispel
-		return true
-	else
-		return (data.isPlayerAura and data.isNameplateOnlyAura) and not (data.isHarmfulAura and data.isCrowdControlAura)
-	end
-end
-
-function UF.UnitFrame_FilterAura(element, _, data)
-	local value = element.__value
-	if data.isHarmfulAura then
-		if C.db["UFs"][value.."DebuffType"] == 2 then -- show all
-			return true
-		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show player only
-			return data.isPlayerAura
-		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- show dispellable debuff
-			return data.isPlayerDispellable
-		end
-	else
-		if C.db["UFs"][value.."BuffType"] == 2 then -- show all
-			return true
-		elseif C.db["UFs"][value.."BuffType"] == 3 then -- show stealable buff
-			return type(data.dispelName) ~= "nil"
-		elseif C.db["UFs"][value.."BuffType"] == 4 then -- include dispel buffs, right click cancelable buffs
-			return data.isPlayerCancelable
-		end
-	end
-end
-
-local function IsAuraPassed(unit, data, filter, suffix)
-	return not C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, data.auraInstanceID, filter.."|"..suffix)
-end
-
-function UF:PostProcessAuraData(unit, data, filter)
-	data.isImportantAura = IsAuraPassed(unit, data, filter, "IMPORTANT") -- important auras
-	data.isCrowdControlAura = IsAuraPassed(unit, data, filter, "CROWD_CONTROL") -- crowd control auras
-	data.isRaidInCombatAura = IsAuraPassed(unit, data, filter, "RAID_IN_COMBAT") -- blizzard filter
-	data.isRaidInCombatAura = IsAuraPassed(unit, data, filter, "RAID_IN_COMBAT") -- blizzard filter
-	data.isBigDefensiveAura = IsAuraPassed(unit, data, filter, "BIG_DEFENSIVE") -- defensive buffs by you
-	data.isExtDefensiveAura = IsAuraPassed(unit, data, filter, "EXTERNAL_DEFENSIVE") -- defensive buffs by  others
-	data.isPlayerCancelable = IsAuraPassed(unit, data, filter, "CANCELABLE") -- dispel buffs and cancelable buffs
-	data.isPlayerDispellable = IsAuraPassed(unit, data, filter, "RAID_PLAYER_DISPELLABLE") -- dispel debuffs
-	data.isNameplateOnlyAura = IsAuraPassed(unit, data, filter, "INCLUDE_NAME_PLATE_ONLY") -- nameplate only auras
-	return data
-end
-
+-- Retained for future AuraContainer filter mapping.
 local satedDebuffs = {
 	[57723] = true, -- 筋疲力尽
 	[57724] = true, -- 心满意足
@@ -1089,33 +1008,6 @@ local satedDebuffs = {
 	[264689] = true, -- 疲倦
 	[390435] = true, -- 筋疲力尽
 }
-
-local function isBloodLustDebuff(data)
-	return B:NotSecretValue(data.spellId) and satedDebuffs[data.spellId]
-end
-
-function UF.RaidFrame_FilterAura(element, _, data)
-	local value = element.__value
-	if data.isHarmfulAura then
-		if C.db["UFs"][value.."DebuffType"] == 2 then -- in combat: blizzard filter
-			return data.isRaidInCombatAura
-		elseif C.db["UFs"][value.."DebuffType"] == 3 then -- show displayable debuff
-			return data.isPlayerDispellable
-		elseif C.db["UFs"][value.."DebuffType"] == 4 then -- mix filters
-			return data.isRaidInCombatAura or data.isPlayerDispellable or data.isImportantAura or (not InCombatLockdown() and isBloodLustDebuff(data))
-		elseif C.db["UFs"][value.."DebuffType"] == 5 then -- show all
-			return true
-		end
-	else
-		if C.db["UFs"][value.."BuffType"] == 2 then -- show blizzard filter
-			return data.isPlayerAura and data.isRaidInCombatAura
-		elseif C.db["UFs"][value.."BuffType"] == 3 then -- show defensive buffs
-			return data.isBigDefensiveAura or data.isExtDefensiveAura
-		elseif C.db["UFs"][value.."BuffType"] == 4 then -- max filters
-			return data.isPlayerAura and data.isRaidInCombatAura or data.isBigDefensiveAura or data.isExtDefensiveAura
-		end
-	end
-end
 
 local function UpdateAuraGroup(element, name, filter, count)
 	local groupKey = filter and element.__groups[name]
@@ -1558,6 +1450,24 @@ local function CreateAuraElement(self, options)
 	element.showStealableBorder = true
 	element.PostCreateButton = UF.PostCreateButton
 	return element
+end
+
+function UF:UpdateAuraLayoutLimit(frame)
+	local width = frame:GetWidth()
+	local element = frame.Auras
+	if element then
+		element:SetFlowLayoutMaximumLineSize(width)
+	end
+
+	element = frame.Buffs
+	if element then
+		element:SetFlowLayoutMaximumLineSize(width)
+	end
+
+	element = frame.Debuffs
+	if element then
+		element:SetFlowLayoutMaximumLineSize(width)
+	end
 end
 
 local auraUFs = {
@@ -2091,13 +2001,6 @@ function UF:CreatePrediction(self)
 	self.Health.HealAbsorb = healAbsorbBar
 	self.Health.OverDamageAbsorbIndicator = overAbsorb
 	self.Health.OverHealAbsorbIndicator = overHealAbsorb
-end
-
-function UF.CreateAuraButton(element, button, isDebuff)
-	UF.PostCreateButton(element, button)
-	button.__isDebuff = isDebuff
-	button.__owner = element
-	element.__buttons[button] = true
 end
 
 function UF.PostUpdateAddPower(element, cur, max)
