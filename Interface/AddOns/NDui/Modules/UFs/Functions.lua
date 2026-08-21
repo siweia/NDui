@@ -1358,7 +1358,7 @@ function UF:ConfigureAuras(element)
 	-- Keep oUF's native Border uncreated; Blizzard can show it again after a layout-side Hide.
 	element.showDebuffTypeBorder = C.db["UFs"]["DebuffColor"]
 	element.desaturateDebuff = C.db["UFs"]["Desaturate"]
-	element.fontSize = C.db["UFs"]["CDFontSize"]
+	element.fontSize = C.db["UFs"][value.."CDSize"]
 end
 
 function UF:RefreshUFAuras(frame)
@@ -1412,7 +1412,7 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	element.size = C.db["UFs"][value..vType.."Size"]
 	element.showDebuffTypeBorder = isDebuff and (isRaid or C.db["UFs"]["DebuffColor"])
 	element.desaturateDebuff = not isRaid and C.db["UFs"]["Desaturate"]
-	element.fontSize = C.db["UFs"]["RaidCDSize"]
+	element.fontSize = C.db["UFs"][value.."CDSize"]
 end
 
 function UF:RefreshBuffAndDebuff(frame)

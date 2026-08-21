@@ -1862,13 +1862,13 @@ function G:SetupUFAuras(parent)
 	local parent, offset = scroll.child, -10
 
 	local defaultData = {
-		["Player"] = {1, 1, 22, 20, 20},
-		["Target"] = {2, 2, 22, 20, 20},
-		["Focus"] = {3, 2, 16, 20, 20},
-		["ToT"] = {1, 1, 12, 6, 6},
-		["Pet"] = {1, 1, 12, 6, 6},
-		["Boss"] = {2, 3, 16, 2, 6},
-		["Arena"] = {2, 2, 16, 2, 6},
+		["Player"] = {1, 1, 22, 20, 20, 12},
+		["Target"] = {2, 2, 22, 20, 20, 12},
+		["Focus"] = {3, 2, 16, 20, 20, 12},
+		["ToT"] = {1, 1, 12, 6, 6, 12},
+		["Pet"] = {1, 1, 12, 6, 6, 12},
+		["Boss"] = {2, 3, 16, 2, 6, 12},
+		["Arena"] = {2, 2, 16, 2, 6, 12},
 	}
 	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"], L["ShowCancelable"]}
 	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"], L["ShowDispell"]}
@@ -1905,15 +1905,16 @@ function G:SetupUFAuras(parent)
 		if fixedPosition then
 			createOptionSlider(parent, "Buff "..L["Auras Size"], 5, 50, default[3], offset-440, value.."BuffSize", queueAuraReload)
 			createOptionSlider(parent, "Debuff "..L["Auras Size"], 5, 50, default[3], offset-510, value.."DebuffSize", queueAuraReload)
+			createOptionSlider(parent, L["CDFontSize"], 5, 30, default[6], offset-580, value.."CDSize", queueAuraReload)
 		else
 			createOptionSlider(parent, L["Auras Size"], 5, 50, default[3], offset-440, value.."AuraSize", queueAuraReload)
+			createOptionSlider(parent, L["CDFontSize"], 5, 30, default[6], offset-510, value.."CDSize", queueAuraReload)
 		end
 	end
 
 	createOptionTitle(parent, GENERAL, offset)
 	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", updateUFAurasAndQueueReload, L["DesaturateIconTip"], true)
 	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", queueAuraReload, L["DebuffColorTip"])
-	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-130, "CDFontSize", queueAuraReload)
 
 	local options = {
 		[1] = L["PlayerUF"],
@@ -1934,7 +1935,7 @@ function G:SetupUFAuras(parent)
 		[7] = "Arena",
 	}
 
-	local dd = G:CreateDropdown(scroll.child, "", 40, -200, options, nil, 180, 28)
+	local dd = G:CreateDropdown(scroll.child, "", 40, -130, options, nil, 180, 28)
 	dd:SetFrameLevel(20)
 	dd.Text:SetText(options[1])
 	dd:SetBackdropBorderColor(1, .8, 0, .5)
@@ -1945,7 +1946,7 @@ function G:SetupUFAuras(parent)
 		panel:SetSize(260, 1)
 		panel:SetPoint("TOP", 0, -30)
 		panel:Hide()
-		createOptionGroup(panel, -195, data[i], updateUFAurasAndQueueReload)
+		createOptionGroup(panel, -125, data[i], updateUFAurasAndQueueReload)
 
 		dd.panels[i] = panel
 		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
