@@ -635,7 +635,7 @@ function UF:ToggleNameplateAuras(shouldEnable)
 end
 
 function UF:UpdateNameplateAuras()
-	UF.ToggleNameplateAuras(self, true)
+	UF.ToggleNameplateAuras(self, self.plateType ~= "NameOnly")
 
 	local element = self.Auras
 	if C.db["Nameplate"]["TargetPower"] then
