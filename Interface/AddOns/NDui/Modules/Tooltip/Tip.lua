@@ -44,8 +44,9 @@ function TT:GetUnit()
 end
 
 function TT:UnitExists(unit)
+	if not unit then return end
 	if ShouldUnitIdentityBeSecret and ShouldUnitIdentityBeSecret(unit) then return end
-	return unit and UnitExists(unit)
+	return UnitExists(unit)
 end
 
 local function GetUnitClassColor(unit)
