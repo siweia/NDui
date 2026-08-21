@@ -910,7 +910,6 @@ L["SmoothBarsTip"] = "|n勾選後，血條、名條、團隊框架的變化將�
 L["PlayerPlate HealthBar"] = "個人資源條血條"
 L["CDAnimation"] = "冷卻動畫效果"
 L["CDFontSize"] = "冷卻數字字體大小"
-L["PrivateAuras"] = "私有光環"
 L["RaidBuffType"] = "增益過濾器"
 L["RaidDebuffType"] = "減益過濾器"
 L["RaidBuffPerRow"] = "增益每行數量"

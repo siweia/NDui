@@ -149,8 +149,6 @@ G.DefaultSettings = {
 		ReverseDebuff = false,
 		DebuffSize = 30,
 		DebuffsPerRow = 16,
-		PrivateSize = 30,
-		ReversePrivate = false,
 		CDAnimation = false,
 	},
 	AuraWatch = {
@@ -240,7 +238,6 @@ G.DefaultSettings = {
 		PlayerAbsorb = false,
 		AutoBuffs = false,
 		ShowRoleMode = 1,
-		ReversePrivate = false,
 		CDFontSize = 12, -- Legacy source for the Reset6 per-frame aura font migration.
 
 		PlayerWidth = 245,
@@ -329,12 +326,19 @@ G.DefaultSettings = {
 		ArenaDebuffSize = 16,
 		ArenaCDSize = 12,
 		RaidAuras = true,
-		RaidCDText = false,
-		RaidCDSize = 12,
+		RaidCDText = false, -- Legacy source for the Reset6 per-container aura text migration.
+		RaidCDSize = 12, -- Legacy source for the Reset6 per-container aura font migration.
+		RaidBuffCDText = false,
+		RaidBuffCDSize = 12,
+		RaidDebuffCDText = false,
+		RaidDebuffCDSize = 12,
 		RaidNumBuff = 6,
 		RaidNumDebuff = 6,
 		RaidBuffType = 1,
 		RaidBigDefensive = false,
+		RaidBigDefensiveCDText = false,
+		RaidBigDefensiveCDSize = 12,
+		RaidBigDefensiveSize = 16,
 		RaidDebuffType = 2,
 		RaidBuffSize = 12,
 		RaidDebuffSize = 12,
@@ -350,10 +354,6 @@ G.DefaultSettings = {
 		FocusAuraDirec = 1,
 		FocusAuraOffset = 10,
 
-		PrivateAuras = true,
-		PAIconSize = 14,
-		CDAnimation = true,
-		CDText = true,
 	},
 	Chat = {
 		Disable = false,
@@ -801,14 +801,23 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		local raidBuffType = ufs["RaidBuffType"]
 		ufs["RaidBigDefensive"] = raidBuffType == 3 or raidBuffType == 4
 		ufs["RaidBuffType"] = (raidBuffType == 2 or raidBuffType == 4) and 2 or 1
+		local raidCDText = ufs["RaidCDText"]
+		local raidCDSize = ufs["RaidCDSize"]
+		local raidAuraCDSize = min(max(raidCDSize, 5), 16)
+		ufs["RaidBuffCDText"] = raidCDText
+		ufs["RaidBuffCDSize"] = raidAuraCDSize
+		ufs["RaidDebuffCDText"] = raidCDText
+		ufs["RaidDebuffCDSize"] = raidAuraCDSize
+		ufs["RaidBigDefensiveCDText"] = raidCDText
+		ufs["RaidBigDefensiveCDSize"] = raidAuraCDSize
 		local unitFrameCDSize = ufs["CDFontSize"]
 		ufs["PlayerCDSize"] = unitFrameCDSize
 		ufs["TargetCDSize"] = unitFrameCDSize
 		ufs["FocusCDSize"] = unitFrameCDSize
 		ufs["ToTCDSize"] = unitFrameCDSize
 		ufs["PetCDSize"] = unitFrameCDSize
-		ufs["BossCDSize"] = ufs["RaidCDSize"]
-		ufs["ArenaCDSize"] = ufs["RaidCDSize"]
+		ufs["BossCDSize"] = raidCDSize
+		ufs["ArenaCDSize"] = raidCDSize
 		local bossBuffType = ufs["BossBuffType"]
 		-- Boss and Arena previously shared the Boss aura settings.
 		ufs["ArenaNumBuff"] = ufs["BossNumBuff"]
@@ -822,6 +831,7 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		ufs["BossNumDebuff"] = min(max(ufs["BossNumDebuff"], 1), 10)
 		ufs["ArenaNumBuff"] = min(max(ufs["ArenaNumBuff"], 1), 6)
 		ufs["ArenaNumDebuff"] = min(max(ufs["ArenaNumDebuff"], 1), 10)
+		C.db["Mover"]["PrivateAuras"] = nil
 		C.db["Reset6"] = true
 	end
 
@@ -931,14 +941,12 @@ local function setupBuffFrame()
 	G:SetupBuffFrame(guiPage[7])
 end
 
---[[ 12.1 AuraContainer already includes private auras.
-local function setupPrivateAuras()
-	G:SetupPrivateAuras(guiPage[4])
-end
-]]
-
 local function setupRaidAuras()
 	G:SetupRaidAuras(guiPage[4])
+end
+
+local function setupRaidBigDefensive()
+	G:SetupRaidBigDefensive(guiPage[4])
 end
 
 local function setupNameplateAuras()
@@ -1375,8 +1383,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
-		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, nil, nil, nil, true},
-		{1, "UFs", "RaidAuras", IsNew..HeaderTag..L["RaidAuras"], true, setupRaidAuras},
+		{1, "UFs", "RaidAuras", IsNew..HeaderTag..L["RaidAuras"], nil, setupRaidAuras},
+		{1, "UFs", "RaidBigDefensive", IsNew..HeaderTag..COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES, true, setupRaidBigDefensive, nil, OPTION_TOOLTIP_COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES},
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		--{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},

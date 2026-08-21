@@ -910,7 +910,6 @@ L["SmoothBarsTip"] = "|n启用后，头像、姓名板、团队框体的状态�
 L["PlayerPlate HealthBar"] = "个人资源条血条"
 L["CDAnimation"] = "冷却动画效果"
 L["CDFontSize"] = "冷却文本字号"
-L["PrivateAuras"] = "私有光环"
 L["RaidBuffType"] = "增益过滤器"
 L["RaidDebuffType"] = "减益过滤器"
 L["RaidBuffPerRow"] = "增益每行数量"

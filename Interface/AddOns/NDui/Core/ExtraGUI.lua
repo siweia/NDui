@@ -2099,15 +2099,6 @@ function G:SetupBuffFrame(parent)
 	local parent, offset = scroll.child, -10
 	local defaultSize, defaultPerRow = 30, 16
 
-	--[[ 12.1 CustomAuraContainer already includes private auras.
-	local function updatePrivateAuras()
-		local PA = B:GetModule("PrivateAuras")
-		if PA then
-			PA:Update()
-		end
-	end
-	]]
-
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
 		createOptionCheck(parent, offset-35, L["ReverseGrow"], "Auras", "Reverse"..value, func)
@@ -2117,7 +2108,6 @@ function G:SetupBuffFrame(parent)
 
 	createOptionGroup(parent, "Buffs", offset, "Buff", queueAuraReload)
 	createOptionGroup(parent, "Debuffs", offset-260, "Debuff", queueAuraReload)
-	-- createOptionGroup(parent, L["PrivateAuras"], offset-520, "Private", updatePrivateAuras)
 end
 
 function G:NameplateColorDots(parent)
@@ -2691,33 +2681,6 @@ end
 --SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
 --SLASH_NDUI_AVADACONFIG1 = "/aa"
 
---[[ 12.1 AuraContainer already includes private auras.
-function G:SetupPrivateAuras(parent)
-	local guiName = "NDuiGUI_PrivateAurasSetup"
-	toggleExtraGUI(guiName)
-	if extraGUIs[guiName] then return end
-
-	local panel = createExtraGUI(parent, guiName, L["PrivateAuras"].."*")
-	local scroll = G:CreateScroll(panel, 260, 540)
-	local parent = scroll.child
-	local offset = -10
-	local UF = B:GetModule("UnitFrames")
-	if not UF then return end
-
-	local function updatePrivateAuras()
-		for _, frame in pairs(ns.oUF.objects) do
-			if frame.PrivateAuras then
-				UF:UpdatePrivateAuras(frame.PrivateAuras, true)
-			end
-		end
-	end
-
-	createOptionCheck(parent, offset, L["CDAnimation"], "UFs", "CDAnimation", updatePrivateAuras)
-	createOptionCheck(parent, offset-30, L["CDText"], "UFs", "CDText", updatePrivateAuras)
-	createOptionSlider(parent, L["Auras Size"], 10, 50, 22, offset-110, "PAIconSize", updatePrivateAuras, "UFs")
-end
-]]
-
 function G:SetupDamageMeters(parent)
 	local guiName = "NDuiGUI_DamageMetersSetup"
 	toggleExtraGUI(guiName)
@@ -2763,20 +2726,34 @@ function G:SetupRaidAuras(parent)
 		L["ShowAll"],
 	}
 
-	createOptionTitle(parent, GENERAL, offset)
-	createOptionCheck(parent, offset-35, L["CDText"], "UFs", "RaidCDText", updateUFAurasAndQueueReload)
-	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-90, "RaidCDSize", queueAuraReload)
+	createOptionTitle(parent, "Buffs", offset)
+	createOptionDropdown(parent, L["RaidBuffType"], offset-60, raidBuffOptions, nil, "UFs", "RaidBuffType", 1, updateUFAurasAndQueueReload)
+	createOptionCheck(parent, offset-105, L["CDText"], "UFs", "RaidBuffCDText", updateUFAurasAndQueueReload)
+	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-160, "RaidBuffCDSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-230, "RaidBuffSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-300, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
 
-	createOptionTitle(parent, "Buffs", offset-160)
-	createOptionDropdown(parent, L["RaidBuffType"], offset-210, raidBuffOptions, nil, "UFs", "RaidBuffType", 1, updateUFAurasAndQueueReload)
-	createOptionCheck(parent, offset-255, COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES, "UFs", "RaidBigDefensive", queueAuraReload, OPTION_TOOLTIP_COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES)
-	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-320, "RaidBuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-400, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
-
-	createOptionTitle(parent, "Debuffs", offset-460)
-	createOptionDropdown(parent, L["RaidDebuffType"], offset-510, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
+	createOptionTitle(parent, "Debuffs", offset-360)
+	createOptionDropdown(parent, L["RaidDebuffType"], offset-410, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
+	createOptionCheck(parent, offset-455, L["CDText"], "UFs", "RaidDebuffCDText", updateUFAurasAndQueueReload)
+	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-510, "RaidDebuffCDSize", queueAuraReload, "UFs")
 	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-580, "RaidDebuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-640, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
+	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-650, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
+end
+
+function G:SetupRaidBigDefensive(parent)
+	local guiName = "NDuiGUI_RaidBigDefensiveSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES)
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+
+	createOptionCheck(parent, offset, L["CDText"], "UFs", "RaidBigDefensiveCDText", queueAuraReload)
+	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-55, "RaidBigDefensiveCDSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["Auras Size"], 5, 30, 16, offset-125, "RaidBigDefensiveSize", queueAuraReload, "UFs")
 end
 
 function G:SetupCooldownViewer(parent)

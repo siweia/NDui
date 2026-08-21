@@ -955,7 +955,6 @@ end
 function UF.PostCreateButton(element, button, options)
 	local size = options.size or element.size
 	local fontSize = options.fontSize or element.fontSize or size*.4
-	local isRaid = element.__owner.mystyle == "raid"
 	if button.Count then
 		button.Count:SetFont(DB.Font[1], fontSize, DB.Font[3])
 	end
@@ -966,7 +965,7 @@ function UF.PostCreateButton(element, button, options)
 			button.CooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
 		end
 		Cooldown:IgnoreCooldown(button.Cooldown)
-		button.Cooldown:SetCountdownFormatter(UpdateAuraDurationFormatter(element, isRaid and not C.db["UFs"]["RaidCDText"]))
+		button.Cooldown:SetCountdownFormatter(UpdateAuraDurationFormatter(element, element.hideDuration))
 	end
 	button.iconbg = B.ReskinIcon(button.Icon)
 	button.iconbg:SetBackdropBorderColor(0, 0, 0)
@@ -1113,10 +1112,9 @@ local ARENA_DEBUFF_GROUPS = {
 	},
 }
 
-local RAID_BIG_DEFENSIVE_SIZE = 16
 local RAID_BIG_DEFENSIVE_SPACING = 2
 local RAID_BIG_DEFENSIVE_RIGHT_INSET = 17
-local RAID_BIG_DEFENSIVE_RESERVED_WIDTH = 54
+local RAID_BIG_DEFENSIVE_PADDING = 3
 local RAID_BIG_DEFENSIVE_FILTERS = {
 	"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
 	"HELPFUL|EXTERNAL_DEFENSIVE",
@@ -1125,7 +1123,7 @@ local RAID_BIG_DEFENSIVE_FILTERS = {
 local function PostCreateRaidBigDefensiveButton(element, button, options)
 	UF.PostCreateButton(element, button, options)
 	button:ClearAllPoints()
-	local xOffset = -RAID_BIG_DEFENSIVE_RIGHT_INSET - (options.slotIndex - 1) * (RAID_BIG_DEFENSIVE_SIZE + RAID_BIG_DEFENSIVE_SPACING)
+	local xOffset = -RAID_BIG_DEFENSIVE_RIGHT_INSET - (options.slotIndex - 1) * (options.size + RAID_BIG_DEFENSIVE_SPACING)
 	button:SetPoint("BOTTOMRIGHT", element.__owner.Health, "BOTTOMRIGHT", xOffset, C.db["UFs"]["RaidDebuffSize"] + 4)
 end
 
@@ -1228,7 +1226,7 @@ function UF:UpdateAuraContainer(parent, element)
 	if parent.mystyle == "nameplate" then return end
 
 	-- AuraButton regions are forbidden after the provider initializer returns.
-	UpdateAuraDurationFormatter(element, parent.mystyle == "raid" and not C.db["UFs"]["RaidCDText"])
+	UpdateAuraDurationFormatter(element, element.hideDuration)
 end
 
 local unitFrameBuffFilters = {
@@ -1328,7 +1326,14 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	element.size = C.db["UFs"][value..vType.."Size"]
 	element.showDebuffTypeBorder = isDebuff and (isRaid or C.db["UFs"]["DebuffColor"])
 	element.desaturateDebuff = not isRaid and C.db["UFs"]["Desaturate"]
-	element.fontSize = C.db["UFs"][value.."CDSize"]
+	if isRaid then
+		local setting = isDebuff and "RaidDebuff" or "RaidBuff"
+		element.fontSize = C.db["UFs"][setting.."CDSize"]
+		element.hideDuration = not C.db["UFs"][setting.."CDText"]
+	else
+		element.fontSize = C.db["UFs"][value.."CDSize"]
+		element.hideDuration = false
+	end
 end
 
 function UF:RefreshBuffAndDebuff(frame)
@@ -1466,6 +1471,7 @@ local function CreateAuraElement(self, options)
 	element.spacing = options.spacing or 0
 	element.groupSpacing = options.groupSpacing
 	element.fontSize = options.fontSize
+	element.hideDuration = options.hideDuration
 	element.sizeRatio = options.sizeRatio or 1
 	element.disableMouse = options.disableMouse
 	element.showDebuffBorder = options.showDebuffBorder
@@ -1485,7 +1491,12 @@ function UF:UpdateAuraLayoutLimit(frame)
 
 	element = frame.Buffs
 	if element then
-		local buffWidth = frame.BigDefensives and max(width - RAID_BIG_DEFENSIVE_RESERVED_WIDTH, element.size) or width
+		local buffWidth = width
+		if frame.BigDefensives then
+			local defensiveSize = frame.BigDefensives.iconSize
+			local reservedWidth = RAID_BIG_DEFENSIVE_RIGHT_INSET + defensiveSize * 2 + RAID_BIG_DEFENSIVE_SPACING + RAID_BIG_DEFENSIVE_PADDING
+			buffWidth = max(width - reservedWidth, element.size)
+		end
 		element:SetFlowLayoutMaximumLineSize(buffWidth)
 	end
 
@@ -1623,20 +1634,23 @@ function UF:CreateBuffs(self)
 end
 
 function UF:CreateRaidBigDefensives(self)
+	local size = C.db["UFs"]["RaidBigDefensiveSize"]
 	local bu = CreateAuraElement(self, {
 		initialAnchor = "TOPRIGHT",
 		growthX = "LEFT",
 		growthY = "DOWN",
-		fontSize = C.db["UFs"]["RaidCDSize"],
+		fontSize = C.db["UFs"]["RaidBigDefensiveCDSize"],
+		hideDuration = not C.db["UFs"]["RaidBigDefensiveCDText"],
 		disableMouse = true,
 	})
 	bu:SetPoint("TOPLEFT", self)
+	bu.iconSize = size
 	bu.showStealableBorder = false
 	bu.PostCreateButton = PostCreateRaidBigDefensiveButton
 
 	for index, filter in ipairs(RAID_BIG_DEFENSIVE_FILTERS) do
 		bu:AddSlot(filter, {
-			size = RAID_BIG_DEFENSIVE_SIZE,
+			size = size,
 			sortMethod = AuraContainerSortMethod.BigDefensive,
 			slotIndex = index,
 		})

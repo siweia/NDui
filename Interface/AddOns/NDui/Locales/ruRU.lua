@@ -910,7 +910,6 @@ L["SmoothBarsTip"] = "|nIf enabled, health and power bars would have smooth anim
 L["PlayerPlate HealthBar"] = "Show HealthBar" -- need translation
 L["CDAnimation"] = "Cooldown Animation" -- need translation
 L["CDFontSize"] = "Cooldown FontSize" -- need translation
-L["PrivateAuras"] = "Private auras" -- need translation
 L["RaidBuffType"] = "Buff filters" -- need translation
 L["RaidDebuffType"] = "Debuff filters" -- need translation
 L["RaidBuffPerRow"] = "Buffs per row" -- need translation

@@ -910,7 +910,6 @@ L["SmoothBarsTip"] = "|nFalls diese Option aktiviert ist, werden die Gesundheits
 L["PlayerPlate HealthBar"] = "Zeige Gesundsheitsleiste"
 L["CDAnimation"] = "Abklingzeiten Animation"
 L["CDFontSize"] = "Abklingzeiten Schriftgröße"
-L["PrivateAuras"] = "Private Auren"
 L["RaidBuffType"] = "Stärkungszauber Filter"
 L["RaidDebuffType"] = "Schwächungszauber Filter"
 L["RaidBuffPerRow"] = "Stärkungszauber pro Zeile"
