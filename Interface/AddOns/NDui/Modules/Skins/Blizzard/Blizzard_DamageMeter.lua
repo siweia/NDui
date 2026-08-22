@@ -35,6 +35,10 @@ local function updateBox(self)
 	self:ForEachFrame(updateBar)
 end
 
+local function updateLocalPlayerEntry(frame)
+	updateBar(frame:GetLocalPlayerEntry())
+end
+
 local function updateMinimizeButton(frame, collapsed)
 	local minimize = frame.MinimizeButton
 	if minimize then
@@ -48,7 +52,7 @@ local function reskinMinimizeButton(frame)
 		B.ReskinCollapse(minimize)
 		minimize:GetNormalTexture():SetAlpha(0)
 		minimize:GetPushedTexture():SetAlpha(0)
-		minimize.__texture:DoCollapse(false)
+		minimize.__texture:DoCollapse(frame:IsMinimized())
 	end
 	if frame.SetMinimized then
 		hooksecurefunc(frame, "SetMinimized", updateMinimizeButton)
@@ -68,10 +72,8 @@ local function ReskinMeterWindow(frame)
 
 	local container = frame.MinimizeContainer
 	if container then
-		if container:IsVisible() then
-			B.ReskinTrimScroll(container.ScrollBar)
-			container.ScrollBox:ForEachFrame(updateBar)
-		end
+		B.ReskinTrimScroll(container.ScrollBar)
+		container.ScrollBox:ForEachFrame(updateBar)
 		hooksecurefunc(container.ScrollBox, "Update", updateBox)
 
 		B.ReskinTrimScroll(container.SourceWindow.ScrollBar)
@@ -99,10 +101,8 @@ local function ReskinMeterWindow(frame)
 	updateButtonState(frame.SettingsDropdown)
 	hooksecurefunc(frame.SettingsDropdown, "OnButtonStateChanged", updateButtonState)
 
-	local localEntry = frame.LocalPlayerEntry
-	if localEntry then
-		updateBar(localEntry)
-	end
+	updateLocalPlayerEntry(frame)
+	hooksecurefunc(frame, "ShowLocalPlayerEntry", updateLocalPlayerEntry)
 
 	frame.styled = true
 end
