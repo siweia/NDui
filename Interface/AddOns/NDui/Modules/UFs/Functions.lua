@@ -967,6 +967,9 @@ function UF.PostCreateButton(element, button, options)
 		Cooldown:IgnoreCooldown(button.Cooldown)
 		button.Cooldown:SetCountdownFormatter(UpdateAuraDurationFormatter(element, element.hideDuration))
 	end
+	if options.desaturated then
+		button.Icon:SetDesaturated(true)
+	end
 	button.iconbg = B.ReskinIcon(button.Icon)
 	button.iconbg:SetBackdropBorderColor(0, 0, 0)
 	B.CreateSD(button)
@@ -1161,6 +1164,27 @@ local RAID_DEBUFF_GROUPS = {
 	},
 }
 
+local UNITFRAME_DESATURATED_DEBUFF_TYPE = 5
+local UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME = "UnitFrameDesaturatedDebuffs"
+local UNITFRAME_DESATURATED_DEBUFF_FILTERS = {
+	"HARMFUL|PLAYER",
+	"HARMFUL|!PLAYER",
+}
+local UNITFRAME_PERSONAL_DEBUFF_LIMIT = 8
+local UNITFRAME_DESATURATED_DEBUFF_VALUES = {
+	Player = true,
+	Target = true,
+	Focus = true,
+}
+
+local function GetUnitFrameDesaturatedDebuffCount(total, index)
+	if index == 1 then
+		return min(total, UNITFRAME_PERSONAL_DEBUFF_LIMIT)
+	end
+
+	return max(total - UNITFRAME_PERSONAL_DEBUFF_LIMIT, 0)
+end
+
 local function GetNameplateAuraGroupCount(group)
 	local settings = NAMEPLATE_AURA_SETTINGS[group.auraType]
 	local db = C.db["Nameplate"]
@@ -1187,7 +1211,15 @@ end
 
 function UF:UpdateAuraContainer(parent, element)
 	UpdateAuraGroup(element, "Buffs", element.buffFilter, element.numBuffs)
-	UpdateAuraGroup(element, "Debuffs", element.debuffFilter, element.numDebuffs)
+	if element.__groups[UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..1] then
+		for index, filter in ipairs(UNITFRAME_DESATURATED_DEBUFF_FILTERS) do
+			local count = element.__desaturateOthers and GetUnitFrameDesaturatedDebuffCount(element.numDebuffs, index) or 0
+			UpdateAuraGroup(element, UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..index, filter, count)
+		end
+	else
+		local count = element.__desaturateOthers and 0 or element.numDebuffs
+		UpdateAuraGroup(element, "Debuffs", element.debuffFilter, count)
+	end
 
 	local auraType = element.__auraType
 	if auraType then
@@ -1241,6 +1273,7 @@ local unitFrameDebuffFilters = {
 	[2] = "HARMFUL",
 	[3] = "HARMFUL|PLAYER",
 	[4] = "HARMFUL|DISPELLABLE",
+	[5] = "HARMFUL",
 }
 
 function UF:ConfigureAuras(element)
@@ -1251,6 +1284,7 @@ function UF:ConfigureAuras(element)
 	element.numDebuffs = debuffType ~= 1 and C.db["UFs"][value.."NumDebuff"] or 0
 	element.buffFilter = unitFrameBuffFilters[buffType]
 	element.debuffFilter = unitFrameDebuffFilters[debuffType]
+	element.__desaturateOthers = UNITFRAME_DESATURATED_DEBUFF_VALUES[value] and debuffType == UNITFRAME_DESATURATED_DEBUFF_TYPE
 	element.size = C.db["UFs"][value.."AuraSize"]
 	-- Keep oUF's native Border uncreated; Blizzard can show it again after a layout-side Hide.
 	element.showDebuffTypeBorder = C.db["UFs"]["DebuffColor"]
@@ -1452,6 +1486,7 @@ local function AddAuraGroup(element, name, filter, count, index, candidateFilter
 		height = element.__owner.mystyle == "nameplate" and size * sizeRatio or nil,
 		fontSize = buttonOptions.fontSize,
 		sizeRatio = sizeRatio,
+		desaturated = buttonOptions.desaturated,
 		showDebuffTypeBorder = showTypeBorder,
 		layout = AuraGroupLayout(element, index),
 	})
@@ -1532,7 +1567,16 @@ function UF:CreateAuras(self)
 		UF:ConfigureAuras(bu)
 		UF:UpdateAuraDirection(self, bu)
 		AddAuraGroup(bu, "Buffs", bu.buffFilter, bu.numBuffs, 1)
-		AddAuraGroup(bu, "Debuffs", bu.debuffFilter, bu.numDebuffs, 2)
+		if bu.__desaturateOthers then
+			for index, filter in ipairs(UNITFRAME_DESATURATED_DEBUFF_FILTERS) do
+				AddAuraGroup(bu, UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..index, filter, GetUnitFrameDesaturatedDebuffCount(bu.numDebuffs, index), index + 1, nil, nil, {
+					desaturated = index == 2,
+					showDebuffTypeBorder = bu.showDebuffTypeBorder,
+				})
+			end
+		else
+			AddAuraGroup(bu, "Debuffs", bu.debuffFilter, bu.numDebuffs, 2)
+		end
 	elseif mystyle == "nameplate" then
 		bu.__auraType = "nameplate"
 		bu:SetFlowLayoutAnchorPoint("BOTTOMLEFT")

@@ -1879,6 +1879,7 @@ function G:SetupUFAuras(parent)
 	}
 	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"], L["ShowCancelable"]}
 	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"], L["ShowDispell"]}
+	local desaturatedDebuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"], L["ShowDispell"], L["ShowAllOthersGray"]}
 	local builtInRuleOptions = {DISABLE, L["ShowAll"], L["Blizzard"]}
 	local arenaBuffOptions = {DISABLE, L["ShowAll"], L["Defensive"], L["ShowDispell"], L["CombinedFilters"]}
 	local growthOptions = {}
@@ -1892,7 +1893,9 @@ function G:SetupUFAuras(parent)
 		local maxBuffs = fixedPosition and 6 or 40
 		local maxDebuffs = fixedPosition and 10 or 40
 		local selectedBuffOptions, selectedDebuffOptions = buffOptions, debuffOptions
-		if value == "Boss" then
+		if value == "Player" or value == "Target" or value == "Focus" then
+			selectedDebuffOptions = desaturatedDebuffOptions
+		elseif value == "Boss" then
 			selectedBuffOptions = builtInRuleOptions
 		elseif value == "Arena" then
 			selectedBuffOptions = arenaBuffOptions
