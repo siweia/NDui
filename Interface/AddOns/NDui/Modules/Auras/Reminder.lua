@@ -13,7 +13,6 @@ local GetNumGroupMembers = GetNumGroupMembers
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = 36
 local frames, parentFrame = {}
-local ShouldUnitAuraIndexBeSecret = C_Secrets.ShouldUnitAuraIndexBeSecret
 
 function A:Reminder_Update(cfg)
 	local frame = cfg.frame
@@ -50,19 +49,11 @@ function A:Reminder_Update(cfg)
 		if weaponIndex then
 			local hasMainHandEnchant, _, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
 			if (hasMainHandEnchant and weaponIndex == 1) or (hasOffHandEnchant and weaponIndex == 2) then
-				frame:Hide()
 				return
 			end
 		else
-			if C_Secrets.ShouldAurasBeSecret() then return end
-			for i = 1, 40 do
-				if ShouldUnitAuraIndexBeSecret("player", i, "HELPFUL") then return end
-				local auraData = C_UnitAuras.GetBuffDataByIndex("player", i, "HELPFUL")
-				if not auraData then break end
-				if B:NotSecretValue(auraData.spellId) and auraData.spellId and cfg.spells[auraData.spellId] then
-					frame:Hide()
-					return
-				end
+			for spellID in pairs(cfg.spells) do
+				if C_UnitAuras.GetPlayerAuraBySpellID(spellID) then return end
 			end
 		end
 		frame:Show()
