@@ -637,12 +637,21 @@ end
 function UF:UpdateNameplateAuras()
 	UF.ToggleNameplateAuras(self, self.plateType ~= "NameOnly")
 
-	local element = self.Auras
+	local yOffset
 	if C.db["Nameplate"]["TargetPower"] then
-		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
+		yOffset = 10 + C.db["Nameplate"]["PPBarHeight"]
 	else
-		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
+		yOffset = 5
 	end
+
+	local element = self.Auras
+	element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, yOffset)
+	UF:ConfigureNameplateAuras(element)
+	UF:UpdateAuraContainer(self, element)
+	element:ForceUpdate()
+
+	element = self.Buffs
+	element:SetPoint("BOTTOMRIGHT", self.nameText, "TOPRIGHT", 0, yOffset)
 	UF:ConfigureNameplateAuras(element)
 	UF:UpdateAuraContainer(self, element)
 	element:ForceUpdate()

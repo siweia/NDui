@@ -1077,6 +1077,10 @@ local NAMEPLATE_AURA_GROUPS = {
 		},
 	},
 }
+local NAMEPLATE_AURA_CONTAINERS = {
+	{auraType = "debuffs", element = "Auras", anchor = "BOTTOMLEFT", relativeAnchor = "TOPLEFT", growthX = "RIGHT"},
+	{auraType = "buffs", element = "Buffs", anchor = "BOTTOMRIGHT", relativeAnchor = "TOPRIGHT", growthX = "LEFT"},
+}
 
 local BOSS_BUFF_GROUP_NAME = "BossBuffs"
 local BOSS_BUFF_GROUPS = {
@@ -1193,7 +1197,9 @@ end
 
 local function UpdateNameplateAuraGroups(element)
 	for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
-		UpdateAuraGroup(element, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group))
+		if group.auraType == element.__nameplateAuraType then
+			UpdateAuraGroup(element, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group))
+		end
 	end
 end
 
@@ -1555,12 +1561,48 @@ end
 
 function UF:CreateAuras(self)
 	local mystyle = self.mystyle
+	if mystyle == "nameplate" then
+		local db = C.db["Nameplate"]
+		local yOffset = db["TargetPower"] and 10 + db["PPBarHeight"] or 5
+		for _, container in ipairs(NAMEPLATE_AURA_CONTAINERS) do
+			local bu = CreateAuraElement(self, {
+				initialAnchor = container.anchor,
+				growthX = container.growthX,
+				growthY = "UP",
+				spacing = 3,
+				groupSpacing = 0,
+				disableMouse = true,
+			})
+			bu.__auraType = "nameplate"
+			bu.__nameplateAuraType = container.auraType
+			bu:SetPoint(container.anchor, self.nameText, container.relativeAnchor, 0, yOffset)
+			UF:ConfigureNameplateAuras(bu)
+
+			local layoutIndex = 0
+			for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
+				if group.auraType == container.auraType then
+					layoutIndex = layoutIndex + 1
+					local settings = NAMEPLATE_AURA_SETTINGS[group.auraType]
+					AddAuraGroup(bu, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group), layoutIndex, group.candidateFilters, nil, {
+						size = db[settings.size],
+						fontSize = db[settings.fontSize],
+						sizeRatio = db[settings.sizeRatio],
+						showDebuffTypeBorder = db[settings.typeBorder],
+					})
+				end
+			end
+
+			UF:UpdateAuraContainer(self, bu)
+			self[container.element] = bu
+		end
+		return
+	end
+
 	local bu = CreateAuraElement(self, {
 		initialAnchor = "TOPLEFT",
 		growthX = "RIGHT",
 		growthY = "DOWN",
 		spacing = 3,
-		groupSpacing = mystyle == "nameplate" and 0 or nil,
 	})
 	if auraUFs[mystyle] then
 		bu.__value = auraUFs[mystyle]
@@ -1576,27 +1618,6 @@ function UF:CreateAuras(self)
 			end
 		else
 			AddAuraGroup(bu, "Debuffs", bu.debuffFilter, bu.numDebuffs, 2)
-		end
-	elseif mystyle == "nameplate" then
-		bu.__auraType = "nameplate"
-		bu:SetFlowLayoutAnchorPoint("BOTTOMLEFT")
-		bu:SetFlowLayoutGrowthDirection(1, 1)
-		if C.db["Nameplate"]["TargetPower"] then
-			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
-		else
-			bu:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
-		end
-		UF:ConfigureNameplateAuras(bu)
-		bu.disableMouse = true
-		for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
-			local settings = NAMEPLATE_AURA_SETTINGS[group.auraType]
-			local db = C.db["Nameplate"]
-			AddAuraGroup(bu, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group), index, group.candidateFilters, nil, {
-				size = db[settings.size],
-				fontSize = db[settings.fontSize],
-				sizeRatio = db[settings.sizeRatio],
-				showDebuffTypeBorder = db[settings.typeBorder],
-			})
 		end
 	end
 
