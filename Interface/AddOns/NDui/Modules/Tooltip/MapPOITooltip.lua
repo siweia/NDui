@@ -1,5 +1,6 @@
 local _, ns = ...
 local B = ns[1]
+local C = ns[2]
 local TT = B:GetModule("Tooltip")
 
 local mapTooltip
@@ -93,6 +94,18 @@ local function OnTooltipUpdate(self, elapsed)
 	GameTooltip_OnUpdate(self, elapsed)
 end
 
+local function GetUnprotectedFunctionEnvironment(func)
+	if type(func) ~= "function" then return end
+
+	local success, environment = pcall(getfenv, func)
+	if not success or type(environment) ~= "table" then return end
+
+	local environmentMeta = getmetatable(environment)
+	if environmentMeta ~= nil and (type(environmentMeta) ~= "table" or environmentMeta.__environment ~= nil) then return end
+
+	return environment
+end
+
 local function InstallFix()
 	if installed then return end
 
@@ -100,26 +113,37 @@ local function InstallFix()
 	local onMouseLeave = AreaPOIPinMixin and AreaPOIPinMixin.OnMouseLeave
 	if not tryShowTooltip or not onMouseLeave then return end
 
-	local tryShowEnv = getfenv(tryShowTooltip)
-	local originalAreaPoiUtil = tryShowEnv.AreaPoiUtil
-	originalTryShowTooltip = originalAreaPoiUtil.TryShowTooltip
-	local areaPoiUtil = setmetatable({TryShowTooltip = TryShowTooltip}, {__index = originalAreaPoiUtil})
-	setfenv(tryShowTooltip, setmetatable({AreaPoiUtil = areaPoiUtil}, {__index = tryShowEnv}))
+	local tryShowEnv = GetUnprotectedFunctionEnvironment(tryShowTooltip)
+	local onMouseLeaveEnv = GetUnprotectedFunctionEnvironment(onMouseLeave)
+	if not tryShowEnv or not onMouseLeaveEnv then return end
 
-	local onMouseLeaveEnv = getfenv(onMouseLeave)
+	local originalAreaPoiUtil = tryShowEnv.AreaPoiUtil
+	if type(originalAreaPoiUtil) ~= "table" or type(originalAreaPoiUtil.TryShowTooltip) ~= "function" then return end
+
+	local areaPoiUtil = setmetatable({TryShowTooltip = TryShowTooltip}, {__index = originalAreaPoiUtil})
 	local getAppropriateTooltip = onMouseLeaveEnv.GetAppropriateTooltip
+	if type(getAppropriateTooltip) ~= "function" then return end
+
 	local hideTooltips = {
 		Hide = function()
 			mapTooltip:Hide()
 			getAppropriateTooltip():Hide()
 		end,
 	}
-	setfenv(onMouseLeave, setmetatable({
+	local newTryShowEnv = setmetatable({AreaPoiUtil = areaPoiUtil}, {__index = tryShowEnv})
+	local newOnMouseLeaveEnv = setmetatable({
 		GetAppropriateTooltip = function()
 			return hideTooltips
 		end,
-	}, {__index = onMouseLeaveEnv}))
+	}, {__index = onMouseLeaveEnv})
 
+	if not pcall(setfenv, tryShowTooltip, newTryShowEnv) then return end
+	if not pcall(setfenv, onMouseLeave, newOnMouseLeaveEnv) then
+		pcall(setfenv, tryShowTooltip, tryShowEnv)
+		return
+	end
+
+	originalTryShowTooltip = originalAreaPoiUtil.TryShowTooltip
 	installed = true
 end
 
@@ -131,6 +155,7 @@ local function OnAddOnLoaded(_, addonName)
 end
 
 function TT:SetupMapPOITooltip()
+	if C.db["Tooltip"]["DisableMapPOITooltipFix"] then return end
 	if C_AddOns.IsAddOnLoaded("!MapTooltipTaintFix") then return end
 
 	mapTooltip = CreateFrame("GameTooltip", "NDuiMapPOITooltip", UIParent, "GameTooltipTemplate")
