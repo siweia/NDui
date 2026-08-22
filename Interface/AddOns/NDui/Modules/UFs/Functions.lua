@@ -1077,6 +1077,12 @@ local NAMEPLATE_AURA_GROUPS = {
 		},
 	},
 }
+local NAMEPLATE_NPC_BUFF_GROUP = {
+	filter = "HELPFUL|DISPELLABLE|!IMPORTANT",
+	candidateFilters = {
+		isBossOrRoleAura = false,
+	},
+}
 local NAMEPLATE_AURA_CONTAINERS = {
 	{auraType = "debuffs", element = "Auras", anchor = "BOTTOMLEFT", relativeAnchor = "TOPLEFT", growthX = "RIGHT"},
 	{auraType = "buffs", element = "Buffs", anchor = "BOTTOMRIGHT", relativeAnchor = "TOPRIGHT", growthX = "LEFT"},
@@ -1195,10 +1201,20 @@ local function GetNameplateAuraGroupCount(group)
 	return db[settings.enabled] and db[settings.count] or 0
 end
 
-local function UpdateNameplateAuraGroups(element)
+local function UpdateNameplateAuraGroups(parent, element)
+	local useNPCBuffFilter = element.__nameplateAuraType == "buffs" and parent.isPlayer == false and parent.isFriendly == false
+	local buffFilterChanged = element.__useNPCBuffFilter ~= nil and element.__useNPCBuffFilter ~= useNPCBuffFilter
+	element.__useNPCBuffFilter = useNPCBuffFilter
+
 	for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
 		if group.auraType == element.__nameplateAuraType then
-			UpdateAuraGroup(element, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group))
+			local name = NAMEPLATE_AURA_GROUP_NAME..index
+			local activeGroup = useNPCBuffFilter and index == 2 and NAMEPLATE_NPC_BUFF_GROUP or group
+
+			UpdateAuraGroup(element, name, activeGroup.filter, GetNameplateAuraGroupCount(group))
+			if buffFilterChanged and index == 2 then
+				element:SetAuraGroupCandidateFilters(element.__groups[name], activeGroup.candidateFilters)
+			end
 		end
 	end
 end
@@ -1230,7 +1246,7 @@ function UF:UpdateAuraContainer(parent, element)
 	local auraType = element.__auraType
 	if auraType then
 		if auraType == "nameplate" then
-			UpdateNameplateAuraGroups(element)
+			UpdateNameplateAuraGroups(parent, element)
 		else
 			local isRaidDebuffs = auraType == "debuffs" and element.__value == "Raid"
 			local isBossBuffs = auraType == "buffs" and element.__value == "Boss"

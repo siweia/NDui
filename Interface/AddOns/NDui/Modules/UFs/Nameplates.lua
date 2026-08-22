@@ -815,6 +815,11 @@ function UF:RefreshPlateType(unit)
 		UF.UpdatePlateByType(self)
 		self.previousType = self.plateType
 	end
+
+	local buffs = self.Buffs
+	if buffs then
+		UF:UpdateAuraContainer(self, buffs)
+	end
 end
 
 function UF:OnUnitFactionChanged(unit)
