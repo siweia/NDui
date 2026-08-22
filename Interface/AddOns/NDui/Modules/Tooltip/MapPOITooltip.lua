@@ -1,5 +1,6 @@
 local _, ns = ...
 local B = ns[1]
+local C = ns[2]
 local TT = B:GetModule("Tooltip")
 
 local mapTooltip
@@ -154,6 +155,7 @@ local function OnAddOnLoaded(_, addonName)
 end
 
 function TT:SetupMapPOITooltip()
+	if C.db["Tooltip"]["DisableMapPOITooltipFix"] then return end
 	if C_AddOns.IsAddOnLoaded("!MapTooltipTaintFix") then return end
 
 	mapTooltip = CreateFrame("GameTooltip", "NDuiMapPOITooltip", UIParent, "GameTooltipTemplate")
