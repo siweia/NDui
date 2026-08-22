@@ -1452,6 +1452,7 @@ function UF:ToggleAllAuras()
 	UF:ToggleUFAuras(_G.oUF_Target, enable)
 	UF:ToggleUFAuras(_G.oUF_Focus, enable)
 	UF:ToggleUFAuras(_G.oUF_ToT, enable)
+	UF:ToggleUFAuras(_G.oUF_Pet, enable)
 end
 
 UF.AuraDirections = {
