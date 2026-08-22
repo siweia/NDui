@@ -1477,8 +1477,8 @@ function UF:UpdateAuraDirection(self, element)
 	element:SetPoint(value.initialAnchor, self, value.relAnchor, value.x, value.y * yOffset)
 end
 
-local function AuraGroupLayout(element, index)
-	local groupSpacing = element.groupSpacing
+local function AuraGroupLayout(element, index, groupSpacing)
+	if groupSpacing == nil then groupSpacing = element.groupSpacing end
 	if groupSpacing == nil then groupSpacing = element.spacing end
 	return {
 		elementSpacing = element.spacing,
@@ -1510,7 +1510,7 @@ local function AddAuraGroup(element, name, filter, count, index, candidateFilter
 		sizeRatio = sizeRatio,
 		desaturated = buttonOptions.desaturated,
 		showDebuffTypeBorder = showTypeBorder,
-		layout = AuraGroupLayout(element, index),
+		layout = AuraGroupLayout(element, index, buttonOptions.groupSpacing),
 	})
 end
 
@@ -1629,6 +1629,7 @@ function UF:CreateAuras(self)
 			for index, filter in ipairs(UNITFRAME_DESATURATED_DEBUFF_FILTERS) do
 				AddAuraGroup(bu, UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..index, filter, GetUnitFrameDesaturatedDebuffCount(bu.numDebuffs, index), index + 1, nil, nil, {
 					desaturated = index == 2,
+					groupSpacing = index == 2 and 0 or nil,
 					showDebuffTypeBorder = bu.showDebuffTypeBorder,
 				})
 			end
