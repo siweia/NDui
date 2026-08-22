@@ -4,6 +4,7 @@ local G = B:RegisterModule("GUI")
 
 local unpack, strfind, gsub = unpack, strfind, gsub
 local tonumber, pairs, ipairs, next, type, tinsert = tonumber, pairs, ipairs, next, type, tinsert
+local min, max = math.min, math.max
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
 
@@ -11,6 +12,7 @@ local guiTab, guiPage, f = {}, {}
 G.DefaultSettings = {
 	Reset4 = false,
 	Reset5 = false,
+	Reset6 = false,
 	Mover = {},
 	InternalCD = {},
 	AuraWatchMover = {},
@@ -39,56 +41,66 @@ G.DefaultSettings = {
 		Bar1Flyout = 1,
 		Bar1Size = 34,
 		Bar1Font = 12,
+		Bar1CDSize = 16,
 		Bar1Num = 12,
 		Bar1PerRow = 12,
 		Bar2 = true,
 		Bar2Flyout = 1,
 		Bar2Size = 34,
 		Bar2Font = 12,
+		Bar2CDSize = 16,
 		Bar2Num = 12,
 		Bar2PerRow = 12,
 		Bar3 = true,
 		Bar3Flyout = 1,
 		Bar3Size = 32,
 		Bar3Font = 12,
+		Bar3CDSize = 16,
 		Bar3Num = 0,
 		Bar3PerRow = 12,
 		Bar4 = true,
 		Bar4Flyout = 3,
 		Bar4Size = 32,
 		Bar4Font = 12,
+		Bar4CDSize = 16,
 		Bar4Num = 12,
 		Bar4PerRow = 1,
 		Bar5 = true,
 		Bar5Flyout = 3,
 		Bar5Size = 32,
 		Bar5Font = 12,
+		Bar5CDSize = 16,
 		Bar5Num = 12,
 		Bar5PerRow = 1,
 		Bar6 = false,
 		Bar6Flyout = 1,
 		Bar6Size = 34,
 		Bar6Font = 12,
+		Bar6CDSize = 16,
 		Bar6Num = 12,
 		Bar6PerRow = 12,
 		Bar7 = false,
 		Bar7Flyout = 1,
 		Bar7Size = 34,
 		Bar7Font = 12,
+		Bar7CDSize = 16,
 		Bar7Num = 12,
 		Bar7PerRow = 12,
 		Bar8 = false,
 		Bar8Flyout = 1,
 		Bar8Size = 34,
 		Bar8Font = 12,
+		Bar8CDSize = 16,
 		Bar8Num = 12,
 		Bar8PerRow = 12,
 
 		BarPetSize = 26,
 		BarPetFont = 12,
+		BarPetCDSize = 16,
 		BarPetPerRow = 10,
 		BarStanceSize = 30,
 		BarStanceFont = 12,
+		BarStanceCDSize = 16,
 		BarStancePerRow = 10,
 		VehButtonSize = 34,
 		MBSize = 22,
@@ -147,8 +159,6 @@ G.DefaultSettings = {
 		ReverseDebuff = false,
 		DebuffSize = 30,
 		DebuffsPerRow = 16,
-		PrivateSize = 30,
-		ReversePrivate = false,
 		CDAnimation = false,
 	},
 	AuraWatch = {
@@ -238,8 +248,7 @@ G.DefaultSettings = {
 		PlayerAbsorb = false,
 		AutoBuffs = false,
 		ShowRoleMode = 1,
-		ReversePrivate = false,
-		CDFontSize = 12,
+		CDFontSize = 12, -- Legacy source for the Reset6 per-frame aura font migration.
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -287,38 +296,59 @@ G.DefaultSettings = {
 		PlayerBuffType = 1,
 		PlayerDebuffType = 1,
 		PlayerAuraSize = 22,
+		PlayerCDSize = 12,
 		TargetNumBuff = 20,
 		TargetNumDebuff = 20,
 		TargetBuffType = 2,
 		TargetDebuffType = 2,
 		TargetAuraSize = 22,
+		TargetCDSize = 12,
 		FocusNumBuff = 20,
 		FocusNumDebuff = 20,
 		FocusBuffType = 3,
 		FocusDebuffType = 2,
 		FocusAuraSize = 16,
+		FocusCDSize = 12,
 		ToTNumBuff = 6,
 		ToTNumDebuff = 6,
 		ToTBuffType = 1,
 		ToTDebuffType = 1,
 		ToTAuraSize = 12,
+		ToTCDSize = 12,
 		PetNumBuff = 6,
 		PetNumDebuff = 6,
 		PetBuffType = 1,
 		PetDebuffType = 1,
 		PetAuraSize = 12,
-		BossNumBuff = 6,
+		PetCDSize = 12,
+		BossNumBuff = 2,
 		BossNumDebuff = 6,
 		BossBuffType = 2,
 		BossDebuffType = 3,
 		BossBuffSize = 16,
 		BossDebuffSize = 16,
+		BossCDSize = 12,
+		ArenaNumBuff = 2,
+		ArenaNumDebuff = 6,
+		ArenaBuffType = 2,
+		ArenaDebuffType = 2,
+		ArenaBuffSize = 16,
+		ArenaDebuffSize = 16,
+		ArenaCDSize = 12,
 		RaidAuras = true,
-		RaidCDText = false,
-		RaidCDSize = 12,
+		RaidCDText = false, -- Legacy source for the Reset6 per-container aura text migration.
+		RaidCDSize = 12, -- Legacy source for the Reset6 per-container aura font migration.
+		RaidBuffCDText = false,
+		RaidBuffCDSize = 12,
+		RaidDebuffCDText = false,
+		RaidDebuffCDSize = 12,
 		RaidNumBuff = 6,
 		RaidNumDebuff = 6,
 		RaidBuffType = 1,
+		RaidBigDefensive = false,
+		RaidBigDefensiveCDText = false,
+		RaidBigDefensiveCDSize = 12,
+		RaidBigDefensiveSize = 16,
 		RaidDebuffType = 2,
 		RaidBuffSize = 12,
 		RaidDebuffSize = 12,
@@ -334,10 +364,6 @@ G.DefaultSettings = {
 		FocusAuraDirec = 1,
 		FocusAuraOffset = 10,
 
-		PrivateAuras = true,
-		PAIconSize = 14,
-		CDAnimation = true,
-		CDText = true,
 	},
 	Chat = {
 		Disable = false,
@@ -381,10 +407,15 @@ G.DefaultSettings = {
 	},
 	Nameplate = {
 		Enable = true,
-		maxAuras = 5,
+		maxAuras = 6,
 		PlateAuras = true,
-		FontSize = 14,
+		FontSize = 12,
 		SizeRatio = .5,
+		PlateBuffs = true,
+		maxBuffs = 2,
+		BuffFontSize = 12,
+		BuffSizeRatio = .5,
+		BuffColor = false,
 		FriendlyCC = false,
 		HostileCC = true,
 		TankMode = false,
@@ -445,13 +476,13 @@ G.DefaultSettings = {
 		FriendRaidTargetX = 0,
 		FriendRaidTargetY = 3,
 		PlateRange = 45,
-		AuraSize = 16,
-		ShowDispel = true,
+		AuraSize = 24,
+		BuffSize = 24,
 		PlateCC = true,
-		CCFontSize = 14,
+		CCFontSize = 12,
 		CCSizeRatio = .5,
-		NumCC = 10,
-		CCSize = 12,
+		NumCC = 2,
+		CCSize = 24,
 
 		PlateWidth = 190,
 		PlateHeight = 8,
@@ -744,15 +775,82 @@ loader:SetScript("OnEvent", function(self, _, addon)
 
 	if not C.db["Reset5"] then
 		local ufs = C.db["UFs"]
-		if ufs["RaidBuffType"] == 4 then
-			ufs["RaidBuffType"] = 2
-		end
 		if ufs["RaidDebuffType"] == 5 then
 			ufs["RaidDebuffType"] = 4
 		elseif ufs["RaidDebuffType"] == 4 then
 			ufs["RaidDebuffType"] = 2
 		end
 		C.db["Reset5"] = true
+	end
+
+	if not C.db["Reset6"] then
+		local actionbar = C.db["Actionbar"]
+		local cooldownFontSize = actionbar["CDFontSize"]
+		for i = 1, 8 do
+			actionbar["Bar"..i.."CDSize"] = cooldownFontSize
+		end
+		actionbar["BarPetCDSize"] = cooldownFontSize
+		actionbar["BarStanceCDSize"] = cooldownFontSize
+
+		local nameplate = C.db["Nameplate"]
+		nameplate["PlateBuffs"] = nameplate["PlateAuras"]
+		nameplate["BuffColor"] = nameplate["DebuffColor"]
+		nameplate["BuffSize"] = nameplate["AuraSize"]
+		nameplate["BuffFontSize"] = nameplate["FontSize"]
+		nameplate["BuffSizeRatio"] = nameplate["SizeRatio"]
+		if nameplate["maxAuras"] == 4 or nameplate["maxAuras"] == 5 then
+			nameplate["maxAuras"] = 6
+		end
+		if nameplate["AuraSize"] == 16 then
+			nameplate["AuraSize"] = 24
+			nameplate["BuffSize"] = 24
+		end
+		if nameplate["FontSize"] == 14 then
+			nameplate["FontSize"] = 12
+			nameplate["BuffFontSize"] = 12
+		end
+		if nameplate["CCSize"] == 12 then nameplate["CCSize"] = 24 end
+		if nameplate["CCFontSize"] == 14 then nameplate["CCFontSize"] = 12 end
+		nameplate["maxBuffs"] = min(max(nameplate["maxBuffs"], 1), 6)
+		nameplate["maxAuras"] = min(max(nameplate["maxAuras"], 1), 10)
+		nameplate["NumCC"] = min(max(nameplate["NumCC"], 1), 2)
+
+		local ufs = C.db["UFs"]
+		local raidBuffType = ufs["RaidBuffType"]
+		ufs["RaidBigDefensive"] = raidBuffType == 3 or raidBuffType == 4
+		ufs["RaidBuffType"] = (raidBuffType == 2 or raidBuffType == 4) and 2 or 1
+		local raidCDText = ufs["RaidCDText"]
+		local raidCDSize = ufs["RaidCDSize"]
+		local raidAuraCDSize = min(max(raidCDSize, 5), 16)
+		ufs["RaidBuffCDText"] = raidCDText
+		ufs["RaidBuffCDSize"] = raidAuraCDSize
+		ufs["RaidDebuffCDText"] = raidCDText
+		ufs["RaidDebuffCDSize"] = raidAuraCDSize
+		ufs["RaidBigDefensiveCDText"] = raidCDText
+		ufs["RaidBigDefensiveCDSize"] = raidAuraCDSize
+		local unitFrameCDSize = ufs["CDFontSize"]
+		ufs["PlayerCDSize"] = unitFrameCDSize
+		ufs["TargetCDSize"] = unitFrameCDSize
+		ufs["FocusCDSize"] = unitFrameCDSize
+		ufs["ToTCDSize"] = unitFrameCDSize
+		ufs["PetCDSize"] = unitFrameCDSize
+		ufs["BossCDSize"] = raidCDSize
+		ufs["ArenaCDSize"] = raidCDSize
+		local bossBuffType = ufs["BossBuffType"]
+		-- Boss and Arena previously shared the Boss aura settings.
+		ufs["ArenaNumBuff"] = ufs["BossNumBuff"]
+		ufs["ArenaNumDebuff"] = ufs["BossNumDebuff"]
+		ufs["ArenaBuffSize"] = ufs["BossBuffSize"]
+		ufs["ArenaDebuffSize"] = ufs["BossDebuffSize"]
+		ufs["ArenaBuffType"] = bossBuffType == 1 and 1 or bossBuffType == 3 and 4 or 2
+		ufs["ArenaDebuffType"] = ufs["BossDebuffType"] == 1 and 1 or 2
+		ufs["BossBuffType"] = bossBuffType == 1 and 1 or 2
+		ufs["BossNumBuff"] = min(max(ufs["BossNumBuff"], 1), 6)
+		ufs["BossNumDebuff"] = min(max(ufs["BossNumDebuff"], 1), 10)
+		ufs["ArenaNumBuff"] = min(max(ufs["ArenaNumBuff"], 1), 6)
+		ufs["ArenaNumDebuff"] = min(max(ufs["ArenaNumDebuff"], 1), 10)
+		C.db["Mover"]["PrivateAuras"] = nil
+		C.db["Reset6"] = true
 	end
 
 	B:SetupUIScale(true)
@@ -861,18 +959,20 @@ local function setupBuffFrame()
 	G:SetupBuffFrame(guiPage[7])
 end
 
---[[ 12.1 AuraContainer already includes private auras.
-local function setupPrivateAuras()
-	G:SetupPrivateAuras(guiPage[4])
-end
-]]
-
 local function setupRaidAuras()
 	G:SetupRaidAuras(guiPage[4])
 end
 
+local function setupRaidBigDefensive()
+	G:SetupRaidBigDefensive(guiPage[4])
+end
+
 local function setupNameplateAuras()
 	G:SetupNameplateAuras(guiPage[5])
+end
+
+local function setupNameplateBuffs()
+	G:SetupNameplateBuffs(guiPage[5])
 end
 
 local function setupNameplateCC()
@@ -1247,7 +1347,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
 		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorTenth"], L["ColorText"], L["WhiteTenth"], L["WhiteText"], DISABLE}, updateCooldown},
-		{3, "Actionbar", "CDFontSize", L["CDFontSize"].."*", true, {5, 30, 1}, updateCDText},
+		{3, "Actionbar", "CDFontSize", L["GeneralCDFontSize"].."*", true, {5, 30, 1}, updateCDText, L["GeneralCDFontSizeTip"]},
 		{},--blank
 		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
 		{1, "Actionbar", "ButtonLock", L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},
@@ -1301,8 +1401,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "PartyFrame", HeaderTag..L["PartyFrame"], nil, setupPartyFrame, nil, L["PartyFrameTip"]},
 		{1, "UFs", "PartyPetFrame", HeaderTag..L["PartyPetFrame"], true, setupPartyPetFrame, nil, L["PartyPetTip"]},
 		{},--blank
-		{1, "UFs", "PrivateAuras", IsNew..HeaderTag..L["PrivateAuras"], nil, nil, nil, nil, true},
-		{1, "UFs", "RaidAuras", IsNew..HeaderTag..L["RaidAuras"], true, setupRaidAuras},
+		{1, "UFs", "RaidAuras", IsNew..HeaderTag..L["RaidAuras"], nil, setupRaidAuras},
+		{1, "UFs", "RaidBigDefensive", IsNew..HeaderTag..COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES, true, setupRaidBigDefensive, nil, OPTION_TOOLTIP_COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES},
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
 		--{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},
@@ -1341,9 +1441,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
 		{1, "Nameplate", "PlateAuras", IsNew..L["PlateAuras"], nil, setupNameplateAuras, refreshNameplates},
-		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"], true, setupNameplateCC, refreshNameplates},
-		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", nil, nil, refreshNameplates, L["DesaturateIconTip"], true},
-		{1, "Nameplate", "DebuffColor", L["DebuffColor"], true, nil, refreshNameplates, L["DebuffColorTip"]},
+		{1, "Nameplate", "PlateBuffs", IsNew..L["PlateBuffs"], true, setupNameplateBuffs, refreshNameplates},
+		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"], nil, setupNameplateCC, refreshNameplates},
+		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", true, nil, refreshNameplates, L["DesaturateIconTip"], true},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", L["ExecuteRatio"].."*", true, {0, 90, 1}, refreseExecuteRatio, L["ExecuteRatioTip"]},

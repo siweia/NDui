@@ -393,6 +393,12 @@ local booleanTable = {
 	["DotSpells"] = true,
 }
 
+local profileBooleanValues = {
+	["Reset4"] = true,
+	["Reset5"] = true,
+	["Reset6"] = true,
+}
+
 function G:ExportGUIData()
 	local text = "NDuiSettings:"..DB.Version..":"..DB.MyName..":"..DB.MyClass
 	for KEY, VALUE in pairs(C.db) do
@@ -445,6 +451,8 @@ function G:ExportGUIData()
 					end
 				end
 			end
+		elseif profileBooleanValues[KEY] then
+			text = text..";PROFILE:"..KEY..":"..tostring(VALUE)
 		end
 	end
 
@@ -557,6 +565,10 @@ function G:ImportGUIData()
 		if arg1 == "true" or arg1 == "false" then
 			if key == "ACCOUNT" then
 				NDuiADB[value] = toBoolean(arg1)
+			elseif key == "PROFILE" then
+				if profileBooleanValues[value] then
+					C.db[value] = toBoolean(arg1)
+				end
 			else
 				C.db[key][value] = toBoolean(arg1)
 			end

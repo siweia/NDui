@@ -99,6 +99,9 @@ local function reskinMinimizeButton(button, header)
 	end
 end
 
+-- Disabled for 12.1: modifying this event owner can taint the restricted
+-- aura query performed by ScenarioObjectiveTracker:LayoutContents().
+--[[
 local function GetMawBuffsAnchor(frame)
 	local center = frame:GetCenter()
 	if center and center < GetScreenWidth()/2 then
@@ -151,6 +154,7 @@ local function ReskinMawBuffsContainer(container)
 	blockList:HookScript("OnShow", blockList_Show)
 	blockList:HookScript("OnHide", blockList_Hide)
 end
+]]
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["QuestTracker"] then return end
@@ -265,5 +269,5 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Maw buffs container
-	ReskinMawBuffsContainer(ScenarioObjectiveTracker.MawBuffsBlock.Container)
+	-- ReskinMawBuffsContainer(ScenarioObjectiveTracker.MawBuffsBlock.Container)
 end)

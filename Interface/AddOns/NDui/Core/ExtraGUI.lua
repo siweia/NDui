@@ -1099,6 +1099,7 @@ local function SetUnitFrameSize(self, unit)
 	local powerOffset = C.db["UFs"][unit.."PowerOffset"]
 	local height = powerHeight == 0 and healthHeight or healthHeight + powerHeight + C.mult
 	self:SetSize(width, height)
+	B:GetModule("UnitFrames"):UpdateAuraLayoutLimit(self)
 	self.Health:SetHeight(healthHeight)
 	if self.nameText and nameOffset then
 		self.nameText:SetPoint("LEFT", 3, nameOffset)
@@ -1317,6 +1318,7 @@ function G:SetupSimpleRaidFrame(parent)
 				local powerHeight = 2*scale
 				local healthHeight = frameHeight - powerHeight
 				frame:SetSize(frameWidth, frameHeight)
+				UF:UpdateAuraLayoutLimit(frame)
 				frame.Health:SetHeight(healthHeight)
 				frame.Power:SetHeight(powerHeight)
 				UF.UpdateRaidNameAnchor(frame, frame.nameText)
@@ -1752,13 +1754,17 @@ function G:SetupActionBar(parent)
 		local function updateBarScale()
 			Bar:UpdateActionSize(value)
 		end
+		local function updateCooldownText()
+			Bar:UpdateCooldownText(value)
+		end
 		createOptionTitle(parent, "", offset)
 		createOptionSlider(parent, L["ButtonSize"], 20, 80, data[1], offset-60, value.."Size", updateBarScale, "Actionbar")
 		createOptionSlider(parent, L["ButtonsPerRow"], 1, data[3], data[5], offset-130, value.."PerRow", updateBarScale, "Actionbar")
 		createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, value.."Font", updateBarScale, "Actionbar")
+		createOptionSlider(parent, L["CDFontSize"], 5, 30, 16, offset-270, value.."CDSize", updateCooldownText, "Actionbar")
 		if value ~= "BarPet" then
-			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-270, value.."Num", updateBarScale, "Actionbar")
-			createOptionDropdown(parent, L["GrowthDirection"], offset-340, directions, nil, "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
+			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-340, value.."Num", updateBarScale, "Actionbar")
+			createOptionDropdown(parent, L["GrowthDirection"], offset-410, directions, nil, "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
 		end
 	end
 
@@ -1825,6 +1831,7 @@ function G:SetupStanceBar(parent)
 	createOptionSlider(parent, L["ButtonSize"], 20, 80, 30, offset-60, "BarStanceSize", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["ButtonsPerRow"], 1, 10, 10, offset-130, "BarStancePerRow", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, "BarStanceFont", Bar.UpdateStanceBar, "Actionbar")
+	createOptionSlider(parent, L["CDFontSize"], 5, 30, 16, offset-270, "BarStanceCDSize", function() Bar:UpdateCooldownText("BarStance") end, "Actionbar")
 end
 
 function G:SetupUFClassPower(parent)
@@ -1862,45 +1869,62 @@ function G:SetupUFAuras(parent)
 	local parent, offset = scroll.child, -10
 
 	local defaultData = {
-		["Player"] = {1, 1, 22, 20, 20},
-		["Target"] = {2, 2, 22, 20, 20},
-		["Focus"] = {3, 2, 16, 20, 20},
-		["ToT"] = {1, 1, 12, 6, 6},
-		["Pet"] = {1, 1, 12, 6, 6},
-		["Boss"] = {2, 3, 16, 6, 6},
+		["Player"] = {1, 1, 22, 20, 20, 12},
+		["Target"] = {2, 2, 22, 20, 20, 12},
+		["Focus"] = {3, 2, 16, 20, 20, 12},
+		["ToT"] = {1, 1, 12, 6, 6, 12},
+		["Pet"] = {1, 1, 12, 6, 6, 12},
+		["Boss"] = {2, 3, 16, 2, 6, 12},
+		["Arena"] = {2, 2, 16, 2, 6, 12},
 	}
 	local buffOptions = {DISABLE, L["ShowAll"], L["ShowDispell"], L["ShowCancelable"]}
 	local debuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"], L["ShowDispell"]}
+	local desaturatedDebuffOptions = {DISABLE, L["ShowAll"], L["BlockOthers"], L["ShowDispell"], L["ShowAllOthersGray"]}
+	local builtInRuleOptions = {DISABLE, L["ShowAll"], L["Blizzard"]}
+	local arenaBuffOptions = {DISABLE, L["ShowAll"], L["Defensive"], L["ShowDispell"], L["CombinedFilters"]}
 	local growthOptions = {}
 	for i = 1, 4 do
 		growthOptions[i] = UF.AuraDirections[i].name
 	end
 
-	local function createOptionGroup(parent, offset, value, func, isBoss)
+	local function createOptionGroup(parent, offset, value, func)
 		local default = defaultData[value]
+		local fixedPosition = value == "Boss" or value == "Arena"
+		local maxBuffs = fixedPosition and 6 or 40
+		local maxDebuffs = fixedPosition and 10 or 40
+		local selectedBuffOptions, selectedDebuffOptions = buffOptions, debuffOptions
+		if value == "Player" or value == "Target" or value == "Focus" then
+			selectedDebuffOptions = desaturatedDebuffOptions
+		elseif value == "Boss" then
+			selectedBuffOptions = builtInRuleOptions
+		elseif value == "Arena" then
+			selectedBuffOptions = arenaBuffOptions
+			selectedDebuffOptions = builtInRuleOptions
+		end
 		createOptionTitle(parent, "", offset)
-		if isBoss then
+		if fixedPosition then
 			offset = offset + 130
 		else
 			createOptionDropdown(parent, L["GrowthDirection"], offset-50, growthOptions, "", "UFs", value.."AuraDirec", 1, func)
 			createOptionSlider(parent, L["yOffset"], 0, 200, 10, offset-110, value.."AuraOffset", func)
 		end
-		createOptionDropdown(parent, L["BuffType"], offset-180, buffOptions, nil, "UFs", value.."BuffType", default[1], func)
-		createOptionDropdown(parent, L["DebuffType"], offset-240, debuffOptions, nil, "UFs", value.."DebuffType", default[2], func)
-		createOptionSlider(parent, L["MaxBuffs"], 1, 40, default[4], offset-300, value.."NumBuff", func)
-		createOptionSlider(parent, L["MaxDebuffs"], 1, 40, default[5], offset-370, value.."NumDebuff", func)
-		if isBoss then
+		createOptionDropdown(parent, L["BuffType"], offset-180, selectedBuffOptions, nil, "UFs", value.."BuffType", default[1], func)
+		createOptionDropdown(parent, L["DebuffType"], offset-240, selectedDebuffOptions, nil, "UFs", value.."DebuffType", default[2], func)
+		createOptionSlider(parent, L["MaxBuffs"], 1, maxBuffs, default[4], offset-300, value.."NumBuff", func)
+		createOptionSlider(parent, L["MaxDebuffs"], 1, maxDebuffs, default[5], offset-370, value.."NumDebuff", func)
+		if fixedPosition then
 			createOptionSlider(parent, "Buff "..L["Auras Size"], 5, 50, default[3], offset-440, value.."BuffSize", queueAuraReload)
 			createOptionSlider(parent, "Debuff "..L["Auras Size"], 5, 50, default[3], offset-510, value.."DebuffSize", queueAuraReload)
+			createOptionSlider(parent, L["CDFontSize"], 5, 30, default[6], offset-580, value.."CDSize", queueAuraReload)
 		else
 			createOptionSlider(parent, L["Auras Size"], 5, 50, default[3], offset-440, value.."AuraSize", queueAuraReload)
+			createOptionSlider(parent, L["CDFontSize"], 5, 30, default[6], offset-510, value.."CDSize", queueAuraReload)
 		end
 	end
 
 	createOptionTitle(parent, GENERAL, offset)
 	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", updateUFAurasAndQueueReload, L["DesaturateIconTip"], true)
 	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", queueAuraReload, L["DebuffColorTip"])
-	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-130, "CDFontSize", queueAuraReload)
 
 	local options = {
 		[1] = L["PlayerUF"],
@@ -1908,7 +1932,8 @@ function G:SetupUFAuras(parent)
 		[3] = L["TotUF"],
 		[4] = L["PetUF"],
 		[5] = L["FocusUF"],
-		[6] = L["BossFrame"],
+		[6] = L["BossAuraFrame"],
+		[7] = L["ArenaAuraFrame"],
 	}
 	local data = {
 		[1] = "Player",
@@ -1917,9 +1942,10 @@ function G:SetupUFAuras(parent)
 		[4] = "Pet",
 		[5] = "Focus",
 		[6] = "Boss",
+		[7] = "Arena",
 	}
 
-	local dd = G:CreateDropdown(scroll.child, "", 40, -200, options, nil, 180, 28)
+	local dd = G:CreateDropdown(scroll.child, "", 40, -130, options, nil, 180, 28)
 	dd:SetFrameLevel(20)
 	dd.Text:SetText(options[1])
 	dd:SetBackdropBorderColor(1, .8, 0, .5)
@@ -1930,7 +1956,7 @@ function G:SetupUFAuras(parent)
 		panel:SetSize(260, 1)
 		panel:SetPoint("TOP", 0, -30)
 		panel:Hide()
-		createOptionGroup(panel, -195, data[i], updateUFAurasAndQueueReload, i == 6)
+		createOptionGroup(panel, -125, data[i], updateUFAurasAndQueueReload)
 
 		dd.panels[i] = panel
 		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)
@@ -2081,15 +2107,6 @@ function G:SetupBuffFrame(parent)
 	local parent, offset = scroll.child, -10
 	local defaultSize, defaultPerRow = 30, 16
 
-	--[[ 12.1 CustomAuraContainer already includes private auras.
-	local function updatePrivateAuras()
-		local PA = B:GetModule("PrivateAuras")
-		if PA then
-			PA:Update()
-		end
-	end
-	]]
-
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
 		createOptionCheck(parent, offset-35, L["ReverseGrow"], "Auras", "Reverse"..value, func)
@@ -2099,7 +2116,6 @@ function G:SetupBuffFrame(parent)
 
 	createOptionGroup(parent, "Buffs", offset, "Buff", queueAuraReload)
 	createOptionGroup(parent, "Debuffs", offset-260, "Debuff", queueAuraReload)
-	-- createOptionGroup(parent, L["PrivateAuras"], offset-520, "Private", updatePrivateAuras)
 end
 
 function G:NameplateColorDots(parent)
@@ -2673,33 +2689,6 @@ end
 --SlashCmdList["NDUI_AVADACONFIG"] = G.SetupAvada
 --SLASH_NDUI_AVADACONFIG1 = "/aa"
 
---[[ 12.1 AuraContainer already includes private auras.
-function G:SetupPrivateAuras(parent)
-	local guiName = "NDuiGUI_PrivateAurasSetup"
-	toggleExtraGUI(guiName)
-	if extraGUIs[guiName] then return end
-
-	local panel = createExtraGUI(parent, guiName, L["PrivateAuras"].."*")
-	local scroll = G:CreateScroll(panel, 260, 540)
-	local parent = scroll.child
-	local offset = -10
-	local UF = B:GetModule("UnitFrames")
-	if not UF then return end
-
-	local function updatePrivateAuras()
-		for _, frame in pairs(ns.oUF.objects) do
-			if frame.PrivateAuras then
-				UF:UpdatePrivateAuras(frame.PrivateAuras, true)
-			end
-		end
-	end
-
-	createOptionCheck(parent, offset, L["CDAnimation"], "UFs", "CDAnimation", updatePrivateAuras)
-	createOptionCheck(parent, offset-30, L["CDText"], "UFs", "CDText", updatePrivateAuras)
-	createOptionSlider(parent, L["Auras Size"], 10, 50, 22, offset-110, "PAIconSize", updatePrivateAuras, "UFs")
-end
-]]
-
 function G:SetupDamageMeters(parent)
 	local guiName = "NDuiGUI_DamageMetersSetup"
 	toggleExtraGUI(guiName)
@@ -2736,8 +2725,6 @@ function G:SetupRaidAuras(parent)
 	local raidBuffOptions = {
 		DISABLE,
 		L["Blizzard"],
-		L["Defensive"],
-		-- L["CombinedFilters"],
 	}
 	local raidDebuffOptions = {
 		DISABLE,
@@ -2747,19 +2734,34 @@ function G:SetupRaidAuras(parent)
 		L["ShowAll"],
 	}
 
-	createOptionTitle(parent, GENERAL, offset)
-	createOptionCheck(parent, offset-35, L["CDText"], "UFs", "RaidCDText", updateUFAurasAndQueueReload)
-	createOptionSlider(parent, L["CDFontSize"], 5, 30, 12, offset-90, "RaidCDSize", queueAuraReload)
+	createOptionTitle(parent, "Buffs", offset)
+	createOptionDropdown(parent, L["RaidBuffType"], offset-60, raidBuffOptions, nil, "UFs", "RaidBuffType", 1, updateUFAurasAndQueueReload)
+	createOptionCheck(parent, offset-105, L["CDText"], "UFs", "RaidBuffCDText", updateUFAurasAndQueueReload)
+	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-160, "RaidBuffCDSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-230, "RaidBuffSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-300, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
 
-	createOptionTitle(parent, "Buffs", offset-160)
-	createOptionDropdown(parent, L["RaidBuffType"], offset-210, raidBuffOptions, nil, "UFs", "RaidBuffType", 2, updateUFAurasAndQueueReload)
-	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-280, "RaidBuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-360, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
+	createOptionTitle(parent, "Debuffs", offset-360)
+	createOptionDropdown(parent, L["RaidDebuffType"], offset-410, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
+	createOptionCheck(parent, offset-455, L["CDText"], "UFs", "RaidDebuffCDText", updateUFAurasAndQueueReload)
+	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-510, "RaidDebuffCDSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-580, "RaidDebuffSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-650, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
+end
 
-	createOptionTitle(parent, "Debuffs", offset-420)
-	createOptionDropdown(parent, L["RaidDebuffType"], offset-470, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
-	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-540, "RaidDebuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-600, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
+function G:SetupRaidBigDefensive(parent)
+	local guiName = "NDuiGUI_RaidBigDefensiveSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES)
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+
+	createOptionCheck(parent, offset, L["CDText"], "UFs", "RaidBigDefensiveCDText", queueAuraReload)
+	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-55, "RaidBigDefensiveCDSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["Auras Size"], 5, 30, 16, offset-125, "RaidBigDefensiveSize", queueAuraReload, "UFs")
 end
 
 function G:SetupCooldownViewer(parent)
@@ -2788,11 +2790,28 @@ function G:SetupNameplateAuras(parent)
 	local parent = scroll.child
 	local offset = -10
 
-	createOptionCheck(parent, offset, L["Dispellable"], "Nameplate", "ShowDispel", updateNameplateAurasAndQueueReload)
-	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-65, "FontSize", queueAuraReload, "Nameplate")
+	createOptionCheck(parent, offset, L["AuraTypeColor"], "Nameplate", "DebuffColor", queueAuraReload, L["AuraTypeColorTip"])
+	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 12, offset-65, "FontSize", queueAuraReload, "Nameplate")
 	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-135, "SizeRatio", queueAuraReload, "Nameplate", .1)
-	createOptionSlider(parent, L["Max Auras"], 1, 20, 5, offset-205, "maxAuras", updateNameplateAurasAndQueueReload, "Nameplate")
-	createOptionSlider(parent, L["Auras Size"], 1, 40, 16, offset-275, "AuraSize", queueAuraReload, "Nameplate")
+	createOptionSlider(parent, L["Max Auras"], 1, 10, 6, offset-205, "maxAuras", updateNameplateAurasAndQueueReload, "Nameplate")
+	createOptionSlider(parent, L["Auras Size"], 1, 40, 24, offset-275, "AuraSize", queueAuraReload, "Nameplate")
+end
+
+function G:SetupNameplateBuffs(parent)
+	local guiName = "NDuiGUI_NameplateBuffsSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["PlateBuffs"])
+	local scroll = G:CreateScroll(panel, 260, 540)
+	local parent = scroll.child
+	local offset = -10
+
+	createOptionCheck(parent, offset, L["AuraTypeColor"], "Nameplate", "BuffColor", queueAuraReload, L["AuraTypeColorTip"])
+	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 12, offset-65, "BuffFontSize", queueAuraReload, "Nameplate")
+	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-135, "BuffSizeRatio", queueAuraReload, "Nameplate", .1)
+	createOptionSlider(parent, L["Max Auras"], 1, 6, 2, offset-205, "maxBuffs", updateNameplateAurasAndQueueReload, "Nameplate")
+	createOptionSlider(parent, L["Auras Size"], 1, 40, 24, offset-275, "BuffSize", queueAuraReload, "Nameplate")
 end
 
 function G:SetupNameplateCC(parent)
@@ -2805,10 +2824,10 @@ function G:SetupNameplateCC(parent)
 	local parent = scroll.child
 	local offset = -10
 
-	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 14, offset-30, "CCFontSize", queueAuraReload, "Nameplate")
+	createOptionSlider(parent, L["AuraFontSize"], 10, 30, 12, offset-30, "CCFontSize", queueAuraReload, "Nameplate")
 	createOptionSlider(parent, L["SizeRatio"], .5, 1, 0.5, offset-100, "CCSizeRatio", queueAuraReload, "Nameplate", .1)
-	createOptionSlider(parent, L["Max Auras"], 1, 20, 10, offset-170, "NumCC", updateNameplateAurasAndQueueReload, "Nameplate")
-	createOptionSlider(parent, L["Auras Size"], 1, 40, 12, offset-240, "CCSize", queueAuraReload, "Nameplate")
+	createOptionSlider(parent, L["Max Auras"], 1, 2, 2, offset-170, "NumCC", updateNameplateAurasAndQueueReload, "Nameplate")
+	createOptionSlider(parent, L["Auras Size"], 1, 40, 24, offset-240, "CCSize", queueAuraReload, "Nameplate")
 end
 
 function G:SetupNameplateMobColors(parent)

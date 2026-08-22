@@ -16,10 +16,11 @@ local InCombatLockdown, IsShiftKeyDown = InCombatLockdown, IsShiftKeyDown
 local GetCreatureDifficultyColor, UnitCreatureType, UnitClassification = GetCreatureDifficultyColor, UnitCreatureType, UnitClassification
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
 local UnitIsPlayer, UnitName, UnitPVPName, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitRace, UnitLevel
-local GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild = GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild
+local GetRaidTargetIndex, UnitGroupRolesAssignedEnum, GetGuildInfo, IsInGuild = GetRaidTargetIndex, UnitGroupRolesAssignedEnum, GetGuildInfo, IsInGuild
 local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAuras, C_PetBattles.GetAuraInfo
 local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
 local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
+local C_ClassColor_GetClassColor = C_ClassColor.GetClassColor
 local GameTooltip_ClearMoney, GameTooltip_ClearStatusBars, GameTooltip_ClearProgressBars = GameTooltip_ClearMoney, GameTooltip_ClearStatusBars, GameTooltip_ClearProgressBars
 local ShouldUnitIdentityBeSecret = C_Secrets and C_Secrets.ShouldUnitIdentityBeSecret
 local GetDisplayedItem = TooltipUtil and TooltipUtil.GetDisplayedItem
@@ -43,8 +44,14 @@ function TT:GetUnit()
 end
 
 function TT:UnitExists(unit)
+	if not unit then return end
 	if ShouldUnitIdentityBeSecret and ShouldUnitIdentityBeSecret(unit) then return end
-	return unit and UnitExists(unit)
+	return UnitExists(unit)
+end
+
+local function GetUnitClassColor(unit)
+	local _, class = UnitClass(unit)
+	return C_ClassColor_GetClassColor(class)
 end
 
 local FACTION_COLORS = {
@@ -61,7 +68,7 @@ function TT:UpdateFactionLine(lineData)
 	if not self:IsTooltipType(Enum.TooltipDataType.Unit) then return end
 
 	local unit = TT.GetUnit(self)
-	if not unit then return end
+	if not TT:UnitExists(unit) then return end
 	local unitClass = unit and UnitIsPlayer(unit) and UnitClass(unit)
 	local unitCreature = unit and UnitCreatureType(unit)
 
@@ -189,10 +196,37 @@ function TT:OnTooltipSetUnit()
 	end
 
 	local unit, guid = TT.GetUnit(self)
-	if not unit then return end
+	if not unit or not UnitExists(unit) then return end
+
+	local isPlayer = UnitIsPlayer(unit)
+	if isPlayer and C.db["Tooltip"]["LFDRole"] then
+		local role = UnitGroupRolesAssignedEnum(unit)
+		if B:IsSecretValue(role) then
+			role = nil
+		end
+
+		if role == Enum.LFGRole.Tank then
+			TT.InsertRoleFrame(self, "TANK")
+		elseif role == Enum.LFGRole.Healer then
+			TT.InsertRoleFrame(self, "HEALER")
+		elseif role == Enum.LFGRole.Damage then
+			TT.InsertRoleFrame(self, "DAMAGER")
+		elseif self.roleFrame then
+			self.roleFrame:Hide()
+		end
+	end
+
+	if ShouldUnitIdentityBeSecret and ShouldUnitIdentityBeSecret(unit) then
+		if isPlayer then
+			local color = GetUnitClassColor(unit)
+			if color then
+				GameTooltipTextLeft1:SetTextColor(color:GetRGB())
+			end
+		end
+		return
+	end
 
 	local isShiftKeyDown = IsShiftKeyDown()
-	local isPlayer = UnitIsPlayer(unit)
 	local unitFullName
 	if isPlayer then
 		local name, realm = UnitName(unit)
@@ -225,13 +259,6 @@ function TT:OnTooltipSetUnit()
 			end
 		end
 
-		if C.db["Tooltip"]["LFDRole"] then
-			local role = UnitGroupRolesAssigned(unit)
-			if role ~= "NONE" then
-				TT.InsertRoleFrame(self, role)
-			end
-		end
-
 		local guildName, rank, rankIndex, guildRealm = GetGuildInfo(unit)
 		local hasText = GameTooltipTextLeft2:GetText()
 		if guildName and hasText then
@@ -254,7 +281,8 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	local hexColor = B.UnitColorString(unit)
+	local classColor = isPlayer and GetUnitClassColor(unit)
+	local hexColor = classColor and classColor:GenerateHexColorMarkup() or B.UnitColorString(unit)
 	local text = GameTooltipTextLeft1:GetText()
 	if text then
 		local ricon = GetRaidTargetIndex(unit)
@@ -300,7 +328,7 @@ function TT:OnTooltipSetUnit()
 		end
 	end
 
-	if UnitExists(unit.."target") then
+	if TT:UnitExists(unit.."target") then
 		local targetIcon = GetRaidTargetIndex(unit.."target")
 		local targetIconStr
 		if targetIcon and B:NotSecretValue(targetIcon) and targetIcon <= 8 then
@@ -333,8 +361,15 @@ end
 
 function TT:UpdateStatusBarColor()
 	local unit = TT.GetUnit(self)
-	if not unit then return end -- needs review
-	if B:IsSecretValue(unit) then
+	if not unit then return end
+	if UnitIsPlayer(unit) then
+		local color = GetUnitClassColor(unit)
+		if color then
+			self.StatusBar:SetStatusBarColor(color:GetRGB())
+		end
+		return
+	end
+	if ShouldUnitIdentityBeSecret and ShouldUnitIdentityBeSecret(unit) then
 		self.StatusBar:SetStatusBarColor(0, 1, 0)
 	else
 		self.StatusBar:SetStatusBarColor(B.UnitColor(unit))
@@ -537,6 +572,7 @@ function TT:FixStoneSoupError()
 end
 
 function TT:OnLogin()
+	TT:SetupMapPOITooltip()
 	GameTooltipStatusBar:SetScript("OnValueChanged", nil)
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)

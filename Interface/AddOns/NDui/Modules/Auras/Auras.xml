@@ -3,6 +3,4 @@
 	<Script file="Reminder.lua"/>
 	<Script file="Totems.lua"/>
 	<Script file="AuraWatch.lua"/>
-	<!-- 12.1 CustomAuraContainer already includes private auras. -->
-	<!-- <Script file="PrivateAuras.lua"/> -->
 </Ui>

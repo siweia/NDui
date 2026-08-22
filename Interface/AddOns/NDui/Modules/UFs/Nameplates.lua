@@ -605,9 +605,6 @@ function UF:CreatePlates()
 	UF:CreatePVPClassify(self)
 	UF:CreateThreatColor(self)
 
-	self.Auras.showStealableBuffs = true
-	self.Auras.alwaysShowStealable = C.db["Nameplate"]["ShowDispel"]
-
 	local title = B.CreateFS(self, C.db["Nameplate"]["NameOnlyTitleSize"])
 	title:ClearAllPoints()
 	title:SetPoint("TOP", self.nameText, "BOTTOM", 0, -3)
@@ -626,7 +623,7 @@ function UF:CreatePlates()
 end
 
 function UF:ToggleNameplateAuras(shouldEnable)
-	if (C.db["Nameplate"]["PlateAuras"] or C.db["Nameplate"]["PlateCC"]) and shouldEnable then
+	if (C.db["Nameplate"]["PlateAuras"] or C.db["Nameplate"]["PlateBuffs"] or C.db["Nameplate"]["PlateCC"]) and shouldEnable then
 		if not self:IsElementEnabled("Auras") then
 			self:EnableElement("Auras")
 		end
@@ -638,24 +635,25 @@ function UF:ToggleNameplateAuras(shouldEnable)
 end
 
 function UF:UpdateNameplateAuras()
-	UF.ToggleNameplateAuras(self, true)
+	UF.ToggleNameplateAuras(self, self.plateType ~= "NameOnly")
+
+	local yOffset
+	if C.db["Nameplate"]["TargetPower"] then
+		yOffset = 10 + C.db["Nameplate"]["PPBarHeight"]
+	else
+		yOffset = 5
+	end
 
 	local element = self.Auras
-	if C.db["Nameplate"]["TargetPower"] then
-		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 10 + C.db["Nameplate"]["PPBarHeight"])
-	else
-		element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, 5)
-	end
-	element.numTotal = C.db["Nameplate"]["PlateAuras"] and C.db["Nameplate"]["maxAuras"] or 0
-	element.size = C.db["Nameplate"]["AuraSize"]
-	element.fontSize = C.db["Nameplate"]["FontSize"]
-	element.showDebuffTypeBorder = C.db["Nameplate"]["DebuffColor"]
-	element.showStealableBuffs = true
-	element.alwaysShowStealable = C.db["Nameplate"]["ShowDispel"]
-	element.desaturateDebuff = C.db["Nameplate"]["Desaturate"]
-	element.sizeRatio = C.db["Nameplate"]["SizeRatio"]
-	element.filter = "HARMFUL|PLAYER|INCLUDE_NAME_PLATE_ONLY"
-	UF:UpdateAuraContainer(self, element, element.numTotal)
+	element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, yOffset)
+	UF:ConfigureNameplateAuras(element)
+	UF:UpdateAuraContainer(self, element)
+	element:ForceUpdate()
+
+	element = self.Buffs
+	element:SetPoint("BOTTOMRIGHT", self.nameText, "TOPRIGHT", 0, yOffset)
+	UF:ConfigureNameplateAuras(element)
+	UF:UpdateAuraContainer(self, element)
 	element:ForceUpdate()
 end
 
@@ -718,6 +716,7 @@ function UF:UpdateNameplateSize()
 		self.healthValue:UpdateTag()
 		self.RaidTargetIndicator:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", RaidTargetX, RaidTargetY)
 	end
+	UF:UpdateAuraLayoutLimit(self)
 	self.nameText:UpdateTag()
 end
 
