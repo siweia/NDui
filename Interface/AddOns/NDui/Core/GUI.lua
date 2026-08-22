@@ -41,56 +41,66 @@ G.DefaultSettings = {
 		Bar1Flyout = 1,
 		Bar1Size = 34,
 		Bar1Font = 12,
+		Bar1CDSize = 16,
 		Bar1Num = 12,
 		Bar1PerRow = 12,
 		Bar2 = true,
 		Bar2Flyout = 1,
 		Bar2Size = 34,
 		Bar2Font = 12,
+		Bar2CDSize = 16,
 		Bar2Num = 12,
 		Bar2PerRow = 12,
 		Bar3 = true,
 		Bar3Flyout = 1,
 		Bar3Size = 32,
 		Bar3Font = 12,
+		Bar3CDSize = 16,
 		Bar3Num = 0,
 		Bar3PerRow = 12,
 		Bar4 = true,
 		Bar4Flyout = 3,
 		Bar4Size = 32,
 		Bar4Font = 12,
+		Bar4CDSize = 16,
 		Bar4Num = 12,
 		Bar4PerRow = 1,
 		Bar5 = true,
 		Bar5Flyout = 3,
 		Bar5Size = 32,
 		Bar5Font = 12,
+		Bar5CDSize = 16,
 		Bar5Num = 12,
 		Bar5PerRow = 1,
 		Bar6 = false,
 		Bar6Flyout = 1,
 		Bar6Size = 34,
 		Bar6Font = 12,
+		Bar6CDSize = 16,
 		Bar6Num = 12,
 		Bar6PerRow = 12,
 		Bar7 = false,
 		Bar7Flyout = 1,
 		Bar7Size = 34,
 		Bar7Font = 12,
+		Bar7CDSize = 16,
 		Bar7Num = 12,
 		Bar7PerRow = 12,
 		Bar8 = false,
 		Bar8Flyout = 1,
 		Bar8Size = 34,
 		Bar8Font = 12,
+		Bar8CDSize = 16,
 		Bar8Num = 12,
 		Bar8PerRow = 12,
 
 		BarPetSize = 26,
 		BarPetFont = 12,
+		BarPetCDSize = 16,
 		BarPetPerRow = 10,
 		BarStanceSize = 30,
 		BarStanceFont = 12,
+		BarStanceCDSize = 16,
 		BarStancePerRow = 10,
 		VehButtonSize = 34,
 		MBSize = 22,
@@ -774,6 +784,14 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	end
 
 	if not C.db["Reset6"] then
+		local actionbar = C.db["Actionbar"]
+		local cooldownFontSize = actionbar["CDFontSize"]
+		for i = 1, 8 do
+			actionbar["Bar"..i.."CDSize"] = cooldownFontSize
+		end
+		actionbar["BarPetCDSize"] = cooldownFontSize
+		actionbar["BarStanceCDSize"] = cooldownFontSize
+
 		local nameplate = C.db["Nameplate"]
 		nameplate["PlateBuffs"] = nameplate["PlateAuras"]
 		nameplate["BuffColor"] = nameplate["DebuffColor"]
@@ -1329,7 +1347,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
 		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorTenth"], L["ColorText"], L["WhiteTenth"], L["WhiteText"], DISABLE}, updateCooldown},
-		{3, "Actionbar", "CDFontSize", L["CDFontSize"].."*", true, {5, 30, 1}, updateCDText},
+		{3, "Actionbar", "CDFontSize", L["GeneralCDFontSize"].."*", true, {5, 30, 1}, updateCDText, L["GeneralCDFontSizeTip"]},
 		{},--blank
 		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
 		{1, "Actionbar", "ButtonLock", L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},

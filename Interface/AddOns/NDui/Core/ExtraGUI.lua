@@ -1754,13 +1754,17 @@ function G:SetupActionBar(parent)
 		local function updateBarScale()
 			Bar:UpdateActionSize(value)
 		end
+		local function updateCooldownText()
+			Bar:UpdateCooldownText(value)
+		end
 		createOptionTitle(parent, "", offset)
 		createOptionSlider(parent, L["ButtonSize"], 20, 80, data[1], offset-60, value.."Size", updateBarScale, "Actionbar")
 		createOptionSlider(parent, L["ButtonsPerRow"], 1, data[3], data[5], offset-130, value.."PerRow", updateBarScale, "Actionbar")
 		createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, value.."Font", updateBarScale, "Actionbar")
+		createOptionSlider(parent, L["CDFontSize"], 5, 30, 16, offset-270, value.."CDSize", updateCooldownText, "Actionbar")
 		if value ~= "BarPet" then
-			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-270, value.."Num", updateBarScale, "Actionbar")
-			createOptionDropdown(parent, L["GrowthDirection"], offset-340, directions, nil, "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
+			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-340, value.."Num", updateBarScale, "Actionbar")
+			createOptionDropdown(parent, L["GrowthDirection"], offset-410, directions, nil, "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
 		end
 	end
 
@@ -1827,6 +1831,7 @@ function G:SetupStanceBar(parent)
 	createOptionSlider(parent, L["ButtonSize"], 20, 80, 30, offset-60, "BarStanceSize", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["ButtonsPerRow"], 1, 10, 10, offset-130, "BarStancePerRow", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, "BarStanceFont", Bar.UpdateStanceBar, "Actionbar")
+	createOptionSlider(parent, L["CDFontSize"], 5, 30, 16, offset-270, "BarStanceCDSize", function() Bar:UpdateCooldownText("BarStance") end, "Actionbar")
 end
 
 function G:SetupUFClassPower(parent)

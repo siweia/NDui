@@ -371,12 +371,30 @@ function Bar:UpdateOverlays()
 	end
 end
 
-function Bar:UpdateCooldownText()
-	for _, button in pairs(Bar.buttons) do
+function Bar:UpdateCooldownText(name)
+	local buttons, fontSize
+	if name then
+		local frame = _G["NDui_Action"..name]
+		if not frame then return end
+		buttons = frame.buttons
+		fontSize = C.db["Actionbar"][name.."CDSize"]
+	else
+		buttons = Bar.buttons
+		fontSize = C.db["Actionbar"]["CDFontSize"]
+	end
+
+	for _, button in pairs(buttons) do
 		if button.cooldownText then
-			button.cooldownText:SetFont(DB.Font[1], C.db["Actionbar"]["CDFontSize"], DB.Font[3])
+			button.cooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
 		end
 	end
+
+	if name then return end
+	for i = 1, 8 do
+		Bar:UpdateCooldownText("Bar"..i)
+	end
+	Bar:UpdateCooldownText("BarPet")
+	Bar:UpdateCooldownText("BarStance")
 end
 
 function Bar:OnLogin()

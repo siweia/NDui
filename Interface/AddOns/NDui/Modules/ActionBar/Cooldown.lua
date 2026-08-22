@@ -57,7 +57,7 @@ function module:UpdateBreakPoints()
 end
 
 local function updateCooldown(cooldown)
-	if not cooldown or ignoredCooldownFrames[cooldown] or B:IsSecretTable(cooldown) or hookedCooldownFrames[cooldown] then return end
+	if not cooldown or B:IsSecretTable(cooldown) or ignoredCooldownFrames[cooldown] or hookedCooldownFrames[cooldown] then return end
 
 	local isEnable = C.db["Actionbar"]["CDFormat"] ~= DISABLE_INDEX
 	cooldown:SetCountdownFormatter(isEnable and numberFormatter or nil)
