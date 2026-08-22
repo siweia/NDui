@@ -19,7 +19,7 @@ local C_Container_GetContainerItemInfo = C_Container.GetContainerItemInfo
 local slotString = L["Bags"]..": %s%d"
 local showGoldGap = 100 * 1e4
 local maxAccounts = 30 -- max visible characters
-local TIER_CHARGE_ID = 3378 -- 12.0 S1
+local TIER_CHARGE_ID = 3465 -- 12.1 S2
 
 local profit, spent, oldMoney = 0, 0, 0
 local myName, myRealm = DB.MyName, DB.MyRealm
