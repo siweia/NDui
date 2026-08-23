@@ -763,31 +763,28 @@ function UF:OnLogin()
 		end
 
 		if C.db["UFs"]["SpecRaidPos"] then
-			local function UpdateSpecPos(event, ...)
-				local unit, _, spellID = ...
-				if (event == "UNIT_SPELLCAST_SUCCEEDED" and unit == "player" and spellID == 200749) or event == "ON_LOGIN" then
-					local specIndex = GetSpecialization()
-					if not specIndex then return end
+			local function UpdateSpecPos()
+				local specIndex = GetSpecialization()
+				if not specIndex then return end
 
-					if not C.db["Mover"]["RaidPos"..specIndex] then
-						C.db["Mover"]["RaidPos"..specIndex] = {"TOPLEFT", "UIParent", "TOPLEFT", 35, -50}
-					end
-					if raidMover then
-						raidMover:ClearAllPoints()
-						raidMover:SetPoint(unpack(C.db["Mover"]["RaidPos"..specIndex]))
-					end
+				if not C.db["Mover"]["RaidPos"..specIndex] then
+					C.db["Mover"]["RaidPos"..specIndex] = {"TOPLEFT", "UIParent", "TOPLEFT", 35, -50}
+				end
+				if raidMover then
+					raidMover:ClearAllPoints()
+					raidMover:SetPoint(unpack(C.db["Mover"]["RaidPos"..specIndex]))
+				end
 
-					if not C.db["Mover"]["PartyPos"..specIndex] then
-						C.db["Mover"]["PartyPos"..specIndex] = {"LEFT", "UIParent", "LEFT", 350, 0}
-					end
-					if partyMover then
-						partyMover:ClearAllPoints()
-						partyMover:SetPoint(unpack(C.db["Mover"]["PartyPos"..specIndex]))
-					end
+				if not C.db["Mover"]["PartyPos"..specIndex] then
+					C.db["Mover"]["PartyPos"..specIndex] = {"LEFT", "UIParent", "LEFT", 350, 0}
+				end
+				if partyMover then
+					partyMover:ClearAllPoints()
+					partyMover:SetPoint(unpack(C.db["Mover"]["PartyPos"..specIndex]))
 				end
 			end
-			UpdateSpecPos("ON_LOGIN")
-			B:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", UpdateSpecPos)
+			UpdateSpecPos()
+			B:RegisterEvent("ACTIVE_PLAYER_SPECIALIZATION_CHANGED", UpdateSpecPos)
 
 			if raidMover then
 				local function updateRaidMover()
