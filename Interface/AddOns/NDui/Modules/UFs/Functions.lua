@@ -1038,15 +1038,17 @@ local NAMEPLATE_AURA_SETTINGS = {
 		typeBorder = "DebuffColor",
 	},
 }
-local NAMEPLATE_AURA_GROUPS = {
-	{ -- Boss and role buffs
+
+-- Aura filter rules
+local PRIORITY_BUFF_RULES = {
+	bossOrRole = { -- Boss and role buffs
 		auraType = "buffs",
 		filter = "HELPFUL",
 		candidateFilters = {
 			isBossOrRoleAura = true,
 		},
 	},
-	{ -- Other stealable buffs
+	stealable = { -- Other stealable buffs
 		auraType = "buffs",
 		filter = "HELPFUL|!IMPORTANT",
 		candidateFilters = {
@@ -1054,13 +1056,23 @@ local NAMEPLATE_AURA_GROUPS = {
 			isBossOrRoleAura = false,
 		},
 	},
-	{ -- Other important buffs
+	dispellable = { -- Other dispellable buffs
+		auraType = "buffs",
+		filter = "HELPFUL|DISPELLABLE|!IMPORTANT",
+		candidateFilters = {
+			isBossOrRoleAura = false,
+		},
+	},
+	important = { -- Other important buffs
 		auraType = "buffs",
 		filter = "HELPFUL|IMPORTANT",
 		candidateFilters = {
 			isBossOrRoleAura = false,
 		},
 	},
+}
+
+local NAMEPLATE_DEBUFF_GROUPS = {
 	{ -- Personal nameplate debuffs, excluding crowd control
 		auraType = "debuffs",
 		filter = "HARMFUL|PLAYER|INCLUDE_NAME_PLATE_ONLY|!CROWD_CONTROL",
@@ -1077,11 +1089,22 @@ local NAMEPLATE_AURA_GROUPS = {
 		},
 	},
 }
-local NAMEPLATE_NPC_BUFF_GROUP = {
-	filter = "HELPFUL|DISPELLABLE|!IMPORTANT",
-	candidateFilters = {
-		isBossOrRoleAura = false,
-	},
+
+local NAMEPLATE_BUFF_GROUPS = {
+	PRIORITY_BUFF_RULES.bossOrRole,
+	PRIORITY_BUFF_RULES.stealable,
+	PRIORITY_BUFF_RULES.important,
+}
+local NAMEPLATE_AURA_GROUPS = {
+	NAMEPLATE_BUFF_GROUPS[1],
+	NAMEPLATE_BUFF_GROUPS[2],
+	NAMEPLATE_BUFF_GROUPS[3],
+	NAMEPLATE_DEBUFF_GROUPS[1],
+	NAMEPLATE_DEBUFF_GROUPS[2],
+}
+local NAMEPLATE_NPC_BUFF_GROUP = PRIORITY_BUFF_RULES.dispellable
+local NAMEPLATE_CC_RULE = {
+	filter = "HARMFUL|CROWD_CONTROL|INCLUDE_NAME_PLATE_ONLY",
 }
 local NAMEPLATE_AURA_CONTAINERS = {
 	{auraType = "debuffs", element = "Auras", anchor = "BOTTOMLEFT", relativeAnchor = "TOPLEFT", growthX = "RIGHT"},
@@ -1090,21 +1113,33 @@ local NAMEPLATE_AURA_CONTAINERS = {
 
 local BOSS_BUFF_GROUP_NAME = "BossBuffs"
 local BOSS_BUFF_GROUPS = {
-	NAMEPLATE_AURA_GROUPS[1],
-	NAMEPLATE_AURA_GROUPS[2],
-	NAMEPLATE_AURA_GROUPS[3],
+	PRIORITY_BUFF_RULES.bossOrRole,
+	PRIORITY_BUFF_RULES.stealable,
+	PRIORITY_BUFF_RULES.important,
+}
+
+local DEFENSIVE_BUFF_RULES = {
+	big = {
+		filter = "HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+	},
+	external = {
+		filter = "HELPFUL|EXTERNAL_DEFENSIVE",
+	},
+	dispellable = {
+		filter = "HELPFUL|DISPELLABLE|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+	},
 }
 
 local ARENA_BUFF_GROUP_NAME = "ArenaBuffs"
 local ARENA_BUFF_GROUPS = {
 	[3] = {
-		"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
-		"HELPFUL|EXTERNAL_DEFENSIVE",
+		DEFENSIVE_BUFF_RULES.big,
+		DEFENSIVE_BUFF_RULES.external,
 	},
 	[5] = {
-		"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
-		"HELPFUL|EXTERNAL_DEFENSIVE",
-		"HELPFUL|DISPELLABLE|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+		DEFENSIVE_BUFF_RULES.big,
+		DEFENSIVE_BUFF_RULES.external,
+		DEFENSIVE_BUFF_RULES.dispellable,
 	},
 }
 
@@ -1125,12 +1160,19 @@ local ARENA_DEBUFF_GROUPS = {
 	},
 }
 
+local RAID_BUFF_GROUP = {
+	filter = "HELPFUL|RAID_IN_COMBAT|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+	candidateFilters = {
+		isFromPlayerOrPlayerPet = true,
+	},
+}
+
 local RAID_BIG_DEFENSIVE_SPACING = 2
 local RAID_BIG_DEFENSIVE_RIGHT_INSET = 17
 local RAID_BIG_DEFENSIVE_PADDING = 3
-local RAID_BIG_DEFENSIVE_FILTERS = {
-	"HELPFUL|BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
-	"HELPFUL|EXTERNAL_DEFENSIVE",
+local RAID_BIG_DEFENSIVE_GROUPS = {
+	DEFENSIVE_BUFF_RULES.big,
+	DEFENSIVE_BUFF_RULES.external,
 }
 
 local function PostCreateRaidBigDefensiveButton(element, button, options)
@@ -1176,15 +1218,69 @@ local RAID_DEBUFF_GROUPS = {
 
 local UNITFRAME_DESATURATED_DEBUFF_TYPE = 5
 local UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME = "UnitFrameDesaturatedDebuffs"
-local UNITFRAME_DESATURATED_DEBUFF_FILTERS = {
-	"HARMFUL|PLAYER",
-	"HARMFUL|!PLAYER",
+local UNITFRAME_DESATURATED_DEBUFF_GROUPS = {
+	{filter = "HARMFUL|PLAYER"},
+	{filter = "HARMFUL|!PLAYER"},
 }
 local UNITFRAME_PERSONAL_DEBUFF_LIMIT = 8
 local UNITFRAME_DESATURATED_DEBUFF_VALUES = {
 	Player = true,
 	Target = true,
 	Focus = true,
+}
+
+-- Filter strings mapped to each GUI dropdown value
+local UNITFRAME_AURA_FILTERS = {
+	Buff = {
+		[1] = "HELPFUL",
+		[2] = "HELPFUL",
+		[3] = "HELPFUL|DISPELLABLE",
+		[4] = "HELPFUL|CANCELABLE",
+	},
+	Debuff = {
+		[1] = "HARMFUL",
+		[2] = "HARMFUL",
+		[3] = "HARMFUL|PLAYER",
+		[4] = "HARMFUL|DISPELLABLE",
+		[5] = "HARMFUL",
+	},
+}
+
+local AURA_FILTER_OPTIONS = {
+	Raid = {
+		Buff = {
+			[1] = "HELPFUL",
+			[2] = RAID_BUFF_GROUP.filter,
+		},
+		Debuff = {
+			[1] = "HARMFUL",
+			[2] = "HARMFUL|RAID_IN_COMBAT",
+			[3] = "HARMFUL|DISPELLABLE",
+			[4] = "HARMFUL",
+		},
+	},
+	Boss = {
+		Buff = {
+			[1] = "HELPFUL",
+			[2] = "HELPFUL",
+			[3] = BOSS_BUFF_GROUPS[1].filter,
+		},
+		Debuff = UNITFRAME_AURA_FILTERS.Debuff,
+	},
+	Arena = {
+		Buff = {
+			[1] = "HELPFUL",
+			[2] = "HELPFUL",
+			[3] = ARENA_BUFF_GROUPS[3][1].filter,
+			[4] = "HELPFUL|DISPELLABLE",
+			[5] = ARENA_BUFF_GROUPS[5][1].filter,
+		},
+		Debuff = {
+			[1] = "HARMFUL",
+			[2] = "HARMFUL",
+			[3] = ARENA_DEBUFF_GROUPS[1].filter,
+		},
+	},
 }
 
 local function GetUnitFrameDesaturatedDebuffCount(total, index)
@@ -1219,13 +1315,7 @@ local function UpdateNameplateAuraGroups(parent, element)
 	end
 end
 
-local function UpdateAuraFilterGroups(element, groupName, filters, count)
-	for index, filter in ipairs(filters) do
-		UpdateAuraGroup(element, groupName..index, filter, count)
-	end
-end
-
-local function UpdateCandidateAuraGroups(element, groupName, groups, count)
+local function UpdateAuraGroups(element, groupName, groups, count)
 	for index, group in ipairs(groups) do
 		UpdateAuraGroup(element, groupName..index, group.filter, count)
 	end
@@ -1234,9 +1324,9 @@ end
 function UF:UpdateAuraContainer(parent, element)
 	UpdateAuraGroup(element, "Buffs", element.buffFilter, element.numBuffs)
 	if element.__groups[UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..1] then
-		for index, filter in ipairs(UNITFRAME_DESATURATED_DEBUFF_FILTERS) do
+		for index, group in ipairs(UNITFRAME_DESATURATED_DEBUFF_GROUPS) do
 			local count = element.__desaturateOthers and GetUnitFrameDesaturatedDebuffCount(element.numDebuffs, index) or 0
-			UpdateAuraGroup(element, UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..index, filter, count)
+			UpdateAuraGroup(element, UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..index, group.filter, count)
 		end
 	else
 		local count = element.__desaturateOthers and 0 or element.numDebuffs
@@ -1254,17 +1344,17 @@ function UF:UpdateAuraContainer(parent, element)
 			local isArenaDebuffs = auraType == "debuffs" and element.__value == "Arena"
 			if isRaidDebuffs and element.__groups[RAID_DEBUFF_GROUP_NAME..1] then
 				local count = element.__filterType == 2 and element.num or 0
-				UpdateCandidateAuraGroups(element, RAID_DEBUFF_GROUP_NAME, RAID_DEBUFF_GROUPS, count)
+				UpdateAuraGroups(element, RAID_DEBUFF_GROUP_NAME, RAID_DEBUFF_GROUPS, count)
 			elseif isBossBuffs and element.__groups[BOSS_BUFF_GROUP_NAME..1] then
 				local count = element.__filterType == 3 and element.num or 0
-				UpdateCandidateAuraGroups(element, BOSS_BUFF_GROUP_NAME, BOSS_BUFF_GROUPS, count)
+				UpdateAuraGroups(element, BOSS_BUFF_GROUP_NAME, BOSS_BUFF_GROUPS, count)
 			elseif isArenaBuffs and element.__groups[ARENA_BUFF_GROUP_NAME..1] then
 				local groupType = element.__groups[ARENA_BUFF_GROUP_NAME..3] and 5 or 3
 				local count = element.__filterType == groupType and element.num or 0
-				UpdateAuraFilterGroups(element, ARENA_BUFF_GROUP_NAME, ARENA_BUFF_GROUPS[groupType], count)
+				UpdateAuraGroups(element, ARENA_BUFF_GROUP_NAME, ARENA_BUFF_GROUPS[groupType], count)
 			elseif isArenaDebuffs and element.__groups[ARENA_DEBUFF_GROUP_NAME..1] then
 				local count = element.__filterType == 3 and element.num or 0
-				UpdateCandidateAuraGroups(element, ARENA_DEBUFF_GROUP_NAME, ARENA_DEBUFF_GROUPS, count)
+				UpdateAuraGroups(element, ARENA_DEBUFF_GROUP_NAME, ARENA_DEBUFF_GROUPS, count)
 			else
 				local groupName = auraType == "buffs" and "Buffs" or "Debuffs"
 				local needsReload = isRaidDebuffs and element.__filterType == 2
@@ -1283,29 +1373,14 @@ function UF:UpdateAuraContainer(parent, element)
 	UpdateAuraDurationFormatter(element, element.hideDuration)
 end
 
-local unitFrameBuffFilters = {
-	[1] = "HELPFUL",
-	[2] = "HELPFUL",
-	[3] = "HELPFUL|DISPELLABLE",
-	[4] = "HELPFUL|CANCELABLE",
-}
-
-local unitFrameDebuffFilters = {
-	[1] = "HARMFUL",
-	[2] = "HARMFUL",
-	[3] = "HARMFUL|PLAYER",
-	[4] = "HARMFUL|DISPELLABLE",
-	[5] = "HARMFUL",
-}
-
 function UF:ConfigureAuras(element)
 	local value = element.__value
 	local buffType = C.db["UFs"][value.."BuffType"]
 	local debuffType = C.db["UFs"][value.."DebuffType"]
 	element.numBuffs = buffType ~= 1 and C.db["UFs"][value.."NumBuff"] or 0
 	element.numDebuffs = debuffType ~= 1 and C.db["UFs"][value.."NumDebuff"] or 0
-	element.buffFilter = unitFrameBuffFilters[buffType]
-	element.debuffFilter = unitFrameDebuffFilters[debuffType]
+	element.buffFilter = UNITFRAME_AURA_FILTERS.Buff[buffType]
+	element.debuffFilter = UNITFRAME_AURA_FILTERS.Debuff[debuffType]
 	element.__desaturateOthers = UNITFRAME_DESATURATED_DEBUFF_VALUES[value] and debuffType == UNITFRAME_DESATURATED_DEBUFF_TYPE
 	element.size = C.db["UFs"][value.."AuraSize"]
 	-- Keep oUF's native Border uncreated; Blizzard can show it again after a layout-side Hide.
@@ -1325,39 +1400,6 @@ function UF:RefreshUFAuras(frame)
 	element:ForceUpdate()
 end
 
-local raidBuffFilters = {
-	[1] = "HELPFUL",
-	[2] = "HELPFUL|RAID_IN_COMBAT",
-}
-
-local raidDebuffFilters = {
-	[1] = "HARMFUL",
-	[2] = "HARMFUL|RAID_IN_COMBAT",
-	[3] = "HARMFUL|DISPELLABLE",
-	-- [4] = "HARMFUL|RAID_IN_COMBAT|DISPELLABLE",
-	[4] = "HARMFUL",
-}
-
-local arenaBuffFilters = {
-	[1] = "HELPFUL",
-	[2] = "HELPFUL",
-	[3] = ARENA_BUFF_GROUPS[3][1],
-	[4] = "HELPFUL|DISPELLABLE",
-	[5] = ARENA_BUFF_GROUPS[5][1],
-}
-
-local bossBuffFilters = {
-	[1] = "HELPFUL",
-	[2] = "HELPFUL",
-	[3] = BOSS_BUFF_GROUPS[1].filter,
-}
-
-local arenaDebuffFilters = {
-	[1] = "HARMFUL",
-	[2] = "HARMFUL",
-	[3] = ARENA_DEBUFF_GROUPS[1].filter,
-}
-
 function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	local value = element.__value
 	local vType = isDebuff and "Debuff" or "Buff"
@@ -1365,20 +1407,8 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	local filterType = C.db["UFs"][value..vType.."Type"]
 	element.__filterType = filterType
 	element.num = filterType ~= 1 and C.db["UFs"][value.."Num"..vType] or 0
-	if isRaid then
-		element.filter = isDebuff and raidDebuffFilters[filterType] or raidBuffFilters[filterType]
-		if not isDebuff and filterType == 2 and element.__owner.raidType ~= "simple" and C.db["UFs"]["RaidBigDefensive"] then
-			element.filter = "HELPFUL|RAID_IN_COMBAT|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE"
-		end
-	elseif value == "Boss" and not isDebuff then
-		element.filter = bossBuffFilters[filterType]
-	elseif value == "Arena" and not isDebuff then
-		element.filter = arenaBuffFilters[filterType]
-	elseif value == "Arena" and isDebuff then
-		element.filter = arenaDebuffFilters[filterType]
-	else
-		element.filter = isDebuff and unitFrameDebuffFilters[filterType] or unitFrameBuffFilters[filterType]
-	end
+	local filterOptions = AURA_FILTER_OPTIONS[value] or UNITFRAME_AURA_FILTERS
+	element.filter = filterOptions[vType][filterType]
 	element.size = C.db["UFs"][value..vType.."Size"]
 	element.showDebuffTypeBorder = isDebuff and (isRaid or C.db["UFs"]["DebuffColor"])
 	element.desaturateDebuff = not isRaid and C.db["UFs"]["Desaturate"]
@@ -1627,8 +1657,8 @@ function UF:CreateAuras(self)
 		UF:UpdateAuraDirection(self, bu)
 		AddAuraGroup(bu, "Buffs", bu.buffFilter, bu.numBuffs, 1)
 		if bu.__desaturateOthers then
-			for index, filter in ipairs(UNITFRAME_DESATURATED_DEBUFF_FILTERS) do
-				AddAuraGroup(bu, UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..index, filter, GetUnitFrameDesaturatedDebuffCount(bu.numDebuffs, index), index + 1, nil, nil, {
+			for index, group in ipairs(UNITFRAME_DESATURATED_DEBUFF_GROUPS) do
+				AddAuraGroup(bu, UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..index, group.filter, GetUnitFrameDesaturatedDebuffCount(bu.numDebuffs, index), index + 1, group.candidateFilters, nil, {
 					desaturated = index == 2,
 					groupSpacing = index == 2 and 0 or nil,
 					showDebuffTypeBorder = bu.showDebuffTypeBorder,
@@ -1651,7 +1681,7 @@ local function ConfigureNameplateDebuffs(element)
 	element.showDebuffTypeBorder = false
 	element.desaturateDebuff = false
 	element.sizeRatio = C.db["Nameplate"]["CCSizeRatio"]
-	element.filter = "HARMFUL|CROWD_CONTROL|INCLUDE_NAME_PLATE_ONLY"
+	element.filter = NAMEPLATE_CC_RULE.filter
 end
 
 function UF:UpdateNameplateDebuffs()
@@ -1701,15 +1731,16 @@ function UF:CreateBuffs(self)
 	UF:ConfigureBuffAndDebuff(bu)
 	local filterGroups = mystyle == "arena" and ARENA_BUFF_GROUPS[bu.__filterType]
 	if filterGroups then
-		for index, filter in ipairs(filterGroups) do
-			AddAuraGroup(bu, ARENA_BUFF_GROUP_NAME..index, filter, bu.num, index)
+		for index, group in ipairs(filterGroups) do
+			AddAuraGroup(bu, ARENA_BUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters)
 		end
 	elseif mystyle == "boss" and bu.__filterType == 3 then
 		for index, group in ipairs(BOSS_BUFF_GROUPS) do
 			AddAuraGroup(bu, BOSS_BUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters)
 		end
 	else
-		AddAuraGroup(bu, "Buffs", bu.filter, bu.num, 1)
+		local candidateFilters = mystyle == "raid" and RAID_BUFF_GROUP.candidateFilters
+		AddAuraGroup(bu, "Buffs", bu.filter, bu.num, 1, candidateFilters)
 	end
 	UF:UpdateAuraContainer(self, bu)
 
@@ -1731,8 +1762,8 @@ function UF:CreateRaidBigDefensives(self)
 	bu.showStealableBorder = false
 	bu.PostCreateButton = PostCreateRaidBigDefensiveButton
 
-	for index, filter in ipairs(RAID_BIG_DEFENSIVE_FILTERS) do
-		bu:AddSlot(filter, {
+	for index, group in ipairs(RAID_BIG_DEFENSIVE_GROUPS) do
+		bu:AddSlot(group.filter, {
 			size = size,
 			sortMethod = AuraContainerSortMethod.BigDefensive,
 			slotIndex = index,
