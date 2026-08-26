@@ -117,7 +117,14 @@ C.themes["Blizzard_Communities"] = function()
 	local r, g, b = DB.r, DB.g, DB.b
 	local CommunitiesFrame = CommunitiesFrame
 
-	B.ReskinPortraitFrame(CommunitiesFrame)
+	-- The custom portrait is passed to the restricted C_Club.SetAvatarTexture.
+	-- Reproduce the safe parts of ReskinPortraitFrame without stripping that texture.
+	CommunitiesFrame:DisableDrawLayer("BACKGROUND")
+	CommunitiesFrame:DisableDrawLayer("BORDER")
+	B.StripTextures(CommunitiesFrame.Inset)
+	local frameBG = B.SetBD(CommunitiesFrame)
+	frameBG:SetAllPoints(CommunitiesFrame)
+	B.ReskinClose(CommunitiesFrame.CloseButton)
 	CommunitiesFrame.NineSlice:Hide()
 	CommunitiesFrame.PortraitOverlay:SetAlpha(0)
 	B.ReskinDropDown(CommunitiesFrame.StreamDropdown)
@@ -213,7 +220,7 @@ C.themes["Blizzard_Communities"] = function()
 
 				child:SetHighlightTexture(0)
 				child.IconRing:SetAlpha(0)
-				child.__iconBorder = B.ReskinIcon(child.Icon)
+				child.__iconBorder = createAvatarBorder(child, 40, 40, "TOPLEFT", child, "TOPLEFT", 10, -14)
 				child.Background:Hide()
 				child.Selection:SetAlpha(0)
 				hooksecurefunc(child.Selection, "SetShown", updateCommunitiesSelection)
@@ -292,7 +299,9 @@ C.themes["Blizzard_Communities"] = function()
 
 	do
 		local dialog = CommunitiesTicketManagerDialog
-		B.StripTextures(dialog)
+		-- Remove the dialog artwork without touching the restricted avatar texture.
+		dialog:DisableDrawLayer("BORDER")
+		dialog.Separator:Hide()
 		B.SetBD(dialog)
 		dialog.Background:Hide()
 		B.Reskin(dialog.LinkToChat)
