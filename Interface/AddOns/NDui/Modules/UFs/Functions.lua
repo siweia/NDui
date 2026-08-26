@@ -1000,15 +1000,21 @@ function UF.PostCreateButton(element, button, options)
 	end
 end
 
--- Retained for future AuraContainer filter mapping.
-local satedDebuffs = {
-	[57723] = true, -- 筋疲力尽
-	[57724] = true, -- 心满意足
-	[80354] = true, -- 时空错位
-	[95809] = true, -- 疯狂
-	[160455] = true, -- 疲倦
-	[264689] = true, -- 疲倦
-	[390435] = true, -- 筋疲力尽
+-- 友方减益的法术ID过滤仅对NeverSecret光环生效 / Friendly harmful spell-ID filters only apply to NeverSecret auras.
+local RAID_DEBUFF_BLACKLIST = {
+	[57723] = true,	-- 筋疲力尽 / Exhaustion
+	[57724] = true,	-- 心满意足 / Sated
+	[80354] = true,	-- 时空错位 / Temporal Displacement
+	[95809] = true,	-- 疯狂 / Insanity
+	[160455] = true,	-- 疲倦 / Fatigued
+	[264689] = true,	-- 疲倦 / Fatigued
+	[390435] = true,	-- 筋疲力尽 / Exhaustion
+	[26013] = true,	-- 逃亡者 / Deserter
+	[71041] = true,	-- 地下城逃亡者 / Dungeon Deserter
+	[1313593] = true,	-- 逃亡者 / Deserter
+	[206151] = true,	-- 挑战者的负担 / Challenger's Burden
+	[308312] = true,	-- 限时试炼练习 / Time Trial Practice
+	[1254550] = true,	-- 奥术强化 / Arcane Empowerment
 }
 
 local function UpdateAuraGroup(element, name, filter, count)
@@ -1212,6 +1218,7 @@ local RAID_DEBUFF_GROUPS = {
 			isBossOrRoleAura = false,
 			isPriorityAura = false,
 			isFromPlayerOrPlayerPet = false,
+			excludeSpellIDs = RAID_DEBUFF_BLACKLIST,
 		},
 	},
 }
