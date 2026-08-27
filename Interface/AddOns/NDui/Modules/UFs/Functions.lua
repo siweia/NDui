@@ -957,6 +957,7 @@ function UF.PostCreateButton(element, button, options)
 	local fontSize = options.fontSize or element.fontSize or size*.4
 	if button.Count then
 		button.Count:SetFont(DB.Font[1], fontSize, DB.Font[3])
+		button.Count:SetPoint("BOTTOMRIGHT", 2, 0)
 	end
 	if button.Cooldown then
 		button.Cooldown:SetReverse(true)
