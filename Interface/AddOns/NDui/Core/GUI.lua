@@ -1318,7 +1318,7 @@ G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["Sho
 local function AddNewTag(parent, anchor)
 	local tag = CreateFrame("Frame", nil, parent, "NewFeatureLabelTemplate")
 	tag:SetPoint("LEFT", anchor or parent, -25, 10)
-	tag:SetAlpha(.5)
+	tag:SetAlpha(.35)
 	tag:Show()
 end
 
@@ -1333,10 +1333,10 @@ G.TabList = {
 	L["Raid Tools"],
 	L["ChatFrame"],
 	L["Maps"],
-	IsNew..L["Skins"],
+	L["Skins"],
 	L["Tooltip"],
-	IsNew..L["Misc"],
-	IsNew..L["UI Settings"],
+	L["Misc"],
+	L["UI Settings"],
 	L["Profile"],
 }
 
@@ -1596,8 +1596,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "FontOutline", L["FontOutline"], true},
 		{1, "Skins", "BgTex", L["BgTex"]},
 		{1, "Skins", "GreyBD", L["GreyBackdrop"], true, nil, nil, L["GreyBackdropTip"]},
-		{1, "Skins", "DamageMeter", IsNew..L["DamageMeter"], nil, setupDamageMeters},
-		{1, "Skins", "CooldownMgr", IsNew..L["CooldownMgr"], true, setupCooldownViewer},
+		{1, "Skins", "DamageMeter", L["DamageMeter"], nil, setupDamageMeters},
+		{1, "Skins", "CooldownMgr", L["CooldownMgr"], true, setupCooldownViewer},
 		{3, "Skins", "SkinAlpha", L["SkinAlpha"].."*", nil, {0, 1, .05}, updateSkinAlpha},
 		{3, "Skins", "FontScale", L["GlobalFontScale"], true, {.5, 1.5, .05}},
 		{},--blank
@@ -1647,7 +1647,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*", true},
 		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
 		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
-		{1, "Misc", "CombatAnimation", IsNew..L["CombatAnimation"], nil, nil, toggleBossBanner},
+		{1, "Misc", "CombatAnimation", L["CombatAnimation"], nil, nil, toggleBossBanner},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
 		{1, "Misc", "FasterSkip", L["FasterMovieSkip"].."*", true, nil, nil, L["FasterMovieSkipTip"]},
@@ -1664,7 +1664,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "QuestTool", L["QuestTool"], nil, nil, nil, L["QuestToolTip"]},
 		{1, "Misc", "QuickJoin", HeaderTag..L["EnhancedPremade"], nil, nil, nil, L["EnhancedPremadeTip"]},
 		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 2.6, .1}, updateMaxZoomLevel},
-		{1, "Misc", "SingingSocket", IsNew..L["SingingSocket"], nil, nil, nil, L["SingingSocketTip"]},
+		{1, "Misc", "SingingSocket", L["SingingSocket"], nil, nil, nil, L["SingingSocketTip"]},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
@@ -1672,7 +1672,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "ACCOUNT", "UIScale", L["Setup UIScale"], true, {.4, 1.15, .01}},
 		{},--blank
 		{1, "ACCOUNT", "DisableInfobars", "|cffff0000"..L["DisableInfobars"]},
-		{1, "ACCOUNT", "MilitaryTime", IsNew..TIMEMANAGER_24HOURMODE, true, nil, updateTimeMode},
+		{1, "ACCOUNT", "MilitaryTime", TIMEMANAGER_24HOURMODE, true, nil, updateTimeMode},
 		{3, "Misc", "MaxAddOns", L["SysMaxAddOns"].."*", nil,  {1, 50, 1}, nil, L["SysMaxAddOnsTip"]},
 		{3, "Misc", "InfoSize", L["InfobarFontSize"].."*", true,  {10, 50, 1}, updateInfobarSize},
 		{2, "Misc", "InfoStrLeft", L["LeftInfobar"].."*", nil, nil, updateInfobarAnchor, L["InfobarStrTip"]},
