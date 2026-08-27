@@ -103,6 +103,10 @@ function module:SetupCoords()
 
 	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
 	CoordsUpdater:SetScript("OnUpdate", module.UpdateCoords)
+
+	-- Disable blizzard's coords
+	C_CVar.SetCVar("worldMapShowPlayerCoords", 0)
+	C_CVar.SetCVar("worldMapShowCursorCoords", 0)
 end
 
 function module:UpdateMapScale()
