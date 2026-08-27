@@ -8,6 +8,23 @@ local pairs, next, tonumber, gsub = pairs, next, tonumber, gsub
 local GetSpellName = C_Spell.GetSpellName
 local InCombatLockdown = InCombatLockdown
 
+-- Out-of-phase group units can bypass aura filters outside encounters.
+local function PostUpdateGroupPhase(element, phaseReason)
+	local owner = element.__owner
+	local enabled = C_InstanceEncounter.IsEncounterInProgress()
+		or (UnitIsVisible(owner.__unit) and not phaseReason)
+
+	if owner.Buffs then
+		owner.Buffs:SetEnabled(enabled)
+	end
+	if owner.Debuffs then
+		owner.Debuffs:SetEnabled(enabled)
+	end
+	if owner.BigDefensives then
+		owner.BigDefensives:SetEnabled(enabled)
+	end
+end
+
 -- RaidFrame Elements
 function UF:CreateRaidIcons(self)
 	local parent = CreateFrame("Frame", nil, self)
@@ -33,6 +50,8 @@ function UF:CreateRaidIcons(self)
 	summon:SetSize(32, 32)
 	summon:SetPoint("CENTER", parent)
 	self.SummonIndicator = summon
+
+	self.PhaseIndicator.PostUpdate = PostUpdateGroupPhase
 end
 
 function UF:UpdateTargetBorder()

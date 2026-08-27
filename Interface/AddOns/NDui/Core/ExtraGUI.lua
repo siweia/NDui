@@ -2739,7 +2739,7 @@ function G:SetupRaidAuras(parent)
 	createOptionCheck(parent, offset-105, L["CDText"], "UFs", "RaidBuffCDText", updateUFAurasAndQueueReload)
 	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-160, "RaidBuffCDSize", queueAuraReload, "UFs")
 	createOptionSlider(parent, L["RaidBuffSize"], 5, 30, 12, offset-230, "RaidBuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 6, offset-300, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
+	createOptionSlider(parent, L["MaxBuffs"], 1, 20, 4, offset-300, "RaidNumBuff", updateUFAurasAndQueueReload, "UFs")
 
 	createOptionTitle(parent, "Debuffs", offset-360)
 	createOptionDropdown(parent, L["RaidDebuffType"], offset-410, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
