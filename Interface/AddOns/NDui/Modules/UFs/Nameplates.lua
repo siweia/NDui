@@ -75,10 +75,6 @@ function UF:SetupCVars()
 	hooksecurefunc(NamePlateDriverFrame, "UpdateNamePlateSize", UF.UpdatePlateSize)
 	-- fix blizz friendly plate visibility
 	SetCVar("nameplatePlayerMaxDistance", 60)
-	-- hide realm name in blizz nameonly
-	if NamePlateFriendlyFrameOptions then
-		PurgeKey(NamePlateFriendlyFrameOptions, "updateNameUsesGetUnitName")
-	end
 end
 
 -- Elements
