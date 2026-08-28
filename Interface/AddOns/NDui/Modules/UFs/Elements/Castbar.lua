@@ -9,7 +9,7 @@ castTimeFormatter:SetMillisecondsThreshold(60)
 
 function UF.CreateCastbarTimeBinding()
 	local binding = C_DurationUtil.CreateDurationTextBinding()
-	binding:SetTextFormat("{}/{}", {
+	binding:SetTextFormat("{} | {}", {
 		{
 			property = Enum.DurationTextBindingProperty.ElapsedDuration,
 			formatter = castTimeFormatter,
