@@ -29,6 +29,8 @@ This element updates by changing the texture.
 local _, ns = ...
 local oUF = ns.oUF
 
+local STATE = {}
+
 local function Update(self, event)
 	local element = self.RaidRoleIndicator
 	local unit = self.__unit
@@ -42,13 +44,31 @@ local function Update(self, event)
 		element:PreUpdate()
 	end
 
+	if(event == 'OnShow') then
+		STATE[element] = {}
+	end
+
 	local role, shouldShow
 	if(UnitInRaid(unit) ~= nil and not UnitHasVehicleUI(unit)) then
-		if(GetPartyAssignment('MAINTANK', unit)) then
+		local isMainTank = GetPartyAssignment('MAINTANK', unit)
+		if(issecretvalue(isMainTank)) then
+			isMainTank = STATE[element].isMainTank
+		else
+			STATE[element].isMainTank = isMainTank
+		end
+
+		local isMainAssist = GetPartyAssignment('MAINASSIST', unit)
+		if(issecretvalue(isMainAssist)) then
+			isMainAssist = STATE[element].isMainAssist
+		else
+			STATE[element].isMainAssist = isMainAssist
+		end
+
+		if(isMainTank) then
 			role = 'MAINTANK'
 			shouldShow = true
 			element:SetAtlas('RaidFrame-Icon-MainTank', element.useAtlasSize)
-		elseif(GetPartyAssignment('MAINASSIST', unit)) then
+		elseif(isMainAssist) then
 			role = 'MAINASSIST'
 			shouldShow = true
 			element:SetAtlas('RaidFrame-Icon-MainAssist', element.useAtlasSize)
@@ -89,7 +109,10 @@ local function Enable(self)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
+		STATE[element] = {}
+
 		self:RegisterEvent('GROUP_ROSTER_UPDATE', Path, true)
+		self:RegisterEvent('PLAYER_REGEN_ENABLED', Path, true)
 
 		return true
 	end
@@ -101,6 +124,7 @@ local function Disable(self)
 		element:Hide()
 
 		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path)
+		self:UnregisterEvent('PLAYER_REGEN_ENABLED', Path)
 	end
 end
 

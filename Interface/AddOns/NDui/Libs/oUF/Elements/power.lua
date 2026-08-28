@@ -22,6 +22,7 @@ A default texture will be applied if the widget is a StatusBar and doesn't have 
 .displayAltPower                  - Use this to let the widget display alternative power, if the unit has one.
                                     By default, it does so only for raid and party units. If none, the display will fall
                                     back to the primary power (boolean)
+.displayAltPowerOnly              - Use this to only show alt power, hiding the element otherwise (boolean)
 .considerSelectionInCombatHostile - Indicates whether selection should be considered hostile while the unit is in
                                     combat with the player (boolean)
 .smoothing                        - Which status bar smoothing method to use, defaults to `Enum.StatusBarInterpolation.Immediate` (number)
@@ -223,11 +224,17 @@ local function Update(self, event, unit)
 	local displayType, min
 	if(element.displayAltPower) then
 		displayType, min = element:GetDisplayPower(unit)
+
+		if(element.displayAltPowerOnly and not (displayType and UnitHasPowerType(unit, displayType))) then
+			element:Hide()
+			return
+		end
 	end
 
 	local cur, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
 	min = min or 0 -- ensure we always have a minimum value to avoid errors
 	element:SetMinMaxValues(min, max)
+	element:Show()
 
 	if(UnitIsConnected(unit)) then
 		element:SetValue(cur, element.smoothing)
@@ -329,6 +336,7 @@ local function shouldUpdatePredictionSize(self)
 
 	local horizontal = element:GetOrientation() == 'HORIZONTAL'
 	local size = horizontal and element:GetWidth() or element:GetHeight()
+	size = math.floor((size + 0.005) * 100) / 100 -- normalize floating point errors
 	if(horizontal ~= STATE[element].horizontal or size ~= STATE[element].size) then
 		STATE[element].horizontal = horizontal
 		STATE[element].size = size

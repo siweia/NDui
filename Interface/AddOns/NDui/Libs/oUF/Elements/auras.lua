@@ -411,13 +411,25 @@ local function Create(self, options)
 	return Mixin(element, elementMixin)
 end
 
-local function Update(self)
+local function Update(self, event)
 	if(STATE[self] and STATE[self].elements) then
 		for _, element in next, STATE[self].elements do
 			if element:GetUnit() ~= self.__unit then
 				element:SetUnit(self.__unit) -- triggers a full update
 			else
 				element:ForceUpdate()
+			end
+
+			--[[ Callback: Auras:PostUpdate(event)
+			Called after the element has been updated.
+
+			Note: This only triggers when oUF initiates an update, not when Blizzard does it.
+
+			* self  - the Auras element
+			* event - the event that triggered the update
+			--]]
+			if(element.PostUpdate) then
+				element:PostUpdate(event)
 			end
 		end
 	end
