@@ -1450,7 +1450,6 @@ function G:SetupUFAuras(parent)
 	end
 
 	createOptionTitle(parent, GENERAL, offset)
-	createOptionCheck(parent, offset-35, L["DesaturateIcon"], "UFs", "Desaturate", updateUFAurasAndQueueReload, L["DesaturateIconTip"], true)
 	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", queueAuraReload, L["DebuffColorTip"])
 
 	local options = {

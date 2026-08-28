@@ -642,13 +642,11 @@ function UF:UpdateNameplateAuras()
 
 	local element = self.Auras
 	element:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, yOffset)
-	UF:ConfigureNameplateAuras(element)
 	UF:UpdateAuraContainer(self, element)
 	element:ForceUpdate()
 
 	element = self.Buffs
 	element:SetPoint("BOTTOMRIGHT", self.nameText, "TOPRIGHT", 0, yOffset)
-	UF:ConfigureNameplateAuras(element)
 	UF:UpdateAuraContainer(self, element)
 	element:ForceUpdate()
 end

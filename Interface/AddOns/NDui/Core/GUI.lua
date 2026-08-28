@@ -215,7 +215,6 @@ G.DefaultSettings = {
 		PartyAltPower = true,
 		RaidTextScale = 1,
 		SmartRaid = false,
-		Desaturate = true,
 		DebuffColor = false,
 		CCName = true,
 		RCCName = true,
@@ -419,7 +418,6 @@ G.DefaultSettings = {
 		TargetPower = false,
 		MinScale = 1,
 		MinAlpha = 1,
-		Desaturate = true,
 		DebuffColor = false,
 		QuestIndicator = true,
 		NameOnlyMode = false,
@@ -1374,7 +1372,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "PlateAuras", IsNew..L["PlateAuras"], nil, setupNameplateAuras, refreshNameplates},
 		{1, "Nameplate", "PlateBuffs", IsNew..L["PlateBuffs"], true, setupNameplateBuffs, refreshNameplates},
 		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"], nil, setupNameplateCC, refreshNameplates},
-		{1, "Nameplate", "Desaturate", L["DesaturateIcon"].."*", true, nil, refreshNameplates, L["DesaturateIconTip"], true},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", L["ExecuteRatio"].."*", true, {0, 90, 1}, refreseExecuteRatio, L["ExecuteRatioTip"]},
