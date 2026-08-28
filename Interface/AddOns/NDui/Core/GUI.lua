@@ -227,12 +227,6 @@ G.DefaultSettings = {
 		UFTextScale = 1,
 		PartyAltPower = true,
 		RaidTextScale = 1,
-		ShowRaidBuff = false,
-		RaidBuffSize = 12,
-		BuffClickThru = true,
-		ShowRaidDebuff = true,
-		RaidDebuffSize = 12,
-		DebuffClickThru = true,
 		SmartRaid = false,
 		Desaturate = true,
 		DebuffColor = false,
@@ -242,7 +236,6 @@ G.DefaultSettings = {
 		SortByRole = true,
 		SortAscending = false,
 		PlayerAbsorb = false,
-		AutoBuffs = false,
 		ShowRoleMode = 1,
 		CDFontSize = 12, -- Legacy source for the Reset6 per-frame aura font migration.
 
@@ -661,8 +654,6 @@ G.AccountSettings = {
 	MajorSpells = {},
 	AutoRecycle = true,
 	IgnoredButtons = "",
-	RaidBuffsWhite = {},
-	RaidDebuffsBlack = {},
 	NameplateWhite = {},
 	NameplateBlack = {},
 	IgnoreNotes = {},
@@ -734,12 +725,6 @@ loader:SetScript("OnEvent", function(self, _, addon)
 			for spellID, value in pairs(NDuiADB["NameplateFilter"][2]) do
 				NDuiADB["NameplateBlack"][spellID] = value
 			end
-		end
-	end
-	if NDuiADB["RaidAuraWatch"] then
-		if not NDuiADB["RaidBuffsWhite"] then NDuiADB["RaidBuffsWhite"] = {} end
-		for spellID in pairs(NDuiADB["RaidAuraWatch"]) do
-			NDuiADB["RaidBuffsWhite"][spellID] = true
 		end
 	end
 	-- Transfer old data END
@@ -905,14 +890,6 @@ end
 
 local function setupClickCast()
 	G:SetupClickCast(guiPage[4])
-end
-
-local function setupDebuffsIndicator()
-	G:SetupDebuffsIndicator(guiPage[4])
-end
-
-local function setupBuffsIndicator()
-	G:SetupBuffsIndicator(guiPage[4])
 end
 
 local function setupSpellsIndicator()
@@ -1397,12 +1374,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidBigDefensive", IsNew..HeaderTag..COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES, true, setupRaidBigDefensive, nil, OPTION_TOOLTIP_COMPACT_UNIT_FRAME_PROFILE_SHOW_BIG_DEFENSIVES},
 		{1, "UFs", "RaidClickSets", HeaderTag..L["Enable ClickSets"], nil, setupClickCast},
 		{1, "UFs", "AutoRes", HeaderTag..L["UFs AutoRes"], true},
-		--{1, "UFs", "ShowRaidDebuff", L["ShowRaidDebuff"].."*", nil, setupDebuffsIndicator, updateRaidAurasOptions, L["ShowRaidDebuffTip"]},
-		--{1, "UFs", "ShowRaidBuff", L["ShowRaidBuff"].."*", true, setupBuffsIndicator, updateRaidAurasOptions, L["ShowRaidBuffTip"]},
-		--{1, "UFs", "DebuffClickThru", L["DebuffClickThru"].."*", nil, nil, updateRaidAurasOptions, L["ClickThroughTip"]},
-		--{1, "UFs", "BuffClickThru", L["BuffClickThru"].."*", true, nil, updateRaidAurasOptions, L["ClickThroughTip"]},
-		--{3, "UFs", "RaidDebuffSize", L["RaidDebuffSize"].."*", nil, {5, 30, 1}, updateRaidAurasOptions},
-		--{3, "UFs", "RaidBuffSize", L["RaidBuffSize"].."*", true, {5, 30, 1}, updateRaidAurasOptions},
 		{},--blank
 		{1, "UFs", "RaidBuffIndicator", HeaderTag..L["RaidBuffIndicator"], nil, setupSpellsIndicator, nil, L["RaidBuffIndicatorTip"]},
 		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"], nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}},

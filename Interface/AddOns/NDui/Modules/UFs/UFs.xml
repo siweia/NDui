@@ -9,6 +9,4 @@
 	<Script file="Elements\Castbar.lua"/>
 	<Script file="Elements\RaidAuras.lua"/>
 	<Script file="Elements\SpellsIndicator.lua"/>
-	<Script file="Elements\BuffsIndicator.lua"/>
-	<Script file="Elements\DebuffsIndicator.lua"/>
 </Ui>

@@ -382,8 +382,6 @@ local accountStrValues = {
 }
 
 local spellBooleanValues = {
-	["RaidBuffsWhite"] = true,
-	["RaidDebuffsBlack"] = true,
 	["NameplateWhite"] = true,
 	["NameplateBlack"] = true,
 }

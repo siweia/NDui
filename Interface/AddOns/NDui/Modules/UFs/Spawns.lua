@@ -424,8 +424,6 @@ function UF:OnLogin()
 		B:LockCVar("predictedHealth", "1")
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
-		UF:UpdateRaidBuffsWhite()
-		UF:UpdateRaidDebuffsBlack()
 		UF.headers = {}
 
 		-- Hide Default RaidFrame
