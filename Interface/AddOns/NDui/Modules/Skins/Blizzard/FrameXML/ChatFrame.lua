@@ -22,15 +22,6 @@ tinsert(C.defaultThemes, function()
 	TimeAlertFrame:SetBackdrop(nil)
 	B.SetBD(TimeAlertFrame)
 
-	-- Battletag invite frame
-	if not DB.isNewPatch then
-		local border, send, cancel = BattleTagInviteFrame:GetChildren()
-		border:Hide()
-		B.Reskin(send)
-		B.Reskin(cancel)
-		B.SetBD(BattleTagInviteFrame)
-	end
-
 	local friendTex = "Interface\\HELPFRAME\\ReportLagIcon-Chat"
 	local queueTex = "Interface\\HELPFRAME\\HelpIcon-ItemRestoration"
 	local homeTex = "Interface\\Buttons\\UI-HomeButton"

@@ -285,13 +285,7 @@ local function ChatMsgFilter(self, event, msg, sender, language, channelString, 
 
 	-- Apply NDui modifications
 	if NDuiADB["TimestampFormat"] > 1 then
-		local timeStamp
-		if DB.isNewPatch then
-			timeStamp = TimeUtil.BetterDate(DB.GreyColor..timestampFormat[NDuiADB["TimestampFormat"]].."|r", time())
-		else
-			local locTime, realmTime = GetCurrentTime()
-			timeStamp = BetterDate(DB.GreyColor..timestampFormat[NDuiADB["TimestampFormat"]].."|r", realmTime or locTime)
-		end
+		local timeStamp = TimeUtil.BetterDate(DB.GreyColor..timestampFormat[NDuiADB["TimestampFormat"]].."|r", time())
 		outMsg = timeStamp..outMsg
 	end
 

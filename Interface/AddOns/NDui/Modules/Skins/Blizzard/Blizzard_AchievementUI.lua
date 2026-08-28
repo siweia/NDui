@@ -36,12 +36,10 @@ C.themes["Blizzard_AchievementUI"] = function()
 	end
 
 	B.ReskinClose(AchievementFrameCloseButton)
-	if DB.isNewPatch then
-		B.StripTextures(AchievementFrame.HeaderDetails)
-		B.Reskin(AchievementFrame.HeaderDetails.Back)
-	end
+	B.StripTextures(AchievementFrame.HeaderDetails)
+	B.Reskin(AchievementFrame.HeaderDetails.Back)
 
-	local filterDropdown = DB.isNewPatch and AchievementFrame.HeaderDetails.Filters.FilterDropdown or AchievementFrameFilterDropdown
+	local filterDropdown = AchievementFrame.HeaderDetails.Filters.FilterDropdown
 	if filterDropdown then
 		B.ReskinFilterButton(filterDropdown)
 		filterDropdown:ClearAllPoints()
@@ -49,19 +47,17 @@ C.themes["Blizzard_AchievementUI"] = function()
 	end
 
 	-- Search box
-	local searchbox = DB.isNewPatch and AchievementFrame.HeaderDetails.Filters.SearchBox or AchievementFrame.SearchBox
+	local searchbox = AchievementFrame.HeaderDetails.Filters.SearchBox
 	if searchbox then
 		B.ReskinInput(searchbox)
 		searchbox:ClearAllPoints()
 		searchbox:SetPoint("TOPRIGHT", AchievementFrame, "TOPRIGHT", -25, -5)
 		searchbox:SetPoint("BOTTOMLEFT", AchievementFrame, "TOPRIGHT", -130, -25)
-		if DB.isNewPatch then
-			searchbox.__bg:SetPoint("TOPLEFT", -2, -4)
-			searchbox.__bg:SetPoint("BOTTOMRIGHT", 2, 4)
-		end
+		searchbox.__bg:SetPoint("TOPLEFT", -2, -4)
+		searchbox.__bg:SetPoint("BOTTOMRIGHT", 2, 4)
 	end
 
-	local previewContainer = DB.isNewPatch and searchbox.SearchPreviewContainer or AchievementFrame.SearchPreviewContainer
+	local previewContainer = searchbox.SearchPreviewContainer
 	local showAllSearchResults = previewContainer.ShowAllSearchResults
 	B.StripTextures(previewContainer)
 	previewContainer:ClearAllPoints()
