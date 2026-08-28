@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Modules.lua"/>
 	<Script file="Nameplate.lua"/>
+	<Script file="CornerSpells.lua"/>
 	<Script file="AurasTable.lua"/>
 	<Script file="ClickCast.lua"/>
 </Ui>
