@@ -422,7 +422,6 @@ function UF:OnLogin()
 
 	if C.db["UFs"]["RaidFrame"] then
 		B:LockCVar("predictedHealth", "1")
-		--UF:UpdateRaidInfo() -- RaidAuras
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
 		UF:UpdateRaidBuffsWhite()

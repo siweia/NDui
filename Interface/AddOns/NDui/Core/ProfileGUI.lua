@@ -462,12 +462,6 @@ function G:ExportGUIData()
 			for spellID, value in pairs(VALUE) do
 				text = text..":"..spellID..":"..tostring(value)
 			end
-		elseif KEY == "RaidDebuffs" then
-			for instName, value in pairs(VALUE) do
-				for spellID, prio in pairs(value) do
-					text = text..";ACCOUNT:"..KEY..":"..instName..":"..spellID..":"..prio
-				end
-			end
 		elseif KEY == "CornerSpells" then
 			text = text..";ACCOUNT:"..KEY
 			for class, value in pairs(VALUE) do
@@ -637,10 +631,6 @@ function G:ImportGUIData()
 				for i = 1, #results, 2 do
 					NDuiADB[value][tonumber(results[i])] = toBoolean(results[i+1])
 				end
-			elseif value == "RaidDebuffs" then
-				local instName, spellID, priority = select(3, strsplit(":", option))
-				if not NDuiADB[value][instName] then NDuiADB[value][instName] = {} end
-				NDuiADB[value][instName][tonumber(spellID)] = tonumber(priority)
 			elseif value == "CornerSpells" then
 				local results = {select(3, strsplit(":", option))}
 				local class = results[1]

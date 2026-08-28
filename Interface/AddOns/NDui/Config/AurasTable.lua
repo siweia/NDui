@@ -4,7 +4,6 @@ local module = B:RegisterModule("AurasTable")
 
 local pairs, next, format, wipe, unpack = pairs, next, format, wipe, unpack
 local GetSpellName = C_Spell.GetSpellName
-local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 
 -- AuraWatch
 local AuraWatchList = {}
@@ -85,22 +84,6 @@ function module:AddDeprecatedGroup()
 	wipe(C.DeprecatedAuras)
 end
 
--- RaidFrame debuffs
-local RaidDebuffs = {}
-function module:RegisterDebuff(tierID, instID, _, spellID, level)
-	local instName = EJ_GetInstanceInfo(instID)
-	if not instName then
-		if DB.isDeveloper then print("Invalid instance ID: "..instID) end
-		return
-	end
-
-	if not RaidDebuffs[instName] then RaidDebuffs[instName] = {} end
-	if not level then level = 2 end
-	if level > 6 then level = 6 end
-
-	RaidDebuffs[instName][spellID] = level
-end
-
 function module:CheckCornerSpells()
 	if not NDuiADB["CornerSpells"][DB.MyClass] then NDuiADB["CornerSpells"][DB.MyClass] = {} end
 	local data = C.CornerBuffs[DB.MyClass]
@@ -178,23 +161,8 @@ function module:CheckNameplateFilters()
 end
 
 function module:OnLogin()
-	--[=[for instName, value in pairs(RaidDebuffs) do
-		for spell, priority in pairs(value) do
-			if NDuiADB["RaidDebuffs"][instName] and NDuiADB["RaidDebuffs"][instName][spell] and NDuiADB["RaidDebuffs"][instName][spell] == priority then
-				NDuiADB["RaidDebuffs"][instName][spell] = nil
-			end
-		end
-	end
-	for instName, value in pairs(NDuiADB["RaidDebuffs"]) do
-		if not next(value) then
-			NDuiADB["RaidDebuffs"][instName] = nil
-		end
-	end]=]
-
-	--RaidDebuffs[0] = {} -- OTHER spells
 	--module:AddDeprecatedGroup()
 	--C.AuraWatchList = AuraWatchList
-	--C.RaidDebuffs = RaidDebuffs
 
 	module:CheckCornerSpells()
 	--module:CheckMajorSpells()

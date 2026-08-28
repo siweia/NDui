@@ -191,9 +191,6 @@ G.DefaultSettings = {
 		SMRGroupBy = 1,
 		SMRGroups = 6,
 		SMRDirec = 1,
-		InstanceAuras = true,
-		DispellType = 1,
-		RaidDebuffScale = 1,
 		SpecRaidPos = false,
 		RaidHealthColor = 1,
 		ShowSolo = false,
@@ -201,7 +198,6 @@ G.DefaultSettings = {
 		RaidHeight = 32,
 		RaidPowerHeight = 2,
 		RaidHPMode = 1,
-		AuraClickThru = false,
 		RaidClickSets = false,
 		TeamIndex = false,
 		ClassPower = true,
@@ -635,7 +631,6 @@ G.AccountSettings = {
 	ChatFilterList = "%*",
 	ChatFilterWhiteList = "",
 	TimestampFormat = 4,
-	RaidDebuffs = {},
 	Changelog = {},
 	totalGold = {},
 	ShowSlots = false,
@@ -906,10 +901,6 @@ end
 
 local function setupPartyPetFrame()
 	G:SetupPartyPetFrame(guiPage[4])
-end
-
-local function setupRaidDebuffs()
-	G:SetupRaidDebuffs(guiPage[4])
 end
 
 local function setupClickCast()
@@ -1416,12 +1407,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "UFs", "RaidBuffIndicator", HeaderTag..L["RaidBuffIndicator"], nil, setupSpellsIndicator, nil, L["RaidBuffIndicatorTip"]},
 		{4, "UFs", "BuffIndicatorType", L["BuffIndicatorType"], nil, {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}},
 		{3, "UFs", "BuffIndicatorScale", L["BuffIndicatorScale"], true, {.8, 2, .1}},
-		--{},--blank
-		--{1, "UFs", "InstanceAuras", HeaderTag..L["Instance Auras"].."*", nil, setupRaidDebuffs, updateRaidAurasOptions, L["InstanceAurasTip"]},
-		--{1, "UFs", "AuraClickThru", L["RaidAuras ClickThrough"].."*", true, nil, updateRaidAurasOptions, L["ClickThroughTip"]},
-		--{4, "UFs", "DispellType", L["Dispellable"].."*", nil, {L["Always"], L["Filter"], DISABLE}, updateRaidAurasOptions, L["DispellTypeTip"]},
-		--{3, "UFs", "RaidDebuffScale", L["RaidDebuffScale"].."*", true, {.8, 2, .1}, updateRaidAurasOptions},
-		--{},--blank
 		{},--blank
 		{4, "UFs", "RaidHealthColor", L["HealthColor"].."*", nil, {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}, updateRaidTextScale},
 		{4, "UFs", "RaidHPMode", L["HealthValueType"].."*", true, {DISABLE, L["ShowHealthPercent"], L["ShowHealthCurrent"], L["ShowHealthLoss"], --[=[L["ShowHealthLossPercent"], L["ShowHealthAbsorb"]]=]}, updateRaidTextScale, L["100PercentTip"]},
