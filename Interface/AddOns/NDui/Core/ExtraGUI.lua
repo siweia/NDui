@@ -560,43 +560,6 @@ function G:SetupSpellsIndicator(parent)
 		local r, g, b = unpack(value[2])
 		createBar(scroll.child, spellID, value[1], r, g, b, value[3])
 	end
-
-	-- Preset spells: none secret spells in midnight
-	local menuList = {}
-	local function AddSpellFromPreset(_, spellID)
-		scroll.box:SetText(spellID)
-		DropDownList1:Hide()
-	end
-	local index = 1
-	for class, value in pairs(UF.NonSecretSpells) do
-		local color = B.ClassColorString(class)
-		local localClassName = LOCALIZED_CLASS_NAMES_MALE[class] or OTHER
-		menuList[index] = {text = color..localClassName, notCheckable = true, hasArrow = true, menuList = {}}
-
-		for spellID in pairs(value) do
-			local spellName, texture = GetSpellName(spellID), GetSpellTexture(spellID)
-			if spellName then
-				tinsert(menuList[index].menuList, {
-					text = spellName..":"..spellID,
-					icon = texture,
-					tCoordLeft = .08,
-					tCoordRight = .92,
-					tCoordTop = .08,
-					tCoordBottom = .92,
-					arg1 = spellID,
-					func = AddSpellFromPreset,
-					notCheckable = true,
-				})
-			end
-		end
-		index = index + 1
-	end
-	local preset = B.CreateButton(panel, 100, 25, AVAILABLE)
-	preset:SetPoint("TOPRIGHT", -10, -20)
-	preset.text:SetTextColor(1, .8, 0)
-	preset:SetScript("OnClick", function(self)
-		EasyMenu(menuList, B.EasyMenu, self, -100, 150, "MENU", 1)
-	end)
 end
 
 local function createOptionTitle(parent, title, offset)
@@ -1450,7 +1413,7 @@ function G:SetupUFAuras(parent)
 	end
 
 	createOptionTitle(parent, GENERAL, offset)
-	createOptionCheck(parent, offset-70, L["DebuffColor"], "UFs", "DebuffColor", queueAuraReload, L["DebuffColorTip"])
+	createOptionCheck(parent, offset-35, L["DebuffColor"], "UFs", "DebuffColor", queueAuraReload, L["DebuffColorTip"])
 
 	local options = {
 		[1] = L["PlayerUF"],
