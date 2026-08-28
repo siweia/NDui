@@ -84,6 +84,8 @@ function TT:SetupTooltipID()
 	if C.db["Tooltip"]["HideAllID"] then return end
 
 	-- Update all
+	C_CVar.SetCVar("tooltipShowAuraSpellIDs", 1)
+
 	hooksecurefunc(GameTooltip, "SetHyperlink", TT.SetHyperLinkID)
 	hooksecurefunc(ItemRefTooltip, "SetHyperlink", TT.SetHyperLinkID)
 
