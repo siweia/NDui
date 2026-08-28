@@ -638,7 +638,6 @@ G.AccountSettings = {
 	Help = {},
 	CornerSpells = {},
 	CustomTex = "",
-	MajorSpells = {},
 	AutoRecycle = true,
 	IgnoredButtons = "",
 	NameplateWhite = {},
@@ -898,10 +897,6 @@ end
 
 local function setupNameOnlySize()
 	G:SetupNameOnlySize(guiPage[5])
-end
-
-local function setupPlateCastbarGlow()
-	G:PlateCastbarGlow(guiPage[5])
 end
 
 local function setupNameplateMobColors()
@@ -1396,7 +1391,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{5, "Nameplate", "TargetColor", L["TargetNP Color"].."*"},
 		{5, "Nameplate", "FocusColor", L["FocusNP Color"].."*", 2},
 		--{1, "Nameplate", "ColorByDot", HeaderTag..L["ColorByDot"].."*", nil, setupNameplateColorDots, nil, L["ColorByDotTip"]},
-		--{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", true, setupPlateCastbarGlow, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", nil, nil, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "ShowCustomUnits", HeaderTag..L["ShowCustomUnits"].."*", true, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitsTip"]},
 		{1, "Nameplate", "MobTypeColoring", IsNew..HeaderTag..L["MobTypeColoring"].."*", nil, setupNameplateMobColors, nil, L["MobTypeColoringTip"]},

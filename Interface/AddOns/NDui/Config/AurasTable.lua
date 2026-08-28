@@ -24,25 +24,6 @@ function module:CheckCornerSpells()
 	end
 end
 
-function module:CheckMajorSpells()
-	for spellID in pairs(C.MajorSpells) do
-		local name = GetSpellName(spellID)
-		if name then
-			if NDuiADB["MajorSpells"][spellID] then
-				NDuiADB["MajorSpells"][spellID] = nil
-			end
-		else
-			if DB.isDeveloper then print("Invalid majorspells ID: "..spellID) end
-		end
-	end
-
-	for spellID, value in pairs(NDuiADB["MajorSpells"]) do
-		if value == false and C.MajorSpells[spellID] == nil then
-			NDuiADB["MajorSpells"][spellID] = nil
-		end
-	end
-end
-
 local function CheckNameplateFilter(list, key)
 	for spellID in pairs(list) do
 		local name = GetSpellName(spellID)
@@ -83,6 +64,5 @@ end
 
 function module:OnLogin()
 	module:CheckCornerSpells()
-	--module:CheckMajorSpells()
 	module:CheckNameplateFilters()
 end
