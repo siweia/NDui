@@ -14,13 +14,7 @@ G.DefaultSettings = {
 	Reset5 = false,
 	Reset6 = false,
 	Mover = {},
-	InternalCD = {},
-	AuraWatchMover = {},
 	TempAnchor = {},
-	AuraWatchList = {
-		Switcher = {},
-		IgnoreSpells = {},
-	},
 	Actionbar = {
 		Enable = true,
 		Hotkeys = true,
@@ -160,13 +154,6 @@ G.DefaultSettings = {
 		DebuffSize = 30,
 		DebuffsPerRow = 16,
 		CDAnimation = false,
-	},
-	AuraWatch = {
-		Enable = true,
-		ClickThrough = false,
-		IconScale = 1,
-		DeprecatedAuras = false,
-		MinCD = 3,
 	},
 	Avada = {
 		Enable = false,
@@ -674,9 +661,6 @@ G.TextureList = {
 }
 
 local ignoredTable = {
-	["AuraWatchList"] = true,
-	["AuraWatchMover"] = true,
-	["InternalCD"] = true,
 	["Mover"] = true,
 	["TempAnchor"] = true,
 }
@@ -946,11 +930,6 @@ end
 
 local function setupNameplateCC()
 	G:SetupNameplateCC(guiPage[5])
-end
-
-local function setupAuraWatch()
-	f:Hide()
-	SlashCmdList["NDUI_AWCONFIG"]()
 end
 
 local function updateBagSortOrder()
@@ -1457,12 +1436,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Auras", "HideBlizBuff", L["HideBlizUI"], nil, nil, nil, L["HideBlizBuffTip"]},
 		{1, "Auras", "CDAnimation", L["CDAnimation"], true},
 		{},--blank
-		--[[{1, "AuraWatch", "Enable", HeaderTag..L["Enable AuraWatch"], nil, setupAuraWatch},
-		{1, "AuraWatch", "DeprecatedAuras", L["DeprecatedAuras"], true},
-		{1, "AuraWatch", "ClickThrough", L["AuraWatch ClickThrough"], nil, nil, nil, L["ClickThroughTip"]},
-		{3, "AuraWatch", "IconScale", L["AuraWatch IconScale"], nil, {.8, 2, .1}},
-		{3, "AuraWatch", "MinCD", L["AuraWatch MinCD"].."*", true, {1, 60, 1}, nil, L["MinCDTip"]},
-		{},--blank]]
 		{1, "Auras", "Totems", HeaderTag..L["Enable Totembar"]},
 		{1, "Auras", "VerticalTotems", L["VerticalTotems"].."*", nil, nil, refreshTotemBar},
 		{3, "Auras", "TotemSize", L["TotemSize"].."*", true, {24, 60, 1}, refreshTotemBar},

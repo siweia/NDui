@@ -10,6 +10,99 @@ local GetItemIcon = C_Item.GetItemIconByID
 local IsControlKeyDown = IsControlKeyDown
 local myFullName = DB.MyFullName
 
+-- Generic widgets (moved from AWConfig.lua)
+local function labelOnEnter(self)
+	GameTooltip:ClearLines()
+	GameTooltip:SetOwner(self:GetParent(), "ANCHOR_RIGHT", 0, 3)
+	GameTooltip:AddLine(self.text)
+	GameTooltip:AddLine(self.tip, .6,.8,1, 1)
+	GameTooltip:Show()
+end
+
+local function createLabel(parent, text, tip)
+	local label = B.CreateFS(parent, 14, text, "system", "CENTER", 0, 25)
+	if not tip then return end
+	local frame = CreateFrame("Frame", nil, parent)
+	frame:SetAllPoints(label)
+	frame.text = text
+	frame.tip = tip
+	frame:SetScript("OnEnter", labelOnEnter)
+	frame:SetScript("OnLeave", B.HideTooltip)
+end
+
+function G:CreateEditbox(parent, text, x, y, tip, width, height)
+	local eb = B.CreateEditBox(parent, width or 90, height or 30)
+	eb:SetPoint("TOPLEFT", x, y)
+	eb:SetMaxLetters(255)
+	createLabel(eb, text, tip)
+
+	return eb
+end
+
+function G:CreateCheckBox(parent, text, x, y, tip)
+	local cb = B.CreateCheckBox(parent)
+	cb:SetPoint("TOPLEFT", x, y)
+	cb:SetHitRectInsets(-5, -5, -5, -5)
+	createLabel(cb, text, tip)
+
+	return cb
+end
+
+function G:CreateDropdown(parent, text, x, y, data, tip, width, height)
+	local dd = B.CreateDropDown(parent, width or 90, height or 30, data)
+	dd:SetPoint("TOPLEFT", x, y)
+	createLabel(dd, text, tip)
+
+	return dd
+end
+
+function G:ClearEdit(element)
+	if element.Type == "EditBox" then
+		element:ClearFocus()
+		element:SetText("")
+	elseif element.Type == "CheckBox" then
+		element:SetChecked(false)
+	elseif element.Type == "DropDown" then
+		element.Text:SetText("")
+		for i = 1, #element.options do
+			element.options[i].selected = false
+		end
+	end
+end
+
+function G:CreateScroll(parent, width, height, text)
+	local scroll = CreateFrame("ScrollFrame", nil, parent, "UIPanelScrollFrameTemplate")
+	scroll:SetSize(width, height)
+	scroll:SetPoint("BOTTOMLEFT", 10, 10)
+	B.CreateBDFrame(scroll, .25)
+	if text then
+		B.CreateFS(scroll, 15, text, false, "TOPLEFT", 5, 20)
+	end
+	scroll.child = CreateFrame("Frame", nil, scroll)
+	scroll.child:SetSize(width, 1)
+	scroll:SetScrollChild(scroll.child)
+	B.ReskinScroll(scroll.ScrollBar)
+
+	return scroll
+end
+
+function G:CreateBarWidgets(parent, texture)
+	local icon = CreateFrame("Frame", nil, parent)
+	icon:SetSize(22, 22)
+	icon:SetPoint("LEFT", 5, 0)
+	B.PixelIcon(icon, texture, true)
+
+	local close = CreateFrame("Button", nil, parent)
+	close:SetSize(20, 20)
+	close:SetPoint("RIGHT", -5, 0)
+	close.Icon = close:CreateTexture(nil, "ARTWORK")
+	close.Icon:SetAllPoints()
+	close.Icon:SetTexture("Interface\\BUTTONS\\UI-GroupLoot-Pass-Up")
+	close:SetHighlightTexture(close.Icon:GetTexture())
+
+	return icon, close
+end
+
 local function sortBars(barTable)
 	local num = 1
 	for _, bar in pairs(barTable) do

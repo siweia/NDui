@@ -408,26 +408,7 @@ function G:ExportGUIData()
 						for k, v in pairs(value) do
 							text = text..":"..k..":"..v
 						end
-					elseif KEY == "AuraWatchList" then
-						if key == "Switcher" then
-							for k, v in pairs(value) do
-								text = text..";"..KEY..":"..key..":"..k..":"..tostring(v)
-							end
-						elseif key == "IgnoreSpells" then
-							text = text..";"..KEY..":"..key
-							for spellID in pairs(value) do
-								text = text..":"..tostring(spellID)
-							end
-						else
-							for spellID, k in pairs(value) do
-								text = text..";"..KEY..":"..key..":"..spellID
-								if k[5] == nil then k[5] = false end
-								for _, v in ipairs(k) do
-									text = text..":"..tostring(v)
-								end
-							end
-						end
-					elseif KEY == "Mover" or KEY == "InternalCD" or KEY == "AuraWatchMover" then
+					elseif KEY == "Mover" then
 						text = text..";"..KEY..":"..key
 						for _, v in ipairs(value) do
 							text = text..":"..tostring(v)
@@ -573,28 +554,6 @@ function G:ImportGUIData()
 					C.db[key][value][colors[i]] = tonumber(colors[i+1])
 				end
 			end
-		elseif key == "AuraWatchList" then
-			if value == "Switcher" then
-				local index, state = select(3, strsplit(":", option))
-				C.db[key][value][tonumber(index)] = toBoolean(state)
-			elseif value == "IgnoreSpells" then
-				local spells = {select(3, strsplit(":", option))}
-				for _, spellID in next, spells do
-					C.db[key][value][tonumber(spellID)] = true
-				end
-			else
-				local idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash = select(4, strsplit(":", option))
-				value = tonumber(value)
-				arg1 = tonumber(arg1)
-				spellID = tonumber(spellID)
-				stack = tonumber(stack)
-				amount = toBoolean(amount)
-				timeless = toBoolean(timeless)
-				combat = toBoolean(combat)
-				flash = toBoolean(flash)
-				if not C.db[key][value] then C.db[key][value] = {} end
-				C.db[key][value][arg1] = {idType, spellID, unit, caster, stack, amount, timeless, combat, text, flash}
-			end
 		elseif booleanTable[value] then
 			local results = {select(3, strsplit(":", option))}
 			for i = 1, #results, 2 do
@@ -605,18 +564,12 @@ function G:ImportGUIData()
 			for i = 1, #results, 2 do
 				C.db[key][value][tonumber(results[i])] = tonumber(results[i+1]) or results[i+1]
 			end
-		elseif key == "Mover" or key == "AuraWatchMover" then
+		elseif key == "Mover" then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(":", option))
 			value = tonumber(value) or value
 			x = tonumber(x)
 			y = tonumber(y)
 			C.db[key][value] = {relFrom, parent, relTo, x, y}
-		elseif key == "InternalCD" then
-			local spellID, duration, indicator, unit, itemID = select(3, strsplit(":", option))
-			spellID = tonumber(spellID)
-			duration = tonumber(duration)
-			itemID = tonumber(itemID)
-			C.db[key][spellID] = {spellID, duration, indicator, unit, itemID}
 		elseif value == "InfoStrLeft" or value == "InfoStrRight" or accountStrValues[value] then
 			if key == "ACCOUNT" then
 				NDuiADB[value] = arg1

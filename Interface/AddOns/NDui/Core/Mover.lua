@@ -56,9 +56,8 @@ end
 local MoverList, f = {}
 local updater
 
-function B:Mover(text, value, anchor, width, height, isAuraWatch)
+function B:Mover(text, value, anchor, width, height)
 	local key = "Mover"
-	if isAuraWatch then key = "AuraWatchMover" end
 
 	local mover = CreateFrame("Frame", nil, UIParent)
 	mover:SetWidth(width or self:GetWidth())
@@ -81,15 +80,12 @@ function B:Mover(text, value, anchor, width, height, isAuraWatch)
 	mover.__key = key
 	mover.__value = value
 	mover.__anchor = anchor
-	mover.isAuraWatch = isAuraWatch
 	mover:SetScript("OnEnter", M.Mover_OnEnter)
 	mover:SetScript("OnLeave", M.Mover_OnLeave)
 	mover:SetScript("OnDragStart", M.Mover_OnDragStart)
 	mover:SetScript("OnDragStop", M.Mover_OnDragStop)
 	mover:SetScript("OnMouseUp", M.Mover_OnClick)
-	if not isAuraWatch then
-		tinsert(MoverList, mover)
-	end
+	tinsert(MoverList, mover)
 
 	self:ClearAllPoints()
 	self:SetPoint("TOPLEFT", mover)
@@ -160,11 +156,7 @@ end
 
 function M:Mover_OnClick(btn)
 	if IsShiftKeyDown() and btn == "RightButton" then
-		if self.isAuraWatch then
-			UIErrorsFrame:AddMessage(DB.InfoColor..L["AuraWatchToggleError"])
-		else
-			self:Hide()
-		end
+		self:Hide()
 	elseif IsControlKeyDown() and btn == "RightButton" then
 		self:ClearAllPoints()
 		self:SetPoint(unpack(self.__anchor))
@@ -221,7 +213,6 @@ function M:LockElements()
 	end
 	f:Hide()
 	SlashCmdList["TOGGLEGRID"]("1")
-	SlashCmdList.AuraWatch("lock")
 end
 
 StaticPopupDialogs["RESET_MOVER"] = {
@@ -230,7 +221,6 @@ StaticPopupDialogs["RESET_MOVER"] = {
 	button2 = CANCEL,
 	OnAccept = function()
 		wipe(C.db["Mover"])
-		wipe(C.db["AuraWatchMover"])
 		ReloadUI()
 	end,
 }
@@ -244,8 +234,8 @@ local function CreateConsole()
 	f:SetSize(212, 80)
 	B.SetBD(f)
 	B.CreateFS(f, 15, L["Mover Console"], "system", "TOP", 0, -8)
-	local bu, text = {}, {LOCK, L["Grids"], L["AuraWatch"], RESET}
-	for i = 1, 4 do
+	local bu, text = {}, {LOCK, L["Grids"], RESET}
+	for i = 1, 3 do
 		bu[i] = B.CreateButton(f, 100, 22, text[i])
 		if i == 1 then
 			bu[i]:SetPoint("BOTTOMLEFT", 5, 29)
@@ -262,17 +252,8 @@ local function CreateConsole()
 	bu[2]:SetScript("OnClick", function()
 		SlashCmdList["TOGGLEGRID"]("64")
 	end)
-	-- Cancel
-	bu[3]:SetScript("OnClick", function(self)
-		self.state = not self.state
-		if self.state then
-			SlashCmdList.AuraWatch("move")
-		else
-			SlashCmdList.AuraWatch("lock")
-		end
-	end)
 	-- Reset
-	bu[4]:SetScript("OnClick", function()
+	bu[3]:SetScript("OnClick", function()
 		StaticPopup_Show("RESET_MOVER")
 	end)
 

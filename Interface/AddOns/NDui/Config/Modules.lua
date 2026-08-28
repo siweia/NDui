@@ -12,18 +12,6 @@ C.Bars = {
 C.Auras = {
 	BuffPos			= {"TOPRIGHT", Minimap, "TOPLEFT", -15, 0},			-- BUFF默认位置
 	TotemsPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -450, 20},	-- 图腾助手默认位置
-
-	-- 技能监控各组初始位置
-	PlayerAuraPos	= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 309},	-- 玩家光环分组
-	TargetAuraPos 	= {"BOTTOMLEFT", UIParent, "BOTTOM", 200, 309},		-- 目标光环分组
-	SpecialPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 336},	-- 玩家重要光环分组
-	FocusPos		= {"BOTTOMLEFT", UIParent, "LEFT", 5, -130},		-- 焦点光环分组
-	CDPos			= {"BOTTOMRIGHT", UIParent, "BOTTOM", -425, 125},	-- 冷却计时分组
-	EnchantPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -200, 377},	-- 附魔及饰品分组
-	RaidBuffPos		= {"CENTER", UIParent, "CENTER", -220, 200},		-- 团队增益分组
-	RaidDebuffPos	= {"CENTER", UIParent, "CENTER", 220, 200},			-- 团队减益分组
-	WarningPos		= {"BOTTOMLEFT", UIParent, "BOTTOM", 200, 370},		-- 目标重要光环分组
-	InternalPos		= {"BOTTOMRIGHT", UIParent, "BOTTOM", -425, 500},	-- 法术内置冷却分组
 }
 
 -- 头像相关
