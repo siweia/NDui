@@ -1356,7 +1356,7 @@ function G:SetupUFAuras(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local UF = B:GetModule("UnitFrames")
-	local parent, offset = scroll.child, -10
+	local parent = scroll.child
 
 	local defaultData = {
 		["Player"] = {1, 1, 22, 20, 20, 12},
@@ -1412,9 +1412,6 @@ function G:SetupUFAuras(parent)
 		end
 	end
 
-	createOptionTitle(parent, GENERAL, offset)
-	createOptionCheck(parent, offset-35, L["DebuffColor"], "UFs", "DebuffColor", queueAuraReload, L["DebuffColorTip"])
-
 	local options = {
 		[1] = L["PlayerUF"],
 		[2] = L["TargetUF"],
@@ -1434,7 +1431,7 @@ function G:SetupUFAuras(parent)
 		[7] = "Arena",
 	}
 
-	local dd = G:CreateDropdown(scroll.child, "", 40, -130, options, nil, 180, 28)
+	local dd = G:CreateDropdown(scroll.child, "", 40, -10, options, nil, 180, 28)
 	dd:SetFrameLevel(20)
 	dd.Text:SetText(options[1])
 	dd:SetBackdropBorderColor(1, .8, 0, .5)
@@ -1445,7 +1442,7 @@ function G:SetupUFAuras(parent)
 		panel:SetSize(260, 1)
 		panel:SetPoint("TOP", 0, -30)
 		panel:Hide()
-		createOptionGroup(panel, -125, data[i], updateUFAurasAndQueueReload)
+		createOptionGroup(panel, 0, data[i], updateUFAurasAndQueueReload)
 
 		dd.panels[i] = panel
 		dd.options[i]:HookScript("OnClick", toggleOptionsPanel)

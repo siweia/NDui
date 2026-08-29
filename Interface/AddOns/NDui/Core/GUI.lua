@@ -1104,6 +1104,10 @@ local function toggleAllAuras()
 	B:GetModule("UnitFrames"):ToggleAllAuras()
 end
 
+local function updateUFAuras()
+	B:GetModule("UnitFrames"):UpdateUFAuras()
+end
+
 local function updateRaidTextScale()
 	B:GetModule("UnitFrames"):UpdateRaidTextScale()
 end
@@ -1323,6 +1327,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[3] = {
 		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},
+		{1, "UFs", "DebuffColor", L["DebuffColor"], nil, nil, updateUFAuras, L["DebuffColorTip"]},
 		{1, "UFs", "Arena", L["Arena Frame"], true},
 		{1, "UFs", "ShowAuras", L["ShowAuras"], nil, setupUFAuras, toggleAllAuras},
 		{1, "UFs", "ClassPower", L["UFs ClassPower"].."*", true, setupClassPower, toggleUFClassPower},
