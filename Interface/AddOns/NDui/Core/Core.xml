@@ -6,6 +6,7 @@
 	<Script file="GUI.lua"/>
 	<Script file="ProfileGUI.lua"/>
 	<Script file="ExtraGUI.lua"/>
+	<Script file="FramePreview.lua"/>
 	<Script file="Tutorial.lua"/>
 	<Script file="Changelog.lua"/>
 </Ui>

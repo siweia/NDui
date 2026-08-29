@@ -1976,6 +1976,12 @@ local function OpenGUI()
 		end
 	end)
 
+	local preview = B.CreateButton(f, 110, 20, L["FramePreview"])
+	preview:SetPoint("RIGHT", ok, "LEFT", -5, 0)
+	preview:SetScript("OnClick", function()
+		G:CreateFramePreview()
+	end)
+
 	G:AddSponsor()
 
 	for i, name in pairs(G.TabList) do
