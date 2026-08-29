@@ -324,7 +324,6 @@ function UF:OnLogin()
 		UF:CreateUnitTable()
 		UF:QuestIconCheck()
 		UF:RefreshPlateByEvents()
-		UF:RefreshNameplateFilters()
 		UF:UpdateExcutedCurve()
 	end
 

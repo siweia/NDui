@@ -381,11 +381,6 @@ local accountStrValues = {
 	["IgnoredButtons"] = true,
 }
 
-local spellBooleanValues = {
-	["NameplateWhite"] = true,
-	["NameplateBlack"] = true,
-}
-
 local booleanTable = {
 	["CustomUnits"] = true,
 	["DotSpells"] = true,
@@ -436,12 +431,7 @@ function G:ExportGUIData()
 	end
 
 	for KEY, VALUE in pairs(NDuiADB) do
-		if spellBooleanValues[KEY] then
-			text = text..";ACCOUNT:"..KEY
-			for spellID, value in pairs(VALUE) do
-				text = text..":"..spellID..":"..tostring(value)
-			end
-		elseif KEY == "CornerSpells" then
+		if KEY == "CornerSpells" then
 			text = text..";ACCOUNT:"..KEY
 			for class, value in pairs(VALUE) do
 				if class == DB.MyClass then
@@ -577,12 +567,7 @@ function G:ImportGUIData()
 				C.db[key][value] = arg1
 			end
 		elseif key == "ACCOUNT" then
-			if spellBooleanValues[value] then
-				local results = {select(3, strsplit(":", option))}
-				for i = 1, #results, 2 do
-					NDuiADB[value][tonumber(results[i])] = toBoolean(results[i+1])
-				end
-			elseif value == "CornerSpells" then
+			if value == "CornerSpells" then
 				local results = {select(3, strsplit(":", option))}
 				local class = results[1]
 				if class == DB.MyClass then

@@ -638,8 +638,6 @@ G.AccountSettings = {
 	CustomTex = "",
 	AutoRecycle = true,
 	IgnoredButtons = "",
-	NameplateWhite = {},
-	NameplateBlack = {},
 	IgnoreNotes = {},
 	GlowMode = 3,
 	IgnoredRares = "",
@@ -692,23 +690,6 @@ local loader = CreateFrame("Frame")
 loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "NDui" then return end
-
-	-- Transfer old data START
-	if NDuiADB["NameplateFilter"] then
-		if NDuiADB["NameplateFilter"][1] then
-			if not NDuiADB["NameplateWhite"] then NDuiADB["NameplateWhite"] = {} end
-			for spellID, value in pairs(NDuiADB["NameplateFilter"][1]) do
-				NDuiADB["NameplateWhite"][spellID] = value
-			end
-		end
-		if NDuiADB["NameplateFilter"][2] then
-			if not NDuiADB["NameplateBlack"] then NDuiADB["NameplateBlack"] = {} end
-			for spellID, value in pairs(NDuiADB["NameplateFilter"][2]) do
-				NDuiADB["NameplateBlack"][spellID] = value
-			end
-		end
-	end
-	-- Transfer old data END
 
 	InitialSettings(G.AccountSettings, NDuiADB)
 	if not next(NDuiPDB) then
@@ -875,10 +856,6 @@ end
 
 local function setupSpellsIndicator()
 	G:SetupSpellsIndicator(guiPage[4])
-end
-
-local function setupNameplateFilter()
-	G:SetupNameplateFilter(guiPage[5])
 end
 
 local function setupNameplateColorDots()

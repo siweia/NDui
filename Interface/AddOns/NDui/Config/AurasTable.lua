@@ -24,25 +24,6 @@ function module:CheckCornerSpells()
 	end
 end
 
-local function CheckNameplateFilter(list, key)
-	for spellID in pairs(list) do
-		local name = GetSpellName(spellID)
-		if name then
-			if NDuiADB[key][spellID] then
-				NDuiADB[key][spellID] = nil
-			end
-		else
-			if DB.isDeveloper then print("Invalid nameplate filter ID: "..spellID) end
-		end
-	end
-
-	for spellID, value in pairs(NDuiADB[key]) do
-		if value == false and list[spellID] == nil then
-			NDuiADB[key][spellID] = nil
-		end
-	end
-end
-
 local function cleanupNameplateUnits(VALUE)
 	for npcID in pairs(C[VALUE]) do
 		if C.db["Nameplate"][VALUE][npcID] then
@@ -56,13 +37,7 @@ local function cleanupNameplateUnits(VALUE)
 	end
 end
 
-function module:CheckNameplateFilters()
---	CheckNameplateFilter(C.WhiteList, "NameplateWhite")
---	CheckNameplateFilter(C.BlackList, "NameplateBlack")
-	cleanupNameplateUnits("CustomUnits")
-end
-
 function module:OnLogin()
 	module:CheckCornerSpells()
-	module:CheckNameplateFilters()
+	cleanupNameplateUnits("CustomUnits")
 end
