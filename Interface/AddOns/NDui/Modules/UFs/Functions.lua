@@ -1661,7 +1661,7 @@ function UF:CreateAuras(self)
 			for index, group in ipairs(UNITFRAME_DESATURATED_DEBUFF_GROUPS) do
 				AddAuraGroup(bu, UNITFRAME_DESATURATED_DEBUFF_GROUP_NAME..index, group.filter, GetUnitFrameDesaturatedDebuffCount(bu.numDebuffs, index), index + 1, group.candidateFilters, nil, {
 					desaturated = index == 2,
-					groupSpacing = index == 2 and 0 or nil,
+					groupSpacing = index == 2 and 0 or (bu.size + 3),
 					showDebuffTypeBorder = bu.showDebuffTypeBorder,
 				})
 			end
