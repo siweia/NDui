@@ -45,17 +45,6 @@ function UF:UpdatePlateSize()
 	end
 end
 
-local function PurgeKey(t, k) -- code from platynator
-	t[k] = nil
-	local c = 42
-	repeat
-		if t[c] == nil then
-			t[c] = nil
-		end
-		c = c + 1
-	until issecurevariable(t, k)
-end
-
 function UF:SetupCVars()
 	UF:UpdatePlateCVars()
 	SetCVar("nameplateOverlapH", .8)

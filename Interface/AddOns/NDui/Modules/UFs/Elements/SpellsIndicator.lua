@@ -159,6 +159,4 @@ function UF:CreateSpellsIndicator(self)
 			__frameLevel = baseFrameLevel + index,
 		})
 	end
-
-	self.SpellsIndicator = element
 end
