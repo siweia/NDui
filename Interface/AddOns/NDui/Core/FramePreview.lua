@@ -1,141 +1,188 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local G = B:GetModule("GUI")
-
-local min, max, floor, ceil = math.min, math.max, math.floor, math.ceil
+local min, max, floor = math.min, math.max, math.floor
 
 --[[
 Console frame preview.
 
 The 12.0 aura container bakes the button size in at creation time, so resizing
-raid-frame auras (and most frame geometry) only takes effect after a /reload.
-This window draws a *schematic* of the raid unit frame straight from the live
-C.db values and redraws itself on a throttled timer, so size / icon-count /
-spacing changes are visible immediately while editing the console - no reload.
+raid/party-frame auras (and most frame geometry) only takes effect after a /reload.
+This window draws a *schematic* of a single raid frame and a single party frame
+straight from the live C.db values and redraws itself on a throttled timer, so the
+frame size / power height and the buff / debuff icon sizes are visible immediately
+while editing the console - no reload.
 
-It is a schematic, not a real oUF frame: it shows proportions, the health /
-power strips and the buff / debuff icon grid overlaying the frame, but it does
-not render actual aura textures or unit colors.
+Conventions used here:
+ - One representative unit frame per box, drawn at REAL pixel size (no scaling), so
+   the on-screen size tracks C.db["UFs"] exactly (that is the whole point).
+ - A visible border is drawn around each unit frame so its real width / height is
+   obvious even though the interior is just a health / power strip.
+ - Auras are drawn OVERLAPPING the frame, mirrored from the real layout for BOTH the
+   raid and the party frame (party reuses the exact same "Raid" aura config + anchors:
+   buffs from TOPLEFT growing right+down, debuffs from BOTTOMRIGHT growing left+up,
+   big defensives from TOPRIGHT growing left) so the in-frame icon position is visible
+   - that is what a future "move aura" option would adjust.
+ - Icon backdrop uses the NDui API (B:CreateBDFrame), not a hand-rolled one.
 --]]
 
 local preview
+local unitPool, iconPool = {}, {}
 
-local function SetIcon(parent, pool, i, x, y, size, r, g, b)
-	local bu = pool[i]
+local function GetUnit(i, parent)
+	local u = unitPool[i]
+	if not u then
+		local f = CreateFrame("Frame", nil, parent)
+		local bd = B.CreateBDFrame(f, 0) -- outline the frame bounds
+		bd:SetBackdropBorderColor(.7, .7, .7, 1)
+		local health = CreateFrame("StatusBar", nil, f)
+		health:SetStatusBarTexture(DB.normTex)
+		health:SetAllPoints(f)
+		health:SetFrameLevel(1)
+		local power = CreateFrame("StatusBar", nil, f)
+		power:SetStatusBarTexture(DB.normTex)
+		power:SetPoint("BOTTOMLEFT", f)
+		power:SetPoint("BOTTOMRIGHT", f)
+		power:SetFrameLevel(3)
+		local name = B.CreateFS(f, 11, "", false, "CENTER", 0, 5)
+		local hp = B.CreateFS(f, 11, "", false, "CENTER", 0, -7)
+		u = {f = f, bdFrame = bd, health = health, power = power, name = name, hp = hp}
+		unitPool[i] = u
+	end
+	u.f:SetShown(true)
+	u.f:ClearAllPoints()
+	u.f:SetParent(parent)
+	return u
+end
+
+local function GetIcon(i, parent)
+	local bu = iconPool[i]
 	if not bu then
-		bu = CreateFrame("Frame", nil, parent, "BackdropTemplate")
-		B.CreateBD(bu, 1)
-		pool[i] = bu
+		bu = CreateFrame("Frame", nil, parent)
+		bu.bdFrame = B.CreateBDFrame(bu, .25) -- NDui backdrop API
+		iconPool[i] = bu
 	end
 	bu:SetShown(true)
-	bu:SetSize(size, size)
-	bu:SetPoint("TOPLEFT", parent, "TOPLEFT", x, -y)
-	bu:SetBackdropColor(r, g, b, 1)
+	bu:ClearAllPoints()
+	bu:SetParent(parent)
 	return bu
+end
+
+local function HealthColor(idx)
+	if idx == 2 or idx == 5 then return .3, .6, 1 end
+	if idx == 4 then return 0, 0, 0 end
+	return .1, .1, .1
+end
+
+-- Draw the raid-style aura overlay on a given frame (party reuses the same config).
+-- Returns the next free icon index. iconIndex is the running counter across both frames.
+local function DrawAuras(frame, frameW, ufs, iconIndex)
+	local sp = 2 -- raid style spacing (party shares the raid config, so also 2)
+
+	local buffCount = ufs["RaidBuffType"] ~= 1 and ufs["RaidNumBuff"] or 0
+	local debuffCount = ufs["RaidDebuffType"] ~= 1 and ufs["RaidNumDebuff"] or 0
+	local buffSize = ufs["RaidBuffSize"]
+	local debuffSize = ufs["RaidDebuffSize"]
+
+	local ii = iconIndex
+
+	-- Buffs: TOPLEFT, grow right + down (overlay the frame).
+	local perRowB = max(1, floor((frameW + sp) / (buffSize + sp)))
+	for i = 1, buffCount do
+		ii = ii + 1
+		local col = (i - 1) % perRowB
+		local row = floor((i - 1) / perRowB)
+		local bu = GetIcon(ii, frame)
+		bu:SetSize(buffSize, buffSize)
+		bu:SetPoint("TOPLEFT", frame, "TOPLEFT", 2 + col * (buffSize + sp), -(2 + row * (buffSize + sp)))
+		bu.bdFrame:SetBackdropColor(0, .6, .1, 1)
+	end
+
+	-- Debuffs: BOTTOMRIGHT, grow left + up (overlay the frame).
+	local perRowD = max(1, floor((frameW + sp) / (debuffSize + sp)))
+	for i = 1, debuffCount do
+		ii = ii + 1
+		local col = (i - 1) % perRowD
+		local row = floor((i - 1) / perRowD)
+		local bu = GetIcon(ii, frame)
+		bu:SetSize(debuffSize, debuffSize)
+		bu:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(2 + col * (debuffSize + sp)), 2 + row * (debuffSize + sp))
+		bu.bdFrame:SetBackdropColor(.7, .1, .1, 1)
+	end
+
+	-- Big defensives: TOPRIGHT, grow left (overlay the frame, top-right corner).
+	if ufs["RaidBigDefensive"] then
+		local bd = ufs["RaidBigDefensiveSize"]
+		for i = 1, 2 do
+			ii = ii + 1
+			local bu = GetIcon(ii, frame)
+			bu:SetSize(bd, bd)
+			bu:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -((i - 1) * (bd + 3)), -2)
+			bu.bdFrame:SetBackdropColor(1, .8, 0, 1)
+		end
+	end
+
+	return ii
 end
 
 function G:UpdateFramePreview()
 	if not preview or not preview:IsShown() then return end
 	if not C.db then return end
-
 	local ufs = C.db["UFs"]
-	local W, H = ufs["RaidWidth"], ufs["RaidHeight"]
-	local pH = ufs["RaidPowerHeight"]
-	local textScale = ufs["RaidTextScale"]
 
-	local f = preview.uf
-	f:SetSize(W, H)
+	-- Raid geometry (real values, drawn 1:1).
+	local rW, rH = ufs["RaidWidth"], ufs["RaidHeight"]
+	local rpH = ufs["RaidPowerHeight"]
+	local rFH = rH + rpH + C.mult
 
-	-- Health / power colors follow the raid health color option.
-	local idx = ufs["RaidHealthColor"]
-	local hr, hg, hb = .1, .1, .1
-	if idx == 2 or idx == 5 then
-		hr, hg, hb = .3, .6, 1
-	elseif idx == 4 then
-		hr, hg, hb = 0, 0, 0
-	end
-	preview.health:SetStatusBarColor(hr, hg, hb)
-	preview.power:SetStatusBarColor(.2, .4, .8)
-	preview.power:SetShown(pH > 0)
-	preview.power:SetHeight(pH)
+	-- Party geometry (real values, drawn 1:1).
+	local pW, pH = ufs["PartyWidth"], ufs["PartyHeight"]
+	local pPH = ufs["PartyPowerHeight"]
+	local pFH = pH + pPH + C.mult
 
-	preview.uname:SetScale(textScale)
-	preview.uhp:SetScale(textScale)
-	preview.uname:SetText("Minimal")
-	preview.uhp:SetText("100%")
+	local hr, hg, hb = HealthColor(ufs["RaidHealthColor"])
 
-	-- Aura counts (type 1 = none).
-	local buffCount = ufs["RaidBuffType"] ~= 1 and ufs["RaidNumBuff"] or 0
-	local debuffCount = ufs["RaidDebuffType"] ~= 1 and ufs["RaidNumDebuff"] or 0
-	local buffSize = ufs["RaidBuffSize"]
-	local debuffSize = ufs["RaidDebuffSize"]
-	local spacing = 2
+	-- Raid single frame (real size).
+	local u = GetUnit(1, preview.raidBox)
+	u.f:SetSize(rW, rFH)
+	u.f:SetPoint("CENTER", preview.raidBox, "CENTER", 0, 0)
+	u.health:SetStatusBarColor(hr, hg, hb)
+	u.power:SetStatusBarColor(.2, .4, .8)
+	u.power:SetHeight(rpH)
+	u.power:SetShown(rpH > 0)
+	u.name:SetText("Name")
+	u.hp:SetText("100%")
 
-	local pool = preview.icons
-	local n = 0
-	local bw = W - 2
+	-- Party single frame (real size).
+	local p = GetUnit(2, preview.partyBox)
+	p.f:SetSize(pW, pFH)
+	p.f:SetPoint("CENTER", preview.partyBox, "CENTER", 0, 0)
+	p.health:SetStatusBarColor(.3, .6, 1)
+	p.power:SetStatusBarColor(.2, .4, .8)
+	p.power:SetHeight(pPH)
+	p.power:SetShown(pPH > 0)
+	p.name:SetText("Name")
+	p.hp:SetText("100%")
 
-	-- Buffs: top-left, grow right then down, wrapped within frame width.
-	local perRowB = max(1, floor((bw + spacing) / (buffSize + spacing)))
-	local rowsB = ceil(buffCount / perRowB)
-	for i = 1, buffCount do
-		n = n + 1
-		local col = (i - 1) % perRowB
-		local row = floor((i - 1) / perRowB)
-		SetIcon(f, pool, n,
-			2 + col * (buffSize + spacing),
-			2 + row * (buffSize + spacing),
-			buffSize, 0, .6, .1)
-	end
-	local buffBottom = 2 + rowsB * buffSize + (rowsB - 1) * spacing
+	-- Aura overlay on BOTH frames (party reuses the raid aura config + layout).
+	local ii = 0
+	ii = DrawAuras(unitPool[1].f, rW, ufs, ii)
+	ii = DrawAuras(unitPool[2].f, pW, ufs, ii)
 
-	-- Debuffs: bottom-right, grow left then up, wrapped within frame width.
-	local perRowD = max(1, floor((bw + spacing) / (debuffSize + spacing)))
-	local rowsD = ceil(debuffCount / perRowD)
-	for i = 1, debuffCount do
-		n = n + 1
-		local col = (i - 1) % perRowD
-		local row = floor((i - 1) / perRowD)
-		SetIcon(f, pool, n,
-			W - 2 - debuffSize - col * (debuffSize + spacing),
-			(H - 2) - debuffSize - row * (debuffSize + spacing),
-			debuffSize, .7, .1, .1)
-	end
-	local debuffTop = (H - 2) - debuffSize - (rowsD - 1) * (debuffSize + spacing)
+	-- Hide leftovers from a previous (larger) draw.
+	for i = 2 + 1, #unitPool do unitPool[i].f:Hide() end
+	for i = ii + 1, #iconPool do iconPool[i]:Hide() end
 
-	-- Big defensives: top-right, growing left (schematic only).
-	if ufs["RaidBigDefensive"] then
-		local bdSize = ufs["RaidBigDefensiveSize"]
-		for i = 1, 2 do
-			n = n + 1
-			SetIcon(f, pool, n,
-				W - 2 - i * bdSize - (i - 1) * 3,
-				2, bdSize, 1, .8, 0)
-		end
-	end
-
-	-- Hide leftover icons from a previous (larger) draw.
-	for i = n + 1, #pool do
-		pool[i]:Hide()
-	end
-
-	-- Fit the whole thing (frame + aura overflow) into the canvas.
-	local boxTop = min(0, debuffTop)
-	local boxBottom = max(H, buffBottom)
-	local boxH = boxBottom - boxTop
-	local canvasW, canvasH = 480, 400
-	local margin = 20
-	local scale = min(1, (canvasW - margin) / W, (canvasH - margin) / boxH)
-	scale = max(scale, .3)
-	f:SetScale(scale)
-	local scaledBoxH = boxH * scale
-	local frameY = (canvasH - scaledBoxH) / 2 - boxTop * scale
-	f:SetPoint("TOPLEFT", preview.canvas, "TOPLEFT", (canvasW - W * scale) / 2, -frameY)
-
+	local sp = 2
+	preview.raidTitle:SetText(format(
+		"团队  %dx%d  |  能量 %d  |  图标间距 %d", rW, rH, rpH, sp))
+	preview.partyTitle:SetText(format(
+		"小队  %dx%d  |  能量 %d  |  图标间距 %d", pW, pH, pPH, sp))
 	preview.info:SetText(format(
-		"Raid %dx%d  |  Buffs %dx%d  |  Debuffs %dx%d  |  Power %d  |  BigDef %s",
-		W, H, buffSize, buffCount, debuffSize, debuffCount, pH,
-		ufs["RaidBigDefensive"] and "On" or "Off"))
+		"增益 %dpx×%d  |  减益 %dpx×%d  |  大减益 %s  (尺寸改动需 /reload)",
+		ufs["RaidBuffSize"], ufs["RaidNumBuff"], ufs["RaidDebuffSize"], ufs["RaidNumDebuff"],
+		ufs["RaidBigDefensive"] and "开" or "关")
+	)
 end
 
 function G:CreateFramePreview()
@@ -146,7 +193,7 @@ function G:CreateFramePreview()
 	end
 
 	preview = CreateFrame("Frame", "NDuiFramePreview", UIParent)
-	preview:SetSize(520, 500)
+	preview:SetSize(600, 600)
 	preview:SetPoint("CENTER")
 	preview:SetFrameStrata("DIALOG")
 	B.CreateMF(preview)
@@ -158,36 +205,21 @@ function G:CreateFramePreview()
 	close:SetPoint("BOTTOMRIGHT", -20, 15)
 	close:SetScript("OnClick", function() preview:Hide() end)
 
-	local canvas = CreateFrame("Frame", nil, preview)
-	canvas:SetPoint("TOPLEFT", 20, -40)
-	canvas:SetSize(480, 400)
-	B.CreateBDFrame(canvas, .25)
-	preview.canvas = canvas
+	local raidBox = CreateFrame("Frame", nil, preview)
+	raidBox:SetPoint("TOPLEFT", 20, -50)
+	raidBox:SetSize(270, 500)
+	B.CreateBDFrame(raidBox, .25)
+	preview.raidBox = raidBox
 
-	-- Representative unit frame.
-	local f = CreateFrame("Frame", nil, canvas)
-	local health = CreateFrame("StatusBar", nil, f)
-	health:SetStatusBarTexture(DB.normTex)
-	health:SetAllPoints(f)
-	health:SetFrameLevel(1)
-	local power = CreateFrame("StatusBar", nil, f)
-	power:SetStatusBarTexture(DB.normTex)
-	power:SetPoint("BOTTOMLEFT", f)
-	power:SetPoint("BOTTOMRIGHT", f)
-	power:SetFrameLevel(3)
-	local name = B.CreateFS(f, 13, "", false, "CENTER", 0, 1)
-	name:SetPoint("CENTER", 0, 4)
-	local hp = B.CreateFS(f, 13, "", false, "CENTER", 0, -1)
-	hp:SetPoint("CENTER", 0, -8)
-	preview.uf = f
-	preview.health = health
-	preview.power = power
-	preview.uname = name
-	preview.uhp = hp
-	preview.icons = {}
+	local partyBox = CreateFrame("Frame", nil, preview)
+	partyBox:SetPoint("TOPLEFT", 300, -50)
+	partyBox:SetSize(270, 500)
+	B.CreateBDFrame(partyBox, .25)
+	preview.partyBox = partyBox
 
-	B.CreateFS(preview, 12, L["FramePreviewTip"], false, "BOTTOM", 0, 38)
-	preview.info = B.CreateFS(preview, 13, "", true, "BOTTOM", 0, 18)
+	preview.raidTitle = B.CreateFS(raidBox, 12, "", true, "TOP", 0, -2)
+	preview.partyTitle = B.CreateFS(partyBox, 12, "", true, "TOP", 0, -2)
+	preview.info = B.CreateFS(preview, 12, "", true, "BOTTOM", 0, 42)
 
 	preview:SetScript("OnUpdate", function(self, elapsed)
 		self.elapsed = (self.elapsed or 0) + elapsed
