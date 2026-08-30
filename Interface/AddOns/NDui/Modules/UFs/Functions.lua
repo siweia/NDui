@@ -777,6 +777,7 @@ function UF:CreateCastBar(self)
 	cb.PostCastStop = UF.Castbar_FailedColor
 	cb.PostCastFail = UF.Castbar_FailedColor
 	cb.PostCastInterrupted = UF.Castbar_UpdateInterrupted
+	cb.PostCastGlobal = UF.ResumeCastbarTime -- GCD right after an interrupted cast must show its countdown again
 	cb.CreatePip = UF.CreatePip
 	cb.PostUpdatePips = UF.PostUpdatePips
 

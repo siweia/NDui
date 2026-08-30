@@ -22,6 +22,23 @@ function UF.CreateCastbarTimeBinding()
 	return binding
 end
 
+-- Freeze the cast time countdown: the DurationTextBinding keeps ticking on its own,
+-- so while the castbar is held after an interrupted/failed cast we disable it and
+-- blank the text, otherwise the "elapsed | total" timer would keep counting through
+-- the whole timeToHold. Resumed by UF:ResumeCastbarTime on the next cast start.
+function UF:StopCastbarTime()
+	if self.Time and self.Time.binding then
+		self.Time.binding:SetEnabled(false)
+	end
+	if self.Time then self.Time:SetText("") end
+end
+
+function UF:ResumeCastbarTime()
+	if self.Time and self.Time.binding then
+		self.Time.binding:SetEnabled(true)
+	end
+end
+
 function UF:UpdateCastbarGlow(spellID)
 	if self.barGlow then
 		local isImportant = C.db["Nameplate"]["CastbarGlow"] and C_Spell.IsSpellImportant(spellID)
@@ -68,6 +85,9 @@ function UF:UpdateCastBarColors()
 end
 
 function UF:UpdateCastBarColor(unit, spellID, notInterruptible)
+	-- A new cast is starting: re-enable the countdown binding that StopCastbarTime
+	-- disabled while the previous cast's bar was held.
+	UF.ResumeCastbarTime(self)
 	if unit == "player" then
 		self:SetStatusBarColor(UF.OwnCastColor:GetRGB())
 	elseif not UnitIsUnit(unit, "player") then
@@ -81,10 +101,14 @@ end
 
 function UF:Castbar_FailedColor(unit)
 	self:SetStatusBarColor(1, .1, 0)
+	-- Cast ended (failed, interrupted or finished): stop the countdown so the held
+	-- bar shows a frozen/blank timer instead of keeping on counting through timeToHold.
+	UF.StopCastbarTime(self)
 end
 
 function UF:Castbar_UpdateInterrupted(unit, spellID, interruptedBy)
 	self:SetStatusBarColor(1, .1, 0)
+	UF.StopCastbarTime(self)
 
 	if not C.db["Nameplate"]["Interruptor"] or not self.spellTarget or not B:NotSecretValue(interruptedBy) then return end
 	if not interruptedBy then return end
