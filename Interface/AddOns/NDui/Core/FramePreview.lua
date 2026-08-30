@@ -2,6 +2,7 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local G = B:GetModule("GUI")
 local min, max, floor = math.min, math.max, math.floor
+local GetSpellTexture = C_Spell and C_Spell.GetSpellTexture or GetSpellTexture
 
 --[[
 Console frame preview.
@@ -27,7 +28,7 @@ Conventions used here:
 --]]
 
 local preview
-local unitPool, iconPool = {}, {}
+local unitPool, iconPool, indicatorPool = {}, {}, {}
 
 local function GetUnit(i, parent)
 	local u = unitPool[i]
@@ -47,6 +48,7 @@ local function GetUnit(i, parent)
 		local name = B.CreateFS(f, 11, "", false, "CENTER", 0, 5)
 		local hp = B.CreateFS(f, 11, "", false, "CENTER", 0, -7)
 		u = {f = f, bdFrame = bd, health = health, power = power, name = name, hp = hp}
+		f.health = health -- expose for corner-indicator anchoring
 		unitPool[i] = u
 	end
 	u.f:SetShown(true)
@@ -71,6 +73,25 @@ local function GetIcon(i, parent)
 	bu:SetParent(parent)
 	return bu
 	end
+
+local function GetIndicator(i, parent)
+	local bu = indicatorPool[i]
+	if not bu then
+		bu = CreateFrame("Frame", nil, parent)
+		bu.bdFrame = B.CreateBDFrame(bu, .25)
+		bu.tex = bu:CreateTexture(nil, "ARTWORK")
+		bu.tex:SetAllPoints(bu)
+		bu.tex:Hide()
+		bu.txt = B.CreateFS(bu, 10, "", nil, "CENTER", 0, 0)
+		bu.txt:SetTextColor(1, 1, 1)
+		bu.txt:Hide()
+		indicatorPool[i] = bu
+	end
+	bu:SetShown(true)
+	bu:ClearAllPoints()
+	bu:SetParent(parent)
+	return bu
+end
 
 -- Draw the raid-style aura overlay on a given frame (party reuses the same config).
 -- Returns the next free icon index. iconIndex is the running counter across both frames.
@@ -137,6 +158,63 @@ local function DrawAuras(frame, frameW, ufs, iconIndex, cd)
 	end
 
 	return ii
+end
+
+-- Draw the corner buff indicators (SpellsIndicator) on a frame, mirrored from the
+-- live RaidBuffIndicator / BuffIndicatorType / BuffIndicatorScale / RaidSpellSize.
+-- Each configured corner spell anchors to a corner of the Health bar.
+local function DrawCornerIndicators(frame, ufs, indIndex)
+	if not ufs["RaidBuffIndicator"] then return indIndex end
+	local UF = B:GetModule("UnitFrames")
+	local spells = UF.CornerSpells
+	if not spells or not next(spells) then return indIndex end
+	local spellSize = ufs["RaidSpellSize"] or 10
+	local scale = ufs["BuffIndicatorScale"] or 1
+	local iType = ufs["BuffIndicatorType"] or 1
+	local size = max(4, floor(spellSize * scale + .5))
+	-- counterOffsets[anchor][3] mirrors SpellsIndicator.lua (unscaled point offset).
+	local off = {
+		TOPLEFT = {2, -2}, TOPRIGHT = {-2, -2},
+		BOTTOMLEFT = {2, 2}, BOTTOMRIGHT = {-2, 2},
+		LEFT = {2, 0}, RIGHT = {-2, 0},
+		TOP = {0, -2}, BOTTOM = {0, 2},
+	}
+	-- Use a SEPARATE sequential index (ind) so indicatorPool stays a dense 1..n
+	-- sequence. Reusing the shared aura index would leave holes at the front and
+	-- make #indicatorPool unreliable (Lua # on sparse tables), so leftover chips
+	-- would never get hidden when the toggle is turned off.
+	local ind = indIndex
+	for spellID, value in pairs(spells) do
+		local anchor = value[1]
+		local col = value[2]
+		ind = ind + 1
+		local bu = GetIndicator(ind, frame)
+		bu:SetSize(size, size)
+		local x, y = unpack(off[anchor] or off.TOPLEFT)
+		bu:SetPoint(anchor, frame.health, anchor, x, y)
+		if iType == 3 then -- numbers / timer mode: dark chip with a colored letter
+			bu.tex:Hide()
+			bu.bdFrame:SetBackdropColor(.1, .1, .1, 1)
+			bu.txt:SetTextColor(col[1], col[2], col[3])
+			bu.txt:SetText("T")
+			bu.txt:Show()
+		elseif iType == 2 then -- icon mode: the spell's own icon (e.g. Rejuvenation)
+			local tex = GetSpellTexture and GetSpellTexture(spellID)
+			if tex then
+				bu.tex:SetTexture(tex)
+				bu.tex:Show()
+			else
+				bu.tex:Hide()
+			end
+			bu.bdFrame:SetBackdropColor(col[1], col[2], col[3], 1)
+			bu.txt:Hide()
+		else -- blocks (1): solid colored chip, no label
+			bu.tex:Hide()
+			bu.bdFrame:SetBackdropColor(col[1], col[2], col[3], 1)
+			bu.txt:Hide()
+		end
+	end
+	return ind
 end
 
 function G:UpdateFramePreview()
@@ -217,9 +295,15 @@ function G:UpdateFramePreview()
 	ii = DrawAuras(unitPool[1].f, rW, ufs, ii, cd)
 	ii = DrawAuras(unitPool[2].f, pW, ufs, ii, cd)
 
+	-- Corner indicators use their own dense index so #indicatorPool is reliable.
+	local ind = 0
+	ind = DrawCornerIndicators(unitPool[1].f, ufs, ind)
+	ind = DrawCornerIndicators(unitPool[2].f, ufs, ind)
+
 	-- Hide leftovers from a previous (larger) draw.
 	for i = 2 + 1, #unitPool do unitPool[i].f:Hide() end
 	for i = ii + 1, #iconPool do iconPool[i]:Hide() end
+	for i = ind + 1, #indicatorPool do indicatorPool[i]:Hide() end
 
 	local sp = 2
 	local hpModes = {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}
@@ -236,6 +320,21 @@ function G:UpdateFramePreview()
 		ufs["RaidBuffSize"], ufs["RaidNumBuff"], ufs["RaidDebuffSize"], ufs["RaidNumDebuff"],
 		ufs["RaidBigDefensive"] and L["PreviewOn"] or L["PreviewOff"],
 		bOn, cd.buffSize, dOn, cd.debuffSize)
+	)
+
+	-- Corner indicator summary (SpellsIndicator).
+	local biOn = ufs["RaidBuffIndicator"] and L["PreviewOn"] or L["PreviewOff"]
+	local biModes = {L["BI_Blocks"], L["BI_Icons"], L["BI_Numbers"]}
+	local biMode = biModes[ufs["BuffIndicatorType"] or 1] or biModes[1]
+	local biSize = floor((ufs["RaidSpellSize"] or 10) * (ufs["BuffIndicatorScale"] or 1) + .5)
+	local biCount = 0
+	local UF = B:GetModule("UnitFrames")
+	if UF.CornerSpells then
+		for _ in pairs(UF.CornerSpells) do biCount = biCount + 1 end
+	end
+	preview.cornerInfo:SetText(format(
+		L["PreviewCornerInfo"],
+		biOn, biSize, biMode, biCount)
 	)
 end
 
@@ -282,6 +381,7 @@ function G:CreateFramePreview()
 	preview.raidTitle = B.CreateFS(raidBox, 12, "", true, "TOP", 0, -2)
 	preview.partyTitle = B.CreateFS(partyBox, 12, "", true, "TOP", 0, -2)
 	preview.info = B.CreateFS(preview, 12, "", true, "BOTTOM", 0, 42)
+	preview.cornerInfo = B.CreateFS(preview, 12, "", true, "BOTTOM", 0, 68)
 
 	preview:SetScript("OnUpdate", function(self, elapsed)
 		self.elapsed = (self.elapsed or 0) + elapsed
