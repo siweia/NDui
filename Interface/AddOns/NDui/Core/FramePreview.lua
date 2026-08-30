@@ -314,11 +314,14 @@ function G:UpdateFramePreview()
 		L["PreviewRaidTitle"], rW, rH, rpH, sp))
 	preview.partyTitle:SetText(format(
 		L["PreviewPartyTitle"], pW, pH, pPH, sp))
-	preview.info:SetText(format(
-		L["PreviewAuraInfo"],
+	preview.info1:SetText(format(
+		L["PreviewAuraInfo1"],
 		hpMode,
 		ufs["RaidBuffSize"], ufs["RaidNumBuff"], ufs["RaidDebuffSize"], ufs["RaidNumDebuff"],
-		ufs["RaidBigDefensive"] and L["PreviewOn"] or L["PreviewOff"],
+		ufs["RaidBigDefensive"] and L["PreviewOn"] or L["PreviewOff"])
+	)
+	preview.info2:SetText(format(
+		L["PreviewAuraInfo2"],
 		bOn, cd.buffSize, dOn, cd.debuffSize)
 	)
 
@@ -368,20 +371,21 @@ function G:CreateFramePreview()
 
 	local raidBox = CreateFrame("Frame", nil, preview)
 	raidBox:SetPoint("TOPLEFT", 20, -50)
-	raidBox:SetSize(270, 250)
+	raidBox:SetSize(270, 220)
 	B.CreateBDFrame(raidBox, .25)
 	preview.raidBox = raidBox
 
 	local partyBox = CreateFrame("Frame", nil, preview)
 	partyBox:SetPoint("TOPLEFT", 300, -50)
-	partyBox:SetSize(270, 250)
+	partyBox:SetSize(270, 220)
 	B.CreateBDFrame(partyBox, .25)
 	preview.partyBox = partyBox
 
 	preview.raidTitle = B.CreateFS(raidBox, 12, "", true, "TOP", 0, -2)
 	preview.partyTitle = B.CreateFS(partyBox, 12, "", true, "TOP", 0, -2)
-	preview.info = B.CreateFS(preview, 12, "", true, "BOTTOM", 0, 42)
-	preview.cornerInfo = B.CreateFS(preview, 12, "", true, "BOTTOM", 0, 68)
+	preview.info1 = B.CreateFS(preview, 12, "", true, "BOTTOM", 0, 42)
+	preview.info2 = B.CreateFS(preview, 12, "", true, "BOTTOM", 0, 62)
+	preview.cornerInfo = B.CreateFS(preview, 12, "", true, "BOTTOM", 0, 84)
 
 	preview:SetScript("OnUpdate", function(self, elapsed)
 		self.elapsed = (self.elapsed or 0) + elapsed
