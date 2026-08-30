@@ -4,7 +4,7 @@ local G = B:GetModule("GUI")
 
 local _G = _G
 local unpack, pairs, ipairs, tinsert = unpack, pairs, ipairs, tinsert
-local min, max, strmatch, strfind, tonumber = min, max, strmatch, strfind, tonumber
+local min, max, floor, strmatch, strfind, tonumber = min, max, math.floor, strmatch, strfind, tonumber
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
 local GetItemIcon = C_Item.GetItemIconByID
 local IsControlKeyDown = IsControlKeyDown
@@ -505,6 +505,7 @@ local function createOptionSlider(parent, title, minV, maxV, defaultV, yOffset, 
 	slider.__default = defaultV
 	slider:SetValueStep(step or 1)
 	slider:SetScript("OnValueChanged", sliderValueChanged)
+	return slider
 end
 
 local function updateDropdownHighlight(self)
@@ -1287,7 +1288,20 @@ function G:SetupUFAuras(parent)
 			createOptionSlider(parent, "Debuff "..L["Auras Size"], 5, 50, default[3], offset-510, value.."DebuffSize", queueAuraReload)
 			createOptionSlider(parent, L["CDFontSize"], 5, 30, default[6], offset-580, value.."CDSize", queueAuraReload)
 		else
-			createOptionSlider(parent, L["Auras Size"], 5, 50, default[3], offset-440, value.."AuraSize", queueAuraReload)
+			-- Aura size slider with a live "how many fit per row" hint. The 12.0 aura
+			-- container wraps at the frame's width (layoutLimit = frame:GetWidth() at
+			-- creation, spacing 3), so show the wrap count next to the slider instead of
+			-- making the user guess when a row will wrap while dragging the size.
+			local sizeSlider = createOptionSlider(parent, L["Auras Size"], 5, 50, default[3], offset-440, value.."AuraSize", queueAuraReload)
+			local widthKey = value == "Focus" and "FocusWidth" or ((value == "ToT" or value == "Pet") and "PetWidth" or "PlayerWidth")
+			local function refreshAuraPerRow()
+				local sizeV = C.db["UFs"][value.."AuraSize"]
+				local frameW = C.db["UFs"][widthKey] or 200
+				local perRow = max(1, floor((frameW + 3) / (sizeV + 3)))
+				sizeSlider.Text:SetText(format("%s (%s)", L["Auras Size"], format(L["AuraPerRow"], perRow)))
+			end
+			sizeSlider:HookScript("OnValueChanged", refreshAuraPerRow)
+			refreshAuraPerRow()
 			createOptionSlider(parent, L["CDFontSize"], 5, 30, default[6], offset-510, value.."CDSize", queueAuraReload)
 		end
 	end
