@@ -175,13 +175,13 @@ function G:UpdateFramePreview()
 
 	local sp = 2
 	preview.raidTitle:SetText(format(
-		"团队  %dx%d  |  能量 %d  |  图标间距 %d", rW, rH, rpH, sp))
+		L["PreviewRaidTitle"], rW, rH, rpH, sp))
 	preview.partyTitle:SetText(format(
-		"小队  %dx%d  |  能量 %d  |  图标间距 %d", pW, pH, pPH, sp))
+		L["PreviewPartyTitle"], pW, pH, pPH, sp))
 	preview.info:SetText(format(
-		"增益 %dpx×%d  |  减益 %dpx×%d  |  大减益 %s  (尺寸改动需 /reload)",
+		L["PreviewAuraInfo"],
 		ufs["RaidBuffSize"], ufs["RaidNumBuff"], ufs["RaidDebuffSize"], ufs["RaidNumDebuff"],
-		ufs["RaidBigDefensive"] and "开" or "关")
+		ufs["RaidBigDefensive"] and L["PreviewOn"] or L["PreviewOff"])
 	)
 end
 
@@ -193,7 +193,7 @@ function G:CreateFramePreview()
 	end
 
 	preview = CreateFrame("Frame", "NDuiFramePreview", UIParent)
-	preview:SetSize(600, 600)
+	preview:SetSize(600, 380)
 	preview:SetPoint("CENTER")
 	preview:SetFrameStrata("DIALOG")
 	B.CreateMF(preview)
@@ -207,13 +207,13 @@ function G:CreateFramePreview()
 
 	local raidBox = CreateFrame("Frame", nil, preview)
 	raidBox:SetPoint("TOPLEFT", 20, -50)
-	raidBox:SetSize(270, 500)
+	raidBox:SetSize(270, 250)
 	B.CreateBDFrame(raidBox, .25)
 	preview.raidBox = raidBox
 
 	local partyBox = CreateFrame("Frame", nil, preview)
 	partyBox:SetPoint("TOPLEFT", 300, -50)
-	partyBox:SetSize(270, 500)
+	partyBox:SetSize(270, 250)
 	B.CreateBDFrame(partyBox, .25)
 	preview.partyBox = partyBox
 
