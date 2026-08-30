@@ -529,7 +529,6 @@ G.DefaultSettings = {
 		AzeriteArmor = true,
 		OnlyArmorIcons = false,
 		HideAllID = false,
-		DisableMapPOITooltipFix = false,
 		MythicScore = true,
 		FontSize = 12,
 	},
@@ -1514,7 +1513,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "MythicScore", L["MDScore"].."*", true, nil, nil, L["MDScoreTip"]},
 		{1, "Tooltip", "ItemQuality", L["ShowItemQuality"].."*"},
 		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"], true},
-		{1, "Tooltip", "DisableMapPOITooltipFix", "|cffff0000"..L["DisableMapPOITooltipFix"].."|r", nil, nil, nil, L["DisableMapPOITooltipFixTip"]},
 		{},--blank
 		{1, "Tooltip", "AzeriteArmor", HeaderTag..L["Show AzeriteArmor"]},
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},
