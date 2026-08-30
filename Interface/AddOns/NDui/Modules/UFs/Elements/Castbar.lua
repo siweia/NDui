@@ -57,7 +57,8 @@ function UF:UpdateSpellTarget(unit)
 
 		if UnitShouldDisplaySpellTargetName(unit) then
 			self.spellTarget:SetText(UnitSpellTargetName(unit))
-			local classColor = C_ClassColor.GetClassColor(UnitSpellTargetClass(unit))
+			local targetClass = UnitSpellTargetClass(unit)
+			local classColor = type(targetClass) ~= "nil" and C_ClassColor.GetClassColor(targetClass)
 			if classColor then
 				self.spellTarget:SetTextColor(classColor:GetRGB())
 			else
