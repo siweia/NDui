@@ -66,13 +66,7 @@ local function GetIcon(i, parent)
 	bu:ClearAllPoints()
 	bu:SetParent(parent)
 	return bu
-end
-
-local function HealthColor(idx)
-	if idx == 2 or idx == 5 then return .3, .6, 1 end
-	if idx == 4 then return 0, 0, 0 end
-	return .1, .1, .1
-end
+	end
 
 -- Draw the raid-style aura overlay on a given frame (party reuses the same config).
 -- Returns the next free icon index. iconIndex is the running counter across both frames.
@@ -140,14 +134,37 @@ function G:UpdateFramePreview()
 	local pPH = ufs["PartyPowerHeight"]
 	local pFH = pH + pPH + C.mult
 
-	local hr, hg, hb = HealthColor(ufs["RaidHealthColor"])
+	-- Health / power colour follow the live RaidHealthColor option. Party reuses the
+	-- same "raid" aura + colour config, so both boxes read the same index.
+	local hIdx = ufs["RaidHealthColor"]
+	local cr, cg, cb = B.ClassColor(DB.MyClass)
+	local hr, hg, hb, ha = .1, .1, .1, 1
+	local hTex = DB.normTex
+	if hIdx == 2 then -- class colour
+		hr, hg, hb = cr, cg, cb
+	elseif hIdx == 3 then -- gradient by health %
+		hr, hg, hb = .7, 1, 0
+	elseif hIdx == 4 then -- transparent
+		hr, hg, hb, ha = 0, 0, 0, 0
+	elseif hIdx == 5 then -- class gradient texture
+		hr, hg, hb = cr, cg, cb
+		hTex = DB.classGradientTex
+	end
+	-- Power: power-type colour for idx 2/5, else class colour.
+	local pr, pg, pb
+	if hIdx == 2 or hIdx == 5 then
+		pr, pg, pb = .2, .4, .8
+	else
+		pr, pg, pb = cr, cg, cb
+	end
 
 	-- Raid single frame (real size).
 	local u = GetUnit(1, preview.raidBox)
 	u.f:SetSize(rW, rFH)
 	u.f:SetPoint("CENTER", preview.raidBox, "CENTER", 0, 0)
-	u.health:SetStatusBarColor(hr, hg, hb)
-	u.power:SetStatusBarColor(.2, .4, .8)
+	u.health:SetStatusBarTexture(hTex)
+	u.health:SetStatusBarColor(hr, hg, hb, ha)
+	u.power:SetStatusBarColor(pr, pg, pb)
 	u.power:SetHeight(rpH)
 	u.power:SetShown(rpH > 0)
 	u.name:SetText("Name")
@@ -157,8 +174,9 @@ function G:UpdateFramePreview()
 	local p = GetUnit(2, preview.partyBox)
 	p.f:SetSize(pW, pFH)
 	p.f:SetPoint("CENTER", preview.partyBox, "CENTER", 0, 0)
-	p.health:SetStatusBarColor(.3, .6, 1)
-	p.power:SetStatusBarColor(.2, .4, .8)
+	p.health:SetStatusBarTexture(hTex)
+	p.health:SetStatusBarColor(hr, hg, hb, ha)
+	p.power:SetStatusBarColor(pr, pg, pb)
 	p.power:SetHeight(pPH)
 	p.power:SetShown(pPH > 0)
 	p.name:SetText("Name")
@@ -174,15 +192,26 @@ function G:UpdateFramePreview()
 	for i = ii + 1, #iconPool do iconPool[i]:Hide() end
 
 	local sp = 2
+	local hpModes = {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}
+	local hpMode = hpModes[hIdx] or hpModes[1]
 	preview.raidTitle:SetText(format(
 		L["PreviewRaidTitle"], rW, rH, rpH, sp))
 	preview.partyTitle:SetText(format(
 		L["PreviewPartyTitle"], pW, pH, pPH, sp))
 	preview.info:SetText(format(
 		L["PreviewAuraInfo"],
+		hpMode,
 		ufs["RaidBuffSize"], ufs["RaidNumBuff"], ufs["RaidDebuffSize"], ufs["RaidNumDebuff"],
 		ufs["RaidBigDefensive"] and L["PreviewOn"] or L["PreviewOff"])
 	)
+end
+
+function G:ToggleFramePreview()
+	if preview and preview:IsShown() then
+		preview:Hide()
+	else
+		G:CreateFramePreview()
+	end
 end
 
 function G:CreateFramePreview()

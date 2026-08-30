@@ -1976,10 +1976,10 @@ local function OpenGUI()
 		end
 	end)
 
-	local preview = B.CreateButton(f, 110, 20, L["FramePreview"])
-	preview:SetPoint("RIGHT", ok, "LEFT", -5, 0)
-	preview:SetScript("OnClick", function()
-		G:CreateFramePreview()
+	local previewBtn = B.CreateButton(f, 110, 20, L["FramePreview"])
+	previewBtn:SetPoint("RIGHT", ok, "LEFT", -5, 0)
+	previewBtn:SetScript("OnClick", function()
+		G:ToggleFramePreview()
 	end)
 
 	G:AddSponsor()
