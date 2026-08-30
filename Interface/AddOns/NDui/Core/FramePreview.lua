@@ -60,6 +60,10 @@ local function GetIcon(i, parent)
 	if not bu then
 		bu = CreateFrame("Frame", nil, parent)
 		bu.bdFrame = B.CreateBDFrame(bu, .25) -- NDui backdrop API
+		-- Cooldown countdown text (shown only when the live CDText option is on).
+		bu.cd = B.CreateFS(bu, 12, "", nil, "CENTER", 0, 0)
+		bu.cd:SetTextColor(1, 1, 1)
+		bu.cd:Hide()
 		iconPool[i] = bu
 	end
 	bu:SetShown(true)
@@ -70,13 +74,26 @@ local function GetIcon(i, parent)
 
 -- Draw the raid-style aura overlay on a given frame (party reuses the same config).
 -- Returns the next free icon index. iconIndex is the running counter across both frames.
-local function DrawAuras(frame, frameW, ufs, iconIndex)
+-- cd = {buffText, buffSize, debuffText, debuffSize, bigText, bigSize} mirrors the live
+-- per-type raid aura cooldown-text options (RaidBuffCDText / RaidDebuffCDText /
+-- RaidBigDefensiveCDText + their *CDSize, each slider is clamped 5..16 in-game).
+local function DrawAuras(frame, frameW, ufs, iconIndex, cd)
 	local sp = 2 -- raid style spacing (party shares the raid config, so also 2)
 
 	local buffCount = ufs["RaidBuffType"] ~= 1 and ufs["RaidNumBuff"] or 0
 	local debuffCount = ufs["RaidDebuffType"] ~= 1 and ufs["RaidNumDebuff"] or 0
 	local buffSize = ufs["RaidBuffSize"]
 	local debuffSize = ufs["RaidDebuffSize"]
+
+	local function SetCD(bu, on, size)
+		if on then
+			B.SetFontSize(bu.cd, size)
+			bu.cd:SetText("8")
+			bu.cd:Show()
+		else
+			bu.cd:Hide()
+		end
+	end
 
 	local ii = iconIndex
 
@@ -90,6 +107,7 @@ local function DrawAuras(frame, frameW, ufs, iconIndex)
 		bu:SetSize(buffSize, buffSize)
 		bu:SetPoint("TOPLEFT", frame, "TOPLEFT", 2 + col * (buffSize + sp), -(2 + row * (buffSize + sp)))
 		bu.bdFrame:SetBackdropColor(0, .6, .1, 1)
+		SetCD(bu, cd.buffText, cd.buffSize)
 	end
 
 	-- Debuffs: BOTTOMRIGHT, grow left + up (overlay the frame).
@@ -102,6 +120,7 @@ local function DrawAuras(frame, frameW, ufs, iconIndex)
 		bu:SetSize(debuffSize, debuffSize)
 		bu:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -(2 + col * (debuffSize + sp)), 2 + row * (debuffSize + sp))
 		bu.bdFrame:SetBackdropColor(.7, .1, .1, 1)
+		SetCD(bu, cd.debuffText, cd.debuffSize)
 	end
 
 	-- Big defensives: TOPRIGHT, grow left (overlay the frame, top-right corner).
@@ -112,8 +131,9 @@ local function DrawAuras(frame, frameW, ufs, iconIndex)
 			local bu = GetIcon(ii, frame)
 			bu:SetSize(bd, bd)
 			bu:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -((i - 1) * (bd + 3)), -2)
-			bu.bdFrame:SetBackdropColor(1, .8, 0, 1)
-		end
+		bu.bdFrame:SetBackdropColor(1, .8, 0, 1)
+		SetCD(bu, cd.bigText, cd.bigSize)
+	end
 	end
 
 	return ii
@@ -183,9 +203,19 @@ function G:UpdateFramePreview()
 	p.hp:SetText("100%")
 
 	-- Aura overlay on BOTH frames (party reuses the raid aura config + layout).
+	-- Cooldown countdown text follows the live per-type raid aura options.
+	local cd = {
+		buffText   = ufs["RaidBuffCDText"],
+		buffSize   = min(max(ufs["RaidBuffCDSize"] or 12, 5), 16),
+		debuffText = ufs["RaidDebuffCDText"],
+		debuffSize = min(max(ufs["RaidDebuffCDSize"] or 12, 5), 16),
+		bigText    = ufs["RaidBigDefensiveCDText"],
+		bigSize    = min(max(ufs["RaidBigDefensiveCDSize"] or 12, 5), 16),
+	}
+
 	local ii = 0
-	ii = DrawAuras(unitPool[1].f, rW, ufs, ii)
-	ii = DrawAuras(unitPool[2].f, pW, ufs, ii)
+	ii = DrawAuras(unitPool[1].f, rW, ufs, ii, cd)
+	ii = DrawAuras(unitPool[2].f, pW, ufs, ii, cd)
 
 	-- Hide leftovers from a previous (larger) draw.
 	for i = 2 + 1, #unitPool do unitPool[i].f:Hide() end
@@ -194,6 +224,8 @@ function G:UpdateFramePreview()
 	local sp = 2
 	local hpModes = {L["Default Dark"], L["ClassColorHP"], L["GradientHP"], L["ClearHealth"], L["ClearClass"]}
 	local hpMode = hpModes[hIdx] or hpModes[1]
+	local bOn = cd.buffText and L["PreviewOn"] or L["PreviewOff"]
+	local dOn = cd.debuffText and L["PreviewOn"] or L["PreviewOff"]
 	preview.raidTitle:SetText(format(
 		L["PreviewRaidTitle"], rW, rH, rpH, sp))
 	preview.partyTitle:SetText(format(
@@ -202,7 +234,8 @@ function G:UpdateFramePreview()
 		L["PreviewAuraInfo"],
 		hpMode,
 		ufs["RaidBuffSize"], ufs["RaidNumBuff"], ufs["RaidDebuffSize"], ufs["RaidNumDebuff"],
-		ufs["RaidBigDefensive"] and L["PreviewOn"] or L["PreviewOff"])
+		ufs["RaidBigDefensive"] and L["PreviewOn"] or L["PreviewOff"],
+		bOn, cd.buffSize, dOn, cd.debuffSize)
 	)
 end
 
