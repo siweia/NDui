@@ -223,7 +223,6 @@ G.DefaultSettings = {
 		SortAscending = false,
 		PlayerAbsorb = false,
 		ShowRoleMode = 1,
-		CDFontSize = 12, -- Legacy source for the Reset6 per-frame aura font migration.
 
 		PlayerWidth = 245,
 		PlayerHeight = 24,
@@ -311,8 +310,6 @@ G.DefaultSettings = {
 		ArenaDebuffSize = 16,
 		ArenaCDSize = 12,
 		RaidAuras = true,
-		RaidCDText = false, -- Legacy source for the Reset6 per-container aura text migration.
-		RaidCDSize = 12, -- Legacy source for the Reset6 per-container aura font migration.
 		RaidBuffCDText = false,
 		RaidBuffCDSize = 12,
 		RaidDebuffCDText = false,
@@ -762,23 +759,6 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		local raidBuffType = ufs["RaidBuffType"]
 		ufs["RaidBigDefensive"] = raidBuffType == 3 or raidBuffType == 4
 		ufs["RaidBuffType"] = (raidBuffType == 2 or raidBuffType == 4) and 2 or 1
-		local raidCDText = ufs["RaidCDText"]
-		local raidCDSize = ufs["RaidCDSize"]
-		local raidAuraCDSize = min(max(raidCDSize, 5), 16)
-		ufs["RaidBuffCDText"] = raidCDText
-		ufs["RaidBuffCDSize"] = raidAuraCDSize
-		ufs["RaidDebuffCDText"] = raidCDText
-		ufs["RaidDebuffCDSize"] = raidAuraCDSize
-		ufs["RaidBigDefensiveCDText"] = raidCDText
-		ufs["RaidBigDefensiveCDSize"] = raidAuraCDSize
-		local unitFrameCDSize = ufs["CDFontSize"]
-		ufs["PlayerCDSize"] = unitFrameCDSize
-		ufs["TargetCDSize"] = unitFrameCDSize
-		ufs["FocusCDSize"] = unitFrameCDSize
-		ufs["ToTCDSize"] = unitFrameCDSize
-		ufs["PetCDSize"] = unitFrameCDSize
-		ufs["BossCDSize"] = raidCDSize
-		ufs["ArenaCDSize"] = raidCDSize
 		local bossBuffType = ufs["BossBuffType"]
 		-- Boss and Arena previously shared the Boss aura settings.
 		ufs["ArenaNumBuff"] = ufs["BossNumBuff"]
