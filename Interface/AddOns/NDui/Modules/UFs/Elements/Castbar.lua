@@ -4,7 +4,10 @@ local UF = B:GetModule("UnitFrames")
 
 local castTimeFormatter = C_StringUtil.CreateSecondsFormatter()
 castTimeFormatter:SetDefaultAbbreviation(Enum.SecondsFormatterAbbreviation.OneLetter)
-castTimeFormatter:SetMinInterval(Enum.SecondsFormatterInterval.Seconds)
+-- Minutes interval keeps the "elapsed | total" pair compact and symmetric on long
+-- casts: "5m | 10m" instead of the long/asymmetric "5m 35s | 10m". Sub-minute casts
+-- still show seconds (e.g. "3.2s | 8.5s").
+castTimeFormatter:SetMinInterval(Enum.SecondsFormatterInterval.Minutes)
 castTimeFormatter:SetMillisecondsThreshold(60)
 
 function UF.CreateCastbarTimeBinding()
