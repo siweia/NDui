@@ -740,6 +740,10 @@ TT:RegisterTooltips("NDui", function()
 		if AWQItemTooltip then
 			TT.ReskinTooltip(AWQItemTooltip)
 		end
+		-- MapTooltipTaintFix
+		if MapTooltipTaintFix_GameTooltip then
+			TT.ReskinTooltip(MapTooltipTaintFix_GameTooltip)
+		end
 	end)
 
 	if C_AddOns.IsAddOnLoaded("BattlePetBreedID") then
