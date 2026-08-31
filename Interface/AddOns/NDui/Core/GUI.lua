@@ -775,6 +775,17 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		C.db["Reset6"] = true
 	end
 
+	if not C.db["Reset7"] then
+		local ufs = C.db["UFs"]
+		-- "Show all, others gray" (debuffType 5) merged into "Show all" (2)
+		for _, v in pairs({"Player", "Target", "Focus"}) do
+			if ufs[v.."DebuffType"] == 5 then
+				ufs[v.."DebuffType"] = 2
+			end
+		end
+		C.db["Reset7"] = true
+	end
+
 	B:SetupUIScale(true)
 	if NDuiADB["CustomTex"] ~= "" then
 		DB.normTex = "Interface\\"..NDuiADB["CustomTex"]
