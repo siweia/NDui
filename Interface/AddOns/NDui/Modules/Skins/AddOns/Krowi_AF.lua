@@ -109,6 +109,7 @@ function S:KrowiAF()
 	end
 
 	B.ReskinFilterButton(KrowiAF_AchievementFrameFilterButton)
+	KrowiAF_AchievementFrameFilterButton:ClearAllPoints()
 	KrowiAF_AchievementFrameFilterButton:SetPoint("TOPLEFT", 24, 0)
 	B.ReskinEditBox(KrowiAF_SearchBoxFrame)
 	KrowiAF_SearchOptionsMenuButton:DisableDrawLayer("BACKGROUND")
