@@ -744,6 +744,16 @@ TT:RegisterTooltips("NDui", function()
 		if MapTooltipTaintFix_GameTooltip then
 			TT.ReskinTooltip(MapTooltipTaintFix_GameTooltip)
 		end
+		if MapTooltipTaintFix_ShoppingTooltip1 then
+			TT.ReskinTooltip(MapTooltipTaintFix_ShoppingTooltip1)
+		end
+		if MapTooltipTaintFix_ShoppingTooltip2 then
+			TT.ReskinTooltip(MapTooltipTaintFix_ShoppingTooltip2)
+		end
+		-- Krowi_AchievementFilter
+		if Krowi_Tooltip then
+			TT.ReskinTooltip(Krowi_Tooltip)
+		end
 	end)
 
 	if C_AddOns.IsAddOnLoaded("BattlePetBreedID") then
