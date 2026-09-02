@@ -17,7 +17,7 @@ function A:TotemBar_Init()
 
 	local totemBar = _G["NDui_TotemBar"]
 	if not totemBar then
-		totemBar = CreateFrame("Frame", "NDui_TotemBar", A.PetBattleFrameHider)
+		totemBar = CreateFrame("Frame", "NDui_TotemBar", UIParent)
 	end
 	totemBar:SetSize(width, height)
 
