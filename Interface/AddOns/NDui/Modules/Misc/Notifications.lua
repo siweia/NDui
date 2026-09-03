@@ -237,7 +237,7 @@ local lastVCTime, isVCInit = 0
 local function HandleVersonTag(version)
 	local major, minor = strsplit(".", version)
 	major, minor = tonumber(major), tonumber(minor)
-	if major >= 10 then
+	if major > 10 then
 		major, minor = 0, 0
 	end
 	return major, minor
