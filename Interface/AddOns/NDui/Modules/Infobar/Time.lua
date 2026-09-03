@@ -270,6 +270,8 @@ local delveList = {
 	{uiMapID = 2393, delveID = 8440}, -- 黑暗之途
 	{uiMapID = 2437, delveID = 8442}, -- 暮光墓穴
 	{uiMapID = 2437, delveID = 8444}, -- 阿塔阿曼
+	{uiMapID = 2512, delveID = 8760}, -- 纳拉多尔岛
+	{uiMapID = 2512, delveID = 8763}, -- 荣耀之环
 }
 
 info.onEnter = function(self)
