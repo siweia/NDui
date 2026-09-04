@@ -51,7 +51,7 @@ end
 
 local function GetUnitClassColor(unit)
 	local _, class = UnitClass(unit)
-	return C_ClassColor_GetClassColor(class)
+	return type(class) ~= "nil" and C_ClassColor_GetClassColor(class)
 end
 
 local FACTION_COLORS = {
@@ -527,6 +527,7 @@ function TT:SetupTooltipFonts()
 end
 
 function TT:FixRecipeItemNameWidth()
+	if self:IsForbidden() then return end
 	if self.GetName then
 		local name = self:GetName()
 		for i = 1, self:NumLines() do
