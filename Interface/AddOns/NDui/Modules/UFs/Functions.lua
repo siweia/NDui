@@ -1188,6 +1188,9 @@ local function PostCreateRaidBigDefensiveButton(element, button, options)
 	local xOffset = (options.slotIndex - 1.5) * (options.size + RAID_BIG_DEFENSIVE_SPACING)
 	button:ClearAllPoints()
 	button:SetPoint("CENTER", element.__owner.Health, xOffset, 0)
+	-- Now that it sits over the name, keep it above the name/HP text, which
+	-- lives on a sub-level of the frame while aura buttons default to a low one.
+	button:SetFrameLevel(element.__owner:GetFrameLevel() + 10)
 end
 
 local RAID_DEBUFF_GROUP_NAME = "RaidDebuffs"
