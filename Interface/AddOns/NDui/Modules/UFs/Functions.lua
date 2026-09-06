@@ -1169,7 +1169,9 @@ local ARENA_DEBUFF_GROUPS = {
 }
 
 local RAID_BUFF_GROUP = {
-	filter = "HELPFUL|RAID_IN_COMBAT|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
+	-- isFromPlayerOrPlayerPet candidate boolean matches auras cast by ANY player
+	-- PLAYER filter token instead
+	filter = "HELPFUL|PLAYER|RAID_IN_COMBAT|!BIG_DEFENSIVE|!EXTERNAL_DEFENSIVE",
 	candidateFilters = {
 		isFromPlayerOrPlayerPet = true,
 	},
@@ -1742,7 +1744,14 @@ function UF:CreateBuffs(self)
 			AddAuraGroup(bu, BOSS_BUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters)
 		end
 	else
-		local candidateFilters = mystyle == "raid" and RAID_BUFF_GROUP.candidateFilters or {}
+		-- Fresh table per frame: Blizzard converts the inbound options in place,
+		-- so the shared template must not be handed over for every raid frame.
+		local candidateFilters = {}
+		if mystyle == "raid" then
+			for key, value in next, RAID_BUFF_GROUP.candidateFilters do
+				candidateFilters[key] = value
+			end
+		end
 		AddAuraGroup(bu, "Buffs", bu.filter, bu.num, 1, candidateFilters)
 	end
 	UF:UpdateAuraContainer(self, bu)
