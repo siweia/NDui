@@ -1185,9 +1185,9 @@ local RAID_BIG_DEFENSIVE_GROUPS = {
 
 local function PostCreateRaidBigDefensiveButton(element, button, options)
 	UF.PostCreateButton(element, button, options)
+	local xOffset = (options.slotIndex - 1.5) * (options.size + RAID_BIG_DEFENSIVE_SPACING)
 	button:ClearAllPoints()
-	local xOffset = -RAID_BIG_DEFENSIVE_RIGHT_INSET - (options.slotIndex - 1) * (options.size + RAID_BIG_DEFENSIVE_SPACING)
-	button:SetPoint("BOTTOMRIGHT", element.__owner.Health, "BOTTOMRIGHT", xOffset, C.db["UFs"]["RaidDebuffSize"] + 4)
+	button:SetPoint("CENTER", element.__owner.Health, xOffset, 0)
 end
 
 local RAID_DEBUFF_GROUP_NAME = "RaidDebuffs"

@@ -144,17 +144,19 @@ local function DrawAuras(frame, frameW, ufs, iconIndex, cd)
 		SetCD(bu, cd.debuffText, cd.debuffSize)
 	end
 
-	-- Big defensives: TOPRIGHT, grow left (overlay the frame, top-right corner).
+	-- Big defensives: at most two slots (own + external), straddled around the
+	-- frame center so the pair stays centered as a whole. Mirrors
+	-- PostCreateRaidBigDefensiveButton in Modules/UFs/Functions.lua.
 	if ufs["RaidBigDefensive"] then
 		local bd = ufs["RaidBigDefensiveSize"]
 		for i = 1, 2 do
 			ii = ii + 1
 			local bu = GetIcon(ii, frame)
 			bu:SetSize(bd, bd)
-			bu:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -((i - 1) * (bd + 3)), -2)
-		bu.bdFrame:SetBackdropColor(1, .8, 0, 1)
-		SetCD(bu, cd.bigText, cd.bigSize)
-	end
+			bu:SetPoint("CENTER", frame, "CENTER", (i - 1.5) * (bd + sp), 0)
+			bu.bdFrame:SetBackdropColor(1, .8, 0, 1)
+			SetCD(bu, cd.bigText, cd.bigSize)
+		end
 	end
 
 	return ii
