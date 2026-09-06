@@ -296,9 +296,9 @@ local function ChatMsgFilter(self, event, msg, sender, language, channelString, 
 
 	self:AddMessage(outMsg, info.r, info.g, info.b, info.id)
 
-	-- Fix whipser reply
+	-- Fix whisper reply
 	if chatType == "WHISPER" or chatType == "BN_WHISPER" then
-		ChatFrameUtil.SetLastTellTarget(sender, chatType)
+		pcall(ChatFrameUtil.SetLastTellTarget, sender, chatType)
 		if not self.tellTimer or (GetTime() > self.tellTimer) then
 			PlaySound(SOUNDKIT.TELL_MESSAGE)
 		end
