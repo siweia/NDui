@@ -158,7 +158,7 @@ function module:Chatbar()
 		B:RegisterEvent("CHANNEL_UI_UPDATE", checkChannelStatus)
 		hooksecurefunc("ChatConfigChannelSettings_UpdateCheckboxes", checkChannelStatus) -- toggle in chatconfig
 
-		wcButton:SetScript("OnClick", function(_, btn)
+		local function clickWorldChannel(btn)
 			if module.InWorldChannel then
 				if btn == "RightButton" then
 					LeaveChannelByName(channelName)
@@ -180,6 +180,10 @@ function module:Chatbar()
 				print("|cff00C957"..JOIN.."|r "..DB.InfoColor..L["World Channel"])
 				module.InWorldChannel = true
 			end
+		end
+
+		wcButton:SetScript("OnClick", function(_, btn)
+			pcall(clickWorldChannel, btn)
 		end)
 	end
 
