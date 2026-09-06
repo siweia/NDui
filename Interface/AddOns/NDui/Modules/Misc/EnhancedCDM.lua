@@ -111,6 +111,25 @@ local function Handle_UtilityCooldownViewer()
 end
 
 -- Essential cooldown
+local function SyncPlateBarSize(playerPlate, barWidth)
+	if not barWidth or barWidth <= 0 then return end
+
+	local barHeight = C.db["Nameplate"]["PPBarHeight"]
+	local bars = playerPlate.ClassPower or playerPlate.Runes
+	if bars then
+		playerPlate.ClassPowerBar:SetSize(barWidth, barHeight)
+		playerPlate.ClassPowerBar.width = barWidth
+		local max = bars.__max or #bars
+		for i = 1, max do
+			bars[i]:SetHeight(barHeight)
+			bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)
+		end
+	end
+	if playerPlate.Stagger then
+		playerPlate.Stagger:SetSize(barWidth, barHeight)
+	end
+end
+
 function M:AttachPlayerPlate()
 	local playerPlate = oUF_PlayerPlate
 	if not playerPlate then return end
@@ -120,21 +139,13 @@ function M:AttachPlayerPlate()
 		playerPlate:SetPoint("BOTTOMLEFT", EssentialCooldownViewer, "TOPLEFT", 2, 1)
 		playerPlate:SetPoint("BOTTOMRIGHT", EssentialCooldownViewer, "TOPRIGHT", -2, 1)
 
-		local barWidth = playerPlate:GetWidth()
-		local barHeight = C.db["Nameplate"]["PPBarHeight"]
-		local bars = playerPlate.ClassPower or playerPlate.Runes
-		if bars then
-			playerPlate.ClassPowerBar:SetSize(barWidth, barHeight)
-			playerPlate.ClassPowerBar.width = barWidth
-			local max = bars.__max or #bars
-			for i = 1, max do
-				bars[i]:SetHeight(barHeight)
-				bars[i]:SetWidth((barWidth - (max-1)*C.margin) / max)
-			end
+		if not playerPlate.__ppSizeHooked then
+			playerPlate:HookScript("OnSizeChanged", function(self, width)
+				SyncPlateBarSize(self, width)
+			end)
+			playerPlate.__ppSizeHooked = true
 		end
-		if playerPlate.Stagger then
-			playerPlate.Stagger:SetSize(barWidth, barHeight)
-		end
+		SyncPlateBarSize(playerPlate, playerPlate:GetWidth())
 	else
 		playerPlate:SetPoint("TOPLEFT", playerPlate.mover)
 		local UF = B:GetModule("UnitFrames")
