@@ -5,7 +5,6 @@
 	<Script file="Nameplates.lua"/>
 	<Script file="Spawns.lua"/>
 
-	<Script file="Elements\Avada.lua"/>
 	<Script file="Elements\Castbar.lua"/>
 	<Script file="Elements\RaidAuras.lua"/>
 	<Script file="Elements\SpellsIndicator.lua"/>

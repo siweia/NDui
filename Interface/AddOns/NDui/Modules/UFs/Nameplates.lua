@@ -931,12 +931,6 @@ function UF:ResizePlayerPlate()
 		if plate.Stagger then
 			plate.Stagger:SetSize(barWidth, barHeight)
 		end
-		if plate.Avada then
-			local iconSize = (barWidth+2*C.mult - C.margin*5)/6
-			for i = 1, 6 do
-				plate.Avada[i]:SetSize(iconSize, iconSize)
-			end
-		end
 	end
 end
 
@@ -952,7 +946,6 @@ function UF:CreatePlayerPlate()
 	UF:CreatePrediction(self)
 	UF:CreateClassPower(self)
 	UF:StaggerBar(self)
-	--UF:AvadaKedavra(self)
 
 	local textFrame = CreateFrame("Frame", nil, self.Power)
 	textFrame:SetAllPoints()

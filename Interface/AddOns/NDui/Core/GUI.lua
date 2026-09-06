@@ -155,9 +155,6 @@ G.DefaultSettings = {
 		DebuffsPerRow = 16,
 		CDAnimation = false,
 	},
-	Avada = {
-		Enable = false,
-	},
 	UFs = {
 		Enable = true,
 		Portrait = true,
@@ -637,8 +634,6 @@ G.AccountSettings = {
 	IgnoreNotes = {},
 	GlowMode = 3,
 	IgnoredRares = "",
-	AvadaIndex = {},
-	AvadaProfile = {},
 	AddOnProfiler = false,
 	SmoothBars = true,
 	MilitaryTime = true,
@@ -1022,15 +1017,6 @@ local function togglePlateVisibility()
 	B:GetModule("UnitFrames"):TogglePlateVisibility()
 end
 
-local function toggleAvada()
-	B:GetModule("UnitFrames"):Avada_Toggle()
-end
-
-local function toggleAvadaGUI()
-	G:SetupAvada()
-	if f then f:Hide() end
-end
-
 local function togglePlayerPlate()
 	refreshNameplates()
 	B:GetModule("UnitFrames"):TogglePlayerPlate()
@@ -1382,7 +1368,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"].."*", nil, nil, togglePlayerPlate},
 		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
-		--{1, "Avada", "Enable", IsNew..HeaderTag..L["Enable ClassAuras"].."*", nil, toggleAvadaGUI, toggleAvada},
 		{1, "Nameplate", "PPHealthBar", IsNew..L["PlayerPlate HealthBar"].."*", nil, nil, togglePlateHealth},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
