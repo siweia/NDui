@@ -280,7 +280,8 @@ end
 
 local function UpdateItemEnchantmentBorder(button, inventorySlot)
 	local quality = GetInventoryItemQuality("player", inventorySlot)
-	local color = DB.QualityColors[quality or 1] or DB.QualityColors[1]
+	if not quality then return end -- inventory not ready yet: keep current color
+	local color = DB.QualityColors[quality] or DB.QualityColors[1]
 	button.__nduiBackdrop:SetBackdropBorderColor(color.r, color.g, color.b)
 end
 
@@ -442,7 +443,7 @@ local function OnAuraEvent(_, event, unit)
 
 	A:UpdateBuffAuraLimit()
 
-	if itemBorderUpdatePending or event == "PLAYER_ENTERING_WORLD" or event == "WEAPON_SLOT_CHANGED" then
+	if itemBorderUpdatePending or event == "PLAYER_ENTERING_WORLD" or event == "WEAPON_ENCHANT_CHANGED" or event == "WEAPON_SLOT_CHANGED" then
 		UpdateItemEnchantmentBorders()
 	end
 end
