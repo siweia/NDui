@@ -4,6 +4,7 @@ local module = B:GetModule("Chat")
 
 local tinsert, pairs = tinsert, pairs
 local C_GuildInfo_IsGuildOfficer = C_GuildInfo.IsGuildOfficer
+local InChatMessagingLockdown = C_ChatInfo.InChatMessagingLockdown
 
 local chatSwitchInfo = {
 	text = L["ChatSwitchHelp"],
@@ -49,7 +50,7 @@ function module:Chatbar()
 	end
 
 	local function SaveOpenChat(...)
-		if C_ChatInfo.InChatMessagingLockdown() then return end
+		if InChatMessagingLockdown() then return end
 		return ChatFrameUtil.OpenChat(...)
 	end
 
@@ -158,27 +159,43 @@ function module:Chatbar()
 		B:RegisterEvent("CHANNEL_UI_UPDATE", checkChannelStatus)
 		hooksecurefunc("ChatConfigChannelSettings_UpdateCheckboxes", checkChannelStatus) -- toggle in chatconfig
 
+		-- Channel join/leave is restricted inside encounters and challenge modes
+		local function joinWorldChannel()
+			if InChatMessagingLockdown() then return end
+			JoinPermanentChannel(channelName, nil, 1)
+			ChatFrame1:AddChannel(channelName)
+			print("|cff00C957"..JOIN.."|r "..DB.InfoColor..L["World Channel"])
+			module.InWorldChannel = true
+		end
+
+		local function leaveWorldChannel()
+			if InChatMessagingLockdown() then return end
+			LeaveChannelByName(channelName)
+			print("|cffFF7F50"..QUIT.."|r "..DB.InfoColor..L["World Channel"])
+			module.InWorldChannel = false
+		end
+
+		-- Only opens the editbox, never touches restricted channel APIs
+		local function openWorldChannelInput()
+			if not module.WorldChannelID then return end
+			local editBox = ChatEdit_ChooseBoxForSend()
+			if not editBox then return end
+			editBox:Show()
+			editBox:SetFocus()
+			editBox:SetAttribute("chatType", "CHANNEL")
+			editBox:SetAttribute("channelTarget", module.WorldChannelID)
+			ChatEdit_UpdateHeader(editBox)
+		end
+
 		local function clickWorldChannel(btn)
 			if module.InWorldChannel then
 				if btn == "RightButton" then
-					LeaveChannelByName(channelName)
-					print("|cffFF7F50"..QUIT.."|r "..DB.InfoColor..L["World Channel"])
-					module.InWorldChannel = false
-				elseif module.WorldChannelID then
-					local editBox = ChatEdit_ChooseBoxForSend()
-					if editBox then
-						editBox:Show()
-						editBox:SetFocus()
-						editBox:SetAttribute("chatType", "CHANNEL")
-						editBox:SetAttribute("channelTarget", module.WorldChannelID)
-						ChatEdit_UpdateHeader(editBox)
-					end
+					leaveWorldChannel()
+				else
+					openWorldChannelInput()
 				end
 			else
-				JoinPermanentChannel(channelName, nil, 1)
-				ChatFrame1:AddChannel(channelName)
-				print("|cff00C957"..JOIN.."|r "..DB.InfoColor..L["World Channel"])
-				module.InWorldChannel = true
+				joinWorldChannel()
 			end
 		end
 
