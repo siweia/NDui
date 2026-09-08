@@ -146,7 +146,7 @@ function module:GetFilterResult(event, msg, name, flag, guid)
 end
 
 function module:UpdateChatFilter(event, msg, author, _, _, _, flag, _, _, _, _, lineID, guid)
-	if B:IsSecretValue(msg) then return end
+	if B:IsSecretValue(msg) or B:IsSecretValue(author) then return end
 	if lineID ~= prevLineID then
 		prevLineID = lineID
 
@@ -181,7 +181,7 @@ function module:ToggleChatBubble(party)
 end
 
 function module:UpdateAddOnBlocker(event, msg, author)
-	if B:IsSecretValue(msg) then return end
+	if B:IsSecretValue(msg) or B:IsSecretValue(author) then return end
 
 	for _, word in ipairs(addonBlockList) do
 		if strfind(msg, word) then

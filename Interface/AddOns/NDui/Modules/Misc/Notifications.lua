@@ -288,6 +288,7 @@ end
 function M:VersionCheck_Update(...)
 	local prefix, msg, distType, author = ...
 	if prefix ~= "NDuiVersionCheck" then return end
+	if B:IsSecretValue(author) then return end
 	if Ambiguate(author, "none") == DB.MyName then return end
 
 	local status = M:VersionCheck_Compare(msg, NDuiADB["DetectVersion"], author)

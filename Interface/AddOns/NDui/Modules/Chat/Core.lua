@@ -291,7 +291,7 @@ end
 
 function module.OnChatWhisper(event, ...)
 	local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
-	if B:IsSecretValue(msg) then return end
+	if B:IsSecretValue(msg) or B:IsSecretValue(author) then return end
 	for word in pairs(whisperList) do
 		if (not IsInGroup() or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and strlower(msg) == strlower(word) then
 			if event == "CHAT_MSG_BN_WHISPER" then
