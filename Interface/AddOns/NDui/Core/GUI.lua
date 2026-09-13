@@ -319,6 +319,7 @@ G.DefaultSettings = {
 		RaidBigDefensiveCDSize = 12,
 		RaidBigDefensiveSize = 16,
 		RaidDebuffType = 2,
+		RaidDebuffBorderSize = 1,
 		RaidBuffSize = 12,
 		RaidDebuffSize = 12,
 

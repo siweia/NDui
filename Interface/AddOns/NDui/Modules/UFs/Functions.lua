@@ -906,8 +906,8 @@ function UF:UpdateIconTexCoord(width, height)
 	self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
 end
 
-local function CreateAuraDispelBorder(button)
-	local thickness = C.mult
+local function CreateAuraDispelBorder(button, thickness)
+	thickness = thickness or C.mult
 	local border = CreateFrame("Frame", nil, button)
 	border:SetAllPoints()
 	border:SetFrameLevel(button.Cooldown:GetFrameLevel())
@@ -977,7 +977,7 @@ function UF.PostCreateButton(element, button, options)
 	B.CreateSD(button)
 
 	if options.showDebuffTypeBorder then
-		CreateAuraDispelBorder(button)
+		CreateAuraDispelBorder(button, C.mult * (element.__debuffBorderSize or 1))
 	end
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
@@ -1423,6 +1423,7 @@ function UF:ConfigureBuffAndDebuff(element, isDebuff)
 	element.filter = filterOptions[vType][filterType]
 	element.size = C.db["UFs"][value..vType.."Size"]
 	element.showDebuffTypeBorder = isDebuff and (isRaid or C.db["UFs"]["DebuffColor"])
+	element.__debuffBorderSize = (isDebuff and isRaid) and C.db["UFs"]["RaidDebuffBorderSize"] or 1
 	if isRaid then
 		local setting = isDebuff and "RaidDebuff" or "RaidBuff"
 		element.fontSize = C.db["UFs"][setting.."CDSize"]
