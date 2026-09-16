@@ -1836,6 +1836,7 @@ function G:SetupNameplateMobColors(parent)
 	end
 	createOptions(offset, L["BossColor"], "ShowBossColor", "BossColor")
 	createOptions(offset-60, L["LieutenantColor"], "ShowLieutColor", "LieutenantColor")
-	createOptions(offset-120, L["MeleeColor"], "ShowMeleeColor", "MeleeColor")
-	createOptions(offset-180, L["TrivialColor"], "ShowTrivialColor", "TrivialColor")
+	createOptions(offset-120, L["CasterColor"], "ShowCasterColor", "CasterColor")
+	createOptions(offset-180, L["MeleeColor"], "ShowMeleeColor", "MeleeColor")
+	createOptions(offset-240, L["TrivialColor"], "ShowTrivialColor", "TrivialColor")
 end
