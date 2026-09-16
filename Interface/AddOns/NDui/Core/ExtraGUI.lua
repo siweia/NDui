@@ -1731,10 +1731,12 @@ function G:SetupRaidAuras(parent)
 
 	createOptionTitle(parent, "Debuffs", offset-360)
 	createOptionDropdown(parent, L["RaidDebuffType"], offset-410, raidDebuffOptions, nil, "UFs", "RaidDebuffType", 2, updateUFAurasAndQueueReload)
-	createOptionCheck(parent, offset-455, L["CDText"], "UFs", "RaidDebuffCDText", updateUFAurasAndQueueReload)
-	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-510, "RaidDebuffCDSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-580, "RaidDebuffSize", queueAuraReload, "UFs")
-	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-650, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
+	createOptionSlider(parent, L["DebuffBorderSize"], 1, 10, 1, offset-465, "RaidDebuffBorderSize", queueAuraReload, "UFs")
+	createOptionCheck(parent, offset-535, L["CDText"], "UFs", "RaidDebuffCDText", updateUFAurasAndQueueReload)
+	createOptionSlider(parent, L["CDFontSize"], 5, 16, 12, offset-590, "RaidDebuffCDSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["RaidDebuffSize"], 5, 30, 12, offset-660, "RaidDebuffSize", queueAuraReload, "UFs")
+	createOptionSlider(parent, L["MaxDebuffs"], 1, 20, 6, offset-730, "RaidNumDebuff", updateUFAurasAndQueueReload, "UFs")
+	scroll.child:SetHeight(780)
 end
 
 function G:SetupRaidBigDefensive(parent)
