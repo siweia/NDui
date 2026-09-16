@@ -819,6 +819,7 @@ L["GeneralCDFontSize"] = "Общий размер шрифта времени в
 L["GeneralCDFontSizeTip"] = "Используется для кнопок без отдельной настройки размера шрифта, например для кнопки дополнительного действия."
 L["RaidBuffType"] = "Buff filters" -- need translation
 L["RaidDebuffType"] = "Debuff filters" -- need translation
+L["DebuffBorderSize"] = "Размер рамки дебаффов"
 L["CDText"] = "Cooldown Text" -- need translation
 L["DamageMeter"] = "Reskin DamageMeter" -- need translation
 L["CooldownMgr"] = "Reskin CooldownMgr" -- need translation

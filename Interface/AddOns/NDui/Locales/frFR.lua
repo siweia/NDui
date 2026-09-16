@@ -819,6 +819,7 @@ L["GeneralCDFontSize"] = "Taille générale de la police des temps de recharge"
 L["GeneralCDFontSizeTip"] = "Utilisée pour les boutons sans réglage individuel de la taille de police, comme le bouton d’action supplémentaire."
 L["RaidBuffType"] = "Buff filters" -- need translation
 L["RaidDebuffType"] = "Debuff filters" -- need translation
+L["DebuffBorderSize"] = "Taille de la bordure des affaiblissements"
 L["CDText"] = "Cooldown Text" -- need translation
 L["DamageMeter"] = "Reskin DamageMeter" -- need translation
 L["CooldownMgr"] = "Reskin CooldownMgr" -- need translation
