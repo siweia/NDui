@@ -5,6 +5,11 @@ local module = B:GetModule("Chat")
 local strfind, strmatch, strsub, gsub = string.find, string.match, string.sub, string.gsub
 local strsplit, strlen = string.split, string.len
 
+local IsModifierKeyDown, IsAltKeyDown, IsControlKeyDown, IsModifiedClick = IsModifierKeyDown, IsAltKeyDown, IsControlKeyDown, IsModifiedClick
+local BNInviteFriend = BNInviteFriend
+local CanCooperateWithGameAccount = CanCooperateWithGameAccount
+local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
+
 local foundurl = false
 
 local function convertLink(text, value)
@@ -51,48 +56,61 @@ function module:SearchForURL(text, ...)
 	self.am(self, text, ...)
 end
 
-function module:HyperlinkShowHook(link, _, button)
+function module:Hyperlink_Show(link, button)
 	local type, value = strmatch(link, "(%a+):(.+)")
 	local hide
 	if button == "LeftButton" and IsModifierKeyDown() then
 		if type == "player" then
 			local unit = strmatch(value, "([^:]+)")
 			if IsAltKeyDown() then
-				InviteToGroup(unit)
+				C_PartyInfo.InviteUnit(unit)
 				hide = true
 			elseif IsControlKeyDown() then
-				GuildInvite(unit)
+				C_GuildInfo.Invite(unit)
 				hide = true
 			end
 		elseif type == "BNplayer" then
 			local _, bnID = strmatch(value, "([^:]*):([^:]*):")
 			if not bnID then return end
-			local _, _, _, _, _, gameID = BNGetFriendInfoByID(bnID)
-			if gameID and CanCooperateWithGameAccount(gameID) then
+			local accountInfo = C_BattleNet_GetAccountInfoByID(bnID)
+			if not accountInfo then return end
+			local gameAccountInfo = accountInfo.gameAccountInfo
+			local gameID = gameAccountInfo.gameAccountID
+			if gameID and CanCooperateWithGameAccount(accountInfo) then
 				if IsAltKeyDown() then
 					BNInviteFriend(gameID)
 					hide = true
 				elseif IsControlKeyDown() then
-					local _, charName, _, realmName = BNGetGameAccountInfo(gameID)
-					GuildInvite(charName.."-"..realmName)
+					local charName = gameAccountInfo.characterName
+					local realmName = gameAccountInfo.realmName
+					C_GuildInfo.Invite(charName.."-"..realmName)
 					hide = true
+				end
+			end
+		elseif type == "worldmap" then
+			local waypoint = C_Map.GetUserWaypointHyperlink()
+			if waypoint then
+				if ChatEdit_GetActiveWindow() then
+					ChatEdit_InsertLink(waypoint)
+				else
+					ChatFrame_OpenChat(waypoint)
 				end
 			end
 		end
 	elseif type == "url" then
-		local eb = LAST_ACTIVE_CHAT_EDIT_BOX or _G[self:GetName().."EditBox"]
-		if eb then
-			eb:Show()
-			eb:SetText(value)
-			eb:SetFocus()
-			eb:HighlightText()
+		local editBox = ChatEdit_ChooseBoxForSend()
+		if editBox then
+			editBox:Show()
+			editBox:SetText(value)
+			editBox:SetFocus()
+			editBox:HighlightText()
 		end
 	end
 
 	if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
 end
 
-function module.SetItemRefHook(link, _, button)
+function module:ItemRef_CopyName(link, button)
 	if strsub(link, 1, 6) == "player" and button == "LeftButton" and IsModifiedClick("CHATLINK") then
 		if not StaticPopup_Visible("ADD_IGNORE") and not StaticPopup_Visible("ADD_FRIEND") and not StaticPopup_Visible("ADD_GUILDMEMBER") and not StaticPopup_Visible("ADD_RAIDMEMBER") and not StaticPopup_Visible("CHANNEL_INVITE") and not ChatEdit_GetActiveWindow() then
 			local namelink, fullname
@@ -121,6 +139,11 @@ function module.SetItemRefHook(link, _, button)
 	end
 end
 
+function module.SetItemRefHook(link, _, button)
+	module:ItemRef_CopyName(link, button)
+	module:Hyperlink_Show(link, button)
+end
+
 function module:UrlCopy()
 	for i = 1, NUM_CHAT_WINDOWS do
 		if i ~= 2 then
@@ -130,15 +153,5 @@ function module:UrlCopy()
 		end
 	end
 
-	local orig = ItemRefTooltip.SetHyperlink
-	function ItemRefTooltip:SetHyperlink(link, ...)
-		if link and strsub(link, 0, 3) == "url" then return end
-
-		return orig(self, link, ...)
-	end
-
-	if ChatFrame_OnHyperlinkShow then -- isNewPatch, needs review
-		hooksecurefunc("ChatFrame_OnHyperlinkShow", self.HyperlinkShowHook)
-	end
 	hooksecurefunc("SetItemRef", self.SetItemRefHook)
 end
