@@ -260,7 +260,11 @@ local function ChatMsgFilter(self, event, msg, sender, language, channelString, 
 	if not formatKey then return end
 
 	local coloredName = ChatFrameUtil.GetDecoratedSenderName(event, msg, sender, language, channelString, target, flags, zoneChannelID, channelIndex, channelBaseName, languageID, lineID, senderGUID, bnSenderID, isMobile)
+	-- Sender name is readable, but the class color behind it can be secret in instances/PvP,
+	-- which makes the whole decorated name secret. "["..coloredName.."]" would then throw.
+	if B:IsSecretValue(coloredName) then return end
 	local pflag = ChatFrameUtil.GetPFlag(flags, zoneChannelID, channelIndex)
+	if B:IsSecretValue(pflag) then pflag = "" end
 
 	local playerLink
 	if chatType == "BN_WHISPER" or chatType == "BN_WHISPER_INFORM" then
