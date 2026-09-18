@@ -779,7 +779,11 @@ do
 		["epic"] = Enum.ItemQuality.Epic,
 		["legendary"] = Enum.ItemQuality.Legendary,
 	}
+	-- Tooltips can be protected (forbidden) while Blizzard reuses them, e.g. the loot preview
+	-- inside the EncounterJournal. Touching their backdrop from these hooks then throws
+	-- "Attempt to access forbidden object from code tainted by an AddOn".
 	local function updateIconBorderColorByAtlas(border, atlas)
+		if border.__owner:IsForbidden() then return end
 		local atlasAbbr = atlas and strmatch(atlas, "%-(%w+)$")
 		local quality = atlasAbbr and AtlasToQuality[strlower(atlasAbbr)]
 		local color = DB.QualityColors[quality or 1]
@@ -788,6 +792,7 @@ do
 
 	local greyRGB = DB.QualityColors[0].r
 	local function updateIconBorderColor(border, r, g, b)
+		if border.__owner:IsForbidden() then return end
 		if not r or r == greyRGB or (r>.99 and g>.99 and b>.99) then
 			r, g, b = 0, 0, 0
 		end
@@ -795,7 +800,7 @@ do
 		border:Hide(true) -- fix icon border
 	end
 	local function resetIconBorderColor(border, texture)
-		if not texture then
+		if not texture and not border.__owner:IsForbidden() then
 			border.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 		end
 	end
