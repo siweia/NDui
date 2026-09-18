@@ -434,7 +434,7 @@ G.DefaultSettings = {
 		MobTypeColoring = false,
 		ShowBossColor = false,
 		ShowLieutColor = false,
-		ShowCasterColor = true,
+		ShowCasterColor = false,
 		ShowMeleeColor = false,
 		ShowTrivialColor = false,
 		BossColor = {r=.42, g=.17, b=.69},
