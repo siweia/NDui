@@ -76,7 +76,7 @@ local lodFrames = {
 	Blizzard_Collections		= { ["WardrobeFrame"] = false, ["WardrobeOutfitEditFrame"] = false },
 	Blizzard_CovenantRenown		= { ["CovenantRenownFrame"] = false, },
 	Blizzard_CovenantSanctum	= { ["CovenantSanctumFrame"] = false, },
-	Blizzard_EncounterJournal	= { ["EncounterJournal"] = false },
+	--Blizzard_EncounterJournal	= { ["EncounterJournal"] = false },
 	Blizzard_FlightMap			= { ["FlightMapFrame"] = false },
 	Blizzard_GenericTraitUI		= { ["GenericTraitFrame"] = false },
 	Blizzard_GMSurveyUI			= { ["GMSurveyFrame"] = false },
