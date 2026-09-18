@@ -15,6 +15,7 @@ local GetTime = GetTime
 local GetSpellName = C_Spell.GetSpellName
 local UnitEffectiveLevel, GetInstanceInfo = UnitEffectiveLevel, GetInstanceInfo
 local UnitIsBossMob, UnitIsLieutenant = UnitIsBossMob, UnitIsLieutenant
+local UnitHasPowerType, UnitPowerType, UnitClassBase = UnitHasPowerType, UnitPowerType, UnitClassBase
 
 -- Instance type tracker for mob type coloring
 local isInInstance = false
@@ -99,6 +100,24 @@ function UF:UpdateExcutedCurve()
 	executedCurve:AddPoint(0, CreateColor(1, 0, 0))
 end
 
+-- Caster detection
+-- 12.1 makes UnitClass/UnitClassBase return secrets for restricted enemy units, so the old
+-- UnitClassBase == "PALADIN" test no longer works in instances. UnitHasPowerType is documented
+-- to return a non-secret bool, so mana remains a reliable caster tell. The class check is kept
+-- as a fallback whenever the class is still readable (e.g. outside restricted content).
+local function IsCaster(unit)
+	local hasMana
+	if UnitHasPowerType then
+		hasMana = UnitHasPowerType(unit, Enum.PowerType.Mana or 0)
+	else
+		hasMana = UnitPowerType(unit) == (Enum.PowerType.Mana or 0)
+	end
+	if hasMana then return true end
+
+	local class = UnitClassBase and UnitClassBase(unit)
+	return not B:IsSecretValue(class) and class == "PALADIN"
+end
+
 function UF:UpdateColor(_, unit)
 	if not unit or self.__unit ~= unit then return end
 
@@ -157,6 +176,7 @@ function UF:UpdateColor(_, unit)
 				local isLieutenant = UnitIsLieutenant(unit) or (isElite and uLevel == pLevel + 1)
 				local bossColor = C.db["Nameplate"]["BossColor"]
 				local lieutenantColor = C.db["Nameplate"]["LieutenantColor"]
+				local casterColor = C.db["Nameplate"]["CasterColor"]
 				local meleeColor = C.db["Nameplate"]["MeleeColor"]
 				local trivialColor = C.db["Nameplate"]["TrivialColor"]
 				if isBoss then
@@ -166,6 +186,10 @@ function UF:UpdateColor(_, unit)
 				elseif isLieutenant then
 					if C.db["Nameplate"]["ShowLieutColor"] then
 						r, g, b = lieutenantColor.r, lieutenantColor.g, lieutenantColor.b
+					end
+				elseif IsCaster(unit) then
+					if C.db["Nameplate"]["ShowCasterColor"] then
+						r, g, b = casterColor.r, casterColor.g, casterColor.b
 					end
 				elseif isElite then
 					if C.db["Nameplate"]["ShowMeleeColor"] then
