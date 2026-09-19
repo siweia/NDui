@@ -62,4 +62,4 @@ function M:Focuser()
 	B:RegisterEvent("PLAYER_REGEN_ENABLED", M.Focuser_OnEvent)
 	B:RegisterEvent("GROUP_ROSTER_UPDATE", M.Focuser_OnEvent)
 end
-M:RegisterMisc("Focuser", M.Focuser)
+--M:RegisterMisc("Focuser", M.Focuser)
