@@ -146,14 +146,3 @@ end
 function SetTooltipMoney(frame, money, _, prefixText, suffixText)
 	frame:AddLine((prefixText or "").." "..GetCoinTextureString(money).." "..(suffixText or ""), 1,1,1)
 end
-
--- fix maw buffs error
-if ShouldShowMawBuffs then
-	local origMawBuffs = ShouldShowMawBuffs
-	function ShouldShowMawBuffs()
-		if C_Secrets.ShouldAurasBeSecret() then
-			return IsInJailersTower() or false
-		end
-		return origMawBuffs()
-	end
-end
