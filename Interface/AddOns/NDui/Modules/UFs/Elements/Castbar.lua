@@ -114,17 +114,26 @@ function UF:Castbar_UpdateInterrupted(unit, spellID, interruptedBy)
 	self:SetStatusBarColor(1, .1, 0)
 	UF.StopCastbarTime(self)
 
-	if not C.db["Nameplate"]["Interruptor"] or not self.spellTarget or not B:NotSecretValue(interruptedBy) then return end
-	if not interruptedBy then return end
+	if not C.db["Nameplate"]["Interruptor"] or not self.spellTarget then return end
 
-	local sourceName = UnitNameFromGUID(interruptedBy)
-	if not B:NotSecretValue(sourceName) or not sourceName then return end
+	local interrupterName, interrupterClass
+	if type(interruptedBy) ~= "nil" then
+		local _, class, _, _, _, name = GetPlayerInfoByGUID(interruptedBy)
+		interrupterClass = class
+		interrupterName = name
+		if type(interrupterName) == "nil" then
+			local token = UnitTokenFromGUID(interruptedBy)
+			if type(token) ~= "nil" then
+				interrupterName = UnitName(token)
+			end
+		end
+	end
 
-	local _, class = GetPlayerInfoByGUID(interruptedBy)
-	class = class or "PRIEST"
-	local classColor = C_ClassColor.GetClassColor(class)
-	self.Text:SetText(INTERRUPTED.." > "..classColor:WrapTextInColorCode(sourceName))
-	self.Time:SetText("")
+	if type(interrupterName) ~= "nil" then
+		local interrupterColor = C_ClassColor.GetClassColor(type(interrupterClass) ~= "nil" and interrupterClass or "PRIEST")
+		self.Text:SetText(INTERRUPTED.." > "..interrupterColor:WrapTextInColorCode(interrupterName))
+		self.Time:SetText("")
+	end
 end
 
 -- Empower Pips
