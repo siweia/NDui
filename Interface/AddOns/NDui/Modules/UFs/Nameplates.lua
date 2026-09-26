@@ -137,7 +137,7 @@ function UF:UpdateColor(_, unit)
 	local healthPerc = UnitHealthPercent(unit, true, executedCurve)
 	local targetColor = C.db["Nameplate"]["TargetColor"]
 	local focusColor = C.db["Nameplate"]["FocusColor"]
-	local dotColor = C.db["Nameplate"]["DotColor"]
+	--local dotColor = C.db["Nameplate"]["DotColor"]
 	local classColor
 	local r, g, b
 
@@ -150,8 +150,8 @@ function UF:UpdateColor(_, unit)
 			r, g, b = focusColor.r, focusColor.g, focusColor.b
 		elseif isCustomUnit then
 			r, g, b = customColor.r, customColor.g, customColor.b
-		elseif self.Auras.hasTheDot then
-			r, g, b = dotColor.r, dotColor.g, dotColor.b
+		--elseif self.Auras.hasTheDot then
+		--	r, g, b = dotColor.r, dotColor.g, dotColor.b
 		elseif isPlayer and isFriendly then
 			if C.db["Nameplate"]["FriendlyCC"] then
 				local class = select(2, UnitClass(unit))
@@ -589,6 +589,8 @@ function UF:CreateStackingBounds(self)
 	if plate and plate.SetStackingBoundsFrame then
 		plate:SetStackingBoundsFrame(stackingBounds)
 	end
+
+	self.StackingBounds = stackingBounds
 end
 
 -- Create Nameplates
@@ -885,6 +887,8 @@ function UF:OnNameplateAdded(event, unit)
 			--self.softTargetFrame:SetParent(self)
 			self.softTargetFrame:SetScale(1/NDuiADB["UIScale"])
 		end]=]
+		self.StackingBounds:ClearAllPoints()
+		self.StackingBounds:SetAllPoints(blizzPlate)
 	end
 
 	UF.RefreshPlateType(self, unit)
