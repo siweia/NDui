@@ -641,13 +641,12 @@ function UF:CreatePlates()
 end
 
 function UF:ToggleNameplateAuras(shouldEnable)
-	if (C.db["Nameplate"]["PlateAuras"] or C.db["Nameplate"]["PlateBuffs"] or C.db["Nameplate"]["PlateCC"]) and shouldEnable then
-		if not self:IsElementEnabled("Auras") then
-			self:EnableElement("Auras")
-		end
-	else
-		if self:IsElementEnabled("Auras") then
-			self:DisableElement("Auras")
+	local enable = (C.db["Nameplate"]["PlateAuras"] or C.db["Nameplate"]["PlateBuffs"] or C.db["Nameplate"]["PlateCC"]) and shouldEnable
+	for _, key in ipairs({"Auras", "Buffs", "Debuffs"}) do
+		local element = self[key]
+		if element and element.__nameplateEnabled ~= enable then
+			element:SetEnabled(enable)
+			element.__nameplateEnabled = enable
 		end
 	end
 end
@@ -834,6 +833,15 @@ function UF:RefreshPlateType(unit)
 	local buffs = self.Buffs
 	if buffs then
 		UF:UpdateAuraContainer(self, buffs)
+	end
+
+	-- Reused prebuilt aura containers aren't driven by oUF's auras element (its
+	-- per-frame STATE is private), so bind the unit here whenever it changes.
+	for _, key in ipairs({"Auras", "Buffs", "Debuffs"}) do
+		local element = self[key]
+		if element and element:GetUnit() ~= self.__unit then
+			element:SetUnit(self.__unit)
+		end
 	end
 end
 

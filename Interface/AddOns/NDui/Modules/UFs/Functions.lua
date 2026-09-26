@@ -1582,6 +1582,86 @@ local function CreateAuraElement(self, options)
 	return element
 end
 
+local function ConfigureNameplateDebuffs(element)
+	element.num = C.db["Nameplate"]["PlateCC"] and min(C.db["Nameplate"]["NumCC"], 2) or 0
+	element.size = C.db["Nameplate"]["CCSize"]
+	element.fontSize = C.db["Nameplate"]["CCFontSize"]
+	element.showDebuffTypeBorder = false
+	element.sizeRatio = C.db["Nameplate"]["CCSizeRatio"]
+	element.filter = NAMEPLATE_CC_RULE.filter
+end
+
+-- Nameplate aura container builders. These only create the container and its
+-- groups (the expensive part: blizzard's CustomAuraContainerTemplate init + filter
+-- compile + button pool). Anchoring and filter/count refresh happen later, so the
+-- same builder serves both the prebuild pool and on-demand creation.
+local function BuildNameplateAuraElement(owner, container)
+	local db = C.db["Nameplate"]
+	local bu = CreateAuraElement(owner, {
+		initialAnchor = container.anchor,
+		growthX = container.growthX,
+		growthY = "UP",
+		spacing = 3,
+		groupSpacing = 0,
+		disableMouse = true,
+	})
+	bu.__auraType = "nameplate"
+	bu.__nameplateAuraType = container.auraType
+
+	local layoutIndex = 0
+	for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
+		if group.auraType == container.auraType then
+			layoutIndex = layoutIndex + 1
+			local settings = NAMEPLATE_AURA_SETTINGS[group.auraType]
+			AddAuraGroup(bu, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group), layoutIndex, group.candidateFilters, nil, {
+				size = db[settings.size],
+				fontSize = db[settings.fontSize],
+				sizeRatio = db[settings.sizeRatio],
+				showDebuffTypeBorder = db[settings.typeBorder],
+			})
+		end
+	end
+
+	return bu
+end
+
+local function BuildNameplateDebuffElement(owner)
+	local bu = CreateAuraElement(owner, {
+		initialAnchor = "LEFT",
+		growthX = "RIGHT",
+		growthY = "DOWN",
+		spacing = 3,
+		disableMouse = true,
+	})
+	bu.__auraType = "debuffs"
+	ConfigureNameplateDebuffs(bu)
+	AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1)
+	return bu
+end
+
+-- Prebuild pool: a batch of aura containers (Auras + Buffs + Debuffs) created at
+-- login and reused when nameplates spawn, so blizzard's heavy AuraContainer frame
+-- is never constructed during a mass pull. oUF's auras element keeps its per-frame
+-- STATE privately, so reused containers are driven manually (SetUnit / SetEnabled)
+-- in UpdateNameplateAuras / UpdateNameplateDebuffs / ToggleNameplateAuras.
+local NameplateAuraPool = {}
+
+local function BuildNameplateAuraSet(owner)
+	local set = {}
+	for _, container in ipairs(NAMEPLATE_AURA_CONTAINERS) do
+		set[container.element] = BuildNameplateAuraElement(owner, container)
+	end
+	set.Debuffs = BuildNameplateDebuffElement(owner)
+	return set
+end
+
+function UF:PrebuildNameplateAuras(owner, count)
+	wipe(NameplateAuraPool)
+	for i = 1, count do
+		table.insert(NameplateAuraPool, BuildNameplateAuraSet(owner))
+	end
+end
+
 function UF:UpdateAuraLayoutLimit(frame)
 	local width = frame:GetWidth()
 	local element = frame.Auras
@@ -1619,32 +1699,16 @@ function UF:CreateAuras(self)
 	if mystyle == "nameplate" then
 		local db = C.db["Nameplate"]
 		local yOffset = db["TargetPower"] and 10 + db["PPBarHeight"] or 5
+		local set = table.remove(NameplateAuraPool)
+		self.__nameplateAuraSet = set
 		for _, container in ipairs(NAMEPLATE_AURA_CONTAINERS) do
-			local bu = CreateAuraElement(self, {
-				initialAnchor = container.anchor,
-				growthX = container.growthX,
-				growthY = "UP",
-				spacing = 3,
-				groupSpacing = 0,
-				disableMouse = true,
-			})
-			bu.__auraType = "nameplate"
-			bu.__nameplateAuraType = container.auraType
-			bu:SetPoint(container.anchor, self.nameText, container.relativeAnchor, 0, yOffset)
-
-			local layoutIndex = 0
-			for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
-				if group.auraType == container.auraType then
-					layoutIndex = layoutIndex + 1
-					local settings = NAMEPLATE_AURA_SETTINGS[group.auraType]
-					AddAuraGroup(bu, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group), layoutIndex, group.candidateFilters, nil, {
-						size = db[settings.size],
-						fontSize = db[settings.fontSize],
-						sizeRatio = db[settings.sizeRatio],
-						showDebuffTypeBorder = db[settings.typeBorder],
-					})
-				end
+			local bu = set and set[container.element] or BuildNameplateAuraElement(self, container)
+			if set then
+				bu:SetParent(self)
+				bu.__owner = self
 			end
+			bu:ClearAllPoints()
+			bu:SetPoint(container.anchor, self.nameText, container.relativeAnchor, 0, yOffset)
 
 			UF:UpdateAuraContainer(self, bu)
 			self[container.element] = bu
@@ -1681,15 +1745,6 @@ function UF:CreateAuras(self)
 	self.Auras = bu
 end
 
-local function ConfigureNameplateDebuffs(element)
-	element.num = C.db["Nameplate"]["PlateCC"] and min(C.db["Nameplate"]["NumCC"], 2) or 0
-	element.size = C.db["Nameplate"]["CCSize"]
-	element.fontSize = C.db["Nameplate"]["CCFontSize"]
-	element.showDebuffTypeBorder = false
-	element.sizeRatio = C.db["Nameplate"]["CCSizeRatio"]
-	element.filter = NAMEPLATE_CC_RULE.filter
-end
-
 function UF:UpdateNameplateDebuffs()
 	local element = self.Debuffs
 	if not element then return end
@@ -1700,18 +1755,14 @@ function UF:UpdateNameplateDebuffs()
 end
 
 function UF:CreatePlateDebuffs(self)
-	local bu = CreateAuraElement(self, {
-		initialAnchor = "LEFT",
-		growthX = "RIGHT",
-		growthY = "DOWN",
-		spacing = 3,
-		disableMouse = true,
-	})
-	bu.__auraType = "debuffs"
+	local set = self.__nameplateAuraSet
+	local bu = set and set.Debuffs or BuildNameplateDebuffElement(self)
+	if set then
+		bu:SetParent(self)
+		bu.__owner = self
+	end
+	bu:ClearAllPoints()
 	bu:SetPoint("LEFT", self.Health, "RIGHT", 5, 0)
-
-	ConfigureNameplateDebuffs(bu)
-	AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1)
 
 	self.Debuffs = bu
 end
