@@ -8,7 +8,7 @@ local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate or 10
 local UnitIsDeadOrGhost, UnitIsConnected, UnitIsTapDenied, UnitIsPlayer = UnitIsDeadOrGhost, UnitIsConnected, UnitIsTapDenied, UnitIsPlayer
 local UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger = UnitHealth, UnitHealthMax, UnitPower, UnitPowerType, UnitStagger
 local UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel = UnitReaction, UnitLevel, UnitClassification, UnitEffectiveLevel
-local UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost, UnitName, UnitExists = UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost, UnitName, UnitExists
+local UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost = UnitIsAFK, UnitIsDND, UnitIsDead, UnitIsGhost
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
 local GetNumArenaOpponentSpecs, GetCreatureDifficultyColor = GetNumArenaOpponentSpecs, GetCreatureDifficultyColor
 local TruncateWhenZero = C_StringUtil.TruncateWhenZero
@@ -22,18 +22,17 @@ oUF.Tags.Methods["VariousHP"] = function(unit, _, arg1)
 	end
 
 	if not arg1 then return end
-	local max = B.Numb(UnitHealthMax(unit))
-	local cur = B.Numb(UnitHealth(unit))
-	local per = format("%d", UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
 
 	if arg1 == "currentpercent" then
-		return cur.." | "..per
+		return B.Numb(UnitHealth(unit)).." | "..format("%d", UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
 	elseif arg1 == "currentmax" then
+		local max = B.Numb(UnitHealthMax(unit))
+		local cur = B.Numb(UnitHealth(unit))
 		return cur.." | "..max
 	elseif arg1 == "current" then
-		return cur
+		return B.Numb(UnitHealth(unit))
 	elseif arg1 == "percent" then
-		return per
+		return format("%d", UnitHealthPercent(unit, true, CurveConstants.ScaleTo100))
 	elseif arg1 == "loss" then
 		return TruncateWhenZero(UnitHealthMissing(unit))
 	--elseif arg1 == "losspercent" then -- broken in 12.0
@@ -47,18 +46,16 @@ end
 oUF.Tags.Events["VariousHP"] = "UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED PARTY_MEMBER_ENABLE PARTY_MEMBER_DISABLE"
 
 oUF.Tags.Methods["VariousMP"] = function(unit, _, arg1)
-	local max = B.Numb(UnitPowerMax(unit))
-	local cur = B.Numb(UnitPower(unit))
-	local per = format("%d", UnitPowerPercent(unit, nil, true, CurveConstants.ScaleTo100))
-
 	if arg1 == "currentpercent" then
-		return cur.." | "..per
+		return B.Numb(UnitPower(unit)).." | "..format("%d", UnitPowerPercent(unit, nil, true, CurveConstants.ScaleTo100))
 	elseif arg1 == "currentmax" then
+		local max = B.Numb(UnitPowerMax(unit))
+		local cur = B.Numb(UnitPower(unit))
 		return cur.." | "..max
 	elseif arg1 == "current" then
-		return cur
+		return B.Numb(UnitPower(unit))
 	elseif arg1 == "percent" then
-		return per
+		return format("%d", UnitPowerPercent(unit, nil, true, CurveConstants.ScaleTo100))
 	elseif arg1 == "loss" then
 		return TruncateWhenZero(UnitPowerMissing(unit))
 	--elseif arg1 == "losspercent" then
