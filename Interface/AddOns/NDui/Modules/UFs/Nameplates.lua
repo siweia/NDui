@@ -404,7 +404,6 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
 
 	self.TargetIndicator = frame
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
 	UF.UpdateTargetIndicator(self)
 end
 
@@ -480,7 +479,6 @@ function UF:AddQuestIcon(self)
 
 	self.questIcon = qicon
 	self.questCount = count
-	self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
 end
 
 -- Unit classification
@@ -567,8 +565,6 @@ function UF:MouseoverIndicator(self)
 	glow:SetBackdropBorderColor(0, .6, 1)
 	glow:SetFrameLevel(1)
 
-	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", UF.UpdateMouseoverShown, true)
-
 	local updater = CreateFrame("Frame", nil, self)
 	updater.__owner = self
 	updater:SetScript("OnUpdate", UF.HighlightOnUpdate)
@@ -597,7 +593,7 @@ end
 local platesList = {}
 UF.nameplateUnits = {}
 
-function UF:CreatePlates()
+function UF:CreatePlateFrames()
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 	self:ClearAllPoints()
@@ -621,20 +617,42 @@ function UF:CreatePlates()
 	UF:CreatePlateDebuffs(self)
 	UF:CreatePVPClassify(self)
 	UF:CreateThreatColor(self)
-	UF:CreateStackingBounds(self)
 
 	local title = B.CreateFS(self, C.db["Nameplate"]["NameOnlyTitleSize"])
 	title:ClearAllPoints()
 	title:SetPoint("TOP", self.nameText, "BOTTOM", 0, -3)
 	title:Hide()
-	self:Tag(title, "[npctitle]")
 	self.npcTitle = title
 
 	UF:MouseoverIndicator(self)
 	UF:AddTargetIndicator(self)
 	UF:AddCreatureIcon(self)
 	UF:AddQuestIcon(self)
+end
 
+function UF:CreatePlates()
+	if self.Health then
+		-- Prebuilt frames must anchor to their new native parent and use current settings.
+		local db = C.db["Nameplate"]
+		self:SetSize(db["PlateWidth"], db["PlateHeight"])
+		self:ClearAllPoints()
+		self:SetPoint("CENTER")
+		B.SetFontSize(self.Castbar.isYou, db["NameTextSize"]+3)
+		local yOffset = db["TargetPower"] and 10 + db["PPBarHeight"] or 5
+		self.Auras:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, yOffset)
+		self.Buffs:SetPoint("BOTTOMRIGHT", self.nameText, "TOPRIGHT", 0, yOffset)
+		UF:UpdateAuraContainer(self, self.Auras)
+		UF.UpdateNameplateDebuffs(self, false) -- Initial aura refresh belongs to oUF's unit update.
+	else
+		UF.CreatePlateFrames(self)
+	end
+
+	UF:CreateStackingBounds(self)
+	self:Tag(self.nameText, "[nplevel][name]")
+	self:Tag(self.healthValue, "[VariousHP(currentpercent)]")
+	self:RegisterEvent("UPDATE_MOUSEOVER_UNIT", UF.UpdateMouseoverShown, true)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetChange, true)
+	self:RegisterEvent("QUEST_LOG_UPDATE", UF.UpdateQuestUnit, true)
 	self:RegisterEvent("PLAYER_FOCUS_CHANGED", UF.UpdateFocusColor, true)
 
 	platesList[self] = self:GetName()
@@ -779,6 +797,7 @@ function UF:UpdatePlateByType()
 		name:SetJustifyH("CENTER")
 		name:SetPoint("CENTER", self, "BOTTOM")
 		hpval:Hide()
+		self:Tag(title, "[npctitle]")
 		title:Show()
 
 		raidtarget:SetPoint("TOP", title, "BOTTOM", 0, -5)
@@ -800,6 +819,7 @@ function UF:UpdatePlateByType()
 		name:SetJustifyH("LEFT")
 		hpval:Show()
 		title:Hide()
+		self:Untag(title)
 
 		raidtarget:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", C.db["Nameplate"]["RaidTargetX"], C.db["Nameplate"]["RaidTargetY"])
 		if questIcon then questIcon:SetPoint("LEFT", self, "RIGHT", -1, 0) end

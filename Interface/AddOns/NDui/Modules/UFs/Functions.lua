@@ -318,7 +318,6 @@ function UF:CreateHealthText(self)
 		name:ClearAllPoints()
 		name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
-		self:Tag(name, "[nplevel][name]")
 	elseif mystyle == "player" or mystyle == "target" then
 		name:SetPoint("LEFT", 3, C.db["UFs"]["PlayerNameOffset"])
 		name:SetWidth(self:GetWidth()*(C.db["UFs"]["PlayerNameOffset"] == 0 and .55 or 1))
@@ -351,7 +350,6 @@ function UF:CreateHealthText(self)
 		hpval:SetScale(C.db["UFs"]["RaidTextScale"])
 	elseif mystyle == "nameplate" then
 		hpval:SetPoint("RIGHT", self, 0, 5)
-		self:Tag(hpval, "[VariousHP(currentpercent)]")
 	else
 		UF.UpdateFrameHealthTag(self)
 	end
@@ -1690,13 +1688,13 @@ local function ConfigureNameplateDebuffs(element)
 	element.filter = NAMEPLATE_CC_RULE.filter
 end
 
-function UF:UpdateNameplateDebuffs()
+function UF:UpdateNameplateDebuffs(forceUpdate)
 	local element = self.Debuffs
 	if not element then return end
 
 	ConfigureNameplateDebuffs(element)
 	UF:UpdateAuraContainer(self, element)
-	element:ForceUpdate()
+	if forceUpdate ~= false then element:ForceUpdate() end
 end
 
 function UF:CreatePlateDebuffs(self)
