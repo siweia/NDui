@@ -343,14 +343,6 @@ function UF:OnLogin()
 		UF:ToggleTargetClassPower()
 	end
 
-	do	-- prebuild nameplate aura containers to avoid stutter on mass spawn
-		local holder = oUF:Spawn("player", "oUF_NPAuraHolder", true)
-		holder.mystyle = "nameplate"
-		holder:Hide()
-		holder:EnableMouse(false)
-		UF:PrebuildNameplateAuras(holder, 40)
-	end
-
 	-- Default Clicksets for RaidFrame
 	UF:DefaultClickSets()
 	UF:UpdateCastBarColors()
