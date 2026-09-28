@@ -1,4 +1,4 @@
-local _, ns = ...
+﻿local _, ns = ...
 local _, _, L = unpack(ns)
 --if GetLocale() ~= "enUS" then return end
 
@@ -633,10 +633,7 @@ L["InfobarFontSize"] = "Infobar Fontsize"
 L["LeftInfobar"] = "Left Infobar"
 L["RightInfobar"] = "Right Infobar"
 L["InfobarStrTip"] = "|nAnchor the infobars by the strings below:|n[guild] guild info|n[friend] friends info|n[ping] latency info|n[fps] show fps|n[zone] current location|n[spec] specialization|n[dura] durability|n[gold] gold amount|n[time] current time|n|nYou can sort infobars by different order, but each infobar only uses once.|nMake sure the correct spelling and cases. Empty the editbox will restore default settings."
-L["BagsPerRow"] = "Bags Per Row"
-L["BagsPerRowTip"] = "|nIf Bags ItemFilter enabled, change the bags per row for anchoring."
-L["BankPerRow"] = "Bank bags Per Row"
-L["BankPerRowTip"] = "|nIf Bags ItemFilter enabled, change the bank bags per row for anchoring."
+L["Bags Height"] = "Scroll Area Height"
 L["PlateAuras"] = "Nameplate Debuff Auras"
 L["PlateBuffs"] = "Nameplate Buff Auras"
 L["QuickJoinInfo"] = "Quick apply group by double click. And leave comment by holding key ALT and double click."

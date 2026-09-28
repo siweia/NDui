@@ -1,4 +1,4 @@
-local _, ns = ...
+﻿local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "zhTW" then return end
 -- Credit: EK
@@ -633,10 +633,7 @@ L["InfobarFontSize"] = "訊息條字體大小"
 L["LeftInfobar"] = "左側訊息條"
 L["RightInfobar"] = "右側訊息條"
 L["InfobarStrTip"] = "|n根據你輸入的字符組合對訊息條進行排序:|n[guild] 公會|n[friend] 好友|n[ping] 延遲|n[fps] 幀數|n[zone] 地點|n[spec] 專精|n[dura] 耐久度|n[gold] 金幣|n[time] 時間|n|n你可以自行調整順序，但是一個訊息條只能被使用一次。|n注意拼寫及大小寫格式，清空輸入框將重置設定。"
-L["BagsPerRow"] = "每列背包數量"
-L["BagsPerRowTip"] = "|n開啟背包物品分類存放後，每一列允許堆叠的最大背包數量。"
-L["BankPerRow"] = "每列銀行背包數量"
-L["BankPerRowTip"] = "|n開啟背包物品分類存放後，每一列允許堆叠的最大銀行背包數量。"
+L["Bags Height"] = "滾動區域高度"
 L["PlateAuras"] = "名條減益法術監控"
 L["PlateBuffs"] = "名條增益法術監控"
 L["QuickJoinInfo"] = "你可以雙擊快速申請隊伍，按住ALT雙擊則需輸入備注。"

@@ -108,6 +108,7 @@ G.DefaultSettings = {
 		BagsWidth = 12,
 		BankWidth = 14,
 		AccountWidth = 20,
+		BagsHeight = 400,
 		BagsiLvl = true,
 		BagSortMode = 1,
 		ItemFilter = true,
@@ -119,8 +120,6 @@ G.DefaultSettings = {
 		SpecialBagsColor = true,
 		iLvlToShow = 1,
 		PetTrash = true,
-		BagsPerRow = 6,
-		BankPerRow = 10,
 		HideWidgets = true,
 
 		FilterJunk = true,
@@ -898,10 +897,6 @@ local function updateBagStatus()
 	B:GetModule("Bags"):UpdateAllBags()
 end
 
-local function updateBagAnchor()
-	B:GetModule("Bags"):UpdateAllAnchors()
-end
-
 local function updateBagSize()
 	B:GetModule("Bags"):UpdateBagSize()
 end
@@ -1273,13 +1268,12 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 800, 1}, nil, L["iLvlToShowTip"]},
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder, L["BagSortTip"]},
 		{},--blank
-		{3, "Bags", "BagsPerRow", L["BagsPerRow"].."*", nil, {1, 20, 1}, updateBagAnchor, L["BagsPerRowTip"]},
-		{3, "Bags", "BankPerRow", L["BankPerRow"].."*", true, {1, 20, 1}, updateBagAnchor, L["BankPerRowTip"]},
 		{3, "Bags", "IconSize", L["Bags IconSize"].."*", nil, {20, 50, 1}, updateBagSize},
 		{3, "Bags", "FontSize", L["Bags FontSize"].."*", true, {10, 50, 1}, updateBagSize},
 		{3, "Bags", "BagsWidth", L["Bags Width"].."*", false, {10, 40, 1}, updateBagSize},
 		{3, "Bags", "BankWidth", L["Bank Width"].."*", true, {10, 40, 1}, updateBagSize},
 		{3, "Bags", "AccountWidth", L["AccountBank Width"].."*", nil, {10, 40, 1}, updateBagSize},
+		{3, "Bags", "BagsHeight", L["Bags Height"].."*", true, {200, 1000, 10}, updateBagSize},
 	},
 	[3] = {
 		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},

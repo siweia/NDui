@@ -1,4 +1,4 @@
-local _, ns = ...
+﻿local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "deDE" then return end
 -- Credit: DlargeX
@@ -633,10 +633,7 @@ L["InfobarFontSize"] = "Infoleiste Schriftgröße"
 L["LeftInfobar"] = "Linke Infoleiste"
 L["RightInfobar"] = "Rechte Infoleiste"
 L["InfobarStrTip"] = "|nVerankere die Infoleisten mithilfe der folgenden Kürzel:|n[guild] Gilden-Info|n[friend] Freundesliste|n[ping] Latenz|n[fps] FPS-Anzeige|n[zone] Aktueller Standort|n[spec] Spezialisierung|n[dura] Haltbarkeit|n[gold] Goldbestand|n[time] Aktuelle Uhrzeit|n|nDu kannst die Reihenfolge beliebig sortieren, aber jedes Kürzel nur einmal verwenden.|nAchte auf korrekte Rechtschreibung. Ein leeres Feld stellt die Standardeinstellungen wieder her."
-L["BagsPerRow"] = "Taschen pro Reihe"
-L["BagsPerRowTip"] = "|nWenn der Gegenstandsfilter aktiviert ist, ändert dies die Anzahl der Taschen pro Reihe für die Ausrichtung."
-L["BankPerRow"] = "Banktaschen pro Reihe"
-L["BankPerRowTip"] = "|nWenn der Gegenstandsfilter aktiviert ist, ändert dies die Anzahl der Banktaschen pro Reihe für die Ausrichtung."
+L["Bags Height"] = "Höhe des Scrollbereichs"
 L["PlateAuras"] = "Namensplaketten-Schwächungszauber"
 L["PlateBuffs"] = "Namensplaketten-Stärkungszauber"
 L["QuickJoinInfo"] = "Gruppe schnell beitreten per Doppelklick. Einen Kommentar hinterlassen mit ALT + Doppelklick."

@@ -38,66 +38,219 @@ function module:ReverseSort()
 	module:UpdateAllBags()
 end
 
-local anchorCache = {}
-
 local function CheckForBagReagent(name)
 	return not (name == "BagReagent" and GetContainerNumSlots(5) == 0)
 end
 
-function module:UpdateBagsAnchor(parent, bags)
-	wipe(anchorCache)
+-- 分类滚动列表
+local categoryScroll = {}	-- [bagType] = { scroll, child }
+local categorySpacing = 4
 
-	local index = 1
-	local perRow = C.db["Bags"]["BagsPerRow"]
-	anchorCache[index] = parent
-
-	for i = 1, #bags do
-		local bag = bags[i]
-		if bag:GetHeight() > 45 and CheckForBagReagent(bag.name) then
-			bag:Show()
-			index = index + 1
-
-			bag:ClearAllPoints()
-			if (index-1) % perRow == 0 then
-				bag:SetPoint("BOTTOMRIGHT", anchorCache[index-perRow], "BOTTOMLEFT", -5, 0)
-			else
-				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
-			end
-			anchorCache[index] = bag
-		else
-			bag:Hide()
-		end
-	end
+local function GetCategoryScroll(bagType)
+	return categoryScroll[bagType]
 end
 
-function module:UpdateBankAnchor(parent, bags)
-	wipe(anchorCache)
+-- 为分类 container 创建标题文字（仅分类名）
+function module:CreateCategoryHeader(container, label)
+	local title = B.CreateFS(container, 14, label, true, "TOPLEFT", 5, -8)
 
-	local index = 1
-	local perRow = C.db["Bags"]["BankPerRow"]
-	anchorCache[index] = parent
+	container.header = { title = title }
+	return container.header
+end
 
-	for i = 1, #bags do
-		local bag = bags[i]
-		if bag:GetHeight() > 45 then
-			bag:Show()
-			index = index + 1
+-- 创建分类滚动容器外壳（现代滚动条参考 EllesmereUIBags：16px 隐形命中区 + 4px 窄滑块）
+function module:CreateCategoryScroll(parent, bagType)
+	local scroll = CreateFrame("ScrollFrame", nil, parent, "UIPanelScrollFrameTemplate")
+	-- 头部（搜索栏+按钮行）在 f.main 顶部，分类列表排在 f.main 底部下方
+	scroll:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", 0, -4)
+	scroll:SetHeight(400)
+	B.SetBD(scroll)
 
-			bag:ClearAllPoints()
-			if index <= perRow then
-				bag:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
-			elseif index == perRow+1 then
-				bag:SetPoint("TOPLEFT", anchorCache[index-1], "TOPRIGHT", 5, 0)
-			elseif (index-1) % perRow == 0 then
-				bag:SetPoint("TOPLEFT", anchorCache[index-perRow], "TOPRIGHT", 5, 0)
-			else
-				bag:SetPoint("TOPLEFT", anchorCache[index-1], "BOTTOMLEFT", 0, -5)
-			end
-			anchorCache[index] = bag
+	local child = CreateFrame("Frame", nil, scroll)
+	child:SetPoint("TOPLEFT", scroll, "TOPLEFT", 0, 0)
+	scroll:SetScrollChild(child)
+	scroll:EnableMouseWheel(true)
+
+	-- 移除模板自带的旧式滚动条，改用自建滑块
+	if scroll.ScrollBar then
+		scroll.ScrollBar:Hide()
+	end
+
+	local SCROLLBAR_HIT_W = 16  -- 隐形命中区宽度
+	local SCROLLBAR_W = 2       -- 滑块视觉宽度
+	local SCROLL_STEP = 40      -- 每格滚轮像素
+	local THUMB_MIN_H = 20      -- 滑块最小高度
+
+	-- 轨道：16px 宽的隐形 Button，负责接收鼠标（拖动 + 点击跳转）
+	local track = CreateFrame("Button", nil, scroll)
+	track:SetWidth(SCROLLBAR_HIT_W)
+	track:SetPoint("TOPRIGHT", scroll, "TOPRIGHT", -2, -2)
+	track:SetPoint("BOTTOMRIGHT", scroll, "BOTTOMRIGHT", -2, 2)
+	track:SetFrameLevel(scroll:GetFrameLevel() + 5)
+
+	-- 轨道底：极淡竖条（提示滚动条位置），与滑块贴边对齐
+	local trackBg = track:CreateTexture(nil, "BACKGROUND")
+	trackBg:SetWidth(SCROLLBAR_W)
+	trackBg:SetPoint("TOP", track, "TOP", 0, 0)
+	trackBg:SetPoint("BOTTOM", track, "BOTTOM", 0, 0)
+	trackBg:SetPoint("RIGHT", track, "RIGHT", 1, 0)
+	trackBg:SetColorTexture(DB.r, DB.g, DB.b, .1)
+
+	-- 滑块：2px 纯色 Texture，锚在轨道上
+	local thumb = track:CreateTexture(nil, "ARTWORK")
+	thumb:SetWidth(SCROLLBAR_W)
+	thumb:SetColorTexture(DB.r, DB.g, DB.b, .4)
+	track.thumb = thumb
+
+	local isDragging = false
+	local dragStartY = 0
+	local dragStartPct = 0
+
+	local function GetScrollMetrics()
+		local range = scroll:GetVerticalScrollRange()
+		if not range or range <= 0 then return nil end
+		local trackH = track:GetHeight()
+		local ext = scroll:GetHeight() / (scroll:GetHeight() + range)
+		local thumbH = math.max(THUMB_MIN_H, trackH * ext)
+		local maxTravel = trackH - thumbH
+		if maxTravel <= 0 then return nil end
+		local pct = scroll:GetVerticalScroll() / range
+		return pct, thumbH, maxTravel, range
+	end
+
+	local function updateScrollBar()
+		-- 内容可能缩了，把滚动拉回有效范围
+		local range = scroll:GetVerticalScrollRange() or 0
+		local cur = scroll:GetVerticalScroll()
+		if cur > range then scroll:SetVerticalScroll(range) end
+
+		local pct, thumbH, maxTravel = GetScrollMetrics()
+		if not pct then
+			thumb:Hide()
+			trackBg:Hide()
+			return
+		end
+		thumb:Show()
+		trackBg:Show()
+		thumb:SetHeight(thumbH)
+		thumb:ClearAllPoints()
+		thumb:SetPoint("TOPRIGHT", track, "TOPRIGHT", 1, -(pct * maxTravel))
+	end
+	scroll.UpdateScrollBar = updateScrollBar
+
+	local function OnWheel(_, delta)
+		local range = select(4, GetScrollMetrics())
+		if not range then return end
+		local cur = scroll:GetVerticalScroll()
+		local newVal = math.max(0, math.min(range, cur - delta * SCROLL_STEP))
+		scroll:SetVerticalScroll(newVal)
+		updateScrollBar()
+	end
+	scroll:SetScript("OnMouseWheel", OnWheel)
+	scroll:SetScript("OnScrollRangeChanged", updateScrollBar)
+	scroll:SetScript("OnVerticalScroll", updateScrollBar)
+
+	-- 拖动更新帧：独立于 track，光标移出也能正确收尾
+	local dragUpdate = CreateFrame("Frame")
+	dragUpdate:Hide()
+	dragUpdate:SetScript("OnUpdate", function(self)
+		if not isDragging then self:Hide(); return end
+		if not IsMouseButtonDown("LeftButton") then
+			isDragging = false
+			self:Hide()
+			thumb:SetColorTexture(DB.r, DB.g, DB.b, .4)
+			return
+		end
+		local pct, thumbH, maxTravel, range = GetScrollMetrics()
+		if not pct then isDragging = false; self:Hide(); return end
+		local _, cy = GetCursorPosition()
+		local deltaY = dragStartY - cy / track:GetEffectiveScale()
+		local newPct = math.max(0, math.min(1, dragStartPct + deltaY / maxTravel))
+		scroll:SetVerticalScroll(newPct * range)
+		updateScrollBar()
+	end)
+
+	track:RegisterForDrag("LeftButton")
+	track:SetScript("OnMouseDown", function(_, button)
+		if button ~= "LeftButton" then return end
+		local pct, thumbH, maxTravel, range = GetScrollMetrics()
+		if not pct then return end
+
+		local scale = track:GetEffectiveScale()
+		local _, cy = GetCursorPosition()
+		local cursorLocalY = (track:GetTop() * scale - cy) / scale
+
+		-- 判断光标是否落在滑块上
+		local thumbTop = pct * maxTravel
+		local thumbBot = thumbTop + thumbH
+		if cursorLocalY >= thumbTop and cursorLocalY <= thumbBot then
+			isDragging = true
+			dragStartY = cy / scale
+			dragStartPct = pct
 		else
-			bag:Hide()
+			-- 点击轨道空白：跳到该位置
+			local clickPct = math.max(0, math.min(1, (cursorLocalY - thumbH / 2) / maxTravel))
+			scroll:SetVerticalScroll(clickPct * range)
+			updateScrollBar()
+			isDragging = true
+			dragStartY = cy / scale
+			dragStartPct = clickPct
+		end
+		dragUpdate:Show()
+	end)
+	track:SetScript("OnMouseUp", function()
+		isDragging = false
+	end)
+	track:SetScript("OnEnter", function()
+		thumb:SetColorTexture(DB.r, DB.g, DB.b, .6)
+	end)
+	track:SetScript("OnLeave", function()
+		if not isDragging then thumb:SetColorTexture(DB.r, DB.g, DB.b, .4) end
+	end)
+
+	categoryScroll[bagType] = { scroll = scroll, child = child }
+	return scroll, child
+end
+
+-- 竖直堆叠分类 section，并更新滚动范围
+local function UpdateCategoryLayout(parent, bags, bagType)
+	local scrollInfo = categoryScroll[bagType]
+	if not scrollInfo then return end
+	local child = scrollInfo.child
+	local scroll = scrollInfo.scroll
+
+	local columns = module:GetContainerColumns(bagType)
+	local iconWidth = C.db["Bags"]["IconSize"]
+	local spacing = 3
+	local scrollWidth = columns * (iconWidth + spacing) - spacing + 10
+
+	child:SetWidth(scrollWidth)
+	scroll:SetWidth(scrollWidth)
+
+	local yOffset = 0
+
+	for i = #bags, 1, -1 do
+		local container = bags[i]
+		local hasItems = #container.buttons > 0 or (container.freeSlot and container.freeSlot:IsShown())
+		if hasItems and CheckForBagReagent(container.name) then
+			container:Show()
+
+			container:ClearAllPoints()
+			container:SetPoint("TOPLEFT", child, "TOPLEFT", 0, -yOffset)
+
+			yOffset = yOffset + container:GetHeight() + categorySpacing
+		else
+			container:Hide()
 		end
 	end
+
+	-- 更新滚动子帧高度与滚动框高度（超过最大高度时滚动）
+	local maxHeight = C.db["Bags"]["BagsHeight"] or 400
+	child:SetHeight(math.max(1, yOffset))
+	scroll:SetHeight(math.min(maxHeight, math.max(1, yOffset)))
+
+	-- 内容超长时滚动，滑块显隐按 range 决定
+	scroll.UpdateScrollBar()
 end
 
 local function highlightFunction(button, match)
@@ -947,11 +1100,16 @@ function module:OnLogin()
 		f.accountbank:SetPoint(unpack(f.bank.__anchor))
 		f.accountbank:Hide()
 
+		-- 为三个主容器创建分类滚动外壳，分类 container 改为竖直堆叠进滚动子帧
+		for _, bagType in ipairs({"Bag", "Bank", "Account"}) do
+			local parent = Backpack.contByName[bagType]
+			module:CreateCategoryScroll(parent, bagType)
+		end
+
 		for bagType, groups in pairs(module.ContainerGroups) do
 			for _, container in ipairs(groups) do
-				local parent = Backpack.contByName[bagType]
-				container:SetParent(parent)
-				B.CreateMF(container, parent, true)
+				local scrollInfo = GetCategoryScroll(bagType)
+				container:SetParent(scrollInfo.child)
 			end
 		end
 	end
@@ -1183,9 +1341,9 @@ function module:OnLogin()
 	end
 
 	function module:UpdateAllAnchors()
-		module:UpdateBagsAnchor(f.main, module.ContainerGroups["Bag"])
-		module:UpdateBankAnchor(f.bank, module.ContainerGroups["Bank"])
-		module:UpdateBankAnchor(f.accountbank, module.ContainerGroups["Account"])
+		UpdateCategoryLayout(f.main, module.ContainerGroups["Bag"], "Bag")
+		UpdateCategoryLayout(f.bank, module.ContainerGroups["Bank"], "Bank")
+		UpdateCategoryLayout(f.accountbank, module.ContainerGroups["Account"], "Account")
 	end
 
 	function module:GetContainerColumns(bagType)
@@ -1208,6 +1366,7 @@ function module:OnLogin()
 		local yOffset = -offset + xOffset
 		local _, height = self:LayoutButtons("grid", columns, spacing, xOffset, yOffset)
 		local width = columns * (iconSize+spacing)-spacing
+
 		if self.freeSlot then
 			if C.db["Bags"]["GatherEmpty"] then
 				local numSlots = #self.buttons + 1
@@ -1240,9 +1399,9 @@ function module:OnLogin()
 	function MyContainer:OnCreate(name, settings)
 		self.Settings = settings
 		self:SetFrameStrata("HIGH")
-		self:SetClampedToScreen(true)
-		B.SetBD(self)
+		-- 注意：分类 container 现在挂在 ScrollFrame 里，SetClampedToScreen 会与滚动偏移冲突导致图标卡住，不能开启
 		if settings.Bags then
+			B.SetBD(self)
 			B.CreateMF(self, nil, true)
 		end
 
@@ -1286,7 +1445,7 @@ function module:OnLogin()
 			label = AUCTION_CATEGORY_HOUSING
 		end
 		if label then
-			self.label = B.CreateFS(self, 14, label, true, "TOPLEFT", 5, -8)
+			module:CreateCategoryHeader(self, label)
 			return
 		end
 
@@ -1356,6 +1515,8 @@ function module:OnLogin()
 			end
 			container:OnContentsChanged(true)
 		end
+
+		module:UpdateAllAnchors()
 	end
 
 	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")

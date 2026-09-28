@@ -1,4 +1,4 @@
-local _, ns = ...
+﻿local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "frFR" then return end
 -- Credit: Zeddicus40
@@ -633,10 +633,7 @@ L["InfobarFontSize"] = "Taille du texte dans l'infobar"
 L["LeftInfobar"] = "Infobar gauche"
 L["RightInfobar"] = "RInfobar droite"
 L["InfobarStrTip"] = "|nAncrez les infobars par les chaînes ci-dessous :|n[guild] Infos. Guilde|n[friend] Infos. Contacts|n[ping] Infos. Latence|n[fps] Afficher les FPS|n[zone] Emplacement actuel|n[spec] Specialisation|n[dura] durabilité|n[or] Quantité d'or|n[heure] Heure actuelle|n|nVous pouvez trier les infobars par ordre différent, mais chaque infobar ne s'utilise qu'une seule fois.|nVérifiez que l'orthographe et la case sont correctes. Vider la boîte d'édition restaurera les paramètres par défaut."
-L["BagsPerRow"] = "Sacs par ligne"
-L["BagsPerRowTip"] = "|nSi le filtre d'objet de sac est activé, modifiez les sacs par ligne pour l'ancrage."
-L["BankPerRow"] = "Sacs de banque par ligne"
-L["BankPerRowTip"] = "|nSi le filtre d'objet de sac est activé, modifiez les sacs de banque par ligne pour l'ancrage."
+L["Bags Height"] = "Hauteur de la zone de défilement"
 L["PlateAuras"] = "Affaiblissements des plaques de nom"
 L["PlateBuffs"] = "Améliorations des plaques de nom"
 L["QuickJoinInfo"] = "Demande de groupe rapide par double clic. Laissez un commentaire en maintenant la touche ALT enfoncée et double-cliquez ."
