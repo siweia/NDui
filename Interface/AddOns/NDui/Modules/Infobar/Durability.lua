@@ -113,6 +113,11 @@ info.onEvent = function(self, event)
 	end
 end
 
+C_Timer_After(5, function()
+	if not info.text then return end
+	info:onEvent("PLAYER_ENTERING_WORLD")
+end)
+
 info.onMouseUp = function(self, btn)
 	if btn == "MiddleButton" then
 		NDuiADB["RepairType"] = mod(NDuiADB["RepairType"] + 1, 3)
