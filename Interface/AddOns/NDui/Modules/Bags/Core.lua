@@ -229,7 +229,7 @@ local function UpdateCategoryLayout(parent, bags, bagType)
 
 	local yOffset = 0
 
-	for i = #bags, 1, -1 do
+	for i = 1, #bags do
 		local container = bags[i]
 		local hasItems = #container.buttons > 0 or (container.freeSlot and container.freeSlot:IsShown())
 		if hasItems and CheckForBagReagent(container.name) then
