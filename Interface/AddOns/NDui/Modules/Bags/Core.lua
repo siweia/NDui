@@ -359,7 +359,7 @@ end
 
 function module:CreateBagBar(settings, columns)
 	local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
-	bagBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
+	bagBar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagBar)
 	bagBar.highlightFunction = highlightFunction
 	bagBar.isGlobal = true
@@ -698,7 +698,7 @@ function module:CreateSplitButton()
 
 	local splitFrame = CreateFrame("Frame", nil, self)
 	splitFrame:SetSize(100, 50)
-	splitFrame:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+	splitFrame:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -5)
 	B.CreateFS(splitFrame, 14, L["SplitCount"], "system", "TOP", 1, -5)
 	B.SetBD(splitFrame)
 	splitFrame:Hide()
