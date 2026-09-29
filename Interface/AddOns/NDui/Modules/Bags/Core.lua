@@ -65,6 +65,7 @@ function module:CreateCategoryScroll(parent, bagType)
 	scroll:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 4)
 	scroll:SetHeight(400)
 	B.SetBD(scroll)
+	B.CreateMF(scroll, parent, true)
 
 	local child = CreateFrame("Frame", nil, scroll)
 	child:SetPoint("TOPLEFT", scroll, "TOPLEFT", 0, 0)
