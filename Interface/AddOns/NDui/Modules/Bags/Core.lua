@@ -61,8 +61,8 @@ end
 -- 创建分类滚动容器外壳（现代滚动条参考 EllesmereUIBags：16px 隐形命中区 + 4px 窄滑块）
 function module:CreateCategoryScroll(parent, bagType)
 	local scroll = CreateFrame("ScrollFrame", nil, parent, "UIPanelScrollFrameTemplate")
-	-- 头部（搜索栏+按钮行）在 f.main 顶部，分类列表排在 f.main 底部下方
-	scroll:SetPoint("TOPLEFT", parent, "BOTTOMLEFT", 0, -4)
+	-- f.main 在底部，分类滚动列表排在 f.main 顶部上方
+	scroll:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 4)
 	scroll:SetHeight(400)
 	B.SetBD(scroll)
 
@@ -229,7 +229,7 @@ local function UpdateCategoryLayout(parent, bags, bagType)
 
 	local yOffset = 0
 
-	for i = 1, #bags do
+	for i = #bags, 1, -1 do
 		local container = bags[i]
 		local hasItems = #container.buttons > 0 or (container.freeSlot and container.freeSlot:IsShown())
 		if hasItems and CheckForBagReagent(container.name) then
