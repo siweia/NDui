@@ -677,6 +677,109 @@ local function createBarMover(bar, text, value, anchor)
 	bar.mover = mover
 end
 
+local nameplateShadowCorners = {"TOPLEFT", "TOPRIGHT", "BOTTOMLEFT", "BOTTOMRIGHT"}
+local nameplateShadowCoords = {
+	{.5078125, .6171875, .0625, .9375},
+	{.6328125, .7421875, .0625, .9375},
+	{.7578125, .8671875, .0625, .9375},
+	{.8828125, .9921875, .0625, .9375},
+	{.2578125, .9375, .3671875, .9375, .2578125, .0625, .3671875, .0625},
+	{.3828125, .9375, .4921875, .9375, .3828125, .0625, .4921875, .0625},
+	{.0078125, .1171875, .0625, .9375},
+	{.1328125, .2421875, .0625, .9375},
+}
+
+local function SetNameplateShadowColor(self, r, g, b, a)
+	for i = 1, #self do
+		self[i]:SetVertexColor(r, g, b, a or 1)
+	end
+end
+
+function UF.CreateNameplateShadow(parent, anchor, size, offset)
+	local shadow = CreateFrame("Frame", nil, parent)
+	shadow:SetFrameLevel(0)
+	size, offset = size*C.mult, offset*C.mult
+	shadow:SetPoint("TOPLEFT", anchor, "TOPLEFT", -offset, offset)
+	shadow:SetPoint("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", offset, -offset)
+
+	-- Stretch the existing glow's eight slices; no tiled UV or size-change callback is needed.
+	for i, coords in ipairs(nameplateShadowCoords) do
+		local texture = shadow:CreateTexture(nil, "BACKGROUND")
+		texture:SetTexture(DB.glowTex)
+		texture:SetTexCoord(unpack(coords))
+		shadow[i] = texture
+	end
+	for i, point in ipairs(nameplateShadowCorners) do
+		shadow[i]:SetSize(size, size)
+		shadow[i]:SetPoint(point, shadow, point)
+	end
+
+	local top, bottom, left, right = shadow[5], shadow[6], shadow[7], shadow[8]
+	top:SetHeight(size)
+	top:SetPoint("TOPLEFT", shadow[1], "TOPRIGHT")
+	top:SetPoint("TOPRIGHT", shadow[2], "TOPLEFT")
+	bottom:SetHeight(size)
+	bottom:SetPoint("BOTTOMLEFT", shadow[3], "BOTTOMRIGHT")
+	bottom:SetPoint("BOTTOMRIGHT", shadow[4], "BOTTOMLEFT")
+	left:SetWidth(size)
+	left:SetPoint("TOPLEFT", shadow[1], "BOTTOMLEFT")
+	left:SetPoint("BOTTOMLEFT", shadow[3], "TOPLEFT")
+	right:SetWidth(size)
+	right:SetPoint("TOPRIGHT", shadow[2], "BOTTOMRIGHT")
+	right:SetPoint("BOTTOMRIGHT", shadow[4], "TOPRIGHT")
+
+	shadow.SetVertexColor = SetNameplateShadowColor
+	shadow:SetVertexColor(0, 0, 0, .4)
+	return shadow
+end
+
+function UF.CreateNameplateBackdrop(object, background, shadow)
+	local parent = object:IsObjectType("Texture") and object:GetParent() or object
+	local pixel = C.mult
+	local bg = CreateFrame("Frame", nil, parent)
+	bg:SetFrameLevel(max(parent:GetFrameLevel() - 1, 0))
+	bg:SetPoint("TOPLEFT", object, "TOPLEFT", -pixel, pixel)
+	bg:SetPoint("BOTTOMRIGHT", object, "BOTTOMRIGHT", pixel, -pixel)
+
+	local top = bg:CreateTexture(nil, "BORDER")
+	top:SetColorTexture(0, 0, 0)
+	top:SetPoint("TOPLEFT")
+	top:SetPoint("TOPRIGHT")
+	top:SetHeight(pixel)
+
+	local bottom = bg:CreateTexture(nil, "BORDER")
+	bottom:SetColorTexture(0, 0, 0)
+	bottom:SetPoint("BOTTOMLEFT")
+	bottom:SetPoint("BOTTOMRIGHT")
+	bottom:SetHeight(pixel)
+
+	local left = bg:CreateTexture(nil, "BORDER")
+	left:SetColorTexture(0, 0, 0)
+	left:SetPoint("TOPLEFT", 0, -pixel)
+	left:SetPoint("BOTTOMLEFT", 0, pixel)
+	left:SetWidth(pixel)
+
+	local right = bg:CreateTexture(nil, "BORDER")
+	right:SetColorTexture(0, 0, 0)
+	right:SetPoint("TOPRIGHT", 0, -pixel)
+	right:SetPoint("BOTTOMRIGHT", 0, pixel)
+	right:SetWidth(pixel)
+
+	if background then
+		local texture = bg:CreateTexture(nil, "BACKGROUND")
+		texture:SetAllPoints(object)
+		texture:SetColorTexture(0, 0, 0, C.db["Skins"]["SkinAlpha"])
+		-- Keep the existing opacity slider without creating a BackdropTemplate.
+		texture.SetBackdropColor = texture.SetColorTexture
+		table.insert(C.frames, texture)
+	end
+	if shadow and C.db["Skins"]["Shadow"] then
+		UF.CreateNameplateShadow(bg, bg, 5, 4)
+	end
+
+	return bg
+end
+
 function UF:CreateCastBar(self)
 	local mystyle = self.mystyle
 	if mystyle ~= "nameplate" and not C.db["UFs"]["Castbars"] then return end
@@ -684,7 +787,13 @@ function UF:CreateCastBar(self)
 	local cb = CreateFrame("StatusBar", "oUF_Castbar"..mystyle, self)
 	cb:SetHeight(20)
 	cb:SetWidth(self:GetWidth() - 22)
-	B.CreateSB(cb, true, .3, .7, 1)
+	if mystyle == "nameplate" then
+		cb:SetStatusBarTexture(DB.normTex)
+		cb:SetStatusBarColor(.3, .7, 1)
+		UF.CreateNameplateBackdrop(cb, true, true)
+	else
+		B.CreateSB(cb, true, .3, .7, 1)
+	end
 	cb.castTicks = {}
 
 	if mystyle == "player" then
@@ -720,7 +829,11 @@ function UF:CreateCastBar(self)
 		cb.Icon:SetSize(cb:GetHeight(), cb:GetHeight())
 		cb.Icon:SetPoint("BOTTOMRIGHT", cb, "BOTTOMLEFT", -3, 0)
 		cb.Icon:SetTexCoord(x1, x2, y1, y2)
-		B.SetBD(cb.Icon)
+		if mystyle == "nameplate" then
+			UF.CreateNameplateBackdrop(cb.Icon, false, true)
+		else
+			B.SetBD(cb.Icon)
+		end
 	end
 
 	if mystyle == "player" then
@@ -904,7 +1017,7 @@ function UF:UpdateIconTexCoord(width, height)
 	self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
 end
 
-local function CreateAuraDispelBorder(button, thickness)
+local function CreateAuraDispelBorder(button, thickness, options)
 	thickness = thickness or C.mult
 	local border = CreateFrame("Frame", nil, button)
 	border:SetAllPoints()
@@ -939,7 +1052,7 @@ local function CreateAuraDispelBorder(button, thickness)
 	right:SetWidth(thickness)
 	textures[4] = right
 
-	local options = {
+	options = options or {
 		showWhenHarmful = true,
 		showWhenHelpful = true,
 		showWithoutDispelType = true,
@@ -952,6 +1065,7 @@ local function CreateAuraDispelBorder(button, thickness)
 end
 
 function UF.PostCreateButton(element, button, options)
+	local isNameplate = element.__owner.mystyle == "nameplate"
 	local size = options.size or element.size
 	local fontSize = options.fontSize or element.fontSize or size*.4
 	if button.Count then
@@ -970,12 +1084,24 @@ function UF.PostCreateButton(element, button, options)
 	if options.desaturated then
 		button.Icon:SetDesaturated(true)
 	end
-	button.iconbg = B.ReskinIcon(button.Icon)
-	button.iconbg:SetBackdropBorderColor(0, 0, 0)
-	B.CreateSD(button)
+	if isNameplate then
+		button.iconbg = UF.CreateNameplateBackdrop(button.Icon)
+	else
+		button.iconbg = B.ReskinIcon(button.Icon)
+		button.iconbg:SetBackdropBorderColor(0, 0, 0)
+		B.CreateSD(button)
+	end
 
 	if options.showDebuffTypeBorder then
 		CreateAuraDispelBorder(button, C.mult * (element.__debuffBorderSize or 1))
+	end
+	if isNameplate then
+		CreateAuraDispelBorder(button, C.mult, {
+			showWhenHelpful = true,
+			showWithoutDispelType = true,
+			style = Enum.CustomAuraButtonDispelTypeTextureStyle.PreserveAsset,
+			stealableFilter = Enum.CustomAuraButtonDispelTypeStealableFilter.Stealable,
+		})
 	end
 
 	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
@@ -990,7 +1116,7 @@ function UF.PostCreateButton(element, button, options)
 		button.Stealable:SetAtlas("bags-newitem")
 	end
 
-	if element.__owner.mystyle == "nameplate" then
+	if isNameplate then
 		local sizeRatio = options.sizeRatio or element.sizeRatio
 		UF.UpdateIconTexCoord(button, size, size * sizeRatio)
 		if button.Count then
@@ -1575,7 +1701,7 @@ local function CreateAuraElement(self, options)
 	element.showDebuffBorder = options.showDebuffBorder
 	element.showCount = true
 	element.showDuration = false
-	element.showStealableBorder = true
+	element.showStealableBorder = self.mystyle ~= "nameplate"
 	element.PostCreateButton = UF.PostCreateButton
 	return element
 end

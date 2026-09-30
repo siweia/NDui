@@ -237,10 +237,10 @@ function UF:UpdateColor(_, unit)
 	self.ThreatIndicator:Hide()
 	if status and (isCustomUnit or (not C.db["Nameplate"]["TankMode"] and DB.Role ~= "Tank")) then
 		if status == 3 then
-			self.ThreatIndicator:SetBackdropBorderColor(1, 0, 0)
+			self.ThreatIndicator:SetVertexColor(1, 0, 0)
 			self.ThreatIndicator:Show()
 		elseif status == 2 or status == 1 then
-			self.ThreatIndicator:SetBackdropBorderColor(1, 1, 0)
+			self.ThreatIndicator:SetVertexColor(1, 1, 0)
 			self.ThreatIndicator:Show()
 		end
 	end
@@ -248,30 +248,30 @@ function UF:UpdateColor(_, unit)
 	self.nameText:SetTextColor(healthPerc:GetRGB())
 end
 
-function UF:UpdateThreatColor(_, unit)
-	if unit ~= self.__unit then return end
-
-	UF.UpdateColor(self, _, unit)
+function UF:UpdateThreatColor(event, unit)
+	-- Health already updates the shared colors during a full element refresh.
+	if event == "UNIT_THREAT_SITUATION_UPDATE" or event == "UNIT_THREAT_LIST_UPDATE" or event == "ForceUpdate" then
+		UF.UpdateColor(self, event, unit)
+	end
 end
 
 function UF:CreateThreatColor(self)
-	local threatIndicator = B.CreateSD(self.backdrop, nil, true)
+	local threatIndicator = UF.CreateNameplateShadow(self.backdrop, self.backdrop, 5, 4)
 	threatIndicator:SetFrameLevel(2)
 	threatIndicator:Hide()
-	self.backdrop.__shadow = nil
 
 	self.ThreatIndicator = threatIndicator
 	self.ThreatIndicator.Override = UF.UpdateThreatColor
 end
 
-function UF:UpdateFocusColor()
+function UF:UpdateFocusColor(event)
 	if C.db["Nameplate"]["ColoredFocus"] then
-		UF.UpdateThreatColor(self, _, self.__unit)
+		UF.UpdateColor(self, event, self.__unit)
 	end
 end
 
 -- Target indicator
-function UF:UpdateTargetChange()
+function UF:UpdateTargetChange(event, forceUpdate)
 	local element = self.TargetIndicator
 	if not element then return end
 
@@ -289,8 +289,8 @@ function UF:UpdateTargetChange()
 			end
 		end
 	end
-	if C.db["Nameplate"]["ColoredTarget"] then
-		UF.UpdateThreatColor(self, _, unit)
+	if C.db["Nameplate"]["ColoredTarget"] and forceUpdate ~= false then
+		UF.UpdateColor(self, event, unit)
 	end
 end
 
@@ -391,9 +391,8 @@ function UF:AddTargetIndicator(self)
 	frame.ArrowAnim = anim
 	frame.ArrowAnimGroup = animGroup
 
-	frame.Glow = B.CreateSD(frame, 8, true)
-	frame.Glow:SetOutside(self.backdrop, 8, 8)
-	frame.Glow:SetBackdropBorderColor(1, 1, 1)
+	frame.Glow = UF.CreateNameplateShadow(frame, self.backdrop, 8, 8)
+	frame.Glow:SetVertexColor(1, 1, 1)
 	frame.Glow:SetFrameLevel(0)
 
 	frame.nameGlow = frame:CreateTexture(nil, "BACKGROUND", nil, -5)
@@ -560,9 +559,8 @@ function UF:MouseoverIndicator(self)
 	local texture = highlight:CreateTexture(nil, "ARTWORK")
 	texture:SetAllPoints()
 	texture:SetColorTexture(1, 1, 1, .35)
-	local glow = B.CreateSD(highlight, 8, true)
-	glow:SetOutside(self.backdrop, 8, 8)
-	glow:SetBackdropBorderColor(0, .6, 1)
+	local glow = UF.CreateNameplateShadow(highlight, self.backdrop, 8, 8)
+	glow:SetVertexColor(0, .6, 1)
 	glow:SetFrameLevel(1)
 
 	local updater = CreateFrame("Frame", nil, self)
@@ -595,6 +593,7 @@ UF.nameplateUnits = {}
 
 function UF:CreatePlateFrames()
 	self.mystyle = "nameplate"
+	self:SetFlattensRenderLayers(true)
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 	self:ClearAllPoints()
 	self:SetPoint("CENTER")
@@ -604,8 +603,7 @@ function UF:CreatePlateFrames()
 	health:SetAllPoints()
 	health:SetStatusBarTexture(DB.normTex)
 	UF:SmoothBar(health)
-	self.backdrop = B.SetBD(health)
-	self.backdrop.__shadow = nil
+	self.backdrop = UF.CreateNameplateBackdrop(health, true, true)
 	self.Health = health
 	self.Health.UpdateColor = UF.UpdateColor
 
@@ -699,7 +697,7 @@ UF.PlateNameTags = {
 	[4] = "[nprare][name]",
 	[5] = "[nprare][nplevel][name]",
 }
-function UF:UpdateNameplateSize()
+function UF:UpdateNameplateSize(forceUpdate)
 	local plateWidth, plateHeight = C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"]
 	local plateCBHeight, plateCBOffset = C.db["Nameplate"]["PlateCBHeight"], C.db["Nameplate"]["PlateCBOffset"]
 	local nameTextSize, CBTextSize = C.db["Nameplate"]["NameTextSize"], C.db["Nameplate"]["CBTextSize"]
@@ -725,7 +723,7 @@ function UF:UpdateNameplateSize()
 		self:Tag(self.nameText, "[nprare][nplevel][color][name]")
 		self.__tagIndex = 6
 		B.SetFontSize(self.npcTitle, nameOnlyTitleSize)
-		self.npcTitle:UpdateTag()
+		if forceUpdate ~= false then self.npcTitle:UpdateTag() end
 	else
 		B.SetFontSize(self.nameText, nameTextSize)
 		self.nameText:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, nameTextOffset)
@@ -746,11 +744,11 @@ function UF:UpdateNameplateSize()
 		B.SetFontSize(self.healthValue, healthTextSize)
 		self.healthValue:SetPoint("RIGHT", self, 0, healthTextOffset)
 		self:Tag(self.healthValue, "[VariousHP("..UF.VariousTagIndex[C.db["Nameplate"]["HealthType"]]..")]")
-		self.healthValue:UpdateTag()
+		if forceUpdate ~= false then self.healthValue:UpdateTag() end
 		self.RaidTargetIndicator:SetPoint("BOTTOMRIGHT", self, "TOPLEFT", RaidTargetX, RaidTargetY)
 	end
 	UF:UpdateAuraLayoutLimit(self)
-	self.nameText:UpdateTag()
+	if forceUpdate ~= false then self.nameText:UpdateTag() end
 end
 
 function UF:RefreshNameplats()
@@ -775,7 +773,7 @@ local DisabledElements = {
 	"Health", "Castbar", "PvPClassificationIndicator", "ThreatIndicator"
 }
 
-function UF:UpdatePlateByType()
+function UF:UpdatePlateByType(forceUpdate)
 	local name = self.nameText
 	local hpval = self.healthValue
 	local title = self.npcTitle
@@ -813,7 +811,7 @@ function UF:UpdatePlateByType()
 				self:EnableElement(element)
 			end
 		end
-		self.Health:ForceUpdate()
+		if forceUpdate ~= false then self.Health:ForceUpdate() end
 		shouldEnableAura = true
 
 		name:SetJustifyH("LEFT")
@@ -830,12 +828,12 @@ function UF:UpdatePlateByType()
 		end
 	end
 
-	UF.UpdateNameplateSize(self)
+	UF.UpdateNameplateSize(self, forceUpdate)
 	UF.UpdateTargetIndicator(self)
 	UF.ToggleNameplateAuras(self, shouldEnableAura)
 end
 
-function UF:RefreshPlateType(unit)
+function UF:RefreshPlateType(unit, forceUpdate)
 	self.reaction = UnitReaction(unit, "player")
 	self.isFriendly = self.reaction and self.reaction >= 4 and not UnitCanAttack("player", unit)
 	if C.db["Nameplate"]["NameOnlyMode"] and self.isFriendly then
@@ -847,7 +845,7 @@ function UF:RefreshPlateType(unit)
 	end
 
 	if self.previousType == nil or self.previousType ~= self.plateType then
-		UF.UpdatePlateByType(self)
+		UF.UpdatePlateByType(self, forceUpdate)
 		self.previousType = self.plateType
 	end
 
@@ -876,7 +874,8 @@ end
 local function onTargetChanged(self, event, unit)
 	if not self then return end
 
-	UF.UpdateTargetChange(self)
+	-- The driver refreshes Health after both callbacks; NameOnly has it disabled.
+	UF.UpdateTargetChange(self, event, self.plateType == "NameOnly")
 	UF.UpdateQuestUnit(self, event, unit)
 	UF.UpdateUnitClassify(self, unit)
 	UF:UpdateTargetClassPower()
@@ -911,7 +910,7 @@ function UF:OnNameplateAdded(event, unit)
 		self.StackingBounds:SetAllPoints(blizzPlate)
 	end
 
-	UF.RefreshPlateType(self, unit)
+	UF.RefreshPlateType(self, unit, false) -- The driver refreshes all elements and tags after this callback.
 	onTargetChanged(self, event, unit)
 end
 

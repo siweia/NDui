@@ -9,3 +9,4 @@ ignore:
   - Interface/TargetingFrame
   - Interface/Tooltips
   - README.md
+  - Patches
