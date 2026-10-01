@@ -1090,6 +1090,7 @@ function G:SetupActionBar(parent)
 
 	local panel = createExtraGUI(parent, guiName, L["ActionbarSetup"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
+	scroll.child:SetHeight(640) -- fit the per-bar fade controls
 
 	local Bar = B:GetModule("Actionbar")
 	local defaultValues = {
@@ -1108,6 +1109,9 @@ function G:SetupActionBar(parent)
 	local function toggleBar(self)
 		C.db["Actionbar"][self.__value] = self:GetChecked()
 		Bar:UpdateVisibility()
+	end
+	local function updateFade()
+		Bar:UpdateFade()
 	end
 	local function createOptionGroup(parent, offset, value, color)
 		if value ~= "BarPet" then
@@ -1137,6 +1141,10 @@ function G:SetupActionBar(parent)
 			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-340, value.."Num", updateBarScale, "Actionbar")
 			createOptionDropdown(parent, L["GrowthDirection"], offset-410, directions, nil, "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
 		end
+
+		local fadeOffset = value == "BarPet" and offset-340 or offset-480
+		createOptionCheck(parent, fadeOffset, L["FadeWhenNotHovered"], "Actionbar", value.."Fade", updateFade, L["FadeWhenNotHoveredTip"])
+		createOptionSlider(parent, L["FadedOpacity"], 0, 100, 20, fadeOffset-70, value.."FadeAlpha", updateFade, "Actionbar")
 	end
 
 	local options = {}
@@ -1203,6 +1211,8 @@ function G:SetupStanceBar(parent)
 	createOptionSlider(parent, L["ButtonsPerRow"], 1, 10, 10, offset-130, "BarStancePerRow", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["ButtonFontSize"], 8, 20, 12, offset-200, "BarStanceFont", Bar.UpdateStanceBar, "Actionbar")
 	createOptionSlider(parent, L["CDFontSize"], 5, 30, 16, offset-270, "BarStanceCDSize", function() Bar:UpdateCooldownText("BarStance") end, "Actionbar")
+	createOptionCheck(parent, offset-340, L["FadeWhenNotHovered"], "Actionbar", "BarStanceFade", function() Bar:UpdateFade() end, L["FadeWhenNotHoveredTip"])
+	createOptionSlider(parent, L["FadedOpacity"], 0, 100, 20, offset-410, "BarStanceFadeAlpha", function() Bar:UpdateFade() end, "Actionbar")
 end
 
 function G:SetupUFClassPower(parent)

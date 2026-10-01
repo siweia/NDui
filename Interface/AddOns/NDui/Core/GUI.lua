@@ -26,6 +26,7 @@ G.DefaultSettings = {
 		ShowStance = true,
 		EquipColor = false,
 		ShowGlow = true,
+		FadeRevealAll = false,
 		KeyDown = true,
 		ButtonLock = true,
 		CDFontSize = 16,
@@ -38,6 +39,8 @@ G.DefaultSettings = {
 		Bar1CDSize = 16,
 		Bar1Num = 12,
 		Bar1PerRow = 12,
+		Bar1Fade = false,
+		Bar1FadeAlpha = 20,
 		Bar2 = true,
 		Bar2Flyout = 1,
 		Bar2Size = 34,
@@ -45,6 +48,8 @@ G.DefaultSettings = {
 		Bar2CDSize = 16,
 		Bar2Num = 12,
 		Bar2PerRow = 12,
+		Bar2Fade = false,
+		Bar2FadeAlpha = 20,
 		Bar3 = true,
 		Bar3Flyout = 1,
 		Bar3Size = 32,
@@ -52,6 +57,8 @@ G.DefaultSettings = {
 		Bar3CDSize = 16,
 		Bar3Num = 0,
 		Bar3PerRow = 12,
+		Bar3Fade = false,
+		Bar3FadeAlpha = 20,
 		Bar4 = true,
 		Bar4Flyout = 3,
 		Bar4Size = 32,
@@ -59,6 +66,8 @@ G.DefaultSettings = {
 		Bar4CDSize = 16,
 		Bar4Num = 12,
 		Bar4PerRow = 1,
+		Bar4Fade = false,
+		Bar4FadeAlpha = 20,
 		Bar5 = true,
 		Bar5Flyout = 3,
 		Bar5Size = 32,
@@ -66,6 +75,8 @@ G.DefaultSettings = {
 		Bar5CDSize = 16,
 		Bar5Num = 12,
 		Bar5PerRow = 1,
+		Bar5Fade = false,
+		Bar5FadeAlpha = 20,
 		Bar6 = false,
 		Bar6Flyout = 1,
 		Bar6Size = 34,
@@ -73,6 +84,8 @@ G.DefaultSettings = {
 		Bar6CDSize = 16,
 		Bar6Num = 12,
 		Bar6PerRow = 12,
+		Bar6Fade = false,
+		Bar6FadeAlpha = 20,
 		Bar7 = false,
 		Bar7Flyout = 1,
 		Bar7Size = 34,
@@ -80,6 +93,8 @@ G.DefaultSettings = {
 		Bar7CDSize = 16,
 		Bar7Num = 12,
 		Bar7PerRow = 12,
+		Bar7Fade = false,
+		Bar7FadeAlpha = 20,
 		Bar8 = false,
 		Bar8Flyout = 1,
 		Bar8Size = 34,
@@ -87,15 +102,21 @@ G.DefaultSettings = {
 		Bar8CDSize = 16,
 		Bar8Num = 12,
 		Bar8PerRow = 12,
+		Bar8Fade = false,
+		Bar8FadeAlpha = 20,
 
 		BarPetSize = 26,
 		BarPetFont = 12,
 		BarPetCDSize = 16,
 		BarPetPerRow = 10,
+		BarPetFade = false,
+		BarPetFadeAlpha = 20,
 		BarStanceSize = 30,
 		BarStanceFont = 12,
 		BarStanceCDSize = 16,
 		BarStancePerRow = 10,
+		BarStanceFade = false,
+		BarStanceFadeAlpha = 20,
 		VehButtonSize = 34,
 		MBSize = 22,
 		MBPerRow = 13,
@@ -929,6 +950,10 @@ local function updateOverlays()
 	B:GetModule("Actionbar"):UpdateOverlays()
 end
 
+local function updateActionbarFade()
+	B:GetModule("Actionbar"):UpdateFade()
+end
+
 local function updateEquipColor()
 	local Bar = B:GetModule("Actionbar")
 	for _, button in pairs(Bar.buttons) do
@@ -1254,6 +1279,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Actionbar", "ShowGlow", L["ShowGlow"].."*", nil, nil, updateOverlays},
 		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
+		{1, "Actionbar", "FadeRevealAll", L["FadeRevealAll"], nil, nil, updateActionbarFade, L["FadeRevealAllTip"]},
 		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
 	},
 	[2] = {
