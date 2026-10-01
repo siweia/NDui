@@ -3,11 +3,9 @@ local B, C, L, DB = unpack(ns)
 local M = B:GetModule("Misc")
 
 local format, max = string.format, math.max
-local BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed = BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed
 local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel, C_PaperDollInfo.GetMinItemLevel
 local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 local STAT_HASTE = STAT_HASTE
-local HIGHLIGHT_FONT_COLOR_CODE, FONT_COLOR_CODE_CLOSE = HIGHLIGHT_FONT_COLOR_CODE, FONT_COLOR_CODE_CLOSE
 
 function M:MissingStats()
 	if not C.db["Misc"]["MissingStats"] then return end
@@ -72,36 +70,10 @@ function M:MissingStats()
 		},
 	}
 ]=]
-	PAPERDOLL_STATINFO["ENERGY_REGEN"].updateFunc = function(statFrame, unit)
-		statFrame.numericValue = 0
-		PaperDollFrame_SetEnergyRegen(statFrame, unit)
-	end
-
-	PAPERDOLL_STATINFO["RUNE_REGEN"].updateFunc = function(statFrame, unit)
-		statFrame.numericValue = 0
-		PaperDollFrame_SetRuneRegen(statFrame, unit)
-	end
-
-	PAPERDOLL_STATINFO["FOCUS_REGEN"].updateFunc = function(statFrame, unit)
-		statFrame.numericValue = 0
-		PaperDollFrame_SetFocusRegen(statFrame, unit)
-	end
-
-	function PaperDollFrame_SetAttackSpeed(statFrame, unit)
-		local meleeHaste = GetMeleeHaste()
-		local speed, offhandSpeed = UnitAttackSpeed(unit)
-		local displaySpeed = format("%.2f", speed)
-		if offhandSpeed then
-			offhandSpeed = format("%.2f", offhandSpeed)
-			displaySpeed = displaySpeed.." / "..offhandSpeed
-		end
-		PaperDollFrame_SetLabelAndText(statFrame, WEAPON_SPEED, displaySpeed, false, speed)
-
-		statFrame.tooltip = HIGHLIGHT_FONT_COLOR_CODE..format(PAPERDOLLFRAME_TOOLTIP_FORMAT, ATTACK_SPEED).." "..displaySpeed..FONT_COLOR_CODE_CLOSE
-		statFrame.tooltip2 = format(STAT_ATTACK_SPEED_BASE_TOOLTIP, BreakUpLargeNumbers(meleeHaste))
-		statFrame:Show()
-	end
-
+	-- Blizzard already defines ENERGY_REGEN/RUNE_REGEN/FOCUS_REGEN/ATTACK_ATTACKSPEED
+	-- in PAPERDOLL_STATINFO, so these overrides were redundant. Writing to that
+	-- table from addon code taints it, which makes Blizzard's stat update throw
+	-- "attempt to compare a secret number value" in restricted content.
 	hooksecurefunc("PaperDollFrame_SetItemLevel", function(statFrame, unit)
 		if unit ~= "player" then return end
 
