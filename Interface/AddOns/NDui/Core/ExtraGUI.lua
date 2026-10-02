@@ -1194,6 +1194,8 @@ function G:SetupMicroMenu(parent)
 	createOptionSlider(parent, L["ButtonSize"], 20, 100, 22, offset-60, "MBSize", Bar.MicroMenu_Setup, "Actionbar")
 	createOptionSlider(parent, L["ButtonsPerRow"], 1, 13, 13, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
 	createOptionSlider(parent, L["Spacing"], -10, 10, 5, offset-200, "MBSpacing", Bar.MicroMenu_Setup, "Actionbar")
+	createOptionCheck(parent, offset-270, L["FadeWhenNotHovered"], "Actionbar", "MicroMenuFade", function() Bar:UpdateFade() end, L["FadeWhenNotHoveredTip"])
+	createOptionSlider(parent, L["FadedOpacity"], 0, 100, 20, offset-340, "MicroMenuFadeAlpha", function() Bar:UpdateFade() end, "Actionbar")
 end
 
 function G:SetupStanceBar(parent)

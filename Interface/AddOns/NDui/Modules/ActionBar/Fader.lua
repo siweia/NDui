@@ -18,6 +18,10 @@ local fadable = {
 	{key = "Bar8", frame = "NDui_ActionBar8"},
 	{key = "BarPet", frame = "NDui_ActionBarPet"},
 	{key = "BarStance", frame = "NDui_ActionBarStance"},
+	-- Blizzard's micro menu is split across frames; NDui's menubar replaces them when enabled
+	{key = "MicroMenu", getFrame = function() return Bar.menubar end},
+	{key = "MicroMenu", frame = "MicroMenu"},
+	{key = "MicroMenu", frame = "BagsBar"},
 }
 
 local watched = {}
@@ -57,15 +61,17 @@ end
 function Bar:UpdateFadeAlpha()
 	local revealAll = C.db["Actionbar"]["FadeRevealAll"]
 	local flyoutHovered = isFlyoutHovered()
-	local anyHovered = flyoutHovered
+	local hovered, anyHovered = {}, flyoutHovered
 	local moversShown = false
 
 	for i = 1, #watched do
 		local entry = watched[i]
 		local frame = entry.frame
-		local hovered = frame:IsShown() and frame:IsMouseOver(1, -1, -1, 1)
-		entry.hovered = hovered
-		if hovered then anyHovered = true end
+		-- frames sharing a key (bar halves, micro menu pieces) reveal as one bar
+		if frame:IsShown() and frame:IsMouseOver(1, -1, -1, 1) then
+			hovered[entry.key] = true
+			anyHovered = true
+		end
 
 		local mover = frame.mover
 		if mover and mover:IsShown() then
@@ -76,7 +82,7 @@ function Bar:UpdateFadeAlpha()
 	local showAll = moversShown or (revealAll and anyHovered)
 	for i = 1, #watched do
 		local entry = watched[i]
-		local show = showAll or (not revealAll and (flyoutHovered or entry.hovered))
+		local show = showAll or (not revealAll and (flyoutHovered or hovered[entry.key]))
 		local alpha = show and 1 or getFadedAlpha(entry.key)
 		if entry.frame:GetAlpha() ~= alpha then
 			entry.frame:SetAlpha(alpha)
@@ -92,7 +98,12 @@ function Bar:UpdateFade()
 
 	local db = C.db["Actionbar"]
 	for _, info in ipairs(fadable) do
-		local frame = _G[info.frame]
+		local frame
+		if info.getFrame then
+			frame = info.getFrame()
+		else
+			frame = _G[info.frame]
+		end
 		if frame and db[info.key.."Fade"] then
 			tinsert(watched, {key = info.key, frame = frame})
 

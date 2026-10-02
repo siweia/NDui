@@ -121,6 +121,8 @@ G.DefaultSettings = {
 		MBSize = 22,
 		MBPerRow = 13,
 		MBSpacing = 5,
+		MicroMenuFade = false,
+		MicroMenuFadeAlpha = 20,
 	},
 	Bags = {
 		Enable = true,
