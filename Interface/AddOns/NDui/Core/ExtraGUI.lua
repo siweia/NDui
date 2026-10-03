@@ -1190,12 +1190,20 @@ function G:SetupMicroMenu(parent)
 
 	local Bar = B:GetModule("Actionbar")
 	local parent, offset = scroll.child, -10
+	local enabled = C.db["Actionbar"]["MicroMenu"]
+	local function disableControl(control)
+		if not enabled then
+			control:Disable()
+			control:SetAlpha(.5)
+		end
+	end
+
 	createOptionTitle(parent, L["Menubar"], offset)
-	createOptionSlider(parent, L["ButtonSize"], 20, 100, 22, offset-60, "MBSize", Bar.MicroMenu_Setup, "Actionbar")
-	createOptionSlider(parent, L["ButtonsPerRow"], 1, 13, 13, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
-	createOptionSlider(parent, L["Spacing"], -10, 10, 5, offset-200, "MBSpacing", Bar.MicroMenu_Setup, "Actionbar")
-	createOptionCheck(parent, offset-270, L["FadeWhenNotHovered"], "Actionbar", "MicroMenuFade", function() Bar:UpdateFade() end, L["FadeWhenNotHoveredTip"])
-	createOptionSlider(parent, L["FadedOpacity"], 0, 100, 20, offset-340, "MicroMenuFadeAlpha", function() Bar:UpdateFade() end, "Actionbar")
+	disableControl(createOptionSlider(parent, L["ButtonSize"], 20, 100, 22, offset-60, "MBSize", Bar.MicroMenu_Setup, "Actionbar"))
+	disableControl(createOptionSlider(parent, L["ButtonsPerRow"], 1, 13, 13, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar"))
+	disableControl(createOptionSlider(parent, L["Spacing"], -10, 10, 5, offset-200, "MBSpacing", Bar.MicroMenu_Setup, "Actionbar"))
+	createOptionCheck(parent, offset-270, L["FadeWhenNotHovered"], "Actionbar", "MicroMenuFade", function() Bar:UpdateFade() end, L["MicroMenuFadeTip"], not enabled)
+	disableControl(createOptionSlider(parent, L["FadedOpacity"], 0, 100, 20, offset-340, "MicroMenuFadeAlpha", function() Bar:UpdateFade() end, "Actionbar"))
 end
 
 function G:SetupStanceBar(parent)

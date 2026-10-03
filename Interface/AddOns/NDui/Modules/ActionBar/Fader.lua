@@ -18,10 +18,8 @@ local fadable = {
 	{key = "Bar8", frame = "NDui_ActionBar8"},
 	{key = "BarPet", frame = "NDui_ActionBarPet"},
 	{key = "BarStance", frame = "NDui_ActionBarStance"},
-	-- Blizzard's micro menu is split across frames; NDui's menubar replaces them when enabled
+	-- Only NDui's own menubar fades; Blizzard's micro menu is left to Edit Mode
 	{key = "MicroMenu", getFrame = function() return Bar.menubar end},
-	{key = "MicroMenu", frame = "MicroMenu"},
-	{key = "MicroMenu", frame = "BagsBar"},
 }
 
 local watched = {}
