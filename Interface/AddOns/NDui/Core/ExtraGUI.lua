@@ -1090,6 +1090,7 @@ function G:SetupActionBar(parent)
 
 	local panel = createExtraGUI(parent, guiName, L["ActionbarSetup"].."*")
 	local scroll = G:CreateScroll(panel, 260, 540)
+	scroll.child:SetHeight(700) -- fit the growth direction row and its menu
 
 	local Bar = B:GetModule("Actionbar")
 	local defaultValues = {
@@ -1105,6 +1106,7 @@ function G:SetupActionBar(parent)
 		["BarPet"] = {26, 1, 10, 10, 10},
 	}
 	local directions = {L["GO_UP"], L["GO_DOWN"], L["GO_LEFT"], L["GO_RIGHT"]}
+	local growDirections = {L["DOWN_RIGHT"], L["DOWN_LEFT"], L["UP_RIGHT"], L["UP_LEFT"]}
 	local function toggleBar(self)
 		C.db["Actionbar"][self.__value] = self:GetChecked()
 		Bar:UpdateVisibility()
@@ -1136,6 +1138,7 @@ function G:SetupActionBar(parent)
 		if value ~= "BarPet" then
 			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-340, value.."Num", updateBarScale, "Actionbar")
 			createOptionDropdown(parent, L["GrowthDirection"], offset-410, directions, nil, "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
+			createOptionDropdown(parent, L["BarGrowthDirection"], offset-480, growDirections, L["BarGrowthDirectionTip"], "Actionbar", value.."Grow", 1, updateBarScale)
 		end
 	end
 

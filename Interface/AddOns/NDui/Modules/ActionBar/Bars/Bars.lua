@@ -7,6 +7,16 @@ local _G = _G
 local tinsert, next = tinsert, next
 local margin, padding = C.Bars.margin, C.Bars.padding
 
+-- Growth directions: dx/dy are the axes the bar fills along, so button 1 sits
+-- in the corner the bar grows away from. 1 = down-right (the historical
+-- layout), 2 = down-left, 3 = up-right, 4 = up-left.
+local growDirections = {
+	[1] = {dx = 1, dy = 1},
+	[2] = {dx = -1, dy = 1},
+	[3] = {dx = 1, dy = -1},
+	[4] = {dx = -1, dy = -1},
+}
+
 function Bar:UpdateAllSize()
 	if not C.db["Actionbar"]["Enable"] then return end
 	Bar:UpdateActionSize("Bar1")
@@ -88,17 +98,18 @@ function Bar:UpdateActionSize(name)
 			Bar:UpdateFontSize(button, fontSize)
 		end
 	else
+		local grow = growDirections[C.db["Actionbar"][name.."Grow"] or 1] or growDirections[1]
+		local anchor = (grow.dy > 0 and "TOP" or "BOTTOM")..(grow.dx > 0 and "LEFT" or "RIGHT")
+
 		for i = 1, num do
 			local button = frame.buttons[i]
 			button:SetSize(size, size)
 			button:ClearAllPoints()
-			if i == 1 then
-				button:SetPoint("TOPLEFT", frame, padding, -padding)
-			elseif mod(i-1, perRow) == 0 then
-				button:SetPoint("TOP", frame.buttons[i-perRow], "BOTTOM", 0, -margin)
-			else
-				button:SetPoint("LEFT", frame.buttons[i-1], "RIGHT", margin, 0)
-			end
+			local x = padding + mod(i-1, perRow) * (size + margin)
+			local y = padding + floor((i-1)/perRow) * (size + margin)
+			if grow.dx < 0 then x = -x end
+			if grow.dy > 0 then y = -y end
+			button:SetPoint(anchor, frame, anchor, x, y)
 			button:Show()
 			Bar:UpdateFontSize(button, fontSize)
 		end
