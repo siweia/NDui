@@ -67,7 +67,8 @@ local function onAttributeChanged(self, name, value)
 			iterateChildren(self:GetChildren())
 		end
 
-		if(not self:GetAttribute('oUF-onlyProcessChildren')) then
+		-- NDui: the nameplate driver rebinds the unit and updates after its added callback.
+		if(not self.isNamePlate and not self:GetAttribute('oUF-onlyProcessChildren')) then
 			updateActiveUnit(self, 'OnAttributeChanged')
 		end
 	end
