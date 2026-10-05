@@ -2345,22 +2345,22 @@ end
 function ShowOverlayGlow(self)
 	if Feat_UseVanillaOverlayGlow then
 		ActionButtonSpellAlertManager:ShowAlert(self)
-	elseif LBG then
-		LBG.ShowOverlayGlow(self)
+	elseif LCG and lib.eventFrame.showGlow then -- NDui mod
+		LCG.ShowOverlayGlow(self)
 	end
 end
 
 function HideOverlayGlow(self)
 	if Feat_UseVanillaOverlayGlow then
 		ActionButtonSpellAlertManager:HideAlert(self)
-	elseif LBG then
-		LBG.HideOverlayGlow(self)
+	elseif LCG then -- NDui mod
+		LCG.HideOverlayGlow(self)
 	end
 end
 
 local IsSpellOverlayed = C_SpellActivationOverlay and C_SpellActivationOverlay.IsSpellOverlayed or IsSpellOverlayed
 function UpdateOverlayGlow(self)
-	local spellId = self:GetSpellId()
+	local spellId = lib.eventFrame.showGlow and self:GetSpellId() -- NDui mod
 	if spellId and IsSpellOverlayed(spellId) then
 		ShowOverlayGlow(self)
 	else
