@@ -61,6 +61,7 @@ function Bar:UpdateActionSize(name)
 	local num = C.db["Actionbar"][name.."Num"]
 	local perRow = C.db["Actionbar"][name.."PerRow"]
 	if name == "BarPet" then num = 10 end
+	local wasSplit = frame.child and not frame.child.mover.isDisable
 
 	if num == 0 then
 		local column = 3
@@ -115,6 +116,11 @@ function Bar:UpdateActionSize(name)
 		frame:SetHeight(size*rows + (rows-1)*margin + 2*padding)
 		frame.mover:SetSize(frame:GetSize())
 		if frame.child then frame.child.mover.isDisable = true end
+	end
+
+	-- Keep hover targets in sync when Bar3's right half enters or leaves use.
+	if frame.child and wasSplit ~= (not frame.child.mover.isDisable) then
+		Bar:UpdateFade()
 	end
 end
 
@@ -401,7 +407,10 @@ function Bar:OnLogin()
 	Bar.buttons = {}
 	Bar:MicroMenu()
 
-	if not C.db["Actionbar"]["Enable"] then return end
+	if not C.db["Actionbar"]["Enable"] then
+		Bar:UpdateFade()
+		return
+	end
 
 	Bar.movers = {}
 	Bar:CreateBars()
@@ -413,8 +422,8 @@ function Bar:OnLogin()
 	Bar:ReskinBars()
 	Bar:UpdateBarConfig()
 	Bar:UpdateVisibility()
-	Bar:UpdateFade()
 	Bar:UpdateAllSize()
+	Bar:UpdateFade()
 	Bar:HideBlizz()
 	Bar:UpdateCooldownText()
 
