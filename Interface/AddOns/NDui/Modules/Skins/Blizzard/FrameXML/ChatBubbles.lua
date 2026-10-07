@@ -47,8 +47,11 @@ tinsert(C.defaultThemes, function()
 	bubbleHook:SetScript("OnUpdate", function(self, elapsed)
 		self.elapsed = self.elapsed + elapsed
 		if self.elapsed > .1 then
-			for _, chatbubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
-				reskinChatBubble(chatbubble)
+			local chatbubbles = C_ChatBubbles_GetAllChatBubbles()
+			if chatbubbles and B:NotSecretTable(chatbubbles) then
+				for _, chatbubble in pairs(chatbubbles) do
+					reskinChatBubble(chatbubble)
+				end
 			end
 			self:Hide()
 		end
