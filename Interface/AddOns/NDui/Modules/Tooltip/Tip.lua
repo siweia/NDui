@@ -369,11 +369,7 @@ function TT:UpdateStatusBarColor()
 		end
 		return
 	end
-	if ShouldUnitIdentityBeSecret and ShouldUnitIdentityBeSecret(unit) then
-		self.StatusBar:SetStatusBarColor(0, 1, 0)
-	else
-		self.StatusBar:SetStatusBarColor(B.UnitColor(unit))
-	end
+	self.StatusBar:SetStatusBarColor(B.UnitColor(unit))
 end
 
 function TT:RefreshStatusBar()

@@ -186,7 +186,7 @@ do
 			r, g, b = .6, .6, .6
 		else
 			local reaction = UnitReaction(unit, "player")
-			if reaction then
+			if type(reaction) ~= "nil" then
 				local color = FACTION_BAR_COLORS[reaction]
 				r, g, b = color.r, color.g, color.b
 			end
