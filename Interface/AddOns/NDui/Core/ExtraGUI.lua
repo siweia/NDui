@@ -1137,8 +1137,8 @@ function G:SetupActionBar(parent)
 		createOptionSlider(parent, L["CDFontSize"], 5, 30, 16, offset-270, value.."CDSize", updateCooldownText, "Actionbar")
 		if value ~= "BarPet" then
 			createOptionSlider(parent, color..L["MaxButtons"], data[2], data[3], data[4], offset-340, value.."Num", updateBarScale, "Actionbar")
-			createOptionDropdown(parent, L["FlyoutDirection"], offset-410, directions, nil, "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
-			createOptionDropdown(parent, L["BarGrowthDirection"], offset-480, growDirections, L["BarGrowthDirectionTip"], "Actionbar", value.."Grow", 1, updateBarScale)
+			createOptionDropdown(parent, L["FlyoutDirection"], offset-410, directions, L["FlyoutDirectionTip"], "Actionbar", value.."Flyout", data[6], Bar.UpdateBarConfig)
+			createOptionDropdown(parent, L["GrowthDirection"], offset-480, growDirections, L["BarGrowthDirectionTip"], "Actionbar", value.."Grow", 1, updateBarScale)
 		end
 	end
 
