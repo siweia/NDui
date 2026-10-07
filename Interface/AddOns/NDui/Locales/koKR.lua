@@ -834,3 +834,4 @@ L["SortByRole"] = "Sort by role" -- need translation
 L["SortByRoleTip"] = "|nIf checked, sort party members by role.|n|nIf unchecked, sort party members by index." -- need translation
 L["SortAscending"] = "Sort Ascending" -- need translation
 L["SortAscendingTip"] = "|nIf checked, sort party members by ascending order.|n|nIf unchecked, sort party members by descending order." -- need translation
+L["WoW Forever"] = "WoW Forever"
