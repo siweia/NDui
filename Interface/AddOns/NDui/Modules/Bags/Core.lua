@@ -1139,6 +1139,7 @@ function module:OnLogin()
 
 	local MyButton = Backpack:GetItemButtonClass()
 	MyButton:Scaffold("Default")
+	module:SetupItemContext(MyButton)
 
 	function MyButton:OnCreate()
 		self:SetNormalTexture(0)
@@ -1187,6 +1188,8 @@ function module:OnLogin()
 			self.ProfessionQualityOverlay = self:CreateTexture(nil, "OVERLAY")
 			self.ProfessionQualityOverlay:SetPoint("TOPLEFT", -3, 2)
 		end
+
+		module:SetupItemContextButton(self)
 	end
 
 	function MyButton:ItemOnEnter()

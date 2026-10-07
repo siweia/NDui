@@ -105,11 +105,9 @@ function ItemButton:Create(tpl, parent)
 	local btnNT = _G[button:GetName().."NormalTexture"]
 	local btnNIT = button.NewItemTexture
 	local btnBIT = button.BattlepayItemTexture
-	local btnICO = button.ItemContextOverlay
 	if btnNT then btnNT:SetTexture("") end
 	if btnNIT then btnNIT:SetTexture("") end
 	if btnBIT then btnBIT:SetTexture("") end
-	if btnICO then btnICO:SetTexture("") end
 
 	button:RegisterForDrag("LeftButton") -- fix button drag in 9.0
 	button.UpdateTooltip = ContainerFrameItemButtonMixin.OnUpdate
