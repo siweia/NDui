@@ -25,8 +25,21 @@ local RAF_RECRUIT_FRIEND, RAF_RECRUITER_FRIEND = RAF_RECRUIT_FRIEND, RAF_RECRUIT
 local EXPANSION_NAME0, EXPANSION_NAME3 = EXPANSION_NAME0, EXPANSION_NAME3
 local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
 local WOW_PROJECT_60 = WOW_PROJECT_CLASSIC or 2
+local WOW_PROJECT_BCC = WOW_PROJECT_BURNING_CRUSADE_CLASSIC or 5
+local WOW_PROJECT_WLK = WOW_PROJECT_WRATH_CLASSIC or 11
 local WOW_PROJECT_CATA = WOW_PROJECT_CATACLYSM_CLASSIC or 14
+local WOW_PROJECT_MOP = WOW_PROJECT_MISTS_CLASSIC or 19
+local WOW_PROJECT_FOREVER = WOW_PROJECT_CAMELOT or 18
 local CLIENT_WOW_DIFF = "WoV" -- for sorting
+
+local PROJECTID_TO_EXPANSION = {
+	[WOW_PROJECT_60] = EXPANSION_NAME0,
+	[WOW_PROJECT_BCC] = EXPANSION_NAME1,
+	[WOW_PROJECT_WLK] = EXPANSION_NAME2,
+	[WOW_PROJECT_CATA] = EXPANSION_NAME3,
+	[WOW_PROJECT_MOP] = EXPANSION_NAME4,
+	[WOW_PROJECT_FOREVER] = L["WoW Forever"],
+}
 
 local r, g, b = DB.r, DB.g, DB.b
 local infoFrame, updateRequest, prevTime
@@ -134,11 +147,7 @@ local function buildBNetTable(num)
 					status = FRIENDS_TEXTURE_DND
 				end
 
-				if wowProjectID == WOW_PROJECT_60 then
-					gameText = EXPANSION_NAME0
-				elseif wowProjectID == WOW_PROJECT_CATA then
-					gameText = EXPANSION_NAME3
-				end
+				gameText = PROJECTID_TO_EXPANSION[wowProjectID] or gameText
 
 				local infoText = GetOnlineInfoText(client, isMobile, rafLinkType, gameText)
 				if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID then
