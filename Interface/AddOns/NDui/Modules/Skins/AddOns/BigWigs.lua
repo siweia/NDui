@@ -4,16 +4,23 @@ local S = B:GetModule("Skins")
 
 local function removeStyle(bar)
 	bar.candyBarBackdrop:Hide()
-	local height = bar:Get("bigwigs:restoreheight")
+	bar.candyBarIconFrameBackdrop:Hide()
+
+	local height = bar:Get("ndui:restoreheight")
 	if height then
 		bar:SetHeight(height)
+		bar:Set("ndui:restoreheight", nil)
 	end
 
-	local tex = bar:Get("bigwigs:restoreicon")
-	if tex then
-		bar:SetIcon(tex)
-		bar:Set("bigwigs:restoreicon", nil)
-		bar.candyBarIconFrameBackdrop:Hide()
+	-- Restore the indicator frame anchor that was moved to leave room for the icon
+	local indicatorAnchor = bar:Get("ndui:indicatoranchor")
+	if indicatorAnchor then
+		local indicatorFrame = bar:Get("bigwigs:indicatorFrame")
+		if indicatorFrame == indicatorAnchor[1] and indicatorFrame.bar == bar then
+			indicatorFrame:ClearAllPoints()
+			indicatorFrame:SetPoint(indicatorAnchor[2], indicatorAnchor[3], indicatorAnchor[4], indicatorAnchor[5], indicatorAnchor[6])
+		end
+		bar:Set("ndui:indicatoranchor", nil)
 	end
 
 	bar.candyBarDuration:ClearAllPoints()
@@ -26,34 +33,68 @@ end
 
 local function styleBar(bar)
 	local height = bar:GetHeight()
-	bar:Set("bigwigs:restoreheight", height)
+	bar:Set("ndui:restoreheight", height)
 	bar:SetHeight(height/2)
 	bar.candyBarBackdrop:Hide()
+	-- LibCandyBar resets the status bar anchors when the bar height changes.
+	local cbb = bar.candyBarBar
+	cbb:ClearAllPoints()
+	cbb:SetAllPoints(bar)
 	if not bar.styled then
-		B.StripTextures(bar.candyBarBar, true)
-		B.SetBD(bar.candyBarBar)
+		B.StripTextures(cbb, true)
+		B.SetBD(cbb)
 		bar.styled = true
 	end
 	bar:SetTexture(DB.normTex)
 
-	local tex = bar:GetIcon()
-	if tex then
-		local icon = bar.candyBarIconFrame
-		bar:SetIcon(nil)
-		icon:SetTexture(tex)
-		icon:Show()
-		if bar.iconPosition == "RIGHT" then
+	-- Icons may be "secret" in 12.x; release the anchor before moving it out of the bar
+	local icon = bar.candyBarIconFrame
+	local iconVisible = bar:IsIconVisible()
+	local reApplyIcon
+	if iconVisible and icon.IsAnchoringSecret and icon:IsAnchoringSecret() then
+		reApplyIcon = bar:GetIcon()
+		icon:SetToDefaults()
+		icon:ClearAllPoints()
+	end
+
+	icon:ClearAllPoints()
+	if iconVisible then
+		if bar:GetIconPosition() == "RIGHT" then
 			icon:SetPoint("BOTTOMLEFT", bar, "BOTTOMRIGHT", 5, 0)
 		else
 			icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMLEFT", -5, 0)
 		end
 		icon:SetSize(height, height)
-		bar:Set("bigwigs:restoreicon", tex)
-		bar.candyBarIconFrameBackdrop:Hide()
+		icon:Show()
+	end
 
-		if not icon.styled then
-			B.SetBD(icon)
-			icon.styled = true
+	bar.candyBarIconFrameBackdrop:Hide()
+	if not icon.styled then
+		B.SetBD(icon)
+		icon.styled = true
+	end
+
+	if reApplyIcon then
+		icon:SetTexture(reApplyIcon)
+		icon:SetTexCoord(.08, .92, .08, .92)
+	end
+
+	-- Leave room for the icon when the spell indicators share its side
+	local indicatorFrame = bar:Get("bigwigs:indicatorFrame")
+	if indicatorFrame and indicatorFrame.bar == bar then
+		local point, relativeTo, relativePoint, x, y = indicatorFrame:GetPoint(1)
+		local onLeft = point == "BOTTOMRIGHT" and relativePoint == "BOTTOMLEFT"
+		local onRight = point == "BOTTOMLEFT" and relativePoint == "BOTTOMRIGHT"
+		if relativeTo == bar and (onLeft or onRight) then
+			if not bar:Get("ndui:indicatoranchor") then
+				bar:Set("ndui:indicatoranchor", {indicatorFrame, point, relativeTo, relativePoint, x, y})
+			end
+
+			local iconOnRight = bar:GetIconPosition() == "RIGHT"
+			local sameSide = iconVisible and ((onLeft and not iconOnRight) or (onRight and iconOnRight))
+			local offset = sameSide and (height + 6) or 2
+			indicatorFrame:ClearAllPoints()
+			indicatorFrame:SetPoint(point, bar, relativePoint, onLeft and -offset or offset, y)
 		end
 	end
 
@@ -67,8 +108,9 @@ end
 
 local styleData = {
 	apiVersion = 1,
-	version = 3,
+	version = 4,
 	GetSpacing = function(bar) return bar:GetHeight()+5 end,
+	spellIndicatorsOffset = 2,
 	ApplyStyle = styleBar,
 	BarStopped = removeStyle,
 	fontSizeNormal = 13,
