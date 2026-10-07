@@ -1871,13 +1871,14 @@ function UF:OnUpdateRunes(elapsed)
 	local duration = self.duration + elapsed
 	self.duration = duration
 	self:SetValue(duration)
-	self.timer:SetText("")
+	local textStr = ""
 	if C.db["UFs"]["RuneTimer"] then
 		local remain = self.runeDuration - duration
 		if remain > 0 then
-			self.timer:SetText(B.FormatTime(remain))
+			textStr = B.FormatTime(remain)
 		end
 	end
+	self.timer:SetText(textStr)
 end
 
 function UF.PostUpdateRunes(element, runemap)
