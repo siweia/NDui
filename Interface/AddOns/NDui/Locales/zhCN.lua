@@ -864,3 +864,4 @@ L["SortByRoleTip"] = "|n勾选后，按职责对小队成员进行排序。否�
 L["SortAscending"] = "按升序排序"
 L["SortAscendingTip"] = "|n勾选后，按升序对小队成员进行排序。否则按降序排序。"
 L["Show PetFilter"] = "显示宠物类型切换标签"
+L["WoW Forever"] = "魔兽世界：无限"

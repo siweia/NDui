@@ -864,3 +864,4 @@ L["SortByRoleTip"] = "|n勾選後，按職責對小隊成員進行排序。否�
 L["SortAscending"] = "升序排序"
 L["SortAscendingTip"] = "|n勾選後，按升序對小隊成員進行排序。否則按降序排序。"
 L["Show PetFilter"] = "顯示寵物類型切換標籤"
+L["WoW Forever"] = "魔獸世界：永恆"

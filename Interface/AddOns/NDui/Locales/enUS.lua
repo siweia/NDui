@@ -864,3 +864,4 @@ L["SortByRoleTip"] = "|nIf checked, sort party members by role.|n|nIf unchecked,
 L["SortAscending"] = "Sort Ascending"
 L["SortAscendingTip"] = "|nIf checked, sort party members by ascending order.|n|nIf unchecked, sort party members by descending order."
 L["Show PetFilter"] = "Show PetFilter Tabs"
+L["WoW Forever"] = "WoW Forever"
