@@ -106,15 +106,18 @@ function module:CreateCategoryScroll(parent, bagType)
 	local dragStartY = 0
 	local dragStartPct = 0
 
-	local function GetScrollMetrics()
+	local function GetHealedRange()
 		local childHeight = child:GetHeight() or 0
 		local scrollHeight = scroll:GetHeight() or 0
-		if childHeight <= scrollHeight then return end
+		return math.max(0, childHeight - scrollHeight)
+	end
 
-		local range = scroll:GetVerticalScrollRange()
+	local function GetScrollMetrics()
+		local range = GetHealedRange()
 		if not range or range <= 0 then return end
 
 		local trackH = track:GetHeight()
+		local scrollHeight = scroll:GetHeight() or 0
 		local ext = scrollHeight / (scrollHeight + range)
 		local thumbH = math.max(THUMB_MIN_H, trackH * ext)
 		local maxTravel = trackH - thumbH
@@ -125,8 +128,7 @@ function module:CreateCategoryScroll(parent, bagType)
 	end
 
 	local function updateScrollBar()
-		-- 内容可能缩了，把滚动拉回有效范围
-		local range = scroll:GetVerticalScrollRange() or 0
+		local range = GetHealedRange()
 		local cur = scroll:GetVerticalScroll()
 		if cur > range then scroll:SetVerticalScroll(range) end
 
@@ -249,13 +251,11 @@ local function UpdateCategoryLayout(parent, bags, bagType)
 		end
 	end
 
-
-	-- 滚动子帧高度按内容更新；滚动框固定为设置高度，内容不足时保留完整面板
 	local maxHeight = C.db["Bags"]["BagsHeight"] or 400
 	yOffset = math.max(1, yOffset)
 	child:SetHeight(yOffset)
 	scroll:SetHeight(math.min(maxHeight, yOffset))
-	-- 内容超出可视高度才显示滑块，显隐在 UpdateScrollBar 内决定
+
 	scroll.UpdateScrollBar()
 end
 
