@@ -44,7 +44,6 @@ end
 
 -- 分类滚动列表
 local categoryScroll = {}	-- [bagType] = { scroll, child }
-local categorySpacing = 4
 
 local function GetCategoryScroll(bagType)
 	return categoryScroll[bagType]
@@ -108,13 +107,19 @@ function module:CreateCategoryScroll(parent, bagType)
 	local dragStartPct = 0
 
 	local function GetScrollMetrics()
+		local childHeight = child:GetHeight() or 0
+		local scrollHeight = scroll:GetHeight() or 0
+		if childHeight <= scrollHeight then return end
+
 		local range = scroll:GetVerticalScrollRange()
-		if not range or range <= 0 then return nil end
+		if not range or range <= 0 then return end
+
 		local trackH = track:GetHeight()
-		local ext = scroll:GetHeight() / (scroll:GetHeight() + range)
+		local ext = scrollHeight / (scrollHeight + range)
 		local thumbH = math.max(THUMB_MIN_H, trackH * ext)
 		local maxTravel = trackH - thumbH
-		if maxTravel <= 0 then return nil end
+		if maxTravel <= 0 then return end
+
 		local pct = scroll:GetVerticalScroll() / range
 		return pct, thumbH, maxTravel, range
 	end
@@ -235,22 +240,22 @@ local function UpdateCategoryLayout(parent, bags, bagType)
 		local hasItems = #container.buttons > 0 or (container.freeSlot and container.freeSlot:IsShown())
 		if hasItems and CheckForBagReagent(container.name) then
 			container:Show()
-
 			container:ClearAllPoints()
 			container:SetPoint("TOPLEFT", child, "TOPLEFT", 0, -yOffset)
 
-			yOffset = yOffset + container:GetHeight() + categorySpacing
+			yOffset = yOffset + container:GetHeight()
 		else
 			container:Hide()
 		end
 	end
 
-	-- 更新滚动子帧高度与滚动框高度（超过最大高度时滚动）
-	local maxHeight = C.db["Bags"]["BagsHeight"] or 400
-	child:SetHeight(math.max(1, yOffset))
-	scroll:SetHeight(math.min(maxHeight, math.max(1, yOffset)))
 
-	-- 内容超长时滚动，滑块显隐按 range 决定
+	-- 滚动子帧高度按内容更新；滚动框固定为设置高度，内容不足时保留完整面板
+	local maxHeight = C.db["Bags"]["BagsHeight"] or 400
+	yOffset = math.max(1, yOffset)
+	child:SetHeight(yOffset)
+	scroll:SetHeight(math.min(maxHeight, yOffset))
+	-- 内容超出可视高度才显示滑块，显隐在 UpdateScrollBar 内决定
 	scroll.UpdateScrollBar()
 end
 
@@ -610,6 +615,8 @@ function module:GetContainerEmptySlot(bagID)
 end
 
 function module:GetEmptySlot(name)
+	name = name == "BagOther" and "Bag" or name
+
 	if name == "Bag" then
 		for bagID = 0, 4 do
 			local slotID = module:GetContainerEmptySlot(bagID)
@@ -647,7 +654,7 @@ function module:FreeSlotOnDrop()
 end
 
 local freeSlotContainer = {
-	["Bag"] = true,
+	["BagOther"] = true,
 	["Bank"] = true,
 	["BagReagent"] = true,
 	["Account"] = true,
@@ -1041,28 +1048,29 @@ function module:OnLogin()
 
 	function Backpack:OnInit()
 		for i = 1, 5 do
-			AddNewContainer("Bag", i, "BagCustom"..i, filters["bagCustom"..i])
+			AddNewContainer("Bag", i+1, "BagCustom"..i, filters["bagCustom"..i])
 		end
-		AddNewContainer("Bag", 6, "BagReagent", filters.onlyBagReagent)
-		AddNewContainer("Bag", 20, "Junk", filters.bagsJunk)
-		AddNewContainer("Bag", 9, "EquipSet", filters.bagEquipSet)
-		AddNewContainer("Bag", 10, "BagAOE", filters.bagAOE)
-		AddNewContainer("Bag", 7, "AzeriteItem", filters.bagAzeriteItem)
-		AddNewContainer("Bag", 18, "BagLegacy", filters.bagLegacy)
-		AddNewContainer("Bag", 19, "BagLower", filters.bagLower)
-		AddNewContainer("Bag", 8, "Equipment", filters.bagEquipment)
-		AddNewContainer("Bag", 11, "BagCollection", filters.bagCollection)
-		AddNewContainer("Bag", 15, "BagStone", filters.bagStone)
-		AddNewContainer("Bag", 16, "Consumable", filters.bagConsumable)
-		AddNewContainer("Bag", 13, "BagGoods", filters.bagGoods)
-		AddNewContainer("Bag", 17, "BagQuest", filters.bagQuest)
-		AddNewContainer("Bag", 14, "BagAnima", filters.bagAnima)
-		AddNewContainer("Bag", 12, "BagDecor", filters.bagDecor)
+		AddNewContainer("Bag", 7, "BagReagent", filters.onlyBagReagent)
+		AddNewContainer("Bag", 21, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 10, "EquipSet", filters.bagEquipSet)
+		AddNewContainer("Bag", 11, "BagAOE", filters.bagAOE)
+		AddNewContainer("Bag", 8, "AzeriteItem", filters.bagAzeriteItem)
+		AddNewContainer("Bag", 19, "BagLegacy", filters.bagLegacy)
+		AddNewContainer("Bag", 20, "BagLower", filters.bagLower)
+		AddNewContainer("Bag", 9, "Equipment", filters.bagEquipment)
+		AddNewContainer("Bag", 12, "BagCollection", filters.bagCollection)
+		AddNewContainer("Bag", 16, "BagStone", filters.bagStone)
+		AddNewContainer("Bag", 17, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 14, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 18, "BagQuest", filters.bagQuest)
+		AddNewContainer("Bag", 15, "BagAnima", filters.bagAnima)
+		AddNewContainer("Bag", 13, "BagDecor", filters.bagDecor)
+		AddNewContainer("Bag", 1, "BagOther", filters.onlyBags)
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
 		f.main:SetPoint(unpack(f.main.__anchor))
-		f.main:SetFilter(filters.onlyBags, true)
+		f.main:SetFilter(function() end, true)
 
 		for i = 1, 5 do
 			AddNewContainer("Bank", i, "BankCustom"..i, filters["bankCustom"..i])
@@ -1437,6 +1445,8 @@ function module:OnLogin()
 			label = GetCustomGroupTitle(settings.Index)
 		elseif name == "BagReagent" then
 			label = L["ReagentBag"]
+		elseif name == "BagOther" then
+			label = OTHER
 		elseif name == "BagStone" then
 			label = C_Spell.GetSpellName(404861)
 		elseif strmatch(name, "AOE") then
