@@ -378,7 +378,7 @@ function module:CreateBagBar(settings, columns)
 end
 
 function module:CreateBagTab(settings, columns, account)
-	local bagTab = self:SpawnPlugin("BagTab", settings.Bags, account)
+	local bagTab = self:SpawnPlugin("BagTab", settings.Bags)
 	bagTab:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
 	B.SetBD(bagTab)
 	bagTab.highlightFunction = highlightFunction
@@ -615,7 +615,7 @@ function module:GetContainerEmptySlot(bagID)
 end
 
 function module:GetEmptySlot(name)
-	name = name == "BagOther" and "Bag" or name
+	name = strmatch(name, "^(.-)Other$") or name
 
 	if name == "Bag" then
 		for bagID = 0, 4 do
@@ -655,9 +655,9 @@ end
 
 local freeSlotContainer = {
 	["BagOther"] = true,
-	["Bank"] = true,
+	["BankOther"] = true,
 	["BagReagent"] = true,
-	["Account"] = true,
+	["AccountOther"] = true,
 }
 
 function module:CreateFreeSlots()
@@ -779,9 +779,11 @@ StaticPopupDialogs["NDUI_RENAMECUSTOMGROUP"] = {
 		local text = self.EditBox:GetText()
 		C.db["Bags"]["CustomNames"][index] = text ~= "" and text or nil
 
-		module.CustomMenu[index+2].text = GetCustomGroupTitle(index)
-		module.ContainerGroups["Bag"][index].label:SetText(GetCustomGroupTitle(index))
-		module.ContainerGroups["Bank"][index].label:SetText(GetCustomGroupTitle(index))
+		local title = GetCustomGroupTitle(index)
+		module.CustomMenu[index+2].text = title
+		for _, bagType in ipairs({"Bag", "Bank", "Account"}) do
+			module.Bags:GetContainer(bagType.."Custom"..index).header.title:SetText(title)
+		end
 	end,
 	EditBoxOnEscapePressed = function(self)
 		self:GetParent():Hide()
@@ -1073,39 +1075,41 @@ function module:OnLogin()
 		f.main:SetFilter(function() end, true)
 
 		for i = 1, 5 do
-			AddNewContainer("Bank", i, "BankCustom"..i, filters["bankCustom"..i])
+			AddNewContainer("Bank", i+1, "BankCustom"..i, filters["bankCustom"..i])
 		end
-		AddNewContainer("Bank", 8, "BankEquipSet", filters.bankEquipSet)
-		AddNewContainer("Bank", 9, "BankAOE", filters.bankAOE)
-		AddNewContainer("Bank", 6, "BankAzeriteItem", filters.bankAzeriteItem)
-		AddNewContainer("Bank", 10, "BankLegendary", filters.bankLegendary)
-		AddNewContainer("Bank", 17, "BankLegacy", filters.bankLegacy)
-		AddNewContainer("Bank", 18, "BankLower", filters.bankLower)
-		AddNewContainer("Bank", 7, "BankEquipment", filters.bankEquipment)
-		AddNewContainer("Bank", 11, "BankCollection", filters.bankCollection)
-		AddNewContainer("Bank", 15, "BankConsumable", filters.bankConsumable)
-		AddNewContainer("Bank", 13, "BankGoods", filters.bankGoods)
-		AddNewContainer("Bank", 16, "BankQuest", filters.bankQuest)
-		AddNewContainer("Bank", 14, "BankAnima", filters.bankAnima)
-		AddNewContainer("Bank", 12, "BankDecor", filters.bankDecor)
+		AddNewContainer("Bank", 9, "BankEquipSet", filters.bankEquipSet)
+		AddNewContainer("Bank", 10, "BankAOE", filters.bankAOE)
+		AddNewContainer("Bank", 7, "BankAzeriteItem", filters.bankAzeriteItem)
+		AddNewContainer("Bank", 11, "BankLegendary", filters.bankLegendary)
+		AddNewContainer("Bank", 18, "BankLegacy", filters.bankLegacy)
+		AddNewContainer("Bank", 19, "BankLower", filters.bankLower)
+		AddNewContainer("Bank", 8, "BankEquipment", filters.bankEquipment)
+		AddNewContainer("Bank", 12, "BankCollection", filters.bankCollection)
+		AddNewContainer("Bank", 16, "BankConsumable", filters.bankConsumable)
+		AddNewContainer("Bank", 14, "BankGoods", filters.bankGoods)
+		AddNewContainer("Bank", 17, "BankQuest", filters.bankQuest)
+		AddNewContainer("Bank", 15, "BankAnima", filters.bankAnima)
+		AddNewContainer("Bank", 13, "BankDecor", filters.bankDecor)
+		AddNewContainer("Bank", 1, "BankOther", filters.onlyBank)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
 		f.bank:SetPoint(unpack(f.bank.__anchor))
-		f.bank:SetFilter(filters.onlyBank, true)
+		f.bank:SetFilter(function() end, true)
 		f.bank:Hide()
 
 		for i = 1, 5 do
-			AddNewContainer("Account", i, "AccountCustom"..i, filters["accountCustom"..i])
+			AddNewContainer("Account", i+1, "AccountCustom"..i, filters["accountCustom"..i])
 		end
-		AddNewContainer("Account", 8, "AccountAOE", filters.accountAOE)
-		AddNewContainer("Account", 7, "AccountLegacy", filters.accountLegacy)
-		AddNewContainer("Account", 6, "AccountEquipment", filters.accountEquipment)
-		AddNewContainer("Account", 10, "AccountConsumable", filters.accountConsumable)
-		AddNewContainer("Account", 9, "AccountGoods", filters.accountGoods)
+		AddNewContainer("Account", 9, "AccountAOE", filters.accountAOE)
+		AddNewContainer("Account", 8, "AccountLegacy", filters.accountLegacy)
+		AddNewContainer("Account", 7, "AccountEquipment", filters.accountEquipment)
+		AddNewContainer("Account", 11, "AccountConsumable", filters.accountConsumable)
+		AddNewContainer("Account", 10, "AccountGoods", filters.accountGoods)
+		AddNewContainer("Account", 1, "AccountOther", filters.accountbank)
 
 		f.accountbank = MyContainer:New("Account", {Bags = "accountbank", BagType = "Account"})
-		f.accountbank:SetFilter(filters.accountbank, true)
+		f.accountbank:SetFilter(function() end, true)
 		f.accountbank:SetPoint(unpack(f.bank.__anchor))
 		f.accountbank:Hide()
 
@@ -1442,10 +1446,10 @@ function module:OnLogin()
 		elseif strmatch(name, "Anima") then
 			label = POWER_TYPE_ANIMA
 		elseif strmatch(name, "Custom%d") then
-			label = GetCustomGroupTitle(settings.Index)
+			label = GetCustomGroupTitle(tonumber(strmatch(name, "Custom(%d+)$")))
 		elseif name == "BagReagent" then
 			label = L["ReagentBag"]
-		elseif name == "BagOther" then
+		elseif strmatch(name, "Other$") then
 			label = OTHER
 		elseif name == "BagStone" then
 			label = C_Spell.GetSpellName(404861)

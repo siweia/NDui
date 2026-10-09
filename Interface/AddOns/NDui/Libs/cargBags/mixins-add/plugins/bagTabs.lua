@@ -7,9 +7,6 @@ local B, C, L, DB = unpack(ns)
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
-local BANK_TAB1 = Enum.BagIndex.CharacterBankTab_1 or 6
-local ACCOUNT_TAB1 = Enum.BagIndex.AccountBankTab_1 or 12
-
 function Implementation:GetBagTabClass()
 	return self:GetClass("BagTab", true, "BagTab")
 end
@@ -46,11 +43,10 @@ local function UpdateTooltip(self, id)
 	GameTooltip:Show()
 end
 
-function BagTab:Create(bagID, i, account)
-	local bagId = (account and ACCOUNT_TAB1 or BANK_TAB1) + i - 1
-	local name = addon.."BagTab_ID"..bagId
+function BagTab:Create(bagID, i)
+	local name = addon.."BagTab_ID"..bagID
 	local button = setmetatable(CreateFrame("Button", name, nil, "BackdropTemplate"), self.__index)
-	button.bagId = bagId
+	button.bagId = bagID
 	button:SetID(i)
 
 	B.PixelIcon(button, BagTab.bgTex, true)
@@ -159,7 +155,7 @@ end
 -- Register the plugin
 local hooked
 
-cargBags:RegisterPlugin("BagTab", function(self, bags, account)
+cargBags:RegisterPlugin("BagTab", function(self, bags)
 	if(cargBags.ParseBags) then
 		bags = cargBags:ParseBags(bags)
 	end
@@ -173,7 +169,7 @@ cargBags:RegisterPlugin("BagTab", function(self, bags, account)
 	local buttonClass = self.implementation:GetBagTabClass()
 	bar.buttons = {}
 	for i = 1, #bags do
-		local button = buttonClass:Create(bags[i], i, account)
+		local button = buttonClass:Create(bags[i], i)
 		button:SetParent(bar)
 		button.hidden = true
 		button.bar = bar

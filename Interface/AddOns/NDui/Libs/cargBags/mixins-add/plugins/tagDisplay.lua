@@ -94,7 +94,7 @@ end
 
 -- Tags
 local function GetNumFreeSlots(name)
-	name = name == "BagOther" and "Bag" or name
+	name = strmatch(name, "^(.-)Other$") or name
 
 	if name == "Bag" then
 		local totalFree, freeSlots, bagFamily = 0

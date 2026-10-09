@@ -230,7 +230,7 @@ function module:GetFilters()
 	filters.bankAOE = function(item) return isItemInBank(item) and isWarboundUntilEquipped(item) end
 	filters.bankLower = function(item) return isItemInBank(item) and isItemLowerLevel(item) end
 	filters.bankLegacy = function(item) return isItemInBank(item) and isItemLegacy(item) end
-	filters.bankDecor = function(item) return isItemInBag(item) and isItemDecor(item) end
+	filters.bankDecor = function(item) return isItemInBank(item) and isItemDecor(item) end
 
 	filters.onlyBagReagent = function(item) return (isItemInBagReagent(item) and not isEmptySlot(item)) or (hasReagentBagEquipped() and isItemInBag(item) and isTradeGoods(item)) end -- reagent bagslot
 
