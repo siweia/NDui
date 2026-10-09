@@ -1251,7 +1251,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
 		{},--blank
 		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorTenth"], L["ColorText"], L["WhiteTenth"], L["WhiteText"], DISABLE}, updateCooldown},
-		{3, "Actionbar", "CDFontSize", L["GeneralCDFontSize"].."*", true, {5, 30, 1}, updateCDText, L["GeneralCDFontSizeTip"]},
+		{3, "Actionbar", "CDFontSize", L["ExtraActionCDFontSize"].."*", true, {5, 30, 1}, updateCDText, L["ExtraActionCDFontSizeTip"]},
 		{},--blank
 		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
 		{1, "Actionbar", "ButtonLock", L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},
