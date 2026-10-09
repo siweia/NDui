@@ -57,9 +57,9 @@ function module:CreateCategoryHeader(container, label)
 	return container.header
 end
 
--- 创建分类滚动容器外壳（现代滚动条参考 EllesmereUIBags：16px 隐形命中区 + 4px 窄滑块）
+-- 分类滚动容器：原生滚动条，16px 命中区 + 2px 细滑块
 function module:CreateCategoryScroll(parent, bagType)
-	local scroll = CreateFrame("ScrollFrame", nil, parent, "UIPanelScrollFrameTemplate")
+	local scroll = CreateFrame("ScrollFrame", nil, parent)
 	-- f.main 在底部，分类滚动列表排在 f.main 顶部上方
 	scroll:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 4)
 	scroll:SetHeight(400)
@@ -71,150 +71,50 @@ function module:CreateCategoryScroll(parent, bagType)
 	scroll:SetScrollChild(child)
 	scroll:EnableMouseWheel(true)
 
-	-- 移除模板自带的旧式滚动条，改用自建滑块
-	if scroll.ScrollBar then
-		scroll.ScrollBar:Hide()
-	end
+	local scrollBar = CreateFrame("EventFrame", nil, scroll, "MinimalScrollBar")
+	scrollBar:SetWidth(16)
+	scrollBar:SetPoint("TOPRIGHT", scroll, "TOPRIGHT", -1, -2)
+	scrollBar:SetPoint("BOTTOMRIGHT", scroll, "BOTTOMRIGHT", -1, 2)
+	scrollBar:SetFrameLevel(scroll:GetFrameLevel() + 5)
+	scrollBar.minThumbExtent = 20
+	scrollBar.Back:Hide()
+	scrollBar.Forward:Hide()
+	scroll.ScrollBar = scrollBar
 
-	local SCROLLBAR_HIT_W = 16  -- 隐形命中区宽度
-	local SCROLLBAR_W = 2       -- 滑块视觉宽度
-	local SCROLL_STEP = 40      -- 每格滚轮像素
-	local THUMB_MIN_H = 20      -- 滑块最小高度
-
-	-- 轨道：16px 宽的隐形 Button，负责接收鼠标（拖动 + 点击跳转）
-	local track = CreateFrame("Button", nil, scroll)
-	track:SetWidth(SCROLLBAR_HIT_W)
-	track:SetPoint("TOPRIGHT", scroll, "TOPRIGHT", -2, -2)
-	track:SetPoint("BOTTOMRIGHT", scroll, "BOTTOMRIGHT", -2, 2)
-	track:SetFrameLevel(scroll:GetFrameLevel() + 5)
-
-	-- 轨道底：极淡竖条（提示滚动条位置），与滑块贴边对齐
+	local track = scrollBar.Track
+	track:ClearAllPoints()
+	track:SetAllPoints(scrollBar)
+	track:DisableDrawLayer("ARTWORK")
 	local trackBg = track:CreateTexture(nil, "BACKGROUND")
-	trackBg:SetWidth(SCROLLBAR_W)
-	trackBg:SetPoint("TOP", track, "TOP", 0, 0)
-	trackBg:SetPoint("BOTTOM", track, "BOTTOM", 0, 0)
-	trackBg:SetPoint("RIGHT", track, "RIGHT", 1, 0)
+	trackBg:SetWidth(2)
+	trackBg:SetPoint("TOPRIGHT")
+	trackBg:SetPoint("BOTTOMRIGHT")
 	trackBg:SetColorTexture(DB.r, DB.g, DB.b, .1)
 
-	-- 滑块：2px 纯色 Texture，锚在轨道上
-	local thumb = track:CreateTexture(nil, "ARTWORK")
-	thumb:SetWidth(SCROLLBAR_W)
-	thumb:SetColorTexture(DB.r, DB.g, DB.b, .4)
-	track.thumb = thumb
+	local thumb = scrollBar:GetThumb()
+	thumb:SetWidth(16)
+	thumb:SetHitRectInsets(0, 0, 0, 0)
+	thumb:DisableDrawLayer("ARTWORK")
+	local thumbTex = thumb:CreateTexture(nil, "OVERLAY")
+	thumbTex:SetWidth(2)
+	thumbTex:SetPoint("TOPRIGHT")
+	thumbTex:SetPoint("BOTTOMRIGHT")
+	thumbTex:SetColorTexture(DB.r, DB.g, DB.b, .4)
+	local highlight = thumb:CreateTexture(nil, "HIGHLIGHT")
+	highlight:SetAllPoints(thumbTex)
+	highlight:SetColorTexture(DB.r, DB.g, DB.b, .2)
 
-	local isDragging = false
-	local dragStartY = 0
-	local dragStartPct = 0
+	ScrollUtil.InitScrollFrameWithScrollBar(scroll, scrollBar)
+	scroll:SetPanExtent(40)
+	scrollBar:SetScript("OnMouseWheel", scroll:GetScript("OnMouseWheel"))
+	scrollBar:SetHideIfUnscrollable(true)
 
-	local function GetHealedRange()
-		local childHeight = child:GetHeight() or 0
-		local scrollHeight = scroll:GetHeight() or 0
-		return math.max(0, childHeight - scrollHeight)
+	-- 布局后立即刷新范围；尺寸变化但范围相同时也需更新滑块比例。
+	local onRangeChanged = scroll:GetScript("OnScrollRangeChanged")
+	scroll.UpdateScrollBar = function()
+		scroll:UpdateScrollChildRect()
+		onRangeChanged(scroll, 0, scroll:GetVerticalScrollRange())
 	end
-
-	local function GetScrollMetrics()
-		local range = GetHealedRange()
-		if not range or range <= 0 then return end
-
-		local trackH = track:GetHeight()
-		local scrollHeight = scroll:GetHeight() or 0
-		local ext = scrollHeight / (scrollHeight + range)
-		local thumbH = math.max(THUMB_MIN_H, trackH * ext)
-		local maxTravel = trackH - thumbH
-		if maxTravel <= 0 then return end
-
-		local pct = scroll:GetVerticalScroll() / range
-		return pct, thumbH, maxTravel, range
-	end
-
-	local function updateScrollBar()
-		local range = GetHealedRange()
-		local cur = scroll:GetVerticalScroll()
-		if cur > range then scroll:SetVerticalScroll(range) end
-
-		local pct, thumbH, maxTravel = GetScrollMetrics()
-		if not pct then
-			thumb:Hide()
-			trackBg:Hide()
-			return
-		end
-		thumb:Show()
-		trackBg:Show()
-		thumb:SetHeight(thumbH)
-		thumb:ClearAllPoints()
-		thumb:SetPoint("TOPRIGHT", track, "TOPRIGHT", 1, -(pct * maxTravel))
-	end
-	scroll.UpdateScrollBar = updateScrollBar
-
-	local function OnWheel(_, delta)
-		local range = select(4, GetScrollMetrics())
-		if not range then return end
-		local cur = scroll:GetVerticalScroll()
-		local newVal = math.max(0, math.min(range, cur - delta * SCROLL_STEP))
-		scroll:SetVerticalScroll(newVal)
-		updateScrollBar()
-	end
-	scroll:SetScript("OnMouseWheel", OnWheel)
-	scroll:SetScript("OnScrollRangeChanged", updateScrollBar)
-	scroll:SetScript("OnVerticalScroll", updateScrollBar)
-
-	-- 拖动更新帧：独立于 track，光标移出也能正确收尾
-	local dragUpdate = CreateFrame("Frame")
-	dragUpdate:Hide()
-	dragUpdate:SetScript("OnUpdate", function(self)
-		if not isDragging then self:Hide(); return end
-		if not IsMouseButtonDown("LeftButton") then
-			isDragging = false
-			self:Hide()
-			thumb:SetColorTexture(DB.r, DB.g, DB.b, .4)
-			return
-		end
-		local pct, thumbH, maxTravel, range = GetScrollMetrics()
-		if not pct then isDragging = false; self:Hide(); return end
-		local _, cy = GetCursorPosition()
-		local deltaY = dragStartY - cy / track:GetEffectiveScale()
-		local newPct = math.max(0, math.min(1, dragStartPct + deltaY / maxTravel))
-		scroll:SetVerticalScroll(newPct * range)
-		updateScrollBar()
-	end)
-
-	track:RegisterForDrag("LeftButton")
-	track:SetScript("OnMouseDown", function(_, button)
-		if button ~= "LeftButton" then return end
-		local pct, thumbH, maxTravel, range = GetScrollMetrics()
-		if not pct then return end
-
-		local scale = track:GetEffectiveScale()
-		local _, cy = GetCursorPosition()
-		local cursorLocalY = (track:GetTop() * scale - cy) / scale
-
-		-- 判断光标是否落在滑块上
-		local thumbTop = pct * maxTravel
-		local thumbBot = thumbTop + thumbH
-		if cursorLocalY >= thumbTop and cursorLocalY <= thumbBot then
-			isDragging = true
-			dragStartY = cy / scale
-			dragStartPct = pct
-		else
-			-- 点击轨道空白：跳到该位置
-			local clickPct = math.max(0, math.min(1, (cursorLocalY - thumbH / 2) / maxTravel))
-			scroll:SetVerticalScroll(clickPct * range)
-			updateScrollBar()
-			isDragging = true
-			dragStartY = cy / scale
-			dragStartPct = clickPct
-		end
-		dragUpdate:Show()
-	end)
-	track:SetScript("OnMouseUp", function()
-		isDragging = false
-	end)
-	track:SetScript("OnEnter", function()
-		thumb:SetColorTexture(DB.r, DB.g, DB.b, .6)
-	end)
-	track:SetScript("OnLeave", function()
-		if not isDragging then thumb:SetColorTexture(DB.r, DB.g, DB.b, .4) end
-	end)
 
 	categoryScroll[bagType] = { scroll = scroll, child = child }
 	return scroll, child
