@@ -271,13 +271,14 @@ function UF:UpdateFocusColor()
 end
 
 -- Target indicator
-function UF:UpdateTargetChange()
+function UF:UpdateTargetChange(event)
 	local element = self.NDuiTargetIndicator
 	if not element then return end
 
 	local unit = self.__unit
+	local isTargeted = UnitIsUnit(unit, "target")
 	if C.db["Nameplate"]["TargetIndicator"] ~= 1 then
-		if UnitIsUnit(unit, "target") and not UnitIsUnit(unit, "player") then
+		if isTargeted and not UnitIsUnit(unit, "player") then
 			element:Show()
 			if element.Arrow:IsShown() and not element.ArrowAnimGroup:IsPlaying() then
 				element.ArrowAnimGroup:Play()
@@ -289,9 +290,11 @@ function UF:UpdateTargetChange()
 			end
 		end
 	end
-	if C.db["Nameplate"]["ColoredTarget"] then
+	-- Only refresh unchanged target colors when adding plates or applying settings.
+	if C.db["Nameplate"]["ColoredTarget"] and (event ~= "PLAYER_TARGET_CHANGED" or isTargeted ~= element.isTargeted) then
 		UF.UpdateThreatColor(self, _, unit)
 	end
+	element.isTargeted = isTargeted
 end
 
 local points = {-15, -5, 0, 5, 0}
@@ -304,6 +307,7 @@ function UF:UpdateTargetIndicator()
 	local isNameOnly = self.plateType == "NameOnly"
 	if style == 1 then
 		element:Hide()
+		element.ArrowAnimGroup:Stop()
 	else
 		if style == 2 then
 			element.Arrow:ClearAllPoints()
@@ -327,6 +331,7 @@ function UF:UpdateTargetIndicator()
 			element.nameGlow:Hide()
 		elseif style == 4 then
 			element.Arrow:Hide()
+			element.ArrowAnimGroup:Stop()
 			if isNameOnly then
 				element.Glow:Hide()
 				element.nameGlow:Show()
@@ -573,6 +578,7 @@ function UF:MouseoverIndicator(self)
 
 	self.HighlightIndicator = highlight
 	self.HighlightUpdater = updater
+	updater:Hide()
 end
 
 function UF:CreateStackingBounds(self)
@@ -877,7 +883,7 @@ end
 local function onTargetChanged(self, event, unit)
 	if not self then return end
 
-	UF.UpdateTargetChange(self)
+	UF.UpdateTargetChange(self, event)
 	UF.UpdateQuestUnit(self, event, unit)
 	UF.UpdateUnitClassify(self, unit)
 	UF:UpdateTargetClassPower()
