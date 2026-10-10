@@ -104,7 +104,15 @@ function module:CreateCategoryScroll(parent, bagType)
 	highlight:SetAllPoints(thumbTex)
 	highlight:SetColorTexture(DB.r, DB.g, DB.b, .2)
 
+	-- 原生范围可能大于布局高度，只使用分类实际占用的高度。
+	scroll.GetVerticalScrollRange = function()
+		return math.max(0, child:GetHeight() - scroll:GetHeight())
+	end
 	ScrollUtil.InitScrollFrameWithScrollBar(scroll, scrollBar)
+	local onRangeChanged = scroll:GetScript("OnScrollRangeChanged")
+	scroll:SetScript("OnScrollRangeChanged", function(self, horizontalRange)
+		onRangeChanged(self, horizontalRange, self:GetVerticalScrollRange())
+	end)
 	scroll:SetPanExtent(40)
 	scrollBar:SetScript("OnMouseWheel", scroll:GetScript("OnMouseWheel"))
 	scrollBar:SetHideIfUnscrollable(true)
@@ -984,7 +992,7 @@ function module:OnLogin()
 		AddNewContainer("Bank", 1, "BankOther", filters.onlyBank)
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
-		f.bank.__anchor = {"BOTTOMLEFT", 25, 50}
+		f.bank.__anchor = {"BOTTOMLEFT", 50, 100}
 		f.bank:SetPoint(unpack(f.bank.__anchor))
 		f.bank:SetFilter(function() end, true)
 		f.bank:Hide()
