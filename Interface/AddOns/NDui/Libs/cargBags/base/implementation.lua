@@ -432,7 +432,7 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 			self:UpdateBag(bagID)
 		end
 
-		local bankType = BankFrame.BankPanel.bankType
+		local bankType = self:AtBank() and BankFrame.BankPanel.bankType
 
 		if bankType == Enum.BankType.Character then
 			for bagID = 6, 11 do

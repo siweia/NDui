@@ -111,12 +111,15 @@ G.DefaultSettings = {
 	},
 	Bags = {
 		Enable = true,
+		LayoutMode = false,
 		IconSize = 34,
 		FontSize = 12,
 		BagsWidth = 12,
 		BankWidth = 20,
 		AccountWidth = 20,
-		BagsHeight = 800,
+		ScrollHeight = 800,
+		BagsPerRow = 6,
+		BankPerRow = 10,
 		BagsiLvl = true,
 		BagSortMode = 1,
 		ItemFilter = true,
@@ -711,7 +714,6 @@ loader:SetScript("OnEvent", function(self, _, addon)
 	if not C.db["Reset4"] then
 		C.db["UFs"]["Portrait"] = false
 		C.db["Actionbar"]["MBPerRow"] = 13
-		C.db["UFs"]["GatherEmpty"] = true
 		C.db["UFs"]["RaidBuffType"] = 1
 		C.db["UFs"]["RaidDebuffType"] = 2
 		C.db["Reset4"] = true
@@ -725,59 +727,6 @@ loader:SetScript("OnEvent", function(self, _, addon)
 			ufs["RaidDebuffType"] = 2
 		end
 		C.db["Reset5"] = true
-	end
-
-	if not C.db["Reset6"] then
-		local actionbar = C.db["Actionbar"]
-		local cooldownFontSize = actionbar["CDFontSize"]
-		for i = 1, 8 do
-			actionbar["Bar"..i.."CDSize"] = cooldownFontSize
-		end
-		actionbar["BarPetCDSize"] = cooldownFontSize
-		actionbar["BarStanceCDSize"] = cooldownFontSize
-
-		local nameplate = C.db["Nameplate"]
-		nameplate["PlateBuffs"] = nameplate["PlateAuras"]
-		nameplate["BuffColor"] = nameplate["DebuffColor"]
-		nameplate["BuffSize"] = nameplate["AuraSize"]
-		nameplate["BuffFontSize"] = nameplate["FontSize"]
-		nameplate["BuffSizeRatio"] = nameplate["SizeRatio"]
-		if nameplate["maxAuras"] == 4 or nameplate["maxAuras"] == 5 then
-			nameplate["maxAuras"] = 6
-		end
-		if nameplate["AuraSize"] == 16 then
-			nameplate["AuraSize"] = 24
-			nameplate["BuffSize"] = 24
-		end
-		if nameplate["FontSize"] == 14 then
-			nameplate["FontSize"] = 12
-			nameplate["BuffFontSize"] = 12
-		end
-		if nameplate["CCSize"] == 12 then nameplate["CCSize"] = 24 end
-		if nameplate["CCFontSize"] == 14 then nameplate["CCFontSize"] = 12 end
-		nameplate["maxBuffs"] = min(max(nameplate["maxBuffs"], 1), 6)
-		nameplate["maxAuras"] = min(max(nameplate["maxAuras"], 1), 10)
-		nameplate["NumCC"] = min(max(nameplate["NumCC"], 1), 2)
-
-		local ufs = C.db["UFs"]
-		local raidBuffType = ufs["RaidBuffType"]
-		ufs["RaidBigDefensive"] = raidBuffType == 3 or raidBuffType == 4
-		ufs["RaidBuffType"] = (raidBuffType == 2 or raidBuffType == 4) and 2 or 1
-		local bossBuffType = ufs["BossBuffType"]
-		-- Boss and Arena previously shared the Boss aura settings.
-		ufs["ArenaNumBuff"] = ufs["BossNumBuff"]
-		ufs["ArenaNumDebuff"] = ufs["BossNumDebuff"]
-		ufs["ArenaBuffSize"] = ufs["BossBuffSize"]
-		ufs["ArenaDebuffSize"] = ufs["BossDebuffSize"]
-		ufs["ArenaBuffType"] = bossBuffType == 1 and 1 or bossBuffType == 3 and 4 or 2
-		ufs["ArenaDebuffType"] = ufs["BossDebuffType"] == 1 and 1 or 2
-		ufs["BossBuffType"] = bossBuffType == 1 and 1 or 2
-		ufs["BossNumBuff"] = min(max(ufs["BossNumBuff"], 1), 6)
-		ufs["BossNumDebuff"] = min(max(ufs["BossNumDebuff"], 1), 10)
-		ufs["ArenaNumBuff"] = min(max(ufs["ArenaNumBuff"], 1), 6)
-		ufs["ArenaNumDebuff"] = min(max(ufs["ArenaNumDebuff"], 1), 10)
-		C.db["Mover"]["PrivateAuras"] = nil
-		C.db["Reset6"] = true
 	end
 
 	if not C.db["Reset7"] then
@@ -907,6 +856,14 @@ end
 
 local function updateBagSize()
 	B:GetModule("Bags"):UpdateBagSize()
+end
+
+local function updateBagAnchor()
+	B:GetModule("Bags"):UpdateAllAnchors()
+end
+
+local function updateBagHeight()
+	B:GetModule("Bags"):UpdateScrollHeight()
 end
 
 local function setupActionBar()
@@ -1266,6 +1223,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},
+		{1, "Bags", "LayoutMode", IsNew..L["Bags Scroll Mode"], true, nil, nil, L["Bags Scroll Mode Tip"]},
 		{},--blank
 		{1, "Bags", "ItemFilter", L["Bags ItemFilter"].."*", nil, setupBagFilter, updateBagStatus},
 		{1, "Bags", "GatherEmpty", L["Bags GatherEmpty"].."*", true, nil, updateBagStatus},
@@ -1276,12 +1234,14 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{3, "Bags", "iLvlToShow", L["iLvlToShow"].."*", nil, {1, 800, 1}, nil, L["iLvlToShowTip"]},
 		{4, "Bags", "BagSortMode", L["BagSortMode"].."*", true, {L["Forward"], L["Backward"], DISABLE}, updateBagSortOrder, L["BagSortTip"]},
 		{},--blank
+		{3, "Bags", "BagsPerRow", L["BagsPerRow"].."*", nil, {1, 20, 1}, updateBagAnchor, L["BagsPerRowTip"]},
+		{3, "Bags", "BankPerRow", L["BankPerRow"].."*", true, {1, 20, 1}, updateBagAnchor, L["BankPerRowTip"]},
 		{3, "Bags", "IconSize", L["Bags IconSize"].."*", nil, {20, 50, 1}, updateBagSize},
 		{3, "Bags", "FontSize", L["Bags FontSize"].."*", true, {10, 50, 1}, updateBagSize},
 		{3, "Bags", "BagsWidth", L["Bags Width"].."*", false, {10, 40, 1}, updateBagSize},
 		{3, "Bags", "BankWidth", L["Bank Width"].."*", true, {10, 40, 1}, updateBagSize},
 		{3, "Bags", "AccountWidth", L["AccountBank Width"].."*", nil, {10, 40, 1}, updateBagSize},
-		{3, "Bags", "BagsHeight", L["Bags Height"].."*", true, {200, 1000, 10}, updateBagSize},
+		{3, "Bags", "ScrollHeight", L["Bags Height"].."*", true, {200, 1000, 10}, updateBagHeight, L["Bags Height Tip"]},
 	},
 	[3] = {
 		{1, "UFs", "Enable", HeaderTag..L["Enable UFs"], nil, setupUnitFrame, nil, L["HideUFWarning"]},

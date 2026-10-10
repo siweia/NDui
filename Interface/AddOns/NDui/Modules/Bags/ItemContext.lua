@@ -62,7 +62,10 @@ local function UpdateAllItemContexts()
 	local bags = module.Bags
 	if not bags or not bags:IsShown() then return end
 	for _, button in pairs(bags.buttons) do
-		UpdateItemContext(button)
+		local bagID = button.bagId
+		if bagID and bagID >= 0 and bagID <= NUM_TOTAL_EQUIPPED_BAG_SLOTS then
+			UpdateItemContext(button)
+		end
 	end
 end
 

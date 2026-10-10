@@ -44,6 +44,45 @@ end
 
 -- 分类滚动列表
 local categoryScroll = {}	-- [bagType] = { scroll, child }
+local compactLayout
+local anchorCache = {}
+
+local function HasContainerItems(container)
+	return #container.buttons > 0 or (container.freeSlot and container.freeSlot:IsShown())
+end
+
+local function UpdateClassicLayout(parent, bags, bagType)
+	wipe(anchorCache)
+	local index = 1
+	local perRow = C.db["Bags"][bagType == "Bag" and "BagsPerRow" or "BankPerRow"]
+	anchorCache[index] = parent
+
+	for _, container in ipairs(bags) do
+		if HasContainerItems(container) and CheckForBagReagent(container.name) then
+			container:Show()
+			index = index + 1
+			container:ClearAllPoints()
+			if bagType == "Bag" then
+				if (index-1) % perRow == 0 then
+					container:SetPoint("BOTTOMRIGHT", anchorCache[index-perRow], "BOTTOMLEFT", -5, 0)
+				else
+					container:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
+				end
+			elseif index <= perRow then
+				container:SetPoint("BOTTOMLEFT", anchorCache[index-1], "TOPLEFT", 0, 5)
+			elseif index == perRow+1 then
+				container:SetPoint("TOPLEFT", anchorCache[index-1], "TOPRIGHT", 5, 0)
+			elseif (index-1) % perRow == 0 then
+				container:SetPoint("TOPLEFT", anchorCache[index-perRow], "TOPRIGHT", 5, 0)
+			else
+				container:SetPoint("TOPLEFT", anchorCache[index-1], "BOTTOMLEFT", 0, -5)
+			end
+			anchorCache[index] = container
+		else
+			container:Hide()
+		end
+	end
+end
 
 local function GetCategoryScroll(bagType)
 	return categoryScroll[bagType]
@@ -57,14 +96,13 @@ function module:CreateCategoryHeader(container, label)
 	return container.header
 end
 
--- 分类滚动容器：原生滚动条，16px 命中区 + 2px 细滑块
+-- 分类滚动容器：原生滚动条，4px 命中区 + 2px 细滑块
 function module:CreateCategoryScroll(parent, bagType)
 	local scroll = CreateFrame("ScrollFrame", nil, parent)
-	-- f.main 在底部，分类滚动列表排在 f.main 顶部上方
-	scroll:SetPoint("BOTTOMLEFT", parent, "TOPLEFT", 0, 4)
+	-- 工具栏固定在主容器顶部，只有下方的物品区域滚动。
+	scroll:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, -38)
 	scroll:SetHeight(400)
 	B.SetBD(scroll)
-	B.CreateMF(scroll, parent, true)
 
 	local child = CreateFrame("Frame", nil, scroll)
 	child:SetPoint("TOPLEFT", scroll, "TOPLEFT", 0, 0)
@@ -72,7 +110,7 @@ function module:CreateCategoryScroll(parent, bagType)
 	scroll:EnableMouseWheel(true)
 
 	local scrollBar = CreateFrame("EventFrame", nil, scroll, "MinimalScrollBar")
-	scrollBar:SetWidth(16)
+	scrollBar:SetWidth(8)
 	scrollBar:SetPoint("TOPRIGHT", scroll, "TOPRIGHT", -1, -2)
 	scrollBar:SetPoint("BOTTOMRIGHT", scroll, "BOTTOMRIGHT", -1, 2)
 	scrollBar:SetFrameLevel(scroll:GetFrameLevel() + 5)
@@ -92,7 +130,7 @@ function module:CreateCategoryScroll(parent, bagType)
 	trackBg:SetColorTexture(DB.r, DB.g, DB.b, .1)
 
 	local thumb = scrollBar:GetThumb()
-	thumb:SetWidth(16)
+	thumb:SetWidth(8)
 	thumb:SetHitRectInsets(0, 0, 0, 0)
 	thumb:DisableDrawLayer("ARTWORK")
 	local thumbTex = thumb:CreateTexture(nil, "OVERLAY")
@@ -140,8 +178,7 @@ local function UpdateCategoryLayout(parent, bags, bagType)
 
 	for i = #bags, 1, -1 do
 		local container = bags[i]
-		local hasItems = #container.buttons > 0 or (container.freeSlot and container.freeSlot:IsShown())
-		if hasItems and CheckForBagReagent(container.name) then
+		if HasContainerItems(container) and CheckForBagReagent(container.name) then
 			container:Show()
 			container:ClearAllPoints()
 			container:SetPoint("TOPLEFT", child, "TOPLEFT", 0, -yOffset)
@@ -152,10 +189,12 @@ local function UpdateCategoryLayout(parent, bags, bagType)
 		end
 	end
 
-	local maxHeight = C.db["Bags"]["BagsHeight"] or 400
+	local maxHeight = C.db["Bags"]["ScrollHeight"] or 400
+	maxHeight = math.min(maxHeight, UIParent:GetHeight() - 48)
 	yOffset = math.max(1, yOffset)
 	child:SetHeight(yOffset)
 	scroll:SetHeight(math.min(maxHeight, yOffset))
+	parent:SetSize(scrollWidth, scroll:GetHeight() + 38)
 end
 
 local function highlightFunction(button, match)
@@ -553,6 +592,9 @@ function module:FreeSlotOnDrop()
 end
 
 local freeSlotContainer = {
+	["Bag"] = true,
+	["Bank"] = true,
+	["Account"] = true,
 	["BagOther"] = true,
 	["BankOther"] = true,
 	["BagReagent"] = true,
@@ -562,6 +604,7 @@ local freeSlotContainer = {
 function module:CreateFreeSlots()
 	local name = self.name
 	if not freeSlotContainer[name] then return end
+	if compactLayout and self.Settings.Bags then return end
 
 	local slot = CreateFrame("Button", name.."FreeSlot", self, "BackdropTemplate")
 	slot:SetSize(self.iconSize, self.iconSize)
@@ -919,6 +962,7 @@ end
 
 function module:OnLogin()
 	if not C.db["Bags"]["Enable"] then return end
+	compactLayout = C.db["Bags"]["LayoutMode"] == true
 
 	-- Settings
 	local iconSize = C.db["Bags"]["IconSize"]
@@ -942,6 +986,7 @@ function module:OnLogin()
 	module.ContainerGroups = {["Bag"] = {}, ["Bank"] = {}, ["Account"] = {}}
 
 	local function AddNewContainer(bagType, index, name, filter)
+		if not compactLayout then index = index - 1 end
 		local newContainer = MyContainer:New(name, {BagType = bagType, Index = index})
 		newContainer:SetFilter(filter, true)
 		module.ContainerGroups[bagType][index] = newContainer
@@ -966,12 +1011,12 @@ function module:OnLogin()
 		AddNewContainer("Bag", 18, "BagQuest", filters.bagQuest)
 		AddNewContainer("Bag", 15, "BagAnima", filters.bagAnima)
 		AddNewContainer("Bag", 13, "BagDecor", filters.bagDecor)
-		AddNewContainer("Bag", 1, "BagOther", filters.onlyBags)
+		if compactLayout then AddNewContainer("Bag", 1, "BagOther", filters.onlyBags) end
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
 		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
 		f.main:SetPoint(unpack(f.main.__anchor))
-		f.main:SetFilter(function() end, true)
+		f.main:SetFilter(compactLayout and function() end or filters.onlyBags, true)
 
 		for i = 1, 5 do
 			AddNewContainer("Bank", i+1, "BankCustom"..i, filters["bankCustom"..i])
@@ -989,12 +1034,12 @@ function module:OnLogin()
 		AddNewContainer("Bank", 17, "BankQuest", filters.bankQuest)
 		AddNewContainer("Bank", 15, "BankAnima", filters.bankAnima)
 		AddNewContainer("Bank", 13, "BankDecor", filters.bankDecor)
-		AddNewContainer("Bank", 1, "BankOther", filters.onlyBank)
+		if compactLayout then AddNewContainer("Bank", 1, "BankOther", filters.onlyBank) end
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
 		f.bank.__anchor = {"BOTTOMLEFT", 50, 100}
 		f.bank:SetPoint(unpack(f.bank.__anchor))
-		f.bank:SetFilter(function() end, true)
+		f.bank:SetFilter(compactLayout and function() end or filters.onlyBank, true)
 		f.bank:Hide()
 
 		for i = 1, 5 do
@@ -1005,23 +1050,25 @@ function module:OnLogin()
 		AddNewContainer("Account", 7, "AccountEquipment", filters.accountEquipment)
 		AddNewContainer("Account", 11, "AccountConsumable", filters.accountConsumable)
 		AddNewContainer("Account", 10, "AccountGoods", filters.accountGoods)
-		AddNewContainer("Account", 1, "AccountOther", filters.accountbank)
+		if compactLayout then AddNewContainer("Account", 1, "AccountOther", filters.accountbank) end
 
 		f.accountbank = MyContainer:New("Account", {Bags = "accountbank", BagType = "Account"})
-		f.accountbank:SetFilter(function() end, true)
+		f.accountbank:SetFilter(compactLayout and function() end or filters.accountbank, true)
 		f.accountbank:SetPoint(unpack(f.bank.__anchor))
 		f.accountbank:Hide()
 
-		-- 为三个主容器创建分类滚动外壳，分类 container 改为竖直堆叠进滚动子帧
-		for _, bagType in ipairs({"Bag", "Bank", "Account"}) do
-			local parent = Backpack.contByName[bagType]
-			module:CreateCategoryScroll(parent, bagType)
+		if compactLayout then
+			for _, bagType in ipairs({"Bag", "Bank", "Account"}) do
+				module:CreateCategoryScroll(Backpack.contByName[bagType], bagType)
+			end
 		end
 
 		for bagType, groups in pairs(module.ContainerGroups) do
 			for _, container in ipairs(groups) do
 				local scrollInfo = GetCategoryScroll(bagType)
-				container:SetParent(scrollInfo.child)
+				local parent = Backpack.contByName[bagType]
+				container:SetParent(scrollInfo and scrollInfo.child or parent)
+				if not compactLayout then B.CreateMF(container, parent, true) end
 			end
 		end
 	end
@@ -1255,10 +1302,43 @@ function module:OnLogin()
 		end
 	end
 
+	local function UpdateContainerLayout(bagType)
+		local parent = Backpack.contByName[bagType]
+		if not parent then return end
+		local groups = module.ContainerGroups[bagType]
+		if compactLayout then
+			UpdateCategoryLayout(parent, groups, bagType)
+		else
+			UpdateClassicLayout(parent, groups, bagType)
+		end
+	end
+
+	local pendingLayouts, layoutScheduled = {}, false
+	function module:ScheduleLayout(bagType)
+		pendingLayouts[bagType] = true
+		if layoutScheduled then return end
+		layoutScheduled = true
+		C_Timer_After(0, function()
+			layoutScheduled = false
+			for pendingType in pairs(pendingLayouts) do
+				pendingLayouts[pendingType] = nil
+				UpdateContainerLayout(pendingType)
+			end
+		end)
+	end
+
 	function module:UpdateAllAnchors()
-		UpdateCategoryLayout(f.main, module.ContainerGroups["Bag"], "Bag")
-		UpdateCategoryLayout(f.bank, module.ContainerGroups["Bank"], "Bank")
-		UpdateCategoryLayout(f.accountbank, module.ContainerGroups["Account"], "Account")
+		for _, bagType in ipairs({"Bag", "Bank", "Account"}) do
+			pendingLayouts[bagType] = nil
+			UpdateContainerLayout(bagType)
+		end
+	end
+
+	function module:UpdateScrollHeight()
+		if not compactLayout then return end
+		for _, bagType in ipairs({"Bag", "Bank", "Account"}) do
+			module:ScheduleLayout(bagType)
+		end
 	end
 
 	function module:GetContainerColumns(bagType)
@@ -1272,6 +1352,10 @@ function module:OnLogin()
 	end
 
 	function MyContainer:OnContentsChanged(gridOnly)
+		if compactLayout and self.Settings.Bags then
+			if not gridOnly then module:ScheduleLayout(self.Settings.BagType) end
+			return
+		end
 		self:SortButtons("bagSlot")
 
 		local columns = module:GetContainerColumns(self.Settings.BagType)
@@ -1307,16 +1391,23 @@ function module:OnLogin()
 		self:SetSize(width + xOffset*2, height + offset)
 
 		if not gridOnly then
-			module:UpdateAllAnchors()
+			module:ScheduleLayout(self.Settings.BagType)
 		end
 	end
 
 	function MyContainer:OnCreate(name, settings)
 		self.Settings = settings
 		self:SetFrameStrata("HIGH")
-		-- 注意：分类 container 现在挂在 ScrollFrame 里，SetClampedToScreen 会与滚动偏移冲突导致图标卡住，不能开启
+		-- 滚动子容器不能独立限制屏幕位置，否则会抵消滚动偏移。
+		self:SetClampedToScreen(not compactLayout or settings.Bags ~= nil)
+		if not compactLayout or settings.Bags then
+			local bg = B.SetBD(self)
+			if compactLayout then
+				-- 主容器保留整体边界，背景只覆盖顶部工具栏。
+				bg:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", C.mult, -33-C.mult)
+			end
+		end
 		if settings.Bags then
-			B.SetBD(self)
 			B.CreateMF(self, nil, true)
 		end
 
