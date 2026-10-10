@@ -1184,7 +1184,7 @@ end
 
 G.TabList = {
 	L["Actionbar"],
-	L["Bags"],
+	IsNew..L["Bags"],
 	L["Unitframes"],
 	IsNew..L["RaidFrame"],
 	IsNew..L["Nameplate"],
