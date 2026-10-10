@@ -272,7 +272,7 @@ end
 
 -- Target indicator
 function UF:UpdateTargetChange()
-	local element = self.TargetIndicator
+	local element = self.NDuiTargetIndicator
 	if not element then return end
 
 	local unit = self.__unit
@@ -297,7 +297,7 @@ end
 local points = {-15, -5, 0, 5, 0}
 
 function UF:UpdateTargetIndicator()
-	local element = self.TargetIndicator
+	local element = self.NDuiTargetIndicator
 	if not element then return end
 
 	local style = C.db["Nameplate"]["TargetIndicator"]
@@ -403,7 +403,8 @@ function UF:AddTargetIndicator(self)
 	frame.nameGlow:SetBlendMode("ADD")
 	frame.nameGlow:SetPoint("CENTER", self, "BOTTOM")
 
-	self.TargetIndicator = frame
+	-- Keep the custom arrow/glow separate from oUF's TargetIndicator element.
+	self.NDuiTargetIndicator = frame
 	UF.UpdateTargetIndicator(self)
 end
 
