@@ -245,7 +245,7 @@ function module:CreateInfoFrame()
 	search.textFilters = BagSmartFilter
 
 	infoFrame.title = SEARCH
-	B.AddTooltip(infoFrame, "ANCHOR_TOPLEFT", DB.InfoColor..L["BagSearchTip"])
+	B.AddTooltip(infoFrame, "ANCHOR_BOTTOMLEFT", DB.InfoColor..L["BagSearchTip"])
 end
 
 local function ToggleWidgetButtons(self)
