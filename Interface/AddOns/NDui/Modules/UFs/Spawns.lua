@@ -206,14 +206,11 @@ end
 
 -- Spawns
 local function GetPartyVisibility()
-	local visibility = "custom [group:party,nogroup:raid]show;hide"
+	local visibility = "[@raid1,exists]hide;"
 	if C.db["UFs"]["SmartRaid"] then
-		visibility = "custom [@raid6,noexists,group]show;hide"
+		visibility = "[@raid6,exists]hide;[@raid1,exists]show;"
 	end
-	if C.db["UFs"]["ShowSolo"] then
-		visibility = "custom [nogroup]show;"..visibility
-	end
-	return visibility
+	return "custom "..visibility.."[@party1,exists]show;"..(C.db["UFs"]["ShowSolo"] and "show" or "hide")
 end
 
 local function GetRaidVisibility()
@@ -222,13 +219,13 @@ local function GetRaidVisibility()
 		if C.db["UFs"]["SmartRaid"] then
 			visibility = "custom [@raid6,exists]show;hide"
 		else
-			visibility = "custom [group:raid]show;hide"
+			visibility = "custom [@raid1,exists]show;hide"
 		end
 	else
 		if C.db["UFs"]["ShowSolo"] then
 			visibility = "custom show"
 		else
-			visibility = "custom [group]show;hide"
+			visibility = "custom [@raid1,exists][@party1,exists]show;hide"
 		end
 	end
 	return visibility
