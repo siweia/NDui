@@ -126,6 +126,8 @@ local _ENV = {
 		return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
 	end,
 	ColorMixin = ColorMixin, -- not available in restricted env for some reason
+	GameVersion = Private.GameVersion,
+	GameCompatibility = Private.GameCompatibility,
 }
 
 local _PROXY = setmetatable(_ENV, {__index = _G})
@@ -159,7 +161,7 @@ local tagStrings = {
 	end]],
 
 	['chi'] = [[function()
-		if(C_SpecializationInfo.GetSpecialization() == SPEC_MONK_WINDWALKER) then
+		if(C_SpecializationInfo.GetSpecialization() == SPEC_MONK_WINDWALKER or not GameCompatibility.Legion) then
 			local num = UnitPower('player', Enum.PowerType.Chi)
 			if(num > 0) then
 				return num
@@ -225,12 +227,23 @@ local tagStrings = {
 		end
 	end]],
 
-	['holypower'] = [[function()
-		if(C_SpecializationInfo.GetSpecialization() == SPEC_PALADIN_RETRIBUTION) then
-			local num = UnitPower('player', Enum.PowerType.HolyPower)
-			if(num > 0) then
-				return num
+	['happiness'] = [[function(u)
+		if(GameVersion.Forever and u == 'pet') then
+			local happiness = C_PetInfo.GetPetHappiness()
+			if(happiness == 1) then
+				return ':<'
+			elseif(happiness == 2) then
+				return ':|'
+			elseif(happiness == 3) then
+				return ':D'
 			end
+		end
+	end]],
+
+	['holypower'] = [[function()
+		local num = UnitPower('player', Enum.PowerType.HolyPower)
+		if(num > 0) then
+			return num
 		end
 	end]],
 
@@ -274,7 +287,11 @@ local tagStrings = {
 	end]],
 
 	['name'] = [[function(u, r)
-		return UnitName(r or u)
+		if(GameVersion.Forever) then
+			return NameUtil.GetUnmodifiedUnitFullName(r or u)
+		else
+			return UnitName(r or u)
+		end
 	end]],
 
 	['offline'] = [[function(u)
@@ -318,7 +335,8 @@ local tagStrings = {
 	end]],
 
 	['pvp'] = [[function(u)
-		if(UnitIsPVP(u)) then
+		local successful, isPVP = pcall(UnitIsPVP, u)
+		if(successful and isPVP) then
 			return 'PvP'
 		end
 	end]],
@@ -358,17 +376,17 @@ local tagStrings = {
 		end
 	end]],
 
-	['runes'] = [[function()
-		local amount = 0
-
-		for i = 1, 6 do
-			local _, _, ready = GetRuneCooldown(i)
-			if(ready) then
-				amount = amount + 1
+	['runes'] = [[function(u)
+		if(UnitClassBase(u) == 'DEATHKNIGHT') then
+			local amount = 0
+			for i = 1, 6 do
+				local _, _, ready = GetRuneCooldown(i)
+				if(ready) then
+					amount = amount + 1
+				end
 			end
+			return amount
 		end
-
-		return amount
 	end]],
 
 	['sex'] = [[function(u)
@@ -530,6 +548,7 @@ local tagEvents = {
 	['difficulty']          = 'UNIT_FACTION',
 	['faction']             = 'NEUTRAL_FACTION_SELECT_RESULT',
 	['group']               = 'GROUP_ROSTER_UPDATE',
+	['happiness']           = 'UNIT_HAPPINESS UNIT_PET',
 	['holypower']           = 'UNIT_POWER_UPDATE PLAYER_TALENT_UPDATE',
 	['leader']              = 'PARTY_LEADER_CHANGED',
 	['leaderlong']          = 'PARTY_LEADER_CHANGED',
@@ -837,6 +856,8 @@ local function unregisterTimer(fs)
 	end
 end
 
+local taggedFontStrings = {}
+
 --[[ Tags: frame:Tag(fs, ts, ...)
 Used to register a tag on a unit frame.
 
@@ -882,6 +903,7 @@ local function Tag(self, fs, ts, ...)
 		end
 	end
 
+	taggedFontStrings[fs] = ts
 	STATE[self][fs] = ts
 end
 
@@ -899,6 +921,7 @@ local function Untag(self, fs)
 
 	fs.UpdateTag = nil
 
+	taggedFontStrings[fs] = nil
 	STATE[self][fs] = nil
 end
 
@@ -912,7 +935,7 @@ oUF.Tags = {
 	Events = tagEvents,
 	SharedEvents = unitlessEvents,
 	Vars = vars,
-	RefreshMethods = function(self, tag)
+	RefreshMethods = function(_, tag)
 		if(not tag) then return end
 
 		-- if a tag's name contains magic chars, there's a chance that string.match will fail to
@@ -929,7 +952,7 @@ oUF.Tags = {
 			if(strip(tagstr):match(tag)) then
 				tagStringFuncs[tagstr] = nil
 
-				for fs in next, STATE[self] do
+				for fs in next, taggedFontStrings do
 					if(fs.UpdateTag == func) then
 						fs.UpdateTag = getTagFunc(tagstr)
 
@@ -941,7 +964,7 @@ oUF.Tags = {
 			end
 		end
 	end,
-	RefreshEvents = function(self, tag)
+	RefreshEvents = function(_, tag)
 		if(not tag) then return end
 
 		-- if a tag's name contains magic chars, there's a chance that string.match will fail to
@@ -950,7 +973,7 @@ oUF.Tags = {
 
 		for tagstr in next, tagStringFuncs do
 			if(strip(tagstr):match(tag)) then
-				for fs, ts in next, STATE[self] do
+				for fs, ts in next, taggedFontStrings do
 					if(ts == tagstr) then
 						unregisterEvents(fs)
 						registerEvents(fs, tagstr)
@@ -959,7 +982,7 @@ oUF.Tags = {
 			end
 		end
 	end,
-	SetEventUpdateTimer = function(self, timer)
+	SetEventUpdateTimer = function(_, timer)
 		if(not timer) then return end
 		if(type(timer) ~= 'number') then return end
 

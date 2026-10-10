@@ -120,15 +120,16 @@ local function Enable(self, unit)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		local AnimationGroup = element:CreateAnimationGroup()
+		local AnimationGroup = element.Animation or element:CreateAnimationGroup()
 		AnimationGroup:SetScript('OnFinished', OnFinished)
 		element.Animation = AnimationGroup
 
-		local Animation = AnimationGroup:CreateAnimation('Alpha')
+		local Animation = AnimationGroup.Alpha or AnimationGroup:CreateAnimation('Alpha')
 		Animation:SetFromAlpha(1)
 		Animation:SetToAlpha(0)
 		Animation:SetDuration(element.fadeTime or 1.5)
 		Animation:SetStartDelay(element.finishedTime or 10)
+		AnimationGroup.Alpha = Animation
 
 		self:RegisterEvent('READY_CHECK', Path, true)
 		self:RegisterEvent('READY_CHECK_CONFIRM', Path, true)

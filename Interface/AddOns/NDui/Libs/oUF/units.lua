@@ -28,6 +28,8 @@ local function updateArenaPreparationElements(self, event, elementName, specID)
 
 		element:SetMinMaxValues(0, 1)
 		element:SetValue(1)
+		element:Show()
+
 		if(element.UpdateColorArenaPreparation) then
 			--[[ Override: Health:UpdateColor(specID)
 			Used to completely override the internal function for updating the widget's colors
@@ -92,19 +94,9 @@ local function updateArenaPreparation(self, event)
 
 	if(event == 'ARENA_OPPONENT_UPDATE' and not self:IsEnabled()) then
 		self:Enable()
+		self:ResumeAllElements()
 		self:UpdateAllElements('ArenaPreparation')
 		self:UnregisterEvent(event, updateArenaPreparation)
-
-		-- show elements that don't handle their own visibility
-		if(self:IsElementEnabled('Auras')) then
-			if(self.Auras) then self.Auras:Show() end
-			if(self.Buffs) then self.Buffs:Show() end
-			if(self.Debuffs) then self.Debuffs:Show() end
-		end
-
-		if(self.Portrait and self:IsElementEnabled('Portrait')) then
-			self.Portrait:Show()
-		end
 	elseif(event == 'PLAYER_ENTERING_WORLD' and not UnitExists(self.__unit)) then
 		-- semi-recursive call for when the player zones into an arena
 		updateArenaPreparation(self, 'ARENA_PREP_OPPONENT_SPECIALIZATIONS')
@@ -132,20 +124,12 @@ local function updateArenaPreparation(self, event)
 				self:RegisterEvent('ARENA_OPPONENT_UPDATE', updateArenaPreparation)
 			end
 
-			-- update Health and Power (if available) with "fake" data
+			-- pause all elements
+			self:PauseAllElements()
+
+			-- update Health and Power (if available) with fake data
 			updateArenaPreparationElements(self, event, 'Health', specID)
 			updateArenaPreparationElements(self, event, 'Power', specID)
-
-			-- hide all other (relevant) elements (they have no effect during arena prep)
-			if(self.Auras) then self.Auras:Hide() end
-			if(self.Buffs) then self.Buffs:Hide() end
-			if(self.Debuffs) then self.Debuffs:Hide() end
-			if(self.Castbar) then self.Castbar:Hide() end
-			if(self.CombatIndicator) then self.CombatIndicator:Hide() end
-			if(self.GroupRoleIndicator) then self.GroupRoleIndicator:Hide() end
-			if(self.Portrait) then self.Portrait:Hide() end
-			if(self.PvPIndicator) then self.PvPIndicator:Hide() end
-			if(self.RaidTargetIndicator) then self.RaidTargetIndicator:Hide() end
 
 			self:Show()
 			self:UpdateTags()

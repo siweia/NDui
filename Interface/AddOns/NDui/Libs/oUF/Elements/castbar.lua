@@ -548,7 +548,7 @@ local function CastGlobal(self, event, unit, _, spellID)
 	-- we need to fake some data
 	STATE[element].channeling = true
 
-	local duration = C_DurationUtil.CreateDuration()
+	local duration = element.globalCooldownDuration
 	duration:SetTimeFromStart(cooldownInfo.startTime, cooldownInfo.duration, cooldownInfo.modRate)
 
 	element:SetTimerDuration(duration, element.smoothing, Enum.StatusBarTimerDirection.RemainingTime)
@@ -671,6 +671,7 @@ local function Enable(self, unit)
 		end
 
 		if(unit == 'player' and element.showGlobalCooldown) then
+			element.globalCooldownDuration = element.globalCooldownDuration or C_DurationUtil.CreateDuration()
 			self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', CastGlobal)
 		end
 

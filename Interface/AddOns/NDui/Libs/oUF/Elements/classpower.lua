@@ -1,7 +1,7 @@
 --[[
 # Element: ClassPower
 
-Handles the visibility and updating of the player's class resources (like Chi Orbs or Holy Power) and combo points.
+Handles the visibility and updating of vehicle and player class resources (like Combo Points or Holy Power).
 
 ## Widget
 
@@ -48,6 +48,7 @@ local Private = oUF.Private
 local STATE = {}
 
 local unitIsUnit = Private.unitIsUnit
+local GameCompatibility = Private.GameCompatibility
 
 local playerClass = UnitClassBase('player')
 
@@ -74,7 +75,7 @@ local SPELL_ICICLES = 205473
 local SPELL_ICICLES_TALENT = 1246832
 local SPELL_MAELSTROM_WEAPON = 344179
 local SPELL_MAELSTROM_WEAPON_TALENT = 187880
-local SPELL_SHRED = 5221
+local SPELL_CAT_FORM = 768
 local SPELL_SILENCE_THE_WHISPERS = Constants.UnitPowerSpellIDs.SILENCE_THE_WHISPERS_SPELL_ID or 1227702
 local SPELL_TIP_OF_THE_SPEAR = 260286
 local SPELL_TIP_OF_THE_SPEAR_TALENT = 260285
@@ -107,7 +108,7 @@ local function GetComboPointsMax(unit)
 	return UnitPowerMax(unit, Enum.PowerType.ComboPoints)
 end
 
-if(playerClass == 'DEMONHUNTER') then
+if(playerClass == 'DEMONHUNTER' and GameCompatibility.Midnight) then
 	local function GetSoulFragments()
 		if(C_UnitAuras.GetPlayerAuraBySpellID(SPELL_VOID_METAMORPHOSIS)) then
 			local auraInfo = C_UnitAuras.GetPlayerAuraBySpellID(SPELL_SILENCE_THE_WHISPERS)
@@ -155,7 +156,7 @@ elseif(playerClass == 'DRUID') then
 	end
 
 	GetPowerInfo = function()
-		if(UnitPowerType('player') == Enum.PowerType.Energy and C_SpellBook.IsSpellKnown(SPELL_SHRED)) then
+		if(UnitPowerType('player') == Enum.PowerType.Energy and C_SpellBook.IsSpellKnown(SPELL_CAT_FORM)) then
 			return POWER_TYPE_COMBO_POINTS, Enum.PowerType.ComboPoints
 		end
 	end
@@ -167,7 +168,7 @@ elseif(playerClass == 'EVOKER') then
 	GetPowerInfo = function() -- might as well be static
 		return POWER_TYPE_ESSENCE, Enum.PowerType.Essence
 	end
-elseif(playerClass == 'HUNTER') then
+elseif(playerClass == 'HUNTER' and GameCompatibility.BattleForAzeroth) then
 	local function GetTipOfTheSpear()
 		local auraInfo = C_UnitAuras.GetPlayerAuraBySpellID(SPELL_TIP_OF_THE_SPEAR)
 		if(auraInfo) then
@@ -194,7 +195,7 @@ elseif(playerClass == 'HUNTER') then
 			return POWER_TYPE_TIP_OF_THE_SPEAR
 		end
 	end
-elseif(playerClass == 'MAGE') then
+elseif(playerClass == 'MAGE' and GameCompatibility.Midnight) then
 	local function GetIcicles(unit)
 		local auraInfo = C_UnitAuras.GetPlayerAuraBySpellID(SPELL_ICICLES)
 		if(auraInfo) then
@@ -245,7 +246,7 @@ elseif(playerClass == 'MONK') then
 			return POWER_TYPE_CHI, Enum.PowerType.Chi
 		end
 	end
-elseif(playerClass == 'PALADIN') then
+elseif(playerClass == 'PALADIN' and GameCompatibility.Cataclysm) then
 	GetPowerUpdaters = function()
 		return GetGenericPower, GetGenericPowerMax, GetGenericPowerColor
 	end
@@ -261,7 +262,7 @@ elseif(playerClass == 'ROGUE') then
 	GetPowerInfo = function() -- might as well be static
 		return POWER_TYPE_COMBO_POINTS, Enum.PowerType.ComboPoints
 	end
-elseif(playerClass == 'SHAMAN') then
+elseif(playerClass == 'SHAMAN') then -- TBD
 	local function GetMaelstromWeapon()
 		local auraInfo = C_UnitAuras.GetPlayerAuraBySpellID(SPELL_MAELSTROM_WEAPON)
 		if(auraInfo) then
@@ -284,7 +285,7 @@ elseif(playerClass == 'SHAMAN') then
 			return POWER_TYPE_MAELSTROM -- we re-use the power type from elemental
 		end
 	end
-elseif(playerClass == 'WARLOCK') then
+elseif(playerClass == 'WARLOCK' and GameCompatibility.Cataclysm) then
 	local function GetSoulShardsDestruction(unit)
 		return UnitPower(unit, Enum.PowerType.SoulShards, true) / UnitPowerDisplayMod(Enum.PowerType.SoulShards)
 	end
@@ -410,7 +411,6 @@ local function Update(self, event, unit, powerType)
 	* ...           - the indices of currently charged power points, if any
 	--]]
 	if(element.PostUpdate) then
-		--return element:PostUpdate(cur, max, hasCurChanged, hasMaxChanged, powerType, unpack(chargedPoints or {}))
 		return element:PostUpdate(cur, max, hasCurChanged, hasMaxChanged, powerType, chargedPoints) -- NDui mod
 	end
 end

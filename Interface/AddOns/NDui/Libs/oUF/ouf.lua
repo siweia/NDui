@@ -1,6 +1,6 @@
 local parent, ns = ...
 local global = C_AddOns.GetAddOnMetadata(parent, 'X-oUF')
-local _VERSION = '9.5.7'
+local _VERSION = '14.2.0'
 if(_VERSION:find('project%-version')) then
 	_VERSION = 'devel'
 end
@@ -1185,6 +1185,19 @@ function oUF:AddMetaElement(name, create, update, enable, disable)
 		disable = disable,
 	}
 	self:RegisterMetaFunction('Create' .. name, create)
+end
+
+--[[ oUF:GetUnitFrame(unit)
+Query oUF for a frame attached to the unit.
+
+Layouts can opt out of this by defining `.dontExpose` on each frame.
+--]]
+function oUF:GetUnitFrame(unit)
+	for _, object in next, self.objects do
+		if(object.__unit == unit and not object.dontExpose) then
+			return object
+		end
+	end
 end
 
 oUF.version = _VERSION

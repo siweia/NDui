@@ -44,6 +44,9 @@ The following options are listed by priority. The first check that returns true 
 .colorTapping      - Use `self.colors.tapping` to color the bar if the unit isn't tapped by the player (boolean)
 .colorThreat       - Use `self.colors.threat[threat]` to color the bar based on the unit's threat status. `threat` is
                      defined by the first return of [UnitThreatSituation](https://warcraft.wiki.gg/wiki/API_UnitThreatSituation) (boolean)
+.colorHappiness    - Use `self.colors.happiness[happiness]` to color the bar based on the unit's happiness. `happiness` is
+                     defined by the first return of [C_PetInfo.GetPetHappiness](https://warcraft.wiki.gg/wiki/API:C_PetInfo.GetPetHappiness).
+                     Only available for the `pet` unit, and only in Forever game version (boolean)
 .colorClass        - Use `self.colors.class[class]` to color the bar based on unit class. `class` is defined by the
                      second return of [UnitClass](https://warcraft.wiki.gg/wiki/API_UnitClass) (boolean)
 .colorClassNPC     - Use `self.colors.class[class]` to color the bar if the unit is a NPC (boolean)
@@ -154,6 +157,9 @@ local Private = oUF.Private
 local STATE = {}
 
 local unitSelectionType = Private.unitSelectionType
+local GameVersion = Private.GameVersion
+
+local playerClass = UnitClassBase('player')
 
 local function UpdateColor(self, event, unit)
 	if(not unit or self.__unit ~= unit) then return end
@@ -165,7 +171,9 @@ local function UpdateColor(self, event, unit)
 	elseif(element.colorTapping and not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)) then
 		color = self.colors.tapped
 	elseif(element.colorThreat and not UnitPlayerControlled(unit) and UnitThreatSituation('player', unit)) then
-		color =  self.colors.threat[UnitThreatSituation('player', unit)]
+		color = self.colors.threat[UnitThreatSituation('player', unit)]
+	elseif(element.colorHappiness and GameVersion.Forever and unit == 'pet' and playerClass == 'HUNTER' and C_PetInfo.GetPetHappiness()) then
+		color = self.colors.happiness[(C_PetInfo.GetPetHappiness())]
 	elseif(element.colorClass and (UnitIsPlayer(unit) or UnitInPartyIsAI(unit)))
 		or (element.colorClassNPC and not (UnitIsPlayer(unit) or UnitInPartyIsAI(unit)))
 		or (element.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
@@ -511,6 +519,10 @@ local function Enable(self, unit)
 
 		if(element.colorThreat) then
 			self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
+		end
+
+		if(element.colorHappiness and GameVersion.Forever and unit == 'pet' and playerClass == 'HUNTER') then
+			self:RegisterEvent('UNIT_HAPPINESS', ColorPath)
 		end
 
 		if(element.HealingAll or element.HealingPlayer or element.HealingOther or element.OverHealIndicator) then

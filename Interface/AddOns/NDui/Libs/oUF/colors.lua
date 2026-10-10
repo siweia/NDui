@@ -106,6 +106,11 @@ local colors = {
 	reaction = {},
 	power = {},
 	threat = {},
+	happiness = {
+		oUF:CreateColor(1, 0, 0), -- unhappy
+		oUF:CreateColor(1, 1, 0), -- content
+		oUF:CreateColor(0, 1, 0), -- happy
+	},
 }
 
 -- We do this because people edit the vars directly, and changing the default
