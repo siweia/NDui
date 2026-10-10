@@ -109,13 +109,6 @@ function module:CreateCategoryScroll(parent, bagType)
 	scrollBar:SetScript("OnMouseWheel", scroll:GetScript("OnMouseWheel"))
 	scrollBar:SetHideIfUnscrollable(true)
 
-	-- 布局后立即刷新范围；尺寸变化但范围相同时也需更新滑块比例。
-	local onRangeChanged = scroll:GetScript("OnScrollRangeChanged")
-	scroll.UpdateScrollBar = function()
-		scroll:UpdateScrollChildRect()
-		onRangeChanged(scroll, 0, scroll:GetVerticalScrollRange())
-	end
-
 	categoryScroll[bagType] = { scroll = scroll, child = child }
 	return scroll, child
 end
@@ -155,8 +148,6 @@ local function UpdateCategoryLayout(parent, bags, bagType)
 	yOffset = math.max(1, yOffset)
 	child:SetHeight(yOffset)
 	scroll:SetHeight(math.min(maxHeight, yOffset))
-
-	scroll.UpdateScrollBar()
 end
 
 local function highlightFunction(button, match)
