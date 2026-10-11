@@ -1014,7 +1014,7 @@ function module:OnLogin()
 		if compactLayout then AddNewContainer("Bag", 1, "BagOther", filters.onlyBags) end
 
 		f.main = MyContainer:New("Bag", {Bags = "bags", BagType = "Bag"})
-		f.main.__anchor = {"BOTTOMRIGHT", -50, 100}
+		f.main.__anchor = {"BOTTOMRIGHT", -50, 50}
 		f.main:SetPoint(unpack(f.main.__anchor))
 		f.main:SetFilter(compactLayout and function() end or filters.onlyBags, true)
 
@@ -1037,7 +1037,7 @@ function module:OnLogin()
 		if compactLayout then AddNewContainer("Bank", 1, "BankOther", filters.onlyBank) end
 
 		f.bank = MyContainer:New("Bank", {Bags = "bank", BagType = "Bank"})
-		f.bank.__anchor = {"BOTTOMLEFT", 50, 100}
+		f.bank.__anchor = {"BOTTOMLEFT", 50, 50}
 		f.bank:SetPoint(unpack(f.bank.__anchor))
 		f.bank:SetFilter(compactLayout and function() end or filters.onlyBank, true)
 		f.bank:Hide()
