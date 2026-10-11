@@ -973,22 +973,32 @@ do
 		updateDriver(self)
 	end
 
-	-- NDui: build unit-independent visuals; the normal style initializes them on first use.
+	-- NDui: prebuild missing visuals up to count; the normal style initializes them on first use.
 	function nameplateDriverMixin:Prewarm(count, create)
 		argcheck(count, 2, 'number')
 		argcheck(create, 3, 'function')
 		if(self.prewarmPool) then return end
 
 		self.prewarmPool = {}
-		C_Timer.After(2, function()
-			local prewarmed = 0
+		local function startPrewarm()
+			if(self.numPlates >= count) then return end
+			if(InCombatLockdown()) then
+				self.prewarmResume = startPrewarm
+				self:RegisterEvent('PLAYER_REGEN_ENABLED')
+				return
+			end
+
 			local ticker
 			ticker = C_Timer.NewTicker(0.1, function()
-				if(prewarmed >= count) then
+				if(self.numPlates >= count) then
 					ticker:Cancel()
 					return
 				end
-				if(InCombatLockdown()) then return end
+				if(InCombatLockdown()) then
+					ticker:Cancel()
+					startPrewarm() -- Wait for combat to end instead of polling.
+					return
+				end
 
 				self.numPlates = self.numPlates + 1
 				local object = CreateFrame('Button', self.prefix .. 'Prewarm' .. self.numPlates, UIParent, 'PingableUnitFrameTemplate')
@@ -998,14 +1008,20 @@ do
 				setmetatable(object, frame_metatable)
 				create(object)
 				table.insert(self.prewarmPool, object)
-				prewarmed = prewarmed + 1
+				if(self.numPlates >= count) then ticker:Cancel() end
 			end)
-		end)
+		end
+		C_Timer.After(2, startPrewarm)
 	end
 
 	local function driverEventHandler(self, event, unit)
 		if(event == 'PLAYER_LOGIN') then
 			updateDriver(self)
+		elseif(event == 'PLAYER_REGEN_ENABLED') then
+			self:UnregisterEvent(event)
+			local resume = self.prewarmResume
+			self.prewarmResume = nil
+			if(resume) then resume() end
 		elseif(event == 'PLAYER_TARGET_CHANGED') then
 			local nameplate = C_NamePlate.GetNamePlateForUnit('target')
 			if(not nameplate or not nameplate.unitFrame) then return end
