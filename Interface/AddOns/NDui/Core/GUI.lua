@@ -549,7 +549,6 @@ G.DefaultSettings = {
 		ItemLevel = true,
 		GemNEnchant = true,
 		AzeriteTraits = true,
-		MissingStats = true,
 		RareAlerter = true,
 		RarePrint = true,
 		Focuser = true,
@@ -1475,7 +1474,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 	},
 	[13] = {
 		{1, "Misc", "ItemLevel", HeaderTag..L["Show ItemLevel"], nil, nil, nil, L["ItemLevelTip"]},
-		{1, "Misc", "MissingStats", HeaderTag..L["Show MissingStats"], true},
 		{1, "Misc", "GemNEnchant", L["Show GemNEnchant"].."*"},
 		{1, "Misc", "AzeriteTraits", L["Show AzeriteTraits"].."*", true},
 		{},--blank

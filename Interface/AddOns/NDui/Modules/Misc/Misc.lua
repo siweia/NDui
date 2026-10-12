@@ -95,12 +95,11 @@ end
 
 -- Get Naked
 function M:NakedIcon()
-	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
-	bu:SetSize(33, 35)
-	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, 0)
+	local bu = CreateFrame("Button", nil, PaperDollFrame)
+	bu:SetSize(42, 42)
+	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -2, 0)
 	B.PixelIcon(bu, "Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH", true)
-	bu.bg:SetPoint("TOPLEFT", 2, -3)
-	bu.bg:SetPoint("BOTTOMRIGHT", 0, -2)
+	bu.bg:SetInside(nil, 3, 3)
 	B.AddTooltip(bu, "ANCHOR_RIGHT", L["Get Naked"])
 
 	local function UnequipItemInSlot(i)

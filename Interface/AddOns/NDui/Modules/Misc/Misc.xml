@@ -11,7 +11,6 @@
 	<Script file="ItemLevel.lua"/>
 	<Script file="Mail.lua"/>
 	<Script file="MDGuildBest.lua"/>
-	<Script file="MissingStats.lua"/>
 	<Script file="Notifications.lua"/>
 	<Script file="PetFilterTab.lua"/>
 	<Script file="QuestNotification.lua"/>
