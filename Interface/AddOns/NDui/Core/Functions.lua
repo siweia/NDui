@@ -425,6 +425,11 @@ do
 		"ScrollDownBorder",
 	}
 	function B:StripTextures(kill)
+		if not self then
+			-- Capture the caller before protected skin/event callbacks unwind the stack.
+			error("NDui: StripTextures received a nil frame. Caller stack:\n"..debugstack(2, 20, 20), 2)
+		end
+
 		local frameName = self.GetName and self:GetName()
 		for _, texture in pairs(blizzTextures) do
 			local blizzFrame = self[texture] or (frameName and _G[frameName..texture])
@@ -937,6 +942,10 @@ do
 		"Center",
 	}
 	function B:Reskin(noHighlight, override)
+		if not self then
+			-- Capture the caller before protected skin/event callbacks unwind the stack.
+			error("NDui: Reskin received a nil frame. Caller stack:\n"..debugstack(2, 20, 20), 2)
+		end
 		if self.SetNormalTexture and not override then self:SetNormalTexture(0) end
 		if self.SetHighlightTexture then self:SetHighlightTexture(0) end
 		if self.SetPushedTexture then self:SetPushedTexture(0) end
@@ -1184,6 +1193,10 @@ do
 		button.isSetting = nil
 	end
 	function B:ReskinClose(parent, xOffset, yOffset, override)
+		if not self then
+			-- Capture the caller before protected skin/event callbacks unwind the stack.
+			error("NDui: ReskinClose received a nil frame. Caller stack:\n"..debugstack(2, 20, 20), 2)
+		end
 		parent = parent or self:GetParent()
 		xOffset = xOffset or -6
 		yOffset = yOffset or -6
