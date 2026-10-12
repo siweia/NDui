@@ -170,10 +170,12 @@ tinsert(C.defaultThemes, function()
 	--B.ReskinCheck(BankPanel.AutoDepositFrame.IncludeReagentsCheckbox)
 	B.Reskin(BankPanel.MoneyFrame.WithdrawButton)
 	B.Reskin(BankPanel.MoneyFrame.DepositButton)
+	B.Reskin(BankPanel.PurchaseButton)
 
 	hooksecurefunc(BankPanel, "GenerateItemSlotsForSelectedTab", handleBagSlots)
 
 	hooksecurefunc(BankPanel, "RefreshBankTabs", function(self)
+		if not self.bankTabPool then return end
 		for tab in self.bankTabPool:EnumerateActive() do
 			handleBankTab(tab)
 		end

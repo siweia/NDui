@@ -43,6 +43,18 @@ end
 
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if not LFDParentFrame then
+		if LFGInvitePopup then
+			B.StripTextures(LFGInvitePopup)
+			B.SetBD(LFGInvitePopup)
+			B.Reskin(LFGInvitePopupAcceptButton)
+			B.Reskin(LFGInvitePopupDeclineButton)
+			B.ReskinRole(LFGInvitePopupRoleButtonTank)
+			B.ReskinRole(LFGInvitePopupRoleButtonHealer)
+			B.ReskinRole(LFGInvitePopupRoleButtonDPS)
+		end
+		return
+	end
 
 	B.StripTextures(LFDParentFrame)
 	LFDQueueFrameBackground:Hide()

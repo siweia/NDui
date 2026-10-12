@@ -133,6 +133,7 @@ function M:InterruptAlert_Toggle()
 end
 
 function M:InterruptAlert_IsEnabled()
+	if not CombatLogGetCurrentEventInfo then return end
 	for _, value in pairs(infoType) do
 		if value then
 			return true

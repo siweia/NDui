@@ -5,7 +5,7 @@ local r, g, b, pairs = DB.r, DB.g, DB.b, pairs
 local LE_BATTLE_PET_ALLY = Enum.BattlePetOwner.Ally
 
 tinsert(C.defaultThemes, function()
-	if not C.db["Skins"]["PetBattle"] then return end
+	if not C.db["Skins"]["PetBattle"] or not PetBattleFrame then return end
 
 	local mult = C.mult
 
