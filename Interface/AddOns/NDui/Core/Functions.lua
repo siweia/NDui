@@ -1508,6 +1508,10 @@ do
 
 	local buttonNames = {"MaximizeButton", "MinimizeButton"}
 	function B:ReskinMinMax()
+		if not self then
+			-- Capture the caller before protected skin/event callbacks unwind the stack.
+			error("NDui: ReskinMinMax received a nil frame. Caller stack:\n"..debugstack(2, 20, 20), 2)
+		end
 		for _, name in next, buttonNames do
 			local button = self[name]
 			if button then

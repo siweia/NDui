@@ -86,8 +86,13 @@ tinsert(C.defaultThemes, function()
 	CharacterModelScene:DisableDrawLayer("BORDER")
 	CharacterModelScene:DisableDrawLayer("OVERLAY")
 
-
 	-- Side tabs
+	local function resetTexCoords(self, x1, x2, y1, y2)
+		if x1 ~= .08 or x2 ~= .92 or y1 ~= .08 or y2 ~= .92 then
+			self:SetTexCoord(.08, .92, .08, .92)
+		end
+	end
+
 	local function reskinSideTab(tab)
 		if not tab then return end
 
@@ -99,7 +104,7 @@ tinsert(C.defaultThemes, function()
 		hl:SetColorTexture(1, 1, 1, .25)
 		hl:SetInside(tab.bg)
 		tab.Icon:SetTexCoord(.08, .92, .08, .92)
-		tab.Icon.SetTexCoord = B.Dummy
+		hooksecurefunc(tab.Icon, "SetTexCoord", resetTexCoords)
 		tab.Icon:SetInside(tab.bg)
 		tab.SelectedTexture:SetColorTexture(1, .8, 0, .25)
 		tab.SelectedTexture:SetInside(tab.bg)
@@ -327,26 +332,30 @@ tinsert(C.defaultThemes, function()
 		button.__texture:DoCollapse(button:GetHeader():IsCollapsed())
 	end
 
+	local function reskinReputationBar(bar)
+		bar:DisableDrawLayer("BACKGROUND")
+		if bar.Mask then bar.Fill:RemoveMaskTexture(bar.Mask) end
+		bar.Fill:SetTexture(DB.bdTex)
+
+		-- Keep Fill's left anchor and width under SetFillPercent's control.
+		local bg = B.CreateBDFrame(bar, .25)
+		bg:ClearAllPoints()
+		bg:SetPoint("LEFT", bar, -C.mult, 0)
+		bg:SetPoint("RIGHT", bar, C.mult, 0)
+		bg:SetHeight(bar.Fill:GetHeight() + 2*C.mult)
+	end
+
 	local function updateReputationBars(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
 			if child and not child.styled then
-				if child.Right then
-					B.StripTextures(child)
-					hooksecurefunc(child.Right, "SetAtlas", updateCollapse)
-					hooksecurefunc(child.HighlightRight, "SetAtlas", updateCollapse)
-					updateCollapse(child.Right)
-					updateCollapse(child.HighlightRight)
+				if child.StateIcon then
+					child:DisableDrawLayer("BACKGROUND")
 					B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
 				end
 				local repbar = child.Content and child.Content.ReputationBar
 				if repbar then
-				end
-				if child.ToggleCollapseButton then
-					child.ToggleCollapseButton:GetPushedTexture():SetAlpha(0)
-					B.ReskinCollapse(child.ToggleCollapseButton, true)
-					updateToggleCollapse(child.ToggleCollapseButton)
-					hooksecurefunc(child.ToggleCollapseButton, "RefreshIcon", updateToggleCollapse)
+					reskinReputationBar(repbar)
 				end
 
 				child.styled = true
@@ -360,7 +369,7 @@ tinsert(C.defaultThemes, function()
 
 	local detailFrame = ReputationFrame.ReputationDetailFrame
 	B.StripTextures(detailFrame)
-	B.SetBD(detailFrame)
+	if detailFrame.StandingBar then reskinReputationBar(detailFrame.StandingBar) end
 	B.ReskinCheck(detailFrame.AtWarCheckbox)
 	B.ReskinCheck(detailFrame.MakeInactiveCheckbox)
 	B.ReskinCheck(detailFrame.WatchFactionCheckbox)
@@ -407,29 +416,21 @@ tinsert(C.defaultThemes, function()
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
 			if child and not child.styled then
-				if child.Right then
-					B.StripTextures(child)
-					hooksecurefunc(child.Right, "SetAtlas", updateCollapse)
-					hooksecurefunc(child.HighlightRight, "SetAtlas", updateCollapse)
-					updateCollapse(child.Right)
-					updateCollapse(child.HighlightRight)
+				if child.StateIcon then
+					child:DisableDrawLayer("BACKGROUND")
 					B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
 				end
 				local icon = child.Content and child.Content.CurrencyIcon
 				if icon then
 					B.ReskinIcon(icon)
 				end
-				if child.ToggleCollapseButton then
-					child.ToggleCollapseButton:GetPushedTexture():SetAlpha(0)
-					B.ReskinCollapse(child.ToggleCollapseButton, true)
-					updateToggleCollapse(child.ToggleCollapseButton)
-					hooksecurefunc(child.ToggleCollapseButton, "RefreshIcon", updateToggleCollapse)
-				end
 
 				child.styled = true
 			end
 		end
 	end)
+	B.ReskinCheck(TokenDetailFrame.InactiveCheckbox)
+	B.ReskinCheck(TokenDetailFrame.BackpackCheckbox)
 
 	-- Quick Join
 	B.ReskinTrimScroll(QuickJoinFrame.ScrollBar)
@@ -444,4 +445,49 @@ tinsert(C.defaultThemes, function()
 	B.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonTank, "TANK")
 	B.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonHealer, "HEALER")
 	B.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonDPS, "DPS")
+
+	-- Skills
+	local function updateSkills(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if child and not child.styled then
+				if child.StateIcon then
+					child:DisableDrawLayer("BACKGROUND")
+					B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
+				end
+				local repbar = child.Content and child.Content.SkillsBar
+				if repbar then
+					reskinReputationBar(repbar)
+				end
+
+				child.styled = true
+			end
+		end
+	end
+	hooksecurefunc(SkillsFrame.ScrollBox, "Update", updateSkills)
+	reskinReputationBar(SkillsFrame.SkillDetailFrame.RankBar)
+	B.ReskinTrimScroll(SkillsFrame.ScrollBar)
+
+	-- StatisticsFrame
+	local function updateFrame(self)
+		for i = 1, self.ScrollTarget:GetNumChildren() do
+			local child = select(i, self.ScrollTarget:GetChildren())
+			if child and not child.styled then
+				if child.StateIcon then
+					child:DisableDrawLayer("BACKGROUND")
+					B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
+				end
+				if child.ToggleCollapseButton then
+					child.ToggleCollapseButton:GetPushedTexture():SetAlpha(0)
+					B.ReskinCollapse(child.ToggleCollapseButton, true)
+					updateToggleCollapse(child.ToggleCollapseButton)
+					hooksecurefunc(child.ToggleCollapseButton, "RefreshIcon", updateToggleCollapse)
+				end
+
+				child.styled = true
+			end
+		end
+	end
+	hooksecurefunc(StatisticsFrame.ScrollBox, "Update", updateFrame)
+	B.ReskinTrimScroll(StatisticsFrame.ScrollBar)
 end)

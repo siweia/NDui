@@ -227,4 +227,4 @@ function M:TradeTabs()
 		end)
 	end
 end
-M:RegisterMisc("TradeTabs", M.TradeTabs)
+--M:RegisterMisc("TradeTabs", M.TradeTabs)

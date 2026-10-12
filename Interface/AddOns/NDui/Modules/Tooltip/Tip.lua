@@ -789,15 +789,6 @@ TT:RegisterTooltips("Blizzard_EventTrace", function()
 	TT.ReskinTooltip(EventTraceTooltip)
 end)
 
-TT:RegisterTooltips("Blizzard_Collections", function()
-	PetJournalPrimaryAbilityTooltip:HookScript("OnShow", TT.ReskinTooltip)
-	PetJournalSecondaryAbilityTooltip:HookScript("OnShow", TT.ReskinTooltip)
-	PetJournalPrimaryAbilityTooltip.Delimiter1:SetHeight(1)
-	PetJournalPrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
-	PetJournalPrimaryAbilityTooltip.Delimiter2:SetHeight(1)
-	PetJournalPrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
-end)
-
 TT:RegisterTooltips("Blizzard_GarrisonUI", function()
 	local gt = {
 		GarrisonMissionMechanicTooltip,

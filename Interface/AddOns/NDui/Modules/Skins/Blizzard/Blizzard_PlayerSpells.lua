@@ -22,9 +22,7 @@ C.themes["Blizzard_PlayerSpells"] = function()
 	B.Reskin(frame.TalentsFrame.InspectCopyButton)
 	B.ReskinMinMax(frame.MaximizeMinimizeButton)
 
-	frame.TalentsFrame.BlackBG:SetAlpha(.5)
 	frame.TalentsFrame.Background:SetAlpha(.5)
-	frame.TalentsFrame.BottomBar:SetAlpha(.5)
 
 	B.ReskinEditBox(frame.TalentsFrame.SearchBox)
 	frame.TalentsFrame.SearchBox.__bg:SetPoint("TOPLEFT", -4, -5)
@@ -34,33 +32,6 @@ C.themes["Blizzard_PlayerSpells"] = function()
 		local tab = select(i, frame.TabSystem:GetChildren())
 		B.ReskinTab(tab)
 	end
-
-	hooksecurefunc(frame.SpecFrame, "UpdateSpecFrame", function(self)
-		for specContentFrame in self.SpecContentFramePool:EnumerateActive() do
-			if not specContentFrame.styled then
-				B.Reskin(specContentFrame.ActivateButton)
-
-				local role = GetSpecializationRole(specContentFrame.specIndex)
-				if role then
-					B.ReskinSmallRole(specContentFrame.RoleIcon, role)
-				end
-
-				if specContentFrame.SpellButtonPool then
-					for button in specContentFrame.SpellButtonPool:EnumerateActive() do
-						button.Ring:Hide()
-						B.ReskinIcon(button.Icon)
-
-						local texture = button.spellID and C_Spell.GetSpellTexture(button.spellID)
-						if texture then
-							button.Icon:SetTexture(texture)
-						end
-					end
-				end
-
-				specContentFrame.styled = true
-			end
-		end
-	end)
 
 	local dialog = ClassTalentLoadoutImportDialog
 	if dialog then

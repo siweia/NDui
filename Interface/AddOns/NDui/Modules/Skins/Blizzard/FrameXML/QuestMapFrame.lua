@@ -46,6 +46,7 @@ tinsert(C.defaultThemes, function()
 
 	local QuestMapFrame = QuestMapFrame
 	QuestMapFrame.VerticalSeparator:SetAlpha(0)
+	B.StripTextures(QuestLogCount)
 
 	local QuestScrollFrame = QuestScrollFrame
 	QuestScrollFrame.Contents.Separator:SetAlpha(0)

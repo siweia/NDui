@@ -20,6 +20,7 @@ end
 
 C.themes["Blizzard_ProfessionsBook"] = function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
+	if true then return end -- fixme
 
 	B.ReskinPortraitFrame(ProfessionsBookFrame)
 
