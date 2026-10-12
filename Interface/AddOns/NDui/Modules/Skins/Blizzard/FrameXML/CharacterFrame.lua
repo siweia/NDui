@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local cr, cg, cb = DB.r, DB.g, DB.b
 
 function B:ReskinIconSelector()
 	B.StripTextures(self)
@@ -84,6 +85,31 @@ tinsert(C.defaultThemes, function()
 	CharacterModelScene:DisableDrawLayer("BACKGROUND")
 	CharacterModelScene:DisableDrawLayer("BORDER")
 	CharacterModelScene:DisableDrawLayer("OVERLAY")
+
+
+	-- Side tabs
+	local function reskinSideTab(tab)
+		if not tab then return end
+
+		tab:DisableDrawLayer("BACKGROUND")
+		tab.Mask:Hide()
+		tab.bg = B.SetBD(tab, 1)
+		tab.bg:SetInside(nil, 3, 3)
+		local hl = tab.HighlightTexture
+		hl:SetColorTexture(1, 1, 1, .25)
+		hl:SetInside(tab.bg)
+		tab.Icon:SetTexCoord(.08, .92, .08, .92)
+		tab.Icon.SetTexCoord = B.Dummy
+		tab.Icon:SetInside(tab.bg)
+		tab.SelectedTexture:SetColorTexture(1, .8, 0, .25)
+		tab.SelectedTexture:SetInside(tab.bg)
+	end
+
+	for i = 1, 10 do
+		local tab = _G["CharacterFrameModeTab"..i]
+		if not tab then break end
+		reskinSideTab(tab)
+	end
 
 	-- [[ Item buttons ]]
 
@@ -188,18 +214,6 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- [[ Stats pane ]]
-
-	local pane = CharacterStatsPane
-
-	local categories = {pane.ItemLevelCategory, pane.AttributesCategory, pane.EnhancementsCategory}
-	for _, category in pairs(categories) do
-		category.Background:Hide()
-		category.Title:SetTextColor(r, g, b)
-		local line = category:CreateTexture(nil, "ARTWORK")
-		line:SetSize(180, C.mult)
-		line:SetPoint("BOTTOM", 0, 5)
-		line:SetColorTexture(1, 1, 1, .25)
-	end
 
 	local function updateCategory(category)
 		if category.styled then return end
@@ -327,9 +341,6 @@ tinsert(C.defaultThemes, function()
 				end
 				local repbar = child.Content and child.Content.ReputationBar
 				if repbar then
-					B.StripTextures(repbar)
-					repbar:SetStatusBarTexture(DB.bdTex)
-					B.CreateBDFrame(repbar, .25)
 				end
 				if child.ToggleCollapseButton then
 					child.ToggleCollapseButton:GetPushedTexture():SetAlpha(0)
