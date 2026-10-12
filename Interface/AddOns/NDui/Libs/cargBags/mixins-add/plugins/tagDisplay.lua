@@ -107,7 +107,7 @@ local function GetNumFreeSlots(name)
 		return totalFree
 	elseif name == "Bank" then
 		local numFreeSlots = 0
-		for bagID = 6, 11 do
+		for _, bagID in ipairs(cargBags.BagStrings.bank) do
 			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
 		end
 		return numFreeSlots
@@ -117,7 +117,7 @@ local function GetNumFreeSlots(name)
 		return GetContainerNumFreeSlots(5)
 	elseif name == "Account" then
 		local numFreeSlots = 0
-		for bagID = 12, 16 do
+		for _, bagID in ipairs(cargBags.BagStrings.accountbank) do
 			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
 		end
 		return numFreeSlots

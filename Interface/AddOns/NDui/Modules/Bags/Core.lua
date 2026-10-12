@@ -335,7 +335,7 @@ function module:CreateBagTab(settings, columns, account)
 
 	purchaseButton:RegisterForClicks("AnyUp", "AnyDown")
 	purchaseButton:SetAttribute("type", "click")
-	purchaseButton:SetAttribute("clickbutton", _G.BankPanel.PurchasePrompt.TabCostFrame.PurchaseButton)
+	purchaseButton:SetAttribute("clickbutton", module:GetPurchaseButton())
 	bagTab.purchaseButton = purchaseButton
 
 	self.BagBar = bagTab
@@ -563,7 +563,7 @@ function module:GetEmptySlot(name)
 			end
 		end
 	elseif name == "Bank" then
-		for bagID = 6, 11 do
+		for _, bagID in ipairs(cargBags.BagStrings.bank) do
 			local slotID = module:GetContainerEmptySlot(bagID)
 			if slotID then
 				return bagID, slotID
@@ -575,7 +575,7 @@ function module:GetEmptySlot(name)
 			return 5, slotID
 		end
 	elseif name == "Account" then
-		for bagID = 12, 16 do
+		for _, bagID in ipairs(cargBags.BagStrings.accountbank) do
 			local slotID = module:GetContainerEmptySlot(bagID)
 			if slotID then
 				return bagID, slotID
@@ -955,6 +955,7 @@ end
 
 function module:GetPurchaseButton()
 	local panel = _G.BankPanel
+	if panel and panel.PurchaseButton then return panel.PurchaseButton end
 	local prompt = panel and panel.PurchasePrompt
 	local cost = prompt and prompt.TabCostFrame
 	return cost and cost.PurchaseButton

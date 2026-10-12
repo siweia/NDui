@@ -21,19 +21,12 @@ local _, ns = ...
 local cargBags = ns.cargBags
 
 local _G = _G
-local BANK_SLOTS = {
-	[Enum.BagIndex.CharacterBankTab_1 or 6 ] = true,
-	[Enum.BagIndex.CharacterBankTab_2 or 7 ] = true,
-	[Enum.BagIndex.CharacterBankTab_3 or 8 ] = true,
-	[Enum.BagIndex.CharacterBankTab_4 or 9 ] = true,
-	[Enum.BagIndex.CharacterBankTab_5 or 10 ] = true,
-	[Enum.BagIndex.CharacterBankTab_6 or 11 ] = true,
-	[Enum.BagIndex.AccountBankTab_1 or 12 ] = true,
-	[Enum.BagIndex.AccountBankTab_2 or 13 ] = true,
-	[Enum.BagIndex.AccountBankTab_3 or 14 ] = true,
-	[Enum.BagIndex.AccountBankTab_4 or 15 ] = true,
-	[Enum.BagIndex.AccountBankTab_5 or 16 ] = true,
-}
+local BANK_SLOTS = {}
+for _, bags in ipairs({cargBags.BagStrings.bank, cargBags.BagStrings.accountbank}) do
+	for _, bagID in ipairs(bags) do
+		BANK_SLOTS[bagID] = true
+	end
+end
 
 --[[!
 	@class ItemButton

@@ -16,6 +16,10 @@ local BagTab = cargBags:NewClass("BagTab", nil, "Button")
 -- Default attributes
 BagTab.bgTex = QUESTION_MARK_ICON
 
+local function getBankBagID(button)
+	return button.bagId >= Enum.BagIndex.AccountBankTab_1 and Enum.BagIndex.Accountbanktab or Enum.BagIndex.Characterbanktab
+end
+
 local function AddBankTabSettingsToTooltip(tooltip, depositFlags)
 	if not tooltip or not depositFlags then return end
 
@@ -37,6 +41,10 @@ local function UpdateTooltip(self, id)
 	if not data then return end
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	if self:GetID() > 1 and GameTooltip:SetBagItem(getBankBagID(self), self:GetID()) then
+		GameTooltip:Show()
+		return
+	end
 	GameTooltip_SetTitle(GameTooltip, data.name, NORMAL_FONT_COLOR)
 	AddBankTabSettingsToTooltip(GameTooltip, data.depositFlags)
 	GameTooltip_AddInstructionLine(GameTooltip, BANK_TAB_TOOLTIP_CLICK_INSTRUCTION)
@@ -54,7 +62,7 @@ function BagTab:Create(bagID, i)
 	button:RegisterForClicks("AnyUp")
 	button:SetSize(37, 37)
 
-	cargBags.SetScriptHandlers(button, "OnClick", "OnEnter", "OnLeave")
+	cargBags.SetScriptHandlers(button, "OnClick", "OnEnter", "OnLeave", "OnDragStart", "OnReceiveDrag")
 
 	if(button.OnCreate) then button:OnCreate(bagID) end
 
@@ -123,6 +131,15 @@ function BagTab:UpdateButton()
 	end
 end
 
+function BagTab:PickupBag()
+	local data = BankFrame.BankPanel.purchasedBankTabData
+	if self:GetID() == 1 or not data or not data[self:GetID()] then return end
+	if InCombatLockdown() then UIErrorsFrame:AddMessage(DB.InfoColor..ERR_NOT_IN_COMBAT) return end
+	C_Container.PickupContainerItem(getBankBagID(self), self:GetID())
+end
+BagTab.OnDragStart = BagTab.PickupBag
+BagTab.OnReceiveDrag = BagTab.PickupBag
+
 function BagTab:OnClick(btn)
 	if not BankFrame.BankPanel.purchasedBankTabData then return end
 
@@ -131,7 +148,11 @@ function BagTab:OnClick(btn)
 	if not data then return end
 
 	if btn == "LeftButton" then
-		self.bar.buttons[currentTabID]:UpdateButton()
+		if CursorHasItem() or IsModifiedClick("PICKUPITEM") then
+			self:PickupBag()
+		else
+			self.bar.buttons[currentTabID]:UpdateButton()
+		end
 	else -- right button
 		local menu = BankFrame.BankPanel.TabSettingsMenu
 		if menu then
@@ -182,9 +203,11 @@ cargBags:RegisterPlugin("BagTab", function(self, bags)
 		hooksecurefunc(BankFrame.BankPanel, "RefreshBankTabs", function(self)
 			if not self.purchasedBankTabData then return end
 
-			for _, data in pairs(self.purchasedBankTabData) do
+			for slotID, data in ipairs(self.purchasedBankTabData) do
 				if _G["NDuiBagTab_ID"..data.ID] then
-					_G["NDuiBagTab_ID"..data.ID].Icon:SetTexture(data.icon)
+					local invID = C_Bank.BankBagTypeAndIDToInvSlot(self.bankType, slotID) + 1
+					local icon = slotID > 1 and GetInventoryItemTexture("player", invID)
+					_G["NDuiBagTab_ID"..data.ID].Icon:SetTexture(icon or data.icon or BagTab.bgTex)
 				end
 			end
 		end)

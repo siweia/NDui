@@ -20,6 +20,7 @@
 		Can't live without it!
 	-->
 	<Script file='base\core.lua' />
+	<Script file='mixins\parseBags.lua' />
 	<Script file='base\implementation.lua' />
 	<Script file='base\container.lua' />
 	<Script file='base\itembutton.lua' />
@@ -38,7 +39,6 @@
 		All optional
 	-->
 	<Script file='mixins\api-common.lua' />
-	<Script file='mixins\parseBags.lua' />
 	<Script file='mixins\textFilter.lua' />
 
 	<!--

@@ -6,6 +6,10 @@ local C_ToyBox_GetToyInfo = C_ToyBox.GetToyInfo
 local C_Item_IsAnimaItemByID = C_Item.IsAnimaItemByID
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local CURRENT_EXPANSION = LE_EXPANSION_WAR_WITHIN or 10 -- 11.0
+local characterBankStart = Enum.BagIndex.CharacterBankTab_1
+local characterBankEnd = characterBankStart + C_Bank.FetchMaxNumBankTabs(Enum.BankType.Character)
+local accountBankStart = Enum.BagIndex.AccountBankTab_1
+local accountBankEnd = accountBankStart + C_Bank.FetchMaxNumBankTabs(Enum.BankType.Account)
 
 -- Custom filter
 local CustomFilterList = {
@@ -35,11 +39,11 @@ local function isItemInBagReagent(item)
 end
 
 local function isItemInBank(item)
-	return (item.bagId > 5 and item.bagId < 12)
+	return item.bagId >= characterBankStart and item.bagId < characterBankEnd
 end
 
 local function isItemInAccountBank(item)
-	return item.bagId > 11 and item.bagId < 17
+	return item.bagId >= accountBankStart and item.bagId < accountBankEnd
 end
 
 local function isItemJunk(item)

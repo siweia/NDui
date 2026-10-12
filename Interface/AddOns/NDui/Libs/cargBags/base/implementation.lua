@@ -435,11 +435,11 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 		local bankType = self:AtBank() and BankFrame.BankPanel.bankType
 
 		if bankType == Enum.BankType.Character then
-			for bagID = 6, 11 do
+			for _, bagID in ipairs(cargBags.BagStrings.bank) do
 				self:UpdateBag(bagID)
 			end
 		elseif bankType == Enum.BankType.Account then
-			for bagID = 12, 16 do
+			for _, bagID in ipairs(cargBags.BagStrings.accountbank) do
 				self:UpdateBag(bagID)
 			end
 		end
