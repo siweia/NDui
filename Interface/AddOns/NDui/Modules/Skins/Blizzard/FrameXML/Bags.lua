@@ -166,8 +166,8 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(BankPanel)
 	BankPanel.EdgeShadows:Hide()
 	ReskinSortButton(BankPanel.AutoSortButton)
-	B.Reskin(BankPanel.AutoDepositFrame.DepositButton)
-	B.ReskinCheck(BankPanel.AutoDepositFrame.IncludeReagentsCheckbox)
+	--B.Reskin(BankPanel.AutoDepositFrame.DepositButton)
+	--B.ReskinCheck(BankPanel.AutoDepositFrame.IncludeReagentsCheckbox)
 	B.Reskin(BankPanel.MoneyFrame.WithdrawButton)
 	B.Reskin(BankPanel.MoneyFrame.DepositButton)
 
@@ -179,13 +179,6 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 	handleBankTab(BankPanel.PurchaseTab)
-
-	for i = 1, 3 do
-		local tab = select(i, BankFrame.TabSystem:GetChildren())
-		if tab then
-			B.ReskinTab(tab)
-		end
-	end
 
 	B.ReskinPortraitFrame(BankFrame)
 	B.ReskinInput(BankItemSearchBox)

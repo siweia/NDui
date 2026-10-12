@@ -141,10 +141,8 @@ tinsert(C.defaultThemes, function()
 	B.Reskin(FriendsFrameAddFriendButton)
 	B.Reskin(FriendsFrameSendMessageButton)
 	B.ReskinTrimScroll(FriendsListFrame.ScrollBar)
-	B.ReskinTrimScroll(WhoFrame.ScrollBar)
 	B.ReskinTrimScroll(FriendsFriendsFrame.ScrollBar)
 	B.ReskinDropDown(FriendsFrameStatusDropdown)
-	B.ReskinDropDown(WhoFrameDropdown)
 	B.ReskinDropDown(FriendsFriendsFrameDropdown)
 	FriendsFrameStatusDropdown:SetWidth(58)
 	B.Reskin(FriendsListFrameContinueButton)
@@ -155,21 +153,8 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(FriendsFriendsFrame)
 	B.Reskin(FriendsFriendsFrame.SendRequestButton)
 	B.Reskin(FriendsFriendsFrame.CloseButton)
-	B.Reskin(WhoFrameWhoButton)
-	B.Reskin(WhoFrameAddFriendButton)
-	B.Reskin(WhoFrameGroupInviteButton)
 	B.Reskin(AddFriendEntryFrameAcceptButton)
 	B.Reskin(AddFriendEntryFrameCancelButton)
-
-	for i = 1, 4 do
-		B.StripTextures(_G["WhoFrameColumnHeader"..i])
-	end
-
-	B.StripTextures(WhoFrameListInset)
-	WhoFrameEditBox.Backdrop:Hide()
-	local whoBg = B.CreateBDFrame(WhoFrameEditBox, 0, true)
-	whoBg:SetPoint("TOPLEFT", WhoFrameEditBox, -3, -2)
-	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBox, -1, 2)
 
 	for i = 1, 3 do
 		local tab = select(i, FriendsTabHeader.TabSystem:GetChildren())
