@@ -42,25 +42,32 @@ function B:ReskinModelControl()
 	end
 end
 
-local function NoTaintArrow(self, direction) -- needs review
-	B.StripTextures(self)
-
-	local tex = self:CreateTexture(nil, "ARTWORK")
-	tex:SetAllPoints()
-	B.SetupArrow(tex, direction)
-	self.__texture = tex
-
-	self:HookScript("OnEnter", B.Texture_OnEnter)
-	self:HookScript("OnLeave", B.Texture_OnLeave)
-end
-
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
 	local r, g, b = DB.r, DB.g, DB.b
 
 	B.ReskinPortraitFrame(CharacterFrame)
-	B.StripTextures(CharacterFrameInsetRight)
+
+	-- New elements in 1.60.1
+	PaperDollFrame.TopBackgroundStripHost:SetAlpha(0)
+	CharacterFrameLeftPaneHost:SetAlpha(0)
+	CharacterFrameRightPaneHost:SetAlpha(0)
+	CharacterModelScene:SetFrameLevel(2)
+	B.StripTextures(CharacterStatsPaneScrollBox)
+	B.ReskinTrimScroll(CharacterStatsPaneScrollBox.ScrollBar)
+
+	B.ReskinCollapse(CharacterFrameRightPaneToggleButton, "left")
+	CharacterFrameRightPaneToggleButton:GetRegions():SetAlpha(0)
+	CharacterFrameRightPaneToggleButton:GetPushedTexture():SetAlpha(0)
+
+	hooksecurefunc(CharacterFrame, "UpdateRightPaneToggleButton", function(self)
+		if self:IsRightPaneCollapsed() then
+			CharacterFrameRightPaneToggleButton.__texture:DoCollapse(true)
+		else
+			CharacterFrameRightPaneToggleButton.__texture:DoCollapse(false)
+		end
+	end)
 
 	for i = 1, 3 do
 		local tab = _G["CharacterFrameTab"..i]
@@ -129,7 +136,7 @@ tinsert(C.defaultThemes, function()
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 		"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
-		"SecondaryHand", "Tabard",
+		"SecondaryHand", "Tabard", "Ranged"
 	}
 
 	for i = 1, #slots do
@@ -183,8 +190,6 @@ tinsert(C.defaultThemes, function()
 	-- [[ Stats pane ]]
 
 	local pane = CharacterStatsPane
-	pane.ClassBackground:Hide()
-	pane.ItemLevelFrame.Corruption:SetPoint("RIGHT", 22, -8)
 
 	local categories = {pane.ItemLevelCategory, pane.AttributesCategory, pane.EnhancementsCategory}
 	for _, category in pairs(categories) do
@@ -196,32 +201,50 @@ tinsert(C.defaultThemes, function()
 		line:SetColorTexture(1, 1, 1, .25)
 	end
 
-	-- [[ Sidebar tabs ]]
-	if PaperDollSidebarTabs.DecorRight then
-		PaperDollSidebarTabs.DecorRight:Hide()
+	local function updateCategory(category)
+		if category.styled then return end
+		if category.Title then
+			category.Background:Hide()
+			category.Title:SetTextColor(r, g, b)
+			local line = category:CreateTexture(nil, "ARTWORK")
+			line:SetSize(180, C.mult)
+			line:SetPoint("BOTTOM", 0, 5)
+			line:SetColorTexture(1, 1, 1, .25)
+		end
+		if category.Label then
+			category.Label:SetFontObject(Game13Font)
+		end
+		if category.Value then
+			category.Value:SetFontObject(Game13Font)
+		end
+		category.styled = true
 	end
+
+	hooksecurefunc(CharacterStatsPaneScrollBox.ScrollBox, "Update", function(self)
+		self:ForEachFrame(updateCategory)
+	end)
+
+	-- [[ Sidebar tabs ]]
 
 	for i = 1, #PAPERDOLL_SIDEBARS do
 		local tab = _G["PaperDollSidebarTab"..i]
-
-		if i == 1 then
-			for i = 1, 4 do
-				local region = select(i, tab:GetRegions())
-				region:SetTexCoord(.16, .86, .16, .86)
-				region.SetTexCoord = B.Dummy
-			end
+		tab:DisableDrawLayer("BORDER")
+		tab.bg = B.CreateBDFrame(tab, 1)
+		tab.bg:SetInside(tab, 3, 3)
+		tab.Icon:SetInside(tab.bg)
+		if i == 1 or i == 4 then -- Player and pet portraits.
+			tab.Icon:SetTexCoord(.16, .86, .16, .86)
 		end
 
-		tab.bg = B.CreateBDFrame(tab)
-		tab.bg:SetPoint("TOPLEFT", 2, -3)
-		tab.bg:SetPoint("BOTTOMRIGHT", 0, -2)
+		local checked = tab:GetCheckedTexture()
+		checked:SetColorTexture(r, g, b, .25)
+		checked:SetInside(tab.bg)
+		checked:SetDrawLayer("OVERLAY")
 
-		tab.Icon:SetInside(tab.bg)
-		tab.Hider:SetInside(tab.bg)
-		tab.Highlight:SetInside(tab.bg)
-		tab.Highlight:SetColorTexture(1, 1, 1, .25)
-		tab.Hider:SetColorTexture(.3, .3, .3, .4)
-		tab.TabBg:SetAlpha(0)
+		tab:SetHighlightTexture(DB.bdTex)
+		local highlight = tab:GetHighlightTexture()
+		highlight:SetColorTexture(1, 1, 1, .25)
+		highlight:SetInside(tab.bg)
 	end
 
 	-- [[ Equipment manager ]]
@@ -327,7 +350,6 @@ tinsert(C.defaultThemes, function()
 	local detailFrame = ReputationFrame.ReputationDetailFrame
 	B.StripTextures(detailFrame)
 	B.SetBD(detailFrame)
-	B.ReskinClose(detailFrame.CloseButton)
 	B.ReskinCheck(detailFrame.AtWarCheckbox)
 	B.ReskinCheck(detailFrame.MakeInactiveCheckbox)
 	B.ReskinCheck(detailFrame.WatchFactionCheckbox)
@@ -335,18 +357,7 @@ tinsert(C.defaultThemes, function()
 
 	-- Token frame
 	B.ReskinTrimScroll(TokenFrame.ScrollBar, true) -- taint if touching thumb, needs review
-	B.ReskinDropDown(TokenFrame.filterDropdown)
-	if TokenFramePopup.CloseButton then -- blizz typo by parentKey "CloseButton" into "$parent.CloseButton"
-		B.ReskinClose(TokenFramePopup.CloseButton)
-	else
-		B.ReskinClose((select(5, TokenFramePopup:GetChildren())))
-	end
 
-	B.Reskin(TokenFramePopup.CurrencyTransferToggleButton)
-	B.ReskinCheck(TokenFramePopup.InactiveCheckbox)
-	B.ReskinCheck(TokenFramePopup.BackpackCheckbox)
-
-	NoTaintArrow(TokenFrame.CurrencyTransferLogToggleButton, "right") -- taint control, needs review
 	B.ReskinPortraitFrame(CurrencyTransferLog)
 	B.ReskinTrimScroll(CurrencyTransferLog.ScrollBar)
 
@@ -408,9 +419,6 @@ tinsert(C.defaultThemes, function()
 			end
 		end
 	end)
-
-	B.StripTextures(TokenFramePopup)
-	B.SetBD(TokenFramePopup)
 
 	-- Quick Join
 	B.ReskinTrimScroll(QuickJoinFrame.ScrollBar)
