@@ -108,9 +108,6 @@ local questlist = {
 	{name = C_Map.GetAreaInfo(15141), id = 83333},	-- 觉醒主机
 }
 
-local delvesKeys = {91175, 91176, 91177, 91178}
-local keyName = C_CurrencyInfo.GetCurrencyInfo(3028).name
-
 -- Check Invasion Status
 local region = GetCVar("portal")
 local legionZoneTime = {
@@ -259,21 +256,6 @@ local communityFeastTime = {
 	["US"] = 1679751000, -- 21:30
 }
 
-local delveList = {
-	{uiMapID = 2393, delveID = 8426}, -- 學院災禍
-	{uiMapID = 2424, delveID = 8428}, -- 幻日廣場
-	{uiMapID = 2405, delveID = 8430}, -- 戮日者聖所
-	{uiMapID = 2405, delveID = 8432}, -- 影衛崗哨
-	{uiMapID = 2413, delveID = 8434}, -- 怨鬥坑洞
-	{uiMapID = 2413, delveID = 8436}, -- 回憶裂口
-	{uiMapID = 2395, delveID = 8438}, -- 暗影領區
-	{uiMapID = 2393, delveID = 8440}, -- 黑暗之途
-	{uiMapID = 2437, delveID = 8442}, -- 暮光墓穴
-	{uiMapID = 2437, delveID = 8444}, -- 阿塔阿曼
-	{uiMapID = 2512, delveID = 8760}, -- 纳拉多尔岛
-	{uiMapID = 2512, delveID = 8763}, -- 荣耀之环
-}
-
 info.onEnter = function(self)
 	self.entered = true
 
@@ -334,99 +316,13 @@ info.onEnter = function(self)
 			end
 		end
 	end
-	local currentKeys, maxKeys = 0, #delvesKeys
-	for _, questID in pairs(delvesKeys) do
-		if IsQuestFlaggedCompleted(questID) then
-			currentKeys = currentKeys + 1
-		end
-	end
-	if currentKeys > 0 then
-		addTitle(QUESTS_LABEL)
-		if currentKeys == maxKeys then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-		GameTooltip:AddDoubleLine(keyName, format("%d/%d", currentKeys, #delvesKeys), 1,1,1, r,g,b)
-	end
-
-	-- Delves
-	title = false
-	for _, v in pairs(delveList) do
-		local delveInfo = C_AreaPoiInfo_GetAreaPOIInfo(v.uiMapID, v.delveID)
-		if delveInfo then
-			addTitle(delveInfo.description)
-			local mapInfo = C_Map_GetMapInfo(v.uiMapID)
-			GameTooltip:AddDoubleLine(mapInfo.name.." - "..delveInfo.name, SecondsToTime(GetQuestResetTime(), true, nil, 3), 1,1,1, 1,1,1)
-		end
-	end
-
+--[=[
 	if IsShiftKeyDown() then
-		-- Elemental threats
-		title = false
-		for mapID, stormGroup in next, stormPoiIDs do
-			for _, areaPoiIDs in next, stormGroup do
-				for _, areaPoiID in next, areaPoiIDs do
-					local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(mapID, areaPoiID)
-					local elementType = poiInfo and poiInfo.atlasName and strmatch(poiInfo.atlasName, "ElementalStorm%-Lesser%-(.+)")
-					if elementType then
-						addTitle(poiInfo.name)
-						local mapInfo = C_Map_GetMapInfo(mapID)
-						local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
-						timeLeft = timeLeft/60
-						if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-						GameTooltip:AddDoubleLine(mapInfo.name..GetElementalType(elementType), GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
-						break
-					end
-				end
-			end
-		end
-	
-		-- Grand hunts
-		title = false
-		for areaPoiID, mapID in pairs(huntAreaToMapID) do
-			local poiInfo = C_AreaPoiInfo_GetAreaPOIInfo(1978, areaPoiID) -- Dragon isles
-			if poiInfo then
-				addTitle(poiInfo.name)
-				local mapInfo = C_Map_GetMapInfo(mapID)
-				local timeLeft = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID) or 0
-				timeLeft = timeLeft/60
-				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-				GameTooltip:AddDoubleLine(mapInfo.name, GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
-				break
-			end
-		end
-	
-		-- Community feast
-		title = false
-		local feastTime = communityFeastTime[region]
-		if feastTime then
-			local currentTime = time()
-			local duration = 5400 -- 1.5hrs
-			local elapsed = mod(currentTime - feastTime, duration)
-			local nextTime = duration - elapsed + currentTime
-	
-			addTitle(COMMUNITY_FEAST)
-			if currentTime - (nextTime-duration) < 900 then r,g,b = 0,1,0 else r,g,b = .6,.6,.6 end -- green text if progressing
-			GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime-duration*2), date("%m/%d %H:%M", nextTime-duration), .6,.6,.6, r,g,b)
-			GameTooltip:AddDoubleLine(date("%m/%d %H:%M", nextTime), date("%m/%d %H:%M", nextTime+duration), 1,1,1, 1,1,1)
-		end
-
-		-- Invasions
-		for index, value in ipairs(invIndex) do
-			title = false
-			addTitle(value.title)
-			local timeLeft, zoneName = CheckInvasion(index)
-			local nextTime = GetNextTime(value.baseTime, index)
-			if timeLeft then
-				timeLeft = timeLeft/60
-				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-				GameTooltip:AddDoubleLine(L["Current Invasion"]..zoneName, GetFormattedTimeLeft(timeLeft), 1,1,1, r,g,b)
-			end
-			local nextLocation = GetNextLocation(nextTime, index)
-			GameTooltip:AddDoubleLine(L["Next Invasion"]..nextLocation, date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
-		end
 	else
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(L["Hold Shift"], .6,.8,1)
 	end
-
+]=]
 	-- Help Info
 	GameTooltip:AddDoubleLine(" ", DB.LineString)
 	GameTooltip:AddDoubleLine(" ", DB.LeftButton..L["Toggle Calendar"].." ", 1,1,1, .6,.8,1)

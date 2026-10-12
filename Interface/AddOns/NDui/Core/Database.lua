@@ -3,7 +3,8 @@ local B, C, L, DB = unpack(ns)
 
 local bit_band, bit_bor = bit.band, bit.bor
 local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
-local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
+local GetSpecialization = C_SpecializationInfo.GetSpecialization
+local GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
 
 DB.Version = C_AddOns.GetAddOnMetadata("NDui", "Version")
 DB.Support = C_AddOns.GetAddOnMetadata("NDui", "X-Support")

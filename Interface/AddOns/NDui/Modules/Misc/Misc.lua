@@ -55,7 +55,6 @@ function M:OnLogin()
 	M:TradeTargetInfo()
 	M:BlockStrangerInvite()
 	M:ToggleBossBanner()
-	M:ToggleBossEmote()
 	M:FasterMovieSkip()
 	M:EnhanceDressup()
 	M:FuckTrainSound()
@@ -91,18 +90,6 @@ function M:ToggleBossBanner()
 	else
 		BossBanner:RegisterEvent("BOSS_KILL")
 		BossBanner:RegisterEvent("ENCOUNTER_LOOT_RECEIVED")
-	end
-end
-
--- Hide boss emote
-function M:ToggleBossEmote()
-	if DB.isNewPatch then return end
-	if C.db["Misc"]["HideBossEmote"] then
-		RaidBossEmoteFrame:UnregisterAllEvents()
-	else
-		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
-		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_WHISPER")
-		RaidBossEmoteFrame:RegisterEvent("CLEAR_BOSS_EMOTES")
 	end
 end
 

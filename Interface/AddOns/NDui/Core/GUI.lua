@@ -568,7 +568,6 @@ G.DefaultSettings = {
 		IgnoreQuestNPC = {},
 		HideTalking = true,
 		HideBossBanner = false,
-		HideBossEmote = false,
 		PetFilter = true,
 		QuestNotification = false,
 		QuestProgress = false,
@@ -1097,10 +1096,6 @@ local function toggleBossBanner()
 	B:GetModule("Misc"):ToggleBossBanner()
 end
 
-local function toggleBossEmote()
-	B:GetModule("Misc"):ToggleBossEmote()
-end
-
 local function updateMarkerGrid()
 	B:GetModule("Misc"):RaidTool_UpdateGrid()
 end
@@ -1486,8 +1481,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*", true},
-		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
-		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
+		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", nil, nil, toggleBossBanner},
 		{1, "Misc", "CombatAnimation", L["CombatAnimation"], nil, nil, toggleBossBanner},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
