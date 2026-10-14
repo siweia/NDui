@@ -246,13 +246,13 @@ function B:ReskinProfessionsRankBar()
 end
 
 local function updateSideTabIcon(tab)
+	tab.Icon:SetSize(36, 36)
 	tab.Icon:SetTexCoord(unpack(DB.TexCoord))
 end
 
 local function reskinSideTab(tab)
 	tab.Background:SetAlpha(0)
 	tab.Icon:RemoveMaskTexture(tab.Mask)
-	tab:SetFillToInterior(true, 36)
 	tab.bg = B.ReskinIcon(tab.Icon)
 	tab.SelectedTexture:SetColorTexture(DB.r, DB.g, DB.b, .35)
 	tab.SelectedTexture:SetAllPoints(tab.Icon)
@@ -261,6 +261,7 @@ local function reskinSideTab(tab)
 	tab.TabGlow:SetColorTexture(DB.r, DB.g, DB.b, .35)
 	tab.TabGlow:SetAllPoints(tab.Icon)
 	hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
+	updateSideTabIcon(tab)
 end
 
 local function reskinRecipeListButtons(self)

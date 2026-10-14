@@ -83,13 +83,13 @@ tinsert(C.defaultThemes, function()
 
 	-- Side tabs
 	local function updateSideTabIcon(tab)
+		tab.Icon:SetSize(36, 36)
 		tab.Icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 
 	local function reskinSideTab(tab)
 		tab.Background:SetAlpha(0)
 		tab.Icon:RemoveMaskTexture(tab.Mask)
-		tab:SetFillToInterior(true, 36)
 		tab.bg = B.ReskinIcon(tab.Icon)
 		local hl = tab.HighlightTexture
 		hl:SetColorTexture(1, 1, 1, .25)
@@ -99,6 +99,7 @@ tinsert(C.defaultThemes, function()
 		tab.TabGlow:SetColorTexture(r, g, b, .25)
 		tab.TabGlow:SetAllPoints(tab.Icon)
 		hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
+		updateSideTabIcon(tab)
 	end
 
 	for _, tab in ipairs(CharacterFrame.ModeTabs.Tabs) do
