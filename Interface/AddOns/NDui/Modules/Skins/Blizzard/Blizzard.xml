@@ -38,7 +38,6 @@
 	<Script file="Blizzard_IslandsQueueUI.lua"/>
 	<Script file="Blizzard_ItemSocketingUI.lua"/>
 	<Script file="Blizzard_ItemUpgradeUI.lua"/>
-	<Script file="Blizzard_LegacySystem.lua"/>
 	<Script file="Blizzard_MacroUI.lua"/>
 	<Script file="Blizzard_MajorFactions.lua"/>
 	<Script file="Blizzard_NewPlayerExperienceGuide.lua"/>
