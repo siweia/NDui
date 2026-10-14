@@ -545,12 +545,19 @@ function UF:TogglePortraits()
 end
 
 local function postUpdateRole(element, role)
-	if element:IsShown() then
-		if role == Enum.LFGRole.Damage and C.db["UFs"]["ShowRoleMode"] == 3 then
-			element:Hide()
-			return
-		end
+	if C.db["UFs"]["ShowRoleMode"] ~= 3 then return end
+
+	-- 12.1.5: UnitFrameUtil owns the role icon and passes no role to PostUpdate.
+	-- Read it here instead, and skip secret roles: the icon's shown state is
+	-- secret then and only secure code may set or read it.
+	if role == nil then
+		local unit = element.__owner and element.__owner.__unit
+		role = unit and UnitGroupRolesAssignedEnum(unit)
 	end
+
+	if B:IsSecretValue(role) or role ~= Enum.LFGRole.Damage then return end
+
+	element:Hide()
 end
 
 function UF:CreateRestingIndicator(self)
