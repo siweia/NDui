@@ -8,14 +8,13 @@ local ICON_LIST = ICON_LIST
 local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 local PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE = PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE
 local YOU, TARGET, AFK, DND, DEAD, PLAYER_OFFLINE = YOU, TARGET, AFK, DND, DEAD, PLAYER_OFFLINE
-local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL
-local LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_COALESCED, LE_REALM_RELATION_VIRTUAL
-local UnitIsPVP, UnitFactionGroup, UnitRealmRelationship = UnitIsPVP, UnitFactionGroup, UnitRealmRelationship
+local UnitIsPVP, UnitFactionGroup = UnitIsPVP, UnitFactionGroup
 local UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction = UnitIsConnected, UnitIsDeadOrGhost, UnitIsAFK, UnitIsDND, UnitReaction
 local InCombatLockdown, IsShiftKeyDown = InCombatLockdown, IsShiftKeyDown
 local GetCreatureDifficultyColor, UnitCreatureType, UnitClassification = GetCreatureDifficultyColor, UnitCreatureType, UnitClassification
 local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel
-local UnitIsPlayer, UnitName, UnitPVPName, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitRace, UnitLevel
+local UnitIsPlayer, UnitPVPName, UnitRace, UnitLevel = UnitIsPlayer, UnitPVPName, UnitRace, UnitLevel
+local GetUnmodifiedUnitFullName = NameUtil.GetUnmodifiedUnitFullName
 local GetRaidTargetIndex, UnitGroupRolesAssignedEnum, GetGuildInfo, IsInGuild = GetRaidTargetIndex, UnitGroupRolesAssignedEnum, GetGuildInfo, IsInGuild
 local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAuras, C_PetBattles.GetAuraInfo
 local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
@@ -107,7 +106,7 @@ function TT:GetTarget(unit)
 	if B:NotSecretValue(isYou) and isYou then
 		return format("|cffff0000%s|r", ">"..strupper(YOU).."<")
 	else
-		return B.UnitColorString(unit)..UnitName(unit).."|r"
+		return B.UnitColorString(unit)..GetUnmodifiedUnitFullName(unit).."|r"
 	end
 end
 
@@ -229,23 +228,12 @@ function TT:OnTooltipSetUnit()
 	local isShiftKeyDown = IsShiftKeyDown()
 	local unitFullName
 	if isPlayer then
-		local name, realm = UnitName(unit)
-		unitFullName = name.."-"..(realm or DB.MyRealm)
+		local name = GetUnmodifiedUnitFullName(unit)
+		unitFullName = name.."-"..DB.MyRealm
 		local pvpName = UnitPVPName(unit)
-		local relationship = UnitRealmRelationship(unit)
 		if not C.db["Tooltip"]["HideTitle"] and pvpName and B:NotSecretValue(pvpName) and pvpName ~= "" then
 			name = pvpName
 		end
-		if realm and B:NotSecretValue(realm) and realm ~= "" then
-			if isShiftKeyDown or not C.db["Tooltip"]["HideRealm"] then
-				name = name.."-"..realm
-			elseif relationship == LE_REALM_RELATION_COALESCED then
-				name = name..FOREIGN_SERVER_LABEL
-			elseif relationship == LE_REALM_RELATION_VIRTUAL then
-				name = name..INTERACTIVE_SERVER_LABEL
-			end
-		end
-
 		local status = CheckUnitStatus(UnitIsAFK, unit, AFK) or CheckUnitStatus(UnitIsDND, unit, DND) or (not UnitIsConnected(unit) and PLAYER_OFFLINE)
 		if status then
 			status = format(" |cffffcc00[%s]|r", status)
