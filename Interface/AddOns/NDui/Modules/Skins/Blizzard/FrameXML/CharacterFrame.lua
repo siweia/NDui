@@ -2,6 +2,11 @@ local _, ns = ...
 local B, C, L, DB = unpack(ns)
 local cr, cg, cb = DB.r, DB.g, DB.b
 
+local function skinScrollBox(scrollBox, update)
+	hooksecurefunc(scrollBox, "Update", update)
+	update(scrollBox)
+end
+
 function B:ReskinIconSelector()
 	B.StripTextures(self)
 	B.SetBD(self):SetInside()
@@ -15,7 +20,7 @@ function B:ReskinIconSelector()
 	B.ReskinDropDown(self.BorderBox.IconTypeDropdown)
 	B.ReskinTrimScroll(self.IconSelector.ScrollBar)
 
-	hooksecurefunc(self.IconSelector.ScrollBox, "Update", function(self)
+	skinScrollBox(self.IconSelector.ScrollBox, function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
 			if child.Icon and not child.styled then
@@ -34,8 +39,7 @@ function B:ReskinIconSelector()
 end
 
 function B:ReskinModelControl()
-	for i = 1, 5 do
-		local button = select(i, self.ControlFrame:GetChildren())
+	for _, button in ipairs({self.ControlFrame:GetChildren()}) do
 		if button.NormalTexture then
 			button.NormalTexture:SetAlpha(0)
 			button.PushedTexture:SetAlpha(0)
@@ -51,35 +55,26 @@ tinsert(C.defaultThemes, function()
 	B.ReskinPortraitFrame(CharacterFrame)
 
 	-- New elements in 1.60.1
-	PaperDollFrame.TopBackgroundStripHost:SetAlpha(0)
+	if PaperDollFrame.TopBackgroundStripHost then PaperDollFrame.TopBackgroundStripHost:SetAlpha(0) end
 	CharacterFrameLeftPaneHost:SetAlpha(0)
 	CharacterFrameRightPaneHost:SetAlpha(0)
+	B.StripTextures(PaperDollLevelInfo)
 	CharacterModelScene:SetFrameLevel(2)
-	B.StripTextures(CharacterStatsPaneScrollBox)
-	B.ReskinTrimScroll(CharacterStatsPaneScrollBox.ScrollBar)
-
-	B.ReskinCollapse(CharacterFrameRightPaneToggleButton, "left")
-	CharacterFrameRightPaneToggleButton:GetRegions():SetAlpha(0)
-	CharacterFrameRightPaneToggleButton:GetPushedTexture():SetAlpha(0)
-
-	hooksecurefunc(CharacterFrame, "UpdateRightPaneToggleButton", function(self)
-		if self:IsRightPaneCollapsed() then
-			CharacterFrameRightPaneToggleButton.__texture:DoCollapse(true)
-		else
-			CharacterFrameRightPaneToggleButton.__texture:DoCollapse(false)
-		end
-	end)
-
-	for i = 1, 3 do
-		local tab = _G["CharacterFrameTab"..i]
-		if tab then
-			B.ReskinTab(tab)
-			if i ~= 1 then
-				tab:ClearAllPoints()
-				tab:SetPoint("TOPLEFT", _G["CharacterFrameTab"..(i-1)], "TOPRIGHT", -15, 0)
-			end
-		end
+	for _, pane in ipairs({CharacterStatsPaneScrollBox, CharacterStatsPanePetScrollBox}) do
+		B.StripTextures(pane)
+		B.ReskinTrimScroll(pane.ScrollBar)
 	end
+
+	local toggleButton = CharacterFrame.RightPaneToggleButton
+	B.ReskinArrow(toggleButton, "left")
+	-- Blizzard replaces these textures directly when the pane changes.
+	toggleButton:GetNormalTexture():SetAlpha(0)
+	toggleButton:GetPushedTexture():SetAlpha(0)
+	local function updatePaneToggle(self)
+		B.SetupArrow(toggleButton.__texture, self:IsRightPaneCollapsed() and "right" or "left")
+	end
+	hooksecurefunc(CharacterFrame, "UpdateRightPaneToggleButton", updatePaneToggle)
+	updatePaneToggle(CharacterFrame)
 
 	B.ReskinModelControl(CharacterModelScene)
 	CharacterModelScene:DisableDrawLayer("BACKGROUND")
@@ -87,32 +82,26 @@ tinsert(C.defaultThemes, function()
 	CharacterModelScene:DisableDrawLayer("OVERLAY")
 
 	-- Side tabs
-	local function resetTexCoords(self, x1, x2, y1, y2)
-		if x1 ~= .08 or x2 ~= .92 or y1 ~= .08 or y2 ~= .92 then
-			self:SetTexCoord(.08, .92, .08, .92)
-		end
+	local function updateSideTabIcon(tab)
+		tab.Icon:SetTexCoord(unpack(DB.TexCoord))
 	end
 
 	local function reskinSideTab(tab)
-		if not tab then return end
-
-		tab:DisableDrawLayer("BACKGROUND")
-		tab.Mask:Hide()
-		tab.bg = B.SetBD(tab, 1)
-		tab.bg:SetInside(nil, 3, 3)
+		tab.Background:SetAlpha(0)
+		tab.Icon:RemoveMaskTexture(tab.Mask)
+		tab:SetFillToInterior(true, 36)
+		tab.bg = B.ReskinIcon(tab.Icon)
 		local hl = tab.HighlightTexture
 		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetInside(tab.bg)
-		tab.Icon:SetTexCoord(.08, .92, .08, .92)
-		hooksecurefunc(tab.Icon, "SetTexCoord", resetTexCoords)
-		tab.Icon:SetInside(tab.bg)
-		tab.SelectedTexture:SetColorTexture(1, .8, 0, .25)
-		tab.SelectedTexture:SetInside(tab.bg)
+		hl:SetAllPoints(tab.Icon)
+		tab.SelectedTexture:SetColorTexture(r, g, b, .25)
+		tab.SelectedTexture:SetAllPoints(tab.Icon)
+		tab.TabGlow:SetColorTexture(r, g, b, .25)
+		tab.TabGlow:SetAllPoints(tab.Icon)
+		hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
 	end
 
-	for i = 1, 10 do
-		local tab = _G["CharacterFrameModeTab"..i]
-		if not tab then break end
+	for _, tab in ipairs(CharacterFrame.ModeTabs.Tabs) do
 		reskinSideTab(tab)
 	end
 
@@ -169,6 +158,7 @@ tinsert(C.defaultThemes, function()
 		"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
 		"SecondaryHand", "Tabard", "Ranged"
 	}
+	local flyoutDirections = {LEFT = "left", RIGHT = "right", UP = "up", DOWN = "down"}
 
 	for i = 1, #slots do
 		local slot = _G["Character"..slots[i].."Slot"]
@@ -187,18 +177,12 @@ tinsert(C.defaultThemes, function()
 		B.ReskinIconBorder(slot.IconBorder)
 
 		local popout = slot.popoutButton
-		popout:SetNormalTexture(0)
-		popout:SetHighlightTexture(0)
+		B.StripTextures(popout, 0)
 
 		local arrow = popout:CreateTexture(nil, "OVERLAY")
 		arrow:SetSize(14, 14)
-		if slot.verticalFlyout then
-			B.SetupArrow(arrow, "down")
-			arrow:SetPoint("TOP", slot, "BOTTOM", 0, 1)
-		else
-			B.SetupArrow(arrow, "right")
-			arrow:SetPoint("LEFT", slot, "RIGHT", -1, 0)
-		end
+		B.SetupArrow(arrow, flyoutDirections[slot.flyoutDirection] or "right")
+		arrow:SetPoint("CENTER", popout)
 		popout.arrow = arrow
 
 		popout:HookScript("OnEnter", clearPopout)
@@ -209,14 +193,15 @@ tinsert(C.defaultThemes, function()
 	end
 
 	hooksecurefunc("PaperDollItemSlotButton_Update", function(button)
-		-- also fires for bag slots, we don't want that
-		if button.popoutButton then
-			button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
-			colourPopout(button.popoutButton)
-		end
+		if not button.bg or not button.popoutButton then return end
+		button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
+		colourPopout(button.popoutButton)
 		UpdateCosmetic(button)
 		UpdateHighlight(button)
 	end)
+	for _, name in ipairs(slots) do
+		PaperDollItemSlotButton_Update(_G["Character"..name.."Slot"])
+	end
 
 	-- [[ Stats pane ]]
 
@@ -239,9 +224,11 @@ tinsert(C.defaultThemes, function()
 		category.styled = true
 	end
 
-	hooksecurefunc(CharacterStatsPaneScrollBox.ScrollBox, "Update", function(self)
-		self:ForEachFrame(updateCategory)
-	end)
+	for _, pane in ipairs({CharacterStatsPaneScrollBox, CharacterStatsPanePetScrollBox}) do
+		skinScrollBox(pane.ScrollBox, function(self)
+			self:ForEachFrame(updateCategory)
+		end)
+	end
 
 	-- [[ Sidebar tabs ]]
 
@@ -267,24 +254,30 @@ tinsert(C.defaultThemes, function()
 	end
 
 	-- [[ Equipment manager ]]
-	B.Reskin(PaperDollFrameEquipSet)
-	B.Reskin(PaperDollFrameSaveSet)
-	B.ReskinTrimScroll(PaperDollFrame.EquipmentManagerPane.ScrollBar)
+	local equipmentPane = PaperDollFrame.EquipmentManagerPane
+	B.StripTextures(equipmentPane)
+	B.Reskin(equipmentPane.EquipSet)
+	B.Reskin(equipmentPane.SaveSet)
+	B.Reskin(equipmentPane.NewSet)
+	equipmentPane.NewSet.StateTexture:SetAlpha(0)
+	B.ReskinTrimScroll(equipmentPane.ScrollBar)
 
-	hooksecurefunc(PaperDollFrame.EquipmentManagerPane.ScrollBox, "Update", function(self)
+	skinScrollBox(equipmentPane.ScrollBox, function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
 			if child.icon and not child.styled then
-				B.HideObject(child.Stripe)
-				child.BgTop:SetTexture("")
-				child.BgMiddle:SetTexture("")
-				child.BgBottom:SetTexture("")
+				child.icon.isIgnored = true
+				child.SpecIcon.isIgnored = true
+				child.SpecRing.isIgnored = true
+				B.StripTextures(child)
 				B.ReskinIcon(child.icon)
 
 				child.HighlightBar:SetColorTexture(1, 1, 1, .25)
 				child.HighlightBar:SetDrawLayer("BACKGROUND")
+				child.HighlightBar:SetInside(nil, 2, 2)
 				child.SelectedBar:SetColorTexture(r, g, b, .25)
 				child.SelectedBar:SetDrawLayer("BACKGROUND")
+				child.SelectedBar:SetInside(nil, 2, 2)
 				child.Check:SetAtlas("checkmark-minimal")
 
 				child.styled = true
@@ -295,81 +288,144 @@ tinsert(C.defaultThemes, function()
 	B.ReskinIconSelector(GearManagerPopupFrame)
 
 	-- TitlePane
+	B.StripTextures(PaperDollFrame.TitleManagerPane)
 	B.ReskinTrimScroll(PaperDollFrame.TitleManagerPane.ScrollBar)
 
-	hooksecurefunc(PaperDollFrame.TitleManagerPane.ScrollBox, "Update", function(self)
+	skinScrollBox(PaperDollFrame.TitleManagerPane.ScrollBox, function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
 			if not child.styled then
 				child:DisableDrawLayer("BACKGROUND")
 				child.Check:SetAtlas("checkmark-minimal")
+				child.SelectedBar:SetColorTexture(r, g, b, .25)
+				child.SelectedBar:SetAllPoints()
+				child:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 				child.styled = true
 			end
 		end
 	end)
 
-	-- Reputation Frame
-	local oldAtlas = {
-		["Options_ListExpand_Right"] = 1,
-		["Options_ListExpand_Right_Expanded"] = 1,
+	-- Character progress bars use a Fill texture rather than a StatusBar texture.
+	local progressColors = {
+		["common-stat-bar-red"] = {.8, .2, .2},
+		["common-stat-bar-green"] = {0, .7, 0},
+		["common-stat-bar-blue"] = {.2, .6, 1},
+		["common-stat-bar-white"] = {1, 1, 1},
 	}
-	local function updateCollapse(texture, atlas)
-		if (not atlas) or oldAtlas[atlas] then
-			if not texture.__owner then
-				texture.__owner = texture:GetParent()
-			end
-			if texture.__owner:IsCollapsed() then
-				texture:SetAtlas("Soulbinds_Collection_CategoryHeader_Expand")
-			else
-				texture:SetAtlas("Soulbinds_Collection_CategoryHeader_Collapse")
-			end
-		end
+
+	local function updateProgressColor(bar, color)
+		if color then bar.nduiBarColor = {color:GetRGB()} end
+		local base = progressColors[bar.nduiFillAtlas] or progressColors["common-stat-bar-white"]
+		local tint = bar.nduiBarColor
+		bar.Fill:SetVertexColor(base[1]*tint[1], base[2]*tint[2], base[3]*tint[3])
 	end
 
-	local function updateToggleCollapse(button)
-		button:SetNormalTexture(0)
-		button.__texture:DoCollapse(button:GetHeader():IsCollapsed())
+	local function updateProgressPercent(bar, percent)
+		bar.nduiFillPercent = math.min(1, math.max(0, percent))
+		bar.Fill:SetTexCoord(0, 1, 0, 1)
 	end
 
-	local function reskinReputationBar(bar)
+	local function updateProgressTexture(bar)
+		bar.nduiFillAtlas = bar.Fill:GetAtlas() or bar.nduiFillAtlas
+		bar.Fill:SetTexture(DB.normTex)
+		bar.Fill:SetHeight(bar.nduiFillHeight)
+		-- SetAtlas with UseAtlasSize resets the width; restore the current progress.
+		bar:SetFillPercent(bar.nduiFillPercent)
+		updateProgressColor(bar)
+	end
+
+	local function reskinProgressBar(bar)
+		if bar.styled then return end
 		bar:DisableDrawLayer("BACKGROUND")
-		if bar.Mask then bar.Fill:RemoveMaskTexture(bar.Mask) end
-		bar.Fill:SetTexture(DB.bdTex)
+		bar.Fill:RemoveMaskTexture(bar.Mask)
+		bar.nduiFillHeight = bar.Fill:GetHeight()
+		bar.nduiFillPercent = bar:GetWidth() > 0 and bar.Fill:GetWidth()/bar:GetWidth() or 0
+		bar.nduiBarColor = {bar.Fill:GetVertexColor()}
 
-		-- Keep Fill's left anchor and width under SetFillPercent's control.
 		local bg = B.CreateBDFrame(bar, .25)
 		bg:ClearAllPoints()
 		bg:SetPoint("LEFT", bar, -C.mult, 0)
 		bg:SetPoint("RIGHT", bar, C.mult, 0)
-		bg:SetHeight(bar.Fill:GetHeight() + 2*C.mult)
+		bg:SetHeight(bar.nduiFillHeight + 2*C.mult)
+		hooksecurefunc(bar, "SetFillPercent", updateProgressPercent)
+		hooksecurefunc(bar, "SetFillTextureByColorType", updateProgressTexture)
+		if bar.UpdateBarColor then hooksecurefunc(bar, "UpdateBarColor", updateProgressColor) end
+		updateProgressTexture(bar)
+		bar.styled = true
 	end
 
+	local function updateToggleCollapse(button)
+		local header = button:GetHeader()
+		button:SetNormalTexture(0)
+		button.__texture:DoCollapse((header.treeNode or header):IsCollapsed())
+	end
+
+	local function reskinCategory(child)
+		if child.StateIcon then
+			child:DisableDrawLayer("BACKGROUND")
+			B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
+		end
+		local button = child.ToggleCollapseButton
+		if button then
+			button:GetNormalTexture():SetAlpha(0)
+			button:GetPushedTexture():SetAlpha(0)
+			B.ReskinCollapse(button, true)
+			button.bg:ClearAllPoints()
+			button.bg:SetPoint("CENTER", button)
+			updateToggleCollapse(button)
+			hooksecurefunc(button, "RefreshIcon", updateToggleCollapse)
+		end
+	end
+
+	local function updateDetailRows(pane)
+		for i = 1, pane.Content:GetNumChildren() do
+			local row = select(i, pane.Content:GetChildren())
+			if row.Label and not row.styled then
+				if row.Background then
+					row.Background:SetAlpha(0)
+					row.Label:SetTextColor(r, g, b)
+				end
+				if row.Icon then
+					row.IconSlot:SetAlpha(0)
+					B.ReskinIcon(row.Icon)
+				end
+				row.Label:SetFontObject(Game13Font)
+				if row.Value then row.Value:SetFontObject(Game13Font) end
+				row.styled = true
+			end
+		end
+	end
+
+	for _, pane in ipairs(CharacterFrame.SidePanes) do
+		pane.Divider:SetColorTexture(1, 1, 1, .25)
+		pane.Divider:SetHeight(C.mult)
+		B.ReskinTrimScroll(pane.DescriptionScrollBar)
+		hooksecurefunc(pane, "AcquireRow", updateDetailRows)
+		updateDetailRows(pane)
+	end
+	reskinProgressBar(PetPaperDollFrameExpBar)
+
+	-- Reputation Frame
 	local function updateReputationBars(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
-			if child and not child.styled then
-				if child.StateIcon then
-					child:DisableDrawLayer("BACKGROUND")
-					B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
-				end
-				local repbar = child.Content and child.Content.ReputationBar
-				if repbar then
-					reskinReputationBar(repbar)
-				end
-
+			if not child.styled then
+				reskinCategory(child)
+				local bar = child.Content and child.Content.ReputationBar
+				if bar then reskinProgressBar(bar) end
 				child.styled = true
 			end
 		end
 	end
-	hooksecurefunc(ReputationFrame.ScrollBox, "Update", updateReputationBars)
+	skinScrollBox(ReputationFrame.ScrollBox, updateReputationBars)
 
 	B.ReskinTrimScroll(ReputationFrame.ScrollBar)
 	B.ReskinDropDown(ReputationFrame.filterDropdown)
 
 	local detailFrame = ReputationFrame.ReputationDetailFrame
 	B.StripTextures(detailFrame)
-	if detailFrame.StandingBar then reskinReputationBar(detailFrame.StandingBar) end
+	if detailFrame.StandingBar then reskinProgressBar(detailFrame.StandingBar) end
 	B.ReskinCheck(detailFrame.AtWarCheckbox)
 	B.ReskinCheck(detailFrame.MakeInactiveCheckbox)
 	B.ReskinCheck(detailFrame.WatchFactionCheckbox)
@@ -383,11 +439,12 @@ tinsert(C.defaultThemes, function()
 
 	local function handleCurrencyIcon(button)
 		local icon = button.CurrencyIcon
-		if icon then
+		if icon and not icon.styled then
 			B.ReskinIcon(icon)
+			icon.styled = true
 		end
 	end
-	hooksecurefunc(CurrencyTransferLog.ScrollBox, "Update", function(self)
+	skinScrollBox(CurrencyTransferLog.ScrollBox, function(self)
 		self:ForEachFrame(handleCurrencyIcon)
 	end)
 
@@ -412,14 +469,11 @@ tinsert(C.defaultThemes, function()
 		end
 	end
 
-	hooksecurefunc(TokenFrame.ScrollBox, "Update", function(self)
+	skinScrollBox(TokenFrame.ScrollBox, function(self)
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
 			if child and not child.styled then
-				if child.StateIcon then
-					child:DisableDrawLayer("BACKGROUND")
-					B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
-				end
+				reskinCategory(child)
 				local icon = child.Content and child.Content.CurrencyIcon
 				if icon then
 					B.ReskinIcon(icon)
@@ -451,21 +505,18 @@ tinsert(C.defaultThemes, function()
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
 			if child and not child.styled then
-				if child.StateIcon then
-					child:DisableDrawLayer("BACKGROUND")
-					B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
-				end
+				reskinCategory(child)
 				local repbar = child.Content and child.Content.SkillsBar
 				if repbar then
-					reskinReputationBar(repbar)
+					reskinProgressBar(repbar)
 				end
 
 				child.styled = true
 			end
 		end
 	end
-	hooksecurefunc(SkillsFrame.ScrollBox, "Update", updateSkills)
-	reskinReputationBar(SkillsFrame.SkillDetailFrame.RankBar)
+	skinScrollBox(SkillsFrame.ScrollBox, updateSkills)
+	reskinProgressBar(SkillsFrame.SkillDetailFrame.RankBar)
 	B.ReskinTrimScroll(SkillsFrame.ScrollBar)
 
 	-- StatisticsFrame
@@ -473,21 +524,12 @@ tinsert(C.defaultThemes, function()
 		for i = 1, self.ScrollTarget:GetNumChildren() do
 			local child = select(i, self.ScrollTarget:GetChildren())
 			if child and not child.styled then
-				if child.StateIcon then
-					child:DisableDrawLayer("BACKGROUND")
-					B.CreateBDFrame(child, .25):SetInside(nil, 2, 2)
-				end
-				if child.ToggleCollapseButton then
-					child.ToggleCollapseButton:GetPushedTexture():SetAlpha(0)
-					B.ReskinCollapse(child.ToggleCollapseButton, true)
-					updateToggleCollapse(child.ToggleCollapseButton)
-					hooksecurefunc(child.ToggleCollapseButton, "RefreshIcon", updateToggleCollapse)
-				end
+				reskinCategory(child)
 
 				child.styled = true
 			end
 		end
 	end
-	hooksecurefunc(StatisticsFrame.ScrollBox, "Update", updateFrame)
+	skinScrollBox(StatisticsFrame.ScrollBox, updateFrame)
 	B.ReskinTrimScroll(StatisticsFrame.ScrollBar)
 end)
