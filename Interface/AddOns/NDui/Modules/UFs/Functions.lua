@@ -549,7 +549,7 @@ local function postUpdateRole(element, role)
 
 	-- 12.1.5: UnitFrameUtil owns the role icon and passes no role to PostUpdate.
 	-- Read it here instead, and skip secret roles: the icon's shown state is
-	-- secret then and only secure code may set or read it.
+	-- secret then and must not be boolean-tested from here.
 	if role == nil then
 		local unit = element.__owner and element.__owner.__unit
 		role = unit and UnitGroupRolesAssignedEnum(unit)
