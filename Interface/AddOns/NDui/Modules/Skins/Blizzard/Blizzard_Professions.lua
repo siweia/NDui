@@ -9,7 +9,9 @@ local function reskinFlyoutButton(button)
 		button:SetNormalTexture(0)
 		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		B.ReskinIconBorder(button.IconBorder, true)
+		button:GetHighlightTexture():SetInside(button.bg)
+		button.SlotBackground:SetAlpha(0)
+		B.ReskinIconBorder(button.IconBorder, true, true)
 
 		button.styled = true
 	end
@@ -45,6 +47,7 @@ local function ReskinProfessionsFlyout(_, parent)
 			B.ReskinTrimScroll(flyoutFrame.ScrollBar)
 			reskinFlyoutButton(flyoutFrame.UndoItem)
 			hooksecurefunc(flyoutFrame.ScrollBox, "Update", refreshFlyoutButtons)
+			refreshFlyoutButtons(flyoutFrame.ScrollBox)
 
 			break
 		end
@@ -70,8 +73,9 @@ local function reskinSlotButton(button)
 		button.bg = B.ReskinIcon(button.Icon)
 		B.ReskinIconBorder(button.IconBorder, true, true)
 		if button.SlotBackground then
-			button.SlotBackground:Hide()
+			button.SlotBackground:SetAlpha(0)
 		end
+		if button.CropFrame then button.CropFrame:SetAlpha(0) end
 		resetButton(button)
 		hooksecurefunc(button, "Update", resetButton)
 
@@ -96,10 +100,30 @@ local function reskinQualityContainer(container)
 	reskinArrowInput(container.EditBox)
 end
 
+local function reskinReagentSlots(form)
+	for slot in form.reagentSlotPool:EnumerateActive() do
+		reskinSlotButton(slot.Button)
+		if slot.Checkbox and not slot.Checkbox.styled then
+			B.ReskinCheck(slot.Checkbox)
+			slot.Checkbox.styled = true
+		end
+	end
+	if form.salvageSlot then reskinSlotButton(form.salvageSlot.Button) end
+	if form.enchantSlot then reskinSlotButton(form.enchantSlot.Button) end
+end
+
+local function reskinStatusBar(bar)
+	B.StripTextures(bar)
+	bar:SetStatusBarTexture(DB.normTex)
+	B.CreateBDFrame(bar, .25)
+end
+
 local function reskinProfessionForm(form)
 	local button = form.OutputIcon
 	if button then
 		button.CircleMask:Hide()
+		button.Icon:RemoveMaskTexture(button.CircleMask)
+		button.CountShadow:SetAlpha(0)
 		button.bg = B.ReskinIcon(button.Icon)
 		B.ReskinIconBorder(button.IconBorder, nil, true)
 		local hl = button:GetHighlightTexture()
@@ -132,21 +156,10 @@ local function reskinProfessionForm(form)
 		reskinQualityContainer(qDialog.Container3)
 	end
 
-	hooksecurefunc(form, "Init", function(self)
-		for slot in self.reagentSlotPool:EnumerateActive() do
-			reskinSlotButton(slot.Button)
-		end
-
-		local slot = form.salvageSlot
-		if slot then
-			reskinSlotButton(slot.Button)
-		end
-
-		local slot = form.enchantSlot
-		if slot then
-			reskinSlotButton(slot.Button)
-		end
-	end)
+	hooksecurefunc(form, "Init", reskinReagentSlots)
+	reskinReagentSlots(form)
+	if form.RecipeLevelBar then reskinStatusBar(form.RecipeLevelBar) end
+	if form.RecipeLevelDropdown then B.ReskinDropDown(form.RecipeLevelDropdown) end
 end
 
 local function reskinOutputButtons(self)
@@ -160,9 +173,9 @@ local function reskinOutputButtons(self)
 				item:SetPushedTexture(0)
 				item:SetHighlightTexture(0)
 
-				local icon = item:GetRegions()
-				item.bg = B.ReskinIcon(icon)
+				item.bg = B.ReskinIcon(item.icon)
 				B.ReskinIconBorder(item.IconBorder, true)
+				itemContainer.NameFrame:SetAlpha(0)
 				itemContainer.CritFrame:SetAlpha(0)
 				itemContainer.BorderFrame:Hide()
 				itemContainer.HighlightNameFrame:SetAlpha(0)
@@ -170,15 +183,21 @@ local function reskinOutputButtons(self)
 				itemContainer.bg = B.CreateBDFrame(itemContainer.HighlightNameFrame, .25)
 			end
 
-			local bonus = child.CreationBonus
+			local bonus = child.Multicraft
 			if bonus then
 				local item = bonus.Item
-				B.StripTextures(item, 1)
-				local icon = item:GetRegions()
-				B.ReskinIcon(icon)
+				item:SetNormalTexture(0)
+				item:SetPushedTexture(0)
+				item.bg = B.ReskinIcon(item.icon)
+				B.ReskinIconBorder(item.IconBorder, true)
 			end
 
 			child.styled = true
+		end
+		if child.itemButtonPool then
+			for button in child.itemButtonPool:EnumerateActive() do
+				reskinFlyoutButton(button)
+			end
 		end
 
 		local itemContainer = child.ItemContainer
@@ -201,30 +220,90 @@ local function reskinOutputLog(outputLog)
 	B.ReskinClose(outputLog.ClosePanelButton)
 	B.ReskinTrimScroll(outputLog.ScrollBar)
 	hooksecurefunc(outputLog.ScrollBox, "Update", reskinOutputButtons)
+	reskinOutputButtons(outputLog.ScrollBox)
 end
 
-local function reskinRankBar(rankBar)
-	rankBar.Border:Hide()
-	rankBar.Background:Hide()
-	rankBar.Rank.Text:SetFontObject(Game12Font)
-	B.CreateBDFrame(rankBar.Fill, 1)
-	B.ReskinArrow(rankBar.ExpansionDropdownButton, "down")
+local function updateRankBar(rankBar)
+	-- Keep Blizzard's mask and progress interpolation, but replace the animated fill.
+	rankBar.BarAnimation:Stop()
+	rankBar.FlareFadeOut:Stop()
+	rankBar.Flare:SetAlpha(0)
+	rankBar.Fill:SetTexture(DB.normTex)
+	rankBar.Fill:SetTexCoord(0, 1, 0, 1)
+	rankBar.Fill:SetVertexColor(0, .7, 0)
+end
+
+function B:ReskinProfessionsRankBar()
+	self.Border:SetAlpha(0)
+	self.Background:SetAlpha(0)
+	self.Rank.Text:SetFontObject(Game12Font)
+	-- Book bars inherit a full-size fill even when their mask is much narrower.
+	self.Fill:SetWidth(math.min(self.Fill:GetWidth(), self:GetMaskWidth(1)))
+	B.CreateBDFrame(self.Fill, .25)
+	B.ReskinArrow(self.ExpansionDropdownButton, "down")
+	hooksecurefunc(self, "Update", updateRankBar)
+	updateRankBar(self)
+end
+
+local function updateSideTabIcon(tab)
+	tab.Icon:SetTexCoord(unpack(DB.TexCoord))
+end
+
+local function reskinSideTab(tab)
+	tab.Background:SetAlpha(0)
+	tab.Icon:RemoveMaskTexture(tab.Mask)
+	tab:SetFillToInterior(true, 36)
+	tab.bg = B.ReskinIcon(tab.Icon)
+	tab.SelectedTexture:SetColorTexture(DB.r, DB.g, DB.b, .35)
+	tab.SelectedTexture:SetAllPoints(tab.Icon)
+	tab.HighlightTexture:SetColorTexture(1, 1, 1, .25)
+	tab.HighlightTexture:SetAllPoints(tab.Icon)
+	tab.TabGlow:SetColorTexture(DB.r, DB.g, DB.b, .35)
+	tab.TabGlow:SetAllPoints(tab.Icon)
+	hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
+end
+
+local function reskinRecipeListButtons(self)
+	for i = 1, self.ScrollTarget:GetNumChildren() do
+		local button = select(i, self.ScrollTarget:GetChildren())
+		if not button.styled then
+			if button.SelectedOverlay then
+				button.SelectedOverlay:SetColorTexture(DB.r, DB.g, DB.b, .25)
+				button.SelectedOverlay:SetAllPoints()
+				button.HighlightOverlay:SetColorTexture(1, 1, 1, .1)
+				button.HighlightOverlay:SetAllPoints()
+				button.styled = true
+			elseif button.CollapseButton then
+				B.Reskin(button)
+				button.__bg:SetInside(nil, 0, 2)
+				reskinStatusBar(button.RankBar)
+				button.styled = true
+			end
+		end
+	end
 end
 
 C.themes["Blizzard_Professions"] = function()
-	if true then return end -- fixme
 	local frame = ProfessionsFrame
-	local craftingPage = ProfessionsFrame.CraftingPage
+	local craftingPage = frame.CraftingPage
 
 	B.ReskinPortraitFrame(frame)
+	frame.Bg:SetAlpha(0)
+	B.StripTextures(craftingPage)
 	craftingPage.TutorialButton.Ring:Hide()
 	B.Reskin(craftingPage.CreateButton)
 	B.Reskin(craftingPage.CreateAllButton)
 	B.Reskin(craftingPage.ViewGuildCraftersButton)
 	reskinArrowInput(craftingPage.CreateMultipleInputBox)
-	B.ReskinMinMax(frame.MaximizeMinimize)
 	B.ReskinEditBox(craftingPage.MinimizedSearchBox)
 	B.ReskinIcon(craftingPage.ConcentrationDisplay.Icon)
+
+	reskinSideTab(frame.ProfessionsOverviewTab)
+	for _, tab in ipairs(frame.rightProfessionTabs) do
+		reskinSideTab(tab)
+	end
+	-- The book addon only provides templates; Camelot creates its page in this window.
+	B.ReskinProfessionsBook(frame.BookPage)
 
 	local guildFrame = craftingPage.GuildFrame
 	B.StripTextures(guildFrame)
@@ -233,185 +312,45 @@ C.themes["Blizzard_Professions"] = function()
 	B.CreateBDFrame(guildFrame.Container, .25)
 	B.ReskinTrimScroll(guildFrame.Container.ScrollBar)
 
-	for i = 1, 3 do
-		local tab = select(i, frame.TabSystem:GetChildren())
-		if tab then
-			B.ReskinTab(tab)
-		end
-	end
-
-	-- Tools
-	local slots = {"Prof0ToolSlot", "Prof0Gear0Slot", "Prof0Gear1Slot", "Prof1ToolSlot", "Prof1Gear0Slot", "Prof1Gear1Slot",
-		"CookingToolSlot", "CookingGear0Slot", "FishingToolSlot", "FishingGear0Slot", "FishingGear1Slot"}
-	for _, name in pairs(slots) do
-		local button = craftingPage[name]
-		if button then
-			button.bg = B.ReskinIcon(button.icon)
-			B.ReskinIconBorder(button.IconBorder)
-			button:SetNormalTexture(0)
-			button:SetPushedTexture(0)
-		end
+	for _, button in ipairs(craftingPage.InventorySlots) do
+		button.bg = B.ReskinIcon(button.icon)
+		B.ReskinIconBorder(button.IconBorder)
+		button:SetNormalTexture(0)
+		button:SetPushedTexture(0)
 	end
 
 	local recipeList = craftingPage.RecipeList
 	B.StripTextures(recipeList)
 	B.ReskinTrimScroll(recipeList.ScrollBar)
-	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in case blizz rename
 	B.CreateBDFrame(recipeList, .25):SetInside()
 	B.ReskinEditBox(recipeList.SearchBox)
 	B.ReskinFilterButton(recipeList.FilterDropdown)
+	hooksecurefunc(recipeList.ScrollBox, "Update", reskinRecipeListButtons)
+	reskinRecipeListButtons(recipeList.ScrollBox)
+
+	local searchResults = craftingPage.MinimizedSearchResults
+	B.ReskinPortraitFrame(searchResults)
+	B.ReskinTrimScroll(searchResults.ScrollBar)
 
 	local form = craftingPage.SchematicForm
 	B.StripTextures(form)
 	form.Background:SetAlpha(0)
+	form.MinimalBackground:SetAlpha(0)
 	B.CreateBDFrame(form, .25):SetInside()
 	reskinProfessionForm(form)
-	form.MinimalBackground:SetAlpha(0)
 
-	local rankBar = craftingPage.RankBar
-	reskinRankBar(rankBar)
-
-	B.ReskinArrow(craftingPage.LinkButton, "right")
-	craftingPage.LinkButton:SetSize(20, 20)
-	craftingPage.LinkButton:SetPoint("LEFT", rankBar.Fill, "RIGHT", 3, 0)
-
-	local specPage = frame.SpecPage
-	B.Reskin(specPage.UnlockTabButton)
-	B.Reskin(specPage.ApplyButton)
-	B.Reskin(specPage.ViewTreeButton)
-	B.Reskin(specPage.BackToFullTreeButton)
-	B.Reskin(specPage.ViewPreviewButton)
-	B.Reskin(specPage.BackToPreviewButton)
-	specPage.TopDivider:Hide()
-	specPage.VerticalDivider:Hide()
-	specPage.PanelFooter:Hide()
-	B.StripTextures(specPage.TreeView)
-	specPage.TreeView.Background:Hide()
-	local treeViewBG = B.CreateBDFrame(specPage.TreeView, .25)
-	treeViewBG:SetInside()
-
-	hooksecurefunc(specPage, "UpdateTabs", function(self)
-		for tab in self.tabsPool:EnumerateActive() do
-			if not tab.styled then
-				tab.styled = true
-				B.ReskinTab(tab)
-			end
-		end
-	end)
-
-	local view = specPage.DetailedView
-	B.StripTextures(view)
-	local detailedViewBG = B.CreateBDFrame(view, .25)
-	detailedViewBG:SetInside()
-	B.Reskin(view.UnlockPathButton)
-	B.Reskin(view.SpendPointsButton)
-	B.ReskinIcon(view.UnspentPoints.Icon)
-
-	treeViewBG:SetPoint("BOTTOMRIGHT", detailedViewBG, "BOTTOMLEFT", -3, 0)
-
-	-- log
+	B.ReskinProfessionsRankBar(craftingPage.RankBar)
+	craftingPage.LinkButton.Background:SetAlpha(0)
+	B.Reskin(craftingPage.LinkButton)
 	reskinOutputLog(craftingPage.CraftingOutputLog)
 
-	-- Order page
-	if not frame.OrdersPage then return end -- not exists in retail yet
-
-	local browseFrame = frame.OrdersPage.BrowseFrame
-	B.Reskin(browseFrame.SearchButton)
-	B.Reskin(browseFrame.FavoritesSearchButton)
-	browseFrame.FavoritesSearchButton:SetSize(22, 22)
-
-	local recipeList = browseFrame.RecipeList
-	B.StripTextures(recipeList)
-	B.ReskinTrimScroll(recipeList.ScrollBar)
-	if recipeList.BackgroundNineSlice then recipeList.BackgroundNineSlice:Hide() end -- in case blizz rename
-	B.CreateBDFrame(recipeList, .25):SetInside()
-	B.ReskinEditBox(recipeList.SearchBox)
-	B.ReskinFilterButton(recipeList.FilterDropdown)
-
-	B.ReskinTab(browseFrame.PublicOrdersButton)
-	B.ReskinTab(browseFrame.GuildOrdersButton)
-	B.ReskinTab(browseFrame.PersonalOrdersButton)
-	B.ReskinTab(browseFrame.NpcOrdersButton)
-	B.StripTextures(browseFrame.OrdersRemainingDisplay)
-	B.CreateBDFrame(browseFrame.OrdersRemainingDisplay, .25)
-
-	local orderList = browseFrame.OrderList
-	B.StripTextures(orderList)
-	orderList.Background:SetAlpha(0)
-	B.CreateBDFrame(orderList, .25):SetInside()
-	B.ReskinTrimScroll(orderList.ScrollBar)
-
-	hooksecurefunc(frame.OrdersPage, "SetupTable", function()
-		local maxHeaders = orderList.HeaderContainer:GetNumChildren()
-		for i = 1, maxHeaders do
-			local header = select(i, orderList.HeaderContainer:GetChildren())
-			if not header.styled then
-				header:DisableDrawLayer("BACKGROUND")
-				header.bg = B.CreateBDFrame(header)
-				local hl = header:GetHighlightTexture()
-				hl:SetColorTexture(1, 1, 1, .1)
-				hl:SetAllPoints(header.bg)
-				header.bg:SetPoint("TOPLEFT", 0, -2)
-				header.bg:SetPoint("BOTTOMRIGHT", i < maxHeaders and -5 or 0, -2)
-
-				header.styled = true
-			end
-		end
-	end)
-	frame.OrdersPage:SetupTable() -- init header
-
-	local orderView = frame.OrdersPage.OrderView
-	B.Reskin(orderView.CreateButton)
-	B.Reskin(orderView.StartRecraftButton)
-	B.Reskin(orderView.StopRecraftButton)
-	B.Reskin(orderView.CompleteOrderButton)
-	reskinOutputLog(orderView.CraftingOutputLog)
-	reskinRankBar(orderView.RankBar)
-
-	local orderInfo = orderView.OrderInfo
-	B.StripTextures(orderInfo)
-	B.CreateBDFrame(orderInfo, .25):SetInside()
-	B.Reskin(orderInfo.BackButton)
-	B.Reskin(orderInfo.StartOrderButton)
-	B.Reskin(orderInfo.DeclineOrderButton)
-	B.Reskin(orderInfo.ReleaseOrderButton)
-	B.StripTextures(orderInfo.NoteBox)
-	B.CreateBDFrame(orderInfo.NoteBox, .25)
-	B.Reskin(orderInfo.SocialDropdown)
-
-	local orderDetails = orderView.OrderDetails
-	B.StripTextures(orderDetails)
-	orderDetails.Background:SetAlpha(0)
-	B.CreateBDFrame(orderDetails, .25):SetInside()
-	reskinProfessionForm(orderDetails.SchematicForm)
-
-	B.StripTextures(orderDetails.FulfillmentForm.NoteEditBox)
-	B.CreateBDFrame(orderDetails.FulfillmentForm.NoteEditBox, .25)
-	B.ReskinIcon(orderView.ConcentrationDisplay.Icon)
-
-	local rewardsFrame = orderInfo.NPCRewardsFrame
-	if rewardsFrame then
-		rewardsFrame.Background:Hide()
-		B.CreateBDFrame(rewardsFrame.Background, .25)
-
-		local function handleRewardButton(button)
-			if not button then return end
-			B.StripTextures(button)
-			button.bg = B.ReskinIcon(button.Icon)
-			B.ReskinIconBorder(button.IconBorder, true, true)
-		end
-		handleRewardButton(rewardsFrame.RewardItem1)
-		handleRewardButton(rewardsFrame.RewardItem2)
-	end
-
-	-- InspectRecipeFrame
 	local inspectFrame = InspectRecipeFrame
 	if inspectFrame then
 		B.ReskinPortraitFrame(inspectFrame)
-
-		local form = inspectFrame.SchematicForm
-		reskinProfessionForm(form)
-		form.MinimalBackground:SetAlpha(0)
-		B.CreateBDFrame(form, .25):SetInside()
+		local inspectForm = inspectFrame.SchematicForm
+		B.StripTextures(inspectForm)
+		if inspectForm.MinimalBackground then inspectForm.MinimalBackground:SetAlpha(0) end
+		B.CreateBDFrame(inspectForm, .25):SetInside()
+		reskinProfessionForm(inspectForm)
 	end
 end
