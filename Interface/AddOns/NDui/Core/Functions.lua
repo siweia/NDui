@@ -1010,11 +1010,13 @@ do
 		bg:SetPoint("BOTTOMRIGHT", -8, 0)
 		self.bg = bg
 
-		self:SetHighlightTexture(DB.bdTex)
-		local hl = self:GetHighlightTexture()
-		hl:ClearAllPoints()
-		hl:SetInside(bg)
-		hl:SetVertexColor(cr, cg, cb, .25)
+		if self.SetHighlightTexture then
+			self:SetHighlightTexture(DB.bdTex)
+			local hl = self:GetHighlightTexture()
+			hl:ClearAllPoints()
+			hl:SetInside(bg)
+			hl:SetVertexColor(cr, cg, cb, .25)
+		end
 	end
 
 	function B:ResetTabAnchor()
