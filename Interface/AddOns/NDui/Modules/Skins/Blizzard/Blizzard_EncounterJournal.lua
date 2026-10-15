@@ -82,9 +82,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				child:SetHighlightTexture(0)
 				child:SetPushedTexture(0)
 
-				local bg = B.CreateBDFrame(child.bgImage)
-				bg:SetPoint("TOPLEFT", 3, -3)
-				bg:SetPoint("BOTTOMRIGHT", -4, 2)
+				child.bgImage:SetTexCoord(.05, .63, .05, .69) -- cut grey edges
+				B.CreateBDFrame(child.bgImage)
 
 				child.styled = true
 			end
