@@ -149,6 +149,11 @@ end
 function Bar:MicroMenu()
 	if not C.db["Actionbar"]["MicroMenu"] then return end
 
+	-- Reparenting triggers Blizzard layout before all micro buttons have coordinates.
+	if MicroMenu and MicroMenu.UpdateHelpTicketButtonAnchor then
+		MicroMenu.UpdateHelpTicketButtonAnchor = B.Dummy
+	end
+
 	menubar = CreateFrame("Frame", nil, UIParent)
 	menubar:SetSize(323, 22)
 	menubar.mover = B.Mover(menubar, L["Menubar"], "Menubar", C.Skins.MicroMenuPos)
@@ -198,7 +203,4 @@ function Bar:MicroMenu()
 		QueueStatusButton:SetScale(.9)
 	end
 
-	if MicroMenu and MicroMenu.UpdateHelpTicketButtonAnchor then
-		MicroMenu.UpdateHelpTicketButtonAnchor = B.Dummy
-	end
 end
