@@ -6,8 +6,8 @@
 ## Version: 0.0.2
 ## X-Support: Forever
 ## X-Website: https://github.com/siweia/NDui
-## X-Curse-Project-ID: 324377
-## X-WoWI-ID: 24846
+## X-Curse-Project-ID: 338794
+## X-WoWI-ID: 25188
 ## X-Wago-ID: Xb6X4j6p
 ## SavedVariables: NDuiADB, NDuiPDB
 ## SavedVariablesPerCharacter: NDuiDB
