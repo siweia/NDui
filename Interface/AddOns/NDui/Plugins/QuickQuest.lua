@@ -106,6 +106,7 @@ local ignoreQuestNPC = {
 	[326027] = true,	-- 运输站回收生成器DX-82
 	[162804] = true,	-- 威娜莉
 	[195935] = true,	-- 塔薇欧，海象人钓鱼道具
+	[269987] = true,	-- 奥林·迷光
 }
 
 C.IgnoreQuestNPC = {}
