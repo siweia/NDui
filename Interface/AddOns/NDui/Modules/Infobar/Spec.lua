@@ -5,10 +5,12 @@ if not C.Infobar.Spec then return end
 local module = B:GetModule("Infobar")
 local info = module:RegisterInfobar("Spec", C.Infobar.SpecPos)
 local format, wipe, select, next = string.format, table.wipe, select, next
-local SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS = SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS
+local SPECIALIZATION, TALENTS_BUTTON = SPECIALIZATION, TALENTS_BUTTON
 local PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT = PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT
-local GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID
-local GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization = GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization
+local GetSpecialization = C_SpecializationInfo.GetSpecialization
+local GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
+local GetLootSpecialization, GetSpecializationInfoByID = GetLootSpecialization, GetSpecializationInfoByID
+local GetPvpTalentInfoByID, SetLootSpecialization = GetPvpTalentInfoByID, SetLootSpecialization
 local C_SpecializationInfo_SetSpecialization = C_SpecializationInfo.SetSpecialization
 local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
 local C_SpecializationInfo_CanPlayerUsePVPTalentUI = C_SpecializationInfo.CanPlayerUsePVPTalentUI
@@ -19,7 +21,7 @@ local function addIcon(texture)
 	return texture
 end
 
-local currentSpecIndex, currentLootIndex, newMenu, numSpecs, numLocal
+local currentSpecIndex, currentLootIndex, newMenu, defaultLootMenu, numLocal
 
 info.eventList = {
 	"PLAYER_ENTERING_WORLD",
@@ -59,19 +61,18 @@ info.onEnter = function(self)
 	local specID, specName, _, specIcon = GetSpecializationInfo(currentSpecIndex)
 	GameTooltip:AddLine(addIcon(specIcon).." "..specName, .6,.8,1)
 
-	for t = 1, MAX_TALENT_TIERS do
-		for c = 1, 3 do
-			local _, name, icon, selected = GetTalentInfo(t, c, 1)
-			if selected then
-				GameTooltip:AddLine(addIcon(icon).." "..name, 1,1,1)
-			end
-		end
-	end
-
 	local configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID)
-	local info = configID and C_Traits.GetConfigInfo(configID)
-	if info and info.name then
-		GameTooltip:AddLine("   ("..info.name..")", 1,1,1)
+	local configInfo = configID and C_Traits.GetConfigInfo(configID)
+	if C_ClassTalents.GetStarterBuildActive() then
+		GameTooltip:AddLine("   ("..TALENT_FRAME_DROP_DOWN_STARTER_BUILD..")", 1,1,1)
+	else
+		if not configInfo then
+			configID = C_ClassTalents.GetActiveConfigID()
+			configInfo = configID and C_Traits.GetConfigInfo(configID)
+		end
+		if configInfo and configInfo.name then
+			GameTooltip:AddLine("   ("..configInfo.name..")", 1,1,1)
+		end
 	end
 
 	if C_SpecializationInfo_CanPlayerUsePVPTalentUI() then
@@ -120,8 +121,7 @@ end
 
 local function refreshDefaultLootSpec()
 	if not currentSpecIndex or currentSpecIndex == 5 then return end
-	local mult = 3 + numSpecs
-	newMenu[numLocal - mult].text = format(LOOT_SPECIALIZATION_DEFAULT, (select(2, GetSpecializationInfo(currentSpecIndex))) or NONE)
+	defaultLootMenu.text = format(LOOT_SPECIALIZATION_DEFAULT, (select(2, GetSpecializationInfo(currentSpecIndex))) or NONE)
 end
 
 local function selectCurrentConfig(_, configID, specID)
@@ -141,16 +141,16 @@ end
 
 local function refreshAllTraits()
 	local numConfig = numLocal or 0
-	local specID = GetSpecializationInfo(currentSpecIndex)
+	local specID = currentSpecIndex and GetSpecializationInfo(currentSpecIndex)
 	local configIDs = specID and C_ClassTalents.GetConfigIDsBySpecID(specID)
 	if configIDs then
 		for i = 1, #configIDs do
 			local configID = configIDs[i]
-			if configID then
-				local info = C_Traits.GetConfigInfo(configID)
+			local configInfo = configID and C_Traits.GetConfigInfo(configID)
+			if configInfo then
 				numConfig = numConfig + 1
 				if not newMenu[numConfig] then newMenu[numConfig] = {} end
-				newMenu[numConfig].text = info.name
+				newMenu[numConfig].text = configInfo.name
 				newMenu[numConfig].arg1 = configID
 				newMenu[numConfig].arg2 = specID
 				newMenu[numConfig].func = selectCurrentConfig
@@ -184,27 +184,32 @@ local seperatorMenu = {
 local function BuildSpecMenu()
 	if newMenu then return end
 
+	defaultLootMenu = {text = "", arg1 = 0, func = selectLootSpec, checked = checkLootSpec}
 	newMenu = {
 		{text = SPECIALIZATION, isTitle = true, notCheckable = true},
 		seperatorMenu,
 		{text = SELECT_LOOT_SPECIALIZATION, isTitle = true, notCheckable = true},
-		{text = "", arg1 = 0, func = selectLootSpec, checked = checkLootSpec},
+		defaultLootMenu,
 	}
 
-	for i = 1, 4 do
+	local numSpecs = 0
+	local classID = select(3, UnitClass("player"))
+	for i = 1, C_SpecializationInfo.GetNumSpecializationsForClassID(classID) do
 		local id, name = GetSpecializationInfo(i)
-		if id then
-			numSpecs = (numSpecs or 0) + 1
-			tinsert(newMenu, i+1, {text = name, arg1 = i, func = selectSpec, checked = checkSpec})
+		if id and id > 0 and name then
+			numSpecs = numSpecs + 1
+			tinsert(newMenu, numSpecs+1, {text = name, arg1 = i, func = selectSpec, checked = checkSpec})
 			tinsert(newMenu, {text = name, arg1 = id, func = selectLootSpec, checked = checkLootSpec})
 		end
 	end
 
 	tinsert(newMenu, seperatorMenu)
-	tinsert(newMenu, {text = C_Spell.GetSpellName(384255), isTitle = true, notCheckable = true})
-	tinsert(newMenu, {text = BLUE_FONT_COLOR:WrapTextInColorCode(TALENT_FRAME_DROP_DOWN_STARTER_BUILD), func = selectCurrentConfig,
-		arg1 = STARTER_BUILD,	checked = function() return C_ClassTalents.GetStarterBuildActive() end,
-	})
+	tinsert(newMenu, {text = TALENTS_BUTTON, isTitle = true, notCheckable = true})
+	if C_ClassTalents.GetHasStarterBuild() then
+		tinsert(newMenu, {text = BLUE_FONT_COLOR:WrapTextInColorCode(TALENT_FRAME_DROP_DOWN_STARTER_BUILD), func = selectCurrentConfig,
+			arg1 = STARTER_BUILD,	checked = function() return C_ClassTalents.GetStarterBuildActive() end,
+		})
+	end
 
 	numLocal = #newMenu
 
