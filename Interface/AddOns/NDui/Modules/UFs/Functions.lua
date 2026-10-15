@@ -544,15 +544,6 @@ function UF:TogglePortraits()
 	end
 end
 
-local function postUpdateRole(element, role)
-	if element:IsShown() then
-		if role == Enum.LFGRole.Damage and C.db["UFs"]["ShowRoleMode"] == 3 then
-			element:Hide()
-			return
-		end
-	end
-end
-
 function UF:CreateRestingIndicator(self)
 	local frame = CreateFrame("Frame", "NDuiRestingFrame", self)
 	frame:SetSize(5, 5)
@@ -640,7 +631,7 @@ function UF:CreateIcons(self)
 			ri:SetPoint("TOPRIGHT", self, 0, 8)
 		end
 		ri:SetSize(15, 15)
-		ri.PostUpdate = postUpdateRole
+		ri.damageAtlas = C.db["UFs"]["ShowRoleMode"] == 3 and ""
 		self.GroupRoleIndicator = ri
 	end
 
