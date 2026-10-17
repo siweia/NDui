@@ -501,20 +501,12 @@ local function reloadDefaultSettings()
 	C.db["BFA"] = true -- don't empty data on next loading
 end
 
-local function IsOldProfileVersion(version)
-	local major, minor, patch = strsplit(".", version)
-	major = tonumber(major)
-	minor = tonumber(minor)
-	patch = tonumber(patch)
-	return major < 7 and (minor < 23 or (minor == 23 and patch < 2))
-end
-
 function G:ImportGUIData()
 	local profile = G.ProfileDataFrame.editBox:GetText()
 	if B:IsBase64(profile) then profile = B:Decode(profile) end
 	local options = {strsplit(";", profile)}
 	local title, version = strsplit(":", options[1])
-	if title ~= "NDuiSettings" or IsOldProfileVersion(version) then
+	if title ~= "NDuiSettings" then
 		UIErrorsFrame:AddMessage(DB.InfoColor..L["Import data error"])
 		return
 	end
