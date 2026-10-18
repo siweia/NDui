@@ -3,17 +3,17 @@
 ## Title-zhCN: |cff0080ffBaudErrorFrame|r 报错收集
 ## Title-zhTW: |cff0080ffBaudErrorFrame|r 報錯收集
 ## Notes: Improved error reporting
-## Author: Baudzilla, wolftankk, Siweia
-## Version: NDui Mod
+## Author: Baudzilla, Siweia
+## Version: 1
 ## SavedVariables: BaudErrorFrameConfig
 
-## Category-enUS: Development Tools
+## Category: Development Tools
 ## Category-deDE: Entwicklungstools
 ## Category-esES: Herramientas de Desarrollo
 ## Category-esMX: Herramientas de Desarrollo
 ## Category-frFR: Outils de Développement
-## Category-itIT:
-## Category-koKR:
+## Category-itIT: Strumenti di sviluppo
+## Category-koKR: 개발 도구
 ## Category-ptBR: Ferramentas de Desenvolvimento
 ## Category-ruRU: Инструменты разработки
 ## Category-zhCN: 开发工具
