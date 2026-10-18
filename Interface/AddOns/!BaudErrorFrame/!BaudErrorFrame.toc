@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120105, 50504, 38002, 20506, 16001, 11509
 ## Title: |cff0080ffBaudErrorFrame|r
 ## Title-zhCN: |cff0080ffBaudErrorFrame|r 报错收集
 ## Title-zhTW: |cff0080ffBaudErrorFrame|r 報錯收集
@@ -19,4 +19,5 @@
 ## Category-zhCN: 开发工具
 ## Category-zhTW: 開發工具
 
-BaudErrorFrame.xml
+BaudErrorFrame.lua
+BaudErrorFrameUI.lua
