@@ -136,6 +136,7 @@ function M:TradeTabs_Create(spellID, toyID, itemID, skillLine)
 	tab:SetNormalTexture(texture)
 	tab:SetHighlightTexture(DB.bdTex)
 	tab:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
+	B.CreateSD(tab)
 	tab:Show()
 
 	tab.CD = CreateFrame("Cooldown", nil, tab, "CooldownFrameTemplate")

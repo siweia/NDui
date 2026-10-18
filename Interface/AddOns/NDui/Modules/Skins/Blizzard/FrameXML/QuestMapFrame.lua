@@ -39,6 +39,20 @@ local function ReskinAWQHeader()
 	end
 end
 
+function B:ReskinSideTab()
+	if not self or self.bg then return end
+
+	self.Background:SetAlpha(0)
+	self.bg = B.SetBD(self.Icon)
+	self.SelectedTexture:SetDrawLayer("BACKGROUND")
+	self.SelectedTexture:SetColorTexture(DB.r, DB.g, DB.b, .35)
+	self.SelectedTexture:SetInside(self.bg)
+	self.HighlightTexture:SetColorTexture(1, 1, 1, .25)
+	self.HighlightTexture:SetInside(self.bg)
+	self.TabGlow:SetColorTexture(DB.r, DB.g, DB.b, .35)
+	self.TabGlow:SetInside(self.bg)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -252,22 +266,7 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Side tabs
-	local function reskinSideTab(tab)
-		if not tab then return end
-
-		B.StripTextures(tab, 2)
-		tab.bg = B.SetBD(tab)
-		tab.bg:SetInside(nil, 2, 2)
-		local hl = tab:CreateTexture(nil, "HIGHLIGHT")
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetInside(tab.bg)
-
-		tab.SelectedTexture:SetDrawLayer("BACKGROUND")
-		tab.SelectedTexture:SetColorTexture(cr, cg, cb, .25)
-		tab.SelectedTexture:SetInside(tab.bg)
-	end
-
 	for _, tab in ipairs(QuestMapFrame.TabButtons) do
-		reskinSideTab(tab)
+		B.ReskinSideTab(tab)
 	end
 end)

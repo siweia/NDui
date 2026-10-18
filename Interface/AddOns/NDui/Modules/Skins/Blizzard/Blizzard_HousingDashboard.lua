@@ -3,14 +3,34 @@ local B, C, L, DB = unpack(ns)
 
 C.themes["Blizzard_HousingDashboard"] = function()
 	B.ReskinPortraitFrame(HousingDashboardFrame)
-	B.Reskin(HousingDashboardFrame.HouseInfoContent.HouseFinderButton)
 	B.ReskinDropDown(HousingDashboardFrame.HouseDropdown.Dropdown)
-	B.ReskinCheck(HousingDashboardFrame.HouseInfoContent.ContentFrame.HouseUpgradeFrame.WatchFavorButton)
-	B.Reskin(HousingDashboardFrame.HouseInfoContent.DashboardNoHousesFrame.NoHouseButton)
+	B.ReskinTrimScroll(HousingDashboardFrame.CollectionContent.BlueprintCollection.ScrollBar)
 
-	B.ReskinEditBox(HousingDashboardFrame.CatalogContent.SearchBox)
-	B.ReskinFilterButton(HousingDashboardFrame.CatalogContent.Filters.FilterDropdown)
-	B.ReskinTrimScroll(HousingDashboardFrame.CatalogContent.OptionsContainer.ScrollBar)
+	for _, tab in ipairs(HousingDashboardFrame.TabButtons) do
+		B.ReskinSideTab(tab)
+	end
+
+	local catalogContent = HousingDashboardFrame.CatalogContent
+	if catalogContent then
+		B.ReskinEditBox(catalogContent.SearchBox, 22)
+		B.ReskinFilterButton(catalogContent.Filters.FilterDropdown)
+		B.ReskinTrimScroll(catalogContent.OptionsContainer.ScrollBar)
+	end
+
+	local infoContent = HousingDashboardFrame.HouseInfoContent
+	if infoContent then
+		B.Reskin(infoContent.HouseFinderButton)
+		B.Reskin(infoContent.DashboardNoHousesFrame.NoHouseButton)
+		B.ReskinCheck(infoContent.ContentFrame.HouseUpgradeFrame.WatchFavorButton)
+
+		hooksecurefunc(infoContent.ContentFrame, "UpdateTabs", function(frame)
+			for _, tab in pairs({frame.TabSystem:GetChildren()}) do
+				if not tab.bg then
+					B.ReskinTab(tab)
+				end
+			end
+		end)
+	end
 end
 
 C.themes["Blizzard_HousingModelPreview"] = function()

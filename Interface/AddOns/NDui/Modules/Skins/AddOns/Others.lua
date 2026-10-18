@@ -522,6 +522,27 @@ function S:ManuscriptsJournal()
 	end
 end
 
+function S:MCL()
+	if not IsAddOnLoaded("MCL") then return end
+
+	hooksecurefunc(QuestMapFrame, "ValidateTabs", function()
+		if MCL_MapPanel and not MCL_MapPanel.styled then
+			B.StripTextures(MCL_MapPanel)
+			B.CreateBDFrame(MCL_MapPanel, .25)
+			MCL_MapPanel.styled = true	
+		end
+		if MCL_MapPanelTab and not MCL_MapPanelTab.styled then
+			B.ReskinSideTab(MCL_MapPanelTab)
+			MCL_MapPanelTab.styled = true
+		end
+		if MCL_MapPanelScrollFrame and not MCL_MapPanelScrollFrame.styled then
+			B.StripTextures(MCL_MapPanelScrollFrame)
+			B.ReskinTrimScroll(MCL_MapPanelScrollFrame.ScrollBar)
+			MCL_MapPanelScrollFrame.styled = true
+		end
+	end)
+end
+
 function S:OtherSkins()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
@@ -536,4 +557,5 @@ function S:OtherSkins()
 	S:PSFJ()
 	S:TLDR()
 	S:ManuscriptsJournal()
+	S:MCL()
 end
