@@ -52,8 +52,8 @@ local function updateArenaPreparationElements(self, event, elementName, specID)
 			-- if(element.colorPower and elementName == 'Power') then
 				-- FIXME: no idea if we can get power type here without the unit
 			if(element.colorClass) then
-				local _, _, _, _, _, class = GetSpecializationInfoByID(specID)
-				color = self.colors.class[class]
+				local info = UnitFrameUtil.GetArenaOpponentSpecDisplayInfo(self.__unitIndex)
+				color = CreateColor(info.barColorR, info.barColorG, info.barColorB)
 			elseif(element.colorReaction) then
 				color = self.colors.reaction[2]
 			elseif(element.colorSmooth and self.colors.health:GetCurve()) then
@@ -111,13 +111,15 @@ local function updateArenaPreparation(self, event)
 			self:PreUpdate(event)
 		end
 
-		if(not self:IsEnabled() and GetNumArenaOpponentSpecs() < self.__unitIndex) then
+		local numOpponents = GetNumArenaOpponentSpecs()
+		if(not self:IsEnabled() and numOpponents < self.__unitIndex) then
 			-- hide the object if the opponent leaves
 			self:Hide()
 		end
 
 		local specID = GetArenaOpponentSpec(self.__unitIndex)
-		if(specID) then
+		-- Secret spec IDs cannot control visibility; use the public opponent count.
+		if(self.__unitIndex <= numOpponents) then
 			if(self:IsEnabled()) then
 				-- disable the unit watch so we can forcefully show the object ourselves
 				self:Disable()

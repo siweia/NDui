@@ -152,11 +152,7 @@ local tagStrings = {
 	['arenaspec'] = [[function(u)
 		local id = u:match('arena(%d)$')
 		if(id) then
-			local specID = GetArenaOpponentSpec(tonumber(id))
-			if(specID and specID > 0) then
-				local _, specName = GetSpecializationInfoByID(specID)
-				return specName
-			end
+			return UnitFrameUtil.GetArenaOpponentSpecDisplayInfo(tonumber(id)).specName
 		end
 	end]],
 
@@ -354,11 +350,8 @@ local tagStrings = {
 		else
 			local id = u:match('arena(%d)$')
 			if(id) then
-				local specID = GetArenaOpponentSpec(tonumber(id))
-				if(specID and specID > 0) then
-					_, _, _, _, _, class = GetSpecializationInfoByID(specID)
-					return _COLORS.class[class]:GenerateHexColorMarkup()
-				end
+				local info = UnitFrameUtil.GetArenaOpponentSpecDisplayInfo(tonumber(id))
+				return CreateColor(info.barColorR, info.barColorG, info.barColorB):GenerateHexColorMarkup()
 			end
 		end
 	end]],
