@@ -87,9 +87,14 @@ info.eventList = {
 	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD",
 }
 
+local function refreshInfo()
+	info:onEvent()
+end
+
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
-		self:UnregisterEvent(event)
+		C_Timer_After(1, refreshInfo)
+		return
 	end
 
 	if event == "PLAYER_REGEN_ENABLED" then
