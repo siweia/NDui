@@ -87,9 +87,14 @@ info.eventList = {
 	"UPDATE_INVENTORY_DURABILITY", "PLAYER_ENTERING_WORLD",
 }
 
+local function refreshInfo()
+	info:onEvent()
+end
+
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
-		self:UnregisterEvent(event)
+		C_Timer_After(1, refreshInfo)
+		return
 	end
 
 	if event == "PLAYER_REGEN_ENABLED" then
@@ -112,11 +117,6 @@ info.onEvent = function(self, event)
 		needToRepair = false
 	end
 end
-
-C_Timer_After(5, function()
-	if not info.text then return end
-	info:onEvent("PLAYER_ENTERING_WORLD")
-end)
 
 info.onMouseUp = function(self, btn)
 	if btn == "MiddleButton" then
