@@ -399,6 +399,8 @@ function UF:OnLogin()
 		end
 
 		if C.db["UFs"]["Arena"] then
+			-- UnitFrameUtil's arena spec bar colors follow this CVar.
+			SetCVar("pvpFramesDisplayClassColor", 1)
 			oUF:RegisterStyle("Arena", CreateArenaStyle)
 			oUF:SetActiveStyle("Arena")
 			local arena = {}
