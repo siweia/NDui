@@ -87,7 +87,7 @@ local function CaptureError(message)
 	AddCaptured(message, stack, locals)
 end
 
-function BaudErrorFrameHandler(message)
+local function ErrorHandler(message)
 	if handlingError then return end
 
 	handlingError = true
@@ -101,12 +101,8 @@ function BaudErrorFrameHandler(message)
 	handlingError = false
 end
 
-function BaudErrorFrameAdd(message, retrace)
+function BEF.AddError(message, retrace)
 	AddCaptured(message, debugstack(retrace or 2), "")
-end
-
-function BaudErrorFrameScrollValue()
-	return #errors
 end
 
 function BEF.Clear()
@@ -159,4 +155,4 @@ function BEF.GetDetail(entry)
 end
 
 -- Leave the global setter available to other addons and Blizzard.
-seterrorhandler(BaudErrorFrameHandler)
+seterrorhandler(ErrorHandler)

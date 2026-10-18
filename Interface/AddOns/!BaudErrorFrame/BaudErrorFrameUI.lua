@@ -24,8 +24,8 @@ local function CreateLabel(parent, text)
 	return label
 end
 
-local function CreateScrollBar(name, parent)
-	local scrollBar = CreateFrame("EventFrame", name, parent, "MinimalScrollBar")
+local function CreateScrollBar(parent)
+	local scrollBar = CreateFrame("EventFrame", nil, parent, "MinimalScrollBar")
 	scrollBar:SetPoint("TOPRIGHT", -10, -2)
 	scrollBar:SetPoint("BOTTOMRIGHT", -10, 2)
 	return scrollBar
@@ -37,10 +37,10 @@ list:SetPoint("TOPLEFT", 16, -50)
 list:SetPoint("TOPRIGHT", -16, -50)
 CreateLabel(list, ERRORS)
 
-local listScroll = CreateFrame("Frame", "BaudErrorFrameListScrollBox", list, "WowScrollBoxList")
+local listScroll = CreateFrame("Frame", nil, list, "WowScrollBoxList")
 listScroll:SetPoint("TOPLEFT", 4, -4)
 listScroll:SetPoint("BOTTOMRIGHT", -30, 4)
-local listScrollBar = CreateScrollBar("BaudErrorFrameListScrollBar", list)
+local listScrollBar = CreateScrollBar(list)
 local dataProvider = CreateDataProvider()
 
 local detail = CreateFrame("Frame", nil, frame, "InsetFrameTemplate")
@@ -48,12 +48,12 @@ detail:SetPoint("TOPLEFT", 16, -242)
 detail:SetPoint("BOTTOMRIGHT", -16, 48)
 CreateLabel(detail, QUEST_DESCRIPTION)
 
-local detailScroll = CreateFrame("Frame", "BaudErrorFrameDetailScrollBox", detail, "WowScrollBox")
+local detailScroll = CreateFrame("Frame", nil, detail, "WowScrollBox")
 detailScroll:SetPoint("TOPLEFT", 4, -4)
 detailScroll:SetPoint("BOTTOMRIGHT", -30, 4)
-local detailScrollBar = CreateScrollBar("BaudErrorFrameDetailScrollBar", detail)
+local detailScrollBar = CreateScrollBar(detail)
 
-local editBox = CreateFrame("EditBox", "BaudErrorFrameEditBox", detailScroll)
+local editBox = CreateFrame("EditBox", nil, detailScroll)
 editBox:SetSize(526, 1)
 editBox:SetAutoFocus(false)
 editBox:SetMultiLine(true)
@@ -140,19 +140,19 @@ local function UpdateList()
 end
 frame:SetScript("OnShow", UpdateList)
 
-local function CreateButton(name, text, onClick)
-	local button = CreateFrame("Button", name, frame, "UIPanelButtonTemplate")
+local function CreateButton(text, onClick)
+	local button = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 	button:SetSize(100, 22)
 	button:SetText(text)
 	button:SetScript("OnClick", onClick)
 	return button
 end
 
-local reloadButton = CreateButton("BaudErrorFrameReloadUIButton", RELOADUI, ReloadUI)
+local reloadButton = CreateButton(RELOADUI, ReloadUI)
 reloadButton:SetPoint("BOTTOMLEFT", 16, 12)
-local closeButton = CreateButton("BaudErrorFrameCloseButton", CLOSE, function() frame:Hide() end)
+local closeButton = CreateButton(CLOSE, function() frame:Hide() end)
 closeButton:SetPoint("BOTTOMRIGHT", -16, 12)
-local clearButton = CreateButton("BaudErrorFrameClearButton", CLEAR_ALL, function()
+local clearButton = CreateButton(CLEAR_ALL, function()
 	BEF.Clear()
 	UpdateList()
 	frame:Hide()
@@ -282,7 +282,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
 		local message = taintMessages[event]
 		if message then
 			local addon, action = ...
-			BaudErrorFrameAdd(message:format(BEF.PrepareText(addon, "unknown"), BEF.PrepareText(action, "unknown")), 4)
+			BEF.AddError(message:format(BEF.PrepareText(addon, "unknown"), BEF.PrepareText(action, "unknown")), 4)
 		end
 	end
 end)
