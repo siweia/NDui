@@ -48,7 +48,7 @@ function M:UpdateProfessions()
 				if not C_SpellBook.IsSpellBookItemPassive(slotID, BOOKTYPE_PROFESSION) then
 					local spellID = GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION).spellID
 					if spellID then
-						M:TradeTabs_Create(spellID)
+						M:TradeTabs_Create(spellID, nil, nil, i == 1 and skillLine or nil)
 					end
 				end
 			end
@@ -64,11 +64,12 @@ function M:UpdateProfessions()
 end
 
 function M:TradeTabs_Update()
+	local professionInfo = C_TradeSkillUI.GetBaseProfessionInfo()
 	for _, tab in pairs(tabList) do
 		local spellID = tab.spellID
 		local itemID = tab.itemID
 
-		if spellID and C_Spell.IsCurrentSpell(spellID) then
+		if tab.skillLine and tab.skillLine == professionInfo.professionID then
 			tab:SetChecked(true)
 			tab.cover:Show()
 		else
@@ -105,7 +106,7 @@ function M:TradeTabs_Reskin()
 end
 
 local index = 1
-function M:TradeTabs_Create(spellID, toyID, itemID)
+function M:TradeTabs_Create(spellID, toyID, itemID, skillLine)
 	local name, _, texture
 	if toyID then
 		_, name, texture = C_ToyBox_GetToyInfo(toyID)
@@ -120,9 +121,11 @@ function M:TradeTabs_Create(spellID, toyID, itemID)
 	tab:SetSize(32, 32)
 	tab.tooltip = name
 	tab.spellID = spellID
+	tab.skillLine = skillLine
 	tab.itemID = toyID or itemID
 	tab.type = (toyID and "toy") or (itemID and "item") or "spell"
 	tab:RegisterForClicks("AnyUp", "AnyDown")
+	tab:SetScript("PostClick", M.TradeTabs_Update)
 	if spellID == 818 then -- cooking fire
 		tab:SetAttribute("type", "macro")
 		tab:SetAttribute("macrotext", "/cast [@player]"..name)
@@ -199,7 +202,6 @@ function M:TradeTabs_OnLoad()
 	M:TradeTabs_Update()
 	B:RegisterEvent("TRADE_SKILL_SHOW", M.TradeTabs_Update)
 	B:RegisterEvent("TRADE_SKILL_CLOSE", M.TradeTabs_Update)
-	B:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", M.TradeTabs_Update)
 
 	M:TradeTabs_FilterIcons()
 
