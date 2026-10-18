@@ -252,7 +252,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		B.StripTextures(TrainingGroundsFrame.BonusTrainingGroundList)
 		TrainingGroundsFrame.BonusTrainingGroundList.ShadowOverlay:Hide()
 
-		local names = {"RandomTrainingGroundButton", "RandomTrainingGroundArenaButton"}
+		local names = {"RandomTrainingGroundButton", "RandomTrainingGroundArenaButton", "RandomTrainingGroundBGButton"}
 		for _, name in pairs(names) do
 			local bu = TrainingGroundsFrame.BonusTrainingGroundList[name]
 			if bu then
