@@ -164,6 +164,7 @@ function M:ItemLevel_UpdateInfo(slotFrame, info, quality)
 		local enchant = info.enchantText
 		if enchant then
 			enchant = gsub(enchant, "^.-%s%-%s", "") -- remove enchant prefix
+			enchant = gsub(enchant, "^(.-)(|A.-|a)$", "%2%1") -- move quality icon before name
 			slotFrame.enchantText:SetText(enchant)
 		end
 
