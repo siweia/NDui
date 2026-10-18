@@ -111,7 +111,9 @@ function S:KrowiAF()
 	B.ReskinFilterButton(KrowiAF_AchievementFrameFilterButton)
 	KrowiAF_AchievementFrameFilterButton:ClearAllPoints()
 	KrowiAF_AchievementFrameFilterButton:SetPoint("TOPLEFT", 24, 0)
-	B.ReskinEditBox(KrowiAF_SearchBoxFrame)
+	B.ReskinEditBox(KrowiAF_SearchBoxFrame, 22)
+	KrowiAF_SearchBoxFrame:ClearAllPoints()
+	KrowiAF_SearchBoxFrame:SetPoint("TOPRIGHT", AchievementFrameCloseButton, "TOPLEFT", -5, 0)
 	KrowiAF_SearchOptionsMenuButton:DisableDrawLayer("BACKGROUND")
 
 	local frame = KrowiAF_CategoriesFrame
