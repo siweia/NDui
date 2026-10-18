@@ -70,7 +70,22 @@ local function UpdateProfessionQuality(self)
 	ClearProfessionQuality(self)
 end
 
+local function StyleChargeCooldown(button)
+	if heh then return end
+	local cooldown = button.chargeCooldown
+	if not cooldown or cooldown.__styled then return end
+
+	-- Keep recharge progress visible while another charge is still usable.
+	cooldown:ClearAllPoints()
+	cooldown:SetAllPoints(button.icon)
+	cooldown:SetDrawSwipe(true)
+	cooldown:SetSwipeColor(0, 0, 0, .35)
+	cooldown:SetDrawEdge(true)
+	cooldown.__styled = true
+end
+
 function Bar:UpdateEquipedColor(button)
+	StyleChargeCooldown(button)
 	if button.__bg then
 		if button.Border:IsShown() then
 			button.__bg:SetBackdropBorderColor(0, .7, .1)
@@ -165,6 +180,7 @@ function Bar:StyleActionButton(button)
 	if button.lossOfControlCooldown then
 		button.lossOfControlCooldown:SetInside()
 	end
+	StyleChargeCooldown(button)
 
 	button.__styled = true
 end
