@@ -584,7 +584,6 @@ G.DefaultSettings = {
 		MarkerSize = 28,
 		BlockInvite = false,
 		BlockRequest = false,
-		SendActionCD = true,
 		MDGuildBest = true,
 		FasterSkip = false,
 		EnhanceDressup = true,
@@ -1219,7 +1218,6 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Actionbar", "EquipColor", L["EquipColor"].."*", nil, nil, updateHotkeys},
 		{1, "Actionbar", "ShowGlow", L["ShowGlow"].."*", nil, nil, updateOverlays},
 		{4, "ACCOUNT", "GlowMode", L["GlowMode"].."*", true, {"Pixel", "Autocast", "Action Button", "Proc Glow"}},
-		{1, "Misc", "SendActionCD", HeaderTag..L["SendActionCD"].."*", nil, nil, nil, L["SendActionCDTip"]},
 	},
 	[2] = {
 		{1, "Bags", "Enable", HeaderTag..L["Enable Bags"]},

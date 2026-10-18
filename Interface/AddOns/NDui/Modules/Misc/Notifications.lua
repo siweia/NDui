@@ -10,8 +10,6 @@ local IsInRaid, IsInGroup, IsInInstance, IsInGuild = IsInRaid, IsInGroup, IsInIn
 local UnitName, Ambiguate, GetTime = UnitName, Ambiguate, GetTime
 local GetSpellLink = C_Spell.GetSpellLink
 local GetSpellName = C_Spell.GetSpellName
-local GetActionInfo, GetMacroSpell, GetMacroItem = GetActionInfo, GetMacroSpell, GetMacroItem
-local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_VignetteInfo_GetVignetteInfo = C_VignetteInfo.GetVignetteInfo
 local C_VignetteInfo_GetVignettePosition = C_VignetteInfo.GetVignettePosition
@@ -493,98 +491,6 @@ function M:CheckIncompatible()
 	end
 end
 
--- Send cooldown status
-local function GetRemainTime(second)
-	if second > 60 then
-		return format("%d:%.2d", second/60, second%60)
-	else
-		return format("%ds", second)
-	end
-end
-
-local lastCDSend = 0
-function M:SendCurrentSpell(thisTime, spellID)
-	local spellLink = GetSpellLink(spellID)
-	local chargeInfo = C_Spell.GetSpellCharges(spellID)
-	local charges = chargeInfo and chargeInfo.currentCharges
-	local maxCharges = chargeInfo and chargeInfo.maxCharges
-	local chargeStart = chargeInfo and chargeInfo.cooldownStartTime
-	local chargeDuration = chargeInfo and chargeInfo.cooldownDuration
-
-	if charges and maxCharges then
-		if B:NotSecretValue(charges) then
-			if charges ~= maxCharges then
-				local remain = chargeStart + chargeDuration - thisTime
-				B:SendChatMessage(format(L["ChargesRemaining"], spellLink, charges, maxCharges, GetRemainTime(remain)), M:GetMsgChannel())
-			else
-				B:SendChatMessage(format(L["ChargesCompleted"], spellLink, charges, maxCharges), M:GetMsgChannel())
-			end
-		end
-	else
-		local cooldownInfo = C_Spell.GetSpellCooldown(spellID)
-		local start = cooldownInfo and cooldownInfo.startTime
-		local duration = cooldownInfo and cooldownInfo.duration
-
-		if B:NotSecretValue(duration) then
-			if start and duration > 0 then
-				local remain = start + duration - thisTime
-				B:SendChatMessage(format(L["CooldownRemaining"], spellLink, GetRemainTime(remain)), M:GetMsgChannel())
-			else
-				B:SendChatMessage(format(L["CooldownCompleted"], spellLink), M:GetMsgChannel())
-			end
-		end
-	end
-end
-
-function M:SendCurrentItem(thisTime, itemID, itemLink, itemCount)
-	local start, duration = C_Item.GetItemCooldown(itemID)
-	if start and duration > 0 then
-		local remain = start + duration - thisTime
-		B:SendChatMessage(format(L["CooldownRemaining"], itemLink.." x"..itemCount, GetRemainTime(remain)), M:GetMsgChannel())
-	else
-		B:SendChatMessage(format(L["CooldownCompleted"], itemLink.." x"..itemCount), M:GetMsgChannel())
-	end
-end
-
-function M:AnalyzeButtonCooldown()
-	if not self._state_action then return end -- no action for pet actionbar
-	if not C.db["Misc"]["SendActionCD"] then return end
-	if not IsInGroup() then return end
-	if InCombatLockdown() then return end
-
-	local thisTime = GetTime()
-	if thisTime - lastCDSend < 1.5 then return end
-	lastCDSend = thisTime
-
-	local spellType, id, subType = GetActionInfo(self._state_action)
-	local itemCount = GetActionCount(self._state_action)
-	if spellType == "spell" then
-		M:SendCurrentSpell(thisTime, id)
-	elseif spellType == "item" then
-		local itemName, itemLink = C_Item.GetItemInfo(id)
-		M:SendCurrentItem(thisTime, id, itemLink or itemName, itemCount)
-	elseif spellType == "macro" then
-		local spellID = subType == "spell" and id or GetMacroSpell(id)
-		local _, itemLink = GetMacroItem(id)
-		local itemID = itemLink and GetItemInfoFromHyperlink(itemLink)
-		if spellID then
-			M:SendCurrentSpell(thisTime, spellID)
-		elseif itemID then
-			M:SendCurrentItem(thisTime, itemID, itemLink, itemCount)
-		end
-	end
-end
-
-function M:SendCDStatus()
-	if not C.db["Actionbar"]["Enable"] then return end
-
-	local Bar = B:GetModule("Actionbar")
-	if not Bar then return end
-	for _, button in pairs(Bar.buttons) do
-		button:HookScript("OnMouseWheel", M.AnalyzeButtonCooldown)
-	end
-end
-
 -- Init
 function M:AddAlerts()
 	M:RareAlert()
@@ -592,6 +498,5 @@ function M:AddAlerts()
 	C_Timer.After(0, M.VersionCheck) -- add delay to avoid taint
 	M:SpellItemAlert()
 	M:CheckIncompatible()
-	M:SendCDStatus()
 end
 M:RegisterMisc("Notifications", M.AddAlerts)
