@@ -70,8 +70,21 @@ local function UpdateProfessionQuality(self)
 	ClearProfessionQuality(self)
 end
 
+local function StyleChargeCooldownText(button)
+	local cooldown = button.chargeCooldown
+	local normalText = button.cooldownText
+	if not cooldown or not normalText or button.chargeCooldownText then return end
+
+	local text = cooldown:GetRegions()
+	if not text or not text:IsObjectType("FontString") then return end
+
+	text:SetFont(normalText:GetFont())
+	button.chargeCooldownText = text
+end
+
 local function StyleChargeCooldown(button)
-	if heh then return end
+	StyleChargeCooldownText(button)
+
 	local cooldown = button.chargeCooldown
 	if not cooldown or cooldown.__styled then return end
 
@@ -81,6 +94,7 @@ local function StyleChargeCooldown(button)
 	cooldown:SetDrawSwipe(true)
 	cooldown:SetSwipeColor(0, 0, 0, .35)
 	cooldown:SetDrawEdge(true)
+	cooldown:SetHideCountdownNumbers(false)
 	cooldown.__styled = true
 end
 

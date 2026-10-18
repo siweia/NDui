@@ -398,6 +398,9 @@ function Bar:UpdateCooldownText(name)
 		if button.cooldownText then
 			button.cooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
 		end
+		if button.chargeCooldownText then
+			button.chargeCooldownText:SetFont(DB.Font[1], fontSize, DB.Font[3])
+		end
 	end
 
 	if name then return end
