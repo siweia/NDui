@@ -1799,18 +1799,19 @@ function UF:CreateDebuffs(self)
 	else
 		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
 	end
+	local sortMethod = AuraContainerSortMethod.UnitFrameDebuff
 
 	UF:ConfigureBuffAndDebuff(bu, true)
 	if mystyle == "raid" and bu.__filterType == 2 then
 		for index, group in ipairs(RAID_DEBUFF_GROUPS) do
-			AddAuraGroup(bu, RAID_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters, AuraContainerSortMethod.Default)
+			AddAuraGroup(bu, RAID_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters, sortMethod)
 		end
 	elseif mystyle == "arena" and bu.__filterType == 3 then
 		for index, group in ipairs(ARENA_DEBUFF_GROUPS) do
-			AddAuraGroup(bu, ARENA_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters)
+			AddAuraGroup(bu, ARENA_DEBUFF_GROUP_NAME..index, group.filter, bu.num, index, group.candidateFilters, sortMethod)
 		end
 	else
-		AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1)
+		AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1, {}, sortMethod)
 	end
 	UF:UpdateAuraContainer(self, bu)
 
