@@ -78,9 +78,14 @@ local function SaveClickTime()
 	lastClick = GetTime()
 end
 
+local function refreshInfo()
+	info:onEvent()
+end
+
 info.onEvent = function(self, event)
 	if event == "PLAYER_ENTERING_WORLD" then
-		self:UnregisterEvent(event)
+		C_Timer_After(1, refreshInfo)
+		return
 	end
 
 	if UpdateAllSlots() > 0 then
