@@ -147,6 +147,7 @@ end
 
 function M:ItemLevel_UpdateInfo(slotFrame, info, quality)
 	local infoType = type(info)
+	slotFrame.dataInstanceID = infoType == "table" and info.dataInstanceID or nil
 	local level
 	if infoType == "table" then
 		level = info.iLvl
@@ -205,23 +206,15 @@ function M:ItemLevel_UpdateInfo(slotFrame, info, quality)
 	end
 end
 
-function M:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
-	C_Timer.After(.1, function()
-		local quality = select(3, GetItemInfo(link))
-		local info = B.GetItemLevel(link, unit, index, C.db["Misc"]["GemNEnchant"])
-		if info == "tooSoon" then return end
-		M:ItemLevel_UpdateInfo(slotFrame, info, quality)
-	end)
-end
-
-function M:ItemLevel_SetupLevel(frame, strType, unit)
+function M:ItemLevel_SetupLevel(frame, strType, unit, dataInstanceID)
 	if not UnitExists(unit) then return end
 
 	M:CreateItemString(frame, strType)
 
 	for index, slot in pairs(inspectSlots) do
-		if index ~= 4 then
-			local slotFrame = _G[strType..slot.."Slot"]
+		local slotFrame = _G[strType..slot.."Slot"]
+		if index ~= 4 and (not dataInstanceID or slotFrame.dataInstanceID == dataInstanceID) then
+			slotFrame.dataInstanceID = nil
 			slotFrame.iLvlText:SetText("")
 			slotFrame.enchantText:SetText("")
 			for i = 1, 10 do
@@ -234,11 +227,7 @@ function M:ItemLevel_SetupLevel(frame, strType, unit)
 			if link then
 				local quality = select(3, GetItemInfo(link))
 				local info = B.GetItemLevel(link, unit, index, C.db["Misc"]["GemNEnchant"])
-				if info == "tooSoon" then
-					M:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
-				else
-					M:ItemLevel_UpdateInfo(slotFrame, info, quality)
-				end
+				M:ItemLevel_UpdateInfo(slotFrame, info, quality)
 
 				if strType == "Character" then
 					M:ItemLevel_UpdateTraits(slotFrame, index, link)
@@ -250,6 +239,17 @@ end
 
 function M:ItemLevel_UpdatePlayer()
 	M:ItemLevel_SetupLevel(CharacterFrame, "Character", "player")
+end
+
+function M.ItemLevel_TooltipDataUpdate(_, dataInstanceID)
+	if not dataInstanceID then return end
+
+	if CharacterFrame:IsShown() then
+		M:ItemLevel_SetupLevel(CharacterFrame, "Character", "player", dataInstanceID)
+	end
+	if InspectFrame and InspectFrame:IsShown() and InspectFrame.unit then
+		M:ItemLevel_SetupLevel(InspectFrame, "Inspect", InspectFrame.unit, dataInstanceID)
+	end
 end
 
 function M:ItemLevel_UpdateInspect(...)
@@ -489,6 +489,7 @@ function M:ShowItemLevel()
 	-- iLvl on CharacterFrame
 	CharacterFrame:HookScript("OnShow", M.ItemLevel_UpdatePlayer)
 	B:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", M.ItemLevel_UpdatePlayer)
+	B:RegisterEvent("TOOLTIP_DATA_UPDATE", M.ItemLevel_TooltipDataUpdate)
 
 	-- iLvl on InspectFrame
 	B:RegisterEvent("INSPECT_READY", M.ItemLevel_UpdateInspect)

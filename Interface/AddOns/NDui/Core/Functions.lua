@@ -244,6 +244,7 @@ do
 			wipe(slotData.gemsColor)
 			slotData.iLvl = nil
 			slotData.enchantText = nil
+			slotData.dataInstanceID = data.dataInstanceID
 
 			local num = 0
 			for i = 2, #data.lines do
@@ -255,7 +256,8 @@ do
 						local level = strmatch(text, "(%d+)%)?$")
 						slotData.iLvl = tonumber(level) or 0
 					end
-				elseif data.id == 158075 then -- heart of azeroth
+				end
+				if data.id == 158075 then -- heart of azeroth
 					if lineData.essenceIcon then
 						num = num + 1
 						slotData.gems[num] = lineData.essenceIcon
