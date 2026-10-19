@@ -1187,11 +1187,11 @@ local function AddNewTag(parent, anchor)
 end
 
 G.TabList = {
-	L["Actionbar"],
+	IsNew..L["Actionbar"],
 	IsNew..L["Bags"],
 	L["Unitframes"],
 	IsNew..L["RaidFrame"],
-	IsNew..L["Nameplate"],
+	L["Nameplate"],
 	L["PlayerPlate"],
 	L["Auras"],
 	L["Raid Tools"],
@@ -1213,7 +1213,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorTenth"], L["ColorText"], L["WhiteTenth"], L["WhiteText"], DISABLE}, updateCooldown},
 		{3, "Actionbar", "CDFontSize", L["ExtraActionCDFontSize"].."*", true, {5, 30, 1}, updateCDText, L["ExtraActionCDFontSizeTip"]},
-		{1, "Actionbar", "ChargeCooldown", L["Show Charge Cooldown"].."*", nil, nil, updateChargeCooldown},
+		{1, "Actionbar", "ChargeCooldown", IsNew..L["Show Charge Cooldown"].."*", nil, nil, updateChargeCooldown},
 		{},--blank
 		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
 		{1, "Actionbar", "ButtonLock", L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},
@@ -1296,9 +1296,9 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{4, "Nameplate", "NameType", L["NameTextType"].."*", nil, {DISABLE, L["Tag:name"], L["Tag:levelname"], L["Tag:rarename"], L["Tag:rarelevelname"]}, refreshNameplates, L["PlateLevelTagTip"]},
 		{4, "Nameplate", "HealthType", L["HealthValueType"].."*", true, G.HealthValues, refreshNameplates, L["100PercentTip"]},
 		{},--blank
-		{1, "Nameplate", "PlateAuras", IsNew..L["PlateAuras"], nil, setupNameplateAuras, refreshNameplates},
-		{1, "Nameplate", "PlateBuffs", IsNew..L["PlateBuffs"], true, setupNameplateBuffs, refreshNameplates},
-		{1, "Nameplate", "PlateCC", IsNew..L["PlateCC"], nil, setupNameplateCC, refreshNameplates},
+		{1, "Nameplate", "PlateAuras", L["PlateAuras"], nil, setupNameplateAuras, refreshNameplates},
+		{1, "Nameplate", "PlateBuffs", L["PlateBuffs"], true, setupNameplateBuffs, refreshNameplates},
+		{1, "Nameplate", "PlateCC", L["PlateCC"], nil, setupNameplateCC, refreshNameplates},
 		{},--blank
 		{4, "Nameplate", "TargetIndicator", L["TargetIndicator"].."*", nil, {DISABLE, L["TopArrow"], L["RightArrow"], L["TargetGlow"], L["TopNGlow"], L["RightNGlow"]}, refreshNameplates},
 		{3, "Nameplate", "ExecuteRatio", L["ExecuteRatio"].."*", true, {0, 90, 1}, refreseExecuteRatio, L["ExecuteRatioTip"]},
@@ -1317,7 +1317,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		--{1, "Nameplate", "ColorByDot", HeaderTag..L["ColorByDot"].."*", nil, setupNameplateColorDots, nil, L["ColorByDotTip"]},
 		{1, "Nameplate", "CastbarGlow", HeaderTag..L["PlateCastbarGlow"].."*", nil, nil, nil, L["PlateCastbarGlowTip"]},
 		{1, "Nameplate", "ShowCustomUnits", HeaderTag..L["ShowCustomUnits"].."*", true, setupNameplateUnitFilter, updateCustomUnitList, L["CustomUnitsTip"]},
-		{1, "Nameplate", "MobTypeColoring", IsNew..HeaderTag..L["MobTypeColoring"].."*", nil, setupNameplateMobColors, nil, L["MobTypeColoringTip"]},
+		{1, "Nameplate", "MobTypeColoring", HeaderTag..L["MobTypeColoring"].."*", nil, setupNameplateMobColors, nil, L["MobTypeColoringTip"]},
 		{},--blank
 		{1, "Nameplate", "TankMode", HeaderTag..L["Tank Mode"].."*", nil, nil, nil, L["TankModeTip"]},
 		{1, "Nameplate", "DPSRevertThreat", L["DPS Revert Threat"].."*", true, nil, nil, L["RevertThreatTip"]},
@@ -1337,7 +1337,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Nameplate", "ShowPlayerPlate", HeaderTag..L["Enable PlayerPlate"].."*", nil, nil, togglePlayerPlate},
 		{1, "Nameplate", "TargetPower", HeaderTag..L["TargetClassPower"].."*", true, nil, toggleTargetClassPower},
 		{},--blank
-		{1, "Nameplate", "PPHealthBar", IsNew..L["PlayerPlate HealthBar"].."*", nil, nil, togglePlateHealth},
+		{1, "Nameplate", "PPHealthBar", L["PlayerPlate HealthBar"].."*", nil, nil, togglePlateHealth},
 		{1, "Nameplate", "PPFadeout", L["PlayerPlate Fadeout"].."*", true, nil, togglePlateVisibility},
 		{1, "Nameplate", "PPPowerText", L["PlayerPlate PowerText"].."*", nil, nil, togglePlatePower},
 		{1, "Nameplate", "PPGCDTicker", L["PlayerPlate GCDTicker"].."*", nil, nil, toggleGCDTicker},
