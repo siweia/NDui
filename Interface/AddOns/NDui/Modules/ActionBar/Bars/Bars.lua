@@ -382,6 +382,20 @@ function Bar:UpdateOverlays()
 	end
 end
 
+local chargeCooldowns = {}
+
+function Bar:UpdateChargeCooldownNumbers(cooldown)
+	local hideNumbers = not C.db["Actionbar"]["ChargeCooldown"]
+	if cooldown then
+		chargeCooldowns[cooldown] = true
+		cooldown:SetHideCountdownNumbers(hideNumbers)
+	else
+		for frame in pairs(chargeCooldowns) do
+			frame:SetHideCountdownNumbers(hideNumbers)
+		end
+	end
+end
+
 function Bar:UpdateCooldownText(name)
 	local buttons, fontSize
 	if name then

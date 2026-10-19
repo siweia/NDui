@@ -30,6 +30,7 @@ G.DefaultSettings = {
 		ButtonLock = true,
 		CDFontSize = 16,
 		CDFormat = 4,
+		ChargeCooldown = true,
 
 		Bar1 = true,
 		Bar1Flyout = 1,
@@ -910,6 +911,10 @@ local function updateCDText()
 	B:GetModule("Actionbar"):UpdateCooldownText()
 end
 
+local function updateChargeCooldown()
+	B:GetModule("Actionbar"):UpdateChargeCooldownNumbers()
+end
+
 local function updateReminder()
 	B:GetModule("Auras"):InitReminder()
 end
@@ -1208,6 +1213,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorTenth"], L["ColorText"], L["WhiteTenth"], L["WhiteText"], DISABLE}, updateCooldown},
 		{3, "Actionbar", "CDFontSize", L["ExtraActionCDFontSize"].."*", true, {5, 30, 1}, updateCDText, L["ExtraActionCDFontSizeTip"]},
+		{1, "Actionbar", "ChargeCooldown", L["Show Charge Cooldown"].."*", nil, nil, updateChargeCooldown},
 		{},--blank
 		{1, "Actionbar", "KeyDown", L["KeyDown"].."*", nil, nil, updateHotkeys, L["KeyDownTip"]},
 		{1, "Actionbar", "ButtonLock", L["ButtonLock"].."*", true, nil, updateHotkeys, L["ButtonLockTip"]},

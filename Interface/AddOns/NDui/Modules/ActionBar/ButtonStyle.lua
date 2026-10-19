@@ -94,7 +94,7 @@ local function StyleChargeCooldown(button)
 	cooldown:SetDrawSwipe(true)
 	cooldown:SetSwipeColor(0, 0, 0, .35)
 	cooldown:SetDrawEdge(true)
-	cooldown:SetHideCountdownNumbers(false)
+	Bar:UpdateChargeCooldownNumbers(cooldown)
 	cooldown.__styled = true
 end
 
