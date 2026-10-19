@@ -122,10 +122,9 @@ local function UpdateHealthColorByIndex(health, index)
 		health.colorDisconnected = (index == 2)
 	end
 	health.colorSmooth = (index == 3)
-	if index == 1 then
-		health:SetStatusBarColor(.1, .1, .1)
-		health.bg:SetVertexColor(.6, .6, .6)
-	elseif index == 2 or index == 3 then
+	health:SetStatusBarColor(.1, .1, .1, 1)
+	health.bg:SetVertexColor(.6, .6, .6, 1)
+	if index == 2 or index == 3 then
 		health.bg:SetVertexColor(0, 0, 0, .7)
 	elseif index == 4 then
 		health:SetStatusBarColor(0, 0, 0, 0)
