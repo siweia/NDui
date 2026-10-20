@@ -682,7 +682,6 @@ function module:SetupMinimap()
 
 	-- Hide Blizz
 	MinimapCluster:EnableMouse(false)
-	--MinimapCluster.BorderTop:Hide()
 	MinimapCluster.ZoneTextButton:Hide()
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)
@@ -697,6 +696,9 @@ function module:SetupMinimap()
 	if MinimapBackdrop.StaticOverlayTexture then
 		MinimapBackdrop.StaticOverlayTexture:SetInside(Minimap)
 		MinimapBackdrop.StaticOverlayTexture:SetTexCoord(.2, .8, .2, .8)
+	end
+	if MinimapBackdrop.ExternalEventURLButton then
+		MinimapBackdrop.ExternalEventURLButton:Hide()
 	end
 
 	-- Add Elements
