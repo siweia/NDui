@@ -682,7 +682,7 @@ function module:SetupMinimap()
 
 	-- Hide Blizz
 	MinimapCluster:EnableMouse(false)
-	MinimapCluster.BorderTop:Hide()
+	--MinimapCluster.BorderTop:Hide()
 	MinimapCluster.ZoneTextButton:Hide()
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)
