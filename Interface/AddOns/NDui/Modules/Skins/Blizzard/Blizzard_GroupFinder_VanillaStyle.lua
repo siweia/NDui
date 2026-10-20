@@ -9,7 +9,7 @@ end
 local function reskinSideTab(tab)
 	tab.Background:SetAlpha(0)
 	tab.Icon:RemoveMaskTexture(tab.Mask)
-	B.ReskinIcon(tab.Icon)
+	B.ReskinIcon(tab.Icon, true)
 	tab.HighlightTexture:SetColorTexture(1, 1, 1, .25)
 	tab.HighlightTexture:SetAllPoints(tab.Icon)
 	tab.SelectedTexture:SetColorTexture(DB.r, DB.g, DB.b, .25)
@@ -22,8 +22,10 @@ end
 
 local function reskinCategoryButton(button)
 	if button.styled then return end
-	button.Cover:SetAlpha(0)
+	button.Cover:Hide()
 	B.Reskin(button)
+	button.Icon:SetTexCoord(.01, .99, .01, .99)
+	button.__bg:SetOutside(button.Icon)
 	button.styled = true
 end
 
@@ -119,8 +121,10 @@ C.themes["Blizzard_GroupFinder_VanillaStyle"] = function()
 	B.ReskinCheck(listing.NewPlayerFriendlyButton.CheckButton)
 	local categories = listing.CategoryView.CategorySelection
 	local function updateCategories(self)
-		for _, button in ipairs(self.CategoryButtons) do
-			reskinCategoryButton(button)
+		if self.CategoryButtons then
+			for _, button in ipairs(self.CategoryButtons) do
+				reskinCategoryButton(button)
+			end
 		end
 	end
 	hooksecurefunc("LFGListingCategorySelection_UpdateCategoryButtons", updateCategories)
@@ -129,6 +133,7 @@ C.themes["Blizzard_GroupFinder_VanillaStyle"] = function()
 	local activity = listing.ActivityView
 	B.StripTextures(activity, 0)
 	B.ReskinDropDown(activity.PlayStyleDropdown)
+	B.ReskinDropDown(activity.VoiceChatDropdown)
 	B.ReskinCheck(activity.LevelRangesCheckbox.Checkbox)
 	B.ReskinTrimScroll(activity.ScrollBar)
 	B.StripTextures(activity.Comment)
@@ -144,6 +149,7 @@ C.themes["Blizzard_GroupFinder_VanillaStyle"] = function()
 	B.ReskinDropDown(browse.ActivityDropdown)
 	B.ReskinFilterReset(browse.ActivityDropdown.ResetButton)
 	B.Reskin(browse.RefreshButton)
+	browse.RefreshButton.__bg:SetInside(nil, 5, 5)
 	B.Reskin(browse.OptionsButton)
 	B.Reskin(browse.SendMessageButton)
 	B.Reskin(browse.GroupInviteButton)
@@ -153,7 +159,10 @@ C.themes["Blizzard_GroupFinder_VanillaStyle"] = function()
 
 	local who = LFGWhoListFrame
 	B.ReskinInput(who.EditBox)
+	who.EditBox.__bg:SetPoint("TOPLEFT", -5, -6)
+	who.EditBox.__bg:SetPoint("BOTTOMRIGHT", -3, 4)
 	B.Reskin(who.WhoSearch)
+	who.WhoSearch.__bg:SetInside(nil, 5, 5)
 	B.ReskinFilterButton(who.FilterDropdown)
 	B.ReskinTrimScroll(who.ScrollBar)
 	reskinScrollBox(who.ScrollBox, reskinWhoEntry)

@@ -90,7 +90,7 @@ tinsert(C.defaultThemes, function()
 	local function reskinSideTab(tab)
 		tab.Background:SetAlpha(0)
 		tab.Icon:RemoveMaskTexture(tab.Mask)
-		tab.bg = B.ReskinIcon(tab.Icon)
+		tab.bg = B.ReskinIcon(tab.Icon, true)
 		local hl = tab.HighlightTexture
 		hl:SetColorTexture(1, 1, 1, .25)
 		hl:SetAllPoints(tab.Icon)
@@ -307,52 +307,16 @@ tinsert(C.defaultThemes, function()
 		end
 	end)
 
-	-- Character progress bars use a Fill texture rather than a StatusBar texture.
-	local progressColors = {
-		["common-stat-bar-red"] = {.8, .2, .2},
-		["common-stat-bar-green"] = {0, .7, 0},
-		["common-stat-bar-blue"] = {.2, .6, 1},
-		["common-stat-bar-white"] = {1, 1, 1},
-	}
-
-	local function updateProgressColor(bar, color)
-		if color then bar.nduiBarColor = {color:GetRGB()} end
-		local base = progressColors[bar.nduiFillAtlas] or progressColors["common-stat-bar-white"]
-		local tint = bar.nduiBarColor
-		bar.Fill:SetVertexColor(base[1]*tint[1], base[2]*tint[2], base[3]*tint[3])
-	end
-
-	local function updateProgressPercent(bar, percent)
-		bar.nduiFillPercent = math.min(1, math.max(0, percent))
-		bar.Fill:SetTexCoord(0, 1, 0, 1)
-	end
-
-	local function updateProgressTexture(bar)
-		bar.nduiFillAtlas = bar.Fill:GetAtlas() or bar.nduiFillAtlas
-		bar.Fill:SetTexture(DB.normTex)
-		bar.Fill:SetHeight(bar.nduiFillHeight)
-		-- SetAtlas with UseAtlasSize resets the width; restore the current progress.
-		bar:SetFillPercent(bar.nduiFillPercent)
-		updateProgressColor(bar)
-	end
-
 	local function reskinProgressBar(bar)
 		if bar.styled then return end
 		bar:DisableDrawLayer("BACKGROUND")
 		bar.Fill:RemoveMaskTexture(bar.Mask)
-		bar.nduiFillHeight = bar.Fill:GetHeight()
-		bar.nduiFillPercent = bar:GetWidth() > 0 and bar.Fill:GetWidth()/bar:GetWidth() or 0
-		bar.nduiBarColor = {bar.Fill:GetVertexColor()}
-
 		local bg = B.CreateBDFrame(bar, .25)
 		bg:ClearAllPoints()
-		bg:SetPoint("LEFT", bar, -C.mult, 0)
-		bg:SetPoint("RIGHT", bar, C.mult, 0)
-		bg:SetHeight(bar.nduiFillHeight + 2*C.mult)
-		hooksecurefunc(bar, "SetFillPercent", updateProgressPercent)
-		hooksecurefunc(bar, "SetFillTextureByColorType", updateProgressTexture)
-		if bar.UpdateBarColor then hooksecurefunc(bar, "UpdateBarColor", updateProgressColor) end
-		updateProgressTexture(bar)
+		bg:SetPoint("LEFT", bar.FillArea, -C.mult, 0)
+		bg:SetPoint("RIGHT", bar.FillArea, C.mult, 0)
+		bg:SetHeight(bar.Fill:GetHeight() + 2*C.mult)
+
 		bar.styled = true
 	end
 

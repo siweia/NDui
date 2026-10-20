@@ -1,6 +1,33 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function updateCategoryTab(tab, isSelected)
+	if isSelected then
+		tab.bg:SetBackdropBorderColor(DB.r, DB.g, DB.b)
+	else
+		B.SetBorderColor(tab.bg)
+	end
+end
+
+local function reskinCategoryTabs(spellBook)
+	for _, tab in ipairs(spellBook.CategoryTabSystem.tabs) do
+		if not tab.styled then
+			tab.Icon:RemoveMaskTexture(tab.IconMask)
+			tab.bg = B.ReskinIcon(tab.Icon)
+			tab.SquareBackground:SetAlpha(0)
+			tab.SquareBackgroundActive:SetAlpha(0)
+			tab.SquareBackgroundActiveGlow:SetAlpha(0)
+			tab:SetHighlightTexture(DB.bdTex)
+			local hl = tab:GetHighlightTexture()
+			hl:SetAllPoints(tab.Icon)
+			hl:SetVertexColor(1, 1, 1, .25)
+			hooksecurefunc(tab, "SetTabSelected", updateCategoryTab)
+			updateCategoryTab(tab, tab:IsSelected())
+			tab.styled = true
+		end
+	end
+end
+
 local function reskinTalentFrameDialog(dialog)
 	B.StripTextures(dialog)
 	B.SetBD(dialog)
@@ -88,16 +115,16 @@ C.themes["Blizzard_PlayerSpells"] = function()
 		spellBook.Bookmark:SetAlpha(.5)
 		spellBook.BookCornerFlipbook:Hide()
 
-		for i = 1, 3 do
-			local tab = select(i, spellBook.CategoryTabSystem:GetChildren())
-			B.ReskinTab(tab)
-		end
+		hooksecurefunc(spellBook, "CreateCategoryMixins", reskinCategoryTabs)
+		reskinCategoryTabs(spellBook)
 		B.ReskinArrow(spellBook.PagedSpellsFrame.PagingControls.PrevPageButton, "left")
 		B.ReskinArrow(spellBook.PagedSpellsFrame.PagingControls.NextPageButton, "right")
 		spellBook.PagedSpellsFrame.PagingControls.PageText:SetTextColor(1, 1, 1)
 		B.ReskinEditBox(spellBook.SearchBox)
 		spellBook.SearchBox.__bg:SetPoint("TOPLEFT", -5, -3)
 		spellBook.SearchBox.__bg:SetPoint("BOTTOMRIGHT", 2, 3)
+		B.StripTextures(spellBook.SettingsDropdown)
+		B.ReskinArrow(spellBook.SettingsDropdown, "down")
 
 		hooksecurefunc(spellBook.PagedSpellsFrame, "DisplayViewsForCurrentPage", function(self)
 			for _, frame in self:EnumerateFrames() do
