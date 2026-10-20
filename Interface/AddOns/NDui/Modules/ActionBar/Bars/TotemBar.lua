@@ -18,12 +18,12 @@ local function reskinTotemButton(button, nobg, uncut, strip)
 	else
 		if button.overlayTex then button.overlayTex:Hide() end
 		if button.SlotBackground then button.SlotBackground:Hide() end
-		if button:GetNormalTexture() then button:GetNormalTexture():Hide() end
+		if button:GetNormalTexture() then button:GetNormalTexture():SetAlpha(0) end
 		if button.PushedTexture then button.PushedTexture:SetAlpha(0) end
 	end
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-	local icon = _G[button:GetName().."Icon"] or button:GetRegions()
+	local icon = _G[button:GetName().."Icon"] or button.icon
 	if icon then
 		if not button.icon then button.icon = icon end
 		if not uncut then
@@ -32,6 +32,13 @@ local function reskinTotemButton(button, nobg, uncut, strip)
 		if not nobg then
 			button.bg = B.SetBD(icon)
 		end
+	end
+end
+
+local function updateSlotBackground(button, slot)
+	local slotButton = button.slotButton
+	if slot ~= 0 and slotButton and slotButton.background then
+		slotButton.background:SetAlpha(button.icon and button.icon:IsShown() and 0 or 1)
 	end
 end
 
@@ -93,6 +100,7 @@ function Bar:TotemBar()
 	for i = 1, 4 do
 		local button = _G["MultiCastSlotButton"..i]
 		reskinTotemButton(button)
+		button.bg = B.SetBD(button)
 		button:SetSize(iconSize, iconSize)
 		if i ~= 1 then
 			button:SetPoint("LEFT", prevButton, "RIGHT", margin, 0)
@@ -115,11 +123,21 @@ function Bar:TotemBar()
 		end
 	end)
 
-	hooksecurefunc("MultiCastActionButton_Update", function(button, _, _, slot)
+	hooksecurefunc("MultiCastActionButton_Update", function(button, _, index, slot)
+		local pageOffset = ((MultiCastActionBarFrame.currentPage or 1) - 1) * 4
+		if index > pageOffset and index <= pageOffset + 4 then
+			updateSlotBackground(button, slot)
+		end
 		if InCombatLockdown() then return end
 		button:ClearAllPoints()
 		button:SetAllPoints(button.slotButton)
 	end)
+
+	local pageOffset = ((MultiCastActionBarFrame.currentPage or 1) - 1) * 4
+	for i = 1, 4 do
+		local button = _G["MultiCastActionButton"..pageOffset + i]
+		updateSlotBackground(button, button.slotButton and button.slotButton:GetID() or 0)
+	end
 
 	B.StripTextures(MultiCastFlyoutFrame)
 	reskinTotemArrow(MultiCastFlyoutFrameOpenButton, "up")
