@@ -253,7 +253,7 @@ end
 local function reskinSideTab(tab)
 	tab.Background:SetAlpha(0)
 	tab.Icon:RemoveMaskTexture(tab.Mask)
-	tab.bg = B.ReskinIcon(tab.Icon)
+	tab.bg = B.ReskinIcon(tab.Icon, true)
 	tab.SelectedTexture:SetColorTexture(DB.r, DB.g, DB.b, .35)
 	tab.SelectedTexture:SetAllPoints(tab.Icon)
 	tab.HighlightTexture:SetColorTexture(1, 1, 1, .25)
