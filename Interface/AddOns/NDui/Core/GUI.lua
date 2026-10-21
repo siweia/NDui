@@ -7,6 +7,7 @@ local tonumber, pairs, ipairs, next, type, tinsert = tonumber, pairs, ipairs, ne
 local min, max = math.min, math.max
 local cr, cg, cb = DB.r, DB.g, DB.b
 local guiTab, guiPage, f = {}, {}
+local optionSearchEntries = {}
 
 -- Default Settings
 G.DefaultSettings = {
@@ -1179,6 +1180,14 @@ local HeaderTag = "|cff00cc4c"
 local IsNew = "ISNEW"
 G.HealthValues = {DISABLE, L["ShowHealthDefault"], L["ShowHealthCurMax"], L["ShowHealthCurrent"], L["ShowHealthPercent"], L["ShowHealthLoss"], --[=[L["ShowHealthLossPercent"]]=]}
 
+local function cleanSearchText(text)
+	text = gsub(text or "", "ISNEW", "")
+	text = gsub(text, "|c%x%x%x%x%x%x%x%x", "")
+	text = gsub(text, "|r", "")
+	text = gsub(text, "%*", "")
+	return text
+end
+
 local function AddNewTag(parent, anchor)
 	local tag = CreateFrame("Frame", nil, parent, "NewFeatureLabelTemplate")
 	tag:SetPoint("LEFT", anchor or parent, -25, 10)
@@ -1644,8 +1653,9 @@ end
 local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
-	for _, option in pairs(G.OptionList[i]) do
+	for _, option in ipairs(G.OptionList[i]) do
 		local optType, key, value, name, horizon, data, callback, tooltip, disabled = unpack(option)
+		local optionOffset, searchFrame = offset
 		local isNew
 		if name then
 			local rawName, hasNew = gsub(name, "ISNEW", "")
@@ -1656,6 +1666,7 @@ local function CreateOption(i)
 		-- Checkboxes
 		if optType == 1 then
 			local cb = B.CreateCheckBox(parent)
+			searchFrame = cb
 			cb:SetHitRectInsets(-5, -5, -5, -5)
 			if horizon then
 				cb:SetPoint("TOPLEFT", 330, -offset + 35)
@@ -1690,6 +1701,7 @@ local function CreateOption(i)
 		-- Editbox
 		elseif optType == 2 then
 			local eb = B.CreateEditBox(parent, 200, 28)
+			searchFrame = eb
 			eb:SetMaxLetters(999)
 			eb.__key = key
 			eb.__value = value
@@ -1722,6 +1734,7 @@ local function CreateOption(i)
 				offset = offset + 70
 			end
 			local s = B.CreateSlider(parent, name, min, max, step, x, y)
+			searchFrame = s
 			if isNew then AddNewTag(s, s.Text) end
 			s.__key = key
 			s.__value = value
@@ -1743,6 +1756,7 @@ local function CreateOption(i)
 			end
 
 			local dd = B.CreateDropDown(parent, 200, 28, data)
+			searchFrame = dd
 			if horizon then
 				dd:SetPoint("TOPLEFT", 345, -offset + 45)
 			else
@@ -1773,6 +1787,7 @@ local function CreateOption(i)
 		-- Colorswatch
 		elseif optType == 5 then
 			local swatch = B.CreateColorSwatch(parent, name, CheckUIOption(key, value))
+			searchFrame = swatch
 			if isNew then AddNewTag(swatch) end
 			local width = 25 + (horizon or 0)*155
 			if horizon then
@@ -1790,11 +1805,26 @@ local function CreateOption(i)
 			end
 			offset = offset + 35
 		end
+
+		if searchFrame and name then
+			local label = cleanSearchText(name)
+			local category = cleanSearchText(G.TabList[i])
+			local scrollOffset = optionOffset
+			if horizon and optType == 1 then scrollOffset = max(0, optionOffset - 35) end
+			tinsert(optionSearchEntries, {
+				label = label,
+				category = category,
+				searchText = string.lower(label.." "..category),
+				tabIndex = i,
+				scrollOffset = scrollOffset,
+			})
+		end
 	end
 
 	local footer = CreateFrame("Frame", nil, parent)
 	footer:SetSize(20, 20)
 	footer:SetPoint("TOPLEFT", 25, -offset)
+	if i ~= 15 then parent:SetHeight(offset + 40) end
 end
 
 local function resetUrlBox(self)
@@ -1933,8 +1963,8 @@ local function OpenGUI()
 		if isNew > 0 then AddNewTag(guiTab[i]) end
 
 		guiPage[i] = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
-		guiPage[i]:SetPoint("TOPLEFT", 160, -50)
-		guiPage[i]:SetSize(610, 500)
+		guiPage[i]:SetPoint("TOPLEFT", 160, -82)
+		guiPage[i]:SetSize(610, 468)
 		B.CreateBDFrame(guiPage[i], .25)
 		guiPage[i]:Hide()
 		guiPage[i].child = CreateFrame("Frame", nil, guiPage[i])
@@ -1948,6 +1978,128 @@ local function OpenGUI()
 
 	G:CreateProfileGUI(guiPage[15]) -- profile GUI
 	G:SetupActionbarStyle(guiPage[1])
+
+	local searchBox = B.CreateEditBox(f, 210, 24)
+	searchBox:SetPoint("TOPLEFT", 160, -50)
+	searchBox:SetMaxLetters(100)
+	searchBox:SetTextInsets(25, 22, 0, 0)
+	local searchIcon = searchBox:CreateTexture(nil, "ARTWORK")
+	searchIcon:SetSize(14, 14)
+	searchIcon:SetPoint("LEFT", 6, 0)
+	searchIcon:SetTexture("Interface\\Common\\UI-Searchbox-Icon")
+	searchIcon:SetVertexColor(.7, .7, .7)
+	local searchPlaceholder = B.CreateFS(searchBox, 13, L["Search"], false, "LEFT", 25, 0)
+	searchPlaceholder:SetTextColor(.55, .55, .55)
+	local function updateSearchPlaceholder(self)
+		searchPlaceholder:SetShown((self:GetText() or "") == "" and not self:HasFocus())
+	end
+	local clearSearch = B.CreateButton(searchBox, 18, 18, true, DB.closeTex)
+	clearSearch:SetPoint("RIGHT", -3, 0)
+	clearSearch:Hide()
+	B.AddTooltip(clearSearch, "ANCHOR_TOP", L["Clear Search"], "info")
+
+	local resultFrame = CreateFrame("Frame", nil, f, "BackdropTemplate")
+	resultFrame:SetPoint("TOPLEFT", 160, -78)
+	resultFrame:SetSize(390, 40)
+	resultFrame:SetFrameStrata("DIALOG")
+	resultFrame:SetFrameLevel(f:GetFrameLevel() + 20)
+	B.CreateBD(resultFrame, .95)
+	resultFrame:Hide()
+
+	local resultScroll = CreateFrame("ScrollFrame", nil, resultFrame, "UIPanelScrollFrameTemplate")
+	resultScroll:SetPoint("TOPLEFT", 4, -4)
+	resultScroll:SetPoint("BOTTOMRIGHT", -25, 4)
+	B.ReskinScroll(resultScroll.ScrollBar)
+	resultScroll:SetScript("OnMouseWheel", scrollBarHook)
+	local resultChild = CreateFrame("Frame", nil, resultScroll)
+	resultChild:SetSize(355, 1)
+	resultScroll:SetScrollChild(resultChild)
+
+	local noResults = B.CreateFS(resultFrame, 13, L["No Search Results"], "system", "CENTER")
+	local resultButtons = {}
+	local function chooseSearchResult(self)
+		local entry = self.entry
+		local page = guiPage[entry.tabIndex]
+		SelectTab(entry.tabIndex)
+		local scroll = max(0, entry.scrollOffset - 55)
+		C_Timer.After(0, function()
+			page:SetVerticalScroll(min(scroll, page:GetVerticalScrollRange()))
+		end)
+		resultFrame:Hide()
+		searchBox:ClearFocus()
+	end
+
+	local function updateSearchResults(self)
+		local query = string.lower(self:GetText() or "")
+		query = gsub(query, "^%s+", "")
+		query = gsub(query, "%s+$", "")
+		updateSearchPlaceholder(self)
+		clearSearch:SetShown(query ~= "")
+		if query == "" then
+			resultFrame:Hide()
+			return
+		end
+
+		local count = 0
+		for _, entry in ipairs(optionSearchEntries) do
+			if strfind(entry.searchText, query, 1, true) then
+				count = count + 1
+				local button = resultButtons[count]
+				if not button then
+					button = CreateFrame("Button", nil, resultChild, "BackdropTemplate")
+					button:SetSize(350, 25)
+					button:SetPoint("TOPLEFT", 2, -2 - (count-1)*27)
+					B.CreateBD(button, .3)
+					button.text = B.CreateFS(button, 13, "", false, "LEFT", 8, 0)
+					button.text:SetPoint("RIGHT", -6, 0)
+					button:SetScript("OnEnter", function(self)
+						self:SetBackdropColor(cr, cg, cb, .3)
+					end)
+					button:SetScript("OnLeave", function(self)
+						self:SetBackdropColor(0, 0, 0, .3)
+					end)
+					button:SetScript("OnClick", chooseSearchResult)
+					resultButtons[count] = button
+				end
+				button.entry = entry
+				button.text:SetText(entry.label.."  |cffaaaaaa["..entry.category.."]|r")
+				button:Show()
+			end
+		end
+
+		for i = count + 1, #resultButtons do
+			resultButtons[i]:Hide()
+		end
+		resultFrame:SetHeight(max(38, min(count, 8)*27 + 8))
+		resultChild:SetHeight(max(1, count*27 + 4))
+		resultScroll:SetVerticalScroll(0)
+		resultScroll:SetShown(count > 0)
+		noResults:SetShown(count == 0)
+		resultFrame:Show()
+	end
+
+	searchBox:SetScript("OnTextChanged", updateSearchResults)
+	searchBox:SetScript("OnEditFocusGained", updateSearchResults)
+	searchBox:SetScript("OnEditFocusLost", updateSearchPlaceholder)
+	searchBox:SetScript("OnEnterPressed", function(self)
+		if resultFrame:IsShown() and resultButtons[1] then
+			chooseSearchResult(resultButtons[1])
+		else
+			self:ClearFocus()
+		end
+	end)
+	searchBox:SetScript("OnEscapePressed", function(self)
+		resultFrame:Hide()
+		self:ClearFocus()
+	end)
+	clearSearch:SetScript("OnClick", function()
+		searchBox:SetText("")
+		searchBox:SetFocus()
+	end)
+	f:HookScript("OnHide", function()
+		resultFrame:Hide()
+		searchBox:ClearFocus()
+	end)
 
 	local helpInfo = B.CreateHelpInfo(f, L["Option* Tips"])
 	helpInfo:SetPoint("TOPLEFT", 20, -5)
