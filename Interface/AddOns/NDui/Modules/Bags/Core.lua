@@ -1112,6 +1112,7 @@ function module:OnLogin()
 		self.Count:SetPoint("BOTTOMRIGHT", -1, 2)
 		B.SetFontSize(self.Count, C.db["Bags"]["FontSize"])
 		self.Cooldown:SetInside()
+		self.Cooldown:SetDrawEdge(false)
 		self.IconOverlay:SetInside()
 		self.IconOverlay2:SetInside()
 
