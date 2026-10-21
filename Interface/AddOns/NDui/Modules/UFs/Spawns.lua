@@ -430,7 +430,6 @@ function UF:OnLogin()
 		end
 		if CompactRaidFrameManager_SetSetting then
 			CompactRaidFrameManager_SetSetting("IsShown", "0")
-			UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
 			CompactRaidFrameManager:UnregisterAllEvents()
 			CompactRaidFrameManager:SetParent(B.HiddenFrame)
 		end
