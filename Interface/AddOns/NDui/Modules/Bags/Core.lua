@@ -1624,17 +1624,18 @@ function module:OnLogin()
 
 	-- Delay updates for data jam
 	local updater = CreateFrame("Frame", nil, f.main)
+	updater.delay = 0
 	updater:Hide()
 	updater:SetScript("OnUpdate", function(self, elapsed)
 		self.delay = self.delay - elapsed
-		if self.delay < 0 then
-			module:UpdateAllBags()
+		if self.delay <= 0 then
 			self:Hide()
+			module:UpdateAllBags()
 		end
 	end)
 
-	B:RegisterEvent("GET_ITEM_INFO_RECEIVED", function()
-		if module.Bags and module.Bags:IsShown() then
+	B:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(_, _, success)
+		if success and module.Bags and module.Bags:IsShown() then
 			updater.delay = 1
 			updater:Show()
 		end
