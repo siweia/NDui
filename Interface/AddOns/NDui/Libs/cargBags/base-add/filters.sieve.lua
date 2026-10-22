@@ -106,15 +106,17 @@ function FilterSet:Check(item)
 
 	-- check own filters
 	for filter, flag in pairs(funcs) do
-		local result = filter(item, params[filter])
-		if((flag == true and not result) or (flag == -1 and result)) then
-			return nil
+		if flag == true or flag == -1 then
+			local result = filter(item, params[filter])
+			if((flag == true and not result) or (flag == -1 and result)) then
+				return nil
+			end
 		end
 	end
 
 	-- check filters of chained sets
-	for tbl in pairs(self.chained) do
-		if(not tbl:Check(item)) then
+	for tbl, flag in pairs(self.chained) do
+		if(flag and not tbl:Check(item)) then
 			return nil
 		end
 	end
