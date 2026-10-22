@@ -350,6 +350,7 @@ tinsert(C.defaultThemes, function()
 					iconBg:SetBackdropBorderColor(HOUSING_REWARD_TOAST_LABEL_FONT_COLOR:GetRGBA())
 				end
 				frame.Border:Hide()
+				frame:DisableDrawLayer("BORDER")
 			end
 			frame.Background:SetTexture("")
 		end,
