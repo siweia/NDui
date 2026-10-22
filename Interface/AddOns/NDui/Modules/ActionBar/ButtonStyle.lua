@@ -92,7 +92,7 @@ local function StyleChargeCooldown(button)
 	cooldown:ClearAllPoints()
 	cooldown:SetAllPoints(button.icon)
 	cooldown:SetDrawSwipe(true)
-	cooldown:SetSwipeColor(0, 0, 0, .35)
+	cooldown:SetSwipeColor(0, 0, 0, 0)
 	cooldown:SetDrawEdge(true)
 	Bar:UpdateChargeCooldownNumbers(cooldown)
 	cooldown.__styled = true
