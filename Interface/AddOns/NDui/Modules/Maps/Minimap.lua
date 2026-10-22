@@ -602,7 +602,12 @@ function module:SetupMinimap()
 	MinimapCluster:KillEditMode()
 	MinimapCluster:ClearAllPoints()
 	MinimapCluster:SetAllPoints(Minimap)
-	MinimapCluster.BorderTop:Hide()
+	if MinimapCluster.BorderTop then
+		MinimapCluster.BorderTop:Hide()
+	end
+	if MinimapBackdrop.ExternalEventURLButton then
+		MinimapBackdrop.ExternalEventURLButton:Hide()
+	end
 
 	-- Add Elements
 	self:CreatePulse()
