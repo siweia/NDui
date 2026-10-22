@@ -308,6 +308,7 @@ function module:RecycleBin()
 
 	local isGoodLookingIcon = {
 		["Narci_MinimapButton"] = true,
+		["ArcUIv2MinimapButton"] = true,
 	}
 
 	local iconsPerRow = 10
@@ -331,7 +332,8 @@ function module:RecycleBin()
 					region:ClearAllPoints()
 					region:SetAllPoints()
 				end
-				if not isGoodLookingIcon[name] then
+				local hasMask = region.GetNumMaskTextures and region:GetNumMaskTextures() > 0
+				if not isGoodLookingIcon[name] and not hasMask then
 					region:SetTexCoord(unpack(DB.TexCoord))
 				end
 			end
