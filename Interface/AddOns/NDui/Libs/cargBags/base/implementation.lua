@@ -234,6 +234,36 @@ function Implementation:OnEvent(event, ...)
 	end
 end
 
+local function SetupFullUpdateQueue(impl)
+	impl.bagUpdateQueue = {}
+	impl.queuedBagIDs = {}
+	local updateQueue = CreateFrame("Frame", nil, impl)
+	updateQueue:Hide()
+	updateQueue:SetScript("OnUpdate", function(frame)
+		local bagID = table.remove(impl.bagUpdateQueue, 1)
+		if not bagID then
+			frame:Hide()
+			return
+		end
+
+		impl.queuedBagIDs[bagID] = nil
+		impl:BAG_UPDATE("BAG_UPDATE", bagID)
+		if #impl.bagUpdateQueue == 0 then
+			frame:Hide()
+		end
+	end)
+
+	impl.bagUpdateQueueFrame = updateQueue
+end
+
+function Implementation:QueueBagUpdate(bagID)
+	if not self.queuedBagIDs[bagID] then
+		self.queuedBagIDs[bagID] = true
+		self.bagUpdateQueue[#self.bagUpdateQueue + 1] = bagID
+	end
+	self.bagUpdateQueueFrame:Show()
+end
+
 --[[!
 	Inits the implementation by registering events
 	@callback OnInit
@@ -249,6 +279,7 @@ function Implementation:Init()
 	self.notInited = nil
 
 	if(self.OnInit) then self:OnInit() end
+	SetupFullUpdateQueue(self)
 
 	if(not self.buttonClass) then
 		self:SetDefaultItemButtonClass()
@@ -410,6 +441,23 @@ function Implementation:UpdateBag(bagID)
 	end
 end
 
+local function ForEachBagToUpdate(impl, callback)
+	for bagID = 0, 5 do
+		callback(impl, bagID)
+	end
+
+	local bankType = impl:AtBank() and BankFrame.BankPanel.bankType
+	if bankType == Enum.BankType.Character then
+		for bagID = 6, 11 do
+			callback(impl, bagID)
+		end
+	elseif bankType == Enum.BankType.Account then
+		for bagID = 12, 16 do
+			callback(impl, bagID)
+		end
+	end
+end
+
 --[[!
 	Updates a set of items
 	@param bagID <number> [optional]
@@ -421,6 +469,11 @@ local isUpdating = false
 function Implementation:BAG_UPDATE(_, bagID, slotID)
 	if self.isSorting then return end
 	if isUpdating then return end
+	if not bagID and not slotID and self.bagUpdateQueueFrame then
+		ForEachBagToUpdate(self, self.QueueBagUpdate)
+		return
+	end
+
 	isUpdating = true
 
 	if bagID and slotID then
@@ -428,21 +481,7 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 	elseif bagID then
 		self:UpdateBag(bagID)
 	else
-		for bagID = 0, 5 do
-			self:UpdateBag(bagID)
-		end
-
-		local bankType = self:AtBank() and BankFrame.BankPanel.bankType
-
-		if bankType == Enum.BankType.Character then
-			for bagID = 6, 11 do
-				self:UpdateBag(bagID)
-			end
-		elseif bankType == Enum.BankType.Account then
-			for bagID = 12, 16 do
-				self:UpdateBag(bagID)
-			end
-		end
+		ForEachBagToUpdate(self, self.UpdateBag)
 	end
 
 	isUpdating = false
