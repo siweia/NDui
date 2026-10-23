@@ -72,6 +72,10 @@ local function CancelInspectUpdate()
 	end
 end
 
+local function IsCurrentInspect(unit, guid)
+	return unit and guid and currentGUID == guid and checkUnitGUID(unit) == guid
+end
+
 local function InspectFrameIsBusy()
 	local now = GetTime()
 	if inspectFrameTime > 0 and now - inspectFrameTime < inspectFrameLockTime then return true end
@@ -111,7 +115,7 @@ function TT:InspectOnUpdate(elapsed)
 	if self.elapsed > frequency then
 		self.elapsed = 0
 
-		if currentUNIT and checkUnitGUID(currentUNIT) == currentGUID then
+		if IsCurrentInspect(currentUNIT, currentGUID) then
 			if InspectFrameIsBusy() then
 				CancelInspectUpdate()
 				return
@@ -147,18 +151,23 @@ function TT:GetInspectInfo(...)
 			lastTime = thisTime
 
 			local unit = ...
-			if checkUnitGUID(unit) == currentGUID then
+			if IsCurrentInspect(unit, currentGUID) then
 				TT:InspectUnit(unit, true)
 			end
 		end
 	elseif self == "INSPECT_READY" then
 		local guid = ...
-		if B:NotSecretValue(guid) and guid == currentGUID and guid == inspectGUID then
+		if not B:NotSecretValue(guid) or guid ~= inspectGUID then return end
+
+		if IsCurrentInspect(currentUNIT, guid) then
 			inspectGUID = nil
 
 			local level = TT:GetUnitItemLevel(currentUNIT)
-			cache[guid].level = level
-			cache[guid].getTime = GetTime()
+			local currentDB = cache[guid]
+			if currentDB then
+				currentDB.level = level
+				currentDB.getTime = GetTime()
+			end
 
 			if level then
 				TT:SetupItemLevel(level)
@@ -169,8 +178,6 @@ function TT:GetInspectInfo(...)
 			if not InspectFrameIsBusy() then
 				ClearInspectPlayer()
 			end
-		else
-			inspectGUID = nil
 		end
 		B:UnregisterEvent(self, TT.GetInspectInfo)
 	end
@@ -331,8 +338,10 @@ end
 function TT:InspectUnitItemLevel(unit)
 	if C.db["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
 
-	if not unit or not CanInspect(unit) then return end
-	currentUNIT, currentGUID = unit, checkUnitGUID(unit)
+	local guid = unit and checkUnitGUID(unit)
+	if not guid or not CanInspect(unit) then return end
+	if currentGUID ~= guid then CancelInspectUpdate() end
+	currentUNIT, currentGUID = unit, guid
 	if not cache[currentGUID] then cache[currentGUID] = {} end
 
 	TT:InspectUnit(unit)
