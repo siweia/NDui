@@ -178,7 +178,10 @@ end
 B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 
 function TT:SetupItemLevel(level)
-	if not TT:UnitExists("mouseover") or UnitGUID("mouseover") ~= currentGUID then return end
+	if not TT:UnitExists("mouseover") then return end
+
+	local mouseoverGUID = checkUnitGUID("mouseover")
+	if not mouseoverGUID or mouseoverGUID ~= currentGUID then return end
 
 	local levelLine
 	for i = 2, GameTooltip:NumLines() do

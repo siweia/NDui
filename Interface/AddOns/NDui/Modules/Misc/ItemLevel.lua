@@ -254,7 +254,11 @@ end
 
 function M:ItemLevel_UpdateInspect(...)
 	local guid = ...
-	if InspectFrame and InspectFrame.unit and UnitGUID(InspectFrame.unit) == guid then
+	if not B:NotSecretValue(guid) or not guid then return end
+	if not InspectFrame or not InspectFrame.unit then return end
+
+	local unitGUID = UnitGUID(InspectFrame.unit)
+	if B:NotSecretValue(unitGUID) and unitGUID == guid then
 		M:ItemLevel_SetupLevel(InspectFrame, "Inspect", InspectFrame.unit)
 	end
 end
