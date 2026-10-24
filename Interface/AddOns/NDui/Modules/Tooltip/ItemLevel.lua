@@ -16,6 +16,7 @@ local inspectFrameLockTime, inspectNotifyLockTime = 10, 3
 local cache = {}
 local currentUnit, currentGUID, pendingGUID
 local inspectFrameTime, inspectNotifyTime = 0, 0
+local lastTooltipInspectTime = 0
 local internalInspect
 local requester, OnInspectReady
 
@@ -161,9 +162,17 @@ requester:SetScript("OnUpdate", function(self, elapsed)
 		CancelRequest()
 		return
 	end
+	if lastTooltipInspectTime > 0 then
+		local remaining = inspectNotifyLockTime - (GetTime() - lastTooltipInspectTime)
+		if remaining > 0 then
+			self.elapsed = requestDelay - math.min(requestDelay, remaining)
+			return
+		end
+	end
 
 	pendingGUID = currentGUID
 	B:RegisterEvent("INSPECT_READY", OnInspectReady)
+	lastTooltipInspectTime = GetTime()
 	internalInspect = true
 	NotifyInspect(currentUnit)
 	internalInspect = nil
