@@ -973,45 +973,34 @@ do
 		updateDriver(self)
 	end
 
-	-- NDui: prebuild missing visuals up to count; the normal style initializes them on first use.
+	-- NDui: spread complete prebuilt frames over time; the normal style initializes them on first use.
 	function nameplateDriverMixin:Prewarm(count, create)
 		argcheck(count, 2, 'number')
 		argcheck(create, 3, 'function')
 		if(self.prewarmPool) then return end
 
 		self.prewarmPool = {}
-		local function startPrewarm()
+		local function createNext()
 			if(self.numPlates >= count) then return end
 			if(InCombatLockdown()) then
-				self.prewarmResume = startPrewarm
+				self.prewarmResume = createNext
 				self:RegisterEvent('PLAYER_REGEN_ENABLED')
 				return
 			end
 
-			local ticker
-			ticker = C_Timer.NewTicker(0.1, function()
-				if(self.numPlates >= count) then
-					ticker:Cancel()
-					return
-				end
-				if(InCombatLockdown()) then
-					ticker:Cancel()
-					startPrewarm() -- Wait for combat to end instead of polling.
-					return
-				end
+			self.numPlates = self.numPlates + 1
+			local object = CreateFrame('Button', self.prefix .. 'Prewarm' .. self.numPlates, UIParent, 'PingableUnitFrameTemplate')
+			object:Hide()
+			object:EnableMouse(false)
+			object.isNamePlate = true
+			setmetatable(object, frame_metatable)
+			create(object)
+			table.insert(self.prewarmPool, object)
 
-				self.numPlates = self.numPlates + 1
-				local object = CreateFrame('Button', self.prefix .. 'Prewarm' .. self.numPlates, UIParent, 'PingableUnitFrameTemplate')
-				object:Hide()
-				object:EnableMouse(false)
-				object.isNamePlate = true
-				setmetatable(object, frame_metatable)
-				create(object)
-				table.insert(self.prewarmPool, object)
-				if(self.numPlates >= count) then ticker:Cancel() end
-			end)
+			if(self.numPlates < count) then C_Timer.After(.1, createNext) end
 		end
-		C_Timer.After(2, startPrewarm)
+
+		C_Timer.After(3, createNext)
 	end
 
 	local function driverEventHandler(self, event, unit)
