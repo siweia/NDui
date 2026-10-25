@@ -457,37 +457,6 @@ function module:RecycleBin()
 	B:RegisterEvent("ADDON_LOADED", delayCollect)
 end
 
-function module:WhoPingsMyMap()
-	if not C.db["Map"]["WhoPings"] then return end
-
-	local f = CreateFrame("Frame", nil, Minimap)
-	f:SetAllPoints()
-	f.text = B.CreateFS(f, 12, "", false, "TOP", 0, -3)
-
-	local anim = f:CreateAnimationGroup()
-	anim:SetScript("OnPlay", function() f:SetAlpha(1) end)
-	anim:SetScript("OnFinished", function() f:SetAlpha(0) end)
-	anim.fader = anim:CreateAnimation("Alpha")
-	anim.fader:SetFromAlpha(1)
-	anim.fader:SetToAlpha(0)
-	anim.fader:SetDuration(3)
-	anim.fader:SetSmoothing("OUT")
-	anim.fader:SetStartDelay(3)
-
-	B:RegisterEvent("MINIMAP_PING", function(_, unit)
-		if UnitIsUnit(unit, "player") then return end -- ignore player ping
-
-		local class = select(2, UnitClass(unit))
-		local r, g, b = B.ClassColor(class)
-		local name = GetUnitName(unit)
-
-		anim:Stop()
-		f.text:SetText(name)
-		f.text:SetTextColor(r, g, b)
-		anim:Play()
-	end)
-end
-
 function module:UpdateMinimapScale()
 	if C.db["Map"]["DisableMinimap"] then return end
 
@@ -706,7 +675,6 @@ function module:SetupMinimap()
 	self:RecycleBin()
 	self:BlizzardACF() -- blizz addons collector
 	self:ReskinRegions()
-	--self:WhoPingsMyMap()
 	self:ShowMinimapHelpInfo()
 	self:SoundVolume()
 
