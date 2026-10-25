@@ -222,10 +222,6 @@ function M:QuickJoin()
 	end)
 	M:QuickJoin_ShowTips()
 
-	hooksecurefunc("LFGListInviteDialog_Accept", function()
-		if PVEFrame:IsShown() then HideUIPanel(PVEFrame) end
-	end)
-
 	hooksecurefunc("StaticPopup_Show", M.HookDialogOnShow)
 	hooksecurefunc("LFGListInviteDialog_Show", M.HookDialogOnShow)
 	hooksecurefunc("LFGListSearchEntry_Update", M.ShowLeaderOverallScore)
