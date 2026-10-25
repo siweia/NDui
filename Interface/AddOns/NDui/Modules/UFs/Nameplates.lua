@@ -1183,23 +1183,10 @@ end
 
 function UF:UpdateGCDTicker()
 	local cooldownInfo = C_Spell.GetSpellCooldown(61304)
-	local start = cooldownInfo and cooldownInfo.startTime
-	local duration = cooldownInfo and cooldownInfo.duration
 	local isActive = cooldownInfo and cooldownInfo.isActive
-	local cdObject
 	if isActive then
-		cdObject = C_Spell.GetSpellCooldownDuration(61304)
-	end
-
-	if B:IsSecretValue(cdObject) then
-		self:SetTimerDuration(gcdDuration)
-		self.spark:Show()
-	elseif start > 0 and duration > 0 then
-		if self.duration ~= duration then
-			self:SetMinMaxValues(0, duration)
-			self.duration = duration
-		end
-		self:SetValue(GetTime() - start)
+		local cdObject = C_Spell.GetSpellCooldownDuration(61304)
+		self:SetTimerDuration(cdObject, nil, Enum.StatusBarTimerDirection.ElapsedTime)
 		self.spark:Show()
 	else
 		self.spark:Hide()
