@@ -453,6 +453,7 @@ end
 
 -- Tooltip skin
 function TT:ReskinTooltip()
+	if not C.db["Tooltip"]["Enable"] then return end
 	if not self then
 		if DB.isDeveloper then print("Unknown tooltip spotted.") end
 		return
@@ -573,6 +574,8 @@ function TT:FixStoneSoupError()
 end
 
 function TT:OnLogin()
+	if not C.db["Tooltip"]["Enable"] then return end
+
 	GameTooltipStatusBar:SetScript("OnValueChanged", nil)
 	GameTooltip:HookScript("OnTooltipCleared", TT.OnTooltipCleared)
 	TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TT.OnTooltipSetUnit)
@@ -591,6 +594,10 @@ function TT:OnLogin()
 	TT:ReskinTooltipIcons()
 	TT:SetupTooltipID()
 	TT:AzeriteArmor()
+	TT:SetupPetInfo()
+	TT:SetupItemLevel()
+	TT:SetupHoverTips()
+	TT:SetupTooltipSkins()
 	B:RegisterEvent("MODIFIER_STATE_CHANGED", TT.ResetUnit)
 end
 
@@ -605,7 +612,6 @@ local function addonStyled(_, addon)
 		tipTable[addon] = nil
 	end
 end
-B:RegisterEvent("ADDON_LOADED", addonStyled)
 
 TT:RegisterTooltips("NDui", function()
 	local tooltips = {
@@ -837,3 +843,12 @@ TT:RegisterTooltips("Blizzard_PerksProgram", function()
 		PerksProgramTooltip:SetScale(UIParent:GetScale())
 	end
 end)
+
+function TT:SetupTooltipSkins()
+	B:RegisterEvent("ADDON_LOADED", addonStyled)
+	for addon in pairs(tipTable) do
+		if C_AddOns.IsAddOnLoaded(addon) then
+			addonStyled(nil, addon)
+		end
+	end
+end

@@ -26,7 +26,10 @@ function TT:PetInfo_Reset()
 		self.petIcon:SetAlpha(0)
 	end
 end
-GameTooltip:HookScript("OnTooltipCleared", TT.PetInfo_Reset)
+
+function TT:SetupPetInfo()
+	GameTooltip:HookScript("OnTooltipCleared", TT.PetInfo_Reset)
+end
 
 function TT:PetInfo_Setup(unit)
 	if not unit then return end

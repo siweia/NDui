@@ -150,35 +150,6 @@ OnInspectReady = function(_, guid)
 	CancelRequest()
 	if not IsInspectBusy() then ClearInspectPlayer() end
 end
-
-requester = CreateFrame("Frame")
-requester:Hide()
-requester:SetScript("OnUpdate", function(self, elapsed)
-	self.elapsed = (self.elapsed or 0) + elapsed
-	if self.elapsed < requestDelay then return end
-	self.elapsed = 0
-
-	if not IsCurrentUnit(currentUnit, currentGUID) or IsInspectBusy() then
-		CancelRequest()
-		return
-	end
-	if lastTooltipInspectTime > 0 then
-		local remaining = inspectNotifyLockTime - (GetTime() - lastTooltipInspectTime)
-		if remaining > 0 then
-			self.elapsed = requestDelay - math.min(requestDelay, remaining)
-			return
-		end
-	end
-
-	pendingGUID = currentGUID
-	B:RegisterEvent("INSPECT_READY", OnInspectReady)
-	lastTooltipInspectTime = GetTime()
-	internalInspect = true
-	NotifyInspect(currentUnit)
-	internalInspect = nil
-	self:Hide()
-end)
-
 local function OnExternalInspect()
 	if internalInspect then return end
 	inspectNotifyTime = GetTime()
@@ -196,18 +167,6 @@ local function HookInspectUnit()
 		TT.inspectUnitHooked = true
 	end
 end
-
-HookInspectUnit()
-if not TT.inspectUnitHooked then
-	local function OnAddonLoaded(event, addon)
-		if addon ~= "Blizzard_InspectUI" then return end
-		HookInspectUnit()
-		B:UnregisterEvent(event, OnAddonLoaded)
-	end
-	B:RegisterEvent("ADDON_LOADED", OnAddonLoaded)
-end
-hooksecurefunc("NotifyInspect", OnExternalInspect)
-
 function TT:GetInspectInfo(event, unit)
 	if event ~= "UNIT_INVENTORY_CHANGED" or InCombatLockdown() then return end
 	if IsCurrentUnit(unit, currentGUID) then
@@ -215,7 +174,6 @@ function TT:GetInspectInfo(event, unit)
 		if entry then entry.time = 0 end
 	end
 end
-B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 
 function TT:InspectUnitItemLevel(unit)
 	if C.db["Tooltip"]["SpecLevelByShift"] and not IsShiftKeyDown() then return end
@@ -246,4 +204,46 @@ function TT:InspectUnitItemLevel(unit)
 	if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") or IsInspectBusy() then return end
 	requester.elapsed = 0
 	requester:Show()
+end
+
+function TT:SetupItemLevel()
+	requester = CreateFrame("Frame")
+	requester:Hide()
+	requester:SetScript("OnUpdate", function(self, elapsed)
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed < requestDelay then return end
+		self.elapsed = 0
+
+		if not IsCurrentUnit(currentUnit, currentGUID) or IsInspectBusy() then
+			CancelRequest()
+			return
+		end
+		if lastTooltipInspectTime > 0 then
+			local remaining = inspectNotifyLockTime - (GetTime() - lastTooltipInspectTime)
+			if remaining > 0 then
+				self.elapsed = requestDelay - math.min(requestDelay, remaining)
+				return
+			end
+		end
+
+		pendingGUID = currentGUID
+		B:RegisterEvent("INSPECT_READY", OnInspectReady)
+		lastTooltipInspectTime = GetTime()
+		internalInspect = true
+		NotifyInspect(currentUnit)
+		internalInspect = nil
+		self:Hide()
+	end)
+
+	HookInspectUnit()
+	if not TT.inspectUnitHooked then
+		local function OnAddonLoaded(event, addon)
+			if addon ~= "Blizzard_InspectUI" then return end
+			HookInspectUnit()
+			B:UnregisterEvent(event, OnAddonLoaded)
+		end
+		B:RegisterEvent("ADDON_LOADED", OnAddonLoaded)
+	end
+	hooksecurefunc("NotifyInspect", OnExternalInspect)
+	B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 end

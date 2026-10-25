@@ -98,26 +98,28 @@ function TT:HyperLink_OnLeave(_, ...)
 	if orig2[self] then return orig2[self](self, ...) end
 end
 
-for i = 1, NUM_CHAT_WINDOWS do
-	local frame = _G["ChatFrame"..i]
-	orig1[frame] = frame:GetScript("OnHyperlinkEnter")
-	frame:SetScript("OnHyperlinkEnter", TT.HyperLink_OnEnter)
-	orig2[frame] = frame:GetScript("OnHyperlinkLeave")
-	frame:SetScript("OnHyperlinkLeave", TT.HyperLink_OnLeave)
-end
-
 local function hookMessageFrame()
 	CommunitiesFrame.Chat.MessageFrame:SetScript("OnHyperlinkEnter", TT.HyperLink_OnEnter)
 	CommunitiesFrame.Chat.MessageFrame:SetScript("OnHyperlinkLeave", TT.HyperLink_OnLeave)
 end
-local function hookCommunitiesFrame(event, addon)
-	if addon == "Blizzard_Communities" then
-		hookMessageFrame()
-		B:UnregisterEvent(event, hookCommunitiesFrame)
+function TT:SetupHoverTips()
+	for i = 1, NUM_CHAT_WINDOWS do
+		local frame = _G["ChatFrame"..i]
+		orig1[frame] = frame:GetScript("OnHyperlinkEnter")
+		frame:SetScript("OnHyperlinkEnter", TT.HyperLink_OnEnter)
+		orig2[frame] = frame:GetScript("OnHyperlinkLeave")
+		frame:SetScript("OnHyperlinkLeave", TT.HyperLink_OnLeave)
 	end
-end
-if C_AddOns.IsAddOnLoaded("Blizzard_Communities") then
-	hookMessageFrame()
-else
-	B:RegisterEvent("ADDON_LOADED", hookCommunitiesFrame)
+
+	local function hookCommunitiesFrame(event, addon)
+		if addon == "Blizzard_Communities" then
+			hookMessageFrame()
+			B:UnregisterEvent(event, hookCommunitiesFrame)
+		end
+	end
+	if C_AddOns.IsAddOnLoaded("Blizzard_Communities") then
+		hookMessageFrame()
+	else
+		B:RegisterEvent("ADDON_LOADED", hookCommunitiesFrame)
+	end
 end

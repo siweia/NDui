@@ -526,6 +526,7 @@ G.DefaultSettings = {
 		DamageMeter = true,
 	},
 	Tooltip = {
+		Enable = true,
 		HideInCombat = 1,
 		CursorMode = 1,
 		ItemQuality = false,
@@ -1150,7 +1151,7 @@ end
 
 local function updateTooltipFont()
 	local TT = B:GetModule("Tooltip")
-	if TT then
+	if TT and C.db["Tooltip"]["Enable"] then
 		TT:SetupTooltipFonts()
 	end
 end
@@ -1473,6 +1474,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Rematch", L["Rematch Skin"], true},
 	},
 	[12] = {
+		{1, "Tooltip", "Enable", L["Enable Tooltip"], nil, nil, nil, L["Enable Tooltip Tip"]},
+		{},--blank
 		{3, "Tooltip", "FontSize", L["Tooltip FontSize"].."*", nil, {8, 42, 1}, updateTooltipFont},
 		{4, "Tooltip", "TipAnchor", L["TipAnchor"].."*", true, {L["TOPLEFT"], L["TOPRIGHT"], L["BOTTOMLEFT"], L["BOTTOMRIGHT"]}, nil, L["TipAnchorTip"]},
 		{4, "Tooltip", "HideInCombat", L["HideInCombat"].."*", nil, {DISABLE, "ALT", "SHIFT", "CTRL", ALWAYS}, nil, L["HideInCombatTip"]},
