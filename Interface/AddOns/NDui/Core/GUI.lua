@@ -570,7 +570,6 @@ G.DefaultSettings = {
 		IgnoreQuestNPC = {},
 		HideTalking = true,
 		HideBossBanner = false,
-		HideBossEmote = false,
 		PetFilter = true,
 		QuestNotification = false,
 		QuestProgress = false,
@@ -1101,10 +1100,6 @@ local function toggleBossBanner()
 	B:GetModule("Misc"):ToggleBossBanner()
 end
 
-local function toggleBossEmote()
-	B:GetModule("Misc"):ToggleBossEmote()
-end
-
 local function updateMarkerGrid()
 	B:GetModule("Misc"):RaidTool_UpdateGrid()
 end
@@ -1499,8 +1494,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*", true},
-		{1, "Misc", "HideBossEmote", L["HideBossEmote"].."*", nil, nil, toggleBossEmote},
-		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", true, nil, toggleBossBanner},
+		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", nil, nil, toggleBossBanner},
 		{1, "Misc", "CombatAnimation", L["CombatAnimation"], nil, nil, toggleBossBanner},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},
@@ -1516,8 +1510,8 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "MenuButton", L["MenuButton"], nil, nil, nil, L["MenuButtonTip"]},
 		{1, "Misc", "EnhanceDressup", L["EnhanceDressup"], true, nil, nil, L["EnhanceDressupTip"]},
 		{1, "Misc", "QuickJoin", HeaderTag..L["EnhancedPremade"], nil, nil, nil, L["EnhancedPremadeTip"]},
-		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 2.6, .1}, updateMaxZoomLevel},
 		{1, "Misc", "SingingSocket", L["SingingSocket"], nil, nil, nil, L["SingingSocketTip"]},
+		{3, "Misc", "MaxZoom", L["MaxZoom"].."*", true, {1, 2.6, .1}, updateMaxZoomLevel},
 	},
 	[14] = {
 		{1, "ACCOUNT", "VersionCheck", L["Version Check"]},
