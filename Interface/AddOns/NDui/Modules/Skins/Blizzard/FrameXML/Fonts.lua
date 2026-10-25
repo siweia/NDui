@@ -43,6 +43,8 @@ tinsert(C.defaultThemes, function()
 
 	if not C.db["Skins"]["FontOutline"] then return end
 
+	C_CVar.SetCVar("questTextContrast", 4)
+
 	SetupRaidWarningFonts(RaidWarningFrame)
 	SetupRaidWarningFonts(CinematicFrame.BossEmoteFrame)
 
