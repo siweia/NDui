@@ -1793,6 +1793,7 @@ do
 		b = B:Round(b, 2)
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b = r, g, b
+		if swatch.__callback then swatch.__callback() end
 	end
 
 	local function cancelPicker()
@@ -1800,6 +1801,7 @@ do
 		local r, g, b = ColorPickerFrame:GetPreviousValues()
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b = r, g, b
+		if swatch.__callback then swatch.__callback() end
 	end
 
 	local function openColorPicker(self)
@@ -1828,7 +1830,7 @@ do
 	end
 
 	local whiteColor = {r=1, g=1, b=1}
-	function B:CreateColorSwatch(name, color)
+	function B:CreateColorSwatch(name, color, callback)
 		color = color or whiteColor
 
 		local swatch = CreateFrame("Button", nil, self, "BackdropTemplate")
@@ -1845,6 +1847,7 @@ do
 
 		swatch.tex = tex
 		swatch.color = color
+		swatch.__callback = callback
 		swatch:SetScript("OnClick", openColorPicker)
 		swatch:SetScript("OnDoubleClick", resetColorPicker)
 

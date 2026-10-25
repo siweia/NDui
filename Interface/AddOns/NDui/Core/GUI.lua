@@ -24,6 +24,8 @@ G.DefaultSettings = {
 		Classcolor = false,
 		BindType = 1,
 		MicroMenu = true,
+		MicroMenuCustomColor = false,
+		MicroMenuColor = {r=1, g=1, b=1},
 		ShowStance = true,
 		EquipColor = false,
 		ShowGlow = true,

@@ -1189,6 +1189,16 @@ function G:SetupMicroMenu(parent)
 	createOptionSlider(parent, L["ButtonSize"], 20, 100, 22, offset-60, "MBSize", Bar.MicroMenu_Setup, "Actionbar")
 	createOptionSlider(parent, L["ButtonsPerRow"], 1, 13, 13, offset-130, "MBPerRow", Bar.MicroMenu_Setup, "Actionbar")
 	createOptionSlider(parent, L["Spacing"], -10, 10, 5, offset-200, "MBSpacing", Bar.MicroMenu_Setup, "Actionbar")
+
+	local swatch = B.CreateColorSwatch(parent, nil, C.db["Actionbar"]["MicroMenuColor"], function()
+		Bar:UpdateMicroMenuColor()
+	end)
+	swatch:SetPoint("TOPLEFT", 220, offset-280)
+	swatch.__default = G.DefaultSettings["Actionbar"]["MicroMenuColor"]
+
+	createOptionCheck(parent, offset-280, L["MicroMenuCustomColor"], "Actionbar", "MicroMenuCustomColor", function()
+		Bar:UpdateMicroMenuColor()
+	end)
 end
 
 function G:SetupStanceBar(parent)

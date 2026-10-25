@@ -5,15 +5,45 @@ local Bar = B:GetModule("Actionbar")
 -- Texture credit: 胡里胡涂
 local _G = getfenv(0)
 local tinsert, pairs, type = table.insert, pairs, type
-local buttonList, menubar = {}
+local buttonList, microTextures, lineTextures, menubar = {}, {}, {}
 
-function Bar:MicroButton_SetupTexture(icon, texture)
-	local r, g, b = DB.r, DB.g, DB.b
-	if not C.db["Skins"]["ClassLine"] then r, g, b = 0, 0, 0 end
+local function GetMicroMenuColor()
+	local settings = C.db["Actionbar"]
+	if settings.MicroMenuCustomColor then
+		local color = settings.MicroMenuColor
+		return color.r, color.g, color.b
+	end
 
+	return DB.r, DB.g, DB.b
+end
+
+local function UpdateMicroTextureColor(texture)
+	local r, g, b = GetMicroMenuColor()
+	if C.db["Actionbar"]["MicroMenuCustomColor"] or texture.__microMenuClassColor then
+		texture:SetVertexColor(r, g, b)
+	else
+		texture:SetVertexColor(1, 1, 1)
+	end
+end
+
+function Bar:MicroButton_SetupTexture(icon, texture, classColor)
 	icon:SetOutside(nil, 3, 3)
 	icon:SetTexture(DB.MicroTex..texture)
-	icon:SetVertexColor(r, g, b)
+	icon.__microMenuClassColor = classColor ~= false
+	tinsert(microTextures, icon)
+	UpdateMicroTextureColor(icon)
+end
+
+function Bar:UpdateMicroMenuColor()
+	local r, g, b = GetMicroMenuColor()
+	for i = 1, #microTextures do
+		UpdateMicroTextureColor(microTextures[i])
+	end
+
+	for i = 1, #lineTextures do
+		local line = lineTextures[i]
+		line[1]:SetGradient("Horizontal", CreateColor(r, g, b, line[2]), CreateColor(r, g, b, line[3]))
+	end
 end
 
 local function ResetButtonParent(button, parent)
@@ -54,17 +84,16 @@ function Bar:MicroButton_Create(parent, data)
 		if tooltip then B.AddTooltip(button, "ANCHOR_RIGHT", tooltip) end
 
 		local hl = button:GetHighlightTexture()
-		Bar:MicroButton_SetupTexture(hl, texture)
+		Bar:MicroButton_SetupTexture(hl, texture, C.db["Skins"]["ClassLine"])
 		hooksecurefunc(button, "SetHighlightAtlas", function()
 			button:SetHighlightTexture(DB.MicroTex..texture)
 			hl:SetBlendMode("ADD")
+			UpdateMicroTextureColor(hl)
 		end)
-		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
 
 		local flash = button.FlashBorder
 		if flash then
-			Bar:MicroButton_SetupTexture(flash, texture)
-			if not C.db["Skins"]["ClassLine"] then flash:SetVertexColor(1, 1, 1) end
+			Bar:MicroButton_SetupTexture(flash, texture, C.db["Skins"]["ClassLine"])
 		end
 		if button.FlashContent then button.FlashContent:SetAlpha(0) end
 		if button.Portrait then button.Portrait:Hide() end
@@ -86,16 +115,14 @@ function Bar:MicroButton_Create(parent, data)
 
 		local hl = bu:CreateTexture(nil, "HIGHLIGHT")
 		hl:SetBlendMode("ADD")
-		Bar:MicroButton_SetupTexture(hl, texture)
-		if not C.db["Skins"]["ClassLine"] then hl:SetVertexColor(1, 1, 1) end
+		Bar:MicroButton_SetupTexture(hl, texture, C.db["Skins"]["ClassLine"])
 	end
 end
 
 function Bar:MicroMenu_Lines(parent)
 	if not C.db["Skins"]["MenuLine"] then return end
 
-	local cr, cg, cb = 0, 0, 0
-	if C.db["Skins"]["ClassLine"] then cr, cg, cb = DB.r, DB.g, DB.b end
+	local cr, cg, cb = GetMicroMenuColor()
 
 	local width, height = 200, 20
 	local anchors = {
@@ -112,8 +139,10 @@ function Bar:MicroMenu_Lines(parent)
 		tex:SetPoint("CENTER")
 		local bottomLine = B.SetGradient(frame, "H", cr, cg, cb, v[1], v[2], width-25, C.mult)
 		bottomLine:SetPoint("TOP"..anchor, frame, "BOTTOM"..anchor, 0, 0)
+		tinsert(lineTextures, {bottomLine, v[1], v[2]})
 		local topLine = B.SetGradient(frame, "H", cr, cg, cb, v[1], v[2], width+25, C.mult)
 		topLine:SetPoint("BOTTOM"..anchor, frame, "TOP"..anchor, 0, 0)
+		tinsert(lineTextures, {topLine, v[1], v[2]})
 	end
 end
 
