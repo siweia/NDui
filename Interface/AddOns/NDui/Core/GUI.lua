@@ -1472,7 +1472,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Skins", "Rematch", L["Rematch Skin"], true},
 	},
 	[12] = {
-		{1, "Tooltip", "Enable", L["Enable Tooltip"], nil, nil, nil, L["Enable Tooltip Tip"]},
+		{1, "Tooltip", "Enable", HeaderTag..L["Enable Tooltip"], nil, nil, nil, L["Enable Tooltip Tip"]},
 		{},--blank
 		{3, "Tooltip", "FontSize", L["Tooltip FontSize"].."*", nil, {8, 42, 1}, updateTooltipFont},
 		{4, "Tooltip", "TipAnchor", L["TipAnchor"].."*", true, {L["TOPLEFT"], L["TOPRIGHT"], L["BOTTOMLEFT"], L["BOTTOMRIGHT"]}, nil, L["TipAnchorTip"]},
