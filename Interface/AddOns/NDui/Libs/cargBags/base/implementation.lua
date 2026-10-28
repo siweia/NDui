@@ -183,6 +183,17 @@ function Implementation:SetDefaultItemButtonClass(name)
 	return self.buttonClass
 end
 
+function Implementation:PrewarmItemButtons()
+	if not self.buttonClass or InCombatLockdown() then return end
+
+	local slots = 0
+	for bagID = 0, 5 do
+		slots = slots + GetContainerNumSlots(bagID)
+	end
+
+	self.buttonClass:Prewarm(slots, 0)
+end
+
 --[[!
 	Registers the implementation to overwrite Blizzards Bag-Toggle-Functions
 	@note This function only works before PLAYER_LOGIN and can be overwritten by other Implementations
@@ -284,6 +295,7 @@ function Implementation:Init()
 	if(not self.buttonClass) then
 		self:SetDefaultItemButtonClass()
 	end
+	self:PrewarmItemButtons()
 
 	self:RegisterEvent("BAG_UPDATE", self, self.BAG_UPDATE)
 	self:RegisterEvent("MERCHANT_SHOW", self, self.BAG_UPDATE)

@@ -115,6 +115,21 @@ function ItemButton:Create(tpl, parent)
 	return button
 end
 
+-- Create item buttons while the bag UI is out of combat so later BAG_UPDATE
+-- events can reuse secure template buttons instead of creating them in combat.
+function ItemButton:Prewarm(count, bagID)
+	if not count or count <= 0 then return end
+
+	self.recycled = self.recycled or setmetatable({}, mt_gen_key)
+	local tpl = self:GetTemplate(bagID or 0)
+	local pool = self.recycled[tpl]
+	for i = 1, count do
+		local button = self:Create(tpl)
+		button:Hide()
+		pool[#pool + 1] = button
+	end
+end
+
 --[[!
 	Frees an ItemButton, storing it for later use
 ]]
