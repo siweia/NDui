@@ -322,7 +322,9 @@ function UF:OnLogin()
 		UF:QuestIconCheck()
 		UF:RefreshPlateByEvents()
 		UF:UpdateExcutedCurve()
-		UF.NameplateDriver:Prewarm(20, UF.CreatePlateFrames)
+		UF.NameplateDriver:Prewarm(20, function(frame)
+			UF.CreatePlateFrames(frame, true)
+		end)
 	end
 
 	do -- a playerplate-like PlayerFrame

@@ -601,7 +601,7 @@ end
 local platesList = {}
 UF.nameplateUnits = {}
 
-function UF:CreatePlateFrames()
+function UF:CreatePlateFrames(prewarm)
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 	self:ClearAllPoints()
@@ -621,8 +621,10 @@ function UF:CreatePlateFrames()
 	UF:CreateCastBar(self)
 	UF:CreateRaidMark(self)
 	UF:CreatePrediction(self)
-	UF:CreateAuras(self)
-	UF:CreatePlateDebuffs(self)
+	if not prewarm then
+		UF:CreateAuras(self)
+		UF:CreatePlateDebuffs(self)
+	end
 	UF:CreatePVPClassify(self)
 	UF:CreateThreatColor(self)
 
@@ -641,6 +643,11 @@ end
 function UF:CreatePlates()
 	if self.Health then
 		-- Prebuilt frames must anchor to their new native parent and use current settings.
+		-- Aura containers are intentionally deferred until the frame gets a real unit.
+		if not self.Auras then
+			UF:CreateAuras(self)
+			UF:CreatePlateDebuffs(self)
+		end
 		local db = C.db["Nameplate"]
 		self:SetSize(db["PlateWidth"], db["PlateHeight"])
 		self:ClearAllPoints()
