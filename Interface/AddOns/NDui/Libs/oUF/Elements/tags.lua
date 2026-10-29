@@ -351,7 +351,7 @@ local tagStrings = {
 			local id = u:match('arena(%d)$')
 			if(id) then
 				local info = UnitFrameUtil.GetArenaOpponentSpecDisplayInfo(tonumber(id))
-				return CreateColor(info.barColorR, info.barColorG, info.barColorB):GenerateHexColorMarkup()
+				return Hex(info.barColorR, info.barColorG, info.barColorB)
 			end
 		end
 	end]],

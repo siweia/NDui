@@ -95,7 +95,7 @@ local function Disable(self)
 		element:Hide()
 
 		self:UnregisterEvent('PARTY_LOOT_METHOD_CHANGED', Path)
-		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path) -- TBD: do we need this or does oUF handle it for us?
+		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path)
 	end
 end
 
@@ -110,8 +110,8 @@ local function Enable(self, unit)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('PARTY_LOOT_METHOD_CHANGED', Path)
-		self:RegisterEvent('GROUP_ROSTER_UPDATE', Path) -- TBD: do we need this or does oUF handle it for us?
+		self:RegisterEvent('PARTY_LOOT_METHOD_CHANGED', Path, true)
+		self:RegisterEvent('GROUP_ROSTER_UPDATE', Path, true)
 
 		if(element:IsObjectType('Texture') and not element:GetTexture()) then
 			element:SetTexture([[Interface\GroupFrame\UI-Group-MasterLooter]])

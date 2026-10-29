@@ -13,14 +13,14 @@ local function updateArenaPreparationElements(self, event, elementName, specID)
 
 			* self   - the parent object
 			* event  - the event triggering the update (string)
-			* specID - the specialization ID for the opponent (number)
+			* specID - (DEPRECATED) the specialization ID for the opponent (number)
 			--]]
 			--[[ Override: Power.OverrideArenaPreparation(self, event, specID)
 			Used to completely override the internal update function for arena preparation.
 
 			* self   - the parent object
 			* event  - the event triggering the update (string)
-			* specID - the specialization ID for the opponent (number)
+			* specID - (DEPRECATED) the specialization ID for the opponent (number)
 			--]]
 			element.OverrideArenaPreparation(self, event, specID)
 			return
@@ -36,14 +36,14 @@ local function updateArenaPreparationElements(self, event, elementName, specID)
 			during arena preparation.
 
 			* self   - the Health element
-			* specID - the specialization ID for the opponent (number)
+			* specID - (DEPRECATED) the specialization ID for the opponent (number)
 			--]]
 			--[[ Override: Power:UpdateColor(specID)
 			Used to completely override the internal function for updating the widget's colors
 			during arena preparation.
 
 			* self   - the Power element
-			* specID - the specialization ID for the opponent (number)
+			* specID - (DEPRECATED) the specialization ID for the opponent (number)
 			--]]
 			element:UpdateColorArenaPreparation(specID)
 		else
@@ -53,7 +53,7 @@ local function updateArenaPreparationElements(self, event, elementName, specID)
 				-- FIXME: no idea if we can get power type here without the unit
 			if(element.colorClass) then
 				local info = UnitFrameUtil.GetArenaOpponentSpecDisplayInfo(self.__unitIndex)
-				color = CreateColor(info.barColorR, info.barColorG, info.barColorB)
+				color = oUF:CreateColor(info.barColorR, info.barColorG, info.barColorB)
 			elseif(element.colorReaction) then
 				color = self.colors.reaction[2]
 			elseif(element.colorSmooth and self.colors.health:GetCurve()) then
@@ -73,20 +73,21 @@ local function updateArenaPreparationElements(self, event, elementName, specID)
 
 			* self   - the Health element
 			* event  - the event triggering the update (string)
-			* specID - the specialization ID for the opponent (number)
+			* specID - (DEPRECATED) the specialization ID for the opponent (number)
 			--]]
 			--[[ Callback: Power:PostUpdateArenaPreparation(event, specID)
 			Called after the element has been updated during arena preparation.
 
 			* self   - the Power element
 			* event  - the event triggering the update (string)
-			* specID - the specialization ID for the opponent (number)
+			* specID - (DEPRECATED) the specialization ID for the opponent (number)
 			--]]
 			element:PostUpdateArenaPreparation(event, specID)
 		end
 	end
 end
 
+local restoreArenaCVar
 local function updateArenaPreparation(self, event)
 	if(not self:GetAttribute('oUF-enableArenaPrep')) then
 		return
@@ -97,6 +98,11 @@ local function updateArenaPreparation(self, event)
 		self:ResumeAllElements()
 		self:UpdateAllElements('ArenaPreparation')
 		self:UnregisterEvent(event, updateArenaPreparation)
+
+		if(restoreArenaCVar) then
+			C_CVar.SetCVar('pvpFramesDisplayClassColor', 0)
+			restoreArenaCVar = false
+		end
 	elseif(event == 'PLAYER_ENTERING_WORLD' and not UnitExists(self.__unit)) then
 		-- semi-recursive call for when the player zones into an arena
 		updateArenaPreparation(self, 'ARENA_PREP_OPPONENT_SPECIALIZATIONS')
@@ -105,6 +111,12 @@ local function updateArenaPreparation(self, event)
 			-- prevent calling protected functions if entering arena while in combat
 			self:RegisterEvent('PLAYER_REGEN_ENABLED', updateArenaPreparation, true)
 			return
+		end
+
+		if((self.Health.colorClass or self.Power.colorClass) and not C_CVar.GetCVarBool('pvpFramesDisplayClassColor')) then
+			-- this CVar is required for class coloring to work with UnitFrameUtil
+			restoreArenaCVar = true
+			C_CVar.SetCVar('pvpFramesDisplayClassColor', 1)
 		end
 
 		if(self.PreUpdate) then
@@ -117,8 +129,6 @@ local function updateArenaPreparation(self, event)
 			self:Hide()
 		end
 
-		local specID = GetArenaOpponentSpec(self.__unitIndex)
-		-- Secret spec IDs cannot control visibility; use the public opponent count.
 		if(self.__unitIndex <= numOpponents) then
 			if(self:IsEnabled()) then
 				-- disable the unit watch so we can forcefully show the object ourselves
@@ -130,6 +140,7 @@ local function updateArenaPreparation(self, event)
 			self:PauseAllElements()
 
 			-- update Health and Power (if available) with fake data
+			local specID = GetArenaOpponentSpec(self.__unitIndex) -- DEPRECATED
 			updateArenaPreparationElements(self, event, 'Health', specID)
 			updateArenaPreparationElements(self, event, 'Power', specID)
 
