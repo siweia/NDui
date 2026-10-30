@@ -11,7 +11,7 @@ local HEIRLOOMS = _G.HEIRLOOMS
 
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local pendingText = LFG_LIST_LOADING
-local cacheDuration, requestDelay = 900, .5
+local cacheDuration, requestDelay = 120, .5
 local inspectFrameLockTime, inspectNotifyLockTime = 10, 3
 local heirloomQuality = Enum.ItemQuality.Heirloom
 local cache = {}
@@ -63,8 +63,31 @@ local function GetUnitGUID(unit)
 	return B:NotSecretValue(guid) and guid
 end
 
+local function UnitMatchesGUID(unit, guid)
+	return unit and B:NotSecretValue(unit) and guid and GetUnitGUID(unit) == guid
+end
+
+local function GetInspectUnit(guid, preferred)
+	if UnitMatchesGUID(preferred, guid) then return preferred end
+	if UnitMatchesGUID("player", guid) then return "player" end
+
+	local count, prefix
+	if IsInRaid() then
+		count, prefix = GetNumGroupMembers(), "raid"
+	else
+	count, prefix = GetNumSubgroupMembers(), "party"
+	end
+	for index = 1, count do
+		local unit = prefix..index
+		if UnitMatchesGUID(unit, guid) then return unit end
+	end
+
+	local unit = UnitTokenFromGUID and UnitTokenFromGUID(guid)
+	return UnitMatchesGUID(unit, guid) and unit
+end
+
 local function IsCurrentUnit(unit, guid)
-	return unit and guid and currentGUID == guid and GetUnitGUID(unit) == guid
+	return currentGUID == guid and UnitMatchesGUID(unit, guid)
 end
 
 local function GetInspectItemLevel(unit)
@@ -72,6 +95,14 @@ local function GetInspectItemLevel(unit)
 	local level = C_PaperDollInfo.GetInspectItemLevel(unit)
 	if not B:NotSecretValue(level) or type(level) ~= "number" or level <= 0 then return end
 	return level
+end
+
+local function GetPlayerItemLevel()
+	local _, level = GetAverageItemLevel()
+	if B:NotSecretValue(level) and type(level) == "number" and level > 0 then
+		return level
+	end
+	return GetInspectItemLevel("player")
 end
 
 local function GetEquipmentCounts(unit)
@@ -106,7 +137,7 @@ local function UpdateTooltip(guid, text, unit, refresh)
 	for index = 2, GameTooltip:NumLines() do
 		local candidate = _G["GameTooltipTextLeft"..index]
 		local value = candidate and candidate:GetText()
-		if value and B:NotSecretValue(value) and strfind(value, levelPrefix) then
+		if value and B:NotSecretValue(value) and strfind(value, levelPrefix, 1, true) then
 			line = candidate
 			break
 		end
@@ -137,8 +168,8 @@ end
 OnInspectReady = function(_, guid)
 	if not B:NotSecretValue(guid) or guid ~= pendingGUID then return end
 
-	local unit = currentUnit
-	local current = IsCurrentUnit(unit, guid)
+	local unit = GetInspectUnit(guid, currentUnit)
+	local current = UnitMatchesGUID(unit, guid)
 	local level, heirlooms, tierPieces
 	if current then
 		level = GetInspectItemLevel(unit)
@@ -148,14 +179,20 @@ OnInspectReady = function(_, guid)
 	if current and level then
 		local entry = {text = FormatItemLevel(level, heirlooms, tierPieces), time = GetTime()}
 		cache[guid] = entry
-		local tooltipUnit = TT.GetUnit(GameTooltip)
-		if GetUnitGUID(tooltipUnit) == guid then
+		local tooltipUnit, tooltipGUID = TT.GetUnit(GameTooltip)
+		if tooltipGUID == guid or UnitMatchesGUID(tooltipUnit, guid) then
+			tooltipUnit = GetInspectUnit(guid, tooltipUnit)
 			UpdateTooltip(guid, entry.text, tooltipUnit, true)
 		end
 	end
 
-	CancelRequest()
+	pendingGUID = nil
+	B:UnregisterEvent("INSPECT_READY", OnInspectReady)
 	if not IsInspectBusy() then ClearInspectPlayer() end
+	if requester and currentGUID ~= guid and UnitMatchesGUID(currentUnit, currentGUID) then
+		requester.elapsed = 0
+		requester:Show()
+	end
 end
 local function OnExternalInspect()
 	if internalInspect then return end
@@ -189,14 +226,14 @@ function TT:InspectUnitItemLevel(unit)
 	if not guid then return end
 
 	if UnitIsUnit(unit, "player") then
-		local _, level = GetAverageItemLevel()
+		local level = GetPlayerItemLevel()
 		local heirlooms, tierPieces = GetEquipmentCounts("player")
 		UpdateTooltip(guid, FormatItemLevel(level, heirlooms, tierPieces), unit)
 		return
 	end
 	if not UnitIsPlayer(unit) or not CanInspect(unit) then return end
 
-	if currentGUID ~= guid then CancelRequest() end
+	if currentGUID ~= guid and requester then requester:Hide() end
 	currentUnit, currentGUID = unit, guid
 
 	local entry = cache[guid]
@@ -223,8 +260,9 @@ function TT:SetupItemLevel()
 		if self.elapsed < requestDelay then return end
 		self.elapsed = 0
 
+		if pendingGUID then return end
 		if not IsCurrentUnit(currentUnit, currentGUID) or IsInspectBusy() then
-			CancelRequest()
+			self:Hide()
 			return
 		end
 		if lastTooltipInspectTime > 0 then
@@ -238,6 +276,7 @@ function TT:SetupItemLevel()
 		pendingGUID = currentGUID
 		B:RegisterEvent("INSPECT_READY", OnInspectReady)
 		lastTooltipInspectTime = GetTime()
+		ClearInspectPlayer()
 		internalInspect = true
 		NotifyInspect(currentUnit)
 		internalInspect = nil
