@@ -13,6 +13,7 @@ local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local pendingText = LFG_LIST_LOADING
 local cacheDuration, requestDelay = 900, .5
 local inspectFrameLockTime, inspectNotifyLockTime = 10, 3
+local heirloomQuality = Enum.ItemQuality.Heirloom
 local cache = {}
 local currentUnit, currentGUID, pendingGUID
 local inspectFrameTime, inspectNotifyTime = 0, 0
@@ -20,7 +21,7 @@ local lastTooltipInspectTime = 0
 local internalInspect
 local requester, OnInspectReady
 
-TT.TierSets = {
+local tierSets = {
 	-- WARRIOR
 	[271454] = true, [271455] = true, [271456] = true, [271457] = true, [271459] = true,
 	-- PALADIN
@@ -79,8 +80,8 @@ local function GetEquipmentCounts(unit)
 		if slot ~= 4 then
 			local itemID = GetInventoryItemID(unit, slot)
 			if itemID and B:NotSecretValue(itemID) then
-				if TT.TierSets[itemID] then tierPieces = tierPieces + 1 end
-				if GetInventoryItemQuality(unit, slot) == Enum.ItemQuality.Heirloom then
+				if tierSets[itemID] then tierPieces = tierPieces + 1 end
+				if GetInventoryItemQuality(unit, slot) == heirloomQuality then
 					heirlooms = heirlooms + 1
 				end
 			end
@@ -97,8 +98,10 @@ local function FormatItemLevel(level, heirlooms, tierPieces)
 	return text
 end
 
-local function UpdateTooltip(guid, text)
-	if not GameTooltip:IsShown() or not TT:UnitExists("mouseover") or GetUnitGUID("mouseover") ~= guid then return end
+local function UpdateTooltip(guid, text, unit, refresh)
+	-- Post-calls run before Show(); only delayed inspect results require a visible unit tooltip.
+	if refresh and (not GameTooltip:IsShown() or not GameTooltip:IsTooltipType(Enum.TooltipDataType.Unit)) then return end
+	if not TT:UnitExists(unit) or GetUnitGUID(unit) ~= guid then return end
 	local line
 	for index = 2, GameTooltip:NumLines() do
 		local candidate = _G["GameTooltipTextLeft"..index]
@@ -115,6 +118,7 @@ local function UpdateTooltip(guid, text)
 	else
 		GameTooltip:AddLine(value)
 	end
+	if refresh then GameTooltip:Show() end
 end
 
 local function CancelRequest()
@@ -144,7 +148,10 @@ OnInspectReady = function(_, guid)
 	if current and level then
 		local entry = {text = FormatItemLevel(level, heirlooms, tierPieces), time = GetTime()}
 		cache[guid] = entry
-		UpdateTooltip(guid, entry.text)
+		local tooltipUnit = TT.GetUnit(GameTooltip)
+		if GetUnitGUID(tooltipUnit) == guid then
+			UpdateTooltip(guid, entry.text, tooltipUnit, true)
+		end
 	end
 
 	CancelRequest()
@@ -184,7 +191,7 @@ function TT:InspectUnitItemLevel(unit)
 	if UnitIsUnit(unit, "player") then
 		local _, level = GetAverageItemLevel()
 		local heirlooms, tierPieces = GetEquipmentCounts("player")
-		UpdateTooltip(guid, FormatItemLevel(level, heirlooms, tierPieces))
+		UpdateTooltip(guid, FormatItemLevel(level, heirlooms, tierPieces), unit)
 		return
 	end
 	if not UnitIsPlayer(unit) or not CanInspect(unit) then return end
@@ -195,15 +202,17 @@ function TT:InspectUnitItemLevel(unit)
 	local entry = cache[guid]
 	local force = not C.db["Tooltip"]["SpecLevelByShift"] and IsShiftKeyDown()
 	if entry and not force and GetTime() - entry.time < cacheDuration then
-		UpdateTooltip(guid, entry.text)
+		UpdateTooltip(guid, entry.text, unit)
 		return
 	end
 
-	UpdateTooltip(guid)
+	UpdateTooltip(guid, nil, unit)
 	if pendingGUID == guid then return end
 	if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") or IsInspectBusy() then return end
-	requester.elapsed = 0
-	requester:Show()
+	if not requester:IsShown() then
+		requester.elapsed = 0
+		requester:Show()
+	end
 end
 
 function TT:SetupItemLevel()
