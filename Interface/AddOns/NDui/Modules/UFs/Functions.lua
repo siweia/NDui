@@ -980,7 +980,7 @@ function UF.PostCreateButton(element, button, options)
 		button.Stealable:SetAtlas("bags-newitem")
 	end
 
-	if element.__owner.mystyle == "nameplate" then
+	if element.__isNameplate then
 		local sizeRatio = options.sizeRatio or element.sizeRatio
 		UF.UpdateIconTexCoord(button, size, size * sizeRatio)
 		if button.Count then
@@ -1536,7 +1536,7 @@ local function AddAuraGroup(element, name, filter, count, index, candidateFilter
 		maxFrameCount = count,
 		sortMethod = sortMethod,
 		size = size,
-		height = element.__owner.mystyle == "nameplate" and size * sizeRatio or nil,
+		height = element.__isNameplate and size * sizeRatio or nil,
 		fontSize = buttonOptions.fontSize,
 		sizeRatio = sizeRatio,
 		desaturated = buttonOptions.desaturated,
@@ -1545,16 +1545,9 @@ local function AddAuraGroup(element, name, filter, count, index, candidateFilter
 	})
 end
 
-local function CreateAuraElement(self, options)
-	local element = self:CreateAuras({
-		initialAnchor = options.initialAnchor,
-		growthX = options.growthX,
-		growthY = options.growthY,
-		layout = AnchorUtil.FlowLayoutAxis.Horizontal,
-		layoutLimit = self:GetWidth(),
-	})
-
+local function ConfigureAuraElement(element, options)
 	element.__groups = {}
+	element.__isNameplate = options.isNameplate
 	element.__value = options.value
 	element.spacing = options.spacing or 0
 	element.groupSpacing = options.groupSpacing
@@ -1567,6 +1560,18 @@ local function CreateAuraElement(self, options)
 	element.showDuration = false
 	element.showStealableBorder = true
 	element.PostCreateButton = UF.PostCreateButton
+end
+
+local function CreateAuraElement(self, options)
+	local element = self:CreateAuras({
+		initialAnchor = options.initialAnchor,
+		growthX = options.growthX,
+		growthY = options.growthY,
+		layout = AnchorUtil.FlowLayoutAxis.Horizontal,
+		layoutLimit = self:GetWidth(),
+	})
+	options.isNameplate = self.mystyle == "nameplate"
+	ConfigureAuraElement(element, options)
 	return element
 end
 
@@ -1602,30 +1607,25 @@ local auraUFs = {
 	["focus"] = "Focus",
 }
 
-function UF:CreateAuras(self)
-	local mystyle = self.mystyle
-	if mystyle == "nameplate" then
-		local db = C.db["Nameplate"]
-		local yOffset = db["TargetPower"] and 10 + db["PPBarHeight"] or 5
-		for _, container in ipairs(NAMEPLATE_AURA_CONTAINERS) do
-			local bu = CreateAuraElement(self, {
-				initialAnchor = container.anchor,
-				growthX = container.growthX,
-				growthY = "UP",
-				spacing = 3,
-				groupSpacing = 0,
-				disableMouse = true,
-			})
-			bu.__auraType = "nameplate"
-			bu.__nameplateAuraType = container.auraType
-			bu:SetPoint(container.anchor, self.nameText, container.relativeAnchor, 0, yOffset)
-
+-- Initialize groups and appearance once, before a container gets a unit owner.
+-- Stable option tables keep buffs and debuffs in separate preallocated pools.
+for _, container in ipairs(NAMEPLATE_AURA_CONTAINERS) do
+	container.options = {
+		initialAnchor = container.anchor,
+		growthX = container.growthX,
+		growthY = "UP",
+		layout = AnchorUtil.FlowLayoutAxis.Horizontal,
+		initialize = function(element)
+			ConfigureAuraElement(element, {isNameplate = true, spacing = 3, groupSpacing = 0, disableMouse = true})
+			element.__auraType = "nameplate"
+			element.__nameplateAuraType = container.auraType
+			local db = C.db["Nameplate"]
 			local layoutIndex = 0
 			for index, group in ipairs(NAMEPLATE_AURA_GROUPS) do
 				if group.auraType == container.auraType then
 					layoutIndex = layoutIndex + 1
 					local settings = NAMEPLATE_AURA_SETTINGS[group.auraType]
-					AddAuraGroup(bu, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group), layoutIndex, group.candidateFilters, nil, {
+					AddAuraGroup(element, NAMEPLATE_AURA_GROUP_NAME..index, group.filter, GetNameplateAuraGroupCount(group), layoutIndex, group.candidateFilters, nil, {
 						size = db[settings.size],
 						fontSize = db[settings.fontSize],
 						sizeRatio = db[settings.sizeRatio],
@@ -1633,7 +1633,20 @@ function UF:CreateAuras(self)
 					})
 				end
 			end
+		end,
+	}
+end
 
+function UF:CreateAuras(self)
+	local mystyle = self.mystyle
+	if mystyle == "nameplate" then
+		local db = C.db["Nameplate"]
+		local yOffset = db["TargetPower"] and 10 + db["PPBarHeight"] or 5
+		for _, container in ipairs(NAMEPLATE_AURA_CONTAINERS) do
+			container.options.layoutLimit = self:GetWidth()
+			local bu = self:CreatePrewarmAuras(container.options)
+			bu:SetFlowLayoutMaximumLineSize(self:GetWidth())
+			bu:SetPoint(container.anchor, self.nameText, container.relativeAnchor, 0, yOffset)
 			UF:UpdateAuraContainer(self, bu)
 			self[container.element] = bu
 		end
@@ -1693,21 +1706,54 @@ local PlateDebuffsExclude = {
 	},
 }
 
+local NAMEPLATE_CC_OPTIONS = {
+	initialAnchor = "LEFT",
+	growthX = "RIGHT",
+	growthY = "DOWN",
+	layout = AnchorUtil.FlowLayoutAxis.Horizontal,
+	initialize = function(element)
+		ConfigureAuraElement(element, {isNameplate = true, spacing = 3, disableMouse = true})
+		element.__auraType = "debuffs"
+		ConfigureNameplateDebuffs(element)
+		AddAuraGroup(element, "Debuffs", element.filter, element.num, 1, PlateDebuffsExclude)
+	end,
+}
+
 function UF:CreatePlateDebuffs(self)
-	local bu = CreateAuraElement(self, {
-		initialAnchor = "LEFT",
-		growthX = "RIGHT",
-		growthY = "DOWN",
-		spacing = 3,
-		disableMouse = true,
-	})
-	bu.__auraType = "debuffs"
+	NAMEPLATE_CC_OPTIONS.layoutLimit = self:GetWidth()
+	local bu = self:CreatePrewarmAuras(NAMEPLATE_CC_OPTIONS)
+	bu:SetFlowLayoutMaximumLineSize(self:GetWidth())
 	bu:SetPoint("LEFT", self.Health, "RIGHT", 5, 0)
 
 	ConfigureNameplateDebuffs(bu)
-	AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1, PlateDebuffsExclude)
+	UF:UpdateAuraContainer(self, bu)
 
 	self.Debuffs = bu
+end
+
+function UF:PrewarmNameplateAuras(count)
+	if self.__nameplateAurasPrewarmed or InCombatLockdown() then return end
+	local db = C.db["Nameplate"]
+	local options = {}
+	for _, container in ipairs(NAMEPLATE_AURA_CONTAINERS) do
+		local settings = NAMEPLATE_AURA_SETTINGS[container.auraType]
+		if db[settings.enabled] then
+			container.options.layoutLimit = db["PlateWidth"]
+			table.insert(options, container.options)
+		end
+	end
+	if db["PlateCC"] then
+		NAMEPLATE_CC_OPTIONS.layoutLimit = db["PlateWidth"]
+		table.insert(options, NAMEPLATE_CC_OPTIONS)
+	end
+
+	-- Finish during login initialization: no background creation after entering the world.
+	for _ = 1, count do
+		for _, config in ipairs(options) do
+			oUF:PrewarmAuras(config)
+		end
+	end
+	self.__nameplateAurasPrewarmed = true
 end
 
 function UF:CreateBuffs(self)
