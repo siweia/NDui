@@ -4,7 +4,7 @@ local TT = B:GetModule("Tooltip")
 
 local format, strfind = string.format, string.find
 local GetTime, CanInspect, NotifyInspect, ClearInspectPlayer = GetTime, CanInspect, NotifyInspect, ClearInspectPlayer
-local UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi = UnitGUID, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi
+local UnitGUID, UnitIsPlayer, UnitIsDeadOrGhost, UnitOnTaxi = UnitGUID, UnitIsPlayer, UnitIsDeadOrGhost, UnitOnTaxi
 local GetInventoryItemID, GetInventoryItemQuality = GetInventoryItemID, GetInventoryItemQuality
 local GetAverageItemLevel = GetAverageItemLevel
 local HEIRLOOMS = _G.HEIRLOOMS
@@ -245,7 +245,7 @@ function TT:InspectUnitItemLevel(unit)
 
 	UpdateTooltip(guid, nil, unit)
 	if pendingGUID == guid then return end
-	if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") or IsInspectBusy() then return end
+	if UnitIsDeadOrGhost("player") or UnitOnTaxi("player") or IsInspectBusy() then return end
 	if not requester:IsShown() then
 		requester.elapsed = 0
 		requester:Show()
