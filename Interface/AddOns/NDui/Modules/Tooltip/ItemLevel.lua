@@ -13,6 +13,7 @@ local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..DB.InfoColor
 local pendingText = LFG_LIST_LOADING
 local cacheDuration, requestDelay = 120, .5
 local inspectFrameLockTime, inspectNotifyLockTime = 10, 3
+local inspectTimeout = 5
 local heirloomQuality = Enum.ItemQuality.Heirloom
 local cache = {}
 local currentUnit, currentGUID, pendingGUID
@@ -184,6 +185,11 @@ OnInspectReady = function(_, guid)
 			tooltipUnit = GetInspectUnit(guid, tooltipUnit)
 			UpdateTooltip(guid, entry.text, tooltipUnit, true)
 		end
+	elseif current then
+		local tooltipUnit, tooltipGUID = TT.GetUnit(GameTooltip)
+		if tooltipGUID == guid or UnitMatchesGUID(tooltipUnit, guid) then
+			UpdateTooltip(guid, "-", GetInspectUnit(guid, tooltipUnit), true)
+		end
 	end
 
 	pendingGUID = nil
@@ -192,6 +198,8 @@ OnInspectReady = function(_, guid)
 	if requester and currentGUID ~= guid and UnitMatchesGUID(currentUnit, currentGUID) then
 		requester.elapsed = 0
 		requester:Show()
+	elseif requester then
+		requester:Hide()
 	end
 end
 local function OnExternalInspect()
@@ -231,10 +239,7 @@ function TT:InspectUnitItemLevel(unit)
 		UpdateTooltip(guid, FormatItemLevel(level, heirlooms, tierPieces), unit)
 		return
 	end
-	if not UnitIsPlayer(unit) or not CanInspect(unit) then return end
-
-	if currentGUID ~= guid and requester then requester:Hide() end
-	currentUnit, currentGUID = unit, guid
+	if not UnitIsPlayer(unit) then return end
 
 	local entry = cache[guid]
 	local force = not C.db["Tooltip"]["SpecLevelByShift"] and IsShiftKeyDown()
@@ -243,9 +248,11 @@ function TT:InspectUnitItemLevel(unit)
 		return
 	end
 
+	if not CanInspect(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") or IsInspectBusy() then return end
+	if currentGUID ~= guid and requester and not pendingGUID then requester:Hide() end
+	currentUnit, currentGUID = unit, guid
 	UpdateTooltip(guid, nil, unit)
 	if pendingGUID == guid then return end
-	if UnitIsDeadOrGhost("player") or UnitOnTaxi("player") or IsInspectBusy() then return end
 	if not requester:IsShown() then
 		requester.elapsed = 0
 		requester:Show()
@@ -260,7 +267,18 @@ function TT:SetupItemLevel()
 		if self.elapsed < requestDelay then return end
 		self.elapsed = 0
 
-		if pendingGUID then return end
+		if pendingGUID then
+			if GetTime() - lastTooltipInspectTime < inspectTimeout then return end
+			local guid = pendingGUID
+			CancelRequest()
+			local tooltipUnit, tooltipGUID = TT.GetUnit(GameTooltip)
+			if tooltipGUID == guid or UnitMatchesGUID(tooltipUnit, guid) then
+				UpdateTooltip(guid, "-", GetInspectUnit(guid, tooltipUnit), true)
+			elseif currentGUID ~= guid and UnitMatchesGUID(currentUnit, currentGUID) then
+				self:Show()
+			end
+			return
+		end
 		if not IsCurrentUnit(currentUnit, currentGUID) or IsInspectBusy() then
 			self:Hide()
 			return
@@ -280,7 +298,6 @@ function TT:SetupItemLevel()
 		internalInspect = true
 		NotifyInspect(currentUnit)
 		internalInspect = nil
-		self:Hide()
 	end)
 
 	HookInspectUnit()
