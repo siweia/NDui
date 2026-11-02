@@ -962,7 +962,7 @@ function UF.PostCreateButton(element, button, options)
 	end
 	button.iconbg = B.ReskinIcon(button.Icon)
 	button.iconbg:SetBackdropBorderColor(0, 0, 0)
-	B.CreateSD(button)
+	--B.CreateSD(button)
 
 	if options.showDebuffTypeBorder then
 		CreateAuraDispelBorder(button, C.mult * (element.__debuffBorderSize or 1))
