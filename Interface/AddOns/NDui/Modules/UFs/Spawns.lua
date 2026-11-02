@@ -165,7 +165,7 @@ local function CreateRaidStyle(self)
 	UF:CreateClickSets(self)
 	UF:CreateThreatBorder(self)
 	if self.raidType ~= "simple" then
-		UF:CreateRaidAuras(self)
+		UF:CreateSpellsIndicator(self)
 	end
 	if C.db["UFs"]["RaidAuras"] then
 		UF:CreateBuffs(self)

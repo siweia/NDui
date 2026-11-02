@@ -6,6 +6,5 @@
 	<Script file="Spawns.lua"/>
 
 	<Script file="Elements\Castbar.lua"/>
-	<Script file="Elements\RaidAuras.lua"/>
 	<Script file="Elements\SpellsIndicator.lua"/>
 </Ui>
