@@ -1566,10 +1566,10 @@ function module:OnLogin()
 	C_Container.SetInsertItemsLeftToRight(false)
 
 	-- Init
-	C.db["Bags"]["GatherEmpty"] = not C.db["Bags"]["GatherEmpty"]
-	ToggleAllBags()
-	C.db["Bags"]["GatherEmpty"] = not C.db["Bags"]["GatherEmpty"]
-	ToggleAllBags()
+	C_Timer_After(0, function()
+		ToggleAllBags()
+		ToggleAllBags()
+	end)
 	module.initComplete = true
 
 	B:RegisterEvent("TRADE_SHOW", module.OpenBags)
