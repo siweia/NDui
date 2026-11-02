@@ -77,13 +77,13 @@ local function CreateIndicatorButton(element, options, button)
 	local r, g, b = unpack(options.__color)
 	local indicatorType = options.__indicatorType
 
-	button:SetFrameLevel(element:GetFrameLevel() + options.__frameLevel)
+	button:SetFrameLevel(options.__frameLevel)
 	button:SetSize(options.size, options.size)
 	button:SetScale(options.__scale)
 	button:EnableMouse(false)
 	button:ClearAllPoints()
 	local x, y = unpack(counterOffsets[anchor][3])
-	button:SetPoint(anchor, element, anchor, x, y)
+	button:SetPoint(anchor, element.__owner.Health, anchor, x, y)
 
 	local count = button:CreateFontString(nil, "OVERLAY", "NumberFontNormal")
 	count:SetFont(DB.Font[1], 12, DB.Font[3])
@@ -125,17 +125,24 @@ local function CreateIndicatorButton(element, options, button)
 	button:SetApplicationCount(count, {formatter = COUNT_FORMATTER})
 end
 
-local function InitializeCornerSpells(element)
+function UF:CreateSpellsIndicator(self)
+	if not C.db["UFs"]["RaidBuffIndicator"] then return end
+
 	local spellIDs = {}
 	for spellID in pairs(UF.CornerSpells) do
 		tinsert(spellIDs, spellID)
 	end
+	if #spellIDs == 0 then return end
 	sort(spellIDs)
 
+	local element = self:CreateAuras()
+	element:SetAllPoints(self.Health)
 	element.disableMouse = true
+
 	local spellSize = C.db["UFs"]["RaidSpellSize"] or 10
 	local indicatorType = C.db["UFs"]["BuffIndicatorType"]
 	local scale = C.db["UFs"]["BuffIndicatorScale"]
+	local baseFrameLevel = self:GetFrameLevel() + 10
 	for index, spellID in ipairs(spellIDs) do
 		local value = UF.CornerSpells[spellID]
 		local filter = value[3] and "HELPFUL" or "HELPFUL|PLAYER"
@@ -149,23 +156,7 @@ local function InitializeCornerSpells(element)
 			__color = value[2],
 			__indicatorType = indicatorType,
 			__scale = scale,
-			__frameLevel = index,
+			__frameLevel = baseFrameLevel + index,
 		})
 	end
-end
-
-UF.CornerSpellsPrewarmOptions = {
-	initialAnchor = "TOPLEFT",
-	growthX = "RIGHT",
-	growthY = "DOWN",
-	layout = AnchorUtil.FlowLayoutAxis.Horizontal,
-	initialize = InitializeCornerSpells,
-}
-
-function UF:CreateSpellsIndicator(self)
-	if not C.db["UFs"]["RaidBuffIndicator"] or not next(UF.CornerSpells) then return end
-
-	local element = self:CreatePrewarmAuras(UF.CornerSpellsPrewarmOptions)
-	element:SetAllPoints(self.Health)
-	element:SetFrameLevel(self:GetFrameLevel() + 10)
 end
