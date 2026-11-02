@@ -420,6 +420,7 @@ function UF:OnLogin()
 		B:LockCVar("predictedHealth", "1")
 		UF:AddClickSetsListener()
 		UF:UpdateCornerSpells()
+		UF:PrewarmRaidAuras()
 		UF.headers = {}
 
 		-- Hide Default RaidFrame

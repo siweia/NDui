@@ -1177,10 +1177,10 @@ local function PostCreateRaidBigDefensiveButton(element, button, options)
 	UF.PostCreateButton(element, button, options)
 	local xOffset = (options.slotIndex - 1.5) * (options.size + RAID_BIG_DEFENSIVE_SPACING)
 	button:ClearAllPoints()
-	button:SetPoint("CENTER", element.__owner.Health, xOffset, 0)
+	button:SetPoint("CENTER", element, xOffset, 0)
 	-- Now that it sits over the name, keep it above the name/HP text, which
 	-- lives on a sub-level of the frame while aura buttons default to a low one.
-	button:SetFrameLevel(element.__owner:GetFrameLevel() + 10)
+	button:SetFrameLevel(element:GetFrameLevel() + 1)
 end
 
 local RAID_DEBUFF_GROUP_NAME = "RaidDebuffs"
@@ -1756,24 +1756,7 @@ function UF:PrewarmNameplateAuras(count)
 	self.__nameplateAurasPrewarmed = true
 end
 
-function UF:CreateBuffs(self)
-	local mystyle = self.mystyle
-	local value = mystyle == "raid" and "Raid" or mystyle == "arena" and "Arena" or "Boss"
-	local bu = CreateAuraElement(self, {
-		initialAnchor = mystyle == "raid" and "TOPLEFT" or "BOTTOMLEFT",
-		growthX = "RIGHT",
-		growthY = mystyle == "raid" and "DOWN" or "UP",
-		spacing = mystyle == "raid" and 2 or 3,
-		value = value,
-		disableMouse = mystyle == "raid",
-	})
-	bu.__auraType = "buffs"
-	if mystyle == "raid" then
-		bu:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
-	else
-		bu:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
-	end
-
+local function InitializeBuffs(bu, mystyle)
 	UF:ConfigureBuffAndDebuff(bu)
 	local filterGroups = mystyle == "arena" and ARENA_BUFF_GROUPS[bu.__filterType]
 	if filterGroups then
@@ -1795,22 +1778,15 @@ function UF:CreateBuffs(self)
 		end
 		AddAuraGroup(bu, "Buffs", bu.filter, bu.num, 1, candidateFilters)
 	end
-	UF:UpdateAuraContainer(self, bu)
-
-	self.Buffs = bu
 end
 
-function UF:CreateRaidBigDefensives(self)
+local function InitializeRaidBigDefensives(bu)
 	local size = C.db["UFs"]["RaidBigDefensiveSize"]
-	local bu = CreateAuraElement(self, {
-		initialAnchor = "TOPRIGHT",
-		growthX = "LEFT",
-		growthY = "DOWN",
+	ConfigureAuraElement(bu, {
 		fontSize = C.db["UFs"]["RaidBigDefensiveCDSize"],
 		hideDuration = not C.db["UFs"]["RaidBigDefensiveCDText"],
 		disableMouse = true,
 	})
-	bu:SetPoint("TOPLEFT", self)
 	bu.iconSize = size
 	bu.showStealableBorder = false
 	bu.PostCreateButton = PostCreateRaidBigDefensiveButton
@@ -1822,28 +1798,9 @@ function UF:CreateRaidBigDefensives(self)
 			slotIndex = index,
 		})
 	end
-
-	self.BigDefensives = bu
-	UF:UpdateAuraLayoutLimit(self)
 end
 
-function UF:CreateDebuffs(self)
-	local mystyle = self.mystyle
-	local value = mystyle == "raid" and "Raid" or mystyle == "arena" and "Arena" or "Boss"
-	local bu = CreateAuraElement(self, {
-		initialAnchor = mystyle == "raid" and "BOTTOMRIGHT" or "TOPRIGHT",
-		growthX = "LEFT",
-		growthY = mystyle == "raid" and "UP" or "DOWN",
-		spacing = mystyle == "raid" and 2 or 3,
-		value = value,
-		disableMouse = mystyle == "raid",
-	})
-	bu.__auraType = "debuffs"
-	if mystyle == "raid" then
-		bu:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
-	else
-		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
-	end
+local function InitializeDebuffs(bu, mystyle)
 	local sortMethod = AuraContainerSortMethod.UnitFrameDebuff
 
 	UF:ConfigureBuffAndDebuff(bu, true)
@@ -1858,9 +1815,98 @@ function UF:CreateDebuffs(self)
 	else
 		AddAuraGroup(bu, "Debuffs", bu.filter, bu.num, 1, {}, sortMethod)
 	end
-	UF:UpdateAuraContainer(self, bu)
+end
 
-	self.Debuffs = bu
+-- Use the same pools as nameplates; build every group/slot before joining a group.
+local RAID_BUFF_OPTIONS = {
+	initialAnchor = "TOPLEFT", growthX = "RIGHT", growthY = "DOWN",
+	layout = AnchorUtil.FlowLayoutAxis.Horizontal,
+	initialize = function(element)
+		ConfigureAuraElement(element, {value = "Raid", spacing = 2, disableMouse = true})
+		element.__auraType = "buffs"
+		InitializeBuffs(element, "raid")
+	end,
+}
+local RAID_DEBUFF_OPTIONS = {
+	initialAnchor = "BOTTOMRIGHT", growthX = "LEFT", growthY = "UP",
+	layout = AnchorUtil.FlowLayoutAxis.Horizontal,
+	initialize = function(element)
+		ConfigureAuraElement(element, {value = "Raid", spacing = 2, disableMouse = true})
+		element.__auraType = "debuffs"
+		InitializeDebuffs(element, "raid")
+	end,
+}
+local RAID_DEFENSIVE_OPTIONS = {
+	initialAnchor = "TOPRIGHT", growthX = "LEFT", growthY = "DOWN",
+	layout = AnchorUtil.FlowLayoutAxis.Horizontal,
+	initialize = InitializeRaidBigDefensives,
+}
+
+local function CreateBuffOrDebuff(self, isDebuff)
+	local mystyle = self.mystyle
+	local element
+	if mystyle == "raid" then
+		element = self:CreatePrewarmAuras(isDebuff and RAID_DEBUFF_OPTIONS or RAID_BUFF_OPTIONS)
+		element:SetFlowLayoutMaximumLineSize(self:GetWidth())
+	else
+		element = CreateAuraElement(self, {
+			initialAnchor = isDebuff and "TOPRIGHT" or "BOTTOMLEFT",
+			growthX = isDebuff and "LEFT" or "RIGHT",
+			growthY = isDebuff and "DOWN" or "UP",
+			spacing = 3,
+			value = mystyle == "arena" and "Arena" or "Boss",
+		})
+		element.__auraType = isDebuff and "debuffs" or "buffs"
+		if isDebuff then InitializeDebuffs(element, mystyle) else InitializeBuffs(element, mystyle) end
+	end
+	if isDebuff then
+		if mystyle == "raid" then
+			element:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
+		else
+			element:SetPoint("TOPRIGHT", self, "TOPLEFT", -5, 0)
+		end
+	elseif mystyle == "raid" then
+		element:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+	else
+		element:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+	end
+	UF:UpdateAuraContainer(self, element)
+	return element
+end
+
+function UF:CreateBuffs(self)
+	self.Buffs = CreateBuffOrDebuff(self, false)
+end
+
+function UF:CreateDebuffs(self)
+	self.Debuffs = CreateBuffOrDebuff(self, true)
+end
+
+function UF:CreateRaidBigDefensives(self)
+	local element = self:CreatePrewarmAuras(RAID_DEFENSIVE_OPTIONS)
+	element:SetAllPoints(self.Health)
+	element:SetFrameLevel(self:GetFrameLevel() + 9)
+	self.BigDefensives = element
+	UF:UpdateAuraLayoutLimit(self)
+end
+
+function UF:PrewarmRaidAuras()
+	if self.__raidAurasPrewarmed or InCombatLockdown() then return end
+	local db = C.db["UFs"]
+	local partyCount = db["PartyFrame"] and 5 or 0
+	local count = 40 + partyCount
+	local indicatorCount = (db["SimpleMode"] and 0 or 40) + partyCount
+	for i = 1, count do
+		if db["RaidAuras"] then
+			oUF:PrewarmAuras(RAID_BUFF_OPTIONS)
+			oUF:PrewarmAuras(RAID_DEBUFF_OPTIONS)
+		end
+		if i <= indicatorCount then
+			if db["RaidBigDefensive"] then oUF:PrewarmAuras(RAID_DEFENSIVE_OPTIONS) end
+			if db["RaidBuffIndicator"] and next(UF.CornerSpells) then oUF:PrewarmAuras(UF.CornerSpellsPrewarmOptions) end
+		end
+	end
+	self.__raidAurasPrewarmed = true
 end
 
 -- Class Powers
