@@ -42,7 +42,6 @@
 
 	<Script file='Plugins\AutoResurrect.lua' />
 	<Script file='Plugins\EnemyRange.lua' />
-	<Script file="Plugins\PrewarmAuras.lua"/>
 
 	<Script file="finalize.lua"/>
 

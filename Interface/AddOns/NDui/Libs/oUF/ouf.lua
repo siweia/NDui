@@ -974,9 +974,44 @@ do
 		updateDriver(self)
 	end
 
+	-- NDui: spread complete prebuilt frames over time; the normal style initializes them on first use.
+	function nameplateDriverMixin:Prewarm(count, create)
+		argcheck(count, 2, 'number')
+		argcheck(create, 3, 'function')
+		if(self.prewarmPool) then return end
+
+		self.prewarmPool = {}
+		local function createNext()
+			if(self.numPlates >= count) then return end
+			if(InCombatLockdown()) then
+				self.prewarmResume = createNext
+				self:RegisterEvent('PLAYER_REGEN_ENABLED')
+				return
+			end
+
+			self.numPlates = self.numPlates + 1
+			local object = CreateFrame('Button', self.prefix .. 'Prewarm' .. self.numPlates, UIParent, 'PingableUnitFrameTemplate')
+			object:Hide()
+			object:EnableMouse(false)
+			object.isNamePlate = true
+			setmetatable(object, frame_metatable)
+			create(object)
+			table.insert(self.prewarmPool, object)
+
+			if(self.numPlates < count) then C_Timer.After(.1, createNext) end
+		end
+
+		C_Timer.After(3, createNext)
+	end
+
 	local function driverEventHandler(self, event, unit)
 		if(event == 'PLAYER_LOGIN') then
 			updateDriver(self)
+		elseif(event == 'PLAYER_REGEN_ENABLED') then
+			self:UnregisterEvent(event)
+			local resume = self.prewarmResume
+			self.prewarmResume = nil
+			if(resume) then resume() end
 		elseif(event == 'PLAYER_TARGET_CHANGED') then
 			local nameplate = C_NamePlate.GetNamePlateForUnit('target')
 			if(not nameplate or not nameplate.unitFrame) then return end
@@ -1000,14 +1035,28 @@ do
 			if(not nameplate.unitFrame) then
 				nameplate.style = self.style
 
-				nameplate.unitFrame = CreateFrame('Button', self.prefix .. nameplate:GetName(), nameplate, 'PingableUnitFrameTemplate')
+				local prebuilt = self.prewarmPool and table.remove(self.prewarmPool)
+				if(prebuilt) then
+					nameplate.unitFrame = prebuilt
+					prebuilt:SetParent(nameplate)
+					prebuilt:ClearAllPoints()
+				else
+					nameplate.unitFrame = CreateFrame('Button', self.prefix .. nameplate:GetName(), nameplate, 'PingableUnitFrameTemplate')
+					self.numPlates = self.numPlates + 1
+				end
 				nameplate.unitFrame:EnableMouse(false)
 				nameplate.unitFrame:SetAllPoints()
 				nameplate.unitFrame.isNamePlate = true
 
 				Private.UpdateUnits(nameplate.unitFrame, unit)
 
-				walkObject(nameplate.unitFrame, unit)
+				if(prebuilt) then
+					-- Its existing children are visuals, not additional oUF unit frames.
+					initObject(unit, self.style, styles[self.style], nil, prebuilt)
+					prebuilt:Show()
+				else
+					walkObject(nameplate.unitFrame, unit)
+				end
 
 				-- re-parent other elements directly to the nameplate frame, as there doesn't seem
 				-- to be any downsides to be parented there than to the unit frame within,
@@ -1074,6 +1123,7 @@ do
 
 		nameplateDriver.style = style
 		nameplateDriver.prefix = namePrefix or generateName()
+		nameplateDriver.numPlates = 0
 
 		nameplateDriver:RegisterEvent('NAME_PLATE_UNIT_ADDED')
 		nameplateDriver:RegisterEvent('NAME_PLATE_UNIT_REMOVED')

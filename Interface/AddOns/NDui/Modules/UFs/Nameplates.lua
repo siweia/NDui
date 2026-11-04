@@ -601,7 +601,7 @@ end
 local platesList = {}
 UF.nameplateUnits = {}
 
-function UF:CreatePlateFrames()
+function UF:CreatePlateFrames(prewarm)
 	self.mystyle = "nameplate"
 	self:SetSize(C.db["Nameplate"]["PlateWidth"], C.db["Nameplate"]["PlateHeight"])
 	self:ClearAllPoints()
@@ -621,8 +621,10 @@ function UF:CreatePlateFrames()
 	UF:CreateCastBar(self)
 	UF:CreateRaidMark(self)
 	UF:CreatePrediction(self)
-	UF:CreateAuras(self)
-	UF:CreatePlateDebuffs(self)
+	if not prewarm then
+		UF:CreateAuras(self)
+		UF:CreatePlateDebuffs(self)
+	end
 	UF:CreatePVPClassify(self)
 	UF:CreateThreatColor(self)
 
@@ -639,7 +641,26 @@ function UF:CreatePlateFrames()
 end
 
 function UF:CreatePlates()
-	UF.CreatePlateFrames(self)
+	if self.Health then
+		-- Prebuilt frames must anchor to their new native parent and use current settings.
+		-- Aura containers are intentionally deferred until the frame gets a real unit.
+		if not self.Auras then
+			UF:CreateAuras(self)
+			UF:CreatePlateDebuffs(self)
+		end
+		local db = C.db["Nameplate"]
+		self:SetSize(db["PlateWidth"], db["PlateHeight"])
+		self:ClearAllPoints()
+		self:SetPoint("CENTER")
+		B.SetFontSize(self.Castbar.isYou, db["NameTextSize"]+3)
+		local yOffset = db["TargetPower"] and 10 + db["PPBarHeight"] or 5
+		self.Auras:SetPoint("BOTTOMLEFT", self.nameText, "TOPLEFT", 0, yOffset)
+		self.Buffs:SetPoint("BOTTOMRIGHT", self.nameText, "TOPRIGHT", 0, yOffset)
+		UF:UpdateAuraContainer(self, self.Auras)
+		UF.UpdateNameplateDebuffs(self, false) -- Initial aura refresh belongs to oUF's unit update.
+	else
+		UF.CreatePlateFrames(self)
+	end
 
 	UF:CreateStackingBounds(self)
 	self:Tag(self.nameText, "[nplevel][name]")
@@ -653,12 +674,12 @@ end
 
 function UF:ToggleNameplateAuras(shouldEnable)
 	if (C.db["Nameplate"]["PlateAuras"] or C.db["Nameplate"]["PlateBuffs"] or C.db["Nameplate"]["PlateCC"]) and shouldEnable then
-		if not self:IsElementEnabled("PrewarmAuras") then
-			self:EnableElement("PrewarmAuras")
+		if not self:IsElementEnabled("Auras") then
+			self:EnableElement("Auras")
 		end
 	else
-		if self:IsElementEnabled("PrewarmAuras") then
-			self:DisableElement("PrewarmAuras")
+		if self:IsElementEnabled("Auras") then
+			self:DisableElement("Auras")
 		end
 	end
 end
