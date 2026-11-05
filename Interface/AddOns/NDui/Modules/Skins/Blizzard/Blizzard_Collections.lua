@@ -46,25 +46,6 @@ local function reskinFrameButton(self)
 	self:ForEachFrame(reskinCollectionButton)
 end
 
-local function updateSideTabIcon(tab)
-	tab.Icon:SetSize(36, 36)
-	tab.Icon:SetTexCoord(unpack(DB.TexCoord))
-end
-
-local function reskinSideTab(tab)
-	tab.Background:SetAlpha(0)
-	tab.Icon:RemoveMaskTexture(tab.Mask)
-	B.ReskinIcon(tab.Icon, true)
-	tab.HighlightTexture:SetColorTexture(1, 1, 1, .25)
-	tab.HighlightTexture:SetAllPoints(tab.Icon)
-	tab.SelectedTexture:SetColorTexture(cr, cg, cb, .25)
-	tab.SelectedTexture:SetAllPoints(tab.Icon)
-	tab.TabGlow:SetColorTexture(cr, cg, cb, .25)
-	tab.TabGlow:SetAllPoints(tab.Icon)
-	hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
-	updateSideTabIcon(tab)
-end
-
 local function reskinProgressTracker(tracker)
 	B.StripTextures(tracker)
 	if not tracker.isCount then
@@ -80,7 +61,7 @@ C.themes["Blizzard_Collections"] = function()
 	CollectionsJournal.bg = B.ReskinPortraitFrame(CollectionsJournal) -- need this for Rematch skin
 	if CollectionsJournal.TabContainer then
 		for _, tab in ipairs(CollectionsJournal.TabContainer.Tabs) do
-			reskinSideTab(tab)
+			B.ReskinSideTab(tab)
 		end
 	else
 		for i = 1, 6 do

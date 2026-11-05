@@ -80,26 +80,6 @@ local function reskinSocialContent(content)
 	end
 end
 
-local function updateSideTabIcon(tab)
-	tab.Icon:SetSize(36, 36)
-	tab.Icon:SetTexCoord(unpack(DB.TexCoord))
-end
-
-local function reskinSideTab(tab)
-	tab.Background:SetAlpha(0)
-	tab.Icon:RemoveMaskTexture(tab.Mask)
-	tab.bg = B.ReskinIcon(tab.Icon, true)
-	local hl = tab.HighlightTexture
-	hl:SetColorTexture(1, 1, 1, .25)
-	hl:SetAllPoints(tab.Icon)
-	tab.SelectedTexture:SetColorTexture(cr, cg, cb, .25)
-	tab.SelectedTexture:SetAllPoints(tab.Icon)
-	tab.TabGlow:SetColorTexture(cr, cg, cb, .25)
-	tab.TabGlow:SetAllPoints(tab.Icon)
-	hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
-	updateSideTabIcon(tab)
-end
-
 C.themes["Blizzard_SocialUI"] = function()
 	local frame = SocialUIFrame
 
@@ -120,7 +100,7 @@ C.themes["Blizzard_SocialUI"] = function()
 
 	hooksecurefunc(frame, "RefreshTabs", function(self)
 		for tab in self:EnumerateTabs() do
-			reskinSideTab(tab)
+			B.ReskinSideTab(tab)
 		end
 	end)
 

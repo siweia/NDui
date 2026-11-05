@@ -1,5 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
+local r, g, b = DB.r, DB.g, DB.b
 
 local function resetIcon(icon, x1)
 	if x1 ~= .08 then
@@ -56,10 +57,28 @@ function B:ReskinModelControl()
 	end
 end
 
+local function updateSideTabIcon(tab)
+	tab.Icon:SetSize(36, 36)
+	tab.Icon:SetTexCoord(unpack(DB.TexCoord))
+end
+
+function B.ReskinSideTab(tab)
+	tab.Background:SetAlpha(0)
+	tab.Icon:RemoveMaskTexture(tab.Mask)
+	tab.bg = B.ReskinIcon(tab.Icon, true)
+	local hl = tab.HighlightTexture
+	hl:SetColorTexture(1, 1, 1, .25)
+	hl:SetAllPoints(tab.Icon)
+	tab.SelectedTexture:SetColorTexture(r, g, b, .25)
+	tab.SelectedTexture:SetAllPoints(tab.Icon)
+	tab.TabGlow:SetColorTexture(r, g, b, .25)
+	tab.TabGlow:SetAllPoints(tab.Icon)
+	hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
+	updateSideTabIcon(tab)
+end
+
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
-
-	local r, g, b = DB.r, DB.g, DB.b
 
 	B.ReskinPortraitFrame(CharacterFrame)
 
@@ -91,28 +110,8 @@ tinsert(C.defaultThemes, function()
 	CharacterModelScene:DisableDrawLayer("OVERLAY")
 
 	-- Side tabs
-	local function updateSideTabIcon(tab)
-		tab.Icon:SetSize(36, 36)
-		tab.Icon:SetTexCoord(unpack(DB.TexCoord))
-	end
-
-	local function reskinSideTab(tab)
-		tab.Background:SetAlpha(0)
-		tab.Icon:RemoveMaskTexture(tab.Mask)
-		tab.bg = B.ReskinIcon(tab.Icon, true)
-		local hl = tab.HighlightTexture
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetAllPoints(tab.Icon)
-		tab.SelectedTexture:SetColorTexture(r, g, b, .25)
-		tab.SelectedTexture:SetAllPoints(tab.Icon)
-		tab.TabGlow:SetColorTexture(r, g, b, .25)
-		tab.TabGlow:SetAllPoints(tab.Icon)
-		hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
-		updateSideTabIcon(tab)
-	end
-
 	for _, tab in ipairs(CharacterFrame.ModeTabs.Tabs) do
-		reskinSideTab(tab)
+		B.ReskinSideTab(tab)
 	end
 
 	-- [[ Item buttons ]]

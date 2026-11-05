@@ -245,25 +245,6 @@ function B:ReskinProfessionsRankBar()
 	updateRankBar(self)
 end
 
-local function updateSideTabIcon(tab)
-	tab.Icon:SetSize(36, 36)
-	tab.Icon:SetTexCoord(unpack(DB.TexCoord))
-end
-
-local function reskinSideTab(tab)
-	tab.Background:SetAlpha(0)
-	tab.Icon:RemoveMaskTexture(tab.Mask)
-	tab.bg = B.ReskinIcon(tab.Icon, true)
-	tab.SelectedTexture:SetColorTexture(DB.r, DB.g, DB.b, .35)
-	tab.SelectedTexture:SetAllPoints(tab.Icon)
-	tab.HighlightTexture:SetColorTexture(1, 1, 1, .25)
-	tab.HighlightTexture:SetAllPoints(tab.Icon)
-	tab.TabGlow:SetColorTexture(DB.r, DB.g, DB.b, .35)
-	tab.TabGlow:SetAllPoints(tab.Icon)
-	hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
-	updateSideTabIcon(tab)
-end
-
 local function reskinRecipeListButtons(self)
 	for i = 1, self.ScrollTarget:GetNumChildren() do
 		local button = select(i, self.ScrollTarget:GetChildren())
@@ -299,9 +280,9 @@ C.themes["Blizzard_Professions"] = function()
 	B.ReskinEditBox(craftingPage.MinimizedSearchBox)
 	B.ReskinIcon(craftingPage.ConcentrationDisplay.Icon)
 
-	reskinSideTab(frame.ProfessionsOverviewTab)
+	B.ReskinSideTab(frame.ProfessionsOverviewTab)
 	for _, tab in ipairs(frame.rightProfessionTabs) do
-		reskinSideTab(tab)
+		B.ReskinSideTab(tab)
 	end
 	-- The book addon only provides templates; Camelot creates its page in this window.
 	B.ReskinProfessionsBook(frame.BookPage)

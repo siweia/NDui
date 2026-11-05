@@ -253,22 +253,7 @@ tinsert(C.defaultThemes, function()
 	end)
 
 	-- Side tabs
-	local function reskinSideTab(tab)
-		if not tab then return end
-
-		B.StripTextures(tab, 2)
-		tab.bg = B.SetBD(tab)
-		tab.bg:SetInside(nil, 2, 2)
-		local hl = tab:CreateTexture(nil, "HIGHLIGHT")
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetInside(tab.bg)
-
-		tab.SelectedTexture:SetDrawLayer("BACKGROUND")
-		tab.SelectedTexture:SetColorTexture(cr, cg, cb, .25)
-		tab.SelectedTexture:SetInside(tab.bg)
-	end
-
 	for _, tab in ipairs(QuestMapFrame.TabButtons) do
-		reskinSideTab(tab)
+		B.ReskinSideTab(tab)
 	end
 end)

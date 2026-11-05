@@ -1,25 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function updateSideTabIcon(tab)
-	tab.Icon:SetSize(36, 36)
-	tab.Icon:SetTexCoord(unpack(DB.TexCoord))
-end
-
-local function reskinSideTab(tab)
-	tab.Background:SetAlpha(0)
-	tab.Icon:RemoveMaskTexture(tab.Mask)
-	B.ReskinIcon(tab.Icon, true)
-	tab.HighlightTexture:SetColorTexture(1, 1, 1, .25)
-	tab.HighlightTexture:SetAllPoints(tab.Icon)
-	tab.SelectedTexture:SetColorTexture(DB.r, DB.g, DB.b, .25)
-	tab.SelectedTexture:SetAllPoints(tab.Icon)
-	tab.TabGlow:SetColorTexture(DB.r, DB.g, DB.b, .25)
-	tab.TabGlow:SetAllPoints(tab.Icon)
-	hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
-	updateSideTabIcon(tab)
-end
-
 local function reskinCategoryButton(button)
 	if button.styled then return end
 	button.Cover:Hide()
@@ -96,7 +77,7 @@ C.themes["Blizzard_GroupFinder_VanillaStyle"] = function()
 	B.ReskinClose(LFGParentFrameCloseButton)
 	LFGParentFramePortrait:SetAlpha(0)
 	for _, key in ipairs({"ListingTab", "BrowsingTab", "WhoListingTab"}) do
-		reskinSideTab(LFGParentFrame[key])
+		B.ReskinSideTab(LFGParentFrame[key])
 	end
 	for _, frame in ipairs({LFGListingFrame, LFGBrowseFrame, LFGWhoListFrame}) do
 		B.StripTextures(frame, 0)

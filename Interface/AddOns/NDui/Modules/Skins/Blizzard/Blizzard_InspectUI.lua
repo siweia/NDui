@@ -7,21 +7,23 @@ C.themes["Blizzard_InspectUI"] = function()
 	B.Reskin(InspectPaperDollFrame.ViewButton)
 	InspectPaperDollFrame.ViewButton:ClearAllPoints()
 	InspectPaperDollFrame.ViewButton:SetPoint("TOP", InspectFrame, 0, -45)
-	InspectPVPFrame.BG:Hide()
-	B.Reskin(InspectPaperDollItemsFrame.InspectTalents)
+	--InspectPVPFrame.BG:Hide()
+	--B.Reskin(InspectPaperDollItemsFrame.InspectTalents)
 
 	-- Character
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 		"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
-		"SecondaryHand", "Tabard",
+		"SecondaryHand", "Tabard", "Ranged",
 	}
 
 	for i = 1, #slots do
 		local slot = _G["Inspect"..slots[i].."Slot"]
+		if slot.Mask then slot.Mask:Hide() end
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
+		B:ResetTexCoord(slot.icon)
 		slot.bg = B.CreateBDFrame(slot.icon, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		B.ReskinIconBorder(slot.IconBorder)
@@ -93,4 +95,8 @@ C.themes["Blizzard_InspectUI"] = function()
 		end
 	end)
 	]=]
+	-- Side tabs
+	for _, tab in ipairs(InspectFrame.ModeTabs.Tabs) do
+		B.ReskinSideTab(tab)
+	end
 end

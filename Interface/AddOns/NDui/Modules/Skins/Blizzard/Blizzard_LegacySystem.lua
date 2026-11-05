@@ -11,26 +11,6 @@ local function reskinProgressBar(bar)
 	bar.styled = true
 end
 
-local function updateSideTabIcon(tab)
-	tab.Icon:SetSize(36, 36)
-	tab.Icon:SetTexCoord(unpack(DB.TexCoord))
-end
-
-local function reskinSideTab(tab)
-	tab.Background:SetAlpha(0)
-	tab.Icon:RemoveMaskTexture(tab.Mask)
-	tab.Mask:Hide()
-	B.ReskinIcon(tab.Icon, true)
-
-	for _, texture in ipairs({tab.SelectedTexture, tab.TabGlow}) do
-		texture:SetColorTexture(r, g, b, .25)
-		texture:SetAllPoints(tab.Icon)
-	end
-	tab.HighlightTexture:SetColorTexture(1, 1, 1, .25)
-	tab.HighlightTexture:SetAllPoints(tab.Icon)
-	hooksecurefunc(tab, "UpdateIconInterior", updateSideTabIcon)
-end
-
 local function updateCategory(button)
 	if not button.styled then
 		button.bg = B.CreateBDFrame(button, .25)
@@ -120,7 +100,7 @@ C.themes["Blizzard_LegacySystem"] = function()
 	local frame = LegacySystemFrame
 	B.ReskinPortraitFrame(frame)
 	for _, tab in ipairs(frame.Tabs) do
-		reskinSideTab(tab)
+		B.ReskinSideTab(tab)
 	end
 
 	-- Reward track
