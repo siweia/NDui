@@ -802,6 +802,19 @@ function UF:ToggleCastBar(unit)
 	end
 end
 
+function UF:ToggleSwingBars()
+	local frame = _G.oUF_Player
+	if not frame then return end
+
+	if C.db["UFs"]["SwingBar"] then
+		if not frame:IsElementEnabled("Swing") then
+			frame:EnableElement("Swing")
+		end
+	elseif frame:IsElementEnabled("Swing") then
+		frame:DisableElement("Swing")
+	end
+end
+
 local function reskinTimerBar(bar)
 	bar:SetSize(280, 15)
 	B.StripTextures(bar)

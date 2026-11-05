@@ -1,7 +1,13 @@
 local _, ns = ...
 local B = ns[1]
 local oUF = ns.oUF
-local swingType = Enum.PlayerSwingType
+
+-- On WoW Forever the swing timer is driven by the native PLAYER_SWING event.
+-- Its payload (duration, hand) stays readable in restricted content, while
+-- UnitAttackSpeed returns secret values and CLEU is refused by the client.
+-- hand is normally an Enum.PlayerSwingType value, but that enum may be missing
+-- on some clients, so we also accept plain strings as a fallback.
+local swingType = Enum and Enum.PlayerSwingType
 
 local function Clear(element)
 	for _, bar in ipairs({element.Main, element.Offhand}) do
@@ -31,6 +37,21 @@ local function OnUpdate(element)
 	if not visible then element:Hide() end
 end
 
+-- Returns "ranged", "mainhand", "offhand" or nil, tolerant of both the enum and
+-- string representations of the hand argument.
+local function DetectHand(hand)
+	if swingType then
+		if hand == swingType.Ranged then return "ranged"
+		elseif hand == swingType.MainHand then return "mainhand"
+		elseif hand == swingType.OffHand then return "offhand" end
+	elseif type(hand) == "string" then
+		local h = hand:lower()
+		if h == "ranged" then return "ranged"
+		elseif h == "mainhand" or h == "main_hand" then return "mainhand"
+		elseif h == "offhand" or h == "off_hand" then return "offhand" end
+	end
+end
+
 local function Update(self, event, duration, hand)
 	local element = self.Swing
 	if event ~= "PLAYER_SWING" then
@@ -40,23 +61,24 @@ local function Update(self, event, duration, hand)
 	if B:IsSecretValue(duration) or B:IsSecretValue(hand) then return end
 	if type(duration) ~= "number" or duration <= 0 then return end
 
+	local handType = DetectHand(hand)
+	if not handType then return end
+
 	local bar
-	if hand == swingType.Ranged then
-		if element.mode ~= swingType.Ranged then
+	if handType == "ranged" then
+		if element.mode ~= "ranged" then
 			element.Offhand.finish = nil
 			element.Offhand:Hide()
 		end
-		element.mode = swingType.Ranged
+		element.mode = "ranged"
 		bar = element.Main
-	elseif hand == swingType.MainHand or hand == swingType.OffHand then
-		if element.mode == swingType.Ranged then
+	else
+		if element.mode == "ranged" then
 			element.Main.finish = nil
 			element.Main:Hide()
 		end
-		element.mode = swingType.MainHand
-		bar = hand == swingType.OffHand and element.Offhand or element.Main
-	else
-		return
+		element.mode = "melee"
+		bar = handType == "offhand" and element.Offhand or element.Main
 	end
 
 	bar.duration = duration
@@ -69,7 +91,7 @@ end
 
 local function Enable(self, unit)
 	local element = self.Swing
-	if not element or unit ~= "player" or not swingType then return end
+	if not element or unit ~= "player" then return end
 	element:SetScript("OnUpdate", OnUpdate)
 	self:RegisterEvent("PLAYER_SWING", Update, true)
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", Update, true)

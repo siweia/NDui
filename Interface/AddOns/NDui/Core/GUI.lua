@@ -173,6 +173,10 @@ G.DefaultSettings = {
 		Castbars = true,
 		AddPower = true,
 		OffOnTop = false,
+		SwingBar = false,
+		SwingWidth = 275,
+		SwingHeight = 3,
+		SwingTimer = false,
 		RaidFrame = true,
 		AutoRes = true,
 		NumGroups = 6,
@@ -768,6 +772,14 @@ local function setupCastbar()
 	G:SetupCastbar(guiPage[3])
 end
 
+local function setupSwingBars()
+	G:SetupSwingBars(guiPage[3])
+end
+
+local function toggleSwingBars()
+	B:GetModule("UnitFrames"):ToggleSwingBars()
+end
+
 local function setupClassPower()
 	G:SetupUFClassPower(guiPage[3])
 end
@@ -1252,6 +1264,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "UFs", "Castbars", HeaderTag..L["UFs Castbar"], nil, setupCastbar},
 		{1, "UFs", "PetCB", L["PetCastbar"], true},
+		{1, "UFs", "SwingBar", HeaderTag..L["UFs SwingBar"].."*", nil, setupSwingBars, toggleSwingBars},
 	},
 	[4] = {
 		{1, "UFs", "RaidFrame", HeaderTag..L["UFs RaidFrame"], nil, setupRaidFrame, nil, L["RaidFrameTip"]},

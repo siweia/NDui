@@ -415,6 +415,7 @@ function UF:OnLogin()
 		UF:UpdateTextScale()
 		UF:ToggleAllAuras()
 		UF:TogglePortraits()
+		UF:ToggleSwingBars()
 		UF:CheckPowerBars()
 	end
 

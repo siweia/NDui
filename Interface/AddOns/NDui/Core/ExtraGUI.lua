@@ -969,6 +969,54 @@ function G:SetupCastbar(parent)
 	end)
 end
 
+function G:SetupSwingBars(parent)
+	local guiName = "NDuiGUI_SwingSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["UFs SwingBar"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local frame = _G.oUF_Player
+
+	local function configureSwingBars()
+		if not frame then return end
+
+		local width, height = C.db["UFs"]["SwingWidth"], C.db["UFs"]["SwingHeight"]
+		local swing = frame.Swing
+		if not swing then return end
+		swing:SetSize(width, height)
+		swing.Main:SetHeight(height)
+		swing.Main:SetWidth(width)
+		swing.Offhand:SetHeight(height)
+		swing.Offhand:SetWidth(width)
+		swing.mover:SetSize(width, height)
+		swing.mover:Show()
+
+		swing.Main.Time:SetShown(C.db["UFs"]["SwingTimer"])
+		swing.Offhand.Time:SetShown(C.db["UFs"]["SwingTimer"])
+
+		swing.Offhand:ClearAllPoints()
+		if C.db["UFs"]["OffOnTop"] then
+			swing.Offhand:SetPoint("BOTTOMLEFT", swing, "TOPLEFT", 0, 3)
+			swing.Offhand:SetPoint("BOTTOMRIGHT", swing, "TOPRIGHT", 0, 3)
+		else
+			swing.Offhand:SetPoint("TOPLEFT", swing.Main, "BOTTOMLEFT", 0, -3)
+			swing.Offhand:SetPoint("TOPRIGHT", swing.Main, "BOTTOMRIGHT", 0, -3)
+		end
+	end
+
+	createOptionCheck(scroll.child, -10, L["UFs SwingTimer"], "UFs", "SwingTimer", configureSwingBars, L["SwingTimer Tip"])
+	createOptionCheck(scroll.child, -45, L["OffhandOnTop"], "UFs", "OffOnTop", configureSwingBars)
+	createOptionSlider(scroll.child, L["Width"], 50, 1000, 275, -115, "SwingWidth", configureSwingBars)
+	createOptionSlider(scroll.child, L["Height"], 1, 50, 3, -185, "SwingHeight", configureSwingBars)
+
+	panel:HookScript("OnHide", function()
+		local mover = frame and frame.Swing and frame.Swing.mover
+		if mover then mover:Hide() end
+	end)
+end
+
 function G:SetupBagFilter(parent)
 	local guiName = "NDuiGUI_BagFilterSetup"
 	toggleExtraGUI(guiName)
