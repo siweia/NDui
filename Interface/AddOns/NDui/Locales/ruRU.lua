@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "ruRU" then return end
 -- Credit: unw1s3, hacktivist
@@ -48,6 +48,9 @@ L["AutoQuestTip"] = "|nЕсли флажок установлен, квесты 
 L["AutoQuestIgnoreTip"] = "|nВы больше автоматически не взаимодействуете с текущим NPC. Вы можете удерживать клавишу ALT и щелкнуть имя выше, чтобы отменить это."
 L["StanceBar"] = "Панель стоек"
 L["ShowStanceBar"] = "Панель стоек"
+L["AspectBar"] = "Панель аспектов"
+L["AspectSize"] = "Размер значков аспектов"
+L["VerticalAspect"] = "Аспекты вертикально"
 L["Extrabar"] = "Дополнительная панель умений"
 L["LeaveVehicle"] = "Кнопка выхода из транспорта"
 L["Pet Actionbar"] = "Панель умений питомца"

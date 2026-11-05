@@ -427,6 +427,7 @@ function Bar:OnLogin()
 	Bar:UpdateAllSize()
 	Bar:HideBlizz()
 	Bar:UpdateCooldownText()
+	Bar:HunterAspectBar()
 
 	if C_PetBattles.IsInBattle() then
 		Bar:ClearBindings()

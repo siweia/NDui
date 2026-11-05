@@ -1239,6 +1239,21 @@ function G:SetupStanceBar(parent)
 	createOptionSlider(parent, L["CDFontSize"], 5, 30, 16, offset-270, "BarStanceCDSize", function() Bar:UpdateCooldownText("BarStance") end, "Actionbar")
 end
 
+function G:SetupAspectBar(parent)
+	local guiName = "NDuiGUI_AspectBarSetup"
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then return end
+
+	local panel = createExtraGUI(parent, guiName, L["ActionbarSetup"].."*")
+	local scroll = G:CreateScroll(panel, 260, 540)
+
+	local Bar = B:GetModule("Actionbar")
+	local parent, offset = scroll.child, -10
+	createOptionTitle(parent, L["AspectBar"], offset)
+	createOptionSlider(parent, L["AspectSize"], 20, 60, 30, offset-60, "AspectSize", Bar.UpdateAspectStatus, "Actionbar")
+	createOptionCheck(parent, offset-130, L["VerticalAspect"], "Actionbar", "VerticleAspect", Bar.UpdateAspectStatus)
+end
+
 function G:SetupUFClassPower(parent)
 	local guiName = "NDuiGUI_ClassPowerSetup"
 	toggleExtraGUI(guiName)

@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "zhTW" then return end
 -- Credit: EK
@@ -48,6 +48,9 @@ L["AutoQuestTip"] = "|n啟用自動交接任務後，對於只有一個選項的
 L["AutoQuestIgnoreTip"] = "|n你不再與該NPC自動交接任務，可以按住ALT並點擊上方名字取消忽略。"
 L["StanceBar"] = "姿態快捷列"
 L["ShowStanceBar"] = "啟用姿態快捷列"
+L["AspectBar"] = "守護條"
+L["AspectSize"] = "守護圖示大小"
+L["VerticalAspect"] = "守護垂直排列"
 L["Extrabar"] = "額外快捷列"
 L["LeaveVehicle"] = "離開載具按鈕"
 L["Pet Actionbar"] = "寵物快捷列"

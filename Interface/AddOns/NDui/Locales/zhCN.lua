@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "zhCN" then return end
 
@@ -48,6 +48,9 @@ L["AutoQuestTip"] = "|n启用自动交接任务后，对于只有一个选项的
 L["AutoQuestIgnoreTip"] = "|n你不再与该NPC自动交接任务，可以按住ALT并点击上方名字取消屏蔽。"
 L["StanceBar"] = "姿态动作条"
 L["ShowStanceBar"] = "启用姿态动作条"
+L["AspectBar"] = "守护条"
+L["AspectSize"] = "守护图标大小"
+L["VerticalAspect"] = "守护竖直排列"
 L["Extrabar"] = "额外动作条"
 L["LeaveVehicle"] = "离开载具按钮"
 L["Pet Actionbar"] = "宠物动作条"

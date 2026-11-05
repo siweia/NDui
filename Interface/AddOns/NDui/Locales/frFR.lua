@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "frFR" then return end
 -- Credit: Zeddicus40
@@ -48,6 +48,9 @@ L["AutoQuestTip"] = "|nSi cette case est cochée, les quêtes seront interagis a
 L["AutoQuestIgnoreTip"] = "|nVous n'interagissez plus automatiquement avec les quêtes du PNJ actuel. Vous pouvez maintenir la touche ALT enfoncée et cliquer sur le nom ci-dessus pour annuler cela."
 L["StanceBar"] = "Barre de posture"
 L["ShowStanceBar"] = "Montrer la barre de posture"
+L["AspectBar"] = "Barre d'aspects"
+L["AspectSize"] = "Taille des icônes d'aspect"
+L["VerticalAspect"] = "Aspects verticaux"
 L["Extrabar"] = "Barre d'action supplémentaire"
 L["LeaveVehicle"] = "Bouton pour quitter le véhicule"
 L["Pet Actionbar"] = "Barre d'action des familiers"

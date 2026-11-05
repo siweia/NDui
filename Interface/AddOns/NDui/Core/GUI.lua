@@ -24,6 +24,9 @@ G.DefaultSettings = {
 		BindType = 1,
 		MicroMenu = true,
 		ShowStance = true,
+		AspectBar = false,
+		AspectSize = 30,
+		VerticleAspect = false,
 		EquipColor = false,
 		ShowGlow = true,
 		KeyDown = true,
@@ -888,6 +891,14 @@ local function setupStanceBar()
 	G:SetupStanceBar(guiPage[1])
 end
 
+local function setupAspectBar()
+	G:SetupAspectBar(guiPage[1])
+end
+
+local function toggleAspectBar()
+	B:GetModule("Actionbar"):ToggleAspectBar()
+end
+
 local function setupDamageMeters()
 	G:SetupDamageMeters(guiPage[11])
 end
@@ -1212,6 +1223,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 		{1, "Actionbar", "MicroMenu", L["Micromenu"], nil, setupMicroMenu, nil, L["MicroMenuTip"]},
 		{1, "Actionbar", "ShowStance", L["ShowStanceBar"], true, setupStanceBar},
+		{1, "Actionbar", "AspectBar", L["AspectBar"].."*", nil, setupAspectBar, toggleAspectBar, nil, DB.MyClass ~= "HUNTER"},
 		{},--blank
 		{4, "Actionbar", "CDFormat", L["Show Cooldown"].."*", nil, {L["ColorTenth"], L["ColorText"], L["WhiteTenth"], L["WhiteText"], DISABLE}, updateCooldown},
 		{3, "Actionbar", "CDFontSize", L["ExtraActionCDFontSize"].."*", true, {5, 30, 1}, updateCDText, L["ExtraActionCDFontSizeTip"]},

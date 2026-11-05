@@ -1,4 +1,4 @@
-﻿local _, ns = ...
+local _, ns = ...
 local _, _, L = unpack(ns)
 if GetLocale() ~= "deDE" then return end
 -- Credit: DlargeX
@@ -48,6 +48,9 @@ L["AutoQuestTip"] = "|nWenn diese Option aktiviert ist, wird automatisch mit Que
 L["AutoQuestIgnoreTip"] = "|nDu interagierst nicht mehr automatisch Quests mit dem aktuellen NPC. Du kannst die Taste ALT gedrückt halten und auf den Namen oben klicken, um dies rückgängig zu machen."
 L["StanceBar"] = "Haltungsleiste"
 L["ShowStanceBar"] = "Zeige Haltungsleiste"
+L["AspectBar"] = "Aspektleiste"
+L["AspectSize"] = "Aspekt Symbolgröße"
+L["VerticalAspect"] = "Aspekte vertikal"
 L["Extrabar"] = "Extra Aktionsleiste"
 L["LeaveVehicle"] = "Fahrzeug verlassen Taste"
 L["Pet Actionbar"] = "Begleiter Aktionsleiste"
