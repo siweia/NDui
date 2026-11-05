@@ -51,7 +51,12 @@ function UF:CreateSwingBar(self)
 	element.Offhand = CreateBar(height, "TOPLEFT", element.Main, "BOTTOMLEFT", -GAP)
 
 	-- A 10pt text does not fit into two 3px bars, a single one is used instead.
-	element.Time = B.CreateFS(element, 10)
+	-- The bars are child frames of the element (one frame level above it), so the
+	-- text needs its own frame above them or the statusbar fill would cover it.
+	local overlay = CreateFrame("Frame", nil, element)
+	overlay:SetAllPoints(element)
+	overlay:SetFrameLevel(element.Main:GetFrameLevel() + 2)
+	element.Time = B.CreateFS(overlay, 10)
 	element.Time:SetShown(C.db["UFs"]["SwingTimer"])
 
 	UF:UpdateSwingBarLayout(element)
