@@ -26,6 +26,7 @@ DB.Devs = {
 	["打蛋獵手-地獄吼"] = true,
 	["Huniverster-Koranos"] = true,
 	["Therefire-TheseGoToEleven"] = true,
+	["泽津京 耶丽埃"] = true,
 }
 local function isDeveloper()
 	local rawName = gsub(DB.MyFullName, "%s", "")

@@ -19,19 +19,6 @@ local timestampFormat = {
 	[5] = "[%H:%M:%S] ",
 }
 
-local function GetCurrentTime()
-	local locTime = time()
-	local realmTime = not GetCVarBool("timeMgrUseLocalTime") and C_DateAndTime_GetCurrentCalendarTime()
-	if realmTime then
-		realmTime.day = realmTime.monthDay
-		realmTime.min = realmTime.minute
-		realmTime.sec = date("%S") -- no sec value for realm time
-		realmTime = time(realmTime)
-	end
-
-	return locTime, realmTime
-end
-
 -- Author Logo
 local function AddAuthorLogo(link, unitName)
 	if unitName and DB.Devs[unitName] then
