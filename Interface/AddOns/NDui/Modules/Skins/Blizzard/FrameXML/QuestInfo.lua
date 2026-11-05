@@ -55,6 +55,7 @@ end
 
 local function ReskinRewardButtonWithSize(bu, isMapQuestInfo)
 	ReskinRewardButton(bu)
+	B:ResetTexCoord(bu.Icon)
 
 	if isMapQuestInfo then
 		bu.Icon:SetSize(29, 29)

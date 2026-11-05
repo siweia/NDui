@@ -9,6 +9,7 @@ tinsert(C.defaultThemes, function()
 	B.StripTextures(LootFrame)
 	B.SetBD(LootFrame)
 	B.ReskinTrimScroll(LootFrame.ScrollBar)
+	LootFrame.NineSlice:SetAlpha(0)
 
 	local function updateHighlight(self)
 		local button = self.__owner
