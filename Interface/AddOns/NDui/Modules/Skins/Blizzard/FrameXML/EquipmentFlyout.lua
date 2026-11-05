@@ -4,12 +4,6 @@ local B, C, L, DB = unpack(ns)
 tinsert(C.defaultThemes, function()
 	if not C.db["Skins"]["BlizzardSkins"] then return end
 
-	local function resetIcon(icon, x1)
-		if x1 ~= .08 then
-			icon:SetTexCoord(.08, .92, .08, .92)
-		end
-	end
-
 	hooksecurefunc("EquipmentFlyout_CreateButton", function()
 		local button = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
 
@@ -17,7 +11,7 @@ tinsert(C.defaultThemes, function()
 		button:SetPushedTexture(0)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.ReskinIcon(button.icon)
-		hooksecurefunc(button.icon, "SetTexCoord", resetIcon)
+		B:ResetTexCoord(button.icon)
 		B.ReskinIconBorder(button.IconBorder)
 	end)
 

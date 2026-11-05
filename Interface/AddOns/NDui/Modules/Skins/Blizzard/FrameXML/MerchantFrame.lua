@@ -1,12 +1,6 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
-local function resetIcon(icon, x1)
-	if x1 ~= .08 then
-		icon:SetTexCoord(.08, .92, .08, .92)
-	end
-end
-
 local function reskinMerchantItem(item)
 	local name = item.Name
 	local button = item.ItemButton
@@ -25,7 +19,7 @@ local function reskinMerchantItem(item)
 	hl:SetInside()
 
 	icon:SetInside()
-	hooksecurefunc(icon, "SetTexCoord", resetIcon)
+	B:ResetTexCoord(icon)
 	button.bg = B.ReskinIcon(icon)
 	B.ReskinIconBorder(button.IconBorder)
 	button.IconOverlay:SetInside()

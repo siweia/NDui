@@ -1,6 +1,15 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
-local cr, cg, cb = DB.r, DB.g, DB.b
+
+local function resetIcon(icon, x1)
+	if x1 ~= .08 then
+		icon:SetTexCoord(.08, .92, .08, .92)
+	end
+end
+
+function B:ResetTexCoord(icon)
+	hooksecurefunc(icon, "SetTexCoord", resetIcon)
+end
 
 local function skinScrollBox(scrollBox, update)
 	hooksecurefunc(scrollBox, "Update", update)
@@ -161,12 +170,6 @@ tinsert(C.defaultThemes, function()
 	}
 	local flyoutDirections = {LEFT = "left", RIGHT = "right", UP = "up", DOWN = "down"}
 
-	local function resetIcon(icon, x1)
-		if x1 ~= .08 then
-			icon:SetTexCoord(.08, .92, .08, .92)
-		end
-	end
-
 	for i = 1, #slots do
 		local slot = _G["Character"..slots[i].."Slot"]
 		local cooldown = _G["Character"..slots[i].."SlotCooldown"]
@@ -175,7 +178,7 @@ tinsert(C.defaultThemes, function()
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
-		hooksecurefunc(slot.icon, "SetTexCoord", resetIcon)
+		B:ResetTexCoord(slot.icon)
 		slot.bg = B.CreateBDFrame(slot.icon, .25)
 		slot.bg:SetFrameLevel(3) -- higher than portrait
 		cooldown:SetInside()

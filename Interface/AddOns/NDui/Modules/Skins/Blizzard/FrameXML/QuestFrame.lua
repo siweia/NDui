@@ -44,6 +44,7 @@ tinsert(C.defaultThemes, function()
 		button.bg = B.ReskinIcon(button.Icon)
 		button.Icon.__owner = button
 		hooksecurefunc(button.Icon, "SetTexture", UpdateProgressItemQuality)
+		B:ResetTexCoord(button.Icon)
 
 		local bg = B.CreateBDFrame(button, .25)
 		bg:SetPoint("TOPLEFT", button.bg, "TOPRIGHT", 2, 0)
