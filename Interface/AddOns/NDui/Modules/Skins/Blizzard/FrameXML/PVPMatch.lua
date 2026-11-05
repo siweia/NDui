@@ -26,14 +26,14 @@ tinsert(C.defaultThemes, function()
 	-- match score
 	B.SetBD(PVPMatchScoreboard)
 	PVPMatchScoreboard:HookScript("OnShow", stripBorders)
-	B.ReskinClose(PVPMatchScoreboard.CloseButton)
+	--B.ReskinClose(PVPMatchScoreboard.CloseButton)
 
 	local content = PVPMatchScoreboard.Content
 	local tabContainer = content.TabContainer
 
 	B.StripTextures(content)
 	local bg = B.CreateBDFrame(content, .25)
-	bg:SetPoint("BOTTOMRIGHT", tabContainer.InsetBorderTop, 4, -1)
+	--bg:SetPoint("BOTTOMRIGHT", tabContainer.InsetBorderTop, 4, -1)
 	B.ReskinTrimScroll(content.ScrollBar)
 
 	B.StripTextures(tabContainer)
@@ -45,15 +45,15 @@ tinsert(C.defaultThemes, function()
 	B.SetBD(PVPMatchResults)
 	PVPMatchResults:HookScript("OnShow", stripBorders)
 	B.ReskinClose(PVPMatchResults.CloseButton)
-	B.StripTextures(PVPMatchResults.overlay)
+	--B.StripTextures(PVPMatchResults.overlay)
 
 	local content = PVPMatchResults.content
 	local tabContainer = content.tabContainer
 
 	B.StripTextures(content)
 	local bg = B.CreateBDFrame(content, .25)
-	bg:SetPoint("BOTTOMRIGHT", tabContainer.InsetBorderTop, 4, -1)
-	B.StripTextures(content.earningsArt)
+	--bg:SetPoint("BOTTOMRIGHT", tabContainer.InsetBorderTop, 4, -1)
+	--B.StripTextures(content.earningsArt)
 	B.ReskinTrimScroll(content.scrollBar)
 
 	B.StripTextures(tabContainer)
@@ -63,5 +63,5 @@ tinsert(C.defaultThemes, function()
 
 	local buttonContainer = PVPMatchResults.buttonContainer
 	B.Reskin(buttonContainer.leaveButton)
-	B.Reskin(buttonContainer.requeueButton)
+	--B.Reskin(buttonContainer.requeueButton)
 end)
