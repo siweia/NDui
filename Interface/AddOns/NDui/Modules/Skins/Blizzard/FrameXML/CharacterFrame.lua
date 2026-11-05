@@ -157,40 +157,52 @@ tinsert(C.defaultThemes, function()
 	local slots = {
 		"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 		"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
-		"SecondaryHand", "Tabard", "Ranged"
+		"SecondaryHand", "Tabard", "Ranged", "Ammo"
 	}
 	local flyoutDirections = {LEFT = "left", RIGHT = "right", UP = "up", DOWN = "down"}
+
+	local function resetIcon(icon, x1)
+		if x1 ~= .08 then
+			icon:SetTexCoord(.08, .92, .08, .92)
+		end
+	end
 
 	for i = 1, #slots do
 		local slot = _G["Character"..slots[i].."Slot"]
 		local cooldown = _G["Character"..slots[i].."SlotCooldown"]
 
+		if slot.Mask then slot.Mask:Hide() end
 		B.StripTextures(slot)
 		slot.icon:SetTexCoord(unpack(DB.TexCoord))
 		slot.icon:SetInside()
+		hooksecurefunc(slot.icon, "SetTexCoord", resetIcon)
 		slot.bg = B.CreateBDFrame(slot.icon, .25)
 		slot.bg:SetFrameLevel(3) -- higher than portrait
 		cooldown:SetInside()
 
-		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
+		if slot.ignoreTexture then
+			slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
+		end
 		slot.IconOverlay:SetAtlas("CosmeticIconFrame")
 		slot.IconOverlay:SetInside()
 		B.ReskinIconBorder(slot.IconBorder)
 
 		local popout = slot.popoutButton
-		B.StripTextures(popout, 0)
+		if popout then
+			B.StripTextures(popout, 0)
 
-		local arrow = popout:CreateTexture(nil, "OVERLAY")
-		arrow:SetSize(14, 14)
-		B.SetupArrow(arrow, flyoutDirections[slot.flyoutDirection] or "right")
-		arrow:SetPoint("CENTER", popout)
-		popout.arrow = arrow
+			local arrow = popout:CreateTexture(nil, "OVERLAY")
+			arrow:SetSize(14, 14)
+			B.SetupArrow(arrow, flyoutDirections[slot.flyoutDirection] or "right")
+			arrow:SetPoint("CENTER", popout)
+			popout.arrow = arrow
 
-		popout:HookScript("OnEnter", clearPopout)
-		popout:HookScript("OnLeave", colourPopout)
+			popout:HookScript("OnEnter", clearPopout)
+			popout:HookScript("OnLeave", colourPopout)
 
-		hooksecurefunc(slot, "DisplayAsAzeriteItem", UpdateAzeriteItem)
-		hooksecurefunc(slot, "DisplayAsAzeriteEmpoweredItem", UpdateAzeriteEmpoweredItem)
+			hooksecurefunc(slot, "DisplayAsAzeriteItem", UpdateAzeriteItem)
+			hooksecurefunc(slot, "DisplayAsAzeriteEmpoweredItem", UpdateAzeriteEmpoweredItem)
+		end
 	end
 
 	hooksecurefunc("PaperDollItemSlotButton_Update", function(button)

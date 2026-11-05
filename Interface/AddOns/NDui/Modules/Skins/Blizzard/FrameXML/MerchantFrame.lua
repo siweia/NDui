@@ -1,6 +1,12 @@
 local _, ns = ...
 local B, C, L, DB = unpack(ns)
 
+local function resetIcon(icon, x1)
+	if x1 ~= .08 then
+		icon:SetTexCoord(.08, .92, .08, .92)
+	end
+end
+
 local function reskinMerchantItem(item)
 	local name = item.Name
 	local button = item.ItemButton
@@ -10,6 +16,7 @@ local function reskinMerchantItem(item)
 	B.StripTextures(item)
 	B.CreateBDFrame(item, .25)
 
+	if button.Mask then button.Mask:Hide() end
 	B.StripTextures(button)
 	button:ClearAllPoints()
 	button:SetPoint("LEFT", item, 4, 0)
@@ -18,6 +25,7 @@ local function reskinMerchantItem(item)
 	hl:SetInside()
 
 	icon:SetInside()
+	hooksecurefunc(icon, "SetTexCoord", resetIcon)
 	button.bg = B.ReskinIcon(icon)
 	B.ReskinIconBorder(button.IconBorder)
 	button.IconOverlay:SetInside()
