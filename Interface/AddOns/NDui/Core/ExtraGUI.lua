@@ -978,32 +978,15 @@ function G:SetupSwingBars(parent)
 	local scroll = G:CreateScroll(panel, 260, 540)
 
 	local frame = _G.oUF_Player
+	local UF = B:GetModule("UnitFrames")
 
 	local function configureSwingBars()
-		if not frame then return end
-
-		local width, height = C.db["UFs"]["SwingWidth"], C.db["UFs"]["SwingHeight"]
-		local swing = frame.Swing
+		local swing = frame and frame.Swing
 		if not swing then return end
-		swing:SetSize(width, height)
-		swing.Main:SetHeight(height)
-		swing.Main:SetWidth(width)
-		swing.Offhand:SetHeight(height)
-		swing.Offhand:SetWidth(width)
-		swing.mover:SetSize(width, height)
+
+		UF:UpdateSwingBarLayout(swing)
+		swing.Time:SetShown(C.db["UFs"]["SwingTimer"])
 		swing.mover:Show()
-
-		swing.Main.Time:SetShown(C.db["UFs"]["SwingTimer"])
-		swing.Offhand.Time:SetShown(C.db["UFs"]["SwingTimer"])
-
-		swing.Offhand:ClearAllPoints()
-		if C.db["UFs"]["OffOnTop"] then
-			swing.Offhand:SetPoint("BOTTOMLEFT", swing, "TOPLEFT", 0, 3)
-			swing.Offhand:SetPoint("BOTTOMRIGHT", swing, "TOPRIGHT", 0, 3)
-		else
-			swing.Offhand:SetPoint("TOPLEFT", swing.Main, "BOTTOMLEFT", 0, -3)
-			swing.Offhand:SetPoint("TOPRIGHT", swing.Main, "BOTTOMRIGHT", 0, -3)
-		end
 	end
 
 	createOptionCheck(scroll.child, -10, L["UFs SwingTimer"], "UFs", "SwingTimer", configureSwingBars, L["SwingTimer Tip"])

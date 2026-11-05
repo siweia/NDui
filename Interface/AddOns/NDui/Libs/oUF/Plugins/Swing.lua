@@ -6,7 +6,7 @@ local oUF = ns.oUF
 -- Its payload (duration, hand) stays readable in restricted content, while
 -- UnitAttackSpeed returns secret values and CLEU is refused by the client.
 -- hand is normally an Enum.PlayerSwingType value, but that enum may be missing
--- on some clients, so we also accept plain strings as a fallback.
+-- on some clients, so both the enum and plain strings are accepted.
 local swingType = Enum and Enum.PlayerSwingType
 
 local function Clear(element)
@@ -20,13 +20,15 @@ end
 
 local function OnUpdate(element)
 	local now = GetTime()
-	local visible = false
+	local nextSwing, visible = nil, false
 	for _, bar in ipairs({element.Main, element.Offhand}) do
 		if bar.finish then
 			local remaining = bar.finish - now
 			if remaining > 0 then
 				bar:SetValue((bar.duration - remaining) / bar.duration)
-				bar.Time:SetFormattedText("%.1f", remaining)
+				if not nextSwing or remaining < nextSwing then
+					nextSwing = remaining
+				end
 				visible = true
 			else
 				bar.finish = nil
@@ -34,21 +36,28 @@ local function OnUpdate(element)
 			end
 		end
 	end
-	if not visible then element:Hide() end
+
+	if not visible then
+		element:Hide()
+	elseif element.Time then
+		-- One shared text: the time until the next swing, whichever hand is closer.
+		element.Time:SetFormattedText("%.1f", nextSwing)
+	end
 end
 
 -- Returns "ranged", "mainhand", "offhand" or nil, tolerant of both the enum and
 -- string representations of the hand argument.
 local function DetectHand(hand)
-	if swingType then
-		if hand == swingType.Ranged then return "ranged"
-		elseif hand == swingType.MainHand then return "mainhand"
-		elseif hand == swingType.OffHand then return "offhand" end
-	elseif type(hand) == "string" then
+	if type(hand) == "string" then
 		local h = hand:lower()
-		if h == "ranged" then return "ranged"
-		elseif h == "mainhand" or h == "main_hand" then return "mainhand"
-		elseif h == "offhand" or h == "off_hand" then return "offhand" end
+		if h == "ranged" then return "ranged" end
+		if h:find("off") then return "offhand" end
+		if h:find("main") then return "mainhand" end
+	end
+	if swingType then
+		if hand == swingType.Ranged then return "ranged" end
+		if hand == swingType.MainHand then return "mainhand" end
+		if hand == swingType.OffHand then return "offhand" end
 	end
 end
 
@@ -62,7 +71,11 @@ local function Update(self, event, duration, hand)
 	if type(duration) ~= "number" or duration <= 0 then return end
 
 	local handType = DetectHand(hand)
-	if not handType then return end
+	if not handType then
+		-- Keep the raw value around, so an unexpected payload can be inspected.
+		element.lastHand = hand
+		return
+	end
 
 	local bar
 	if handType == "ranged" then
@@ -84,7 +97,6 @@ local function Update(self, event, duration, hand)
 	bar.duration = duration
 	bar.finish = GetTime() + duration
 	bar:SetValue(0)
-	bar.Time:SetFormattedText("%.1f", duration)
 	bar:Show()
 	element:Show()
 end
