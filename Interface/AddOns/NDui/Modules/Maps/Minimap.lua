@@ -693,6 +693,7 @@ function module:SetupMinimap()
 
 	_G.MinimapCluster.Tracking:SetAlpha(0)
 	_G.MinimapCluster.Tracking:SetScale(0.0001)
+	_G.MinimapCluster.DielFrame:SetAlpha(0)
 
 	-- Housing overlay
 	if MinimapBackdrop.StaticOverlayTexture then
