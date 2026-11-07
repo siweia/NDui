@@ -575,6 +575,7 @@ G.DefaultSettings = {
 		HideTalking = true,
 		HideBossBanner = false,
 		PetFilter = true,
+		PetHappiness = true,
 		QuestNotification = false,
 		QuestProgress = false,
 		OnlyCompleteRing = false,
@@ -1114,6 +1115,10 @@ local function updateFasterLoot()
 	B:GetModule("Misc"):UpdateFasterLoot()
 end
 
+local function togglePetHappiness()
+	B:GetModule("Misc"):TogglePetHappiness()
+end
+
 local function toggleBossBanner()
 	B:GetModule("Misc"):ToggleBossBanner()
 end
@@ -1505,6 +1510,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Misc", "HideTalking", L["No Talking"]},
 		{1, "Misc", "InstantDelete", L["InstantDelete"].."*", true},
 		{1, "Misc", "HideBossBanner", L["Hide Bossbanner"].."*", nil, nil, toggleBossBanner},
+		{1, "Misc", "PetHappiness", IsNew..L["PetHappiness"].."*", true, nil, togglePetHappiness},
 		{1, "Misc", "CombatAnimation", L["CombatAnimation"], nil, nil, toggleBossBanner},
 		{1, "Misc", "FasterLoot", L["Faster Loot"].."*", true, nil, updateFasterLoot},
 		{1, "Misc", "BlockInvite", "|cffff0000"..L["BlockInvite"].."*", nil, nil, nil, L["BlockInviteTip"]},

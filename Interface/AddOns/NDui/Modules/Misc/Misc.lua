@@ -54,6 +54,7 @@ function M:OnLogin()
 	M:UpdateFasterLoot()
 	M:TradeTargetInfo()
 	M:BlockStrangerInvite()
+	M:TogglePetHappiness()
 	M:ToggleBossBanner()
 	M:FasterMovieSkip()
 	M:EnhanceDressup()
@@ -306,6 +307,41 @@ function M:BlockStrangerInvite()
 			StaticPopup_Hide("GROUP_INVITE_CONFIRMATION")
 		end
 	end)
+end
+
+-- Hunter pet happiness
+local GetPetHappiness = C_PetInfo and C_PetInfo.GetPetHappiness
+local petHappinessStr, lastHappiness = {
+	[1] = L["PetUnhappy"],
+	[2] = L["PetBadMood"],
+	[3] = L["PetHappy"],
+}
+
+local function CheckPetHappiness(_, unit)
+	if unit ~= "pet" or not GetPetHappiness then return end
+
+	local happiness = GetPetHappiness()
+	if not happiness or happiness == lastHappiness then return end
+
+	local str = petHappinessStr[happiness]
+	local petName = UnitName(unit)
+	if str and petName and B:NotSecretValue(petName) then
+		local msg = format(str, DB.InfoColor, petName)
+		UIErrorsFrame:AddMessage(msg)
+		print(DB.NDuiString, msg)
+	end
+
+	lastHappiness = happiness
+end
+
+function M:TogglePetHappiness()
+	if DB.MyClass ~= "HUNTER" or not GetPetHappiness then return end
+
+	if C.db["Misc"]["PetHappiness"] then
+		B:RegisterEvent("UNIT_HAPPINESS", CheckPetHappiness)
+	else
+		B:UnregisterEvent("UNIT_HAPPINESS", CheckPetHappiness)
+	end
 end
 
 -- Archaeology counts
