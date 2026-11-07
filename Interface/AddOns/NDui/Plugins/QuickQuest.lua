@@ -67,7 +67,8 @@ function QuickQuest:Register(event, func)
 end
 
 local function GetNPCID()
-	return B.GetNPCID(UnitGUID("npc"))
+	local guid = UnitGUID("npc")
+	return B:NotSecretValue(guid) and B.GetNPCID(guid)
 end
 
 local function IsAccountCompleted(questID)
