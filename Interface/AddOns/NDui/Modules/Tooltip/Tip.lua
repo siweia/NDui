@@ -364,7 +364,7 @@ function TT:RefreshStatusBar()
 	if not self.text then
 		self.text = B.CreateFS(self, 12, "")
 	end
-	local unit = TT.GetUnit(self:GetParent())
+	local unit = TT.GetUnit(GameTooltip) -- bar may be reparented by other addons (e.g. PrettyTooltip)
 	local ok, value = pcall(UnitHealth, unit)
 	if ok and value then
 		self.text:SetText(B.Numb(value))
