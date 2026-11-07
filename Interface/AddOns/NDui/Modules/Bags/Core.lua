@@ -954,8 +954,9 @@ function module:CloseBags()
 end
 
 function module:GetPurchaseButton()
+	-- Use the addon-safe BankPanelPurchaseButtonScriptTemplate (reads overrideBankType),
+	-- not the Camelot BankPanel.PurchaseButton which reads the tainted active bank type
 	local panel = _G.BankPanel
-	if panel and panel.PurchaseButton then return panel.PurchaseButton end
 	local prompt = panel and panel.PurchasePrompt
 	local cost = prompt and prompt.TabCostFrame
 	return cost and cost.PurchaseButton
@@ -1076,8 +1077,8 @@ function module:OnLogin()
 
 	local initBagType
 	function Backpack:OnBankOpened()
+		BankFrame.BankPanel:Show() -- must be shown first, BankFrame:OnShow reads GetActiveBankType()
 		BankFrame:Show()
-		BankFrame.BankPanel:Show()
 
 		if not initBagType then
 			module:UpdateBagSize()
@@ -1602,6 +1603,10 @@ function module:OnLogin()
 
 	SetCVar("professionToolSlotsExampleShown", 1)
 	SetCVar("professionAccessorySlotsExampleShown", 1)
+
+	-- BankFrame:SetTab auto-buys the free first tab via protected C_Bank.PurchaseBankTab,
+	-- which is forbidden since we show BankFrame from addon code; use the purchase button instead
+	BankFrame.PurchaseFirstSlot = B.Dummy
 
 	-- Bank frame paging
 	hooksecurefunc(BankFrame.BankPanel, "SetBankType", function(self, bankType)
