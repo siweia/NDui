@@ -1217,7 +1217,7 @@ G.TabList = {
 	L["Maps"],
 	L["Skins"],
 	L["Tooltip"],
-	L["Misc"],
+	IsNew..L["Misc"],
 	L["UI Settings"],
 	L["Profile"],
 }
