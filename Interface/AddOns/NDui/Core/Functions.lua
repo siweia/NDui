@@ -227,18 +227,44 @@ end
 -- Scan tooltip
 do
 	local iLvlDB = {}
-	local itemLevelString = "^"..gsub(ITEM_LEVEL, "%%d", "")
+	local itemLevelString = gsub(ITEM_LEVEL, "%%d", "")
+	itemLevelString = gsub(itemLevelString, "%s+$", "")
 	local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, "%%s", "(.+)")
 	local isUnknownString = {
 		[TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN] = true,
 		[TRANSMOGRIFY_TOOLTIP_ITEM_UNKNOWN_APPEARANCE_KNOWN] = true,
 	}
+	local interface = select(4, GetBuildInfo())
+	local isForever = interface >= 16001 and interface < 20000
+	local ARMOR, WEAPON = Enum.ItemClass.Armor, Enum.ItemClass.Weapon
+
+	local function GetLevelFromText(text)
+		if not text or B:IsSecretValue(text) then return end
+
+		text = gsub(text, "|c%x%x%x%x%x%x%x%x", "")
+		text = gsub(text, "|r", "")
+		text = gsub(text, "^%s+", "")
+		if itemLevelString == "" or strfind(text, itemLevelString, 1, true) ~= 1 then return end
+
+		local level = strmatch(text, "(%d+)")
+		return tonumber(level)
+	end
+
+	local function GetItemLevelFromInfo(link)
+		if not link then return end
+
+		local name, _, _, itemLevel, _, _, _, _, _, _, _, classID = C_Item.GetItemInfo(link)
+		if not name or B:IsSecretValue(itemLevel) then return end
+		if itemLevel and itemLevel > 1 and (classID == ARMOR or classID == WEAPON) then
+			return itemLevel
+		end
+	end
 
 	local slotData = {gems={},gemsColor={}}
 	function B.GetItemLevel(link, arg1, arg2, fullScan)
 		if fullScan then
 			local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
-			if not data then return end
+			if not data then return "tooSoon" end
 
 			wipe(slotData.gems)
 			wipe(slotData.gemsColor)
@@ -249,57 +275,67 @@ do
 			for i = 2, #data.lines do
 				local lineData = data.lines[i]
 				if not slotData.iLvl then
-					local text = lineData.leftText
-					local found = text and strfind(text, itemLevelString)
-					if found then
-						local level = strmatch(text, "(%d+)%)?$")
-						slotData.iLvl = tonumber(level) or 0
-					end
-				elseif data.id == 158075 then -- heart of azeroth
+					slotData.iLvl = GetLevelFromText(lineData.leftText)
+				end
+
+				if data.id == 158075 then -- heart of azeroth
 					if lineData.essenceIcon then
 						num = num + 1
 						slotData.gems[num] = lineData.essenceIcon
 						slotData.gemsColor[num] = lineData.leftColor
 					end
-				else
-					if lineData.enchantID then
-						slotData.enchantText = strmatch(lineData.leftText, enchantString)
-					elseif lineData.gemIcon then
-						num = num + 1
-						slotData.gems[num] = lineData.gemIcon
-					elseif lineData.socketType then
-						num = num + 1
-						slotData.gems[num] = format("Interface\\ItemSocketingFrame\\UI-EmptySocket-%s", lineData.socketType)
-					end
+				elseif lineData.enchantID then
+					slotData.enchantText = strmatch(lineData.leftText, enchantString)
+				elseif lineData.gemIcon then
+					num = num + 1
+					slotData.gems[num] = lineData.gemIcon
+				elseif lineData.socketType then
+					num = num + 1
+					slotData.gems[num] = format("Interface\\ItemSocketingFrame\\UI-EmptySocket-%s", lineData.socketType)
 				end
+			end
+
+			if not slotData.iLvl then
+				slotData.iLvl = GetItemLevelFromInfo(link)
 			end
 
 			return slotData
 		else
+			if not link then return end
 			if iLvlDB[link] then return iLvlDB[link] end
 
-			local data
-			if arg1 and type(arg1) == "string" then
-				data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
-			elseif arg1 and type(arg1) == "number" then
-				data = C_TooltipInfo.GetBagItem(arg1, arg2)
-			else
-				data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
+			-- Forever's item tooltip has no item level line, so prefer the item API there
+			local level
+			if isForever then
+				level = GetItemLevelFromInfo(link)
 			end
-			if not data then return end
 
-			for i = 2, 5 do
-				local lineData = data.lines[i]
-				if not lineData then break end
-				local text = lineData.leftText
-				local found = text and strfind(text, itemLevelString)
-				if found then
-					local level = strmatch(text, "(%d+)%)?$")
-					iLvlDB[link] = tonumber(level)
-					break
+			if not level then
+				local data
+				if arg1 and type(arg1) == "string" then
+					data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
+				elseif arg1 and type(arg1) == "number" then
+					data = C_TooltipInfo.GetBagItem(arg1, arg2)
+				else
+					data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
+				end
+
+				if data then
+					for i = 2, #data.lines do
+						level = GetLevelFromText(data.lines[i].leftText)
+						if level then break end
+					end
 				end
 			end
-			return iLvlDB[link]
+
+			if not level and not isForever then
+				level = GetItemLevelFromInfo(link)
+			end
+
+			if level then
+				iLvlDB[link] = level
+			end
+			return level
 		end
 	end
 
