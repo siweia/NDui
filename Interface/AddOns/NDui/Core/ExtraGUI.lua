@@ -985,6 +985,7 @@ function G:SetupSwingBars(parent)
 		if not swing then return end
 
 		UF:UpdateSwingBarLayout(swing)
+		B.SetFontSize(swing.Time, C.db["UFs"]["SwingFontSize"] or 10)
 		swing.Time:SetShown(C.db["UFs"]["SwingTimer"])
 		swing.mover:Show()
 	end
@@ -993,6 +994,7 @@ function G:SetupSwingBars(parent)
 	createOptionCheck(scroll.child, -45, L["OffhandOnTop"], "UFs", "OffOnTop", configureSwingBars)
 	createOptionSlider(scroll.child, L["Width"], 50, 1000, 275, -115, "SwingWidth", configureSwingBars)
 	createOptionSlider(scroll.child, L["Height"], 1, 50, 3, -185, "SwingHeight", configureSwingBars)
+	createOptionSlider(scroll.child, L["SwingTimerSize"], 8, 24, 10, -255, "SwingFontSize", configureSwingBars)
 
 	panel:HookScript("OnHide", function()
 		local mover = frame and frame.Swing and frame.Swing.mover

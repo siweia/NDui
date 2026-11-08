@@ -179,6 +179,7 @@ G.DefaultSettings = {
 		SwingBar = false,
 		SwingWidth = 275,
 		SwingHeight = 3,
+		SwingFontSize = 10,
 		SwingTimer = false,
 		RaidFrame = true,
 		AutoRes = true,

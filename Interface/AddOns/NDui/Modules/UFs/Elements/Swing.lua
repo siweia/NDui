@@ -77,7 +77,7 @@ function UF:CreateSwingBar(self)
 	local overlay = CreateFrame("Frame", nil, element)
 	overlay:SetAllPoints(element)
 	overlay:SetFrameLevel(element.Main:GetFrameLevel() + 2)
-	element.Time = B.CreateFS(overlay, 10)
+	element.Time = B.CreateFS(overlay, C.db["UFs"]["SwingFontSize"] or 10)
 	element.Time:SetShown(C.db["UFs"]["SwingTimer"])
 
 	UF:UpdateSwingBarLayout(element)
