@@ -1160,6 +1160,7 @@ function module:OnLogin()
 	end
 
 	local bagTypeColor = {
+		[-1] = {.67, .83, .45, .25},-- 箭袋/弹药
 		[0] = {.3, .3, .3, .3},		-- 容器
 		[1] = false,				-- 灵魂袋
 		[2] = {0, .5, 0, .25},		-- 草药袋
@@ -1557,6 +1558,8 @@ function module:OnLogin()
 
 		if classID == Enum.ItemClass.Container then
 			module.BagsType[self.bagId] = subClassID or 0
+		elseif classID == Enum.ItemClass.Quiver then
+			module.BagsType[self.bagId] = -1
 		else
 			module.BagsType[self.bagId] = 0
 		end
