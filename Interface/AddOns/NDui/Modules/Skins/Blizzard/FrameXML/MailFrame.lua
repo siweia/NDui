@@ -63,6 +63,7 @@ tinsert(C.defaultThemes, function()
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		B.CreateBDFrame(button)
 		B:ResetTexCoord(button.icon)
+		if button.Mask then button.Mask:Hide() end
 	end
 
 	for i = 1, INBOXITEMS_TO_DISPLAY do
@@ -84,7 +85,6 @@ tinsert(C.defaultThemes, function()
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.CreateBDFrame(button, .25)
 		B.ReskinIconBorder(button.IconBorder)
-		B:ResetTexCoord(button:GetNormalTexture())
 	end
 
 	hooksecurefunc("SendMailFrame_Update", function()
@@ -104,6 +104,7 @@ tinsert(C.defaultThemes, function()
 		button.bg = B.CreateBDFrame(button, .25)
 		B.ReskinIconBorder(button.IconBorder)
 		B:ResetTexCoord(button.icon)
+		if button.Mask then button.Mask:Hide() end
 	end
 
 	MailFont_Large:SetTextColor(1, 1, 1)
