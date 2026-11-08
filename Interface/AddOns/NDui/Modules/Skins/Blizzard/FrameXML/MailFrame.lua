@@ -62,6 +62,7 @@ tinsert(C.defaultThemes, function()
 		button.icon:SetTexCoord(texL, texR, texT, texB)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		B.CreateBDFrame(button)
+		B:ResetTexCoord(button.icon)
 	end
 
 	for i = 1, INBOXITEMS_TO_DISPLAY do
@@ -74,6 +75,7 @@ tinsert(C.defaultThemes, function()
 		button.Icon:SetTexCoord(texL, texR, texT, texB)
 		button.IconBorder:SetAlpha(0)
 		B.CreateBDFrame(button)
+		B:ResetTexCoord(button.Icon)
 	end
 
 	for i = 1, ATTACHMENTS_MAX_SEND do
@@ -82,6 +84,7 @@ tinsert(C.defaultThemes, function()
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.bg = B.CreateBDFrame(button, .25)
 		B.ReskinIconBorder(button.IconBorder)
+		B:ResetTexCoord(button:GetNormalTexture())
 	end
 
 	hooksecurefunc("SendMailFrame_Update", function()
@@ -100,6 +103,7 @@ tinsert(C.defaultThemes, function()
 		button.icon:SetTexCoord(texL, texR, texT, texB)
 		button.bg = B.CreateBDFrame(button, .25)
 		B.ReskinIconBorder(button.IconBorder)
+		B:ResetTexCoord(button.icon)
 	end
 
 	MailFont_Large:SetTextColor(1, 1, 1)
