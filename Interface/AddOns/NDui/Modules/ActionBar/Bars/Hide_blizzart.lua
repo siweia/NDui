@@ -53,6 +53,7 @@ local function DisableDefaultBarEvents() -- credit: Simpy
 	_G.ActionBarActionEventsFrame:UnregisterAllEvents()
 	-- used for ExtraActionButton and TotemBar (on wrath)
 	_G.ActionBarButtonEventsFrame:UnregisterAllEvents()
+	_G.ActionBarButtonEventsFrame:RegisterEvent("PLAYER_ENTERING_WORLD") -- fix gamepad petactionbar error
 	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_SLOT_CHANGED") -- needed to let the ExtraActionButton show and Totems to swap
 	_G.ActionBarButtonEventsFrame:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN") -- needed for cooldowns of them both
 	hooksecurefunc(_G.ActionBarButtonEventsFrame, "RegisterFrame", buttonEventsRegisterFrame)
