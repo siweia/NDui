@@ -35,6 +35,7 @@
 	<Script file="ObjectiveTracker.lua"/>
 	<Script file="PetBattleUI.lua"/>
 	<Script file="PetitionFrame.lua"/>
+	<Script file="PetStable.lua"/>
 	<Script file="PVPMatch.lua"/>
 	<Script file="QuestFrame.lua"/>
 	<Script file="QuestInfo.lua"/>

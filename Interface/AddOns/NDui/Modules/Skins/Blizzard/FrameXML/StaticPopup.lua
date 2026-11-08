@@ -46,6 +46,7 @@ tinsert(C.defaultThemes, function()
 			bu:SetPushedTexture(0)
 			bu.bg = B.ReskinIcon(icon)
 			B.ReskinIconBorder(bu.IconBorder)
+			B:ResetTexCoord(icon)
 
 			local bg = B.CreateBDFrame(bu, .25)
 			bg:SetPoint("TOPLEFT", bu.bg, "TOPRIGHT", 2, 0)
