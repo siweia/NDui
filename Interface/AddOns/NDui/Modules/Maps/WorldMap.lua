@@ -119,7 +119,7 @@ end
 
 -- Keep the frame inside Blizzard's UIPanelManager.
 -- Re-anchor the frame after Blizzard's layout instead of detaching it.
-function module:RestoreMapAnchor(frame)
+function module.RestoreMapAnchor(frame)
 	if frame.isMaximized then return end
 
 	if C.db["TempAnchor"][frame:GetName()] then
@@ -132,7 +132,7 @@ end
 
 function module:UpdateMapAnchor()
 	module.UpdateMapScale(self)
-	module:RestoreMapAnchor(self)
+	module.RestoreMapAnchor(self)
 end
 
 function module:WorldMapScale()
@@ -304,7 +304,7 @@ function module:SetupWorldMap()
 	-- Blizzard's panel layout runs on every panel change and would move the map
 	-- back to its default position, so put our own anchor back afterwards.
 	hooksecurefunc("UpdateUIPanelPositions", function()
-		module:RestoreMapAnchor(WorldMapFrame)
+		module.RestoreMapAnchor(WorldMapFrame)
 	end)
 end
 
