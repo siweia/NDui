@@ -335,7 +335,7 @@ function module:CreateBagTab(settings, columns, account)
 
 	purchaseButton:RegisterForClicks("AnyUp", "AnyDown")
 	purchaseButton:SetAttribute("type", "click")
-	purchaseButton:SetAttribute("clickbutton", _G.BankPanel.PurchasePrompt.TabCostFrame.PurchaseButton)
+	purchaseButton:SetAttribute("clickbutton", module:GetPurchaseButton())
 	bagTab.purchaseButton = purchaseButton
 
 	self.BagBar = bagTab
