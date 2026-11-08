@@ -132,7 +132,7 @@ end
 
 function module:UpdateMapAnchor()
 	module.UpdateMapScale(self)
-	module.RestoreMapAnchor(self)
+	module:RestoreMapAnchor(self)
 end
 
 function module:WorldMapScale()
