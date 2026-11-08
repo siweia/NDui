@@ -1618,6 +1618,7 @@ do
 		for _, frame in ipairs(list) do
 			frame.Border:SetTexture(nil)
 			frame.Portrait:SetTexture(nil)
+			if frame.CircleMask then frame.CircleMask:Hide() end
 			if not frame.bg then
 				frame.bg = B.ReskinIcon(frame.Portrait)
 			end
