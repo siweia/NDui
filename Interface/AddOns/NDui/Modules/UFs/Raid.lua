@@ -54,22 +54,11 @@ function UF:CreateRaidIcons(self)
 	self.PhaseIndicator.PostUpdate = PostUpdateGroupPhase
 end
 
-function UF:UpdateTargetBorder()
-	if UnitIsUnit("target", self.__unit) then
-		self.TargetBorder:Show()
-	else
-		self.TargetBorder:Hide()
-	end
-end
-
-function UF:CreateTargetBorder(self)
+function UF:CreateTargetIndicator(self)
 	local border = B.CreateBDFrame(self, 0)
 	border:SetBackdropBorderColor(.9, .9, .9)
-	border:Hide()
 
-	self.TargetBorder = border
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", UF.UpdateTargetBorder, true)
-	self:RegisterEvent("GROUP_ROSTER_UPDATE", UF.UpdateTargetBorder, true)
+	self.TargetIndicator = border
 end
 
 function UF:UpdateThreatBorder(_, unit)
