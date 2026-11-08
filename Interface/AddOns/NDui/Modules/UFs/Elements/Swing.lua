@@ -55,7 +55,7 @@ function UF:CreateSwingBar(self)
 		bar:SetSize(element:GetWidth(), barHeight)
 		bar:SetPoint(point, relative, relativePoint, 0, offset)
 		bar:SetMinMaxValues(0, 1)
-		B.CreateSB(bar)
+		B.CreateSB(bar, true)
 		bar:Hide()
 		return bar
 	end
