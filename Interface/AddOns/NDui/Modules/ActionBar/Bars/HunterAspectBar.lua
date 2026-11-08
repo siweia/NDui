@@ -5,8 +5,8 @@ local Bar = B:GetModule("Actionbar")
 local pairs, sort, tinsert, max = pairs, sort, tinsert, math.max
 local InCombatLockdown, IsPlayerSpell = InCombatLockdown, IsPlayerSpell
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
-local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
-local GetAuraDataBySpellName = C_UnitAuras.GetAuraDataBySpellName
+local GetAuraData = C_UnitAuras and C_UnitAuras.GetAuraDataByIndex
+local GetAura = UnitAura
 
 -- Classic aspect ranks; IDs the client does not know are skipped, so the bar
 -- only ever shows what the hunter has actually learned.
@@ -23,6 +23,7 @@ local aspects = {
 }
 
 local aspectButtons = {}
+local aspectByName, aspectBySpell = {}, {}
 local aspectFrame
 
 local function IsAspectKnown(spellID)
@@ -31,15 +32,39 @@ local function IsAspectKnown(spellID)
 end
 
 -- The buff of a ranked aspect carries the rank's ID, not the base ID, so the
--- name lookup is the reliable half here. Auras cast by another hunter (Pack,
--- Wild) must not light up our button, hence the source check.
-local function IsAspectActive(spellID, name)
-	local aura = GetPlayerAuraBySpellID and GetPlayerAuraBySpellID(spellID)
-	if not aura and GetAuraDataBySpellName then
-		aura = GetAuraDataBySpellName("player", name, "HELPFUL")
+-- name is the reliable match. Aura data is read in a single pass; a self-cast
+-- aura wins over another hunter's group aspect (Pack/Wild), and an unknown
+-- source still counts so a missing unit token can never drop the highlight.
+local function FindActiveAspect()
+	if not GetAuraData and not GetAura then return end
+
+	local fallback
+	for i = 1, 40 do
+		local name, spellID, source
+		if GetAuraData then
+			local aura = GetAuraData("player", i, "HELPFUL")
+			if not aura then break end
+			name, spellID, source = aura.name, aura.spellId, aura.sourceUnit
+		else
+			local auraName, _, _, _, _, _, caster = GetAura("player", i, "HELPFUL")
+			if not auraName then break end
+			name, source = auraName, caster
+		end
+
+		local button
+		if name then button = aspectByName[name] end
+		if not button and spellID then button = aspectBySpell[spellID] end
+
+		if button then
+			if source and source ~= "" and source ~= "player" then
+				fallback = fallback or button
+			else
+				return button
+			end
+		end
 	end
-	if not aura then return false end
-	return not aura.sourceUnit or aura.sourceUnit == "player"
+
+	return fallback
 end
 
 function Bar:UpdateAspectCooldown()
@@ -87,7 +112,9 @@ function Bar:CreateAspectButton(spellID, index)
 	button.cover:SetColorTexture(1, 1, 1, .18)
 	button.cover:Hide()
 
-	tinsert(aspectButtons, {button, index, name})
+	aspectByName[name] = button
+	aspectBySpell[spellID] = button
+	tinsert(aspectButtons, {button, index, name, spellID})
 	return button
 end
 
@@ -147,16 +174,18 @@ function Bar:CheckKnownAspects()
 	end
 
 	Bar:UpdateAspectStatus()
+	Bar:CheckActiveAspect("player")
 end
 
 function Bar:CheckActiveAspect(unit)
 	if unit ~= "player" or not aspectFrame or not aspectFrame:IsShown() then return end
 
+	local active = FindActiveAspect()
 	for _, value in pairs(aspectButtons) do
 		local button = value[1]
-		local active = IsAspectActive(button.spellID, value[3])
-		button.cover:SetShown(active)
-		if active then
+		local isActive = button == active
+		button.cover:SetShown(isActive)
+		if isActive then
 			button.bg:SetBackdropBorderColor(1, .8, 0)
 		else
 			B.SetBorderColor(button.bg)
@@ -164,9 +193,30 @@ function Bar:CheckActiveAspect(unit)
 	end
 end
 
--- UNIT_AURA passes (event, unit), the direct call passes the unit only.
+-- Aura data is not always refreshed yet while the event is being handled, so
+-- the check runs one frame later; events of the same frame collapse into one.
+local checkQueued
+local function QueueActiveCheck()
+	if checkQueued then return end
+	checkQueued = true
+
+	local function run()
+		checkQueued = nil
+		Bar:CheckActiveAspect("player")
+	end
+
+	if C_Timer and C_Timer.After then
+		C_Timer.After(0, run)
+	else
+		run()
+	end
+end
+
+-- UNIT_AURA passes (event, unit); some clients omit the unit, so it is queued
+-- in that case as well.
 local function OnUnitAura(event, unit)
-	Bar:CheckActiveAspect(unit or event)
+	if unit and unit ~= "player" then return end
+	QueueActiveCheck()
 end
 
 function Bar:ToggleAspectBar()
