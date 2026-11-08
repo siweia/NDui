@@ -117,9 +117,22 @@ function module:UpdateMapScale()
 	end
 end
 
+-- Keep the frame inside Blizzard's UIPanelManager.
+-- Re-anchor the frame after Blizzard's layout instead of detaching it.
+function module:RestoreMapAnchor(frame)
+	if frame.isMaximized then return end
+
+	if C.db["TempAnchor"][frame:GetName()] then
+		B.RestoreMF(frame)
+	else
+		frame:ClearAllPoints()
+		frame:SetPoint("CENTER")
+	end
+end
+
 function module:UpdateMapAnchor()
 	module.UpdateMapScale(self)
-	B.RestoreMF(self)
+	module.RestoreMapAnchor(self)
 end
 
 function module:WorldMapScale()
@@ -276,7 +289,6 @@ function module:SetupWorldMap()
 	if C.db["Map"]["DisableMap"] then return end
 	if C_AddOns.IsAddOnLoaded("Mapster") then return end
 
-	-- Remove from frame manager
 	WorldMapFrame:ClearAllPoints()
 	WorldMapFrame:SetPoint("CENTER") -- init anchor
 
@@ -288,18 +300,15 @@ function module:SetupWorldMap()
 	self:WorldMapScale()
 	self:SetupCoords()
 	self:RemoveMapFog()
-end
 
-function module:MapFunc()
-	WorldMapFrame:SetAttribute("UIPanelLayout-area", nil)
-	WorldMapFrame:SetAttribute("UIPanelLayout-enabled", false)
-	WorldMapFrame:SetAttribute("UIPanelLayout-allowOtherPanels", true)
-	tinsert(UISpecialFrames, "WorldMapFrame")
-	B:UnregisterEvent("PLAYER_ENTERING_WORLD", self.MapFunc)
+	-- Blizzard's panel layout runs on every panel change and would move the map
+	-- back to its default position, so put our own anchor back afterwards.
+	hooksecurefunc("UpdateUIPanelPositions", function()
+		module:RestoreMapAnchor(WorldMapFrame)
+	end)
 end
 
 function module:OnLogin()
 	self:SetupWorldMap()
 	self:SetupMinimap()
-	B:RegisterEvent("PLAYER_ENTERING_WORLD", self.MapFunc)
 end
