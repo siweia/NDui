@@ -9,6 +9,17 @@ local oUF = ns.oUF
 -- on some clients, so both the enum and plain strings are accepted.
 local swingType = Enum and Enum.PlayerSwingType
 
+-- Auto Shot has a 0.5s cast on vanilla ranged attacks: it is the tail of the
+-- ranged swing and only completes while the hunter stands still.
+local CAST_TIME = .5
+local IsPlayerMoving, GetUnitSpeed = IsPlayerMoving, GetUnitSpeed
+
+local function IsMoving()
+	if IsPlayerMoving then return IsPlayerMoving() end
+	if GetUnitSpeed then return (GetUnitSpeed("player") or 0) > 0 end
+	return false
+end
+
 local function Clear(element)
 	for _, bar in ipairs({element.Main, element.Offhand}) do
 		bar.finish = nil
@@ -25,6 +36,13 @@ local function OnUpdate(element)
 		if bar.finish then
 			local remaining = bar.finish - now
 			if remaining > 0 then
+				-- Hold at the cast window while moving: the shot cannot finish
+				-- until the hunter has stood still for the whole cast time.
+				if remaining <= CAST_TIME and element.mode == "ranged" and bar.duration > CAST_TIME and IsMoving() then
+					bar.finish = now + CAST_TIME
+					remaining = CAST_TIME
+				end
+
 				bar:SetValue((bar.duration - remaining) / bar.duration)
 				if not nextSwing or remaining < nextSwing then
 					nextSwing = remaining
@@ -98,6 +116,16 @@ local function Update(self, event, duration, hand)
 	bar.finish = GetTime() + duration
 	bar:SetValue(0)
 	bar:Show()
+
+	element.Main.Cast:SetShown(element.mode == "ranged")
+	if element.mode == "ranged" then
+		-- the zone is sized from the ranged swing duration of this shot
+		local UF = B:GetModule("UnitFrames")
+		if UF and UF.UpdateSwingCastZone then
+			UF:UpdateSwingCastZone(element)
+		end
+	end
+
 	element:Show()
 end
 
@@ -109,6 +137,7 @@ local function Enable(self, unit)
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", Update, true)
 	self:RegisterEvent("PLAYER_DEAD", Update, true)
 	self:RegisterEvent("WEAPON_SLOT_CHANGED", Update, true)
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", Update, true)
 	return true
 end
 
@@ -117,6 +146,7 @@ local function Disable(self)
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD", Update)
 	self:UnregisterEvent("PLAYER_DEAD", Update)
 	self:UnregisterEvent("WEAPON_SLOT_CHANGED", Update)
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED", Update)
 	self.Swing:SetScript("OnUpdate", nil)
 	Clear(self.Swing)
 end

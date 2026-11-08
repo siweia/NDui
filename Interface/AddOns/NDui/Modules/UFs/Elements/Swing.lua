@@ -4,6 +4,17 @@ local UF = B:GetModule("UnitFrames")
 
 local GAP = 3 -- spacing between the main and offhand bars
 local MIN_MOVER_HEIGHT = 14 -- keep the mover draggable on thin bars
+local CAST_TIME = .5 -- Auto Shot cast time, drawn as the tail of a ranged swing
+
+-- Auto Shot needs the hunter to stand still for its cast, so the last 0.5s of a
+-- ranged swing is drawn as its own zone on the main bar.
+function UF:UpdateSwingCastZone(swing)
+	local bar = swing.Main
+	local duration = bar.duration
+	if not duration or duration <= 0 then return end
+
+	bar.Cast:SetWidth(math.min(CAST_TIME, duration) / duration * bar:GetWidth())
+end
 
 -- Shared by creation and the GUI, so the layout is only maintained in one place.
 function UF:UpdateSwingBarLayout(swing)
@@ -26,6 +37,8 @@ function UF:UpdateSwingBarLayout(swing)
 	swing:ClearAllPoints()
 	swing:SetPoint("TOPLEFT", swing.mover)
 	swing.mover:SetSize(width, math.max(2*height + GAP, MIN_MOVER_HEIGHT))
+
+	UF:UpdateSwingCastZone(swing)
 end
 
 function UF:CreateSwingBar(self)
@@ -49,6 +62,14 @@ function UF:CreateSwingBar(self)
 
 	element.Main = CreateBar(height, "TOPLEFT", element, "TOPLEFT", 0)
 	element.Offhand = CreateBar(height, "TOPLEFT", element.Main, "BOTTOMLEFT", -GAP)
+
+	-- Red zone at the end of the main bar: the Auto Shot cast window.
+	element.Main.Cast = element.Main:CreateTexture(nil, "BACKGROUND", nil, 1)
+	element.Main.Cast:SetPoint("TOPRIGHT")
+	element.Main.Cast:SetPoint("BOTTOMRIGHT")
+	element.Main.Cast:SetWidth(1)
+	element.Main.Cast:SetColorTexture(.9, 0, 0)
+	element.Main.Cast:Hide()
 
 	-- A 10pt text does not fit into two 3px bars, a single one is used instead.
 	-- The bars are child frames of the element (one frame level above it), so the
