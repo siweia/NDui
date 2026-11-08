@@ -761,6 +761,9 @@ TT:RegisterTooltips("NDui", function()
 		if Krowi_Tooltip then
 			TT.ReskinTooltip(Krowi_Tooltip)
 		end
+		if Krowi_ProgressBarTooltip then
+			TT.ReskinTooltip(Krowi_ProgressBarTooltip)
+		end
 	end)
 
 	if C_AddOns.IsAddOnLoaded("BattlePetBreedID") then
