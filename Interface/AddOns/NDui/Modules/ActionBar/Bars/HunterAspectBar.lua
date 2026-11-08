@@ -5,8 +5,8 @@ local Bar = B:GetModule("Actionbar")
 local pairs, sort, tinsert, max = pairs, sort, tinsert, math.max
 local InCombatLockdown, IsPlayerSpell = InCombatLockdown, IsPlayerSpell
 local GetSpellName, GetSpellTexture = C_Spell.GetSpellName, C_Spell.GetSpellTexture
-local GetAuraData = C_UnitAuras and C_UnitAuras.GetAuraDataByIndex
-local GetAura = UnitAura
+local GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID
+local GetAuraDataBySpellName = C_UnitAuras and C_UnitAuras.GetAuraDataBySpellName
 
 -- Classic aspect ranks; IDs the client does not know are skipped, so the bar
 -- only ever shows what the hunter has actually learned.
@@ -23,7 +23,6 @@ local aspects = {
 }
 
 local aspectButtons = {}
-local aspectByName, aspectBySpell = {}, {}
 local aspectFrame
 
 local function IsAspectKnown(spellID)
@@ -32,30 +31,22 @@ local function IsAspectKnown(spellID)
 end
 
 -- The buff of a ranked aspect carries the rank's ID, not the base ID, so the
--- name is the reliable match. Aura data is read in a single pass; a self-cast
--- aura wins over another hunter's group aspect (Pack/Wild), and an unknown
--- source still counts so a missing unit token can never drop the highlight.
+-- name lookup is the reliable fallback. Spell/name queries remain available
+-- when indexed aura access is restricted; a self-cast aura wins over another
+-- hunter's group aspect (Pack/Wild).
 local function FindActiveAspect()
-	if not GetAuraData and not GetAura then return end
+	if not GetPlayerAuraBySpellID and not GetAuraDataBySpellName then return end
 
 	local fallback
-	for i = 1, 40 do
-		local name, spellID, source
-		if GetAuraData then
-			local aura = GetAuraData("player", i, "HELPFUL")
-			if not aura then break end
-			name, spellID, source = aura.name, aura.spellId, aura.sourceUnit
-		else
-			local auraName, _, _, _, _, _, caster = GetAura("player", i, "HELPFUL")
-			if not auraName then break end
-			name, source = auraName, caster
+	for _, value in pairs(aspectButtons) do
+		local button, name, spellID = value[1], value[3], value[4]
+		local aura = GetPlayerAuraBySpellID and GetPlayerAuraBySpellID(spellID)
+		if not aura and GetAuraDataBySpellName then
+			aura = GetAuraDataBySpellName("player", name, "HELPFUL")
 		end
 
-		local button
-		if name then button = aspectByName[name] end
-		if not button and spellID then button = aspectBySpell[spellID] end
-
-		if button then
+		if aura then
+			local source = aura.sourceUnit
 			if source and source ~= "" and source ~= "player" then
 				fallback = fallback or button
 			else
@@ -112,8 +103,6 @@ function Bar:CreateAspectButton(spellID, index)
 	button.cover:SetColorTexture(1, 1, 1, .18)
 	button.cover:Hide()
 
-	aspectByName[name] = button
-	aspectBySpell[spellID] = button
 	tinsert(aspectButtons, {button, index, name, spellID})
 	return button
 end
