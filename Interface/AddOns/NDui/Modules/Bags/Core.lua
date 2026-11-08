@@ -303,7 +303,7 @@ end
 
 function module:CreateBagBar(settings, columns)
 	local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
-	bagBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 5)
+	bagBar:SetPoint("TOPLEFT", self, "TOPRIGHT", 5, 0)
 	B.SetBD(bagBar)
 	bagBar.highlightFunction = highlightFunction
 	bagBar.isGlobal = true
@@ -1464,7 +1464,7 @@ function module:OnLogin()
 		buttons[1] = module.CreateCloseButton(self, f)
 		buttons[2] = module.CreateSortButton(self, name)
 		if name == "Bag" then
-			module.CreateBagBar(self, settings, 5)
+			module.CreateBagBar(self, settings, 1)
 			buttons[3] = module.CreateBagToggle(self)
 			buttons[4] = module.CreateSplitButton(self)
 			buttons[5] = module.CreateFavouriteButton(self)
