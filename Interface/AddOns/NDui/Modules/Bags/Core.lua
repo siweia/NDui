@@ -1049,7 +1049,6 @@ function module:OnLogin()
 		for i = 1, 5 do
 			AddNewContainer("Account", i+1, "AccountCustom"..i, filters["accountCustom"..i])
 		end
-		AddNewContainer("Account", 12, "AccountAmmo", filters.accountAmmo)
 		AddNewContainer("Account", 9, "AccountAOE", filters.accountAOE)
 		AddNewContainer("Account", 8, "AccountLegacy", filters.accountLegacy)
 		AddNewContainer("Account", 7, "AccountEquipment", filters.accountEquipment)
@@ -1421,7 +1420,7 @@ function module:OnLogin()
 		module.CreateFreeSlots(self)
 
 		local label
-		if strmatch(name, "Ammo") then
+		if strmatch(name, "AmmoItem$") then
 			label = DB.MyClass == "HUNTER" and INVTYPE_AMMO or SOUL_SHARDS
 		elseif strmatch(name, "AzeriteItem$") then
 			label = L["Azerite Armor"]

@@ -7,7 +7,6 @@ local C_Item_IsAnimaItemByID = C_Item.IsAnimaItemByID
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local CURRENT_EXPANSION = LE_EXPANSION_WAR_WITHIN or 10 -- 11.0
 local AmmoEquipLoc = _G.INVTYPE_AMMO
-local AmmoClassID = Enum.ItemClass.Projectile
 local characterBankStart = Enum.BagIndex.CharacterBankTab_1
 local characterBankEnd = characterBankStart + C_Bank.FetchMaxNumBankTabs(Enum.BankType.Character)
 local accountBankStart = Enum.BagIndex.AccountBankTab_1
@@ -63,7 +62,7 @@ local function isItemAmmo(item)
 	end
 
 	if DB.MyClass == "HUNTER" then
-		return (AmmoEquipLoc and item.equipLoc == AmmoEquipLoc) or (AmmoClassID and item.classID == AmmoClassID) or module.BagsType[item.bagId] == -1
+		return item.equipLoc == AmmoEquipLoc or module.BagsType[item.bagId] == -1
 	elseif DB.MyClass == "WARLOCK" then
 		return item.id == 6265 or module.BagsType[item.bagId] == 1
 	end
@@ -258,7 +257,6 @@ function module:GetFilters()
 	filters.onlyBagReagent = function(item) return (isItemInBagReagent(item) and not isEmptySlot(item)) or (hasReagentBagEquipped() and isItemInBag(item) and isTradeGoods(item)) end -- reagent bagslot
 
 	filters.accountbank = function(item) return isItemInAccountBank(item) and not isEmptySlot(item) end
-	filters.accountAmmo = function(item) return isItemInAccountBank(item) and isItemAmmo(item) end
 	filters.accountEquipment = function(item) return isItemInAccountBank(item) and isItemEquipment(item) end
 	filters.accountConsumable = function(item) return isItemInAccountBank(item) and isItemConsumable(item) end
 	filters.accountGoods = function(item) return isItemInAccountBank(item) and isTradeGoods(item) end
