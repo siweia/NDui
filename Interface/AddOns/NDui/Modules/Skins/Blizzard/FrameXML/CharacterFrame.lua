@@ -511,4 +511,9 @@ tinsert(C.defaultThemes, function()
 	end
 	skinScrollBox(StatisticsFrame.ScrollBox, updateFrame)
 	B.ReskinTrimScroll(StatisticsFrame.ScrollBar)
+
+	if PetPaperDollPetHappinessInfo then
+		PetPaperDollPetHappinessInfo:ClearAllPoints()
+		PetPaperDollPetHappinessInfo:SetPoint("TOPLEFT", 15, 30)
+	end
 end)

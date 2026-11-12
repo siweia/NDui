@@ -78,6 +78,7 @@ local function reskinSlotButton(button)
 		if button.CropFrame then button.CropFrame:SetAlpha(0) end
 		resetButton(button)
 		hooksecurefunc(button, "Update", resetButton)
+		B:ResetTexCoord(button.Icon)
 
 		button.styled = true
 	end
