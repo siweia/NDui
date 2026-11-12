@@ -998,6 +998,7 @@ function module:OnLogin()
 		for i = 1, 5 do
 			AddNewContainer("Bag", i+1, "BagCustom"..i, filters["bagCustom"..i])
 		end
+		AddNewContainer("Bag", 22, "AmmoItem", filters.bagAmmo)
 		AddNewContainer("Bag", 7, "BagReagent", filters.onlyBagReagent)
 		AddNewContainer("Bag", 21, "Junk", filters.bagsJunk)
 		AddNewContainer("Bag", 10, "EquipSet", filters.bagEquipSet)
@@ -1023,6 +1024,7 @@ function module:OnLogin()
 		for i = 1, 5 do
 			AddNewContainer("Bank", i+1, "BankCustom"..i, filters["bankCustom"..i])
 		end
+		AddNewContainer("Bank", 20, "BankAmmoItem", filters.bankAmmo)
 		AddNewContainer("Bank", 9, "BankEquipSet", filters.bankEquipSet)
 		AddNewContainer("Bank", 10, "BankAOE", filters.bankAOE)
 		AddNewContainer("Bank", 7, "BankAzeriteItem", filters.bankAzeriteItem)
@@ -1047,6 +1049,7 @@ function module:OnLogin()
 		for i = 1, 5 do
 			AddNewContainer("Account", i+1, "AccountCustom"..i, filters["accountCustom"..i])
 		end
+		AddNewContainer("Account", 12, "AccountAmmo", filters.accountAmmo)
 		AddNewContainer("Account", 9, "AccountAOE", filters.accountAOE)
 		AddNewContainer("Account", 8, "AccountLegacy", filters.accountLegacy)
 		AddNewContainer("Account", 7, "AccountEquipment", filters.accountEquipment)
@@ -1418,7 +1421,9 @@ function module:OnLogin()
 		module.CreateFreeSlots(self)
 
 		local label
-		if strmatch(name, "AzeriteItem$") then
+		if strmatch(name, "Ammo") then
+			label = DB.MyClass == "HUNTER" and INVTYPE_AMMO or SOUL_SHARDS
+		elseif strmatch(name, "AzeriteItem$") then
 			label = L["Azerite Armor"]
 		elseif strmatch(name, "Equipment$") then
 			label = BAG_FILTER_EQUIPMENT

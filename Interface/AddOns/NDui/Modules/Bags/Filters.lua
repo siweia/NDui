@@ -6,6 +6,8 @@ local C_ToyBox_GetToyInfo = C_ToyBox.GetToyInfo
 local C_Item_IsAnimaItemByID = C_Item.IsAnimaItemByID
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local CURRENT_EXPANSION = LE_EXPANSION_WAR_WITHIN or 10 -- 11.0
+local AmmoEquipLoc = _G.INVTYPE_AMMO
+local AmmoClassID = Enum.ItemClass.Projectile
 local characterBankStart = Enum.BagIndex.CharacterBankTab_1
 local characterBankEnd = characterBankStart + C_Bank.FetchMaxNumBankTabs(Enum.BankType.Character)
 local accountBankStart = Enum.BagIndex.AccountBankTab_1
@@ -50,6 +52,21 @@ local function isItemJunk(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
 	if not C.db["Bags"]["FilterJunk"] then return end
 	return (item.quality == Enum.ItemQuality.Poor or NDuiADB["CustomJunkList"][item.id]) and item.hasPrice and not module:IsPetTrashCurrency(item.id)
+end
+
+local function isItemAmmo(item)
+	if not C.db["Bags"]["ItemFilter"] then return end
+	if not C.db["Bags"]["FilterAmmo"] then return end
+
+	if C.db["Bags"]["GatherEmpty"] and not item.texture then
+		return false
+	end
+
+	if DB.MyClass == "HUNTER" then
+		return (AmmoEquipLoc and item.equipLoc == AmmoEquipLoc) or (AmmoClassID and item.classID == AmmoClassID) or module.BagsType[item.bagId] == -1
+	elseif DB.MyClass == "WARLOCK" then
+		return item.id == 6265 or module.BagsType[item.bagId] == 1
+	end
 end
 
 local function isItemEquipSet(item)
@@ -206,6 +223,7 @@ function module:GetFilters()
 	local filters = {}
 
 	filters.onlyBags = function(item) return isItemInBag(item) and not isEmptySlot(item) end
+	filters.bagAmmo = function(item) return isItemInBag(item) and isItemAmmo(item) end
 	filters.bagAzeriteItem = function(item) return isItemInBag(item) and isAzeriteArmor(item) end
 	filters.bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end
 	filters.bagEquipSet = function(item) return isItemInBag(item) and isItemEquipSet(item) end
@@ -222,6 +240,7 @@ function module:GetFilters()
 	filters.bagDecor = function(item) return isItemInBag(item) and isItemDecor(item) end
 
 	filters.onlyBank = function(item) return isItemInBank(item) and not isEmptySlot(item) end
+	filters.bankAmmo = function(item) return isItemInBank(item) and isItemAmmo(item) end
 	filters.bankAzeriteItem = function(item) return isItemInBank(item) and isAzeriteArmor(item) end
 	filters.bankLegendary = function(item) return isItemInBank(item) and isItemLegendary(item) end
 	filters.bankEquipment = function(item) return isItemInBank(item) and isItemEquipment(item) end
@@ -239,6 +258,7 @@ function module:GetFilters()
 	filters.onlyBagReagent = function(item) return (isItemInBagReagent(item) and not isEmptySlot(item)) or (hasReagentBagEquipped() and isItemInBag(item) and isTradeGoods(item)) end -- reagent bagslot
 
 	filters.accountbank = function(item) return isItemInAccountBank(item) and not isEmptySlot(item) end
+	filters.accountAmmo = function(item) return isItemInAccountBank(item) and isItemAmmo(item) end
 	filters.accountEquipment = function(item) return isItemInAccountBank(item) and isItemEquipment(item) end
 	filters.accountConsumable = function(item) return isItemInAccountBank(item) and isItemConsumable(item) end
 	filters.accountGoods = function(item) return isItemInAccountBank(item) and isTradeGoods(item) end
