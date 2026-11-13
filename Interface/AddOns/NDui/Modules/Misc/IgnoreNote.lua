@@ -8,7 +8,7 @@ local noteString = "|T"..DB.copyTex..":12|t %s"
 local function GetButtonName(button)
 	local name = button.name:GetText()
 	if not name then return end
-	if not strmatch(name, "-") then
+	if not DB.isForever and not strmatch(name, "-") then
 		name = name.."-"..DB.MyRealm
 	end
 	return name
@@ -112,7 +112,7 @@ function M:IgnoreNote()
 		ignoreWindow.UnignorePlayerButton:HookScript("OnClick", function()
 			local name = C_FriendList.GetIgnoreName(C_FriendList.GetSelectedIgnore())
 			if name then
-				if not strmatch(name, "-") then
+				if not DB.isForever and not strmatch(name, "-") then
 					name = name.."-"..DB.MyRealm
 				end
 				NDuiADB["IgnoreNotes"][name] = nil

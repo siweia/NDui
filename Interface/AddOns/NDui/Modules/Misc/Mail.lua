@@ -105,7 +105,8 @@ local function GenerateDataByRealm(realm)
 	if contactListByRealm[realm] then
 		for name, color in pairs(contactListByRealm[realm]) do
 			local r, g, b = strsplit(":", color)
-			tinsert(contactList, {name = name.."-"..realm, r = r, g = g, b = b})
+			if not DB.isForever then name = name.."-"..realm end
+			tinsert(contactList, {name = name, r = r, g = g, b = b})
 		end
 	end
 end
@@ -115,8 +116,14 @@ function M:ContactList_Refresh()
 	wipe(contactListByRealm)
 
 	for fullname, color in pairs(NDuiADB["ContactList"]) do
-		local name, realm = strmatch(fullname, "^(.-)%-(.*)$")
-		if realm then
+		local name, realm
+		if DB.isForever then
+			name, realm = fullname, DB.MyRealm -- contacts are stored as realmless full names on Forever
+		else
+			name, realm = strmatch(fullname, "^(.-)%-(.*)$")
+			realm = realm or DB.MyRealm
+		end
+		if name then
 			if not contactListByRealm[realm] then contactListByRealm[realm] = {} end
 			contactListByRealm[realm][name] = color
 		end
@@ -201,7 +208,7 @@ function M:MailBox_ContactList()
 	add:SetScript("OnClick", function()
 		local text = editbox:GetText()
 		if text == "" or tonumber(text) then return end -- incorrect input
-		if not strfind(text, "-") then text = text.."-"..DB.MyRealm end -- complete player realm name
+		if not DB.isForever and not strfind(text, "-") then text = text.."-"..DB.MyRealm end -- complete player realm name
 		if NDuiADB["ContactList"][text] then return end -- unit exists
 
 		local r, g, b = swatch.tex:GetColor()

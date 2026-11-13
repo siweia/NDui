@@ -118,7 +118,7 @@ function RebuildCharList()
 			if not (realm == myRealm and name == myName) then
 				index = index + 1
 				if not menuList[index] then menuList[index] = {} end
-				menuList[index].text = B.ClassColorString(value[2])..Ambiguate(name.."-"..realm, "none")
+				menuList[index].text = B.ClassColorString(value[2])..(DB.isForever and name or Ambiguate(name.."-"..realm, "none"))
 				menuList[index].notCheckable = true
 				menuList[index].arg1 = realm
 				menuList[index].arg2 = name
@@ -186,7 +186,7 @@ info.onEnter = function(self)
 	if NDuiADB["totalGold"][myRealm] then
 		for k, v in pairs(NDuiADB["totalGold"][myRealm]) do
 			local gold, class = unpack(v)
-			local name = Ambiguate(k.."-"..myRealm, "none")
+			local name = DB.isForever and k or Ambiguate(k.."-"..myRealm, "none")
 			if gold > showGoldGap or UnitIsUnit(name, "player") then
 				if (isShiftKeyDown or currentAccounts < maxAccounts) then
 					local r, g, b = B.ClassColor(class)
@@ -204,7 +204,7 @@ info.onEnter = function(self)
 				local gold, class = unpack(v)
 				if gold > showGoldGap then
 					if isShiftKeyDown then -- show other realms while holding shift
-						local name = Ambiguate(k.."-"..realm, "none")
+						local name = DB.isForever and k or Ambiguate(k.."-"..realm, "none")
 						local r, g, b = B.ClassColor(class)
 						GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
 					end

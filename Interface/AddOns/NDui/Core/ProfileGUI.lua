@@ -92,6 +92,7 @@ StaticPopupDialogs["NDUI_DELETE_UNIT_PROFILE"] = {
 	button2 = NO,
 	OnAccept = function(self)
 		local name, realm = strsplit("-", self.text.text_arg1)
+		realm = realm or DB.MyRealm
 		if NDuiADB["totalGold"][realm] and NDuiADB["totalGold"][realm][name] then
 			NDuiADB["totalGold"][realm][name] = nil
 		end
@@ -153,6 +154,7 @@ function G:FindProfleUser(icon)
 	for fullName, index in pairs(NDuiADB["ProfileIndex"]) do
 		if index == icon.index then
 			local name, realm = strsplit("-", fullName)
+			realm = realm or DB.MyRealm
 			if not icon.list[realm] then icon.list[realm] = {} end
 			icon.list[realm][Ambiguate(fullName, "none")] = G:GetClassFromGoldInfo(name, realm)
 		end
@@ -284,7 +286,7 @@ function G:Delete_OnEnter()
 	local text = self:GetText()
 	if not text or text == "" then return end
 	local name, realm = strsplit("-", text)
-	if not realm then
+	if not realm and not DB.isForever then
 		realm = DB.MyRealm
 		text = name.."-"..realm
 		self:SetText(text)

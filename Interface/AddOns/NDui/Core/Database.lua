@@ -34,9 +34,31 @@ do
 end
 
 -- Colors
-DB.MyName, DB.MyRealm = UnitName("player")
---DB.MyRealm = GetRealmName()
-DB.MyFullName = DB.MyName.." "..DB.MyRealm
+if RegionalUniqueNamesEnabled and RegionalUniqueNamesEnabled() then
+	-- WoW Forever: the full name is unique region-wide, realms are hidden
+	-- UnitName returns firstName, surname instead of name, realm
+	DB.isForever = true
+	local name, surname = UnitNameUnmodified("player")
+	DB.MyName = (surname and surname ~= "") and (name.." "..surname) or name
+	DB.MyFullName = DB.MyName
+	local isRP = C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset)
+	local isPVP = C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset)
+	if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
+		DB.MyRealm = "Hardcore"
+	elseif isRP and isPVP then
+		DB.MyRealm = "RP-PvP"
+	elseif isRP then
+		DB.MyRealm = "RP"
+	elseif isPVP then
+		DB.MyRealm = "PvP"
+	else
+		DB.MyRealm = "PvE"
+	end
+else
+	DB.MyName = UnitName("player")
+	DB.MyRealm = GetRealmName()
+	DB.MyFullName = DB.MyName.."-"..DB.MyRealm
+end
 DB.MyClass = select(2, UnitClass("player"))
 DB.MyFaction = UnitFactionGroup("player")
 DB.ClassList = {}

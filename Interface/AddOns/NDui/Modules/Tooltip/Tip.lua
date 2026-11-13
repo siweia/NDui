@@ -229,7 +229,7 @@ function TT:OnTooltipSetUnit()
 	local unitFullName
 	if isPlayer then
 		local name = GetUnmodifiedUnitFullName(unit)
-		unitFullName = name.."-"..DB.MyRealm
+		unitFullName = DB.isForever and name or name.."-"..DB.MyRealm
 		local pvpName = UnitPVPName(unit)
 		if not C.db["Tooltip"]["HideTitle"] and pvpName and B:NotSecretValue(pvpName) and pvpName ~= "" then
 			name = pvpName
