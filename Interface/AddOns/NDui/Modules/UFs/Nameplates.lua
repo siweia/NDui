@@ -14,7 +14,7 @@ local C_NamePlate_SetNamePlateEnemyClickThrough = C_NamePlate.SetNamePlateEnemyC
 local C_NamePlate_SetNamePlateFriendlyClickThrough = C_NamePlate.SetNamePlateFriendlyClickThrough
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local INTERRUPTED = INTERRUPTED
-local _QuestieTooltips, _QuestiePlayer
+local _QuestieTooltips, _QuestLogCache
 
 -- Init
 function UF:UpdatePlateCVars()
@@ -52,8 +52,8 @@ function UF:SetupCVars()
 	SetCVar("nameplateGlobalScale", 1)
 
 	if IsAddOnLoaded("Questie") and QuestieLoader then
-		_QuestiePlayer = QuestieLoader:ImportModule("QuestiePlayer")
 		_QuestieTooltips = QuestieLoader:ImportModule("QuestieTooltips")
+		_QuestLogCache = QuestieLoader:ImportModule("QuestLogCache")
 
 		local _QuestieEventHandler = QuestieLoader:ImportModule("QuestEventHandler")
 		if _QuestieEventHandler and _QuestieEventHandler.private then
@@ -421,7 +421,7 @@ function UF:UpdateForQuestie(npcID)
 			if not tooltip.npc then
 				local questID = tooltip.questId
 				if questID then
-					if _QuestiePlayer.currentQuestlog[questID] then
+					if _QuestLogCache.TryGetQuest(questID) then
 						foundObjective = true
 
 						if tooltip.objective and tooltip.objective.Needed then
@@ -499,7 +499,7 @@ function UF:UpdateQuestIndicator()
 
 	if CodexMap then
 		UF.UpdateCodexQuestUnit(self, self.unitName)
-	elseif _QuestieTooltips and _QuestiePlayer then
+	elseif _QuestieTooltips and _QuestLogCache then
 		UF.UpdateForQuestie(self, self.npcID)
 	end
 end
