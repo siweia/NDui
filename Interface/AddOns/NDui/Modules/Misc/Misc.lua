@@ -714,7 +714,14 @@ function M:QuickMenuButton()
 		end
 
 		local gameAccountInfo = contextData.accountInfo and contextData.accountInfo.gameAccountInfo
-		if gameAccountInfo and gameAccountInfo.characterName and gameAccountInfo.realmName then
+		if DB.isForever then
+			-- names are region-wide unique on Forever, realm suffix is not needed
+			if gameAccountInfo and gameAccountInfo.characterName and gameAccountInfo.characterName ~= "" then
+				M.MenuButtonName = gameAccountInfo.characterName
+			else
+				M.MenuButtonName = contextData.name
+			end
+		elseif gameAccountInfo and gameAccountInfo.characterName and gameAccountInfo.realmName then
 			M.MenuButtonName = gameAccountInfo.characterName.."-"..gameAccountInfo.realmName
 		else
 			M.MenuButtonName = contextData.name.."-"..(contextData.server or DB.MyRealm)

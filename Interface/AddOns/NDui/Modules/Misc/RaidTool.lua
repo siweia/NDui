@@ -479,7 +479,7 @@ function M:RaidTool_CreateMenu(parent)
 			else
 				for i = MAX_PARTY_MEMBERS, 1, -1 do
 					if UnitExists("party"..i) then
-						UninviteUnit(UnitName("party"..i))
+						UninviteUnit((UnitName("party"..i))) -- parens: drop the surname second return on Forever
 					end
 				end
 			end
