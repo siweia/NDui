@@ -719,7 +719,7 @@ function M:QuickMenuButton()
 			if gameAccountInfo and gameAccountInfo.characterName and gameAccountInfo.characterName ~= "" then
 				M.MenuButtonName = gameAccountInfo.characterName
 			else
-				M.MenuButtonName = contextData.name
+				M.MenuButtonName = NameUtil.GetFullNameWithoutRealm(contextData.name, contextData.surname)
 			end
 		elseif gameAccountInfo and gameAccountInfo.characterName and gameAccountInfo.realmName then
 			M.MenuButtonName = gameAccountInfo.characterName.."-"..gameAccountInfo.realmName

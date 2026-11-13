@@ -286,10 +286,12 @@ function G:Delete_OnEnter()
 	local text = self:GetText()
 	if not text or text == "" then return end
 	local name, realm = strsplit("-", text)
-	if not realm and not DB.isForever then
+	if not realm then
 		realm = DB.MyRealm
-		text = name.."-"..realm
-		self:SetText(text)
+		if not DB.isForever then
+			text = name.."-"..realm
+			self:SetText(text)
+		end
 	end
 
 	if NDuiADB["ProfileIndex"][text] or (NDuiADB["totalGold"][realm] and NDuiADB["totalGold"][realm][name]) then
