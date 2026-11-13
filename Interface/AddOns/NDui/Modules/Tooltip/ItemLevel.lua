@@ -72,6 +72,11 @@ local function CancelInspectUpdate()
 	end
 end
 
+local function ResetInspectUnit()
+	CancelInspectUpdate()
+	currentUNIT, currentGUID = nil, nil
+end
+
 local function InspectFrameIsBusy()
 	local now = GetTime()
 	if inspectFrameTime > 0 and now - inspectFrameTime < inspectFrameLockTime then return true end
@@ -132,6 +137,8 @@ end
 updater = CreateFrame("Frame")
 updater:SetScript("OnUpdate", TT.InspectOnUpdate)
 updater:Hide()
+GameTooltip:HookScript("OnTooltipCleared", ResetInspectUnit)
+GameTooltip:HookScript("OnHide", ResetInspectUnit)
 
 HookInspectUnit()
 if not TT.inspectUnitHooked then
@@ -153,7 +160,8 @@ function TT:GetInspectInfo(...)
 		end
 	elseif self == "INSPECT_READY" then
 		local guid = ...
-		if B:NotSecretValue(guid) and guid == currentGUID and guid == inspectGUID then
+		if not B:NotSecretValue(guid) or guid ~= inspectGUID then return end
+		if guid == currentGUID then
 			inspectGUID = nil
 
 			local level = TT:GetUnitItemLevel(currentUNIT)
@@ -178,7 +186,12 @@ end
 B:RegisterEvent("UNIT_INVENTORY_CHANGED", TT.GetInspectInfo)
 
 function TT:SetupItemLevel(level)
-	if not TT:UnitExists("mouseover") or UnitGUID("mouseover") ~= currentGUID then return end
+	if not currentGUID or GameTooltip:IsForbidden() or not GameTooltip:IsShown() then return end
+	if not GameTooltip:IsTooltipType(Enum.TooltipDataType.Unit) then return end
+
+	local unit, guid = TT.GetUnit(GameTooltip)
+	if guid ~= currentGUID or not TT:UnitExists(unit) or not UnitIsPlayer(unit) then return end
+	if checkUnitGUID(unit) ~= currentGUID then return end
 
 	local levelLine
 	for i = 2, GameTooltip:NumLines() do
