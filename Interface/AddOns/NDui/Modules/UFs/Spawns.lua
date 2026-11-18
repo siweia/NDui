@@ -431,6 +431,10 @@ function UF:OnLogin()
 			CompactRaidFrameManager:UnregisterAllEvents()
 			CompactRaidFrameManager:SetParent(B.HiddenFrame)
 		end
+		-- Edit Mode can show the raid container independently of the manager.
+		if CompactRaidFrameContainer then
+			CompactRaidFrameContainer:SetParent(B.HiddenFrame)
+		end
 
 		-- Group Styles
 		local partyMover
