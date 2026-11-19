@@ -346,6 +346,9 @@ do
 			if lineData then
 				name = lineData[1] and lineData[1].leftText
 			end
+			if B:IsSecretValue(name) or not name then
+				name = loadingStr
+			end
 			if name == loadingStr then
 				if not pendingNPCs[npcID] then
 					pendingNPCs[npcID] = 1
