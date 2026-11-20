@@ -875,7 +875,9 @@ end
 function M:HideBlizzHelpTip()
 	local function AcknowledgeTips()
 		for frame in HelpTip.framePool:EnumerateActive() do
-			frame:Acknowledge()
+			if frame.info and issecurevariable(frame.info, "text") then
+				frame:Acknowledge()
+			end
 		end
 	end
 
