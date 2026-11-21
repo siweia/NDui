@@ -92,6 +92,8 @@ local STATE = {}
 local unitIsUnit = Private.unitIsUnit
 local unitSelectionType = Private.unitSelectionType
 
+local playerClass = UnitClassBase('player')
+
 --[[ Override: Power:GetDisplayPower(unit)
 Used to get info on the unit's alternative power, if any.
 Should return the power type index (see [Enum.PowerType.Alternate](https://warcraft.wiki.gg/wiki/Enum.PowerType))
@@ -119,6 +121,8 @@ local function UpdateColor(self, event, unit)
 		color = self.colors.disconnected
 	elseif(element.colorTapping and not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)) then
 		color = self.colors.tapped
+	elseif(element.colorHappiness and unit == 'pet' and playerClass == 'HUNTER' and C_PetInfo.GetPetHappiness()) then
+		color = self.colors.happiness[(C_PetInfo.GetPetHappiness())]
 	elseif(element.colorThreat and not UnitPlayerControlled(unit) and UnitThreatSituation('player', unit)) then
 		color =  self.colors.threat[UnitThreatSituation('player', unit)]
 	elseif(element.colorPower) then
