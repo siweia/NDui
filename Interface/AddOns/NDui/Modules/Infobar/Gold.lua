@@ -17,7 +17,7 @@ local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
 local C_Container_GetContainerItemInfo = C_Container.GetContainerItemInfo
 
 local slotString = L["Bags"]..": %s%d"
-local showGoldGap = 1 * 1e4
+local showGoldGap = 100
 local maxAccounts = 30 -- max visible characters
 local TIER_CHARGE_ID = 3465 -- 12.1 S2
 
