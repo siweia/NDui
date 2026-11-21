@@ -211,8 +211,6 @@ local BagSmartFilter = {
 		text = strlower(text)
 		if text == "boe" then
 			return item.bindOn == "equip"
-		elseif text == "aoe" then
-			return item.bindOn == "accountequip"
 		else
 			return IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) or IsItemMatched(item.name, text) or IsItemMatched((item.expacID or 0) + 1, text)
 		end
@@ -1002,7 +1000,7 @@ function module:OnLogin()
 		AddNewContainer("Bag", 7, "BagReagent", filters.onlyBagReagent)
 		AddNewContainer("Bag", 21, "Junk", filters.bagsJunk)
 		AddNewContainer("Bag", 10, "EquipSet", filters.bagEquipSet)
-		AddNewContainer("Bag", 11, "BagAOE", filters.bagAOE)
+		AddNewContainer("Bag", 11, "BagBOE", filters.bagBOE)
 		AddNewContainer("Bag", 8, "AzeriteItem", filters.bagAzeriteItem)
 		AddNewContainer("Bag", 19, "BagLegacy", filters.bagLegacy)
 		AddNewContainer("Bag", 20, "BagLower", filters.bagLower)
@@ -1026,7 +1024,7 @@ function module:OnLogin()
 		end
 		AddNewContainer("Bank", 20, "BankAmmoItem", filters.bankAmmo)
 		AddNewContainer("Bank", 9, "BankEquipSet", filters.bankEquipSet)
-		AddNewContainer("Bank", 10, "BankAOE", filters.bankAOE)
+		AddNewContainer("Bank", 10, "BankBOE", filters.bankBOE)
 		AddNewContainer("Bank", 7, "BankAzeriteItem", filters.bankAzeriteItem)
 		AddNewContainer("Bank", 11, "BankLegendary", filters.bankLegendary)
 		AddNewContainer("Bank", 18, "BankLegacy", filters.bankLegacy)
@@ -1049,7 +1047,7 @@ function module:OnLogin()
 		for i = 1, 5 do
 			AddNewContainer("Account", i+1, "AccountCustom"..i, filters["accountCustom"..i])
 		end
-		AddNewContainer("Account", 9, "AccountAOE", filters.accountAOE)
+		AddNewContainer("Account", 9, "AccountBOE", filters.accountBOE)
 		AddNewContainer("Account", 8, "AccountLegacy", filters.accountLegacy)
 		AddNewContainer("Account", 7, "AccountEquipment", filters.accountEquipment)
 		AddNewContainer("Account", 11, "AccountConsumable", filters.accountConsumable)
@@ -1450,8 +1448,8 @@ function module:OnLogin()
 			label = OTHER
 		elseif name == "BagStone" then
 			label = C_Spell.GetSpellName(404861)
-		elseif strmatch(name, "AOE") then
-			label = ITEM_ACCOUNTBOUND_UNTIL_EQUIP
+		elseif strmatch(name, "BOE") then
+			label = ITEM_BIND_ON_EQUIP
 		elseif strmatch(name, "Lower") then
 			label = L["LowerItem"]
 		elseif strmatch(name, "Legacy") then

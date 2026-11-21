@@ -337,6 +337,7 @@ function TT:OnTooltipSetUnit()
 		TT.ShowUnitMythicPlusScore(self, unit)
 	end
 	TT.PetInfo_Setup(self, unit)
+	TT:ShowTargetedBy(self, unit)
 
 	-- Ignore note
 	if unitFullName and B:NotSecretValue(unitFullName) then

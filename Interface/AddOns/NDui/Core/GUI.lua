@@ -149,7 +149,7 @@ G.DefaultSettings = {
 		FilterEquipSet = false,
 		FilterAnima = false,
 		FilterStone = false,
-		FilterAOE = true,
+		FilterBOE = true,
 		FilterLower = true,
 		FilterLegacy = false,
 		FilterDecor = true,
@@ -543,6 +543,7 @@ G.DefaultSettings = {
 		Scale = 1,
 		SpecLevelByShift = false,
 		HideRealm = false,
+		TargetBy = true,
 		HideTitle = false,
 		HideJunkGuild = true,
 		AzeriteArmor = true,
@@ -716,6 +717,12 @@ loader:SetScript("OnEvent", function(self, _, addon)
 		C.db = NDuiDB
 	else
 		C.db = NDuiPDB[NDuiADB["ProfileIndex"][DB.MyFullName] - 1]
+	end
+
+	local bagSettings = C.db["Bags"]
+	-- Preserve the old category toggle.
+	if bagSettings and bagSettings["FilterBOE"] == nil then
+		bagSettings["FilterBOE"] = bagSettings["FilterAOE"]
 	end
 	InitialSettings(G.DefaultSettings, C.db, true)
 
@@ -1500,6 +1507,7 @@ G.OptionList = { -- type, key, value, name, horizon, doubleline
 		{1, "Tooltip", "MythicScore", L["MDScore"].."*", true, nil, nil, L["MDScoreTip"]},
 		{1, "Tooltip", "ItemQuality", L["ShowItemQuality"].."*"},
 		{1, "Tooltip", "HideAllID", "|cffff0000"..L["HideAllID"], true},
+		{1, "Tooltip", "TargetBy", L["Show TargetedBy"].."*"},
 		{},--blank
 		{1, "Tooltip", "AzeriteArmor", HeaderTag..L["Show AzeriteArmor"]},
 		{1, "Tooltip", "OnlyArmorIcons", L["Armor icons only"].."*", true},

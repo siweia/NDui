@@ -1021,7 +1021,7 @@ function G:SetupBagFilter(parent)
 		[8] = "FilterFavourite",
 		[9] = "FilterGoods",
 		[10] = "FilterQuest",
-		[11] = "FilterAOE",
+		[11] = "FilterBOE",
 		[12] = "FilterLower",
 		[13] = "FilterLegacy",
 		[14] = "FilterDecor",

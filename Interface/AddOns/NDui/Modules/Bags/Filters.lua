@@ -212,10 +212,10 @@ local function isPrimordialStone(item)
 	return item.id and primordialStones[item.id]
 end
 
-local function isWarboundUntilEquipped(item)
+local function isItemBindOnEquip(item)
 	if not C.db["Bags"]["ItemFilter"] then return end
-	if not C.db["Bags"]["FilterAOE"] then return end
-	return item.bindOn and item.bindOn == "accountequip"
+	if not C.db["Bags"]["FilterBOE"] then return end
+	return item.equipLoc and item.bindOn == "equip"
 end
 
 function module:GetFilters()
@@ -233,7 +233,7 @@ function module:GetFilters()
 	filters.bagQuest = function(item) return isItemInBag(item) and isQuestItem(item) end
 	filters.bagAnima = function(item) return isItemInBag(item) and isAnimaItem(item) end
 	filters.bagStone = function(item) return isItemInBag(item) and isPrimordialStone(item) end
-	filters.bagAOE = function(item) return isItemInBag(item) and isWarboundUntilEquipped(item) end
+	filters.bagBOE = function(item) return isItemInBag(item) and isItemBindOnEquip(item) end
 	filters.bagLower = function(item) return isItemInBag(item) and isItemLowerLevel(item) end
 	filters.bagLegacy = function(item) return isItemInBag(item) and isItemLegacy(item) end
 	filters.bagDecor = function(item) return isItemInBag(item) and isItemDecor(item) end
@@ -249,7 +249,7 @@ function module:GetFilters()
 	filters.bankGoods = function(item) return isItemInBank(item) and isTradeGoods(item) end
 	filters.bankQuest = function(item) return isItemInBank(item) and isQuestItem(item) end
 	filters.bankAnima = function(item) return isItemInBank(item) and isAnimaItem(item) end
-	filters.bankAOE = function(item) return isItemInBank(item) and isWarboundUntilEquipped(item) end
+	filters.bankBOE = function(item) return isItemInBank(item) and isItemBindOnEquip(item) end
 	filters.bankLower = function(item) return isItemInBank(item) and isItemLowerLevel(item) end
 	filters.bankLegacy = function(item) return isItemInBank(item) and isItemLegacy(item) end
 	filters.bankDecor = function(item) return isItemInBank(item) and isItemDecor(item) end
@@ -260,7 +260,7 @@ function module:GetFilters()
 	filters.accountEquipment = function(item) return isItemInAccountBank(item) and isItemEquipment(item) end
 	filters.accountConsumable = function(item) return isItemInAccountBank(item) and isItemConsumable(item) end
 	filters.accountGoods = function(item) return isItemInAccountBank(item) and isTradeGoods(item) end
-	filters.accountAOE = function(item) return isItemInAccountBank(item) and isWarboundUntilEquipped(item) end
+	filters.accountBOE = function(item) return isItemInAccountBank(item) and isItemBindOnEquip(item) end
 	filters.accountLegacy = function(item) return isItemInAccountBank(item) and isItemLegacy(item) end
 
 	for i = 1, 5 do
