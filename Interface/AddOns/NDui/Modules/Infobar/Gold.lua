@@ -7,7 +7,7 @@ local info = module:RegisterInfobar("Gold", C.Infobar.GoldPos)
 
 local format, pairs, wipe, unpack = string.format, pairs, table.wipe, unpack
 local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
-local GetMoney, Ambiguate = GetMoney, Ambiguate
+local GetMoney = GetMoney
 local C_Timer_After, IsControlKeyDown, IsShiftKeyDown = C_Timer.After, IsControlKeyDown, IsShiftKeyDown
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
 local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
@@ -17,7 +17,7 @@ local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
 local C_Container_GetContainerItemInfo = C_Container.GetContainerItemInfo
 
 local slotString = L["Bags"]..": %s%d"
-local showGoldGap = 100 * 1e4
+local showGoldGap = 1 * 1e4
 local maxAccounts = 30 -- max visible characters
 local TIER_CHARGE_ID = 3465 -- 12.1 S2
 
@@ -118,7 +118,7 @@ function RebuildCharList()
 			if not (realm == myRealm and name == myName) then
 				index = index + 1
 				if not menuList[index] then menuList[index] = {} end
-				menuList[index].text = B.ClassColorString(value[2])..(DB.isForever and name or Ambiguate(name.."-"..realm, "none"))
+				menuList[index].text = B.ClassColorString(value[2])..name
 				menuList[index].notCheckable = true
 				menuList[index].arg1 = realm
 				menuList[index].arg2 = name
@@ -181,34 +181,24 @@ info.onEnter = function(self)
 	GameTooltip:AddLine(L["RealmCharacter"], .6,.8,1)
 
 	local isShiftKeyDown = IsShiftKeyDown()
-	local currentAccounts = 1
-
-	if NDuiADB["totalGold"][myRealm] then
-		for k, v in pairs(NDuiADB["totalGold"][myRealm]) do
-			local gold, class = unpack(v)
-			local name = DB.isForever and k or Ambiguate(k.."-"..myRealm, "none")
-			if gold > showGoldGap or UnitIsUnit(name, "player") then
-				if (isShiftKeyDown or currentAccounts < maxAccounts) then
-					local r, g, b = B.ClassColor(class)
-					GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
-					currentAccounts = currentAccounts + 1
-				end
-				totalGold = totalGold + gold
-			end
-		end
+	local currentAccounts = 0
+	local currentData = NDuiADB["totalGold"][myRealm] and NDuiADB["totalGold"][myRealm][myName]
+	if currentData then
+		local gold, class = unpack(currentData)
+		local r, g, b = B.ClassColor(class)
+		GameTooltip:AddDoubleLine(getClassIcon(class)..myName, module:GetMoneyString(gold), r,g,b, 1,1,1)
+		currentAccounts = 1
 	end
 
 	for realm, data in pairs(NDuiADB["totalGold"]) do
-		if realm ~= myRealm then
-			for k, v in pairs(data) do
-				local gold, class = unpack(v)
-				if gold > showGoldGap then
-					if isShiftKeyDown then -- show other realms while holding shift
-						local name = DB.isForever and k or Ambiguate(k.."-"..realm, "none")
-						local r, g, b = B.ClassColor(class)
-						GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
-					end
-					totalGold = totalGold + gold
+		for name, value in pairs(data) do
+			local gold, class = unpack(value)
+			totalGold = totalGold + gold
+			if not (realm == myRealm and name == myName) and gold > showGoldGap then
+				if isShiftKeyDown or currentAccounts < maxAccounts then
+					local r, g, b = B.ClassColor(class)
+					GameTooltip:AddDoubleLine(getClassIcon(class)..name, module:GetMoneyString(gold), r,g,b, 1,1,1)
+					currentAccounts = currentAccounts + 1
 				end
 			end
 		end
