@@ -64,7 +64,10 @@ function TT:AddLineForID(id, linkType, noadd)
 			if lineText then
 				line:SetFormattedText(ITEM_LEVEL_STR, itemLevel, lineText)
 				line:SetJustifyH("LEFT")
-				line:SetWidth(ceil(line:GetStringWidth())) -- make sure it won't affect by RatingBuster
+				local width = line:GetStringWidth()
+				if B:NotSecretValue(width) then
+					line:SetWidth(ceil(width)) -- make sure it won't affect by RatingBuster
+				end
 			end
 		end
 	end
