@@ -211,25 +211,96 @@ DB.ReminderBuffs = {
 	MAGE = {
 		{	spells = {	-- 奥术智慧
 				[1459] = true,
+				[8096] = true, -- 智力卷轴
+				[23028] = true, -- 奥术光辉
+				[11396] = true, -- 强效智力
 			},
+			matchByName = true,
+			texture = 135932,
 			depend = 1459,
+			combat = true,
 			instance = true,
+			pvp = true,
+		},
+		{	spells = {
+				[168] = true, -- 霜甲术
+				[7302] = true, -- 冰甲术
+				[6117] = true, -- 法师护甲
+				[428741] = true, -- 炎甲术
+			},
+			matchByName = true,
+			depend = 168,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
 	PRIEST = {
 		{	spells = {	-- 真言术耐
-				[21562] = true,
+				[1243] = true,
+				[8099] = true, -- 耐力卷轴
+				[21562] = true, -- 坚韧祷言
 			},
-			depend = 21562,
+			matchByName = true,
+			depends = {1243, 21562},
+			combat = true,
 			instance = true,
+			pvp = true,
+		},
+		{	spells = {	-- 心灵之火
+				[588] = true,
+			},
+			matchByName = true,
+			depend = 588,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
 	WARRIOR = {
 		{	spells = {	-- 战斗怒吼
 				[6673] = true,
+				[25289] = true,
 			},
-			depend = 6673,
+			matchByName = true,
+			depends = {6673, 5242, 6192, 11549, 11550, 11551, 25289},
+			combat = true,
 			instance = true,
+			pvp = true,
+		},
+	},
+	HUNTER = {
+		{	spells = {	-- 雄鹰守护
+				[13165] = true,
+				[469145] = true, -- 猎鹰守护
+			},
+			matchByName = true,
+			depends = {13165, 469145},
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+		{	spells = {	-- 强击光环
+				[19506] = true,
+				[20906] = true,
+			},
+			matchByName = true,
+			depends = {19506, 20905, 20906},
+			combat = true,
+			instance = true,
+			pvp = true,
+		},
+	},
+	WARLOCK = {
+		{	spells = {
+				[706] = true, -- 魔甲术
+				[687] = true, -- 恶魔皮肤
+			},
+			matchByName = true,
+			depend = 706,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
 	SHAMAN = {
@@ -293,9 +364,22 @@ DB.ReminderBuffs = {
 	DRUID = {
 		{	spells = {	-- 野性印记
 				[1126] = true,
+				[21849] = true, -- 野性赐福
 			},
+			matchByName = true,
 			depend = 1126,
+			combat = true,
 			instance = true,
+			pvp = true,
+		},
+		{	spells = {	-- 荆棘术
+				[467] = true,
+			},
+			matchByName = true,
+			depend = 467,
+			combat = true,
+			instance = true,
+			pvp = true,
 		},
 	},
 }
