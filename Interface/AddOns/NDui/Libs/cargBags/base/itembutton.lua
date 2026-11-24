@@ -44,7 +44,6 @@ function ItemButton:GetTemplate(bagID)
 	if bagID == Enum.BagIndex.Keyring then
 		return "ContainerFrameItemButtonTemplate", UIParent
 	end
-
 	return (bagID and "ContainerFrameItemButtonTemplate") or "",
 		(BANK_SLOTS[bagID] and BankFrame.BankPanel) or (bagID and _G["ContainerFrame"..(bagID + 1)]) or ""
 end
