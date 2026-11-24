@@ -377,11 +377,10 @@ function TT:RefreshStatusBar()
 		self.text = B.CreateFS(self, 12, "")
 	end
 	local unit = TT.GetUnit(self:GetParent())
+	if not unit then return end
 	local ok, value = pcall(UnitHealth, unit)
 	if ok and value then
 		self.text:SetText(B.Numb(value))
-	else
-		self.text:SetText("")
 	end
 end
 
@@ -392,6 +391,9 @@ function TT:ReskinStatusBar()
 	self.StatusBar:SetStatusBarTexture(DB.normTex)
 	self.StatusBar:SetHeight(5)
 	B.SetBD(self.StatusBar)
+	self.StatusBar:HookScript("OnHide", function(bar)
+		if bar.text then bar.text:SetText("") end
+	end)
 end
 
 function TT:GameTooltip_ShowStatusBar()
