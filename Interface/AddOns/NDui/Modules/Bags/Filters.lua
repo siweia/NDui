@@ -35,6 +35,10 @@ local function isItemInBag(item)
 	return item.bagId >= 0 and item.bagId <= 4
 end
 
+local function isItemKeyRing(item)
+	return item.bagId == Enum.BagIndex.Keyring
+end
+
 local function isItemInBagReagent(item)
 	return item.bagId == 5
 end
@@ -222,6 +226,7 @@ function module:GetFilters()
 	local filters = {}
 
 	filters.onlyBags = function(item) return isItemInBag(item) and not isEmptySlot(item) end
+	filters.onlyKeyring = function(item) return isItemKeyRing(item) end
 	filters.bagAmmo = function(item) return isItemInBag(item) and isItemAmmo(item) end
 	filters.bagAzeriteItem = function(item) return isItemInBag(item) and isAzeriteArmor(item) end
 	filters.bagEquipment = function(item) return isItemInBag(item) and isItemEquipment(item) end

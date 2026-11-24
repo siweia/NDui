@@ -41,6 +41,10 @@ local ItemButton = cargBags:NewClass("ItemButton", nil, "ItemButton")
 ]]
 function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagId
+	if bagID == Enum.BagIndex.Keyring then
+		return "ContainerFrameItemButtonTemplate", UIParent
+	end
+
 	return (bagID and "ContainerFrameItemButtonTemplate") or "",
 		(BANK_SLOTS[bagID] and BankFrame.BankPanel) or (bagID and _G["ContainerFrame"..(bagID + 1)]) or ""
 end

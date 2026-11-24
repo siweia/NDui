@@ -431,6 +431,7 @@ function Implementation:BAG_UPDATE(_, bagID, slotID)
 		for bagID = 0, 5 do
 			self:UpdateBag(bagID)
 		end
+		self:UpdateBag(Enum.BagIndex.Keyring)
 
 		local bankType = self:AtBank() and BankFrame.BankPanel.bankType
 

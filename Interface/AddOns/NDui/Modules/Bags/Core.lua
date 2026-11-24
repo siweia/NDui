@@ -488,6 +488,7 @@ local function ToggleBackpacks(self)
 	if not parent.BagBar then return end
 	B:TogglePanel(parent.BagBar)
 	if parent.BagBar:IsShown() then
+		if parent.keyring and parent.keyring:IsShown() then parent.keyToggle:Click() end
 		self.bg:SetBackdropBorderColor(1, .8, 0)
 		PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
 	else
@@ -496,12 +497,33 @@ local function ToggleBackpacks(self)
 	end
 end
 
+function module:CreateKeyToggle()
+	local parent = self
+	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\INV_Misc_Key_12")
+	bu:SetScript("OnClick", function()
+		local keyring = parent.keyring
+		keyring:SetShown(not keyring:IsShown())
+		if keyring:IsShown() then
+			bu.bg:SetBackdropBorderColor(1, .8, 0)
+			if parent.BagBar and parent.BagBar:IsShown() then parent.bagToggle:Click() end
+		else
+			B.SetBorderColor(bu.bg)
+		end
+	end)
+	bu.title = KEYRING
+	B.AddTooltip(bu, "ANCHOR_TOP")
+	self.keyToggle = bu
+
+	return bu
+end
+
 function module:CreateBagToggle(click)
 	local bu = B.CreateButton(self, 22, 22, true, "Interface\\Icons\\inv_misc_bag_08")
 	bu.__owner = self
 	bu:SetScript("OnClick", ToggleBackpacks)
 	bu.title = BACKPACK_TOOLTIP
 	B.AddTooltip(bu, "ANCHOR_TOP")
+	self.bagToggle = bu
 	if click then
 		ToggleBackpacks(bu)
 	end
@@ -1019,6 +1041,12 @@ function module:OnLogin()
 		f.main:SetPoint(unpack(f.main.__anchor))
 		f.main:SetFilter(compactLayout and function() end or filters.onlyBags, true)
 
+		local keyring = MyContainer:New("Keyring", {Bags = "keyring", BagType = "Bag", Parent = f.main})
+		keyring:SetFilter(filters.onlyKeyring, true)
+		keyring:SetPoint("TOPRIGHT", f.main, "BOTTOMRIGHT", 0, -5)
+		keyring:Hide()
+		f.main.keyring = keyring
+
 		for i = 1, 5 do
 			AddNewContainer("Bank", i+1, "BankCustom"..i, filters["bankCustom"..i])
 		end
@@ -1418,7 +1446,9 @@ function module:OnLogin()
 		module.CreateFreeSlots(self)
 
 		local label
-		if strmatch(name, "AmmoItem$") then
+		if name == "Keyring" then
+			label = KEYRING
+		elseif strmatch(name, "AmmoItem$") then
 			label = DB.MyClass == "HUNTER" and INVTYPE_AMMO or SOUL_SHARDS
 		elseif strmatch(name, "AzeriteItem$") then
 			label = L["Azerite Armor"]
@@ -1469,11 +1499,12 @@ function module:OnLogin()
 		buttons[2] = module.CreateSortButton(self, name)
 		if name == "Bag" then
 			module.CreateBagBar(self, settings, 1)
-			buttons[3] = module.CreateBagToggle(self)
-			buttons[4] = module.CreateSplitButton(self)
-			buttons[5] = module.CreateFavouriteButton(self)
-			buttons[6] = module.CreateJunkButton(self)
-			buttons[7] = module.CreateDeleteButton(self)
+			buttons[3] = module.CreateKeyToggle(self)
+			buttons[4] = module.CreateBagToggle(self)
+			buttons[5] = module.CreateSplitButton(self)
+			buttons[6] = module.CreateFavouriteButton(self)
+			buttons[7] = module.CreateJunkButton(self)
+			buttons[8] = module.CreateDeleteButton(self)
 		elseif name == "Bank" then
 			module.CreateBagTab(self, settings, 6, "Bank")
 			buttons[3] = module.CreateBagToggle(self)
