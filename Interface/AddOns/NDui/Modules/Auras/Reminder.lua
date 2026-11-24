@@ -13,6 +13,7 @@ local IsSpellKnown = C_SpellBook and C_SpellBook.IsSpellKnown
 local GetSpellName = C_Spell.GetSpellName
 local GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local GetAuraDataBySpellName = C_UnitAuras.GetAuraDataBySpellName
+local ShouldSpellAuraBeSecret = C_Secrets and C_Secrets.ShouldSpellAuraBeSecret
 
 local groups = DB.ReminderBuffs[DB.MyClass]
 local iconSize = 36
@@ -34,15 +35,22 @@ local function HasRequiredSpell(cfg)
 end
 
 local function HasReminderAura(cfg)
+	local canQueryAura = false
 	for spellID in pairs(cfg.spells) do
-		if GetPlayerAuraBySpellID(spellID) then return true end
-		if cfg.matchByName and GetAuraDataBySpellName then
-			-- Different ranks share a name, but apply buffs with different IDs.
-			local name = spellNames[spellID] or GetSpellName(spellID)
-			spellNames[spellID] = name
-			if name and GetAuraDataBySpellName("player", name, "HELPFUL") then return true end
+		if not ShouldSpellAuraBeSecret or not ShouldSpellAuraBeSecret(spellID) then
+			canQueryAura = true
+			if GetPlayerAuraBySpellID(spellID) then return true end
+			if cfg.matchByName and GetAuraDataBySpellName then
+				-- Different ranks share a name, but apply buffs with different IDs.
+				local name = spellNames[spellID] or GetSpellName(spellID)
+				spellNames[spellID] = name
+				if name and GetAuraDataBySpellName("player", name, "HELPFUL") then return true end
+			end
 		end
 	end
+
+	-- Do not report a missing aura when every tracked spell is restricted.
+	return not canQueryAura
 end
 
 function A:Reminder_Update(cfg)
