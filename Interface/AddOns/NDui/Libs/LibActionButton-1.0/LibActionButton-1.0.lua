@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0-NDui"
-local MINOR_VERSION = 168
+local MINOR_VERSION = 171
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -84,6 +84,8 @@ lib.NumChargeCooldowns = lib.NumChargeCooldowns or 0
 lib.FlyoutInfo = lib.FlyoutInfo or {}
 lib.FlyoutButtons = lib.FlyoutButtons or {}
 
+lib.customOverlayGlowSpells = lib.customOverlayGlowSpells or {}
+
 lib.ACTION_HIGHLIGHT_MARKS = lib.ACTION_HIGHLIGHT_MARKS or setmetatable({}, { __index = ACTION_HIGHLIGHT_MARKS })
 
 lib.callbacks = lib.callbacks or CBH:New(lib)
@@ -120,9 +122,10 @@ local type_meta_map = {
 }
 
 local ButtonRegistry, ActiveButtons, ActionButtons, NonActionButtons, ActionButtonsNonUI, OnUpdateButtons, ButtonsByAction = lib.buttonRegistry, lib.activeButtons, lib.actionButtons, lib.nonActionButtons, lib.actionButtonsNonUI, lib.onUpdateButtons, lib.buttonsByAction
+local CustomOverlayGlowSpells = lib.customOverlayGlowSpells
 
 local Update, UpdateButtonState, UpdateUsable, UpdateCount, UpdateCooldown, UpdateCooldownNumberHidden, UpdateTooltip, UpdateNewAction, UpdateSpellHighlight, ClearNewActionHighlight, UpdateAssistedCombatRotationFrame, UpdatedAssistedHighlightFrame
-local StartFlash, StopFlash, UpdateFlash, UpdateHotkeys, UpdateRangeTimer, UpdateOverlayGlow
+local StartFlash, StopFlash, UpdateFlash, UpdateHotkeys, UpdateRangeTimer, UpdateOverlayGlow, UpdateOverlayGlowForSpell
 local UpdateFlyout, ShowGrid, HideGrid, UpdateGrid, SetupSecureSnippets, WrapOnClick
 local ShowOverlayGlow, HideOverlayGlow
 local ClearChargeCooldown
@@ -594,6 +597,32 @@ function lib:GetAllButtons()
 	return buttons
 end
 
+--- Show the overlay glow on all buttons with the given spell, independent of the spell activation overlays of the game.
+-- The glow remains active until it is hidden again with :HideSpellOverlayGlow
+-- @param spellID The spell ID to show the glow for
+function lib:ShowSpellOverlayGlow(spellID)
+	if type(spellID) ~= "number" then
+		error("Usage: ShowSpellOverlayGlow(spellID): spellID must be a number", 2)
+	end
+	if CustomOverlayGlowSpells[spellID] then return end
+
+	CustomOverlayGlowSpells[spellID] = true
+	UpdateOverlayGlowForSpell(spellID)
+end
+
+--- Hide an overlay glow previously shown with :ShowSpellOverlayGlow
+-- If the spell has an active spell activation overlay from the game, the glow remains visible.
+-- @param spellID The spell ID to hide the glow for
+function lib:HideSpellOverlayGlow(spellID)
+	if type(spellID) ~= "number" then
+		error("Usage: HideSpellOverlayGlow(spellID): spellID must be a number", 2)
+	end
+	if not CustomOverlayGlowSpells[spellID] then return end
+
+	CustomOverlayGlowSpells[spellID] = nil
+	UpdateOverlayGlowForSpell(spellID)
+end
+
 function Generic:ClearSetPoint(...)
 	self:ClearAllPoints()
 	self:SetPoint(...)
@@ -1035,7 +1064,7 @@ if Feat_UseCustomFlyout then
 				local numSlots = 0
 				data = data .. ("LAB_FlyoutInfo[%d] = newtable();LAB_FlyoutInfo[%d].slots = newtable();\n"):format(flyoutID, flyoutID)
 				for slotID, slotInfo in ipairs(info.slots) do
-					data = data .. ("LAB_FlyoutInfo[%d].slots[%d] = newtable();LAB_FlyoutInfo[%d].slots[%d].spellID = %d;LAB_FlyoutInfo[%d].slots[%d].isKnown = %s;\n"):format(flyoutID, slotID, flyoutID, slotID, slotInfo.spellID, flyoutID, slotID, slotInfo.isKnown and "true" or "nil")
+					data = data .. ("LAB_FlyoutInfo[%d].slots[%d] = newtable();LAB_FlyoutInfo[%d].slots[%d].spellID = %d;LAB_FlyoutInfo[%d].slots[%d].isKnown = %s;\n"):format(flyoutID, slotID, flyoutID, slotID, slotInfo.spellID, flyoutID, slotID, (slotInfo.isKnown and not slotInfo.isLowerRank) and "true" or "nil")
 					numSlots = numSlots + 1
 				end
 
@@ -1078,6 +1107,34 @@ if Feat_UseCustomFlyout then
 		InSync = false
 	end
 
+	-- flag lower ranks of known spells, so that only the highest known rank is shown
+	-- based on SpellFlyoutMixin:Toggle in SpellFlyout.lua, which hides lower ranks on action bars
+	local function UpdateFlyoutSlotRanks(slots, numSlots)
+		if not WoWForever then return end
+
+		local prevSlot
+		for slotID = 1, numSlots do
+			local slot = slots[slotID]
+			if slot then
+				slot.isLowerRank = nil
+				if slot.isKnown then
+					slot.spellLevel = C_Spell.GetSpellLevelLearned(slot.spellID) or 0
+					if prevSlot and slot.spellName and prevSlot.spellName == slot.spellName then
+						-- ranks are sorted in ascending order, replace the previous slot with the higher rank
+						if prevSlot.spellLevel < slot.spellLevel then
+							prevSlot.isLowerRank = true
+							prevSlot = slot
+						else
+							slot.isLowerRank = true
+						end
+					else
+						prevSlot = slot
+					end
+				end
+			end
+		end
+	end
+
 	-- discover all possible flyouts
 	function DiscoverFlyoutSpells()
 		-- 300 is a safe upper limit in 10.0.2, the highest known spell is 229
@@ -1086,7 +1143,7 @@ if Feat_UseCustomFlyout then
 			if success and numSlots then
 				lib.FlyoutInfo[flyoutID] = { numSlots = numSlots, isKnown = isKnown, slots = {} }
 				for slotID = 1, numSlots do
-					local spellID, overrideSpellID, isKnownSlot = GetFlyoutSlotInfo(flyoutID, slotID)
+					local spellID, overrideSpellID, isKnownSlot, spellName = GetFlyoutSlotInfo(flyoutID, slotID)
 
 					-- hide empty pet slots from the flyout
 					local petIndex, petName = GetCallPetSpellInfo(spellID)
@@ -1094,8 +1151,9 @@ if Feat_UseCustomFlyout then
 						isKnownSlot = false
 					end
 
-					lib.FlyoutInfo[flyoutID].slots[slotID] = { spellID = spellID, overrideSpellID = overrideSpellID, isKnown = isKnownSlot }
+					lib.FlyoutInfo[flyoutID].slots[slotID] = { spellID = spellID, overrideSpellID = overrideSpellID, isKnown = isKnownSlot, spellName = spellName }
 				end
+				UpdateFlyoutSlotRanks(lib.FlyoutInfo[flyoutID].slots, numSlots)
 			end
 		end
 
@@ -1114,7 +1172,7 @@ if Feat_UseCustomFlyout then
 			if success and numSlots then
 				data.isKnown = isKnown
 				for slotID = 1, numSlots do
-					local spellID, overrideSpellID, isKnownSlot = GetFlyoutSlotInfo(flyoutID, slotID)
+					local spellID, overrideSpellID, isKnownSlot, spellName = GetFlyoutSlotInfo(flyoutID, slotID)
 
 					-- hide empty pet slots from the flyout
 					local petIndex, petName = GetCallPetSpellInfo(spellID)
@@ -1125,7 +1183,9 @@ if Feat_UseCustomFlyout then
 					data.slots[slotID].spellID = spellID
 					data.slots[slotID].overrideSpellID = overrideSpellID
 					data.slots[slotID].isKnown = isKnownSlot
+					data.slots[slotID].spellName = spellName
 				end
+				UpdateFlyoutSlotRanks(data.slots, numSlots)
 			end
 		end
 
@@ -1374,6 +1434,7 @@ function InitializeEventHandler()
 
 	lib.eventFrame:RegisterEvent("PLAYER_ENTER_COMBAT")
 	lib.eventFrame:RegisterEvent("PLAYER_LEAVE_COMBAT")
+	lib.eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
 	lib.eventFrame:RegisterEvent("START_AUTOREPEAT_SPELL")
 	lib.eventFrame:RegisterEvent("STOP_AUTOREPEAT_SPELL")
 	lib.eventFrame:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", "player")
@@ -1581,10 +1642,11 @@ function OnEvent(frame, event, arg1, ...)
 				StopFlash(button)
 			end
 		end
-
+	elseif event == "PLAYER_REGEN_ENABLED" then
+		-- run flyout updates that were queued during combat lockdown
 		if Feat_UseCustomFlyout and FlyoutUpdateQueued then
-			UpdateFlyoutSpells()
 			FlyoutUpdateQueued = nil
+			UpdateFlyoutSpells()
 		end
 	elseif event == "START_AUTOREPEAT_SPELL" then
 		for button in next, ActiveButtons do
@@ -1605,33 +1667,9 @@ function OnEvent(frame, event, arg1, ...)
 			UpdateFlyoutSpells()
 		end
 	elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_SHOW" then
-		for button in next, ActiveButtons do
-			local spellId = button:GetSpellId()
-			if spellId and spellId == arg1 then
-				ShowOverlayGlow(button)
-			else
-				if button._state_type == "action" then
-					local actionType, id = GetActionInfo(button._state_action)
-					if actionType == "flyout" and FlyoutHasSpell(id, arg1) then
-						ShowOverlayGlow(button)
-					end
-				end
-			end
-		end
+		UpdateOverlayGlowForSpell(arg1, true)
 	elseif event == "SPELL_ACTIVATION_OVERLAY_GLOW_HIDE" then
-		for button in next, ActiveButtons do
-			local spellId = button:GetSpellId()
-			if spellId and spellId == arg1 then
-				HideOverlayGlow(button)
-			else
-				if button._state_type == "action" then
-					local actionType, id = GetActionInfo(button._state_action)
-					if actionType == "flyout" and FlyoutHasSpell(id, arg1) then
-						HideOverlayGlow(button)
-					end
-				end
-			end
-		end
+		UpdateOverlayGlowForSpell(arg1, false)
 	elseif event == "PLAYER_EQUIPMENT_CHANGED" then
 		for button in next, ActiveButtons do
 			if button._state_type == "item" then
@@ -1920,27 +1958,33 @@ function Generic:UpdateAction(force)
 		self.action = self._state_type == "action" and action or 0
 		if self.action ~= 0 then
 			-- track button by its action
-			if ButtonsByAction[self.action] == nil then
-				ButtonsByAction[self.action] = {}
+			local buttons = ButtonsByAction[self.action]
+			if buttons == nil then
+				buttons = {}
+				ButtonsByAction[self.action] = buttons
 			end
-			ButtonsByAction[self.action][self] = true
+
+			-- enable range checks only once per action, to keep the calls balanced with the disable below
+			if next(buttons) == nil then
+				C_ActionBar.EnableActionRangeCheck(self.action, true)
+			end
+			buttons[self] = true
 
 			if self.config.actionButtonUI then
 				C_ActionBar.RegisterActionUIButton(self, self.action, self.cooldown)
 			else
 				C_ActionBar.UnregisterActionUIButton(self)
 			end
-
-			C_ActionBar.EnableActionRangeCheck(self.action, true)
 		else
 			C_ActionBar.UnregisterActionUIButton(self)
 		end
 
 		-- stop tracking under the previous action
-		if previousAction ~= self.action and ButtonsByAction[previousAction] then
-			ButtonsByAction[previousAction][self] = nil
+		local previousButtons = ButtonsByAction[previousAction]
+		if previousAction ~= self.action and previousButtons and previousButtons[self] then
+			previousButtons[self] = nil
 
-			if next(ButtonsByAction[previousAction]) == nil then
+			if next(previousButtons) == nil then
 				C_ActionBar.EnableActionRangeCheck(previousAction, false)
 			end
 		end
@@ -2077,6 +2121,8 @@ function Update(self)
 	UpdateAssistedCombatRotationFrame(self)
 
 	UpdatedAssistedHighlightFrame(self)
+
+	UpdateRangeIndicator(self, self:IsInRange())
 
 	if GameTooltip_GetOwnerForbidden() == self then
 		UpdateTooltip(self)
@@ -2359,12 +2405,46 @@ function HideOverlayGlow(self)
 end
 
 local IsSpellOverlayed = C_SpellActivationOverlay and C_SpellActivationOverlay.IsSpellOverlayed or IsSpellOverlayed
+if Feat_DisableOverlayGlow or not IsSpellOverlayed then
+	-- no spell activation overlays from the game, only custom glows
+	IsSpellOverlayed = function() return false end
+end
+
 function UpdateOverlayGlow(self)
 	local spellId = lib.eventFrame.showGlow and self:GetSpellId() -- NDui mod
-	if spellId and IsSpellOverlayed(spellId) then
+	if spellId and (CustomOverlayGlowSpells[spellId] or IsSpellOverlayed(spellId)) then
 		ShowOverlayGlow(self)
 	else
 		HideOverlayGlow(self)
+	end
+end
+
+-- Update the glow on all buttons for a spell, including action flyouts containing the spell
+-- overlayed is the spell activation overlay state of the game, if already known by the caller
+function UpdateOverlayGlowForSpell(spellID, overlayed)
+	if not spellID then return end
+
+	if CustomOverlayGlowSpells[spellID] then
+		overlayed = true
+	elseif overlayed == nil then
+		overlayed = IsSpellOverlayed(spellID)
+	end
+
+	for button in next, ActiveButtons do
+		local buttonSpellId = button:GetSpellId()
+		local match = buttonSpellId and buttonSpellId == spellID
+		if not match and button._state_type == "action" then
+			local actionType, id = GetActionInfo(button._state_action)
+			match = actionType == "flyout" and FlyoutHasSpell(id, spellID)
+		end
+
+		if match then
+			if overlayed then
+				ShowOverlayGlow(button)
+			else
+				HideOverlayGlow(button)
+			end
+		end
 	end
 end
 
@@ -3011,11 +3091,6 @@ Custom.IsUnitInRange           = function(self, unit) return nil end
 Custom.SetTooltip              = function(self) return GameTooltip:SetText(self._state_action.tooltip) end
 Custom.GetSpellId              = function(self) return nil end
 Custom.RunCustom               = function(self, unit, button) return self._state_action.func(self, unit, button) end
-
---- WoW Classic overrides
-if Feat_DisableOverlayGlow then
-	UpdateOverlayGlow = function() end
-end
 
 -----------------------------------------------------------
 --- Update old Buttons
