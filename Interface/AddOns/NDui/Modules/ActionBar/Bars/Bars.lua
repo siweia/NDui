@@ -202,6 +202,14 @@ function Bar:UpdateButtonConfig(i)
 end
 
 local fullPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]16;[overridebar]18;[shapeshift]17;[vehicleui]16;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"
+local maxPage = 18
+if DB.isForever and DB.MyClass == "PRIEST" then
+	local vehiclePage = C_ActionBar.GetVehicleBarIndex()
+	local overridePage = C_ActionBar.GetOverrideBarIndex()
+	local shapeshiftPage = C_ActionBar.GetTempShapeshiftBarIndex()
+	maxPage = math.max(maxPage, vehiclePage, overridePage, shapeshiftPage, C_ActionBar.GetBonusBarIndex())
+	fullPage = ("[overridebar]%d;[vehicleui][possessbar]%d;[shapeshift]%d;[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[bonusbar:5]11;[form:1]7;1"):format(overridePage, vehiclePage, shapeshiftPage)
+end
 
 function Bar:UpdateVisibility()
 	for i = 1, 8 do
@@ -311,7 +319,7 @@ function Bar:CreateBars()
 		for i = 1, 12 do
 			local button = LAB:CreateButton(i, "$parentButton"..i, frame)
 			button:SetState(0, "action", i)
-			for k = 1, 18 do
+			for k = 1, maxPage do
 				button:SetState(k, "action", (k - 1) * 12 + i)
 			end
 			if i == 12 then
