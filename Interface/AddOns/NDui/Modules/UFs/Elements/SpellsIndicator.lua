@@ -145,7 +145,10 @@ function UF:CreateSpellsIndicator(self)
 	local baseFrameLevel = self:GetFrameLevel() + 10
 	for index, spellID in ipairs(spellIDs) do
 		local value = UF.CornerSpells[spellID]
-		local filter = value[3] and "HELPFUL" or "HELPFUL|PLAYER"
+		-- Forever party frames intermittently miss own buffs with HELPFUL|PLAYER.
+		-- Use HELPFUL as a compatibility fallback for these own-only slots.
+		local useForeverPartyFallback = DB.isForever and self.raidType == "party" and not value[3]
+		local filter = useForeverPartyFallback and "HELPFUL" or (value[3] and "HELPFUL" or "HELPFUL|PLAYER")
 		element:AddSlot(filter, {
 			size = spellSize,
 			CreateButton = CreateIndicatorButton,
